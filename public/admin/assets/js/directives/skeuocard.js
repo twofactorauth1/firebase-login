@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterService', function(PaymentService, UserService, ToasterService) {
+app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterService', 'formValidations', function(PaymentService, UserService, ToasterService, formValidations) {
         return {
             require: [],
             restrict: 'C',
@@ -86,7 +86,29 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                          $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                          scope.cardNameValidated = true;
                      }
-                    
+
+                };
+
+                scope.checkCardPostcode = function () {
+                    var zipcode = $('#address_zip').val();
+                    if (!zipcode) {
+                        $("#card_postcode .error").html("Postcode Required");
+                        $("#card_postcode").addClass('has-error');
+                        $("#card_postcode .glyphicon").addClass('glyphicon-remove');
+                        scope.cardPostcodeValidated = false;
+                    } else {
+                        if (formValidations.zip.test(zipcode)) {
+                            $("#card_postcode .error").html("");
+                            $("#card_postcode").removeClass('has-error').addClass('has-success');
+                            $("#card_postcode .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                            scope.cardPostcodeValidated = true;
+                        } else {
+                            $("#card_postcode .error").html("Invalid postcode");
+                            $("#card_postcode").addClass('has-error');
+                            $("#card_postcode .glyphicon").addClass('glyphicon-remove');
+                            scope.cardPostcodeValidated = false;
+                        }
+                    }
                 };
 
                 scope.currentYear = new Date().getYear() - 100;
@@ -113,7 +135,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                         $("#card_expiry").addClass('has-error');
                         $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                     } else {
-                        console.log('year ', parseInt(exp_year));   
+                        console.log('year ', parseInt(exp_year));
                         scope.yearLength = exp_year.length;
                         if(scope.yearLength == 2)
                         {
@@ -187,12 +209,13 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
 
                 scope.addCardFn = function() {
                     console.log('addCardFn >>>');
-                    scope.cardValidated = scope.expirationValidated = scope.cvvValidated = scope.cardNameValidated = false;
+                    scope.cardValidated = scope.expirationValidated = scope.cvvValidated = scope.cardNameValidated = scope.cardPostcodeValidated = false;
                     scope.checkCardCvv();
                     scope.checkCardExpiry();
                     scope.checkCardName();
                     scope.checkCardNumber();
-                    if (scope.cardValidated && scope.expirationValidated && scope.cvvValidated && scope.cardNameValidated) {
+                    scope.checkCardPostcode();
+                    if (scope.cardValidated && scope.expirationValidated && scope.cvvValidated && scope.cardNameValidated && scope.cardPostcodeValidated) {
 
 
                         var parent_div = $("." + scope.wrapper).next();
@@ -208,7 +231,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 cvc: parent_div.find('#cvc').val(),
                                 exp_month: exp_month,
                                 exp_year: exp_year,
-                                name : parent_div.find('#name').val()
+                                name : parent_div.find('#name').val(),
+                                address_zip: parent_div.find('#address_zip').val()
                             };
                         } else {
                             var expiry = $('#expiry').val().split("/")
@@ -222,7 +246,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 cvc: $('#cvc').val(),
                                 exp_month: exp_month,
                                 exp_year: exp_year,
-                                name : $('#card_name #name').val()
+                                name : $('#card_name #name').val(),
+                                address_zip: $('#address_zip').val()
                             };
                         }
 

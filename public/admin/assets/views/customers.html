@@ -29,8 +29,8 @@
                                             </button>
                                         </div>
                                         <div class="col-xs-3 col-md-3 padding-right-0">
-                                            <ui-select ng-model="bulkActionChoice" on-select="bulkActionSelectFn(bulkActionChoice)" theme="bootstrap" ng-disabled='!(selectedCustomersFn()).length'>
-                                                <ui-select-match placeholder="Select Bulk Action">
+                                            <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedCustomersFn()).length'>
+                                                <ui-select-match placeholder="Bulk Actions">
                                                     <small ng-bind-html="$select.selected.label"></small>
                                                 </ui-select-match>
                                                 <ui-select-choices repeat="action in bulkActionChoices |  orderBy:'label' | filter: $select.search">
@@ -119,7 +119,7 @@
                     <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedCustomers">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
+                                <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
                                 <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Customer ID</th>
                                 <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
@@ -185,7 +185,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
-                                <td><i class="fa fa-2x" ng-click='customerSelectClickFn($event, customer)' ng-class='{"fa-check-circle": customer.isSelected, "fa-circle-o": !customer.isSelected}'></i></td>
+                                <td ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-click='customerSelectClickFn($event, customer)' ng-class='{"fa-check-circle": customer.isSelected, "fa-circle-o": !customer.isSelected}'></i></td>
                                 <td ng-show="column.name"><strong>Customer ID: </strong>{{customer._id}}</td>
                                 <td class="center" ng-show="column.photo && tableView == 'list'">
                                     <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">

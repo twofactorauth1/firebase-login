@@ -1,0 +1,52 @@
+'use strict';
+
+app.directive('indigewebTransactionLabel', ['OrderService', function(OrderService) {
+    return {
+        restrict: 'E',
+        template: '{{label}}',
+        link: function(scope, element, attrs) {
+            scope.label = '';
+            scope.hasOrder = false;
+            scope.hasDonation = false;
+
+            var updateLogicFn = function(orders) {
+                orders.forEach(function(order, index) {
+                    order.line_items.forEach(function(item, index) {
+                        if (item.type == 'DONATION') {
+                            scope.hasDonation = true;
+                        } else {
+                            scope.hasOrder = true;
+                        }
+                    });
+                });
+                if (scope.hasOrder && scope.hasDonation) {
+                    scope.label = 'transaction';
+                } else if (scope.hasOrder && !scope.hasDonation) {
+                    scope.label = 'order';
+                } else if (!scope.hasOrder && scope.hasDonation) {
+                    scope.label = 'donation';
+                }
+                
+                if (attrs.plural) {
+                    scope.label = scope.label + 's';
+                }
+
+                if (attrs.lower) {
+                    scope.label = scope.label.toLowerCase();
+                }
+
+                if (attrs.upper) {
+                    scope.label = scope.label.toUpperCase();
+                }
+
+                if (attrs.capitalize) {
+                    scope.label = scope.label.charAt(0).toUpperCase() + scope.label.slice(1);
+                }
+            };
+
+            OrderService.getOrders(function(orders) {
+                updateLogicFn(orders);
+            });
+        }
+    }
+}]);

@@ -7,6 +7,7 @@
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
     $scope.selectAllChecked = false;
+    $scope.bulkActionChoice = {};
     $scope.tagsBulkAction = {};
 
     if (!$state.current.sort) {
@@ -531,9 +532,8 @@
     //   }
     // };
 
-    $scope.bulkActionSelectFn = function (choice) {
-        $scope.bulkActionChoice = choice;
-        if (choice.data == 'delete') {
+    $scope.bulkActionSelectFn = function () {
+        if ($scope.bulkActionChoice.action.data == 'delete') {
             SweetAlert.swal({
                 title: "Are you sure?",
                 text: "Do you want to delete the filtered customers?",
@@ -554,14 +554,18 @@
                         $scope.displayedCustomers.splice(_.findIndex($scope.displayedCustomers, function(c) {return c._id == sc._id; }), 1);
                     });
                     $scope.bulkActionChoice = null;
+                    $scope.bulkActionChoice = {};
+                    $scope.clearSelectionFn();
                     toaster.pop('success', 'Customers Deleted.');
                 } else {
                  $scope.bulkActionChoice = null;
+                 $scope.bulkActionChoice = {};
                 }
               });
         }
 
-        if (choice.data == 'tags') {
+        if ($scope.bulkActionChoice.action.data == 'tags') {
+            $scope.bulkActionChoice = {};
             $scope.openSimpleModal('tags-bulk-action-modal');
         }
     };
@@ -573,6 +577,13 @@
         } else {
             $scope.selectAllChecked = true;
         }
+        $scope.displayedCustomers.forEach(function(customer, index) {
+            customer.isSelected = $scope.selectAllChecked;
+        });
+    };
+
+    $scope.clearSelectionFn = function () {
+        $scope.selectAllChecked = false;
         $scope.displayedCustomers.forEach(function(customer, index) {
             customer.isSelected = $scope.selectAllChecked;
         });
@@ -612,6 +623,7 @@
         });
 
         $scope.tagsBulkAction = {};
+        $scope.clearSelectionFn();
         $scope.closeModal();
         toaster.pop('success', 'Customers tags updated.');
     };

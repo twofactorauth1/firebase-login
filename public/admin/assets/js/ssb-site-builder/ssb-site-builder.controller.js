@@ -6,7 +6,7 @@ ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter',
 /* @ngInject */
 function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster) {
 
-    console.info('site-builder directive init...')
+    console.info('site-builder directive init...');
 
     var vm = this;
 
@@ -449,7 +449,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function setupBreakpoints() {
         $timeout(function() {
-            console.log('setupBreakpoints')
+            console.log('setupBreakpoints');
             $window.eqjs.refreshNodes();
             $window.eqjs.query();
         }, 3000);
@@ -470,7 +470,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             .pluck('components')
             .flatten()
             .findWhere({_id: componentId})
-            .value()
+            .value();
 
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
            if(component.type === 'thumbnail-slider'){
