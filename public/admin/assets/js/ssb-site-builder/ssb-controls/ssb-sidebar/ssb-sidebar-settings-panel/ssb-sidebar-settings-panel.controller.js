@@ -28,14 +28,15 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.duplicateSection = pVm.duplicateSection;
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
     vm.customerTags = pVm.customerTags;
-    vm.addSectionToPage = addSectionToPage;
     vm.constructVideoUrl = pVm.constructVideoUrl;
 
+    vm.addSectionToPage = addSectionToPage;
     vm.tagToCustomer = tagToCustomer;
     vm.setTags = setTags;
     vm.filteredSections = filteredSections;
     vm.isSelectedLayout = isSelectedLayout;
     vm.resizeWindow = resizeWindow;
+    vm.changeButtonDesign = changeButtonDesign;
 
 
     //TODO: move into config services
@@ -176,6 +177,11 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
       if(!vm.isSelectedLayout(section)){
         return pVm.addSectionToPage(section, version, activeSectionIndex);
       }
+    }
+
+    function changeButtonDesign(style) {
+        // var button = vm.uiState.activeElement;
+        // debugger;
     }
 
 
