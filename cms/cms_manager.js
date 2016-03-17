@@ -18,6 +18,12 @@ var awsConfig = require('../configs/aws.config');
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
 
+var deferred = require("jquery-deferred");
+if (typeof $ == 'undefined') {
+    $ = {};
+}
+_.extend($, deferred);
+
 module.exports = {
 
     /*
@@ -656,7 +662,7 @@ module.exports = {
             });
             }
         });
-       
+
     },
 
 
@@ -826,7 +832,7 @@ module.exports = {
         log.debug('>> publishPost ');
         log.debug('>> PostId ', postId);
         var query = {
-            _id: postId,         
+            _id: postId,
             accountId: accountId
         };
         blogPostDao.findOne(query, $$.m.BlogPost, function(err, post){
@@ -835,7 +841,7 @@ module.exports = {
                 log.error('Error getting post: ' + err);
                 return fn(err, null);
             }
-            
+
             post.set('post_status', $$.m.BlogPost.status.PUBLISHED);
             post.set('pageId', pageId);
             var modified = {
@@ -889,10 +895,10 @@ module.exports = {
     bulkDeleteBlogPost: function(accountId, pageId, postIds, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> bulkDeleteBlogPost');        
+        self.log.debug('>> bulkDeleteBlogPost');
         var query = {
             _id: {'$in': postIds}
-        };                               
+        };
         blogPostDao.removeByQuery(query, $$.m.BlogPost, function(err, value){
             cmsDao.getPageById(pageId,function(err, page) {
                 if(err) {
@@ -907,7 +913,7 @@ module.exports = {
                     _.each(postIds, function(pid){
                         self.log.debug('post with id: ' + pid);
                         self._removePostIdFromBlogComponentPage(pid, page);
-                    });                    
+                    });
                     cmsDao.saveOrUpdate(page, function(err, page){
                         if(err) {
                             self.log.error('Error updating page for post: ' + err);
@@ -1447,7 +1453,7 @@ module.exports = {
 
             ];
 
-        components : [ 
+        components : [
         {
             "_id" : "908a9f39-8f44-493b-a714-bb9db7e0fc4b",
             "anchor" : "908a9f39-8f44-493b-a714-bb9db7e0fc4b",
@@ -1481,7 +1487,7 @@ module.exports = {
                 "usePage" : false
             },
             "header_title" : "Text Block"
-        }, 
+        },
         {
             "_id" : "69355213-d9c4-467c-a501-f4e9910b0167",
             "anchor" : "69355213-d9c4-467c-a501-f4e9910b0167",
@@ -1526,7 +1532,7 @@ module.exports = {
             },
             "icon" : "fa fa-video",
             "header_title" : "Video"
-        }, 
+        },
         {
             "_id" : "bce88cd4-964a-49c3-95e9-94b8f04ef732",
             "anchor" : "bce88cd4-964a-49c3-95e9-94b8f04ef732",
@@ -1608,7 +1614,7 @@ module.exports = {
             }
         });
     },
-    
+
      createPageFromPage: function(page, fn) {
         var self = this;
         self.log = log;
@@ -1617,7 +1623,7 @@ module.exports = {
             if(err) {
                 self.log.error('Error creating page: ' + err);
                 fn(err, null);
-            } else {                
+            } else {
                 self.log.debug('created page.  Updating Linklists');
                 //console.dir(page);
                 //console.dir(value);
@@ -2608,7 +2614,7 @@ module.exports = {
                 },
                 "icon" : "fa fa-video",
                 "header_title" : "Video"
-            }, 
+            },
             {
                 "_id" : $$.u.idutils.generateUUID(),
                 "anchor" : $$.u.idutils.generateUUID(),
