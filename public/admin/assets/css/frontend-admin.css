@@ -1077,9 +1077,38 @@
 #componentloader .top-bar-v1 .navbar {
   min-height: 50px;
 }
+#componentloader .top-bar-v1 .navbar .nav > li.hour-block,
+#componentloader .top-bar-v1 .navbar .nav > li.phone-block {
+  width: 100%;
+}
+@media screen and (min-width: 660px) {
+  #componentloader .top-bar-v1 .navbar .nav > li.hour-block,
+  #componentloader .top-bar-v1 .navbar .nav > li.phone-block {
+    width: auto;
+  }
+}
+#componentloader .top-bar-v1 .social-list-icons {
+  margin-left: -20px;
+  clear: both;
+  width: 100%;
+  overflow: auto;
+}
+@media screen and (min-width: 690px) {
+  #componentloader .top-bar-v1 .social-list-icons {
+    margin-left: 0;
+    clear: none;
+    width: auto;
+    overflow: initial;
+  }
+}
 #componentloader .top-bar-v1 .left-block {
   padding: 0;
-  margin: 10px !important;
+  margin: 10px 0!important;
+}
+@media screen and (min-width: 992px) {
+  #componentloader .top-bar-v1 .left-block {
+    margin: 10px !important;
+  }
 }
 #componentloader .top-bar-v1 .right-block {
   margin: 5px !important;
@@ -1088,8 +1117,12 @@
   margin-right: 15px !important;
 }
 #componentloader .top-bar-v1 .phone-block div.navbar-right {
-  margin-left: 15px;
   margin-right: 15px !important;
+}
+@media screen and (min-width: 690px) {
+  #componentloader .top-bar-v1 .phone-block div.navbar-right {
+    margin-left: 15px;
+  }
 }
 #componentloader .top-bar-v1 .add-addtional {
   bottom: -20px;
