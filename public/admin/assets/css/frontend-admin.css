@@ -8225,6 +8225,9 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout {
   margin: 10px;
 }
+.form-builder-layout .panel-active {
+  box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
+}
 .form-builder-layout .add-layout-btn {
   display: none;
   position: absolute;

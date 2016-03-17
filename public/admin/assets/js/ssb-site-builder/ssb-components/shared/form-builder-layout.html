@@ -1,5 +1,5 @@
 <div class="form-builder-layout">
-	<div class="row well padding-10">
+	<div class="row well padding-10" ng-class="{'panel-active': vm.component.layout===0}">
 		<div class="form-layout-custom" ng-click="vm.component.layout=0">
 			<div class="disabled">
 			    <div class="form-group ">
@@ -19,14 +19,14 @@
 			        <button type="button" class="btn btn-primary btn-form">button</button>
 			    </div>
 			</div>
-			<div class="add-layout-btn">
+			<div class="add-layout-btn" ng-if="vm.component.layout !== 0">
 	            <button type="button" class="btn btn-primary btn-form btn-wide btn-scroll btn-scroll-top fa-exchange pull-right">
 	                <span>Use Custom Layout</span>
 	            </button>
 	        </div>
 		</div>
 	</div>
-	<div class="row well padding-10">
+	<div class="row well padding-10" ng-class="{'panel-active': vm.component.layout===1}">
 		<div class="form-layout-1" ng-click="vm.component.layout=1">
 			<div class="disabled">
 			    <div class="form-group">
@@ -49,14 +49,14 @@
 			        <button type="button" class="btn btn-primary btn-form">button</button>
 			    </div>
 			</div>
-			<div class="add-layout-btn">
+			<div class="add-layout-btn" ng-if="vm.component.layout !== 1">
 	            <button type="button" class="btn btn-primary btn-form btn-wide btn-scroll btn-scroll-top fa-exchange pull-right">
 	                <span>Use Layout 1</span>
 	            </button>
 	        </div>
 		</div>
 	</div>
-	<div class="row well padding-10">
+	<div class="row well padding-10" ng-class="{'panel-active': vm.component.layout===2}">
 		<div class="form-layout-2" ng-click="vm.component.layout=2">
 			<div class="disabled">
 				<div class="form-group">
@@ -91,14 +91,14 @@
 			        <button type="button" class="btn btn-primary btn-form">button</button>
 			    </div>
 			</div>
-			<div class="add-layout-btn">
+			<div class="add-layout-btn" ng-if="vm.component.layout !== 2">
 	            <button type="button" class="btn btn-primary btn-form btn-wide btn-scroll btn-scroll-top fa-exchange pull-right">
 	                <span>Use Layout 2</span>
 	            </button>
 	        </div>
 		</div>
 	</div>
-	<div class="row well padding-10">
+	<div class="row well padding-10" ng-class="{'panel-active': vm.component.layout===3}">
 		<div class="form-layout-3 col-sm-12" ng-click="vm.component.layout=3">
 			<div class="disabled">
 				<div class="col-sm-6">
@@ -121,7 +121,7 @@
 			        <button type="button" class="btn btn-primary btn-form">button</button>
 			    </div>
 			</div>
-			<div class="add-layout-btn">
+			<div class="add-layout-btn" ng-if="vm.component.layout !== 3">
 	            <button type="button" class="btn btn-primary btn-form btn-wide btn-scroll btn-scroll-top fa-exchange pull-right">
 	                <span>Use Layout 3</span>
 	            </button>
@@ -129,7 +129,7 @@
 		</div>
 	</div>
 
-	<div class="row well padding-10">
+	<div class="row well padding-10" ng-class="{'panel-active': vm.component.layout===4}">
 		<div class="form-layout-4" ng-click="vm.component.layout=4">
 			<div class="disabled">
 			    <div class="form-group ">
@@ -149,7 +149,7 @@
 			        <button type="button" class="btn btn-primary btn-form">button</button>
 			    </div>
 			</div>
-			<div class="add-layout-btn">
+			<div class="add-layout-btn" ng-if="vm.component.layout !== 4">
 	            <button type="button" class="btn btn-primary btn-form btn-wide btn-scroll btn-scroll-top fa-exchange pull-right">
 	                <span>Use Layout 4</span>
 	            </button>
