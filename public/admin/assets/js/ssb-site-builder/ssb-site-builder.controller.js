@@ -601,6 +601,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
+    function checkNavigation(e) {
+        debugger;
+    }
+
 
 
     function init(element) {
@@ -612,6 +616,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         angular.element("body").on("click", ".ssb-page-section", pageSectionClick);
 
         angular.element('.ssb-main').on('eqResize', pageResize);
+
+        angular.element($window).on('beforeunload', checkNavigation);
 
         setupBreakpoints();
 

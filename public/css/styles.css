@@ -11925,6 +11925,14 @@ ssb-topbar .ui-select-match-text > small {
   text-decoration: none;
   text-shadow: 0px 1px 0px #b23e35;
 }
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-5:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-5:hover {
+  background-color: #ea8980 !important;
+}
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-5:active:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-5:active:hover {
+  background-color: #e1584c !important;
+}
 .ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-6,
 [class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-6 {
   font-style: normal;
@@ -11937,7 +11945,7 @@ ssb-topbar .ui-select-match-text > small {
   background: -o-linear-gradient(top, #2e466e 5%, #415989 100%);
   background: -ms-linear-gradient(top, #2e466e 5%, #415989 100%);
   background: linear-gradient(to bottom, #2e466e 5%, #415989 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2e466e', endColorstr='#415989', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@ssb-theme-btn-style-6-bg-color', endColorstr='#415989', GradientType=0);
   background-color: #2e466e;
   -moz-border-radius: 17px;
   -webkit-border-radius: 17px;
@@ -11952,6 +11960,14 @@ ssb-topbar .ui-select-match-text > small {
   text-decoration: none;
   text-shadow: 0px 1px 0px #263666;
 }
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-6:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-6:hover {
+  background-color: #3a588b !important;
+}
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-6:active:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-6:active:hover {
+  background-color: #283d60 !important;
+}
 .ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-7,
 [class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-7 {
   font-style: normal;
@@ -11964,7 +11980,7 @@ ssb-topbar .ui-select-match-text > small {
   background: -o-linear-gradient(top, #33bdef 5%, #019ad2 100%);
   background: -ms-linear-gradient(top, #33bdef 5%, #019ad2 100%);
   background: linear-gradient(to bottom, #33bdef 5%, #019ad2 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bdef', endColorstr='#019ad2', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@ssb-theme-btn-style-7-bg-color', endColorstr='#019ad2', GradientType=0);
   background-color: #33bdef;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
@@ -11979,6 +11995,14 @@ ssb-topbar .ui-select-match-text > small {
   text-decoration: none;
   text-shadow: 0px -1px 0px #5b6178;
 }
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-7:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-7:hover {
+  background-color: #59c9f2 !important;
+}
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-7:active:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-7:active:hover {
+  background-color: #20b7ee !important;
+}
 .ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-8,
 [class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-8 {
   font-style: normal;
@@ -11991,7 +12015,7 @@ ssb-topbar .ui-select-match-text > small {
   background: -o-linear-gradient(top, #ffec64 5%, #ffab23 100%);
   background: -ms-linear-gradient(top, #ffec64 5%, #ffab23 100%);
   background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffec64', endColorstr='#ffab23', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@ssb-theme-btn-style-8-bg-color', endColorstr='#ffab23', GradientType=0);
   background-color: #ffec64;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
@@ -12006,6 +12030,14 @@ ssb-topbar .ui-select-match-text > small {
   text-decoration: none;
   text-shadow: 0px 1px 0px #ffee66;
 }
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-8:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-8:hover {
+  background-color: #fff18d !important;
+}
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-8:active:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-8:active:hover {
+  background-color: #ffe950 !important;
+}
 .ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-9,
 [class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-9 {
   font-style: normal;
@@ -12018,7 +12050,7 @@ ssb-topbar .ui-select-match-text > small {
   background: -o-linear-gradient(top, #007dc1 5%, #0061a7 100%);
   background: -ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);
   background: linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@ssb-theme-btn-style-9-bg-color', endColorstr='#0061a7', GradientType=0);
   background-color: #007dc1;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
@@ -12033,6 +12065,14 @@ ssb-topbar .ui-select-match-text > small {
   text-decoration: none;
   text-shadow: 0px 1px 0px #154682;
 }
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-9:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-9:hover {
+  background-color: #0097ea !important;
+}
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-9:active:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-9:active:hover {
+  background-color: #0070ad !important;
+}
 .ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-10,
 [class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-10 {
   font-style: normal;
@@ -12045,7 +12085,7 @@ ssb-topbar .ui-select-match-text > small {
   background: -o-linear-gradient(top, #77b55a 5%, #72b352 100%);
   background: -ms-linear-gradient(top, #77b55a 5%, #72b352 100%);
   background: linear-gradient(to bottom, #77b55a 5%, #72b352 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#77b55a', endColorstr='#72b352', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@ssb-theme-btn-style-10-bg-color', endColorstr='#72b352', GradientType=0);
   background-color: #77b55a;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -12059,6 +12099,14 @@ ssb-topbar .ui-select-match-text > small {
   padding: 6px 12px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #5b8a3c;
+}
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-10:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-10:hover {
+  background-color: #8ec276 !important;
+}
+.ssb-sidebar .ssb-theme-btn.ssb-theme-btn-style-10:active:hover,
+[class*="ssb-theme-"] .ssb-theme-btn.ssb-theme-btn-style-10:active:hover {
+  background-color: #6cad4e !important;
 }
 ssb-topbar #ssb-froala-scrollable-container {
   position: absolute;
