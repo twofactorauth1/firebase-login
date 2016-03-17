@@ -904,6 +904,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
         if (url) {
             var match = url.match(regex);
+
+            if (match.length) {
+                match = _.filter(match, function(val) { return val !== undefined });
+            }
+
             var id = match && match[1] ? match[1] : null;
 
             returnUrl = defaultUrl.replace(videoIdReplaceToken, id).replace(videoIdReplaceToken, id);

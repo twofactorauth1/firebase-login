@@ -18,12 +18,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.componentClass = componentClass;
     vm.componentStyle = componentStyle;
     vm.sectionHasFooter = sectionHasFooter;
+    vm.sectionHasLegacyUnderNavSetting = sectionHasLegacyUnderNavSetting;
     vm.getTrustedUrl = getTrustedUrl;
     vm.setupVideoBackground = setupVideoBackground;
     vm.playerObject = {};
     vm.player = {};
 
-    
+
 
     $scope.$watch('vm.section.bg.video.id', function (_id) {
         if (_id) {
@@ -70,16 +71,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
                 }
 
-                // if (section.layoutModifiers.sidePadding0) {
-
-                //     classString += ' ssb-page-section-layout-side-padding-0';
-
-                // }
-
             }
 
             if (vm.sectionHasFooter(section)) {
                 classString += ' ssb-page-section-layout-overflow-visible';
+            }
+
+            if (vm.sectionHasLegacyUnderNavSetting(section)) {
+                classString += ' ssb-page-section-layout-legacy-undernav';
             }
 
             if (section.bg.video && section.bg.video.show && section.bg.video.urlProcessed) {
@@ -350,6 +349,17 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
     function sectionHasFooter(section) {
         return _.findWhere(section.components, { type: 'footer' });
+    }
+
+    function sectionHasLegacyUnderNavSetting(section) {
+        var isUnderNav = false;
+        var masthead = _.findWhere(section.components, { type: 'masthead' });
+
+        if (masthead && masthead.bg && masthead.bg.img && masthead.bg.img.undernav) {
+            isUnderNav = true;
+        }
+
+        return isUnderNav;
     }
 
     function getTrustedUrl(url) {

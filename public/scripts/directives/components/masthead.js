@@ -1,4 +1,4 @@
-app.directive('mastheadComponent', ['$window', function ($window) {
+app.directive('mastheadComponent', ['$window', '$timeout', function ($window, $timeout) {
     return {
         scope: {
             component: '='
@@ -23,12 +23,22 @@ app.directive('mastheadComponent', ['$window', function ($window) {
                     scope.setUnderbnavMargin();
                 });
                 scope.setUnderbnavMargin = function () {
-                    if(scope.$parent.addUnderNavSetting)
-                        scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
+
+                    var limit = 10;
+                    var pScope = scope.$parent;
+                    while (!pScope.addUnderNavSetting && limit > 0) {
+                        pScope = pScope.$parent;
+                        limit--;
+                    }
+
+                    if (pScope.addUnderNavSetting) {
+                        pScope.addUnderNavSetting(scope.component._id, function (data) {
                             scope.allowUndernav = data.allowUndernav;
                             scope.navComponent = data.navComponent;
                         });
-                    setTimeout(function () {
+                    }
+
+                    $timeout(function () {
                         var mastheadElement = angular.element(".component_wrap_" + scope.component._id + ".undernav200");
                         var mastheadUnderNavElement = angular.element(".masthead_" + scope.component._id + ".mastHeadUndernav");
                         if (scope.addUndernavClasses && scope.allowUndernav) {
