@@ -932,6 +932,7 @@ var copyutil = {
             }
         ], function done(err){
             srcMongo.close();
+            console.log('Note: you probably should clear the templates cached in S3 for this account!');
             fn(err);
         });
     }

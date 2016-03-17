@@ -31,6 +31,11 @@
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
+                <div id="card_postcode" class="small-3 columns col-xs-6">
+                    <input placeholder="Post Code" type="text" id="address_zip" name="address_zip" ng-blur="checkCardPostcode()" class="form-control input-lg">
+                    <span class="glyphicon form-control-feedback"></span>
+                    <span class="error help-block" />
+                </div>
                 <!-- <div id="coupon_code" class="col-xs-12">
                      <input placeholder="Coupon Code" type="text" id="coupon" name="coupon" ng-blur="checkCouponCode()" class="form-control input-lg">
                     <span class="error help-block" />
@@ -43,6 +48,3 @@
 <div class="panel-footer row">
     <button id="btn-new-address" class="btn btn-info btn-wide btn-o pull-right" ng-click="addCardFn()">Add Card</button>
 </div>
-
-
-
