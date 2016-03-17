@@ -1,4 +1,4 @@
-<div class="form-builder-{{vm.component._id}}">
+<div class="form-builder-component form-builder-{{vm.component._id}}">
         <div class="col-xs-12 component-body" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}" style="{{formStyle(vm.component.formSettings)}}">
             <div>
                 <div class="inner-page row">
@@ -9,20 +9,15 @@
                         <div elem ng-model="vm.component.subtitle"></div>
                     </div>
                     <div class="clearfix mb15"></div>
-                    <form name="formBuilder" ng-submit="createUser(formBuilder)">
+                    <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
                     
                         <div class="form-builder-layout" ng-switch="vm.component.layout">
                             <div ng-switch-when="1" class="form-layout-1" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="control-label">{{val.label}}</label>
-                                    <input type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
+                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
+                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea>  
                                 </div>
-
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12">
-                                  <label class="control-label">Message</label>
-                                  <textarea class="form-control input-lg" name="message" rows="5" ng-model='user.message'></textarea>  
-                                </div>
-
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
                                     <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
@@ -33,19 +28,14 @@
                                 
                             </div>
                             <div ng-switch-when="2" class="form-layout-2" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="col-sm-2 control-label">{{val.label}}</label>                                    
                                     <div class="col-sm-10">
-                                      <input type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
+                                      <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
+                                      <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea>  
                                     </div>
                                 </div>
-
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12">
-                                    <label class="col-sm-2 control-label">Message</label>
-                                    <div class="col-sm-10">
-                                     <textarea class="form-control input-lg" name="message" rows="5" ng-model='user.message'></textarea>  
-                                    </div>
-                                </div>
+                                
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
                                     <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
@@ -55,16 +45,17 @@
                             </div>
                             <div ng-switch-when="3" class="form-layout-3 col-sm-12" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div class="col-sm-6">
-                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">    
-                                      <input placeholder="{{val.label}}" type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
-                                    </div>
-                                </div>  
-                                <div class="col-sm-6">
-                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group">               
-                                        <textarea placeholder="Message" class="form-control input-lg" name="message" rows="5" ng-model='user.message'></textarea> 
+                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">    
+                                      <input placeholder="{{val.label}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
                                     </div>
                                 </div>
 
+                                <div class="col-sm-6">
+                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
+                                      <textarea placeholder="{{val.label}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea> 
+                                    </div>
+                                </div> 
+                               
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
                                     <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
@@ -74,13 +65,11 @@
                                 
                             </div>
                             <div ng-switch-when="4" class="form-layout-4" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
-                                    <input placeholder="{{val.label}}" type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
+                                    <input ng-if="val.name !== 'message'" placeholder="{{val.label}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
+                                    <textarea ng-if="val.name === 'message'" placeholder="{{val.label}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea>  
                                 </div>
-
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12">
-                                  <textarea placeholder="Message" class="form-control input-lg" name="message" rows="5" ng-model='user.message'></textarea>  
-                                </div>
+                                
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
                                     <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
@@ -88,16 +77,12 @@
                                     </button>                           
                                 </div>
                             </div>
-                            <div ng-switch-default class="form-layout-1" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
-                                    <label class="control-label">{{val.label}}</label>
-                                    <input type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
+                            <div ng-switch-default class="form-layout-custom" style="{{vm.inputStyle(vm.component.formSettings)}}">
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
+                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' placeholder="{{val.label}}">
+                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' placeholder="{{val.label}}"></textarea> 
                                 </div>
-
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12">
-                                  <label class="control-label">Message</label>
-                                  <textarea class="form-control input-lg" name="message" rows="5" ng-model='user.message'></textarea>  
-                                </div>
+                               
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
                                     <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
@@ -108,13 +93,13 @@
                         </div>                        
                         
                         <div class="clearfix mb15"></div>
-                        <div ng-show="formSuccess">
-                            <div class="row thank-you animated" ng-class="{fadeOut: !formSuccess, tada: formSuccess}">
+                        <div ng-show="vm.formSuccess">
+                            <div class="row thank-you animated" ng-class="{fadeOut: !vm.formSuccess, tada: vm.formSuccess}">
                                 <h3 class="center mb20" ng-bind-html="vm.component.formSettings.successMessage || 'Thank You for Submitting!'"></h3>
                             </div>
                         </div>
-                         <div ng-show="formError">
-                            <div class="row thank-you animated" ng-class="{fadeOut: !formError, tada: formError}">
+                         <div ng-show="vm.formError">
+                            <div class="row thank-you animated" ng-class="{fadeOut: !vm.formError, tada: vm.formError}">
                                 <h3 class="center mb20" ng-bind-html="vm.component.formSettings.errorMessage || 'Error while Submitting!'"></h3>
                             </div>
                         </div>

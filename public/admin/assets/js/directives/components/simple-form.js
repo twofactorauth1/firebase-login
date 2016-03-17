@@ -74,10 +74,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
       };
        
       scope.buttonStyle = function(btn){ 
-        var styleString = '';
-        if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
-            styleString = "width:" + 100/scope.component.formSettings.fieldsPerRow + "%;";
-        }
+        var styleString = '';        
         if (btn && btn.align) {           
             if(btn.align === 'left' || btn.align === 'right')
               styleString += 'float: ' + btn.align + ";";

@@ -1,7 +1,16 @@
 <div ng-controller="SSBComponentSettingsModalCtrl" class="container-fluid">
     <accordion close-others="oneAtATime" class="accordion simple-form-settings">
         <accordion-group heading="FORM ARRANGEMENT">        
-            
+            <div class="row">
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Fields per row</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right">
+                        <input type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" integer-touch-spin>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
             <div class="row">
                 <div class="form-group margin-bottom-5">
                     <label><strong>Row spacing</strong></label>
@@ -13,7 +22,16 @@
                 </div>
             </div>
 
-            
+            <div class="row">
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Column spacing</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right">
+                        <input type="text" ng-model="component.formSettings.spacing.pr" min="0" max="500" integer-touch-spin>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
             <div class="row">
                 <div class="form-group margin-bottom-5">
                     <label><strong>Field alignment</strong></label>
