@@ -21,7 +21,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         'name': 'Button',
         'type': 'ssb-element-button',
         'title': 'Button',
-        'version': 1,
+        'version': null,
         'bg': {
             'img': {
                 'url': '',
@@ -126,6 +126,16 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             } catch(e) {};
 
             console.log('classObj', classObj);
+
+            if (classObj) {
+
+                data.version = _.each(classObj, function(value, key, obj) {
+                    if (key.indexOf('ssb-theme-btn-style-') === 0) {
+                        return key.replace('ssb-theme-btn-style-', '')
+                    }
+                });
+
+            }
         }
 
         angular.extend(vm.elementData, data);
@@ -163,11 +173,14 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
     function elementClass() {
         var classObj = {};
-       // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
 
         classObj[vm.elementData.type] = true;
 
         classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
+
+        if (vm.elementData.version !== null && typeof parseInt(vm.elementData.version) === "number") {
+            classObj['ssb-theme-btn-style-' + parseInt(vm.elementData.version)] = true;
+        }
 
         if (vm.element) {
             vm.element.attr('data-ssb-class', JSON.stringify(classObj));
