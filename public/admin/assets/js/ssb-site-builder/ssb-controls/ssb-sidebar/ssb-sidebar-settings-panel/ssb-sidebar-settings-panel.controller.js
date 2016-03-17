@@ -179,9 +179,9 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
       }
     }
 
-    function changeButtonDesign(style) {
-        // var button = vm.uiState.activeElement;
-        // debugger;
+    function changeButtonDesign(version) {
+        var button = vm.uiState.activeElement;
+        button.version = version;
     }
 
 

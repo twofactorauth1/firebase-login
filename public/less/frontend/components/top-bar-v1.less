@@ -1,56 +1,99 @@
 /********** Topbar **********/
 .top-bar-v1 {
-  .navbar {
-    min-height: 50px;
-  }
-  .left-block {
-      padding: 0;
-      margin: 10px !important;
 
-  }
-  .right-block{
-    margin: 5px !important;
-  }
-  .hour-block{
-
-    div.navbar-right{
-      margin-right: 15px !important;
+    .navbar {
+        min-height: 50px;
     }
-  }
-  .phone-block{
 
-    div.navbar-right{
-        margin-left: 15px;
-        margin-right: 15px !important;
-      }
-  }
-  .add-addtional {
-  bottom: -20px;
-  }
+    .navbar .nav > li.hour-block,
+    .navbar .nav > li.phone-block {
+        width: 100%;
+
+        @media screen and (min-width: 660px) {
+            width: auto;
+        }
+
+    }
+
+    .social-list-icons {
+        margin-left: -20px;
+        clear: both;
+        width: 100%;
+        overflow: auto;
+
+        @media screen and (min-width: 690px) {
+            margin-left: 0;
+            clear: none;
+            width: auto;
+            overflow: initial;
+        }
+
+    }
+
+    .left-block {
+        padding: 0;
+        margin: 10px 0!important;
+
+        @media screen and (min-width: 992px) {
+            margin: 10px !important;
+        }
+
+    }
+
+    .right-block {
+        margin: 5px !important;
+    }
+
+    .hour-block {
+
+        div.navbar-right{
+            margin-right: 15px !important;
+        }
+
+    }
+
+    .phone-block {
+
+        div.navbar-right{
+            margin-right: 15px !important;
+
+            @media screen and (min-width: 690px) {
+                margin-left: 15px;
+            }
+
+        }
+
+    }
+
+    .add-addtional {
+        bottom: -20px;
+    }
+
 }
 .top-bar-wrap .main-block {
-  .left-block {
-    border: 4px solid rgba(0, 0, 0, 0);
-    position: relative;
-  }
-  .left-block.edit-mode {
-    padding: 20px;
-  }
-  .left-block:hover {
-    
-  }
-  .social-list-icons{
-    float:left;
-    position:relative;
-    &:hover {
-      .left-block {
-        border: 3px dashed rgba(0, 0, 0, 0.4);
-        +.add-addtional {
-          display: block;
-          font-size: 28px;
-        }
-      }
+    .left-block {
+        border: 4px solid rgba(0, 0, 0, 0);
+        position: relative;
     }
-  }
-  
+    .left-block.edit-mode {
+        padding: 20px;
+    }
+    .left-block:hover {
+
+    }
+    .social-list-icons {
+        float:left;
+        position:relative;
+
+        &:hover {
+            .left-block {
+                border: 3px dashed rgba(0, 0, 0, 0.4);
+                +.add-addtional {
+                    display: block;
+                    font-size: 28px;
+                }
+            }
+        }
+    }
+
 }
