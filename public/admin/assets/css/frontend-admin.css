@@ -8228,11 +8228,16 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .add-layout-btn {
   display: none;
   position: absolute;
-  margin-top: -40%;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 170px;
+  height: 35px;
 }
 .form-builder-layout .form-layout-1 {
+  position: relative;
   width: 50%;
   margin: auto;
 }
@@ -8249,6 +8254,7 @@ ssb-topbar .ui-select-match-text > small {
   display: block;
 }
 .form-builder-layout .form-layout-2 {
+  position: relative;
   width: 50%;
   margin: auto;
 }
@@ -8262,6 +8268,9 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .form-layout-2:hover .add-layout-btn {
   display: block;
 }
+.form-builder-layout .form-layout-3 {
+  position: relative;
+}
 .form-builder-layout .form-layout-3 button {
   float: right;
   margin-right: 15px;
@@ -8271,9 +8280,9 @@ ssb-topbar .ui-select-match-text > small {
 }
 .form-builder-layout .form-layout-3:hover .add-layout-btn {
   display: block;
-  margin-top: 10%;
 }
 .form-builder-layout .form-layout-4 {
+  position: relative;
   width: 50%;
   margin: auto;
 }
@@ -8287,6 +8296,7 @@ ssb-topbar .ui-select-match-text > small {
   display: block;
 }
 .form-builder-layout .form-layout-custom {
+  position: relative;
   margin: auto;
 }
 .form-builder-layout .form-layout-custom button {
