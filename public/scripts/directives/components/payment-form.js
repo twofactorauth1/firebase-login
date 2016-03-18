@@ -9,6 +9,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {};
             scope.emailValidation = formValidations.email;
+            scope.havingNetworkIssue = false;
 
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;
@@ -550,7 +551,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             };
 
             scope.checkDomainExists = function(newAccount) {
-
+                scope.havingNetworkIssue = false;
                 if (!newAccount.businessName) {
                     scope.validBusinessName = false;
                     scope.emptyBusinessName = true;
@@ -568,10 +569,21 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     name = name.replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
 
                     newAccount.businessName = name;
-                    UserService.checkDomainExists(name, function(domainAvailable) {
-                        scope.domainExistsAlready = domainAvailable==='false';
+                    UserService.checkDomainExists(name, function(err, domainAvailable) {
+                        if (err) {
+                            scope.isFormValid = false;
+                            scope.showFooter(true);
+                        }
 
-                        scope.validateBusinessName(scope.domainExistsAlready);
+                        if (domainAvailable) {
+                            scope.domainExistsAlready = domainAvailable==='false';
+                            scope.validateBusinessName(scope.domainExistsAlready);
+                        } else {
+                            scope.isFormValid = false;
+                            scope.showFooter(true);
+                            scope.havingNetworkIssue = true;
+                        }
+
                     });
                 }
             };
