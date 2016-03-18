@@ -2709,6 +2709,17 @@ div[data-type="feature-block"] .component-inner {
     width: 100% !important;
   }
 }
+.simple-form-v1 .btn-simple-form {
+  width: auto;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+.simple-form-v1 .btn-simple-form .editable-title {
+  display: none !important;
+}
+.simple-form-v1 .btn-simple-form .element-wrap {
+  padding: 5px !important;
+}
 /********** Simple Form v2 **********/
 .simple-form-v2 {
   background: black;

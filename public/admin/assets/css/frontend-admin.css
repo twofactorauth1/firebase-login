@@ -2711,6 +2711,17 @@
     width: 100% !important;
   }
 }
+#componentloader .simple-form-v1 .btn-simple-form {
+  width: auto;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+#componentloader .simple-form-v1 .btn-simple-form .editable-title {
+  display: none !important;
+}
+#componentloader .simple-form-v1 .btn-simple-form .element-wrap {
+  padding: 5px !important;
+}
 #componentloader .simple-form-v2 {
   background: black;
   padding: 0px!important;
