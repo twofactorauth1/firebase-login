@@ -173,13 +173,16 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
     function elementClass() {
         var classObj = {};
+        var version = parseInt(vm.elementData.version);
+        var versionIsNumber = typeof parseInt(vm.elementData.version) === "number";
+        var versionIsNaN = isNaN(parseInt(vm.elementData.version));
 
         classObj[vm.elementData.type] = true;
 
         classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
 
-        if (vm.elementData.version !== null && typeof parseInt(vm.elementData.version) === "number") {
-            classObj['ssb-theme-btn-style-' + parseInt(vm.elementData.version)] = true;
+        if (versionIsNumber && !versionIsNaN) {
+            classObj['ssb-theme-btn-style-' + version] = true;
         }
 
         if (vm.element) {
