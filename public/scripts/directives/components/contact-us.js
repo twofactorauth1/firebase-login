@@ -6,7 +6,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
       component: '='
     },
     templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs) {      
+    link: function (scope, element, attrs) {
       scope.reloadMap = function()
       {
         if(scope.map){
@@ -14,7 +14,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
          scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
        }
       }
-      function hexToRgb(hex, opacity) {      
+      function hexToRgb(hex, opacity) {
         var c;
         opacity = angular.isDefined(opacity) ? opacity : 1;
         c = hex.substring(1).split('');
@@ -30,12 +30,12 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
       if(!angular.isDefined(scope.component.bg))
         scope.component.bg = {};
       if(!angular.isDefined(scope.component.bg.img))
-        scope.component.bg.img = {};   
+        scope.component.bg.img = {};
       if(!angular.isDefined(scope.component.bg.img.show))
-        scope.component.bg.img.show = false;   
-           
+        scope.component.bg.img.show = false;
+
       scope.component.bg.img.show = false;
-      
+
       if(scope.component.boxColor)
         scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
 
@@ -45,7 +45,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
           $timeout(function () {
               scope.reloadMap();
           }, 500);
-        } 
+        }
         else{
           geocodeService.validateAddress(scope.component.location, function (data, results) {
             if (data && results.length === 1) {
@@ -54,7 +54,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
               $timeout(function () {
                 scope.reloadMap();
               }, 3000);
-            } 
+            }
             else{
               geocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
                 if (data.lat && data.lon) {
@@ -68,8 +68,8 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
             }
           });
         }
-        
-          
+
+
       };
 
       scope.$on('mapInitialized', function(event, map) {
@@ -91,7 +91,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
             scope.component.location = account.business.addresses[0];
           }
         }
-        else if(account.business.hours){        
+        else if(account.business.hours){
           scope.component.hours = account.business.hours;
           scope.component.splitHours = account.business.splitHours;
         }
@@ -111,6 +111,16 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
            scope.updateContactUsAddress();
         }
       });
+
+        scope.calcMaxWidth = function(element){
+            var el = angular.element("."+element);
+            if(el.length){
+                var w = el.width();
+                // - 100 margin-left
+                // -50 margin right
+                return (w - 100 - 50) + 'px';
+            }
+        }
     }
   };
 }]);

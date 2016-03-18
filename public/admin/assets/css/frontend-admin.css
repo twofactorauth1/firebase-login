@@ -1299,6 +1299,12 @@
 #componentloader .navigation-v2 .navbar .navbar-header .navbar-toggle {
   margin-top: 50px;
 }
+@media screen and (max-width: 767px) {
+  #componentloader .navigation-v2 .navbar .navbar-header .navbar-toggle {
+    position: absolute;
+    right: 0;
+  }
+}
 #componentloader .navigation-v2 .navbar .navbar-brand {
   margin: 0 auto!important;
   height: auto;
@@ -1388,9 +1394,14 @@
 }
 #componentloader .navigation-v3 .navbar-nav {
   text-align: center;
-  float: right!important;
+  float: none;
   margin-top: 0;
   margin-right: 0;
+}
+@media screen and (min-width: 767px) {
+  #componentloader .navigation-v3 .navbar-nav {
+    float: right;
+  }
 }
 #componentloader .navigation-v3 .navbar-nav > li {
   float: left;
@@ -2710,6 +2721,17 @@
   #componentloader .simple-form-v1 .btn-simple-form {
     width: 100% !important;
   }
+}
+#componentloader .simple-form-v1 .btn-simple-form {
+  width: auto;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+#componentloader .simple-form-v1 .btn-simple-form .editable-title {
+  display: none !important;
+}
+#componentloader .simple-form-v1 .btn-simple-form .element-wrap {
+  padding: 5px !important;
 }
 #componentloader .simple-form-v2 {
   background: black;
@@ -7638,8 +7660,10 @@ ssb-topbar .ui-select-match-text > small {
   overflow: visible;
   opacity: 1;
 }
-.ssb-page-section-layout-video-bg {
-  height: 56.25vw;
+@media screen and (min-width: 767px) {
+  .ssb-page-section-layout-video-bg {
+    height: 56.25vw;
+  }
 }
 [class*="ssb-theme-"] {
   /*

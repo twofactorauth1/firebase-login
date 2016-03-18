@@ -886,15 +886,21 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function validateDuplicatePage(pageHandle) {
-      var _page = _.find(vm.state.originalPages, function (page) {
-          return page.handle === pageHandle;
+        var _page = _.find(vm.state.originalPages, function (page) {
+            return page.handle === pageHandle;
         });
-      if (_page && _page._id !== vm.state.page._id) {
-        return "Page handles must be unique.";
-      } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
-        return "Page handle cannot be a system route.";
-      }
+        if (_page && _page._id !== vm.state.page._id) {
+            return "Page handles must be unique.";
+        } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
+            return "Page handle cannot be a system route.";
+        }
     }
+
+    $scope.$watch('vm.state.page.handle', function(handle, oldHandle){
+        if(handle && !angular.equals(oldHandle, handle)){
+            vm.state.page.handle = $filter('slugify')(handle);
+        }
+    });
 
     function getYoutubeVideoUrl(videoIdReplaceToken, url) {
         var returnUrl;

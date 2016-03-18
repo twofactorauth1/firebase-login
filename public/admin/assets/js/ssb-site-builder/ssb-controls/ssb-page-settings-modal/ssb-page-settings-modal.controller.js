@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', function ($scope, $timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location) {
+app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', '$filter', function ($scope, $timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location, $filter) {
 
 	var sectionLabel;
 	var vm = this;
@@ -184,13 +184,14 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     });
     if(_page && _page._id !== vm.page._id) {
       return "Page handles must be unique.";
-    } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {     
+    } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
       return "Page handle cannot be a system route.";
     }
   }
 
   $scope.$watch('vm.page.handle', function(handle){
       if(handle){
+        vm.page.handle = $filter('slugify')(handle);
         vm.inValidPageHandle = validateDuplicatePage(handle);
       }
       else{

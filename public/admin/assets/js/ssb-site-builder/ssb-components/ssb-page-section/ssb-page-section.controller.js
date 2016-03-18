@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderPageSectionController', ssbPageSectionController);
 
-ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout'];
+ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$window'];
 /* @ngInject */
-function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout) {
+function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window) {
 
     console.info('page-section directive init...')
 
@@ -82,7 +82,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
 
             if (section.bg.video && section.bg.video.show && section.bg.video.urlProcessed) {
-                classString += ' ssb-page-section-layout-video-bg';
+
+                if (!angular.equals(vm.playerObject, {})) {
+                    classString += ' ssb-page-section-layout-video-bg';
+                }
             }
 
         }
@@ -368,7 +371,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
     function setupVideoBackground() {
 
-        if (vm.section.bg.video && vm.section.bg.video.id) {
+        var windowWidth = angular.element($window).width();
+
+        if (windowWidth > 767 && vm.section.bg.video && vm.section.bg.video.id) {
 
             if (vm.playerObject.destroy) {
                 vm.playerObject.destroy();

@@ -1,5 +1,5 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div class="row ">
+    <div class="row contact-panel-{{component._id}}">
         <div class="map-wrap {{isEditing ? 'editing' : ''}}">
 
             <map zoom="{{component.map.zoom || 10}}" center="{{component.location.lat}}, {{component.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="true" scrollwheel="false">
@@ -10,7 +10,7 @@
             <div class="panel-default widget-weather col-xs-12 col-sm-4 col-md-3 col-lg-3  col-sm-offset-9" style="{{component.splitHours ? 'width:30%' : ''}}">
                 <div class="panel-body">
                     <div class="row" >
-                        <div class="col-xs-12 temp  settings" ng-style="{
+                        <div class="col-xs-12 temp settings" ng-style="{'max-width': calcMaxWidth('contact-panel-{{component._id}}'),
                         'width': component.boxProperties.width ? component.boxProperties.width : '',
                         'height': component.boxProperties.height ? component.boxProperties.height : '', 'background' : boxColor
                         }" tab-active="address" data-id="{{component._id}}" resizable r-directions="['bottom', 'right']">
@@ -20,7 +20,7 @@
                             <!-- <span ng-if="!component.hours.length">Enter Business hours here</span> -->
                             <div ng-if="component.showHours && !component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span><span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
                             <div ng-if="component.showHours && component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''">
-                            <span>{{val.day}} </span>: 
+                            <span>{{val.day}} </span>:
                             <span ng-hide="val.closed || val.wholeday" ng-if="val.split">{{val.start}}-{{val.end}} and {{val.start2}}-{{val.end2}}</span>
                             <span ng-hide="val.closed  || val.wholeday" ng-if="!val.split">{{val.start}}-{{val.end}}</span>
                             <span ng-show="val.closed">Closed</span>
@@ -34,6 +34,6 @@
 </div>
 <style type="text/css">
 .contact-us-v1 a.contact-tel {
-    color: {{component.txtcolor || primaryTextColor}} !important;    
+    color: {{component.txtcolor || primaryTextColor}} !important;
 };
 </style>

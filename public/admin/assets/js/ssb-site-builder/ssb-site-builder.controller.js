@@ -602,7 +602,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function checkNavigation(e) {
-        debugger;
+        // debugger;
     }
 
 
