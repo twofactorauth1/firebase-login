@@ -42,8 +42,8 @@
                         </li>
                     </ul>
                 </div>
-                
-                <button ng-disabled="order.status === FailedStatus || saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder(0,null,myform.$invalid)">Save</button>
+
+                <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder(0,null,myform.$invalid)">Save</button>
                 <!-- <div class="btn-group" dropdown is-open="email.isopen">
                 <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                     Send Email <span class="caret"></span>
@@ -121,20 +121,20 @@
                                                 <button class="btn btn-info btn-o btn-wide" ng-click="customerSync('billing')" ng-if="selectedCustomer">Customer Sync</button>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group col-sm-6 has-feedback" ng-class="{'has-error': myform.billing_first_name.$invalid && (formSubmitted || !myform.billing_first_name.$pristine)}">
                                             <label for="billing-first-name">
                                                 First
                                             </label>
                                             <input required type="text" class="form-control" id="billing-first-name" name="billing_first_name" placeholder="First" ng-model="order.billing_address.first_name">
-                                            
+
                                         </div>
                                         <div class="form-group col-sm-6  has-feedback" ng-class="{'has-error': myform.billing_last_name.$invalid && (formSubmitted || !myform.billing_last_name.$pristine)}">
                                             <label for="billing-last-name">
                                                 Last
                                             </label>
                                             <input required type="text" class="form-control" id="billing-last-name" name="billing_last_name" placeholder="Last" ng-model="order.billing_address.last_name">
-                                            
+
                                         </div>
                                         <div class="form-group col-sm-12">
                                             <label for="billing-company">
@@ -147,7 +147,7 @@
                                                 Address 1
                                             </label>
                                             <input required type="text" class="form-control" id="billing-address-1" name="billing_address_1" placeholder="Address 1" ng-model="order.billing_address.address_1">
-                                           
+
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label for="billing-address-2">
@@ -160,21 +160,21 @@
                                                 City
                                             </label>
                                             <input required type="text" name="billing_city" class="form-control" id="billing-city" placeholder="City" ng-model="order.billing_address.city">
-                                            
+
                                         </div>
                                         <div class="form-group col-sm-6 has-feedback" ng-class="{'has-error': myform.billing_postcode.$invalid && (formSubmitted || !myform.billing_postcode.$pristine)}">
                                             <label for="billing-postcode">
                                                 Zip Code
                                             </label>
                                             <input required type="text" class="form-control" id="billing-postcode" name="billing_postcode" placeholder="Postcode" ng-model="order.billing_address.postcode">
-                                            
+
                                         </div>
                                         <div class="form-group col-sm-6 has-feedback" ng-class="{'has-error': myform.billing_state.$invalid && (formSubmitted || !myform.billing_state.$pristine)}">
                                             <label for="billing-state">
                                                 State
                                             </label>
                                             <input required type="text" class="form-control" id="billing-state" name="billing_state" placeholder="State" ng-model="order.billing_address.state">
-                                            
+
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label for="billing-country">
@@ -186,7 +186,7 @@
                                             <label for="billing-email">
                                                 Email
                                             </label>
-                                            <input required type="text" class="form-control" id="billing-email" name="billing_email" placeholder="Email" ng-model="order.billing_address.email">                                     
+                                            <input required type="text" class="form-control" id="billing-email" name="billing_email" placeholder="Email" ng-model="order.billing_address.email">
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label for="billing-phone">
@@ -496,7 +496,7 @@
                         </div>
                         <div class="panel-footer border-light">
                             <div class="pull-right">
-                                <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
+                                <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
                                     <span>Add Product</span>
                                 </button>
                                 <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
