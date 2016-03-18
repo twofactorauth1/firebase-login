@@ -17,13 +17,14 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	vm.formBuilder = {};
 
 	vm.fieldClass = fieldClass;
-	
+
 	vm.fieldStyle = fieldStyle;
 	vm.inputStyle = inputStyle;
 	vm.buttonStyle = buttonStyle;
 	vm.formStyle = formStyle;
+    vm.addCustomField = addCustomField;
 
-	
+
 
 	function fieldClass(field){
 		var classString = 'col-sm-12';
@@ -53,7 +54,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 		if(field){
 			if(field.align === 'left' || field.align === 'right')
 	      		styleString += 'float: ' + field.align + " !important;";
-	    
+
 		    if(field.align === 'center'){
 		       styleString += 'margin: 0 auto !important; float:none !important;';
 		    }
@@ -64,33 +65,39 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 			  styleString += 'font-family: ' + field.inputFontFamily + ";";
 			}
 		}
-		
+
 		return styleString;
 	};
 
 
 
-	function buttonStyle(btn){ 
+	function buttonStyle(btn){
 		var styleString = '';
-		
-		if (btn && btn.align) {           
+
+		if (btn && btn.align) {
 		    if(btn.align === 'left' || btn.align === 'right')
 		      styleString += 'float: ' + btn.align + " !important;";
-		    
+
 		    if(btn.align === 'center'){
 		      styleString += 'margin: 0 auto !important; float:none !important;';
 		    }
 		}
 		return styleString;
-	};      
+	};
 
-	function formStyle(form){ 
-		var styleString = '';        
+	function formStyle(form){
+		var styleString = '';
 		if (form && form.formFontFamily) {
 		  styleString += 'font-family: ' + form.formFontFamily;
 		}
 		return styleString;
 	};
+
+    function addCustomField(type){
+        console.log("Add custom");
+    };
+
+
 
 	vm.createUser = function (form) {
 		// Admin check
@@ -102,7 +109,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 
 		if($injector.has("ipCookie"))
 			ipCookie = $injector.get("ipCookie");
-        
+
         var fingerprint = new Fingerprint().get();
         var sessionId = ipCookie("session_cookie").id;
 
@@ -161,14 +168,14 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	        });
         if (vm.formBuilder.phone) {
           formatted.details[0].phones.push({
-            number: vm.formBuilder.phone,            
+            number: vm.formBuilder.phone,
             type: 'm'
           });
         }
 
         if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
           formatted.details[0].addresses.push({
-            address: vm.formBuilder.address,  
+            address: vm.formBuilder.address,
             city: vm.formBuilder.city,
             state: vm.formBuilder.state,
             country: vm.formBuilder.country,
@@ -180,7 +187,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
         userService.addContact(formatted, function (data, err) {
           if (err && err.code === 409) {
             vm.userExists = true;
-          } 
+          }
           else if(err && err.code !== 409){
               vm.formError = true;
               $timeout(function () {
@@ -188,7 +195,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
               }, 5000);
           }
           else if (data) {
-            var name = vm.formBuilder.name;            
+            var name = vm.formBuilder.name;
 
             // This variant of the FB Tracking pixel is going away in late 2016
             // Ref: https://www.facebook.com/business/help/373979379354234
