@@ -13,10 +13,10 @@
 
                         <div class="form-builder-layout" ng-switch="vm.component.layout">
                             <div ng-switch-when="1" class="form-layout-1" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="control-label">{{val.label || val.type}}</label>
-                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
-                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea>
+                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                 </div>
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">
@@ -28,11 +28,11 @@
 
                             </div>
                             <div ng-switch-when="2" class="form-layout-2" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="col-sm-2 control-label">{{val.label || val.type}}</label>
                                     <div class="col-sm-10">
-                                      <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
-                                      <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea>
+                                      <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                      <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                 </div>
 
@@ -45,14 +45,14 @@
                             </div>
                             <div ng-switch-when="3" class="form-layout-3 col-sm-12" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div class="col-sm-6">
-                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
-                                      <input placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
+                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                      <input placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
                                     </div>
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
-                                      <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea>
+                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                      <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                 </div>
 
@@ -65,9 +65,9 @@
 
                             </div>
                             <div ng-switch-when="4" class="form-layout-4" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
-                                    <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'>
-                                    <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional'></textarea>
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                    <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                    <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                 </div>
 
                                 <div class="clearfix mb15 visible-xs"></div>
@@ -78,9 +78,9 @@
                                 </div>
                             </div>
                             <div ng-switch-default class="form-layout-custom" style="{{vm.inputStyle(vm.component.formSettings)}}">
-                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : formBuilder.{{val.name}}.$invalid && !formBuilder.{{val.name}}.$pristine }">
-                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' placeholder="{{val.label || val.type}}">
-                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' placeholder="{{val.label || val.type}}"></textarea>
+                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}">
+                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}"></textarea>
                                 </div>
 
                                 <div class="clearfix mb15 visible-xs"></div>

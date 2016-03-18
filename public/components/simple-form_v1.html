@@ -39,7 +39,7 @@
                                 <input style="{{inputStyle(component.formSettings)}}" type="text" name="phone" ng-model="user.phone" ng-pattern="formValidations.phone" class="form-control" placeholder="Phone" required>
                                 <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
                             </div>
-                            
+
                             <!-- EMAIL -->
                             <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
                                 <input style="{{inputStyle(component.formSettings)}}" type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="formValidations.email" ng-model-options="{ debounce: 800 }" placeholder="Email" ng-change="clearValidations()" required>
@@ -47,7 +47,7 @@
                                 <p ng-if="userExists" class="help-block">Email already exists.</p>
                             </div>
                         </div>
-                        
+
                         <div class="clearfix mb15 visible-xs"></div>
                         <div class="col-sm-12">
                             <button type="submit" style="{{buttonStyle(component.btn)}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn ssb-theme-btn btn-default btn-block btn-simple-form" ng-disabled="simpleForm.$invalid" ng-class="{'custom-orange': component.customBtn}">

@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderFormBuilderComponentController', ssbFormBuilderComponentController);
 
-ssbFormBuilderComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector'];
+ssbFormBuilderComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout'];
 /* @ngInject */
-function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude, $injector) {
+function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout) {
 
 	console.info('ssb-form-builder directive init...')
 
@@ -23,7 +23,8 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	vm.buttonStyle = buttonStyle;
 	vm.formStyle = formStyle;
     vm.addCustomField = addCustomField;
-
+    vm.addPattern = addPattern;
+    vm.formValidations = formValidations;
 
 
 	function fieldClass(field){
@@ -96,6 +97,15 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
     function addCustomField(type){
         console.log("Add custom");
     };
+
+    function addPattern(val){
+        if(val.name === "phone"){
+            return vm.formValidations.phone;
+        }
+        if(val.name === "email"){
+            return vm.formValidations.email;
+        }
+    }
 
 
 
