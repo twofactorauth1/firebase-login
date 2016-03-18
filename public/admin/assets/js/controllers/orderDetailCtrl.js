@@ -335,7 +335,9 @@
             return product._id === item.product_id;
           });
           item.product = matchProduct;
-          item.discount = 0.00;
+          if (!$stateParams.orderId) {
+              item.discount = 0.00;
+          }
         });
       }
 
