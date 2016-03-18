@@ -1376,9 +1376,14 @@ ul.nav {
 }
 .navigation-v3 .navbar-nav {
   text-align: center;
-  float: right!important;
+  float: none;
   margin-top: 0;
   margin-right: 0;
+}
+@media screen and (min-width: 767px) {
+  .navigation-v3 .navbar-nav {
+    float: right;
+  }
 }
 .navigation-v3 .navbar-nav > li {
   float: left;
