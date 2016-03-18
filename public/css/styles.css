@@ -1286,6 +1286,12 @@ ul.nav {
 .navigation-v2 .navbar .navbar-header .navbar-toggle {
   margin-top: 50px;
 }
+@media screen and (max-width: 767px) {
+  .navigation-v2 .navbar .navbar-header .navbar-toggle {
+    position: absolute;
+    right: 0;
+  }
+}
 .navigation-v2 .navbar .navbar-brand {
   margin: 0 auto!important;
   height: auto;
@@ -11247,8 +11253,10 @@ ssb-topbar .ui-select-match-text > small {
   overflow: visible;
   opacity: 1;
 }
-.ssb-page-section-layout-video-bg {
-  height: 56.25vw;
+@media screen and (min-width: 767px) {
+  .ssb-page-section-layout-video-bg {
+    height: 56.25vw;
+  }
 }
 [class*="ssb-theme-"] {
   /*
