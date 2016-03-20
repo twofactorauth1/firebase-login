@@ -351,6 +351,7 @@
         });
       } else if ($scope.isTopic) {
         console.log('saving topic');
+        $scope.topic.handle = $filter('slugify')($scope.topic.title);
         WebsiteService.updateTopic($scope.topic, function (data, error) {
           $scope.saveLoading = false;
           if (error) {

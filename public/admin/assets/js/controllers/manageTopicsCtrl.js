@@ -83,6 +83,7 @@
 
 
       // if (!hasHandle) {
+        newtopic.handle = $filter('slugify')(newtopic.title);
         WebsiteService.createTopic(newtopic, function (createdTopic) {
           toaster.pop('success', 'Topic Created', 'The ' + createdTopic.title + ' topic was created successfully.');
           $scope.closeModal();

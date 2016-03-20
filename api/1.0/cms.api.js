@@ -359,7 +359,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.replyTo >>> ', emailDataObj.content.replyTo);
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
         var accountId = parseInt(self.currentAccountId(req));
-        
+
         var components = [];
         var keys = ['logo','title','text','text1','text2','text3'];
         var regex = new RegExp('src="//s3.amazonaws', "g");
@@ -386,9 +386,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 components.push(component);
             }
         });
-        
+
         self.log.debug('components >>> ', components);
-        
+
         app.render('emails/base_email_v2', { components: components }, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
@@ -770,7 +770,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self = null;
             });
         }
-        
+
 
     },
 
@@ -880,11 +880,11 @@ _.extend(api.prototype, baseApi.prototype, {
                 var emailObj = req.body;
                 self.log.debug('>> email body');
                 var email = require('../../cms/model/email');
-               
+
                 if (email != null) {
-                    self.log.debug('>> email not null');                   
+                    self.log.debug('>> email not null');
                     email = new $$.m.cms.Email(emailObj);
-                    var emailId = req.params.id;                
+                    var emailId = req.params.id;
                     var accountId = parseInt(self.accountId(req));
                     email.set('accountId', accountId);
                     email.attributes.modified.date = new Date();
@@ -892,7 +892,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     cmsManager.updateEmail(email, emailId, function (err, value) {
                         self.log.debug('<< updateEmail');
                         self.sendResultOrError(res, err, value, "Error updating Email");
-                       
+
                         self.createUserActivity(req, 'UPDATE_EMAIL', null, null, function(){});
                     });
                 } else {
@@ -1221,7 +1221,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     topic = new Topic({
                         _id: temp,
                         title: topicData.title,
-                        category: topicData.category
+                        category: topicData.category,
+                        handle: topicData.handle
                     });
                     topic.attributes.modified.date = new Date();
                     topic.attributes.created.date = new Date();
@@ -1653,10 +1654,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.currentAccountId(req));
         var blogPostUrl = req.params.handle;
 
-        var statusAry = [$$.m.BlogPost.status.PUBLISHED];        
-            statusAry.push($$.m.BlogPost.status.PRIVATE);            
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
             statusAry.push($$.m.BlogPost.status.DRAFT);
-            statusAry.push($$.m.BlogPost.status.FUTURE);  
+            statusAry.push($$.m.BlogPost.status.FUTURE);
 
         cmsManager.getBlogPostByUrl(accountId, blogPostUrl, statusAry, function(err, value){
             self.log.debug('<< getBlogPostByUrl');
@@ -1758,7 +1759,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(res);
             } else {
                 var blogPostIds = req.body.id;
-                var pageId = req.params.id;                
+                var pageId = req.params.id;
                 cmsManager.bulkDeleteBlogPost(accountId, pageId, blogPostIds, function (err, value) {
                     self.log.debug('<< bulkDeleteBlogPost');
                     self.sendResultOrError(res, err, {deleted:true}, "Error deleting Blog Post(s)");
@@ -2055,7 +2056,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> reorderBlogPost');
         var accountId = parseInt(self.accountId(req));
-        
+
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
@@ -2229,4 +2230,3 @@ _.extend(api.prototype, baseApi.prototype, {
 });
 
 module.exports = new api();
-

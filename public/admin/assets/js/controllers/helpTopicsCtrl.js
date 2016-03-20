@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, Intercom, urlParser*/
 (function (angular) {
-  app.controller('HelpTopicsCtrl', ["$rootScope", "$scope", "WebsiteService", "$location", "$sce", function ($rootScope, $scope, WebsiteService, $location, $sce) {
+  app.controller('HelpTopicsCtrl', ["$rootScope", "$scope", "WebsiteService", "$location", "$sce", '$filter', function ($rootScope, $scope, WebsiteService, $location, $sce, $filter) {
 
     $scope.searchTextValue = {};
     $scope.searchTextValueBy = '$';
@@ -58,11 +58,12 @@
           return top._id === $location.search().topic;
         });
         $scope.viewSingle(_topic);
-      } 
+      }
     });
 
     $scope.updateTopic = function (topic) {
       console.log('topic ', topic);
+      topic.handle = $filter('slugify')(topic.title);
       WebsiteService.updateTopic(topic, function (topic) {
         console.log('topic updated', topic);
       });
@@ -97,7 +98,7 @@
       console.log('viewSingle >>> ', topic);
       if(!topic)
         return;
-      if(!$scope.loaded)          
+      if(!$scope.loaded)
         $scope.isViewed(topic);
       $scope.loaded = true;
       $scope.singleTopic = topic;
