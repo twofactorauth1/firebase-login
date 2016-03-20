@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'SweetAlert', function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, SweetAlert) {
+app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
@@ -141,7 +141,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   });
 
   $scope.lastSelect = null;
-  $scope.isSingleSelect = true;
+  $scope.isSingleSelect = isSingleSelect;
   $scope.showType = "all";
   $scope.editingImage = false;
   $scope.selectModel = {

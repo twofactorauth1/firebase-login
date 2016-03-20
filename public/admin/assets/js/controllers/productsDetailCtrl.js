@@ -49,6 +49,9 @@
           },
           insertMedia: function () {
             return $scope.insertMedia;
+          },
+          isSingleSelect: function () {
+              return true;
           }
         }
       });

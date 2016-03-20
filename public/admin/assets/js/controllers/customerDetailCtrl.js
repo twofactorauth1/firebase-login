@@ -37,6 +37,9 @@
           },
           insertMedia: function () {
             return $scope.insertPhoto;
+          },
+          isSingleSelect: function () {
+              return true;
           }
         }
       });
