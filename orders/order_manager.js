@@ -1375,11 +1375,11 @@ module.exports = {
                         totalAmount += parseFloat(order.get('total_tax'));
                         log.debug('adding tax of ' + order.get('total_tax'));
                     }
-                    else
-                    {
-                        totalAmount += parseFloat(totalAmount * taxPercent);
-                        log.debug('adding tax of ' + order.get('total_tax'));
-                    }
+                    // else
+                    // {
+                    //     totalAmount += parseFloat(totalAmount * taxPercent);
+                    //     log.debug('adding tax of ' + order.get('total_tax'));
+                    // }
                     if(order.get('total_shipping')) {
                         totalAmount += parseFloat(order.get('total_shipping'));
                         log.debug('adding shipping of ' + order.get('total_shipping'));
