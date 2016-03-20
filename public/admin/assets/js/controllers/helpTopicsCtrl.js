@@ -26,9 +26,9 @@
     };
 
     $rootScope.$on('$locationChangeSuccess', function (event, newUrl, oldUrl) {
-      if ($location.search().topic) {
+      if ($location.search().title) {
         var _topic = _.find($scope.topics, function (top) {
-          return top._id === $location.search().topic;
+          return top.handle === $location.search().title;
         });
         $scope.viewSingle(_topic);
         //$location.search('topic', null);
@@ -53,9 +53,9 @@
         }
       });
       $scope.topicsLoaded = true;
-      if ($location.search().topic) {
+      if ($location.search().title) {
         var _topic = _.find($scope.topics, function (top) {
-          return top._id === $location.search().topic;
+          return top.handle === $location.search().title;
         });
         $scope.viewSingle(_topic);
       }
@@ -104,7 +104,7 @@
       $scope.singleTopic = topic;
       $scope.showSingle = true;
       $location.path('/support/help-topics').search({
-        topic: topic._id
+        title: topic.handle
       });
     };
 
