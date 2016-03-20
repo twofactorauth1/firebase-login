@@ -51,7 +51,7 @@
             return $scope.insertMedia;
           },
           isSingleSelect: function () {
-              return false;
+              return true;
           }
         }
       });
