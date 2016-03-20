@@ -350,10 +350,18 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.m.onInsertMedia = function () {
     if ($scope.batch.length > 0) {
       if (insertMedia) {
-        insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+        if ($scope.isSingleSelect) {
+            insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+        } else {
+            insertMedia($scope.batch, $scope.type || $scope.insertMediaType);
+        }
         $scope.type = null;
       } else {
-        insertMedia($scope.batch[$scope.batch.length - 1]);
+        if ($scope.isSingleSelect) {
+            insertMedia($scope.batch[$scope.batch.length - 1]);
+        } else {
+            insertMedia($scope.batch);
+        }
       }
     }
     $scope.m.selectTriggerFn(false);

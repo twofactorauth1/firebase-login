@@ -51,7 +51,7 @@
             return $scope.insertMedia;
           },
           isSingleSelect: function () {
-              return true;
+              return false;
           }
         }
       });
@@ -197,14 +197,15 @@
      * - insert media function
      */
 
-    $scope.insertMedia = function (asset) {
-
+    $scope.insertMedia = function (assets) {
+        var urls = _.pluck(assets, 'url');
       if ($scope.currentDownload) {
         console.log('download');
-        $scope.currentDownload.file = asset.url;
+        $scope.currentDownload.file = urls[0];
       } else {
         console.log('product image');
-        $scope.product.icon = asset.url;
+        $scope.product.icon = urls[0];
+        $scope.product.assets = urls;
       }
       $scope.setDownloadId();
     };
