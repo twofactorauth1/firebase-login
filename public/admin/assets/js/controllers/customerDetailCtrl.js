@@ -1079,5 +1079,9 @@
      return CustomerService.tagToCustomer(value);
     }
 
+    $scope.viewSingleOrder = function(orderId) {
+        $location.path('/commerce/orders/'+ orderId);
+    }
+
   }]);
 }(angular));
