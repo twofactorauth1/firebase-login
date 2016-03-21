@@ -406,6 +406,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             _modal.resolve.insertMedia = function () {
               return vm.insertMedia;
             };
+
+            _modal.resolve.isSingleSelect = function () {
+                return true;
+            };
         }
 
         if (angular.isDefined(index) && index !== null && index >= 0) {

@@ -1096,7 +1096,10 @@
                     },
                     update: function() {
                         return update;
-                    }
+                    },
+		            isSingleSelect: function () {
+		                return true;
+		            }
                 }
             };
 

@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'SweetAlert', function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, SweetAlert) {
+app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
@@ -141,7 +141,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   });
 
   $scope.lastSelect = null;
-  $scope.isSingleSelect = true;
+  $scope.isSingleSelect = isSingleSelect;
   $scope.showType = "all";
   $scope.editingImage = false;
   $scope.selectModel = {
@@ -350,10 +350,18 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.m.onInsertMedia = function () {
     if ($scope.batch.length > 0) {
       if (insertMedia) {
-        insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+        if ($scope.isSingleSelect) {
+            insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+        } else {
+            insertMedia($scope.batch, $scope.type || $scope.insertMediaType);
+        }
         $scope.type = null;
       } else {
-        insertMedia($scope.batch[$scope.batch.length - 1]);
+        if ($scope.isSingleSelect) {
+            insertMedia($scope.batch[$scope.batch.length - 1]);
+        } else {
+            insertMedia($scope.batch);
+        }
       }
     }
     $scope.m.selectTriggerFn(false);

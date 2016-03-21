@@ -98,6 +98,9 @@
                 _modal.resolve.insertMedia = function () {
                   return vm.insertMedia;
                 };
+                _modal.resolve.isSingleSelect = function () {
+                  return true
+                };
             }
 
             if (size) {

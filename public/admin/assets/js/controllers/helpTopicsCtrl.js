@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, Intercom, urlParser*/
 (function (angular) {
-  app.controller('HelpTopicsCtrl', ["$rootScope", "$scope", "WebsiteService", "$location", "$sce", function ($rootScope, $scope, WebsiteService, $location, $sce) {
+  app.controller('HelpTopicsCtrl', ["$rootScope", "$scope", "WebsiteService", "$location", "$sce", '$filter', function ($rootScope, $scope, WebsiteService, $location, $sce, $filter) {
 
     $scope.searchTextValue = {};
     $scope.searchTextValueBy = '$';
@@ -26,13 +26,19 @@
     };
 
     $rootScope.$on('$locationChangeSuccess', function (event, newUrl, oldUrl) {
-      if ($location.search().topic) {
+      if ($location.search().title) {
         var _topic = _.find($scope.topics, function (top) {
-          return top._id === $location.search().topic;
+          return top.handle === $location.search().title;
         });
         $scope.viewSingle(_topic);
         //$location.search('topic', null);
-      } else {
+    } else if ($location.search().topic) {
+        var _topic = _.find($scope.topics, function (top) {
+          return top._id === $location.search().topic;
+        });
+        console.log(_topic);
+        $scope.viewSingle(_topic);
+    } else {
         $scope.loaded = false;
         $scope.showTopics();
       }
@@ -53,16 +59,23 @@
         }
       });
       $scope.topicsLoaded = true;
+      if ($location.search().title) {
+        var _topic = _.find($scope.topics, function (top) {
+          return top.handle === $location.search().title;
+        });
+        $scope.viewSingle(_topic);
+      }
       if ($location.search().topic) {
         var _topic = _.find($scope.topics, function (top) {
           return top._id === $location.search().topic;
         });
         $scope.viewSingle(_topic);
-      } 
+      }
     });
 
     $scope.updateTopic = function (topic) {
       console.log('topic ', topic);
+      topic.handle = $filter('slugify')(topic.title);
       WebsiteService.updateTopic(topic, function (topic) {
         console.log('topic updated', topic);
       });
@@ -97,13 +110,13 @@
       console.log('viewSingle >>> ', topic);
       if(!topic)
         return;
-      if(!$scope.loaded)          
+      if(!$scope.loaded)
         $scope.isViewed(topic);
       $scope.loaded = true;
       $scope.singleTopic = topic;
       $scope.showSingle = true;
       $location.path('/support/help-topics').search({
-        topic: topic._id
+        title: topic.handle
       });
     };
 
