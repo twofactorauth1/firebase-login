@@ -6,7 +6,7 @@
                     <label><strong>Fields per row</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right">
-                        <input ng-change="vm.component.layout = 0" type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" integer-touch-spin>
+                        <input ng-change="vm.component.layout = 0" type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" touchspin>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -16,7 +16,7 @@
                     <label><strong>Row spacing</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="top/bottom margin between rows"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right">
-                        <input type="text" ng-model="component.formSettings.spacing.mb" min="0" max="500" integer-touch-spin>
+                        <input type="text" ng-model="component.formSettings.spacing.mb" min="0" max="500" touchspin>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -27,7 +27,7 @@
                     <label><strong>Column spacing</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right">
-                        <input type="text" ng-model="component.formSettings.spacing.pr" min="0" max="500" integer-touch-spin>
+                        <input type="text" ng-model="component.formSettings.spacing.pr" min="0" max="500" touchspin>
                     </div>
                     <div class="clearfix"></div>
                 </div>
