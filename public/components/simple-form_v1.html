@@ -15,7 +15,7 @@
                     </div>
                     <div class="clearfix mb15"></div>
                     <form name="simpleForm" ng-submit="createUser(simpleForm)">
-                        <div class="inputFields {{nthRow}}">
+                        <div class="input-fields {{nthRow}}">
                             <!-- FIRST -->
                             <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
                                 <input style="{{inputStyle(component.formSettings)}}" type="text" name="first" ng-model="user.first" class="form-control" placeholder="First" required>
@@ -29,7 +29,7 @@
                             </div>
 
                             <!-- EXTENSION -->
-                            <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
+                            <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}" ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
                                 <input style="{{inputStyle(component.formSettings)}}" type="text" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control" placeholder="Extension">
                                 <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
                             </div>
@@ -143,49 +143,49 @@
     font-size: {{component.formSettings.formTextSize}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow2 div:nth-child(2n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row2 div:nth-child(2n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow2 div:nth-child(2n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row2 div:nth-child(2n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow3 div:nth-child(3n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div:nth-child(3n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow3 div:nth-child(3n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div:nth-child(3n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow3 div:not(:nth-child(3n)), .inputFields.nthRow3 div:not(:nth-child(3n+1)) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row3 div:not(:nth-child(3n)), .input-fields.nth-row3 div:not(:nth-child(3n+1)) {
     padding-left: {{component.formSettings.spacing.pr/2}}px !important;
     padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow4 div:nth-child(4n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div:nth-child(4n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow4 div:nth-child(4n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div:nth-child(4n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow4 div:not(:nth-child(4n)), .inputFields.nthRow4 div:not(:nth-child(4n+1)) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row4 div:not(:nth-child(4n)), .input-fields.nth-row4 div:not(:nth-child(4n+1)) {
     padding-left: {{component.formSettings.spacing.pr/2}}px !important;
     padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow5 div:nth-child(5n) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div:nth-child(5n) {
   padding-left: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow5 div:nth-child(5n+1) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div:nth-child(5n+1) {
   padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }
 
-.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow5 div:not(:nth-child(5n)), .inputFields.nthRow5 div:not(:nth-child(5n+1)) {
+.simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row5 div:not(:nth-child(5n)), .input-fields.nth-row5 div:not(:nth-child(5n+1)) {
     padding-left: {{component.formSettings.spacing.pr/2}}px !important;
     padding-right: {{component.formSettings.spacing.pr/2}}px !important;
 }

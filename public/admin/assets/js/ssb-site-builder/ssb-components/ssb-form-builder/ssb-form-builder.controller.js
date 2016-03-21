@@ -20,11 +20,14 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 
 	vm.fieldStyle = fieldStyle;
 	vm.inputStyle = inputStyle;
+    vm.inputContainerStyle = inputContainerStyle;
 	vm.buttonStyle = buttonStyle;
 	vm.formStyle = formStyle;
     vm.addCustomField = addCustomField;
     vm.addPattern = addPattern;
     vm.formValidations = formValidations;
+
+    vm.nthRow = 'nth-row';
 
 
 	function fieldClass(field){
@@ -33,7 +36,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 		if(vm.component.formSettings && vm.component.formSettings.fieldsPerRow){
 		classString = "col-sm-" + Math.floor(12/vm.component.formSettings.fieldsPerRow);
 		if(vm.component.formSettings.spacing && vm.component.formSettings.spacing.pr)
-			vm.nthRow = 'nthRow' + vm.component.formSettings.fieldsPerRow;
+			vm.nthRow = 'nth-row' + vm.component.formSettings.fieldsPerRow;
 		}
 		return classString;
 	};
@@ -49,16 +52,23 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	return styleString;
 	};
 
+    function inputContainerStyle(field){
+        var styleString = ' ';
+        if(field){
+            if(field.align === 'left' || field.align === 'right')
+                styleString += 'float: ' + field.align + " !important;";
+
+            if(field.align === 'center'){
+               styleString += 'margin: 0 auto !important; float:none !important;';
+            }
+        }
+        return styleString;
+      };
+
 	function inputStyle(field){
 
 		var styleString = ' ';
 		if(field){
-			if(field.align === 'left' || field.align === 'right')
-	      		styleString += 'float: ' + field.align + " !important;";
-
-		    if(field.align === 'center'){
-		       styleString += 'margin: 0 auto !important; float:none !important;';
-		    }
 			if (field && field.inputTextSize) {
 			  styleString += 'font-size: ' + field.inputTextSize  + 'px !important;';
 			}
@@ -89,7 +99,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	function formStyle(form){
 		var styleString = '';
 		if (form && form.formFontFamily) {
-		  styleString += 'font-family: ' + form.formFontFamily;
+		  styleString += 'font-family: ' + form.formFontFamily + ";";
 		}
 		return styleString;
 	};

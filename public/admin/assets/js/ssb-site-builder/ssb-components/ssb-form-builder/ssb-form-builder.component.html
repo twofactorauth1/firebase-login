@@ -1,5 +1,5 @@
-<div class="form-builder-component form-builder-{{vm.component._id}}">
-        <div class="col-xs-12 component-body" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}" style="{{formStyle(vm.component.formSettings)}}">
+<div class="form-builder-{{vm.component._id}}">
+        <div class="col-xs-12 component-body" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}" style="{{vm.formStyle(vm.component.formSettings)}}">
             <div>
                 <div class="inner-page row">
                     <div class="form-title ssb-theme-heading-text">
@@ -12,11 +12,11 @@
                     <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
 
                         <div class="form-builder-layout" ng-switch="vm.component.layout">
-                            <div ng-switch-when="1" class="form-layout-1" style="{{vm.inputStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="1" class="form-layout-1 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="control-label">{{val.label || val.type}}</label>
-                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
-                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
+                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                 </div>
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">
@@ -27,12 +27,12 @@
 
 
                             </div>
-                            <div ng-switch-when="2" class="form-layout-2" style="{{vm.inputStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="2" class="form-layout-2 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="col-sm-2 control-label">{{val.label || val.type}}</label>
                                     <div class="col-sm-10">
-                                      <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
-                                      <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
+                                      <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                      <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                 </div>
 
@@ -43,16 +43,16 @@
                                     </button>
                                 </div>
                             </div>
-                            <div ng-switch-when="3" class="form-layout-3 col-sm-12" style="{{vm.inputStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="3" class="form-layout-3 col-sm-12 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div class="col-sm-6">
                                     <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                      <input placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                      <input placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
                                     </div>
                                 </div>
 
                                 <div class="col-sm-6">
                                     <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                      <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
+                                      <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                     </div>
                                 </div>
 
@@ -64,10 +64,10 @@
                                 </div>
 
                             </div>
-                            <div ng-switch-when="4" class="form-layout-4" style="{{vm.inputStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="4" class="form-layout-4 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                    <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
-                                    <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
+                                    <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                    <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                 </div>
 
                                 <div class="clearfix mb15 visible-xs"></div>
@@ -77,10 +77,10 @@
                                     </button>
                                 </div>
                             </div>
-                            <div ng-switch-default class="form-layout-custom" style="{{vm.inputStyle(vm.component.formSettings)}}">
+                            <div ng-switch-default class="form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}">
-                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}"></textarea>
+                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}">
+                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}"></textarea>
                                 </div>
 
                                 <div class="clearfix mb15 visible-xs"></div>
@@ -107,4 +107,70 @@
                 </div>
             </div>
         </div>
+        <style>
+            .form-builder-{{vm.component._id}} .form-builder-title {
+            color: {
+                {
+                    vm.component.txtcolor || 'white'
+                }
+            };
+            }
+            .form-builder-{{vm.component._id}} .component-body.default-font-size * {
+                font-size: {{vm.component.formSettings.formTextSize}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n) {
+                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n+1) {
+                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n) {
+                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n+1) {
+                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:not(:nth-child(3n)), .input-fields.nth-row3 div:not(:nth-child(3n+1)) {
+                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n) {
+                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n+1) {
+                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:not(:nth-child(4n)), .input-fields.nth-row4 div:not(:nth-child(4n+1)) {
+                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n) {
+                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n+1) {
+                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+            .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:not(:nth-child(5n)), .input-fields.nth-row5 div:not(:nth-child(5n+1)) {
+                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            }
+
+
+            .form-builder-{{vm.component._id}} .btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
+            {
+                color: {{vm.component.btn.color}}!important
+            }
+        </style>
 </div>
+

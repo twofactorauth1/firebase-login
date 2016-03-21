@@ -8,22 +8,22 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
       console.log('scope.component ', scope.component);
-      scope.nthRow = 'nthRow';
+      scope.nthRow = 'nth-row';
       if(!angular.isDefined(scope.component.tags)){
         scope.component.tags = [];
         if(scope.component.contact_type)
           scope.component.tags.push(scope.component.contact_type);
       }
-      
+
 
 
       scope.fieldClass = function(field){
         var classString = 'col-sm-12';
-        
+
         if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
           classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);
           if(scope.component.formSettings.spacing && scope.component.formSettings.spacing.pr)
-            scope.nthRow = 'nthRow' + scope.component.formSettings.fieldsPerRow;
+            scope.nthRow = 'nth-row' + scope.component.formSettings.fieldsPerRow;
         }
         return classString;
       };
@@ -53,7 +53,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
       scope.inputStyle = function(field){
         var styleString = ' ';
         if (field && field.align) {
-            styleString += 'text-align: ' + field.align + ";";         
+            styleString += 'text-align: ' + field.align + ";";
         }
         if (field && field.inputTextSize) {
           styleString += 'font-size: ' + field.inputTextSize  + 'px important;';
@@ -63,23 +63,23 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         }
         return styleString;
       };
-       
-      scope.buttonStyle = function(btn){ 
+
+      scope.buttonStyle = function(btn){
         var styleString = '';
-        
-        if (btn && btn.align) {           
+
+        if (btn && btn.align) {
             if(btn.align === 'left' || btn.align === 'right')
               styleString += 'float: ' + btn.align + ";";
-            
+
             if(btn.align === 'center'){
               styleString += 'margin: 0 auto;';
             }
         }
         return styleString;
-      };      
+      };
 
-      scope.formStyle = function(form){ 
-        var styleString = '';        
+      scope.formStyle = function(form){
+        var styleString = '';
         if (form && form.formFontFamily) {
           styleString += 'font-family: ' + form.formFontFamily;
         }
@@ -145,7 +145,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         userService.addContact(formatted, function (data, err) {
           if (err && err.code === 409) {
             scope.userExists = true;
-          } 
+          }
           else if(err && err.code !== 409){
               scope.formError = true;
               $timeout(function () {
