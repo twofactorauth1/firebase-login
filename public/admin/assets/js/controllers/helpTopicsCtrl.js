@@ -32,7 +32,13 @@
         });
         $scope.viewSingle(_topic);
         //$location.search('topic', null);
-      } else {
+    } else if ($location.search().topic) {
+        var _topic = _.find($scope.topics, function (top) {
+          return top._id === $location.search().topic;
+        });
+        console.log(_topic);
+        $scope.viewSingle(_topic);
+    } else {
         $scope.loaded = false;
         $scope.showTopics();
       }
@@ -56,6 +62,12 @@
       if ($location.search().title) {
         var _topic = _.find($scope.topics, function (top) {
           return top.handle === $location.search().title;
+        });
+        $scope.viewSingle(_topic);
+      }
+      if ($location.search().topic) {
+        var _topic = _.find($scope.topics, function (top) {
+          return top._id === $location.search().topic;
         });
         $scope.viewSingle(_topic);
       }
