@@ -6,6 +6,7 @@
  */
 
 require('./base.model.js');
+var moment = require('moment');
 
 var post = $$.m.ModelBase.extend({
 
