@@ -27,7 +27,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
 
     $scope.$watch('vm.section.bg.video.id', function (_id) {
-        if (_id) {
+        if (_id && vm.section.bg.video.show) {
             $timeout(function() {
                 vm.setupVideoBackground();
             });
