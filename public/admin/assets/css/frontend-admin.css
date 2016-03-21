@@ -2675,6 +2675,7 @@
 }
 #componentloader .simple-form-v1 .btn-simple-form {
   width: auto;
+  min-width: 25%;
   padding-left: 25px !important;
   padding-right: 25px !important;
 }
@@ -8249,6 +8250,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .form-builder-layout .form-layout-1 button {
   float: right;
+  min-width: 50% !important;
 }
 .form-builder-layout .form-layout-1:hover {
   cursor: pointer;
@@ -8264,6 +8266,7 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .form-layout-2 button {
   float: right;
   margin-right: 15px;
+  min-width: 50% !important;
 }
 .form-builder-layout .form-layout-2:hover {
   cursor: pointer;
@@ -8291,6 +8294,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .form-builder-layout .form-layout-4 button {
   float: right;
+  min-width: 50% !important;
 }
 .form-builder-layout .form-layout-4:hover {
   cursor: pointer;
@@ -8326,6 +8330,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .btn-form {
   width: auto;
+  min-width: 25%;
   padding-left: 25px !important;
   padding-right: 25px !important;
 }
