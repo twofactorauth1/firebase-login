@@ -105,8 +105,9 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
+        var accountId = parseInt(self.currentAccountId(req));
 
-        contactDao.getById(contactId, function(err, value) {
+        contactDao.getContactById(accountId, contactId, function(err, value) {
             self.log.debug('<< getContactById');
             if(!err && !value) {
                 self.wrapError(resp, 404, null, 'Contact not found.', 'Contact not found.');

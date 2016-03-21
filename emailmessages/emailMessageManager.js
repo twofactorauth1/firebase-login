@@ -35,7 +35,7 @@ module.exports = {
                 self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
                     var params = {
                         smtpapi:  new sendgrid.smtpapi(),
-                        //to:       [toAddress],
+                        to:       [toAddress],
                         //toname:   [],
                         from:     fromAddress,
                         fromname: '',
@@ -45,28 +45,32 @@ module.exports = {
                         //bcc:      [],
                         //cc:       [],
                         //replyto:  '',
-                        date:     moment().format('MMM Do, YYYY')
+                        date:     moment().format('MMM Do, YYYY'),
                         //headers:    {}
+                        category: 'welcome'
                     };
                     if(fromName && fromName.length > 0) {
                         params.fromname = fromName;
                     }
                     if(toName && toName.length > 0) {
-                        message.toname = toName;
+                        params.toname = toName;
                     }
-                    params.addCategory('welcome');
-                    self._safeStoreEmail(params, function(err, emailmessage){
+
+
+                    //TODO: do we need SENDDATE?
+                    self._safeStoreEmail(params, accountId, userId, function(err, emailmessage){
                         //we should not have an err here
                         if(err) {
                             self.log.error('Error storing email (this should not happen):', err);
                             return fn(err);
                         } else {
-                            params.setUniqueArgs({
+                            var email = new sendgrid.Email(params);
+                            email.setUniqueArgs({
                                 emailmessageId: emailmessage.id(),
                                 accountId:accountId
                             });
 
-                            var email = new sendgrid.Email(params);
+
                             sendgrid.send(email, function(err, json) {
                                 if (err) {
                                     self.log.error('Error sending email:', err);
@@ -87,17 +91,235 @@ module.exports = {
 
     sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId,
                                 contactId, vars, stepSettings, emailId, fn) {
-        //TODO: this
+        var self = this;
+        self.log.debug('>> sendCampaignEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn(null, 'skipping email for user on unsubscribed list');
+            } else {
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
+                    //inline styles
+                    juice.juiceResources(mergedHtml, {}, function(err, html){
+                        //TODO: do we need to handle SENDDATE?
+
+                        var params = {
+                            smtpapi:  new sendgrid.smtpapi(),
+                            to:       [toAddress],
+                            from:     fromAddress,
+                            fromname: '',
+                            subject:  subject,
+                            html:     html,
+                            date:     moment().format('MMM Do, YYYY'),
+                            category: 'campaign'
+                        };
+                        if(fromName && fromName.length > 0) {
+                            params.fromname = fromName;
+                        }
+                        if(toName && toName.length > 0) {
+                            params.toname = toName;
+                        }
+                        if(stepSettings.bcc) {
+                            params.bcc = stepSettings.bcc;
+                        }
+
+                        self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                            //we should not have an err here
+                            if(err) {
+                                self.log.error('Error storing email (this should not happen):', err);
+                                return fn(err);
+                            } else {
+                                params.addUniqueArgs({
+                                    emailmessageId: emailmessage.id(),
+                                    accountId:accountId,
+                                    emailId: emailId,
+                                    campaignId: campaignId,
+                                    contactId: contactId
+                                });
+
+                                var email = new sendgrid.Email(params);
+
+                                //Figure out when to send it
+                                var send_at = null;
+                                var now_at = null;
+                                if(stepSettings.offset) {
+                                    //the offset is the number of mintues from now to send it at.
+                                    send_at = moment().utc().add('minutes', stepSettings.offset).unix();
+                                    self.log.debug('send_at ' + send_at);
+                                } else if(stepSettings.scheduled) {
+                                    send_at = self._getSecheduledUTCUnix(stepSettings.scheduled.day,
+                                        stepSettings.scheduled.hour, stepSettings.scheduled.minute, stepSettings.offset||0);
+                                } else if(stepSettings.sendAt) {
+                                    self.log.debug('send details >>> ', stepSettings.sendAt);
+                                    // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+                                    // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
+                                    stepSettings.sendAt.month = stepSettings.sendAt.month-1;
+                                    send_at = moment.utc(stepSettings.sendAt).unix();
+                                    now_at = moment.utc();
+                                    self.log.debug('send_at formatted >>> ', send_at);
+                                    self.log.debug('now_at formatted >>> ', now_at);
+                                    if(moment(send_at).isBefore(now_at)) {
+                                        self.log.debug('Sending email now because ' + send_at + ' is in the past.');
+                                        send_at = moment().utc().unix();
+                                    }
+                                } else {
+                                    //send it now?
+                                    self.log.debug('No scheduled or sendAt specified.');
+                                    send_at = moment().utc().unix();
+                                }
+                                //TODO: if this is more than 72 hours in the future, it will (may) fail
+                                email.setSendAt(send_at);
+
+                                sendgrid.send(email, function(err, json) {
+                                    if (err) {
+                                        self.log.error('Error sending email:', err);
+                                        return fn(err);
+                                    } else {
+                                        self.log.debug('<< sendAccountWelcomeEmail');
+                                        return fn(null, json);
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+        });
     },
 
     sendOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId, vars,
                              emailId, fn) {
-        //TODO: this
+        var self = this;
+        self.log.debug('>> sendOrderEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                vars.push({
+                        "name": "SENDDATE",
+                        "content": moment().format('MMM Do, YYYY')
+                    },
+                    {
+                        "name": 'ORDERID',
+                        "content": orderId
+                    }
+                );
+                //TODO: Handle SENDDATE and ORDERID
+
+                var params = {
+                    smtpapi:  new sendgrid.smtpapi(),
+                    to:       [toAddress],
+                    from:     fromAddress,
+                    fromname: '',
+                    subject:  subject,
+                    html:     htmlContent,
+                    date:     moment().format('MMM Do, YYYY'),
+                    category: 'order'
+                };
+                if(fromName && fromName.length > 0) {
+                    params.fromname = fromName;
+                }
+                if(toName && toName.length > 0) {
+                    params.toname = toName;
+                }
+
+                self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                    //we should not have an err here
+                    if(err) {
+                        self.log.error('Error storing email (this should not happen):', err);
+                        return fn(err);
+                    } else {
+                        var email = new sendgrid.Email(params);
+                        email.setUniqueArgs({
+                            emailmessageId: emailmessage.id(),
+                            accountId:accountId,
+                            orderId:orderId
+                        });
+
+                        sendgrid.send(email, function(err, json) {
+                            if (err) {
+                                self.log.error('Error sending email:', err);
+                                return fn(err);
+                            } else {
+                                self.log.debug('<< sendAccountWelcomeEmail');
+                                return fn(null, json);
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
     },
 
     sendFulfillmentEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId,
                                    vars, emailId, fn) {
-        //TODO: this
+        var self = this;
+        self.log.debug('>> sendFulfillmentEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                vars.push({
+                        "name": "SENDDATE",
+                        "content": moment().format('MMM Do, YYYY')
+                    },
+                    {
+                        "name": 'ORDERID',
+                        "content": orderId
+                    }
+                );
+                //TODO: Handle SENDDATE and ORDERID
+                juice.juiceResources(message.html, {}, function(err, html) {
+                    if (err) {
+                        self.log.error('A juice error occurred. Failed to set styles inline.')
+                        self.log.error(err);
+                        fn(err, null);
+                    }
+                    var params = {
+                        smtpapi:  new sendgrid.smtpapi(),
+                        to:       [toAddress],
+                        from:     fromAddress,
+                        fromname: '',
+                        subject:  subject,
+                        html:     html,
+                        date:     moment().format('MMM Do, YYYY'),
+                        category: 'fulfillment'
+                    };
+                    if(fromName && fromName.length > 0) {
+                        params.fromname = fromName;
+                    }
+                    if(toName && toName.length > 0) {
+                        params.toname = toName;
+                    }
+
+                    self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                        //we should not have an err here
+                        if(err) {
+                            self.log.error('Error storing email (this should not happen):', err);
+                            return fn(err);
+                        } else {
+                            var email = new sendgrid.Email(params);
+                            email.setUniqueArgs({
+                                emailmessageId: emailmessage.id(),
+                                accountId:accountId,
+                                orderId:orderId
+                            });
+
+                            sendgrid.send(email, function(err, json) {
+                                if (err) {
+                                    self.log.error('Error sending email:', err);
+                                    return fn(err);
+                                } else {
+                                    self.log.debug('<< sendAccountWelcomeEmail');
+                                    return fn(null, json);
+                                }
+                            });
+                        }
+                    });
+
+                });
+            }
+        });
     },
 
     sendNewCustomerEmail: function(toAddress, toName, accountId, vars, fn) {
@@ -123,6 +345,11 @@ module.exports = {
     _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
         var shiftedUtcDate = moment().utc().hours(hoursValue).minutes(minutesValue).add('minutes', timezoneOffset).add('days', daysShift);
         return shiftedUtcDate.toISOString();
+    },
+
+    _getSecheduledUTCUnix: function(daysShift, hoursValue, minutesValue, timezoneOffset) {
+        var shiftedUtcDate = moment().utc().hours(hoursValue).minutes(minutesValue).add('minutes', timezoneOffset).add('days', daysShift);
+        return shiftedUtcDate.unix();
     },
 
     _getUtcDateTimeIsoString: function(year, month, day, hour, minutes, timezoneOffset) {

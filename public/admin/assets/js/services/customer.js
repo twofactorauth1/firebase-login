@@ -48,6 +48,10 @@
       $http.get(apiUrl)
         .success(function (data) {
           fn(data);
+        })
+        .error(function (err) {
+            console.warn('Error while fetching data', err);
+            fn(null, err);
         });
     };
 
@@ -113,7 +117,7 @@
 
     var customerUploading = 0;
     var customerArr = [];
-    
+
     this.resetCount = function(){
       customerUploading = 0;
     }
@@ -365,15 +369,15 @@
 
 
     this.getCustomerTags = function (fn) {
-      var customerTags = contactConstant.customer_tags.dp;      
+      var customerTags = contactConstant.customer_tags.dp;
       fn(customerTags);
     };
 
 
     this.getAllCustomerTags = function (customers, fn) {
-      var customerTags = contactConstant.customer_tags.dp;      
+      var customerTags = contactConstant.customer_tags.dp;
         var contactTags = [];
-        _.each(customers, function (contact) {          
+        _.each(customers, function (contact) {
           if (contact.tags) {
             _.each(contact.tags, function (tag) {
               var type = _.find(customerTags, function (type) {
@@ -388,7 +392,7 @@
             });
           }
         })
-      customerTags = _.uniq(customerTags.concat(contactTags), function(c) { return c.label; })             
+      customerTags = _.uniq(customerTags.concat(contactTags), function(c) { return c.label; })
       fn(customerTags);
     };
 
@@ -401,7 +405,7 @@
           data: value
         };
       }
-      return item;      
+      return item;
     };
 
 
