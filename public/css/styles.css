@@ -11912,6 +11912,10 @@ ssb-topbar .ui-select-match-text > small {
   margin-left: -15px;
   margin-right: -15px;
 }
+.form-builder.panel.panel-default .information-header {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
 @media (max-width: 767px) {
   .form-builder-layout .form-layout-1,
   .form-builder-layout .form-layout-2,
