@@ -900,7 +900,7 @@ var dao = {
 
     createSignUpContact: function(contact, fn) {
         var self = this;
-        self.log.debug('>> saveOrUpdateContact');        
+        self.log.debug('>> saveOrUpdateContact');
         self.saveOrUpdate(contact, function(err, savedContact){
             if(err) {
                 self.log.error('Error creating contact: ' + err);
@@ -946,7 +946,7 @@ var dao = {
                 return fn(err, null);
             }
 
-            async.each(list, function(sessionEvent, cb){                
+            async.each(list, function(sessionEvent, cb){
                 var activity = new $$.m.ContactActivity({
                     accountId: accountId,
                     contactId: contactId,
@@ -967,7 +967,12 @@ var dao = {
             });
 
         });
-    }
+    },
+
+
+    getContactById: function (accountId, contactId, fn) {
+        this.findOne({'accountId': accountId, "_id": contactId}, fn);
+    },
 
 
 };
