@@ -640,6 +640,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         _modal.resolve.insertMedia = function () {
           return vm.insertMedia;
         };
+
+        _modal.resolve.isSingleSelect = function () {
+            return true;
+        };
       }
 
       if (size) {
