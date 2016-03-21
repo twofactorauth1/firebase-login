@@ -1386,7 +1386,7 @@ module.exports = {
                     }
 
                     order.set('subtotal', subTotal.toFixed(2));
-                    order.set('total', totalAmount.toFixed(2));
+                    // order.set('total', totalAmount.toFixed(2));
                     log.debug('total is now: ' + order.get('total'));
                     order.set('total_line_items_quantity', totalLineItemsQuantity);
                     dao.saveOrUpdate(order, function(err, updatedOrder){
