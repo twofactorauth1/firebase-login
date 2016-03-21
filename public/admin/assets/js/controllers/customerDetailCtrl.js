@@ -169,7 +169,13 @@
 
     $scope.getCustomer = function () {
       console.log('getCustomer >>>');
-      CustomerService.getCustomer($stateParams.contactId, function (customer) {
+      CustomerService.getCustomer($stateParams.contactId, function (customer, error) {
+        if(error){
+            toaster.pop('warning', error.message);
+            if(error.code === 404)
+                $location.path('/customers');
+            return;
+        }
         customer.notes = $scope.matchUsers(customer);
         $scope.customer = customer;
         $scope.setTags();
