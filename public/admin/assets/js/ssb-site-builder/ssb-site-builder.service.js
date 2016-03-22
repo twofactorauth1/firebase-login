@@ -817,7 +817,9 @@
                             ssbService.setActiveSection(replaceAtIndex);
                             ssbService.setActiveComponent(null);
                         } else {
-                            ssbService.page.sections.splice(insertAt, 0, response);
+                            // Set unique _id's for section and component.
+                            var insertSection = ssbService.setTempUUIDForSection(response);
+                            ssbService.page.sections.splice(insertAt, 0, insertSection);
                             ssbService.setActiveSection(insertAt);
                             ssbService.setActiveComponent(null);
                         }
