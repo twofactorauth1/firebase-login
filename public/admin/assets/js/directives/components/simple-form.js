@@ -71,7 +71,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
             styleString += 'font-family: ' + field.inputFontFamily + ";";
         }
         if (field && field.inputBgColor) {
-            styleString += 'background-color: ' + field.inputBgColor + ";";
+            styleString += 'background-color: ' + field.inputBgColor + "!important;";
         }
         if (field && field.inputBorderColor) {
             styleString += 'border-color: ' + field.inputBorderColor + ";";
