@@ -448,7 +448,7 @@ module.exports = {
         page.set('title', page.get('title') + ' (copy)');
         page.set('created', created);
         page.set('modified', created);
-        page.set('ssb', true)
+        page.set('ssb', true);
 
         //reset all section _id's for duplicate page
         if (sections.length) {
@@ -720,10 +720,16 @@ module.exports = {
         });
     },
 
+    /**
+     * Assumes lastest PUBLISH version
+     * @param accountId
+     * @param pageId
+     * @param fn
+     */
     getPage: function(accountId, pageId, fn) {
         var self = this;
         self.log.debug('>> getPage');
-
+        //TODO: add status
         pageDao.getPageById(accountId, pageId, function(err, page){
             if(err || !page) {
                 self.log.error('Error getting page:', err);
@@ -740,9 +746,17 @@ module.exports = {
         });
     },
 
+    /**
+     * Assumes lasted PUBLISH version
+     * @param accountId
+     * @param handle
+     * @param websiteId
+     * @param fn
+     */
     getPageByHandle: function(accountId, handle, websiteId, fn) {
         var self = this;
         self.log.debug('>> getPageByHandle (' + accountId + ',' + handle + ',' + websiteId + ')');
+        //TODO: Add status
         pageDao.getLatestPageForWebsite(websiteId, handle, accountId, function(err, page){
             if(err || !page) {
                 self.log.error('Error getting page:', err);
@@ -768,6 +782,24 @@ module.exports = {
 
             }
         });
+    },
+
+    /**
+     * Gets latest draft page
+     */
+    getDraftPage: function() {
+        //TODO: this
+    },
+
+    /**
+     * Gets latest draft page
+     */
+    getDraftPageByHandle: function() {
+        //TODO: this
+    },
+
+    getPageVersions: function() {
+        //TODO: this
     },
 
     updatePage: function(accountId, pageId, page, modified, homePage, fn) {
@@ -1091,78 +1123,73 @@ module.exports = {
                             self.log.error('Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else {
+                            if (err) {
+                                self.log.error('Error updating website linklists by handle: ' + err);
+                                return cb(err);
+                            }
+
+                            var pageHandles = pages.map(function(page) {
+                                if (page.mainmenu || page.mainmenu === undefined) {
+                                    return page.get('handle');
+                                }
+                            });
+
+                            var _exists = false;
+                            list.links = _(list.links).chain()
+                                .map(function(link){
+                                    if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
+                                        // check if menu title exists
+                                        var _label = updatedPage.get('menuTitle');
+                                        // check if menu title not exists and page title is changed
+                                        if(!_label){
+                                           _label = updatedPage.get('title');
+                                        }
+                                        link.label = _label;
+                                        link.linkTo.data = updatedPage.get("handle");
+                                        _exists = true;
+                                    }
+                                    else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){
+                                        link.linkTo.page = updatedPage.get("handle");
+                                    }
+                                    return link
+                                })
+                                .uniq(function(link) {
+                                    return link.linkTo;
+                                })
+                                .filter(function(link){
+                                    //only keep pages that exist and are visible in menu
+                                    if(link.linkTo.type === 'section' && link.linkTo.page){
+                                        return _.contains(pageHandles, link.linkTo.page)
+                                    }
+                                    else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
+                                        return _.contains(pageHandles, link.linkTo.data)
+                                    }
+                                    else{
+                                        return true;
+                                    }
+                                })
+                                .value(); //return array value
+
+                            if(!_exists){
+                                var link = {
+                                    label: page.get('menuTitle') || page.get('title'),
+                                    type: "link",
+                                    linkTo: {
+                                        type:"page",
+                                        data:page.get('handle')
+                                    }
+                                };
+                                list.links.push(link);
+                            }
+
+                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
                                 if (err) {
                                     self.log.error('Error updating website linklists by handle: ' + err);
-                                    return cb(err);
+                                    cb(err);
+                                } else {
+                                    cb(null, updatedPage, updatedSections, pages);
                                 }
-
-
-                                var pageHandles = pages.map(function(page) {
-                                    if (page.mainmenu || page.mainmenu === undefined) {
-                                        return page.get('handle');
-                                    }
-                                });
-
-                                var _exists = false;
-                                list.links = _(list.links).chain()
-
-                                                .map(function(link){
-                                                    if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
-                                                        // check if menu title exists
-                                                        var _label = updatedPage.get('menuTitle');
-                                                        // check if menu title not exists and page title is changed
-                                                        if(!_label){
-                                                           _label = updatedPage.get('title');
-                                                        }
-                                                        link.label = _label;
-                                                        link.linkTo.data = updatedPage.get("handle");
-                                                        _exists = true;
-                                                    }
-                                                    else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){
-                                                        link.linkTo.page = updatedPage.get("handle");
-                                                    }
-                                                    return link
-                                                })
-
-                                                .uniq(function(link) {
-                                                    return link.linkTo;
-                                                })
-
-                                                .filter(function(link){
-                                                    //only keep pages that exist and are visible in menu
-                                                    if(link.linkTo.type === 'section' && link.linkTo.page){
-                                                        return _.contains(pageHandles, link.linkTo.page)
-                                                    }
-                                                    else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
-                                                        return _.contains(pageHandles, link.linkTo.data)
-                                                    }
-                                                    else{
-                                                        return true;
-                                                    }
-                                                })
-                                                .value(); //return array value
-
-
-                                if(!_exists){
-                                    var link = {
-                                        label: page.get('menuTitle') || page.get('title'),
-                                        type: "link",
-                                        linkTo: {
-                                            type:"page",
-                                            data:page.get('handle')
-                                        }
-                                    };
-                                    list.links.push(link);
-                                }
-
-                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
-                                    if (err) {
-                                        self.log.error('Error updating website linklists by handle: ' + err);
-                                        cb(err);
-                                    } else {
-                                        cb(null, updatedPage, updatedSections, pages);
-                                    }
-                                });
+                            });
                         }
                     });
                 }
@@ -1177,13 +1204,19 @@ module.exports = {
                     cb(null, updatedPage, updatedSections);
                 }
 
+                /*
+                 * The following section could stand some refactoring for clarity.
+                 */
                 async.eachSeries(pages, function(_page, p_callback){
+                    //loop through each page NOT being updated
                     if(_page.get("_id") !== updatedPage.get("_id")){
+                        //loop through each section on page being updated
                         async.each(updatedSections, function(gsection, g_callback){
                             var g_update = false;
                             if(gsection.get("global") === false || gsection.get("global") === true){
                                 _update = true;
                                 if(gsection.get("global") === false){
+                                    //if the current section is NOT global but IS found on another page, remove it?
                                     var sections = _.filter(_page.get("sections"), function(section){
                                         if(section._id !== gsection.get("_id")) {
                                            return true;
@@ -1194,13 +1227,14 @@ module.exports = {
                                 if(gsection.get("global") === true){
                                     g_update = true;
                                     var sections = _page.get("sections");
+                                    //look through the sections on this page to any whose _id matches the global section
                                     var exists = _.filter(sections, function(section){
                                         if(section._id === gsection.get("_id")) {
                                            return true;
                                         }
                                     });
                                     self.log.debug('exists: ' , exists);
-                                    if(!exists.length){
+                                    if(!exists.length){// if the global section does NOT already appear on the page
                                         var globalSection = {_id: gsection.get("_id")};
                                         var sectionIds = sections.map(function(sec) { return sec._id});
                                         var query = {
@@ -1213,39 +1247,38 @@ module.exports = {
                                                 self.log.error('Error finding global footer:', err);
                                                 cb(err);
                                             } else {
-                                                if(footerSection){
+                                                if(footerSection) {
                                                     var filteredFooter = _.findWhere(sections, {
                                                         _id: footerSection.get("_id")
                                                     });
 
-                                                    if(filteredFooter){
+                                                    if(filteredFooter) {
                                                         var footerIndex = _.indexOf(sections, filteredFooter);
                                                         self.log.debug('footerIndex: ' , footerIndex);
                                                         self.log.debug('globalSection: ' , globalSection);
                                                         sections.splice(footerIndex, 0, globalSection);
-                                                    }
-                                                    else
+                                                    } else {
                                                         sections.push(globalSection);
                                                     }
-                                                else{
+
+                                                } else {
                                                     sections.push(globalSection);
                                                 }
                                                 _page.set("sections", sections);
                                                 g_callback();
                                             }
                                         });
-                                    }
-                                    else{
+                                    } else {
                                         _page.set("sections", sections);
                                         g_callback();
                                     }
 
                                 }
+                                //FIXME: What happens if g_update==true?  where is the cb executed?
                                 if(!g_update){
                                     g_callback();
                                 }
-                            }
-                            else{
+                            } else{
                                 g_callback();
                             }
 
@@ -1282,7 +1315,7 @@ module.exports = {
                         cb(null, updatedPage, updatedSections);
                     });
 
-            },
+            }
         ], function done(err, updatedPage, updatedSections){
             if(updatedPage) {
                 var sectionArray = [];
