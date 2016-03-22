@@ -187,6 +187,7 @@
       var _discount = 0;
       var _tax = 0;
       var _taxrate= $scope.order.tax_rate || 0;
+      var _subtotalTaxable = 0;
 
       _.each($scope.order.line_items, function (line_item) {
         var item_price = line_item.product.sale_price && line_item.product.on_sale ? line_item.product.sale_price : line_item.product.regular_price;
@@ -201,16 +202,19 @@
         }
         _subtotal += parseFloat(item_price) * parseFloat(line_item.quantity);
         _total += parseFloat(item_price) * parseFloat(line_item.quantity);
+        if (line_item.product.taxable) {
+            _subtotalTaxable += parseFloat(item_price) * parseFloat(line_item.quantity);
+        }
       });
 
       $scope.order.subtotal = _subtotal;
       $scope.order.total_discount = _discount;
       if (_discount) {
-        $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotal)).toFixed(2);
+        $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotalTaxable)).toFixed(2);
       } else {
         $scope.calculatedDiscountPercent = '';
       }
-      $scope.order.total_tax = (_subtotal - _discount) * _taxrate;
+      $scope.order.total_tax = (_subtotalTaxable - _discount) * _taxrate;
       $scope.order.total = (_subtotal - _discount) + $scope.order.total_tax;
     };
 
@@ -331,7 +335,9 @@
             return product._id === item.product_id;
           });
           item.product = matchProduct;
-          item.discount = 0.00;
+          if (!$stateParams.orderId) {
+              item.discount = 0.00;
+          }
         });
       }
 

@@ -5,7 +5,7 @@ app.directive('indigewebTransactionLabel', ['OrderService', function(OrderServic
         restrict: 'E',
         template: '{{label}}',
         link: function(scope, element, attrs) {
-            scope.label = '';
+            scope.label = 'order';
             scope.hasOrder = false;
             scope.hasDonation = false;
 
@@ -26,7 +26,7 @@ app.directive('indigewebTransactionLabel', ['OrderService', function(OrderServic
                 } else if (!scope.hasOrder && scope.hasDonation) {
                     scope.label = 'donation';
                 }
-                
+
                 if (attrs.plural) {
                     scope.label = scope.label + 's';
                 }

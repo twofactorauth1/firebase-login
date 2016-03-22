@@ -36,7 +36,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
       } else {
         $scope.hideSidebar = false;
       }
-      
+
     });
 
     // Loading bar transition
@@ -187,7 +187,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
       $scope.currentUser = user;
     });
 
-    $scope.openTopBarMediaModal = function () {      
+    $scope.openTopBarMediaModal = function () {
       $scope.modalInstance = $modal.open({
         templateUrl: 'media-modal',
         controller: 'MediaModalCtrl',
@@ -196,10 +196,13 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
         backdrop: 'static',
         resolve: {
           showInsert: function () {
-            
+
           },
           insertMedia: function () {
-            
+
+          },
+          isSingleSelect: function () {
+              return true;
           }
         }
       });

@@ -79,9 +79,10 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
       url: apiUrl,
       method: "GET"
     }).success(function (data) {
-      fn(data);
+      fn(null, data);
     }).error(function (err) {
       console.log('END:userService with ERROR', err);
+      fn(err, null);
     });
   };
 

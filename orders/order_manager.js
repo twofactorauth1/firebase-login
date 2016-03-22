@@ -1375,18 +1375,18 @@ module.exports = {
                         totalAmount += parseFloat(order.get('total_tax'));
                         log.debug('adding tax of ' + order.get('total_tax'));
                     }
-                    else
-                    {
-                        totalAmount += parseFloat(totalAmount * taxPercent);
-                        log.debug('adding tax of ' + order.get('total_tax'));
-                    }
+                    // else
+                    // {
+                    //     totalAmount += parseFloat(totalAmount * taxPercent);
+                    //     log.debug('adding tax of ' + order.get('total_tax'));
+                    // }
                     if(order.get('total_shipping')) {
                         totalAmount += parseFloat(order.get('total_shipping'));
                         log.debug('adding shipping of ' + order.get('total_shipping'));
                     }
 
                     order.set('subtotal', subTotal.toFixed(2));
-                    order.set('total', totalAmount.toFixed(2));
+                    // order.set('total', totalAmount.toFixed(2));
                     log.debug('total is now: ' + order.get('total'));
                     order.set('total_line_items_quantity', totalLineItemsQuantity);
                     dao.saveOrUpdate(order, function(err, updatedOrder){
@@ -1394,6 +1394,104 @@ module.exports = {
                         log.error('Error updating order: ' + err);
                         return fn(err, null);
                     }
+                    log.debug('Sending update order email');
+                    contactDao.getById(order.get('customer_id'), $$.m.Contact, function(err, contact) {
+                        var toAddress = "";
+                        if(contact.getEmails()[0])
+                            toAddress = contact.getEmails()[0].email;
+                        var toName = contact.get('first') + ' ' + contact.get('last');
+                        var accountId = updatedOrder.get('account_id');
+                        var orderId = updatedOrder.id();
+                        var vars = [];
+
+                        log.debug('toAddress ', toAddress);
+                        log.debug('toName ', toName);
+                        log.debug('toAddress ', toAddress);
+
+                        accountDao.getAccountByID(accountId, function(err, account){
+                            if(err) {
+                                callback(err);
+                                log.error('Error getting account:', err);
+                            } else {
+                                var business = account.get('business');
+                                var emailPreferences = account.get('email_preferences');
+                                if(!business || !business.emails || !business.emails[0].email) {
+                                    log.warn('No account email.  No NEW_ORDER email sent');
+                                }
+                                var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
+                                var fromAddress = business.emails[0].email;
+                                var fromName = business.name;
+
+                                cmsManager.getEmailPage(accountId, 'new-order', function(err, email){
+                                    if(err || !email) {
+                                        log.warn('No NEW_ORDER email receipt sent: ' + err);
+                                        if(emailPreferences.new_orders === true) {
+                                            //Send additional details
+                                            subject = "New order created!";
+                                            var component = {};
+                                            component.order = updatedOrder.attributes;
+                                            component.text = "The following order was created:";
+                                            component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                            app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                                juice.juiceResources(html, {}, function(err, _html) {
+                                                    if (err) {
+                                                        log.error('A juice error occurred. Failed to set styles inline:', err);
+                                                    } else {
+                                                        log.debug('juiced - one ' + _html);
+                                                        html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                    }
+                                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                                        log.debug('Admin Notification Sent');
+                                                    });
+                                                });
+                                            });
+                                        }
+                                    } else {
+                                        var component = email.get('components')[0];
+                                        component.order = updatedOrder.attributes;
+                                        log.debug('Using this for data', component);
+                                        app.render('emails/base_email_order', component, function(err, html) {
+                                            juice.juiceResources(html, {}, function(err, _html) {
+                                                if (err) {
+                                                    log.error('A juice error occurred. Failed to set styles inline:', err);
+                                                } else {
+                                                    log.debug('juiced - two' + _html);
+                                                    html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                }
+
+                                                mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                });
+                                            });
+
+
+                                            if(emailPreferences.new_orders === true) {
+                                                //Send additional details
+                                                subject = "New order created!";
+                                                component.text = "The following order was created:";
+                                                component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                                app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                                    juice.juiceResources(html, {}, function(err, _html) {
+                                                        if (err) {
+                                                            log.error('A juice error occurred. Failed to set styles inline:', err);
+                                                        } else {
+                                                            log.debug('juiced - three' + _html);
+                                                            html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                        }
+
+                                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                            log.debug('Admin Notification Sent');
+                                                        });
+                                                    });
+                                                });
+                                            }
+                                        });
+
+                                    }
+                                });
+
+                            }
+                        });
+                    });
                     log.debug('<< updateOrderById');
                     return fn(null, updatedOrder);
                 });

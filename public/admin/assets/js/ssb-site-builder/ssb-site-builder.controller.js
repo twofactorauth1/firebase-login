@@ -406,6 +406,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             _modal.resolve.insertMedia = function () {
               return vm.insertMedia;
             };
+
+            _modal.resolve.isSingleSelect = function () {
+                return true;
+            };
         }
 
         if (angular.isDefined(index) && index !== null && index >= 0) {
@@ -601,6 +605,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
+    function checkNavigation(e) {
+        // debugger;
+    }
+
 
 
     function init(element) {
@@ -612,6 +620,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         angular.element("body").on("click", ".ssb-page-section", pageSectionClick);
 
         angular.element('.ssb-main').on('eqResize', pageResize);
+
+        angular.element($window).on('beforeunload', checkNavigation);
 
         setupBreakpoints();
 

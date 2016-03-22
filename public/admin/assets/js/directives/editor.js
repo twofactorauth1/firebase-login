@@ -65,7 +65,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             }).froalaEditor($.FroalaEditor.config)
                 .on('froalaEditor.contentChanged', function(e, editor) {
                     scope.updateFroalaContent(editor);
-                    $(elem).froalaEditor('html.cleanEmptyTags');
+                    // $(elem).froalaEditor('html.cleanEmptyTags');
                 }).on('froalaEditor.click', function(e, editor, clickEvent) {
 
                 }).on('froalaEditor.keydown', function(e, editor, keydown) {

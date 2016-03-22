@@ -184,6 +184,16 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
             }
         });
 
+        scope.calcMaxWidth = function(element){
+            var el = angular.element("."+element);
+            if(el.length){
+                var w = el.width();
+                // - 100 margin-left
+                // -50 margin right
+                return (w - 100 - 50) + 'px';
+            }
+        }
+
     }
 
   };

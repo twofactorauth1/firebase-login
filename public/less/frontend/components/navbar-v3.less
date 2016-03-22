@@ -24,9 +24,14 @@
   }
   .navbar-nav {
     text-align: center;
-    float: right!important;
+    float: none;
     margin-top: 0;
     margin-right: 0;
+
+    @media screen and (min-width: 767px) {
+        float: right;
+    }
+
     > li {
       float: left;
       display: inline-block;
@@ -45,7 +50,7 @@
       div.editable, .fr-element {
           min-height: 100px;
       }
-      
+
     }
     li {
       min-height: 125px;
@@ -73,9 +78,9 @@
   }
 
    @media (max-width: 767px) {
-    .navbar-nav { 
+    .navbar-nav {
       margin: 0 !important;
-      > li { 
+      > li {
         min-height: 50px;
         float:none;
         display: inherit;
@@ -96,5 +101,5 @@
 .navigation-logo{
   img{
     max-width :100%;
-  } 
+  }
 }

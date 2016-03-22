@@ -990,7 +990,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       };
       setTimeout(function () {
         angular.element(window).scrollTop(scroll);
-        //if(angular.element(".slick-slider"))         
+        //if(angular.element(".slick-slider"))
         //angular.element(".slick-slider")[0].slick.refresh();
       }, 200);
 
@@ -1065,7 +1065,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     $scope.sortableOptions = {
       parentElement: "body",
       containerPositioning: 'relative',
-      dragStart: function (e, ui) {        
+      dragStart: function (e, ui) {
         $scope.parentScope.resizeIframe();
         $scope.isPageDirty = true;
         $scope.first = false;
@@ -1103,7 +1103,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
         }, 1500);
 
-        
+
       }
     };
 
@@ -1681,7 +1681,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
       } else {
         var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-        userService.checkDomainExists(name, function (data) {
+        userService.checkDomainExists(name, function (err, data) {
           if (data != 'true') {
             angular.element("#business-name .error").html("Domain Already Exists");
             angular.element("#business-name").addClass('has-error');

@@ -611,7 +611,11 @@
                 if ($scope.tagsBulkAction.toReplace) {
                     customer.tags = tags;
                 } else {
-                    customer.tags = customer.tags.concat(tags);
+                    if (customer.tags) {
+                        customer.tags = customer.tags.concat(tags);
+                    } else {
+                        customer.tags = tags;
+                    }
                 }
             }
 
