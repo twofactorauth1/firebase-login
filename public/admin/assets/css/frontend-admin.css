@@ -1092,6 +1092,7 @@
   clear: both;
   width: 100%;
   overflow: auto;
+  max-width: 50%;
 }
 @media screen and (min-width: 690px) {
   #componentloader .top-bar-v1 .social-list-icons {
