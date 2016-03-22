@@ -10323,7 +10323,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .edit-wrap:hover .editable-title {
   left: auto;
   right: 0;
-  top: 0;
+  top: -1.5em;
   border-radius: 0;
 }
 .ssb-site-builder .simple-form-v1 .edit-wrap:hover .editable-title {
