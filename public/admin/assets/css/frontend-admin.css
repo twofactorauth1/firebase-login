@@ -2704,13 +2704,13 @@
   color: #2ecc71;
 }
 #componentloader .simple-form-v1 .has-error .form-control {
-  border-color: #e74c3c;
+  border-color: #e74c3c !important;
 }
 #componentloader .simple-form-v1 .has-error .glyphicon {
-  color: #e74c3c;
+  color: #e74c3c !important;
 }
 #componentloader .simple-form-v1 .has-error .help-block {
-  color: #e74c3c;
+  color: #e74c3c !important;
 }
 #componentloader .simple-form-v1 .has-feedback .form-control-feedback {
   position: absolute;
@@ -7354,6 +7354,11 @@ div[class^="spacing-"] input {
 .ssb-section-content-list-item-on {
   border: 6px solid #47B8D9;
 }
+.accordion.component-form-style .ssb-spectrum-color-picker .sp-replacer {
+  width: 3em;
+  height: 3em;
+  margin: 1px 0 0.5em 0;
+}
 .app-sidebar-closed ssb-topbar {
   left: 0;
   width: 100%;
@@ -8221,6 +8226,11 @@ ssb-topbar .ui-select-match-text > small {
   margin: 0 10px;
   position: relative;
 }
+.form-builder-component input,
+.form-builder-component textarea {
+  min-height: 34px;
+  height: auto;
+}
 .form-builder-component .thank-you {
   padding: 0;
   margin-bottom: -70px;
@@ -8240,13 +8250,13 @@ ssb-topbar .ui-select-match-text > small {
   color: #2ecc71;
 }
 .form-builder-component .has-error .form-control {
-  border-color: #e74c3c;
+  border-color: #e74c3c !important;
 }
 .form-builder-component .has-error .glyphicon {
-  color: #e74c3c;
+  color: #e74c3c !important;
 }
 .form-builder-component .has-error .help-block {
-  color: #e74c3c;
+  color: #e74c3c !important;
 }
 .form-builder-component .has-feedback .form-control-feedback {
   position: absolute;

@@ -195,4 +195,19 @@
 {
     color: {{component.btn.color}}!important
 }
+
+.simple-form-v1 .simple-form-{{component._id}} ::-webkit-input-placeholder {
+                color: {{component.formSettings.inputTextColor}};
+}
+.simple-form-v1 .simple-form-{{component._id}} :-moz-placeholder {
+    color: {{component.formSettings.inputTextColor}};
+}
+.simple-form-v1 .simple-form-{{component._id}} ::-moz-placeholder {
+    color: {{component.formSettings.inputTextColor}};
+}
+.simple-form-v1 .simple-form-{{component._id}} :-ms-input-placeholder {
+    color: {{component.formSettings.inputTextColor}};
+}
+
+
 </style>

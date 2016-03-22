@@ -56,17 +56,25 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             styleString += 'text-align: ' + field.align + ";";
         }
         if (field && field.inputTextSize) {
-          styleString += 'font-size: ' + field.inputTextSize  + 'px important;';
+            styleString += 'font-size: ' + field.inputTextSize  + 'px !important;';
         }
         if (field && field.inputFontFamily) {
-          styleString += 'font-family: ' + field.inputFontFamily + ";";
+            styleString += 'font-family: ' + field.inputFontFamily + ";";
+        }
+        if (field && field.inputBgColor) {
+            styleString += 'background-color: ' + field.inputBgColor + ";";
+        }
+        if (field && field.inputBorderColor) {
+            styleString += 'border-color: ' + field.inputBorderColor + ";";
+        }
+        if (field && field.inputTextColor) {
+            styleString += 'color: ' + field.inputTextColor + ";";
         }
         return styleString;
       };
 
       scope.buttonStyle = function(btn){
         var styleString = '';
-
         if (btn && btn.align) {
             if(btn.align === 'left' || btn.align === 'right')
               styleString += 'float: ' + btn.align + ";";
@@ -80,8 +88,13 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
       scope.formStyle = function(form){
         var styleString = '';
-        if (form && form.formFontFamily) {
-          styleString += 'font-family: ' + form.formFontFamily;
+        if(form){
+            if (form.formFontFamily) {
+                styleString += 'font-family: ' + form.formFontFamily + ";";
+            }
+            if (form.formTextColor) {
+                styleString += 'color: ' + form.formTextColor + ";";
+            }
         }
         return styleString;
       };

@@ -257,8 +257,40 @@
     </div>
 
     <div class="row" ng-if="component.type == 'simple-form' || component.type == 'ssb-form-builder'">
-        <accordion close-others="oneAtATime" class="accordion">
+        <accordion close-others="oneAtATime" class="accordion component-form-style">
             <accordion-group heading="INPUT FIELD STYLE">
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Input background</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="background color of input fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
+                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.inputBgColor"></spectrum-colorpicker>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Input border</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="border color of input fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
+                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.inputBorderColor"></spectrum-colorpicker>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Text color</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="text color of entire form"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
+                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.formTextColor"></spectrum-colorpicker>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Input text color</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="text color of input fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
+                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.inputTextColor"></spectrum-colorpicker>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="form-group margin-bottom-5">
                     <label><strong>Text Size</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
