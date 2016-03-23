@@ -7,9 +7,9 @@
 
 var paypalClientID = process.env.PAYPAL_CLIENT_ID || 'Adai01SoHe9BcFr9GkfTNzys2bqUdqdpSphHVzouKPKQxxDRe1eBRKGaKNNETr5tYNf02OfG-e-YzOnO';
 var paypalClientSecret = process.env.PAYPAL_CLIENT_SECRET || 'EMLp1mnLTtXX6PSgZBqnS2U6Cp4-KSUPvUxg1lpDgKEv4fHX3DUo5Ux980Qhu90Aat4fwQSZMlOZJcV5';
-var paypalAPIUsername = process.env.PAYPAL_API_USERNAME || 'paypal-facilitator_api1.indigenous.io';
-var paypalAPIPassword = process.env.PAYPAL_API_PASSWORD || 'N3TBZGQMYEW66MTH';
-var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AFcWxV21C7fd0v3bYYYRCpSSRl31AHk7UU9Y3mtj6J5BdfSV61PJ2Mu';
+var paypalAPIUsername = process.env.PAYPAL_API_USERNAME || 'kyle+business1_api1.indigenous.io';
+var paypalAPIPassword = process.env.PAYPAL_API_PASSWORD || 'AXD2WJ292M5GYTB6';
+var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AkIU8rSQk.Oy5oGjp7-B9Oi15i8wASpz3NNY6GVHsDf4YnMxck0yqWrX';
 var paypalCheckoutURL = process.env.PAYPAL_CHECKOUT_URL || 'https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay';
 var paypalIsSandbox = process.env.PAYPAL_SANDBOX || true;
 var paypalApplicationID = process.env.PAYPAL_APP_ID || 'APP-80W284485P519543T';
