@@ -10543,7 +10543,7 @@ div[class^="spacing-"] input {
   border-width: 1px 0;
   border-color: #e4e4e4;
   border-style: solid;
-  width: calc(130%);
+  width: calc(100% + 30px);
   margin: 0 0 0 -15px;
   padding: 10px 15px;
   font-size: 14px;
