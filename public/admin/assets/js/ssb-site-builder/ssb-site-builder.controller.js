@@ -31,19 +31,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.resetDirty = resetDirty;
     vm.pageChanged = pageChanged;
 
-    vm.state.barConfig = {
-        sort: false,
-        group: 'section',
-        animation: 150,
-        onAdd: function (evt) {
-            SimpleSiteBuilderService.getSection(evt.model, evt.model.version || 1).then(function(response) {
-                if (response) {
-                    vm.state.page.sections[evt.newIndex] = response;
-                }
-            });
-        }
-    };
-
 
     vm.uiState = {
         loading: 0,
@@ -63,7 +50,45 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         showSectionPanel: false,
         componentControl: {}, //hook into component scope (contact-us)
         componentMedia: vm.legacyComponentMedia, //hook into component scope (image-gallery)
-        sidebarOrientation: 'vertical'
+        sidebarOrientation: 'vertical',
+
+        sortableListPageContentConfig: {
+            sort: false,
+            group: 'section',
+            animation: 150,
+            onAdd: function (evt) {
+                SimpleSiteBuilderService.getSection(evt.model, evt.model.version || 1).then(function(response) {
+                    if (response) {
+                        vm.state.page.sections[evt.newIndex] = response;
+                    }
+                });
+            },
+            onEnd: function (evt) {
+               console.log("Dragging End");
+            },
+        },
+
+        sortableListAddContentConfig: {
+            sort: false,
+            group: {
+                name: 'section',
+                pull: 'clone',
+                model: 'vm.filteredSections'
+            },
+            animation: 150,
+            scroll: ".ssb-main", // or HTMLElement
+
+            onStart: function (evt) {
+                console.log("Dragging Start");
+            },
+            onEnd: function (evt) {
+               console.log("Dragging End");
+            },
+            onSort: function (evt) {
+                console.log("On Sort");
+            }
+        }
+
     };
 
 

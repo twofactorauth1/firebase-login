@@ -65,7 +65,7 @@
                             </tab-heading>
 
                             <!-- <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ featured: true, enabled: true }" ng-if="sectionFilter.lowercase === 'featured'" class="ssb-sidebar-add-section margin-bottom-15"> -->
-                            <div ng-sortable="vm.barConfig" >
+                            <div ng-sortable="vm.uiState.sortableListAddContentConfig" >
                                 <div ng-repeat="section in vm.filteredSections = (vm.sections | orderBy:'title' | filter:{ filter: sectionFilter.lowercase, enabled: true })" ng-if="sectionFilter.lowercase != 'all' && sectionFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';" >
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">

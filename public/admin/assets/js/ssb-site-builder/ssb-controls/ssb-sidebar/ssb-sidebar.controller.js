@@ -212,29 +212,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         url: "http://www.yelp.com"
       }];
 
-    vm.barConfig = {
-        sort: false,
-        group: {
-            name: 'section',
-            pull: 'clone',
-            model: 'vm.filteredSections'
-        },
-        animation: 150,
-        forceFallback: true,
-        scroll: ".ssb-main", // or HTMLElement
-
-        onStart: function (evt) {
-            console.log("Dragging Start");
-        },
-        onEnd: function (evt) {
-           console.log("Dragging End");
-        },
-        onSort: function (evt) {
-            console.log("On Sort");
-        }
-    };
-
-    //vm.filteredSections =
 
     function insertMedia(asset) {
       vm.insertMediaCallback(asset);
