@@ -802,7 +802,7 @@ module.exports = {
         //TODO: this
     },
 
-    updatePage: function(accountId, pageId, page, modified, homePage, fn) {
+    updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
         var self = this;
         self.log.debug('>> updatePage (' + pageId + ')');
 
@@ -847,15 +847,29 @@ module.exports = {
                     }
                 });
             },
-            function updateSections(existingPage, globalHeader, globalFooter, cb) {
+            function getExistingSections(existingPage, globalHeader, globalFooter, cb) {
+                if(existingPage.hasSectionReferences()) {
+                    sectionDao.dereferenceSections(existingPage.get('sections'), function(err, existingSectionAry){
+                        if(err) {
+                            self.log.error('Error dereferencing existing sections:', err);
+                            cb(err);
+                        } else {
+                            cb(null, existingPage, globalHeader, globalFooter, existingSectionAry);
+                        }
+                    });
+                } else {
+                    cb(null, existingPage, globalHeader, globalFooter, existingPage.get('sections'));
+                }
+            },
+            function dereferenceSections(existingPage, globalHeader, globalFooter, existingSections, cb) {
                 var sections = page.get('sections');
                 var dereferencedSections = [];
 
-                // _.each(sections, function(section){
                 async.eachSeries(sections, function(section, callback){
 
                     //if template uses section references instead of full section data
                     if (section._id && Object.keys(section).length === 1) {
+                        self.log.warn('Update page has a section with a reference:', section);
                         sectionDao.findOne({_id:section._id}, $$.m.ssb.Section, function(err, referencedSection){
                             if(err) {
                                 callback(err);
@@ -952,17 +966,39 @@ module.exports = {
                         self.log.error("Error getting template's referenced sections:", err);
                         cb(err);
                     }
-
-                    sectionDao.saveSections(dereferencedSections, function(err, updatedSections){
-                        if(err) {
-                            self.log.error('Error saving sections:', err);
-                            cb(err);
-                        } else {
-                            cb(null, existingPage, updatedSections);
-                        }
-                    });
+                    //Callback here so we can do the actual compare/update next:
+                    cb(null, existingPage, globalHeader, globalFooter, existingSections, dereferencedSections);
 
                 });
+            },
+            function updateSections(existingPage, globalHeader, globalFooter, existingSections, dereferencedSections, cb) {
+                /*
+                 * For each section in dereferenced, find partner in existing
+                 * - if changed:
+                 *  -- bump version
+                 *  -- update other pages with reference
+                 */
+                async.eachSeries(dereferencedSections, function(section, callback){
+                    var existingSection = _.find(existingSections, function(existingSection){return section._id === existingSection._id});
+                    if(existingSection) {
+                        if(!_.isEqual(existingSection, section)){
+                            var sectionObj = new $$.m.ssb.Section(section);
+                            var oldID = sectionObj.id();
+                            var newVersion = sectionObj.getVersion() + 1;
+                            var newID = sectionObj.id();
+                            sectionObj.setVersion(newVersion);
+                            sectionObj.set('modified', {date: new Date(), by:userId});
+                            //pageDao.updateOtherPagesWithSectionReference(pageId, oldID, newID);
+                        } else {
+                            //no change.
+                        }
+                    } else {
+                        //this is a new section... do we need to do anything?
+                    }
+                }, function done(err, callback){
+
+                });
+
             },
             function updateThePage(existingPage, updatedSections, cb){
                 //var sections = page.get('sections');

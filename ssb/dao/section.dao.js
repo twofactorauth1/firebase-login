@@ -39,7 +39,7 @@ var dao = {
         var deReffedAry = [];
         async.eachSeries(sectionAry, function(section, cb){
             //self.log.debug('Section:', section);
-            if(section && section._id)
+            if(section && section._id) {
                 self.getById(section._id, $$.m.ssb.Section, function(err, section){
                     if(err) {
                         cb(err);
@@ -48,8 +48,10 @@ var dao = {
                         cb();
                     }
                 });
-            else
+            } else {
+                self.log.warn('The sectionAry contains a section that cannot be dereferenced:', sectionAry);
                 cb();
+            }
         }, function done(err){
             //self.log.debug('Array:', deReffedAry);
             fn(err, deReffedAry);
