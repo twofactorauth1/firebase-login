@@ -9,8 +9,61 @@
 
 
 */
+/* Mixin */
+.mb0 {
+  margin-bottom: 0px!important;
+}
+.mb5 {
+  margin-bottom: 5px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.mb15 {
+  margin-bottom: 15px;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+.mb25 {
+  margin-bottom: 25px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.mb35 {
+  margin-bottom: 35px;
+}
+.mb40 {
+  margin-bottom: 40px;
+}
+.mb45 {
+  margin-bottom: 45px;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.mr20 {
+  margin-right: 20px;
+}
+.mr30 {
+  margin-right: 30px;
+}
+.mt5 {
+  margin-top: 5px;
+}
+.mt10 {
+  margin-top: 10px;
+}
+.full-color {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(0%);
+  opacity: 1;
+}
 #componentloader {
-  /* Mixin */
   /* BS CAROUSEL STEP */
   /********** Email **********/
   /********** Feature List v1 **********/
@@ -48,59 +101,6 @@
   /* ---------------------------------------------------------------------- */
   /*  Background Colors
 /* ---------------------------------------------------------------------- */
-}
-#componentloader .mb0 {
-  margin-bottom: 0px!important;
-}
-#componentloader .mb5 {
-  margin-bottom: 5px;
-}
-#componentloader .mb10 {
-  margin-bottom: 10px;
-}
-#componentloader .mb15 {
-  margin-bottom: 15px;
-}
-#componentloader .mb20 {
-  margin-bottom: 20px;
-}
-#componentloader .mb25 {
-  margin-bottom: 25px;
-}
-#componentloader .mb30 {
-  margin-bottom: 30px;
-}
-#componentloader .mb35 {
-  margin-bottom: 35px;
-}
-#componentloader .mb40 {
-  margin-bottom: 40px;
-}
-#componentloader .mb45 {
-  margin-bottom: 45px;
-}
-#componentloader .mr5 {
-  margin-right: 5px;
-}
-#componentloader .mr10 {
-  margin-right: 10px;
-}
-#componentloader .mr20 {
-  margin-right: 20px;
-}
-#componentloader .mr30 {
-  margin-right: 30px;
-}
-#componentloader .mt5 {
-  margin-top: 5px;
-}
-#componentloader .mt10 {
-  margin-top: 10px;
-}
-#componentloader .full-color {
-  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
-  -webkit-filter: grayscale(0%);
-  opacity: 1;
 }
 #componentloader body {
   font-size: 13px;
@@ -6935,7 +6935,7 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-sub-heading {
   position: relative;
-  padding: 1em .5em 1em;
+  padding: .85em .5em;
   border-top: 1px solid #E7EAEA;
   border-bottom: 1px solid #E7EAEA;
   margin: 0;
@@ -6943,10 +6943,18 @@ div[class^="spacing-"] input {
 .ssb-sidebar-sub-heading .ssb-sidebar-item-icon {
   right: .5em;
 }
-.ssb-sidebar-settings-heading {
-  text-decoration: underline;
-  font-family: Helvetica, Arial, sans-serif;
-  margin: 1em 0;
+.ssb-sidebar-sub-heading-separator {
+  background: #ebebeb;
+  color: #888888;
+  text-transform: uppercase;
+  border-width: 1px 0;
+  border-color: #e4e4e4;
+  border-style: solid;
+  width: calc(130%);
+  margin: 0 0 0 -15px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 500;
 }
 .ssb-page-section-settings-item > .panel-group {
   margin-bottom: 0;
@@ -7212,8 +7220,6 @@ div[class^="spacing-"] input {
   border-radius: 14px;
   font-size: 12px;
   max-height: calc(100% - 182px);
-  overflow: auto;
-  overflow-x: hidden;
   width: 300px;
   border: 10px solid rgba(255, 255, 255, 0.15);
 }
@@ -7250,7 +7256,7 @@ div[class^="spacing-"] input {
   cursor: pointer;
   font-size: 16px;
   color: white;
-  line-height: 3.5em;
+  line-height: 3.15em;
 }
 .ssb-sidebar-section-panel .close {
   position: absolute;
@@ -7291,6 +7297,9 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-section-panel .product-ui-select ul.dropdown-menu {
   max-height: 100px;
+}
+.ssb-sidebar-section-panel label {
+  color: #888888;
 }
 .ssb-sidebar-section-panel-btn.btn-link {
   width: 100%;

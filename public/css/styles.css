@@ -10528,7 +10528,7 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-sub-heading {
   position: relative;
-  padding: 1em .5em 1em;
+  padding: .85em .5em;
   border-top: 1px solid #E7EAEA;
   border-bottom: 1px solid #E7EAEA;
   margin: 0;
@@ -10536,10 +10536,18 @@ div[class^="spacing-"] input {
 .ssb-sidebar-sub-heading .ssb-sidebar-item-icon {
   right: .5em;
 }
-.ssb-sidebar-settings-heading {
-  text-decoration: underline;
-  font-family: Helvetica, Arial, sans-serif;
-  margin: 1em 0;
+.ssb-sidebar-sub-heading-separator {
+  background: #ebebeb;
+  color: #888888;
+  text-transform: uppercase;
+  border-width: 1px 0;
+  border-color: #e4e4e4;
+  border-style: solid;
+  width: calc(130%);
+  margin: 0 0 0 -15px;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 500;
 }
 .ssb-page-section-settings-item > .panel-group {
   margin-bottom: 0;
@@ -10805,8 +10813,6 @@ div[class^="spacing-"] input {
   border-radius: 14px;
   font-size: 12px;
   max-height: calc(100% - 182px);
-  overflow: auto;
-  overflow-x: hidden;
   width: 300px;
   border: 10px solid rgba(255, 255, 255, 0.15);
 }
@@ -10843,7 +10849,7 @@ div[class^="spacing-"] input {
   cursor: pointer;
   font-size: 16px;
   color: white;
-  line-height: 3.5em;
+  line-height: 3.15em;
 }
 .ssb-sidebar-section-panel .close {
   position: absolute;
@@ -10884,6 +10890,9 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-section-panel .product-ui-select ul.dropdown-menu {
   max-height: 100px;
+}
+.ssb-sidebar-section-panel label {
+  color: #888888;
 }
 .ssb-sidebar-section-panel-btn.btn-link {
   width: 100%;

@@ -1205,28 +1205,32 @@ input[type="checkbox"] {
     background: @purple;
 }
 
-.switch {
+.main-content .switch {
     width: 44px;
     height: 20px;
-    background: #C91F37!important;
-    border-color: #C91F37!important;
+    background: @ui-switch-off-bg-color!important;
+    box-shadow: inset 0px 0px 0px 1px fade(@ui-switch-main-border-color, 80%)!important;
 }
 
-.switch small {
+.main-content .switch small {
     top: -3px;
-    box-shadow: inset 0px -2px 8px -1px rgba(0,0,0,0.25), 0px 1px 1px 0px rgba(0,0,0,.25);
+    // box-shadow: inset 0px -2px 8px -1px rgba(0,0,0,0.25), 0px 1px 1px 0px rgba(0,0,0,.25);
+    box-shadow: 1px 1px 2px 1px fade(@ui-switch-circle-border-color, 25%), inset 0px -1px 0px 0px fade(@ui-switch-circle-border-color, 85%), inset 0px 1px 0px 0px fade(@ui-switch-circle-border-color, 25%)!important;
     width: 25px;
     height: 25px;
     left: -1px;
+    background: #fdfdfd;
+    background: linear-gradient(to bottom,  #fdfdfd 25%, #e7e7e7 100%);
 }
 
-.switch.checked small {
+.main-content .switch.checked small {
     left: 20px;
+    box-shadow: -1px 1px 2px 1px fade(@ui-switch-circle-border-color, 25%), inset 0px -1px 0px 0px fade(@ui-switch-circle-border-color, 85%), inset 0px 1px 0px 0px fade(@ui-switch-circle-border-color, 25%)!important;
 }
 
-.switch.checked {
-  background: #64bd63!important;
-  border-color: #64bd63!important;
+.main-content .switch.checked {
+  background: @ui-switch-on-bg-color!important;
+  // border-color: @ui-switch-circle-border-color!important;
 }
 
 .ui-select-multiple input.ui-select-search {

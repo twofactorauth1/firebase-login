@@ -1,15 +1,16 @@
 <div class="row padding-10">
-    <div class="form-group col-xs-6 ssb-spectrum-color-picker">
+    <!-- <div class="form-group col-xs-6 ssb-spectrum-color-picker">
         <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="component.txtcolor"></spectrum-colorpicker>
         <label for="colorpicker">Text <span tooltip-placement="top" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span></label>
-    </div>
+    </div> -->
     <div class="form-group col-xs-6 ssb-spectrum-color-picker">
         <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
         <label for="colorpicker">Background <span tooltip-placement="top" tooltip-html-unsafe="Background color of section."><i class="fa fa-info-circle" /></span></label>
     </div>
 </div>
 <div class="row padding-10">
-    <div class="col-xs-12">
+    <div>
+        <h4 class="ssb-sidebar-sub-heading-separator">Background</h4>
         <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
@@ -52,7 +53,7 @@
     </div>
 </div>
 <div class="row padding-10">
-    <div class="col-xs-12">
+    <div>
         <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
             <label class="margin-bottom-0">Show Background Video</label>
             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background video of component."><i class="fa fa-info-circle" /></span>
@@ -91,7 +92,7 @@
     </div>
 </div>
 <div class="row padding-10">
-    <div class="col-xs-12">
+    <div>
         <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
             <label for="bg_blur">Blur BG</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
