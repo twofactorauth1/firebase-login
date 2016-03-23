@@ -120,7 +120,7 @@
                 </li>
             </ul>
 
-			<div ng-if="vm.state.page.sections.length">
+			<div ng-sortable="vm.state.barConfig" ng-if="vm.state.page.sections.length">
 
 				<ssb-page-section
 					ng-repeat="section in vm.state.page.sections"

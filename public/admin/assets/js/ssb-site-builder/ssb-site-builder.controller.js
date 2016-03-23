@@ -31,6 +31,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.resetDirty = resetDirty;
     vm.pageChanged = pageChanged;
 
+    vm.state.barConfig = {
+        sort: false,
+        group: 'section',
+        animation: 150,
+        onAdd: function (evt) {
+            SimpleSiteBuilderService.getSection(evt.model, evt.model.version || 1).then(function(response) {
+                if (response) {
+                    vm.state.page.sections[evt.newIndex] = response;
+                }
+            });
+        }
+    };
+
 
     vm.uiState = {
         loading: 0,

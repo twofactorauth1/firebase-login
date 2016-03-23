@@ -81,7 +81,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 classString += ' ssb-page-section-layout-legacy-undernav';
             }
 
-            if (section.bg.video && section.bg.video.show && section.bg.video.urlProcessed) {
+            if (section.bg && section.bg.video && section.bg.video.show && section.bg.video.urlProcessed) {
 
                 if (!angular.equals(vm.playerObject, {})) {
                     classString += ' ssb-page-section-layout-video-bg';
