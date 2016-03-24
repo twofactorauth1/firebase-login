@@ -2703,23 +2703,30 @@ div[data-type="feature-block"] .component-inner {
   color: #2ecc71;
 }
 .simple-form-v1 .has-error .form-control {
-  border-color: #e74c3c;
+  border-color: #e74c3c !important;
 }
 .simple-form-v1 .has-error .glyphicon {
-  color: #e74c3c;
+  color: #e74c3c !important;
 }
 .simple-form-v1 .has-error .help-block {
-  color: #e74c3c;
+  color: #e74c3c !important;
 }
 .simple-form-v1 .has-feedback .form-control-feedback {
   position: absolute;
   top: 8px;
   right: 8px;
 }
-@media (max-width: 767px) {
-  .simple-form-v1 .btn-simple-form {
-    width: 100% !important;
-  }
+.simple-form-v1 .btn-simple-form {
+  width: auto;
+  min-width: 25%;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+.simple-form-v1 .btn-simple-form .editable-title {
+  display: none !important;
+}
+.simple-form-v1 .btn-simple-form .element-wrap {
+  padding: 5px !important;
 }
 .simple-form-v1 .btn-simple-form {
   width: auto;
@@ -10930,6 +10937,11 @@ div[class^="spacing-"] input {
 .ssb-section-content-list-item-on {
   border: 6px solid #47B8D9;
 }
+.accordion.component-form-style .ssb-spectrum-color-picker .sp-replacer {
+  width: 3em;
+  height: 3em;
+  margin: 1px 0 0.5em 0;
+}
 .app-sidebar-closed ssb-topbar {
   left: 0;
   width: 100%;
@@ -11787,6 +11799,173 @@ ssb-topbar .ui-select-match-text > small {
 }
 [ssb-image-component] img {
   width: 100%;
+}
+/********** Form Builder **********/
+.form-builder-component .form-title {
+  padding-left: 10px;
+  position: relative;
+}
+.form-builder-component .form-subtitle {
+  margin: 0 10px;
+  position: relative;
+}
+.form-builder-component input,
+.form-builder-component textarea {
+  min-height: 34px;
+  height: auto;
+}
+.form-builder-component .thank-you {
+  padding: 0;
+  margin-bottom: -70px;
+}
+.form-builder-component h3 {
+  color: white;
+  padding: 0 0 0 10px;
+  font-weight: 600;
+  font-family: Capita;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+  margin-top: 10px;
+}
+.form-builder-component .has-success .form-control {
+  border-color: #2ecc71;
+}
+.form-builder-component .has-success .glyphicon {
+  color: #2ecc71;
+}
+.form-builder-component .has-error .form-control {
+  border-color: #e74c3c !important;
+}
+.form-builder-component .has-error .glyphicon {
+  color: #e74c3c !important;
+}
+.form-builder-component .has-error .help-block {
+  color: #e74c3c !important;
+}
+.form-builder-component .has-feedback .form-control-feedback {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.form-builder-layout {
+  margin: 10px;
+}
+.form-builder-layout .panel-active {
+  box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
+}
+.form-builder-layout .add-layout-btn {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 170px;
+  height: 35px;
+}
+.form-builder-layout .form-layout-1 {
+  position: relative;
+  width: 50%;
+  margin: auto;
+}
+.form-builder-layout .form-layout-1 label {
+  display: block;
+}
+.form-builder-layout .form-layout-1 button {
+  float: right;
+  min-width: 50% !important;
+}
+.form-builder-layout .form-layout-1:hover {
+  cursor: pointer;
+}
+.form-builder-layout .form-layout-1:hover .add-layout-btn {
+  display: block;
+}
+.form-builder-layout .form-layout-2 {
+  position: relative;
+  width: 50%;
+  margin: auto;
+}
+.form-builder-layout .form-layout-2 button {
+  float: right;
+  margin-right: 15px;
+  min-width: 50% !important;
+}
+.form-builder-layout .form-layout-2:hover {
+  cursor: pointer;
+}
+.form-builder-layout .form-layout-2:hover .add-layout-btn {
+  display: block;
+}
+.form-builder-layout .form-layout-3 {
+  position: relative;
+}
+.form-builder-layout .form-layout-3 button {
+  float: right;
+  margin-right: 15px;
+}
+.form-builder-layout .form-layout-3:hover {
+  cursor: pointer;
+}
+.form-builder-layout .form-layout-3:hover .add-layout-btn {
+  display: block;
+}
+.form-builder-layout .form-layout-4 {
+  position: relative;
+  width: 50%;
+  margin: auto;
+}
+.form-builder-layout .form-layout-4 button {
+  float: right;
+  min-width: 50% !important;
+}
+.form-builder-layout .form-layout-4:hover {
+  cursor: pointer;
+}
+.form-builder-layout .form-layout-4:hover .add-layout-btn {
+  display: block;
+}
+.form-builder-layout .form-layout-custom {
+  position: relative;
+  margin: auto;
+}
+.form-builder-layout .form-layout-custom button {
+  float: right;
+}
+.form-builder-layout .form-layout-custom:hover {
+  cursor: pointer;
+}
+.form-builder-layout .form-layout-custom:hover .add-layout-btn {
+  display: block;
+}
+.form-builder.panel.panel-default {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.form-builder.panel.panel-default .information-header {
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+@media (max-width: 767px) {
+  .form-builder-layout .form-layout-1,
+  .form-builder-layout .form-layout-2,
+  .form-builder-layout .form-layout-3,
+  .form-builder-layout .form-layout-4,
+  .form-builder-layout .form-layout-custom {
+    width: 100%;
+  }
+}
+.btn-form {
+  width: auto;
+  min-width: 25%;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+.btn-form .editable-title {
+  display: none !important;
+}
+.btn-form .element-wrap {
+  padding: 5px !important;
 }
 .ssb-theme-btn:hover:before {
   background: rgba(255, 255, 255, 0.1);

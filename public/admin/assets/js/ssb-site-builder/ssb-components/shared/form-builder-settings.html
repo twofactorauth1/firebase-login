@@ -6,7 +6,7 @@
                     <label><strong>Fields per row</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right">
-                        <input type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" touchspin>
+                        <input ng-change="vm.component.layout = 0" type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" touchspin>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -57,14 +57,6 @@
         </accordion-group>
 
         <accordion-group heading="FORM EMAIL">
-            <div class="row">
-                <div class="form-group margin-bottom-5" ng-repeat="field in component.fields">
-                    <label><strong>Show "{{field.name | titleCase}}" field</strong></label>
-                    <span tooltip-placement="top" tooltip-html-unsafe="show '{{field.name | titleCase}}' field on form"><i class="fa fa-info-circle" /></span>
-                    <switch name="chk_{{field.name}}" ng-model="field.value" class="pull-right"></switch>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
             <div class="row">
                 <div class="form-group customer-tags">
                     <label class="block">
