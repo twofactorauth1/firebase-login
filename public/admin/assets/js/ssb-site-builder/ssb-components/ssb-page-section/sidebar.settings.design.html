@@ -43,10 +43,48 @@
         <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)" class="img-thumbnail">
     </div>
 
+    <!-- <div class="form-group" ng-show="component.bg.img.show">
+        <div>
+            <label for="bg_position">
+                Image fit
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+        <div class="radio clip-radio radio-primary radio-inline">
+            <input type="radio" id="fit-cover" name="inline" value="cover" ng-model="component.bg.img.fit">
+            <label for="fit-cover">
+                Cover
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will fill container, cropping any extra width or height.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+        <div class="radio clip-radio radio-primary radio-inline">
+            <input type="radio" id="fit-height" name="inline" value="height" ng-model="component.bg.img.fit">
+            <label for="fit-height">
+                Height
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will take up full height of container.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+        <div class="radio clip-radio radio-primary radio-inline">
+            <input type="radio" id="fit-width" name="inline" value="width" ng-model="component.bg.img.fit">
+            <label for="fit-width">
+                Width
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will take up full width of container.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+    </div>
+
     <div class="form-group" ng-show="component.bg.img.show">
         <div>
             <label for="bg_position">
-                Background Position
+                Image position
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position.">
                     <i class="fa fa-info-circle" />
                 </span>
@@ -70,7 +108,7 @@
                 Right
             </label>
         </div>
-    </div>
+    </div> -->
 
     <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
         <label class="margin-bottom-0">
@@ -82,24 +120,28 @@
         <switch ng-model="component.bg.video.show" class="pull-right"></switch>
     </div>
     <div class="form-group" ng-if="component.bg.video.show">
-        <label for="member-name">
-            Video Type
-            <span tooltip-placement="right" tooltip-html-unsafe="Select video type.">
-                <i class="fa fa-info-circle" />
-            </span>
-        </label>
+        <div>
+            <label for="member-name">
+                Video Type
+                <span tooltip-placement="right" tooltip-html-unsafe="Select video type.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
         <select class="form-control" ng-model="component.bg.video.type">
             <option selected value="youtube">YouTube</option>
             <!-- <option value="vimeo">Vimeo</option> -->
         </select>
     </div>
     <div class="form-group" ng-if="component.bg.video.type == 'vimeo' && component.bg.video.show">
-        <label for="video-url-vimeo">
-            Video URL
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
-                <i class="fa fa-info-circle" />
-            </span>
-        </label>
+        <div>
+            <label for="video-url-vimeo">
+                Video URL
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
         <input
             id="video-url-vimeo"
             class="form-control"
@@ -108,12 +150,14 @@
             ng-change="vm.constructVideoUrl(component);"/>
     </div>
     <div class="form-group" ng-if="component.bg.video.type == 'youtube' && component.bg.video.show">
-        <label for="video-url-youtube">
-            Video URL
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
-                <i class="fa fa-info-circle" />
-            </span>
-        </label>
+        <div>
+            <label for="video-url-youtube">
+                Video URL
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
         <input
             id="video-url-youtube"
             class="form-control"
