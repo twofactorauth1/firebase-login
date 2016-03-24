@@ -9704,15 +9704,6 @@ body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper div.fr-scroller div.f
 body[ng-controller] .fr-overlay {
   background: #000000;
 }
-.editable-title {
-  display: block;
-  top: 0!important;
-  pointer-events: none;
-  opacity: 0;
-}
-.editable-title.on {
-  opacity: .85;
-}
 /* DOHY */
 .main-navigation-menu .dashboard-update-icon {
   position: absolute;
