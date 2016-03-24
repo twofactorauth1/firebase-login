@@ -4623,7 +4623,7 @@ select[multiple="multiple"]:focus option {
 }
 label {
   font-weight: normal;
-  color: #858585;
+  color: #444444;
 }
 span.input-icon,
 span.input-help {
@@ -5479,6 +5479,13 @@ input[type="checkbox"] {
 }
 .ui-select-multiple input.ui-select-search {
   width: auto !important;
+}
+.form-group label .fa-info-circle {
+  font-size: 11px;
+  position: relative;
+  top: -2px;
+  left: 2px;
+  color: #444444;
 }
 /* ---------------------------------------------------------------------- */
 /*  Icons

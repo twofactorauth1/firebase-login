@@ -246,7 +246,7 @@ select[multiple="multiple"]:focus option {
 
 label {
     font-weight: normal;
-    color: #858585;
+    color: @form-label-main-text-color;
 }
 
 span.input-icon,
@@ -1236,3 +1236,12 @@ input[type="checkbox"] {
 .ui-select-multiple input.ui-select-search {
   width: auto !important;
 }
+
+.form-group label .fa-info-circle {
+    font-size: 11px;
+    position: relative;
+    top: -2px;
+    left: 2px;
+    color: @form-label-main-text-color;
+}
+

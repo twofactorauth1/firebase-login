@@ -6,91 +6,120 @@
         <label for="colorpicker">Text <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span></label>
     </div> -->
     <div class="form-group ssb-spectrum-color-picker-small">
-        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
-        <label for="colorpicker">Background <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background color of section."><i class="fa fa-info-circle" /></span></label>
+        <div class="ssb-spectrum-color-picker-background-container">
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
+            <i class="fa fa-eyedropper" />
+        </div>
+        <label>
+            Fill color
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background color of section.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
     </div>
-</div>
+    <div class="form-group" ng-hide="isEmail">
+        <label for="bg_hide" class="margin-bottom-0">
+            Show image
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <switch ng-model="component.bg.img.show" class="pull-right"></switch>
+    </div>
+    <div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
+        <div class="btn-wrap">
+            <input id="abi" ng-model="component.bg.img.url" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)">
+        </div>
+    </div>
 
-<div class="row padding-10">
-    <div>
-        <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
-            <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
-            <switch ng-model="component.bg.img.show" class="pull-right"></switch>
-            <br>
+    <div class="form-group ssb-background-image-picker" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
+        <label for="bg_hide" class="margin-bottom-0">
+            Select image
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select an image to use as a background.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <i class="fa fa-close" ng-click="vm.removeBackgroundImage(component)"></i>
+        <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)" class="img-thumbnail">
+    </div>
+
+    <div class="form-group" ng-show="component.bg.img.show">
+        <div>
+            <label for="bg_position">
+                Background Position
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
         </div>
-        <div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
-            <div class="btn-wrap">
-                <input id="abi" ng-model="component.bg.img.url" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)">
-            </div>
+        <div class="radio clip-radio radio-primary radio-inline">
+            <input type="radio" id="leftPosition" name="inline" value="left" ng-model="component.bg.img.position">
+            <label for="leftPosition">
+                Left
+            </label>
         </div>
-        <div class="bgimg" id="bgimg" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
-            <i class="fa fa-close" ng-click="vm.removeBackgroundImage(component)"></i>
-            <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)" class="img-thumbnail">
+        <div class="radio clip-radio radio-primary radio-inline">
+            <input type="radio" id="centerPosition" name="inline" value="center" ng-model="component.bg.img.position">
+            <label for="centerPosition">
+                Center
+            </label>
         </div>
-        <div class="clearfix margin-bottom-10"></div>
-        <div class="form-group" ng-if="component.type == 'masthead'" ng-show="component.bg.img.show">
-            <label for="bg_position">Background Position</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position."><i class="fa fa-info-circle" /></span>
-            <div class="clearfix"></div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="leftPosition" name="inline" value="left" ng-model="component.bg.img.position">
-                <label for="leftPosition">
-                    Left
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="centerPosition" name="inline" value="center" ng-model="component.bg.img.position">
-                <label for="centerPosition">
-                    Center
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="rightPosition" name="inline" value="right" ng-model="component.bg.img.position">
-                <label for="rightPosition">
-                    Right
-                </label>
-            </div>
+        <div class="radio clip-radio radio-primary radio-inline">
+            <input type="radio" id="rightPosition" name="inline" value="right" ng-model="component.bg.img.position">
+            <label for="rightPosition">
+                Right
+            </label>
         </div>
     </div>
-</div>
-<div class="row padding-10">
-    <div>
-        <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
-            <label class="margin-bottom-0">Show Background Video</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background video of component."><i class="fa fa-info-circle" /></span>
-            <switch ng-model="component.bg.video.show" class="pull-right"></switch>
-            <br>
-        </div>
-        <div class="form-group" ng-if="component.bg.video.show">
-            <label for="member-name">Video Type</label>
-            <span tooltip-placement="right" tooltip-html-unsafe="Select video type."><i class="fa fa-info-circle" /></span>
-            <select class="form-control" ng-model="component.bg.video.type">
-                <option selected value="youtube">YouTube</option>
-                <!-- <option value="vimeo">Vimeo</option> -->
-            </select>
-        </div>
-        <div class="form-group" ng-if="component.bg.video.type == 'vimeo' && component.bg.video.show">
-            <label for="video-url-vimeo">Video URL</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL."><i class="fa fa-info-circle" /></span>
-            <input
-                id="video-url-vimeo"
-                class="form-control"
-                type="text"
-                ng-model="component.bg.video.url"
-                ng-change="vm.constructVideoUrl(component);"/>
-        </div>
-        <div class="form-group" ng-if="component.bg.video.type == 'youtube' && component.bg.video.show">
-            <label for="video-url-youtube">Video URL</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL."><i class="fa fa-info-circle" /></span>
-            <input
-                id="video-url-youtube"
-                class="form-control"
-                type="url"
-                ng-model="component.bg.video.url"
-                ng-change="vm.constructVideoUrl(component);"/>
-        </div>
-        <div class="clearfix margin-bottom-10"></div>
+
+    <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
+        <label class="margin-bottom-0">
+            Show video
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background video of component.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <switch ng-model="component.bg.video.show" class="pull-right"></switch>
+    </div>
+    <div class="form-group" ng-if="component.bg.video.show">
+        <label for="member-name">
+            Video Type
+            <span tooltip-placement="right" tooltip-html-unsafe="Select video type.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <select class="form-control" ng-model="component.bg.video.type">
+            <option selected value="youtube">YouTube</option>
+            <!-- <option value="vimeo">Vimeo</option> -->
+        </select>
+    </div>
+    <div class="form-group" ng-if="component.bg.video.type == 'vimeo' && component.bg.video.show">
+        <label for="video-url-vimeo">
+            Video URL
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <input
+            id="video-url-vimeo"
+            class="form-control"
+            type="text"
+            ng-model="component.bg.video.url"
+            ng-change="vm.constructVideoUrl(component);"/>
+    </div>
+    <div class="form-group" ng-if="component.bg.video.type == 'youtube' && component.bg.video.show">
+        <label for="video-url-youtube">
+            Video URL
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <input
+            id="video-url-youtube"
+            class="form-control"
+            type="url"
+            ng-model="component.bg.video.url"
+            ng-change="vm.constructVideoUrl(component);"/>
     </div>
 </div>
 
@@ -99,54 +128,80 @@
 <div class="row padding-10">
     <div>
         <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
-            <label for="bg_blur">Blur BG</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
+            <label for="bg_blur">
+                Blur background
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove blur effect to background image.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
             <switch ng-model="component.bg.img.blur" class="pull-right"></switch>
         </div>
         <div class="form-group" ng-show="component.bg.img.show && !component.bg.video.show">
-            <label for="bg_parallax" ng-if="component.type != 'navigation'">Parallax:</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image."><i class="fa fa-info-circle" /></span>
+            <label for="bg_parallax" ng-if="component.type != 'navigation'">
+                Parallax
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
             <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
         </div>
-        <div class="form-group" ng-if="component.type == 'masthead'" ng-show="component.bg.img.show">
-            <label for="bg_overlay">Under Nav</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
+        <div class="form-group">
+            <label for="bg_overlay">
+                Under nav
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Make Masthead go underneath nav.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
             <switch ng-model="component.bg.img.undernav" class="pull-right"></switch>
         </div>
-        <div class="form-group" ng-if="component.type == 'masthead' && component.bg.img.undernav" ng-show="component.bg.img.show">
-            <label for="bg_fullscreen">Full Screen</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Switch Masthead background to fullscreen."><i class="fa fa-info-circle" /></span>
+        <div class="form-group">
+            <label for="bg_fullscreen">
+                Full Screen
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Switch Masthead background to fullscreen.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
             <switch ng-model="component.bg.img.fullscreen" class="pull-right"></switch>
         </div>
         <div class="form-group">
-            <label for="bg_overlay">Add Overlay</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
+            <label for="bg_overlay">
+                Add overlay
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to background image.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
             <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
         </div>
-        <div class="form-group">
-            <label for="bg_overlay_color">Overlay Color</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
-            <div class="pull-right">
-                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                <spectrum-colorpicker format="rgba" options="vm.spectrum.options" class="pull-right" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
             </div>
+            <label for="colorpicker">
+                Overlay color
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
         </div>
-        <div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <label for="bg_overlay_opacity">Overlay Opacity</label>
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity."><i class="fa fa-info-circle" /></span>
-                </div>
-                <div class="col-xs-12">
-                    <rzslider
-                        class="slider-opacity"
-                        rz-slider-step="10"
-                        name="bg-opacity"
-                        rz-slider-model="component.bg.img.overlayopacity"
-                        rz-slider-floor="0"
-                        rz-slider-ceil="100">
-                    </rzslider>
-                </div>
+
+        <div class="form-group">
+            <div>
+                <label for="bg_overlay_opacity">Overlay opacity</label>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </div>
+            <div>
+                <rzslider
+                    class="slider-opacity"
+                    rz-slider-step="10"
+                    name="bg-opacity"
+                    rz-slider-model="component.bg.img.overlayopacity"
+                    rz-slider-floor="0"
+                    rz-slider-ceil="100">
+                </rzslider>
             </div>
         </div>
     </div>
@@ -168,17 +223,29 @@
 <div class="row padding-10">
     <div>
 
-        <div class="form-group ssb-spectrum-color-picker">
-            <spectrum-colorpicker class="`-background" format="'hex'" options="vm.spectrum.options" ng-model="component.border.color"></spectrum-colorpicker>
-            <label for="colorpicker">Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Choose a color for the border around this section."><i class="fa fa-info-circle" /></span></label>
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.border.color"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label for="colorpicker">
+                Color
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Choose a color for the border around this section.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
         </div>
 
         <div class="form-group">
-            <div class="col-xs-12">
-                <label>Width</label>
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the thickness of the border."><i class="fa fa-info-circle" /></span>
+            <div>
+                <label>
+                    Width
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the thickness of the border.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
             </div>
-            <div class="col-xs-12">
+            <div>
                 <rzslider
                     class="slider-opacity"
                     rz-slider-step="10"
@@ -191,21 +258,50 @@
         </div>
 
         <div class="form-group">
-            <div class="col-xs-12">
-                <label>Style</label>
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the thickness of the border."><i class="fa fa-info-circle" /></span>
+            <div>
+                <label>
+                    Style
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the style of the border.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
             </div>
-            <div class="col-xs-12">
-                <div ng-model="component.border.style">none | solid | dotted | dashed</div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="none" name="inline" value="" ng-model="component.border.style">
+                <label for="none">
+                    None
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="solid" name="inline" value="solid" ng-model="component.border.style">
+                <label for="solid">
+                    Solid
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="dotted" name="inline" value="dotted" ng-model="component.border.style">
+                <label for="dotted">
+                    Dotted
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="dashed" name="inline" value="dashed" ng-model="component.border.style">
+                <label for="dashed">
+                    Dashed
+                </label>
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-xs-12">
-                <label>Roundness</label>
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the roundness of the border to create a curved corner effect. Also known as border radius."><i class="fa fa-info-circle" /></span>
+            <div>
+                <label>
+                    Roundness
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the roundness of the border to create a curved corner effect. Also known as border radius.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
             </div>
-            <div class="col-xs-12">
+            <div>
                 <rzslider
                     class="slider-opacity"
                     rz-slider-step="10"

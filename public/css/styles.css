@@ -10496,6 +10496,17 @@ div[class^="spacing-"] input {
     top: 125px;
   }
 }
+.ssb-sidebar .form-group {
+  clear: both;
+  float: left;
+  width: 100%;
+}
+.ssb-sidebar .form-group > label {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
+}
 .ssb-sidebar-heading {
   position: relative;
   color: white;
@@ -10530,7 +10541,6 @@ div[class^="spacing-"] input {
   position: relative;
   padding: .85em .5em;
   border-top: 1px solid #E7EAEA;
-  border-bottom: 1px solid #E7EAEA;
   margin: 0;
 }
 .ssb-sidebar-sub-heading .ssb-sidebar-item-icon {
@@ -10544,9 +10554,9 @@ div[class^="spacing-"] input {
   border-color: #e4e4e4;
   border-style: solid;
   width: calc(100% + 30px);
-  margin: 0 0 0 -15px;
-  padding: 10px 15px;
-  font-size: 14px;
+  margin: 0 0 10px -15px;
+  padding: 10px 10px;
+  font-size: 12px;
   font-weight: 500;
 }
 .ssb-page-section-settings-item > .panel-group {
@@ -10640,31 +10650,6 @@ div[class^="spacing-"] input {
 .btn-ssb-remove-component {
   width: auto;
   margin: 1em auto;
-}
-.ssb-spectrum-color-picker {
-  text-align: center;
-}
-.ssb-spectrum-color-picker label {
-  width: 100%;
-}
-.ssb-spectrum-color-picker .sp-replacer {
-  padding: 0;
-  border: none;
-  background: none;
-  border-radius: 10em;
-  width: 5em;
-  height: 5em;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
-  margin: 1px 0 1em 0;
-}
-.ssb-spectrum-color-picker .sp-preview {
-  background: transparent;
-  border: 0 none;
-  width: 100%;
-  height: 100%;
-}
-.ssb-spectrum-color-picker .sp-dd {
-  display: none;
 }
 @media (min-width: 768px) {
   .ssb-sidebar-inner {
@@ -10841,7 +10826,7 @@ div[class^="spacing-"] input {
   height: 100%;
   position: relative;
   top: -2px;
-  margin: 0 .85em 0 .25em;
+  margin: 0 .25em 0 .25em;
 }
 .ssb-sidebar-section-panel.draggable > .close-panel {
   top: -1px;
@@ -10864,9 +10849,6 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-section-panel .panel-group {
   margin-bottom: 0;
-}
-.ssb-sidebar-section-panel .row:not(:first-of-type) {
-  border-top: 1px solid #ddd;
 }
 .ssb-sidebar-section-panel .ssb-sidebar-item-section-actions {
   background: #1c2b36;
@@ -10937,9 +10919,7 @@ div[class^="spacing-"] input {
   z-index: 1;
   overflow: hidden;
   min-height: 100%;
-}
-.ssb-sidebar-section-panel-component-panel rzslider {
-  width: calc(100% - 15px);
+  color: #444444;
 }
 .ssb-sidebar-section-panel-component-panel.ng-enter {
   min-height: 128px;
