@@ -1,32 +1,59 @@
-<div class="form-group ssb-spectrum-color-picker-small" ng-show="component.type == 'navigation'">
-    <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.activetxtcolor"></spectrum-colorpicker>
-    <br />
-    <label for="colorpicker">Active Text <span tooltip-placement="top" tooltip-html-unsafe="Nav bar Active menu color."><i class="fa fa-info-circle" /></span></label>
+<div class="form-group ssb-spectrum-color-picker-small">
+    <div class="ssb-spectrum-color-picker-background-container">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.nav.bg"></spectrum-colorpicker>
+        <i class="fa fa-eyedropper" />
+    </div>
+    <label>
+        Nav background
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Nav bar menu hover color.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+</div>
+
+<div class="form-group ssb-spectrum-color-picker-small">
+    <div class="ssb-spectrum-color-picker-background-container">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.activetxtcolor"></spectrum-colorpicker>
+        <i class="fa fa-eyedropper" />
+    </div>
+    <label>
+        Nav active text color
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Nav bar active menu color.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+</div>
+
+<div class="form-group ssb-spectrum-color-picker-small">
+    <div class="ssb-spectrum-color-picker-background-container">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.nav.hover"></spectrum-colorpicker>
+        <i class="fa fa-eyedropper" />
+    </div>
+    <label>
+        Nav hover
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Nav bar menu hover color.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+</div>
+
+<div class="form-group ssb-spectrum-color-picker-small">
+    <div class="ssb-spectrum-color-picker-background-container">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.nav.hoverbg"></spectrum-colorpicker>
+        <i class="fa fa-eyedropper" />
+    </div>
+    <label>
+        Nav hover background
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Nav bar menu hover background color.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
 </div>
 
 <div class="form-group" ng-show="component.type == 'navigation' && component.version == 1">
-    <div class="form-group">
-    <label for="colorpicker">Show Nav Box</label>
-    <span tooltip-placement="top" tooltip-html-unsafe="Show/hide nav box."><i class="fa fa-info-circle" /></span>
-        <switch ng-model="component.shownavbox" class="pull-right"></switch>
-    </div>
-</div>
-
-<div class="form-group ssb-spectrum-color-picker-small" ng-show="component.type == 'navigation'">
-    <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.nav.hover"></spectrum-colorpicker>
-    <br />
-    <label for="colorpicker">Nav Hover <span tooltip-placement="top" tooltip-html-unsafe="Nav bar menu hover color."><i class="fa fa-info-circle" /></span></label>
-</div>
-
-
-<div class="form-group ssb-spectrum-color-picker-small" ng-show="component.type == 'navigation'">
-    <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.nav.hoverbg"></spectrum-colorpicker>
-    <br />
-    <label for="colorpicker">Nav Hover BG <span tooltip-placement="top" tooltip-html-unsafe="Navigation bar on hover BG color."><i class="fa fa-info-circle" /></span></label>
-</div>
-
-<div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'navigation'">
-    <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.nav.bg"></spectrum-colorpicker>
-    <br />
-    <label for="colorpicker">Nav BG <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span></label>
+    <label for="colorpicker">
+        Show nav box
+        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide nav box."><i class="fa fa-info-circle" /></span>
+    </label>
+    <switch ng-model="component.shownavbox" class="pull-right"></switch>
 </div>
