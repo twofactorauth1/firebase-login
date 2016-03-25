@@ -39,9 +39,9 @@ block content
         //console.log('next: ' + next);
         console.log('socialNetwork: ' + socialNetwork);
         if (socialNetwork != 'undefined')
-            document.getElementById('redirectMsg').innerHTML = "You are about to be redirected to "+ socialNetwork +" for authentication";
+            document.getElementById('redirectMsg').innerHTML = "You will be redirected to "+ socialNetwork +" for authentication";
         else
-            document.getElementById('redirectMsg').innerHTML = "You're about to be redirected in ";
+            document.getElementById('redirectMsg').innerHTML = "You will be redirected in ";
         if (socialNetwork == 'stripe')
             document.getElementById('redirectDesc').innerHTML = "Indigenous is asking for permission to use Stripe on your behalf.  This will allow you to use the Indigenous platform to bill your users and collect payments.  This does NOT give Indigenous the permission to charge you for anything and Indigenous will never charge anyone without your explicit permission.";
         var secLeft = 4;
@@ -51,6 +51,6 @@ block content
         	if (secLeft <= 0) {
         		clearInterval(interval);
         		window.location = next;
-        	} 
+        	}
         };
         var interval = setInterval(intervalFn, 1000);
