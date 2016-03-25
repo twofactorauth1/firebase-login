@@ -1,134 +1,107 @@
-<div ng-controller="SSBComponentSettingsModalCtrl" class="container-fluid">
-    <accordion close-others="oneAtATime" class="accordion simple-form-settings">
-        <accordion-group heading="Form Layout">
-            <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        Fields per row
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="col-sm-6 pull-right">
-                        <input type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" touchspin>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
+<div ng-controller="SSBComponentSettingsModalCtrl">
+    <h4 class="ssb-sidebar-sub-heading-separator">Form Layout</h4>
+    <div class="row padding-10">
+        <div class="form-group">
+            <label>
+                Fields per row
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-7 pull-right">
+                <input type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" touchspin>
             </div>
-            <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        Row spacing
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="top/bottom margin between rows"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="col-sm-6 pull-right">
-                        <input type="text" ng-model="component.formSettings.spacing.mb" min="0" max="500" touchspin>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
+        </div>
+        <div class="form-group">
+            <label>
+                Row spacing
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="top/bottom margin between rows"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-7 pull-right">
+                <input type="text" ng-model="component.formSettings.spacing.mb" min="0" max="500" touchspin>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        Column spacing
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="col-sm-6 pull-right">
-                        <input type="text" ng-model="component.formSettings.spacing.pr" min="0" max="500" touchspin>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
+        <div class="form-group">
+            <label>
+                Column spacing
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-7 pull-right">
+                <input type="text" ng-model="component.formSettings.spacing.pr" min="0" max="500" touchspin>
             </div>
-            <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        Field alignment
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="clearfix"></div>
-                    <div class="btn-group">
-                        <label ng-click="component.formSettings.align = option" ng-class="{'active': option == component.formSettings.align}" ng-repeat="option in alignmentOptions" class="btn btn-primary btn-radio-form text-capitalize" ng-model="component.formSettings.align">{{option}}</label>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        Button alignment
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="clearfix"></div>
-                    <div class="btn-group">
-                        <label ng-click="component.btn.align = option" ng-class="{'active': option == component.btn.align}" ng-repeat="option in alignmentOptions" class="btn btn-primary text-capitalize btn-radio-form" ng-model="component.btn.align">{{option}}</label>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </accordion-group>
+        </div>
 
-        <accordion-group heading="Tag Submissions">
-            <div class="row">
-                <div class="form-group margin-bottom-5" ng-repeat="field in component.fields">
-                    <label>
-                        Show "{{field.name | titleCase}}" field
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show '{{field.name | titleCase}}' field on form"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <switch name="chk_{{field.name}}" ng-model="field.value" class="pull-right"></switch>
-                    <div class="clearfix"></div>
-                </div>
+        <div class="form-group">
+            <label>
+                Field alignment
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="btn-group">
+                <label ng-click="component.formSettings.align = option" ng-class="{'active': option == component.formSettings.align}" ng-repeat="option in alignmentOptions" class="btn btn-primary btn-radio-form text-capitalize" ng-model="component.formSettings.align">{{option}}</label>
             </div>
-            <div class="row">
-                <div class="form-group customer-tags">
-                    <label class="block">
-                        Add tag to contact
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add a contact tag on signup"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="clearfix"></div>
-                    <ui-select tagging="vm.tagToCustomer" tagging-match-to-key="label" multiple ng-model="component.tags" theme="bootstrap" ng-disabled="disabled">
-                        <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                        <ui-select-choices repeat="tag.data as tag in vm.customerTags | orderBy:'label' | filter:$select.search">
-                            {{tag.label}}
-                        </ui-select-choices>
-                    </ui-select>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        Unique email check
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Enforced unique check on email for contact creation"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <switch name="uniqueemail" ng-model="component.uniqueEmail" class="pull-right"></switch>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </accordion-group>
+        </div>
 
-        <accordion-group heading="SUBMIT SETTINGS">
-           <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        On Submit Message
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="success message on submit"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="clearfix"></div>
-                    <textarea id="successMessage" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="component.formSettings.successMessage"></textarea>
-                    <div class="clearfix"></div>
-                </div>
+        <div class="form-group">
+            <label>
+                Button alignment
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="btn-group">
+                <label ng-click="component.btn.align = option" ng-class="{'active': option == component.btn.align}" ng-repeat="option in alignmentOptions" class="btn btn-primary text-capitalize btn-radio-form" ng-model="component.btn.align">{{option}}</label>
             </div>
-            <div class="row">
-                <div class="form-group margin-bottom-5">
-                    <label>
-                        On Error Message
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="error message on submit"><i class="fa fa-info-circle" /></span>
-                    </label>
-                    <div class="clearfix"></div>
-                    <textarea id="errorMessage" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="component.formSettings.errorMessage"></textarea>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-        </accordion-group>
-    </accordion>
+        </div>
+    </div>
+
+    <h4 class="ssb-sidebar-sub-heading-separator">Tag Submissions</h4>
+    <div class="row padding-10">
+        <div class="form-group" ng-repeat="field in component.fields">
+            <label>
+                Show "{{field.name | titleCase}}" field
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show '{{field.name | titleCase}}' field on form"><i class="fa fa-info-circle" /></span>
+            </label>
+            <switch name="chk_{{field.name}}" ng-model="field.value" class="pull-right"></switch>
+        </div>
+
+        <div class="form-group customer-tags">
+            <label class="block">
+                Add tag to contact
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add a contact tag on signup"><i class="fa fa-info-circle" /></span>
+            </label>
+            <ui-select tagging="vm.tagToCustomer" tagging-match-to-key="label" multiple ng-model="component.tags" theme="bootstrap" ng-disabled="disabled">
+                <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                <ui-select-choices repeat="tag.data as tag in vm.customerTags | orderBy:'label' | filter:$select.search">
+                    {{tag.label}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Unique email check
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Enforced unique check on email for contact creation"><i class="fa fa-info-circle" /></span>
+            </label>
+            <switch name="uniqueemail" ng-model="component.uniqueEmail" class="pull-right"></switch>
+        </div>
+    </div>
+
+    <h4 class="ssb-sidebar-sub-heading-separator">Submit Settings</h4>
+    <div class="row padding-10">
+        <div class="form-group">
+            <label>
+                On Submit Message
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="success message on submit"><i class="fa fa-info-circle" /></span>
+            </label>
+            <textarea id="successMessage" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="component.formSettings.successMessage"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>
+                On Error Message
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="error message on submit"><i class="fa fa-info-circle" /></span>
+            </label>
+
+            <textarea id="errorMessage" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="component.formSettings.errorMessage"></textarea>
+        </div>
+    </div>
 
     <div class="row padding-10">
         <div class="well">

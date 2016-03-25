@@ -6909,7 +6909,6 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar .form-group {
   clear: both;
-  float: left;
   width: 100%;
 }
 .ssb-sidebar-heading {
