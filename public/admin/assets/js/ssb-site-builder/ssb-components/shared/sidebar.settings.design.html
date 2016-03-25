@@ -191,55 +191,78 @@
     </div>
 </div>
 
-<div class="row" ng-if="component.type == 'simple-form'">
-    <accordion close-others="oneAtATime" class="accordion">
-        <accordion-group heading="Input Field Style">
-            <div class="form-group margin-bottom-5">
-                <label>
-                    Text Size
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
-                </label>
-                <div class="col-sm-6 pull-right">
-                    <input type="text" ng-model="component.formSettings.formTextSize" min="6" max="96" touchspin>
-                </div>
-                <div class="clearfix"></div>
+
+
+<div ng-if="component.type == 'simple-form' || component.type == 'ssb-form-builder'">
+    <h4 class="ssb-sidebar-sub-heading-separator">Input Field Style</h4>
+
+    <div class="row padding-10">
+
+        <div class="form-group">
+            <label for="txt_size">
+                Text Size
+               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-sm-7 pull-right">
+                <input type="text" ng-model="component.formSettings.formTextSize" min="6" max="96" touchspin>
             </div>
-            <div class="form-group margin-bottom-5">
-                <label>
-                    Input Text Size
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
-                </label>
-                <div class="col-sm-6 pull-right">
-                    <input type="text" ng-model="component.formSettings.inputTextSize" min="6" max="96" touchspin>
-                </div>
-                <div class="clearfix"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="input_txt_size">
+                Input Text Size
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-sm-7 pull-right">
+                <input type="text" ng-model="component.formSettings.inputTextSize" min="6" max="96" touchspin>
             </div>
-            <div class="form-group margin-bottom-5">
+        </div>
+
+        <div class="form-group">
+            <label>
+                Font
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="font family for entire form"><i class="fa fa-info-circle" /></span>
+            </label>
+            <select ng-model="component.formSettings.formFontFamily" class="form-control margin-bottom-0">
+                <option value="">--Select--</option>
+                <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.formFontFamily}}">{{key}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Input text font
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="font family for input fields"><i class="fa fa-info-circle" /></span>
+            </label>
+            <select ng-model="component.formSettings.inputFontFamily" class="form-control margin-bottom-0">
+                <option value="">--Select--</option>
+                <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.inputFontFamily}}">{{key}}</option>
+            </select>
+        </div>
+
+        <div class="form-group" ng-if="component.type == 'contact-us'">
+            <div>
                 <label>
-                    Font
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="font family for entire form"><i class="fa fa-info-circle" /></span>
+                    Box opacity
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set contact box opacity.">
+                        <i class="fa fa-info-circle" />
+                    </span>
                 </label>
-                <div class="clearfix"></div>
-                <select ng-model="component.formSettings.formFontFamily" class="form-control margin-bottom-0">
-                    <option value="">--Select--</option>
-                    <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.formFontFamily}}">{{key}}</option>
-                </select>
-                <div class="clearfix"></div>
             </div>
-            <div class="form-group margin-bottom-5">
-                <label>
-                    Input text font
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="font family for input fields"><i class="fa fa-info-circle" /></span>
-                </label>
-                <div class="clearfix"></div>
-                <select ng-model="component.formSettings.inputFontFamily" class="form-control margin-bottom-0">
-                    <option value="">--Select--</option>
-                    <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.inputFontFamily}}">{{key}}</option>
-                </select>
-                <div class="clearfix"></div>
+            <div>
+                <rzslider
+                    class="slider-opacity"
+                    rz-slider-precision="2"
+                    rz-slider-step="0.1"
+                    name="box-opacity"
+                    rz-slider-model="component.boxOpacity"
+                    rz-slider-floor="0"
+                    rz-slider-ceil="1">
+                </rzslider>
             </div>
-        </accordion-group>
-    </accordion>
+        </div>
+
+    </div>
 </div>
 <div class="row padding-10" ng-if="component.type === 'blog' || component.type === 'blog-teaser'">
     <div class="form-group">
