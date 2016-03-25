@@ -6809,6 +6809,13 @@ div[class^="spacing-"] input {
 .sortable-page-content.dragging .ssb-page-section {
   float: none !important;
 }
+.sortable-chosen {
+  cursor: move!important;
+  cursor: -webkit-grabbing !important;
+}
+.sortable-chosen {
+  opacity: .5;
+}
 .ssb-site-template-grid-item {
   padding: 1em;
 }
