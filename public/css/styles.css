@@ -10499,12 +10499,6 @@ div[class^="spacing-"] input {
   float: left;
   width: 100%;
 }
-.ssb-sidebar .form-group > label {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translate(0, -50%);
-}
 .ssb-sidebar-heading {
   position: relative;
   color: white;
