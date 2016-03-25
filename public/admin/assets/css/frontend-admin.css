@@ -3923,9 +3923,8 @@
   display: block;
   font-size: 28px;
 }
-#componentloader .editing.image-wrap:hover .imgHeight {
-  max-height: 146px;
-  min-height: 146px;
+#componentloader .editing.image-wrap:hover .image-gallery {
+  min-height: 196px;
 }
 #componentloader .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -3998,10 +3997,17 @@
   transition: all 0.2s ease-in-out;
 }
 #componentloader .image-gallery-v1 .imgHeight {
-  max-height: 150px;
   overflow: hidden;
-  min-height: 150px;
   margin: 10px 0 20px 0;
+}
+#componentloader .image-gallery-v1 .image-gallery {
+  position: relative;
+  float: left;
+  width: 100%;
+  min-height: 200px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 #componentloader .image-gallery-v1 .image-gallery-title {
   position: relative;
