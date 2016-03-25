@@ -45,6 +45,7 @@ $.FroalaEditor.config = {
      toolbarInline: true,
      toolbarVisibleWithoutSelection: true,
      scrollableContainer: '#ssb-froala-scrollable-container',
+     // allowedEmptyTags: ['a'],
      toolbarButtons: toolbarbuttons,
      toolbarButtonsMD: toolbarbuttons,
      toolbarButtonsSM: toolbarbuttons,
