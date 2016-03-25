@@ -55,13 +55,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         sortableListPageContentConfig: {
             sort: false,
             group: 'section',
+            scroll: true,
             animation: 150,
             onAdd: function (evt) {
-                SimpleSiteBuilderService.getSection(evt.model, evt.model.version || 1).then(function(response) {
-                    if (response) {
-                        vm.state.page.sections[evt.newIndex] = response;
-                    }
-                });
+                if(vm.uiState.draggedSection)
+                    SimpleSiteBuilderService.getSection(vm.uiState.draggedSection, vm.uiState.draggedSection.version || 1).then(function(response) {
+                        if (response) {
+                            vm.state.page.sections[evt.newIndex] = response;
+                        }
+                    });
             },
             onEnd: function (evt) {
                console.log("Dragging End");
@@ -73,19 +75,25 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             group: {
                 name: 'section',
                 pull: 'clone',
-                model: 'vm.filteredSections'
+                model: 'vm.uiState.filteredSections'
             },
             animation: 150,
-            scroll: ".ssb-main", // or HTMLElement
+            scroll: true,
 
             onStart: function (evt) {
-                console.log("Dragging Start");
+                angular.element(".sortable-page-content").addClass("dragging");
             },
             onEnd: function (evt) {
-               console.log("Dragging End");
+               angular.element(".sortable-page-content").removeClass("dragging");
             },
             onSort: function (evt) {
                 console.log("On Sort");
+            },
+            onMove: function (evt) {
+                var sectionId = evt.dragged.attributes["sectionId"].value;
+                vm.uiState.draggedSection = _.findWhere(vm.uiState.filteredSections, {
+                    _id: sectionId
+                });
             }
         }
 

@@ -6806,6 +6806,9 @@ div[class^="spacing-"] input {
 .ssb-hide-during-load {
   opacity: 0;
 }
+.sortable-page-content.dragging .ssb-page-section {
+  float: none !important;
+}
 .ssb-site-template-grid-item {
   padding: 1em;
 }

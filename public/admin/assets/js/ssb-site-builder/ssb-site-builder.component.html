@@ -103,7 +103,7 @@
         </div>
     </div>
 
-	<div class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
+	<div id="ssb-main" class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
 
 
 		<div id="componentloader">
@@ -120,7 +120,7 @@
                 </li>
             </ul>
 
-			<div ng-sortable="vm.uiState.sortableListPageContentConfig" ng-if="vm.state.page.sections.length">
+			<div class="sortable-page-content" ng-sortable="vm.uiState.sortableListPageContentConfig" ng-if="vm.state.page.sections.length">
 
 				<ssb-page-section
 					ng-repeat="section in vm.state.page.sections"
