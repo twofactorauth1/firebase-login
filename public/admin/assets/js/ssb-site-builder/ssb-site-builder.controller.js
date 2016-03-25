@@ -57,8 +57,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             group: 'section',
             scroll: true,
             animation: 150,
-            ghostClass: "sortable-ghost",  // Class name for the drop placeholder
-            chosenClass: "sortable-chosen",  // Class name for the chosen item
+            ghostClass: "ssb-section-sortable-ghost",  // Class name for the drop placeholder
+            chosenClass: "ssb-section-sortable-chosen",  // Class name for the chosen item
             onAdd: function (evt) {
                 if(vm.uiState.draggedSection)
                     SimpleSiteBuilderService.getSection(vm.uiState.draggedSection, vm.uiState.draggedSection.version || 1).then(function(response) {
@@ -81,8 +81,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 model: 'vm.uiState.filteredSections'
             },
             animation: 150,
-            ghostClass: "sortable-ghost",  // Class name for the drop placeholder
-            chosenClass: "sortable-chosen",  // Class name for the chosen item
+            ghostClass: "ssb-add-content-sortable-ghost",  // Class name for the drop placeholder
+            chosenClass: "ssb-add-content-sortable-chosen",  // Class name for the chosen item
             scroll: true,
             onStart: function (evt) {
                 angular.element(".sortable-page-content").addClass("dragging");
