@@ -50,7 +50,58 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         showSectionPanel: false,
         componentControl: {}, //hook into component scope (contact-us)
         componentMedia: vm.legacyComponentMedia, //hook into component scope (image-gallery)
-        sidebarOrientation: 'vertical'
+        sidebarOrientation: 'vertical',
+
+        sortableListPageContentConfig: {
+            sort: false,
+            group: 'section',
+            scroll: true,
+            animation: 150,
+            ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+            chosenClass: "sortable-chosen",  // Class name for the chosen item
+            onAdd: function (evt) {
+                if(vm.uiState.draggedSection)
+                    SimpleSiteBuilderService.getSection(vm.uiState.draggedSection, vm.uiState.draggedSection.version || 1).then(function(response) {
+                        if (response) {
+                            vm.state.page.sections[evt.newIndex] = response;
+                        }
+                    });
+            },
+            onEnd: function (evt) {
+               console.log("Dragging End");
+            },
+        },
+
+        sortableListAddContentConfig: {
+            sort: false,
+            // forceFallback: true,
+            group: {
+                name: 'section',
+                pull: 'clone',
+                model: 'vm.uiState.filteredSections'
+            },
+            animation: 150,
+            ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+            chosenClass: "sortable-chosen",  // Class name for the chosen item
+            scroll: true,
+            onStart: function (evt) {
+                angular.element(".sortable-page-content").addClass("dragging");
+            },
+            onEnd: function (evt) {
+               angular.element(".sortable-page-content").removeClass("dragging");
+               $timeout(function() { vm.uiState.openSidebarPanel = ''; });
+            },
+            onSort: function (evt) {
+                console.log("On Sort");
+            },
+            onMove: function (evt) {
+                var sectionId = evt.dragged.attributes["sectionId"].value;
+                vm.uiState.draggedSection = _.findWhere(vm.uiState.filteredSections, {
+                    _id: sectionId
+                });
+            }
+        }
+
     };
 
 
@@ -292,10 +343,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function cancelPendingEdits() {
-      vm.state.pendingPageChanges = false;
-      vm.state.pendingWebsiteChanges = false;
-      SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
-      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
+        vm.pageSectionClick();
+        vm.state.pendingPageChanges = false;
+        vm.state.pendingWebsiteChanges = false;
+        SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
+        SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
     function updateActiveSection(index) {

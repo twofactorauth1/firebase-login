@@ -212,6 +212,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         url: "http://www.yelp.com"
       }];
 
+
     function insertMedia(asset) {
       vm.insertMediaCallback(asset);
 

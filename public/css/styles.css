@@ -10460,6 +10460,16 @@ div[class^="spacing-"] input {
 .ssb-hide-during-load {
   opacity: 0;
 }
+.sortable-page-content.dragging .ssb-page-section {
+  float: none !important;
+}
+.sortable-chosen {
+  cursor: move!important;
+  cursor: -webkit-grabbing !important;
+}
+.sortable-chosen {
+  opacity: .5;
+}
 .ssb-sidebar {
   background: #131e26;
 }
