@@ -6500,11 +6500,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   clear: both;
   border: inset solid 1px transparent;
 }
-.ssb-site-builder .ssb-page-section:hover .ssb-edit-control:not(.ssb-edit-control-component-btn),
-.ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
-  display: block;
-  opacity: 1;
-}
 .ssb-site-builder .ssb-active-section .ssb-edit-control {
   display: block;
   opacity: 1;
@@ -6813,11 +6808,11 @@ div[class^="spacing-"] input {
 .sortable-page-content.dragging .ssb-page-section {
   float: none !important;
 }
-.sortable-chosen {
+.ssb-add-content-sortable-chosen {
   cursor: move!important;
   cursor: -webkit-grabbing !important;
 }
-.sortable-chosen {
+.ssb-add-content-sortable-chosen {
   opacity: .5;
 }
 .ssb-site-template-grid-item {
@@ -9712,6 +9707,38 @@ body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper div.fr-scroller div.f
 }
 body[ng-controller] .fr-overlay {
   background: #000000;
+}
+.ssb-edit-wrap.on:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: green;
+  opacity: .85;
+}
+.ssb-edit-wrap .editable-title {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+  left: 0;
+  background: #efa022;
+  color: #fff!important;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+  padding: 0 15px;
+  display: block;
+  z-index: 999;
+  font-family: Helvetica, Arial;
+  font-weight: 500;
+  font-size: 14px;
+  height: 20px;
+  line-height: 19px;
+}
+.ssb-edit-wrap .editable-title.on {
+  opacity: .85;
 }
 /* DOHY */
 .main-navigation-menu .dashboard-update-icon {

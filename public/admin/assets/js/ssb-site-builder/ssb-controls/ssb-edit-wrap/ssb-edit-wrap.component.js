@@ -11,23 +11,34 @@ function ssbEditWrap() {
         // bindToController: true,
         link: function(scope, element, attrs, ctrl) {
 
-            // element.on('mouseenter', function() {
+            element.on('mouseenter', function() {
 
-            //     element.children().find('.editable-title:first').toggleClass('on');
+                angular.element('.ssb-edit-wrap').removeClass('on');
+                element.toggleClass('on');
 
-            // });
+                angular.element('.editable-title').removeClass('on');
+                element.find('> .editable-title:first').toggleClass('on');
 
-            // element.on('mouseleave', function() {
+                console.log(element.find('> .editable-title:first'))
 
-            //     element.children().find('.editable-title:first').toggleClass('on');
+            });
 
-            // });
+            element.on('mouseleave', function() {
 
-            // element.on('click', function() {
+                element.toggleClass('on');
+                element.find('.editable-title:first').toggleClass('on');
+                console.log(element.find('> .editable-title:first'))
 
-            //     console.log('click');
+            });
 
-            // })
+            element.on('click', function() {
+
+                console.log(element);
+
+                //show pen
+
+
+            })
 
 
         }

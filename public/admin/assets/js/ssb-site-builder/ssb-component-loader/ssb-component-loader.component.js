@@ -43,7 +43,6 @@ function ssbComponentLoader($compile, $timeout) {
 
         //if edit mode
         if (ctrl.uiState) {
-            // template =  '<span class="editable-title ng-binding">{{vm.component.title || vm.component.name}}</span>' +
             template =  '<ssb-edit-control ' +
                             'ng-if="vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex" ' +
                             'class="ssb-edit-control ssb-edit-control-component" ' +
