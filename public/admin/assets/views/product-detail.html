@@ -56,7 +56,7 @@
                                         <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
                                     </div>
                                     <div class='asset-slider' slick-slider objects='product.assets' config='slickConfig' ng-if='product.assets.length'>
-                                        <div ng-repeat='a in product.assets' class='asset-slide'><img ng-src='{{a}}' /></div>
+                                        <div ng-repeat='a in product.assets track by $index' class='asset-slide' ng-click='assetSlideClickFn($index)'><img ng-src='{{a}}' /></div>
                                     </div>
                                 </div>
                                 <div class="row hidden">

@@ -18,10 +18,14 @@
 
     $scope.slickConfig = {
         infinite: false,
+        dots: false,
         slidesToShow: 3,
         slidesToScroll: 1,
         focusOnSelect: true
     };
+
+    $scope.slickSlideIndex = 0;
+    $scope.isMediaSingleSelect = false;
 
     /*
      * @openModal
@@ -58,7 +62,7 @@
             return $scope.insertMedia;
           },
           isSingleSelect: function () {
-              return false;
+              return $scope.isMediaSingleSelect;
           }
         }
       });
@@ -1135,5 +1139,10 @@
       })
     })();
 
+    $scope.assetSlideClickFn = function ($index) {
+        console.log($index);
+        $scope.slickSlideIndex = $index;
+        $scope.isMediaSingleSelect = true;
+    };
   }]);
 }(angular));
