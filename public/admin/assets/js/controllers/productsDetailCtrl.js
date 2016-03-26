@@ -16,6 +16,13 @@
       dirty : false
     }
 
+    $scope.slickConfig = {
+        infinite: false,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        focusOnSelect: true
+    };
+
     /*
      * @openModal
      * -

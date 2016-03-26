@@ -14265,3 +14265,13 @@ indi-login-modal .modal-title {
 .is-indi-modal a[href="/forgotpassword"] {
   display: none;
 }
+
+.asset-slide {
+    height: 65px;
+    width: 65px
+}
+
+.asset-slide img {
+    height: 64px;
+    width: 64px
+}
