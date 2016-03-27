@@ -6500,7 +6500,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   clear: both;
   border: inset solid 1px transparent;
 }
-.ssb-site-builder .ssb-active-section .ssb-edit-control {
+.ssb-site-builder .ssb-active-edit-control > .ssb-edit-control {
   display: block;
   opacity: 1;
 }
@@ -7675,6 +7675,9 @@ ssb-topbar .ui-select-match-text > small {
   /*
      * layout-header-v5
      */
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header .navigation-logo {
+  max-width: calc(100% - 4px);
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] {
   width: 100%;
@@ -9708,15 +9711,29 @@ body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper div.fr-scroller div.f
 body[ng-controller] .fr-overlay {
   background: #000000;
 }
-.ssb-edit-wrap.on:before {
+.ssb-edit-wrap.ssb-on:before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: green;
+  background: transparent;
   opacity: .85;
+  z-index: 5;
+  pointer-events: none;
+}
+.ssb-edit-wrap .editable-cover {
+  display: block;
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px dotted #47B8D9;
+  min-height: 0!important;
 }
 .ssb-edit-wrap .editable-title {
   position: absolute;
@@ -9736,9 +9753,31 @@ body[ng-controller] .fr-overlay {
   font-size: 14px;
   height: 20px;
   line-height: 19px;
+  text-transform: capitalize;
+  min-height: 0!important;
 }
-.ssb-edit-wrap .editable-title.on {
+.ssb-edit-wrap.ssb-active-edit-control .editable-cover,
+.ssb-edit-wrap [data-edit].ssb-active-edit-control .editable-cover {
   opacity: .85;
+  z-index: 5;
+}
+.ssb-edit-wrap .editable-title.ssb-on,
+.ssb-edit-wrap [data-edit].ssb-on .editable-title {
+  opacity: .85;
+  display: block;
+}
+.ssb-page-section.ssb-edit-wrap > .editable-title {
+  background: #47B8D9;
+}
+.ssb-component .ssb-edit-wrap:before > .editable-title {
+  background: #eda200;
+}
+.ssb-component .ssb-edit-wrap [data-edit] > .editable-cover,
+.ssb-component .ssb-edit-wrap [data-edit] > .editable-title {
+  background: #eda200;
+}
+.ssb-element.ssb-edit-wrap:before > .editable-title {
+  background: #eda200;
 }
 /* DOHY */
 .main-navigation-menu .dashboard-update-icon {

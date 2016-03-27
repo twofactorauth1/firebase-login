@@ -10150,7 +10150,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   clear: both;
   border: inset solid 1px transparent;
 }
-.ssb-site-builder .ssb-active-section .ssb-edit-control {
+.ssb-site-builder .ssb-active-edit-control > .ssb-edit-control {
   display: block;
   opacity: 1;
 }
@@ -11268,6 +11268,9 @@ ssb-topbar .ui-select-match-text > small {
   /*
      * layout-header-v5
      */
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header .navigation-logo {
+  max-width: calc(100% - 4px);
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] {
   width: 100%;
