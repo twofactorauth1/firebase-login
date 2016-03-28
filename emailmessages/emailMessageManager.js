@@ -32,7 +32,15 @@ module.exports = {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
+                //TODO: replace *|SITEURL|* and *|USERNAME|*
                 self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
+                    vars.push({
+                        "name": "SENDDATE",
+                        "content": moment().format('MMM Do, YYYY')
+                    });
+                    _.each(vars, function(eachvar){
+                        //TODO: replace each name with content in vars
+                    });
                     var params = {
                         smtpapi:  new sendgrid.smtpapi(),
                         to:       [toAddress],
@@ -393,7 +401,7 @@ module.exports = {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-                juice.juiceResources(message.html, {}, function(err, html) {
+                juice.juiceResources(htmlContent, {}, function(err, html) {
                     if (err) {
                         self.log.error('A juice error occurred. Failed to set styles inline.');
                         self.log.error(err);
