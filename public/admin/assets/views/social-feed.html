@@ -277,7 +277,7 @@
                     <img alt="" ng-src="{{addCommentPage.from.profile_pic}}" class="media-object"> {{addCommentPage.from.name}}
                 </div>
                 <div class=' mb15'>
-                    <textarea class="form-control" ng-model='addComment'></textarea>
+                    <textarea class="form-control" ng-model='addComment.comment'></textarea>
                 </div>
                 <div class='row'>
                     <div class='col-xs-3'>
@@ -294,8 +294,8 @@
                             <!--&lt;!&ndash;<option ng-repeat="type in feedTypes" ng-show="type.type=='tw'" value="{{type.socialId}}">{{type.name}}</option>&ndash;&gt;-->
                         <!--</select>-->
                         <!--account in tempTrackedAccounts | filter: {'type': 'tw'}-->
-                        <select class='form-control mb0'>
-                            <option ng-repeat="account in tempTrackedAccounts | filter: {'type': 'tw'}" value="account.socialId">{{account.username}}</option>
+                        <select class='form-control mb0' ng-model='addComment.socialId'>
+                            <option ng-repeat="account in tempTrackedAccounts | filter: {'type': 'tw'}" value="{{account.socialId}}">{{account.username}}</option>
                         </select>
                     </div>
                     <div class="col-xs-3">

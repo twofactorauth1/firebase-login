@@ -140,10 +140,10 @@
             });
         };
 
-        this.addTwitterPostReply = function(socialAccountId, postId, username, comment, fn) {
+        this.addTwitterPostReply = function(socialAccountId, postId, comment, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'reply'].join('/');
             $http.post(apiUrl, {
-                post: '@' + username + ' ' + comment
+                post: comment
             }).success(function(data, status, headers, config) {
                     fn(data);
             });
