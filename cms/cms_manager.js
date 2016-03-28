@@ -2312,7 +2312,7 @@ module.exports = {
         log.debug('>> updatePageScreenshot');
 
         cmsDao.getPageById(pageId, function(err, page){
-            if(err) {
+            if(err || !page) {
                 log.error('Error getting page: ' + err);
                 return fn(err, null);
             }
