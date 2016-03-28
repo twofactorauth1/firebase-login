@@ -224,7 +224,7 @@ var dao = {
                                             req.session.subdomain = account.get('subdomain');
                                             req.session.domain = account.get('domain');
                                             if(!self._verifyActiveTrialOrSub(account) ) {
-                                                log.debug('locking session for account ' + req.session.accountId);
+                                                self.log.debug('locking session for account ' + req.session.accountId);
                                                 req.session.locked_sub = true;
                                                 account.set('locked_sub', true);
                                                 accountDao.saveOrUpdate(account, function(err, savedAccount){
@@ -300,7 +300,7 @@ var dao = {
                 req.session.subdomain = account.get('subdomain');
                 req.session.domain = account.get('domain');
                 if(!self._verifyActiveTrialOrSub(account) ) {
-                    log.debug('locking session for account ' + req.session.accountId);
+                    self.log.debug('locking session for account ' + req.session.accountId);
                     req.session.locked_sub = true;
                     account.set('locked_sub', true);
                     accountDao.saveOrUpdate(account, function(err, savedAccount){
