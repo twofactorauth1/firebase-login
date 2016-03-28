@@ -585,8 +585,17 @@ div[class^="spacing-"] {
 }
 
 
-.sortable-page-content.dragging .ssb-page-section {
-    float: none !important;
+#topnav.dragging, ssb-topbar.dragging{
+    display:none;
+
+}
+
+.sortable-page-content.dragging {
+    overflow: hidden;
+    .ssb-page-section{
+        float: none !important;
+    }
+
 }
 
 .sortable-chosen {
