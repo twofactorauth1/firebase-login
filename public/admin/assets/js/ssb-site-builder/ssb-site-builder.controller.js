@@ -87,7 +87,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             onStart: function (evt) {
                 angular.element(".sortable-page-content").addClass("dragging");
                 var _top = angular.element("ssb-topbar").offset().top;
-                var _height = angular.element("ssb-topbar").height()
+                var _height = angular.element("ssb-topbar").height();
                 var _winHeight = angular.element(window).height();
                 var _heightDiff = _height + _top;
                 angular.element(".sortable-page-content").height(_winHeight - _heightDiff);
