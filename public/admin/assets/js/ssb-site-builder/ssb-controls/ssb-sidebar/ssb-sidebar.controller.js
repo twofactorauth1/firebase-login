@@ -680,9 +680,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.saveWebsite().then(function(){
           return (
             SimpleSiteBuilderService.createPage(template._id).then(function(data) {
-                  vm.closeModal();
-                  vm.state.saveLoading = false;
-                  vm.uiState.navigation.loadPage(data.data._id);
+                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                    vm.closeModal();
+                    vm.state.saveLoading = false;
+                    vm.uiState.navigation.loadPage(data.data._id);
+                })
             })
           )
         })
@@ -848,7 +850,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
           vm.state.pendingWebsiteChanges = false;
           SimpleSiteBuilderService.deletePage(vm.state.page).then(function(response){
             SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
-              SimpleSiteBuilderService.getPages().then(function(pages) {
                 vm.state.saveLoading = false;
                 console.log('page deleted');
                 toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
@@ -858,8 +859,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                       else
                         $location.path('/website/site-builder/pages/');
                 }, 0);
-
-              });
             });
           })
         }
