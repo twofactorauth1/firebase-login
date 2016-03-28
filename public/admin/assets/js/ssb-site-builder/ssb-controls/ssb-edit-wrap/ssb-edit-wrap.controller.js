@@ -6,13 +6,7 @@ ssbSiteBuilderEditWrapController.$inject = ['$scope', '$attrs', '$filter', '$tim
 /* @ngInject */
 function ssbSiteBuilderEditWrapController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
 
-    var vm = this;
 
-    vm.init = init;
-
-    function init(element) {
-    	vm.element = element;
-    }
 
 }
 

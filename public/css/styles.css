@@ -11269,9 +11269,6 @@ ssb-topbar .ui-select-match-text > small {
      * layout-header-v5
      */
 }
-[class*="ssb-theme-"] .ssb-page-section-layout-header .navigation-logo {
-  max-width: calc(100% - 4px);
-}
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] {
   width: 100%;
   text-align: center;

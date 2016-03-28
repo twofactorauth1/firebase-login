@@ -33,22 +33,27 @@
     left: 0;
     width: 100%;
     height: 100%;
-    border: 1px dotted @indigenous-blue;
+    border: 1px dashed @indigenous-blue;
     min-height: 0!important;
+    z-index: 5;
+}
+
+.ssb-component .ssb-edit-wrap .editable-cover,
+.ssb-edit-wrap [data-edit] .editable-cover {
+    border: 1px dashed @indigenous-orange;
 }
 
 .ssb-edit-wrap .editable-title {
     display: block;
     position: absolute;
-    top: 0;
+    top: 0!important;
     pointer-events: none;
     opacity: 0;
     left: 0;
     // top: -20px;
     background: #efa022;
     color: #fff!important;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
+    border-radius: 0px!important;
     padding: 0 15px;
     display: block;
     z-index: 999;
@@ -61,16 +66,24 @@
     min-height: 0!important;
 }
 
-.ssb-edit-wrap.ssb-active-edit-control > .editable-cover,
-.ssb-edit-wrap [data-edit].ssb-active-edit-control .editable-cover {
+.ssb-edit-wrap .editable-title.ssb-on,
+.ssb-edit-wrap [data-edit].ssb-on .editable-title,
+.ssb-edit-wrap .editable-cover.ssb-on,
+.ssb-edit-wrap [data-edit].ssb-on .editable-cover {
     opacity: .85;
+    // display: block;
     z-index: 5;
 }
 
-.ssb-edit-wrap .editable-title.ssb-on,
-.ssb-edit-wrap [data-edit].ssb-on .editable-title {
+.ssb-edit-wrap.ssb-active-edit-control > .editable-cover {
     opacity: .85;
-    display: block;
+    border: 2px solid @indigenous-blue;
+    z-index: 5;
+}
+
+.ssb-component .ssb-edit-wrap .ssb-active-edit-control .editable-cover,
+.ssb-edit-wrap [data-edit].ssb-active-edit-control .editable-cover {
+    border: 2px solid @indigenous-orange;
 }
 
 .ssb-page-section.ssb-edit-wrap:before {

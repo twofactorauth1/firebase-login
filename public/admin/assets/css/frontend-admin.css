@@ -7676,9 +7676,6 @@ ssb-topbar .ui-select-match-text > small {
      * layout-header-v5
      */
 }
-[class*="ssb-theme-"] .ssb-page-section-layout-header .navigation-logo {
-  max-width: calc(100% - 4px);
-}
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] {
   width: 100%;
   text-align: center;
@@ -9732,19 +9729,23 @@ body[ng-controller] .fr-overlay {
   left: 0;
   width: 100%;
   height: 100%;
-  border: 1px dotted #47B8D9;
+  border: 1px dashed #47B8D9;
   min-height: 0!important;
+  z-index: 5;
+}
+.ssb-component .ssb-edit-wrap .editable-cover,
+.ssb-edit-wrap [data-edit] .editable-cover {
+  border: 1px dashed #eda200;
 }
 .ssb-edit-wrap .editable-title {
   position: absolute;
-  top: 0;
+  top: 0!important;
   pointer-events: none;
   opacity: 0;
   left: 0;
   background: #efa022;
   color: #fff!important;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-radius: 0px!important;
   padding: 0 15px;
   display: block;
   z-index: 999;
@@ -9756,15 +9757,21 @@ body[ng-controller] .fr-overlay {
   text-transform: capitalize;
   min-height: 0!important;
 }
-.ssb-edit-wrap.ssb-active-edit-control .editable-cover,
-.ssb-edit-wrap [data-edit].ssb-active-edit-control .editable-cover {
+.ssb-edit-wrap .editable-title.ssb-on,
+.ssb-edit-wrap [data-edit].ssb-on .editable-title,
+.ssb-edit-wrap .editable-cover.ssb-on,
+.ssb-edit-wrap [data-edit].ssb-on .editable-cover {
   opacity: .85;
   z-index: 5;
 }
-.ssb-edit-wrap .editable-title.ssb-on,
-.ssb-edit-wrap [data-edit].ssb-on .editable-title {
+.ssb-edit-wrap.ssb-active-edit-control > .editable-cover {
   opacity: .85;
-  display: block;
+  border: 2px solid #47B8D9;
+  z-index: 5;
+}
+.ssb-component .ssb-edit-wrap .ssb-active-edit-control .editable-cover,
+.ssb-edit-wrap [data-edit].ssb-active-edit-control .editable-cover {
+  border: 2px solid #eda200;
 }
 .ssb-page-section.ssb-edit-wrap > .editable-title {
   background: #47B8D9;
@@ -9772,12 +9779,14 @@ body[ng-controller] .fr-overlay {
 .ssb-component .ssb-edit-wrap:before > .editable-title {
   background: #eda200;
 }
-.ssb-component .ssb-edit-wrap [data-edit] > .editable-cover,
 .ssb-component .ssb-edit-wrap [data-edit] > .editable-title {
   background: #eda200;
 }
 .ssb-element.ssb-edit-wrap:before > .editable-title {
   background: #eda200;
+}
+.ssb-edit-mode .ssb-page-section-layout-header .navigation-logo img {
+  max-width: calc(100% - 4px);
 }
 /* DOHY */
 .main-navigation-menu .dashboard-update-icon {

@@ -145,6 +145,10 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
     }
 
+    function setActiveComponentArea(sectionIndex, componentIndex, area) {
+        // TODO: implement
+    }
+
     function setActiveElement() {
 
         $timeout(function() {
