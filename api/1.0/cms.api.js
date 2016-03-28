@@ -699,8 +699,11 @@ _.extend(api.prototype, baseApi.prototype, {
                         if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
                         self = null;
                     });
-                    var pageUrl = self._buildPageUrl(req, value.get('handle'));
-                    self._updatePageCache(pageUrl, accountId, null, pageId);
+                    if(value) {
+                        var pageUrl = self._buildPageUrl(req, value.get('handle'));
+                        self._updatePageCache(pageUrl, accountId, null, pageId);
+                    }
+
                     self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
