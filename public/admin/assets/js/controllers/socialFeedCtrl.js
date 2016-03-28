@@ -412,6 +412,23 @@
       $scope.openModal('twitter-comments-modal');
     };
 
+    $scope.showTweetDMModal = function (post) {
+      _.each(post.comments, function (comment) {
+        //comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
+      });
+      $scope.addComment.post = post;
+      $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
+      //$scope.visibleComments = post.comments;
+
+      // set the intitial value of the textarea because
+      // "reply" means their handle is supposed to come before the message
+
+
+      //$scope.updateComments(post, 'tw');
+
+      $scope.openModal('twitter-direct-message-modal');
+    };
+
     /*
      * @showCommentModal
      * -
@@ -762,5 +779,11 @@
         });
     };
 
+    $scope.addTwDMFn = function (newComment) {
+        SocialConfigService.addTwitterDirectMessage(newComment.socialId, newComment.post.from.name, newComment.comment, function(data) {
+            console.log('twitter DM response >>', data);
+            $scope.closeModal();
+        });
+    };
   }]);
 }(angular));
