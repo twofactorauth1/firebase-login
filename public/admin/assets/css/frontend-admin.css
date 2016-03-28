@@ -6810,6 +6810,13 @@ div[class^="spacing-"] input {
 .ssb-hide-during-load {
   opacity: 0;
 }
+#topnav.dragging,
+ssb-topbar.dragging {
+  display: none;
+}
+.sortable-page-content.dragging {
+  overflow: hidden;
+}
 .sortable-page-content.dragging .ssb-page-section {
   float: none !important;
 }
