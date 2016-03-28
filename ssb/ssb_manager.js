@@ -965,10 +965,10 @@ module.exports = {
                     if(err) {
                         self.log.error("Error getting template's referenced sections:", err);
                         cb(err);
+                    } else {
+                        //Callback here so we can do the actual compare/update next:
+                        cb(null, existingPage, globalHeader, globalFooter, existingSections, dereferencedSections);
                     }
-                    //Callback here so we can do the actual compare/update next:
-                    cb(null, existingPage, globalHeader, globalFooter, existingSections, dereferencedSections);
-
                 });
             },
             function updateSections(existingPage, globalHeader, globalFooter, existingSections, dereferencedSections, cb) {
@@ -978,6 +978,7 @@ module.exports = {
                  *  -- bump version
                  *  -- update other pages with reference
                  */
+                var otherPagesWithSectionReferences = [];
                 async.eachSeries(dereferencedSections, function(section, callback){
                     var existingSection = _.find(existingSections, function(existingSection){return section._id === existingSection._id});
                     if(existingSection) {
@@ -985,22 +986,71 @@ module.exports = {
                             var sectionObj = new $$.m.ssb.Section(section);
                             var oldID = sectionObj.id();
                             var newVersion = sectionObj.getVersion() + 1;
-                            var newID = sectionObj.id();
+                            var newID = sectionObj.id() + '_' + newVersion;
+                            sectionObj.set('_id', newID);
                             sectionObj.setVersion(newVersion);
                             sectionObj.set('modified', {date: new Date(), by:userId});
-                            //pageDao.updateOtherPagesWithSectionReference(pageId, oldID, newID);
+                            otherPagesWithSectionReferences.push({pageId:existingPage.id(), oldId:oldID, newId:newID});
+                            sectionDao.saveOrUpdate(sectionObj, function(err, value){
+                                if(err) {
+                                    self.log.error('Error updating section:', err);
+                                    callback(err);
+                                } else {
+                                    callback();
+                                }
+                            });
+
                         } else {
                             //no change.
+                            callback();
                         }
                     } else {
                         //this is a new section... do we need to do anything?
+                        callback();
                     }
-                }, function done(err, callback){
-
+                }, function done(err){
+                    if(err) {
+                        self.log.error('Error updating sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, dereferencedSections, otherPagesWithSectionReferences);
+                    }
                 });
 
             },
-            function updateThePage(existingPage, updatedSections, cb){
+            function updateOtherPagesWithSectionReferences(existingPage, updatedSections, otherPagesWithSectionReferences, cb) {
+                //TODO: pageDao.updateOtherPagesWithSectionReference(pageId, oldID, newID);
+                async.eachSeries(otherPagesWithSectionReferences, function(obj, callback){
+                    var pageId = obj.pageId;
+                    var oldId = obj.oldId;
+                    var newId = obj.newId;
+                    var query = {pageId:{$ne:pageId}, 'sections._id':oldId};
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err) {
+                            self.log.error('Error finding pages with section reference:', err);
+                            callback(err);
+                        } else {
+                            //TODO: update each one.
+                        }
+                    });
+                }, function(err){});
+            },
+            function incrementPageVersion(existingPage, updatedSections, cb) {
+                var currentVersion = existingPage.get('version') || 0;
+                var newVersion = currentVersion + 1;
+                existingPage.set('latest', false);
+                existingPage.set('_id', existingPage.id() + '_' + currentVersion);
+                pageDao.saveOrUpdate(existingPage, function(err, value){
+                    if(err) {
+                        self.log.error('Error saving existing page with new id:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value, updatedSections, newVersion);
+                    }
+                });
+
+            },
+            function updateThePage(existingPage, updatedSections, newVersion, cb){
                 //var sections = page.get('sections');
                 page.set('modified', modified);
                 var jsonSections = [];
@@ -1009,6 +1059,8 @@ module.exports = {
                 });
                 page.set('sections', jsonSections);
                 page.set('created', existingPage.get('created'));
+                page.set('latest', true);
+                page.set('version', newVersion);
                 pageDao.saveOrUpdate(page, function(err, updatedPage){
                     if(err) {
                         self.log.error('Error updating page:', err);
