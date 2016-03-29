@@ -37,6 +37,9 @@
           },
           insertMedia: function () {
             return $scope.insertPhoto;
+          },
+          isSingleSelect: function () {
+              return true;
           }
         }
       });
@@ -166,7 +169,13 @@
 
     $scope.getCustomer = function () {
       console.log('getCustomer >>>');
-      CustomerService.getCustomer($stateParams.contactId, function (customer) {
+      CustomerService.getCustomer($stateParams.contactId, function (customer, error) {
+        if(error){
+            toaster.pop('warning', error.message);
+            if(error.code === 404)
+                $location.path('/customers');
+            return;
+        }
         customer.notes = $scope.matchUsers(customer);
         $scope.customer = customer;
         $scope.setTags();
@@ -1068,6 +1077,10 @@
 
     $scope.tagToCustomer = function(value) {
      return CustomerService.tagToCustomer(value);
+    }
+
+    $scope.viewSingleOrder = function(orderId) {
+        $location.path('/commerce/orders/'+ orderId);
     }
 
   }]);

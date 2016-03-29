@@ -140,7 +140,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
 
 
         scope.$parent.$watchGroup(['ckeditorLoaded', 'vm.uiState.loaded'], function (newValue, oldValue) {
-            if (newValue[0] || newValue[1]) {
+            if (newValue[0] || newValue[1] && scope.component.visibility) {
                 AccountService.getAccount(function (account) {
 
                     scope.account = account;
@@ -193,6 +193,14 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                 return (w - 100 - 50) + 'px';
             }
         }
+
+        angular.element($window).bind('resize', function () {
+            if(scope.map){
+                $timeout(function () {
+                    google.maps.event.trigger(scope.map, 'resize');
+                }, 500);
+            }
+        });
 
     }
 

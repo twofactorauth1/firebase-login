@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.website.POSTS"></h1>
-                <span ng-if="posts" class="mainDescription">There are currently {{posts.length}} posts.</span>
+                <span ng-if="posts" class="mainDescription">There are currently {{posts.length}} posts. ({{displayedPosts.length || 0}} in filtered view)</span>
             </div>
         </div>
     </section>

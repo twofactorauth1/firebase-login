@@ -122,6 +122,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     }
 
     function cancelPendingEdits() {
+        vm.uiState.openSidebarPanel = '';
         vm.uiState.showSectionPanel = false;
         vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
         vm.state.pendingPageChanges = false;

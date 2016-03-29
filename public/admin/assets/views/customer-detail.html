@@ -514,7 +514,7 @@
                                 </fieldset>
                             </form>
                         </tab>
-                        <tab ng-if="orders">
+                        <tab>
                             <tab-heading>
                                 Orders <span class="badge">{{orders.length}}</span>
                             </tab-heading>
@@ -532,7 +532,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
+                                                <tr ng-repeat="order in displayedOrders" ng-click="viewSingleOrder(order._id)">
                                                     <td class="center"><strong>Status: </strong>
                                                         <span class="fa-stack">
                                                             <span class="fa fa-circle-thin fa-stack-2x"
@@ -569,7 +569,7 @@
                                 </div>
                             </div>
                         </tab>
-                        <tab ng-if="donations">
+                        <tab>
                             <tab-heading>
                                 Donations <span class="badge">{{donations.length}}</span>
                             </tab-heading>

@@ -25,7 +25,7 @@
 
     $scope.getSubscription = function(){
       PaymentService.getInvoicesForAccount(function (invoices) {
-            var invoices = invoices;            
+            var invoices = invoices;
             if(invoices.data.length && invoices.data[0].lines && invoices.data[0].lines.data.length == 2)
             {
               $scope.invoices = invoices.data[0].lines.data[1].plan;
@@ -58,6 +58,9 @@
           },
           insertMedia: function () {
             return $scope.insertPhoto;
+          },
+          isSingleSelect: function () {
+              return true;
           }
         }
       });
@@ -118,7 +121,7 @@
     };
 
     $scope.profileSaveFn = function () {
-      //$scope.currentUser = $scope.profileUser;    
+      //$scope.currentUser = $scope.profileUser;
      // simpleForm.$setPristine(true);
       angular.copy($scope.profileUser, $scope.originalprofileUser);
       if (!$scope.profileUser.email) {
@@ -127,7 +130,7 @@
       }
       if($scope.profileUser.email)
         $scope.profileUser.username = $scope.profileUser.email;
-      UserService.putUser($scope.profileUser, function (user) {        
+      UserService.putUser($scope.profileUser, function (user) {
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');
         angular.copy($scope.profileUser, $scope.originalprofileUser);
@@ -160,7 +163,7 @@
       $scope.curPage = $scope.curPage + page;
     }
     $scope.checkIfDirty = function(){
-      var isDirty = false;      
+      var isDirty = false;
       if($scope.originalprofileUser && !angular.equals($scope.originalprofileUser, $scope.profileUser))
         isDirty = true;
       return isDirty;

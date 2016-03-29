@@ -37,6 +37,8 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.isSelectedLayout = isSelectedLayout;
     vm.resizeWindow = resizeWindow;
     vm.changeButtonDesign = changeButtonDesign;
+    vm.addCustomField = addCustomField;
+    vm.checkDuplicateField = checkDuplicateField;
 
 
     //TODO: move into config services
@@ -168,6 +170,24 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
           vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
         }
     }
+
+    function addCustomField(type){
+        var newInfo = {
+            name: type,
+            type: type,
+            label: type,
+            custom: true,
+            optional:true,
+            visible: true
+        }
+        vm.component.contactInfo.push(newInfo);
+        vm.contactInfo = {};
+    }
+
+    function checkDuplicateField(_type){
+        return _.filter(vm.component.contactInfo, function(info){ return info.type.toLowerCase() === _type.toLowerCase(); }).length;
+    }
+
 
     function resizeWindow(){
       $(window).trigger('resize');

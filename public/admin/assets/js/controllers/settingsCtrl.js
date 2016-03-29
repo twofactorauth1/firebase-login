@@ -261,6 +261,9 @@
           },
           insertMedia: function () {
             return $scope.insertFavicon;
+          },
+          isSingleSelect: function () {
+              return true;
           }
         }
       });

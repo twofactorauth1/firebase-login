@@ -13,13 +13,14 @@ app.directive('topBarComponent', function () {
       scope.sortableConfig = {
         animation: 150,
         onSort: function (evt) {
-          
+
         },
         onStart: function (evt) {
-          
+          if(scope.$parent.vm)
+            scope.$parent.vm.uiState.sortableListPageContentConfig.disabled = true;
         },
         onEnd: function (evt) {
-          
+
         }
       };
     }

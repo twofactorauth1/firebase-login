@@ -3,6 +3,7 @@
 @indigenous-gray-blue: #1c2b36;
 @pill-border-radius-right: 0px 10em 10em 0px;
 
+
 //TODO: pay for froala
 a[href="https://froala.com/wysiwyg-editor"] {
     display: none!important;
@@ -126,20 +127,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
         // z-index: 1;
 
         &:hover .ssb-edit-control:not(.ssb-edit-control-component-btn),
-		&:hover .ssb-settings-btn {
-			display: block;
+        &:hover .ssb-settings-btn {
+            display: block;
             opacity: 1;
-		}
-
-
-        // &:hover .ssb-edit-control-component.on {
-        //     display: block;
-
-        //     .ssb-edit-control-active {
-        //         display: inline-block;
-        //     }
-
-        // }
+        }
 
 	}
 
@@ -147,6 +138,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
         display: block;
         opacity: 1;
     }
+
+
 
 	.ssb-edit-control {
         display: none;
@@ -403,16 +396,16 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 	}
 
-    .edit-wrap:hover .editable-title {
-    	left: auto;
-    	right: 0;
-        top: 0;
-        border-radius: 0;
-    }
+    // .edit-wrap:hover .editable-title {
+    // 	left: auto;
+    // 	right: 0;
+    //     top: -1.5em;
+    //     border-radius: 0;
+    // }
 
-    .simple-form-v1 .edit-wrap:hover .editable-title {
-        top: -1.5em;
-    }
+    // .simple-form-v1 .edit-wrap:hover .editable-title {
+    //     top: -1.5em;
+    // }
 
 }
 
@@ -590,3 +583,25 @@ div[class^="spacing-"] {
 .ssb-hide-during-load {
     opacity: 0;
 }
+
+
+#topnav.dragging, ssb-topbar.dragging{
+    display:none;
+
+}
+
+.sortable-page-content.dragging {
+    overflow: hidden;
+    .ssb-page-section{
+        float: none !important;
+    }
+
+}
+
+.list-add-sortable-chosen {
+    cursor: move!important;
+    cursor: -webkit-grabbing!important;
+    opacity: .5;
+}
+
+

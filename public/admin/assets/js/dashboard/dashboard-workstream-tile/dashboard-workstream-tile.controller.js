@@ -201,6 +201,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, $lo
             _modal.resolve.insertMedia = function () {
               return vm.callbackOnMediaClose;
             };
+            _modal.resolve.isSingleSelect = function () {
+              return true;
+            };
         }
 
         if (size) {
