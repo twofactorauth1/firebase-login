@@ -85,6 +85,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             chosenClass: "list-add-sortable-chosen",  // Class name for the chosen item
             scroll: true,
             onStart: function (evt) {
+                vm.uiState.sortableListPageContentConfig.disabled = false;
                 angular.element(".sortable-page-content").addClass("dragging");
                 var _top = angular.element("ssb-topbar").offset().top;
                 var _height = angular.element("ssb-topbar").height();
