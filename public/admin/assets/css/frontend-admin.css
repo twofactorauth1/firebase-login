@@ -6820,11 +6820,9 @@ ssb-topbar.dragging {
 .sortable-page-content.dragging .ssb-page-section {
   float: none !important;
 }
-.sortable-chosen {
+.list-add-sortable-chosen {
   cursor: move!important;
   cursor: -webkit-grabbing !important;
-}
-.sortable-chosen {
   opacity: .5;
 }
 .ssb-site-template-grid-item {
