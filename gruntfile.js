@@ -571,7 +571,7 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('tests', ['nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
-            'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup']);
+            'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup', 'nodeunit:ssb']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testUtils', ['nodeunit:utils']);
