@@ -2659,7 +2659,7 @@ div[data-type="feature-block"] .component-inner {
 }
 .simple-form-v1 .btn.btn-simple-form,
 .simple-form-v1 input {
-  height: 50px;
+  min-height: 50px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -2772,7 +2772,7 @@ div[data-type="feature-block"] .component-inner {
   -moz-user-select: text;
 }
 .simple-form-v2 .btn.btn-simple-form {
-  height: 50px;
+  min-height: 50px;
   margin: 0;
   padding: 0;
   text-transform: uppercase;
