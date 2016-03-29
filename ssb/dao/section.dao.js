@@ -34,6 +34,24 @@ var dao = {
 
     },
 
+    saveSectionObjects: function(sectionObjAry, fn) {
+        var self = this;
+        var savedAry = [];
+        async.eachSeries(sectionObjAry, function(sectionObj, cb){
+            self.saveOrUpdate(sectionObj, function(err, savedSection){
+                if(err) {
+                    self.log.error('Error saving section:',err);
+                    cb(err);
+                } else {
+                    savedAry.push(savedSection);
+                    cb();
+                }
+            });
+        }, function done(err){
+            fn(err, savedAry);
+        });
+    },
+
     dereferenceSections: function(sectionAry, fn) {
         var self = this;
         var deReffedAry = [];

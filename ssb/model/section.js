@@ -80,16 +80,16 @@ var section = $$.m.ModelBase.extend({
     },
 
     getVersion: function() {
-        var lastIndex = this.id().lastIndexOf('_');
         var version = 0;
-        if(lastIndex != -1) {
-            try {
+        try {
+            var lastIndex = this.id().lastIndexOf('_');
+            if(lastIndex != -1) {
                 version = parseInt(this.id().slice(lastIndex+1));
-            } catch(Exception) {
-
             }
-
+        } catch(Exception) {
+            //whatever
         }
+
         return version;
     },
 

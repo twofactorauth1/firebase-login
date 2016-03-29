@@ -129,7 +129,7 @@ var website = $$.m.ModelBase.extend({
              * @default {}
              */
             created: {
-                date: "",
+                date: new Date,
                 by: null
             },
 
