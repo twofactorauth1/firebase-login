@@ -179,9 +179,9 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
   }
 
   function validateDuplicatePage(pageHandle) {
-    var _page = _.find(vm.parentVm.state.originalPages, function (page) {
-      return page.handle === pageHandle;
-    });
+
+    var _page = vm.parentVm.state.originalPages.filter(function(page){return page.handle.toLowerCase() === pageHandle.toLowerCase()})[0]
+
     if(_page && _page._id !== vm.page._id) {
       return "Page handles must be unique.";
     } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {

@@ -890,9 +890,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function validateDuplicatePage(pageHandle) {
-        var _page = _.find(vm.state.originalPages, function (page) {
-            return page.handle === pageHandle;
-        });
+
+        var _page = vm.state.pages.filter(function(page){return page.handle.toLowerCase() === pageHandle.toLowerCase()})[0]
+
         if (_page && _page._id !== vm.state.page._id) {
             return "Page handles must be unique.";
         } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
