@@ -48,7 +48,8 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
             if (newValue && newValue > 0) {
                 $timeout(function() {
                     $('.carousel-control.right').trigger('click');
-                }, 0)
+                    $(window).trigger('resize');
+                }, 500)
                 unbindWatcher();
             }
         });
