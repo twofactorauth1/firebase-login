@@ -146,8 +146,8 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
                               //console.log('account.billing before update:\n', scope.account.billing);
                               scope.updateStripeIdFn(accBillingUpdate);
                               scope.account = accBillingUpdate;
-
-                              scope.savePlanFn(scope.selectedPlan.product_attributes.stripePlans[0].id);
+                              console.log('About to call save plan... coupon:', scope.credit.coupon);
+                              scope.savePlanFn(scope.selectedPlan.product_attributes.stripePlans[0].id, scope.credit.coupon);
 
                               // TODO: remove this window refresh HACK when we know what is the problem refreshing data on the billingCtrl.
                               // $window.location.reload(true);
@@ -206,6 +206,7 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
           formatting: true
         },
         messages: {},
+        coupon: ''
         //onChange: function() { console.log('changed card'); },
         //onClear: function() { console.log('cleared card'); },
       };
@@ -226,6 +227,7 @@ app.directive('billingCreditCard', ['$timeout', function($timeout) {
       cardValues: '=',
       cardOptions: '=',
       cardMessages: '=',
+      coupon: '=',
       plan: '='
       //clear: '&',
     },
@@ -239,6 +241,6 @@ app.directive('billingCreditCard', ['$timeout', function($timeout) {
           }, 0);
         }
       });
-    },
+    }
   };
 }]);
