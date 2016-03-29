@@ -78,14 +78,12 @@ module.exports = function (config) {
 
       // add module here
       // 'public/admin/assets/js/**/*.js',
-      'public/admin/assets/js/controllers/gettingStartedCtrl.js',
       'public/admin/assets/js/controllers/orderDetailCtrl.js',
       'public/admin/assets/js/controllers/billingCtrl.js',
 
       // add test files here
       // 'public_tests/admin/customers/customerservice_spec.js',
       'public_tests/admin/billing/billingctrl_spec.js',
-      'public_tests/admin/support/gettingStartedCtrl_spec.js',
      // 'public_tests/admin/orders/orderDetailCtrl_spec.js'
     ],
 
