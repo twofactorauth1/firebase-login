@@ -780,7 +780,7 @@
     };
 
     $scope.addTwDMFn = function (newComment) {
-        SocialConfigService.addTwitterDirectMessage(newComment.socialId, newComment.post.from.name, newComment.comment, function(data) {
+        SocialConfigService.addTwitterDirectMessage(newComment.socialId, newComment.post.from.sourceId, newComment.comment, function(data) {
             console.log('twitter DM response >>', data);
             $scope.closeModal();
         });
