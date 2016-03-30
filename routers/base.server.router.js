@@ -121,8 +121,10 @@ _.extend(baseRouter.prototype, {
             });
         } else {
             logger.debug('setting session account and subdomain to new');
-            req.session.accountId = 'new';
-            req.session.subdomain = 'new';
+            //req.session.accountId = 'new';
+            //req.session.subdomain = 'new';
+            req.session.unAuthAccountId = 'new';
+            req.session.unAuthSubdomain = 'new';
             return next();
         }
     },
