@@ -24,7 +24,7 @@
         <td ng-class="{'refunded': invoice.refunded}">{{::invoice.date * 1000 | date : 'longDate'}}</td>
         <td ng-class="{'refunded': invoice.refunded}">${{::(invoice.total/100).toFixed( 2 )}}</td>
         <td ng-show="invoice.paid && invoice.amount/100 <= 0" ng-class="{'refunded': invoice.refunded}">NO CHARGE</td>
-        <td ng-show="invoice.paid && invoice.amount/100 > 0" ng-hide="invoice.refunded">PAID</td>
+        <td ng-show="invoice.paid && !invoice.refunded">PAID</td>
         <td ng-hide="invoice.paid">NOT PAID</td>
         <td ng-show="invoice.paid && invoice.refunded">REFUNDED</td>
         <!--<td>{{pagedInvoices[$index].lines.data[0]["plan"].interval}}</td>-->
