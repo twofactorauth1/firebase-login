@@ -10319,7 +10319,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control-component .ssb-sidebar-item-icon {
   display: none;
 }
-.ssb-site-builder .ssb-active-edit-control:before {
+.ssb-site-builder .ssb-page-section.ssb-active-edit-control:before {
   z-index: 2;
   position: absolute;
   top: 0;
