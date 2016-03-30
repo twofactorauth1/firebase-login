@@ -81,7 +81,7 @@
             <h4>Period:
                         <span class="pull-right">{{_moment(selectedInvoice.lines.data[0].period.start)}} - {{_moment(selectedInvoice.lines.data[0].period.start, {addNum: 30, addType: 'days'})}}</span>
                     </h4>
-                    <h4 ng-repeat='item in selectedInvoice.lines.data'>Item #{{$index + 1}} ({{item.plan.statement_description}}):
+                    <h4 ng-repeat='item in selectedInvoice.lines.data'>Item #{{$index + 1}} ({{ item.description || item.plan.name}}):
                                 <span class="pull-right">${{(item.amount/100).toFixed( 2 )}}</span>
                             </h4>
             <h4>Amount Paid:
