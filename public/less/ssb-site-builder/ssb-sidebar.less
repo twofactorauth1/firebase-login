@@ -1,8 +1,5 @@
-@import "../modules/_mixins.less";
-@import "../modules/_variables.less";
-
-
 .ssb-sidebar {
+
     background: #131e26;
     // opacity: 0;
     // animation: fadeIn .5s 1s forwards;
@@ -59,11 +56,21 @@
         // width: 25%;
         // min-width: 325px;
     }
-}
 
-// .ssb-sidebar.ssb-sidebar-show {
-// 	display: block;
-// }
+    .form-group {
+        clear: both;
+        float: left;
+        width: 100%;
+    }
+
+    .form-group > label {
+        //position: absolute;
+        //top: 50%;
+        //left: 0;
+        //transform: translate(0,-50%);
+    }
+
+}
 
 .ssb-sidebar-heading {
 	position: relative;
@@ -110,9 +117,9 @@
 
 .ssb-sidebar-sub-heading {
     position: relative;
-    padding: 1em .5em 1em;
+    padding: .85em .5em;
     border-top: 1px solid #E7EAEA;
-    border-bottom: 1px solid #E7EAEA;
+    // border-bottom: 1px solid #E7EAEA;
     margin: 0;
 
     .ssb-sidebar-item-icon {
@@ -120,11 +127,25 @@
     }
 }
 
-.ssb-sidebar-settings-heading {
-    text-decoration: underline;
-    font-family: Helvetica, Arial, sans-serif;
-    margin: 1em 0;
+.ssb-sidebar-sub-heading-separator {
+    background: @ssb-sidebar-heading-bg-color;
+    color: @ssb-sidebar-heading-text-color;
+    text-transform: uppercase;
+    border-width: 1px 0;
+    border-color: @ssb-sidebar-heading-border-color;
+    border-style: solid;
+    width: calc(~"100% + 30px");
+    margin: 0 0 10px -15px;
+    padding: 10px 10px;
+    font-size: 12px;
+    font-weight: 500;
 }
+
+// .ssb-sidebar-settings-heading {
+//     text-decoration: underline;
+//     font-family: Helvetica, Arial, sans-serif;
+//     margin: 1em 0;
+// }
 
 .ssb-sidebar-page-sections-list {
     // height: 400px;
@@ -258,44 +279,6 @@
 .btn-ssb-remove-component {
     width: auto;
     margin: 1em auto;
-}
-
-.ssb-spectrum-color-picker {
-
-    text-align: center;
-
-    label {
-        width: 100%;
-    }
-
-    .sp-replacer {
-        // margin: 0;
-        // overflow: hidden;
-        // cursor: pointer;
-        padding: 0;//4px;
-        // display: inline-block;
-        border: none; //solid 1px #91765d;
-        background: none;//#eee;
-        // color: #333;
-        // vertical-align: middle;
-        border-radius: 10em;
-        width: 5em;
-        height: 5em;
-        box-shadow: 0px 1px 2px rgba(0,0,0,.2);
-        margin: 1px 0 1em 0;
-    }
-
-    .sp-preview {
-        background: transparent;
-        border: 0 none;
-        width: 100%;
-        height: 100%;
-    }
-
-    .sp-dd {
-        display: none;
-    }
-
 }
 
 .ssb-sidebar-inner {
@@ -498,9 +481,10 @@
     border-radius: 14px; //5px;
     font-size: 12px;
     max-height: ~"calc(100% - 182px)";
-    overflow: auto;
-    overflow-x: hidden;
+    // overflow: auto;
+    // overflow-x: hidden;
     width: 300px;
+    // width: 360px;
     border: 10px solid rgba(255,255,255,.15);
 
     // right: 35px;
@@ -540,7 +524,7 @@
             height: 100%;
             position: relative;
             top: -2px;
-            margin: 0 .85em 0 .25em;
+            margin: 0 .25em 0 .25em;
         }
 
     }
@@ -551,7 +535,7 @@
         cursor: pointer;
         font-size: 16px;
         color: white;
-        line-height: 3.5em;
+        line-height: 3.15em;
     }
 
     .close {
@@ -571,7 +555,7 @@
     }
 
     .row:not(:first-of-type) {
-        border-top: 1px solid #ddd;
+        // border-top: 1px solid #ddd;
     }
 
     .ssb-sidebar-item-section-actions {
@@ -597,6 +581,10 @@
         ul.dropdown-menu {
             max-height: 100px;
         }
+    }
+
+    label {
+        color: @ssb-sidebar-heading-text-color;
     }
 
 }
@@ -649,14 +637,7 @@
     z-index: 1;
     overflow: hidden;
     min-height: 100%;
-
-
-    rzslider {
-        width: calc(~"100% - 15px");
-    }
-
-
-
+    color: @form-label-main-text-color;
 }
 
 .ssb-sidebar-section-panel-component-panel.ng-enter{
@@ -671,6 +652,17 @@
 .ssb-section-content-list-item-on {
     border: 6px solid @indigenous-blue;
 }
+
+.accordion.component-form-style{
+   .ssb-spectrum-color-picker {
+        .sp-replacer {
+            width: 3em;
+            height: 3em;
+            margin: 1px 0 0.5em 0;
+        }
+    }
+}
+
 
 
 

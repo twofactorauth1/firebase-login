@@ -57,11 +57,11 @@
                             <li>
                                 <a ng-click="viewSettings('commerce', 'Taxes')">Taxes</a>
                             </li>
-                            <!--
+
                             <li>
-                                <a ng-click="viewSettings('commerce', 'Paypal')">Paypal</a>
+                                <a ng-click="viewSettings('commerce', 'Paypal')">PayPal</a>
                             </li>
-                            -->
+
                         </ul>
                     </div>
                 </div>
@@ -274,22 +274,22 @@
                     </form>
                     <div class="clearfix"></div>
                 </tab>
-                <!--
-                <tab heading="Paypal">
+
+                <tab heading="PayPal">
                     <form class="col-sm-6 form-horizontal">
                         <div class="form-group">
-                            <label>Enable paypal payments</label>
+                            <label>Enable PayPal payments</label>
                             <switch ng-model="account.commerceSettings.paypal" class="pull-right"></switch>
                         </div>
                         <div class="form-group" ng-if='account.commerceSettings.paypal'>
-                            <label>Paypal account email address</label>
+                            <label>PayPal account email address</label>
                             <input type="text" placeholder="Email" class="pull-right" ng-model="account.commerceSettings.paypalAddress">
                         </div>
                         <div class="clearfix"></div>
                     </form>
                     <div class="clearfix"></div>
                 </tab>
-                -->
+
             </tabset>
         </div>
         <div ng-show="settingsView == 'emails'">

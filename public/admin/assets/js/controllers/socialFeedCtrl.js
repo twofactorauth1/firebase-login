@@ -14,6 +14,8 @@
       $scope.feed = [];
       $scope.feedLengths = {};
       $scope.orderByAttribute = 'date';
+      $scope.addComment = {};
+      $scope.followers = [];
     };
 
     // execute the 'constructor'
@@ -110,6 +112,7 @@
 
             // get followers
             SocialConfigService.getTwitterFollowers(trackedAccount.id, function (posts) {
+                $scope.followers = posts;
               // TODO: what does feedLengths need to be?
               $scope.feedLengths[trackedAccount.id] = posts.length;
               //$log.debug('number of twitter follower posts: ' + posts.length);
@@ -398,17 +401,34 @@
       _.each(post.comments, function (comment) {
         //comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
       });
-      $scope.tempPost = post;
+      $scope.addComment.post = post;
       $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
       //$scope.visibleComments = post.comments;
 
       // set the intitial value of the textarea because
       // "reply" means their handle is supposed to come before the message
-      $scope.addComment = '@' + $scope.tempPost.from.name + ' ';
+      $scope.addComment.comment = '@' + post.from.name + ' ';
 
       //$scope.updateComments(post, 'tw');
 
       $scope.openModal('twitter-comments-modal');
+    };
+
+    $scope.showTweetDMModal = function (post) {
+      _.each(post.comments, function (comment) {
+        //comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
+      });
+      $scope.addComment.post = post;
+      $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
+      //$scope.visibleComments = post.comments;
+
+      // set the intitial value of the textarea because
+      // "reply" means their handle is supposed to come before the message
+
+
+      //$scope.updateComments(post, 'tw');
+
+      $scope.openModal('twitter-direct-message-modal');
     };
 
     /*
@@ -754,5 +774,36 @@
       }
     })
 
+    $scope.addTwCommentFn = function (newComment) {
+        SocialConfigService.addTwitterPostReply(newComment.socialId, newComment.post._id, newComment.comment, function(data) {
+            console.log('twitter post reply response >>', data);
+            SocialConfigService.getTwitterFeed(newComment.socialId, function (posts) {
+             var matchingPost = _.findWhere(posts, {
+               sourceId: data.id_str
+             });
+             if(matchingPost){
+                 $scope.displayFeed.push(matchingPost);
+                 $scope.feedLengths[newComment.socialId] = posts.length;
+               }
+             $scope.afterPosting();
+             $scope.closeModal();
+            });
+        });
+    };
+
+    $scope.addTwDMFn = function (newComment) {
+        SocialConfigService.addTwitterDirectMessage(newComment.socialId, newComment.post.from.sourceId || newComment.post.sourceId, newComment.comment, function(data) {
+            console.log('twitter DM response >>', data);
+            $scope.closeModal();
+        });
+    };
+
+    $scope.isTwFollowerFn = function (sourceId) {
+        if (_.findWhere($scope.followers, {sourceId: String(sourceId)})) {
+            return true;
+        } else {
+            return false;
+        }
+    };
   }]);
 }(angular));

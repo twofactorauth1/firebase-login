@@ -96,6 +96,7 @@ ssb-topbar #ssb-froala-scrollable-container {
     color: inherit;
     overflow: hidden;
     padding: 4px;
+    cursor: text;
 }
 
 .fr-wrapper ::selection {
@@ -940,6 +941,17 @@ body[ng-controller] .fr-image-resizer .fr-handler.fr-hse {
 }
 body[ng-controller] .fr-image-upload-layer {
   border: dashed 2px #ffffff;
+}
+body[ng-controller] .fr-image-upload-media-layer {
+    border: dashed 2px #ffffff;
+    button{
+        width: 100% !important;
+        background: #243948 !important;
+        border: 0 !important;
+        span{
+            margin-left:5px;
+        }
+    }
 }
 body[ng-controller] .fr-image-upload-layer:hover {
   background: #243948;

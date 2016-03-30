@@ -7,6 +7,7 @@
 
 var paypalClientID = process.env.PAYPAL_CLIENT_ID || 'Adai01SoHe9BcFr9GkfTNzys2bqUdqdpSphHVzouKPKQxxDRe1eBRKGaKNNETr5tYNf02OfG-e-YzOnO';
 var paypalClientSecret = process.env.PAYPAL_CLIENT_SECRET || 'EMLp1mnLTtXX6PSgZBqnS2U6Cp4-KSUPvUxg1lpDgKEv4fHX3DUo5Ux980Qhu90Aat4fwQSZMlOZJcV5';
+
 var paypalAPIUsername = process.env.PAYPAL_API_USERNAME || 'paypal-facilitator_api1.indigenous.io';
 var paypalAPIPassword = process.env.PAYPAL_API_PASSWORD || 'N3TBZGQMYEW66MTH';
 var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AFcWxV21C7fd0v3bYYYRCpSSRl31AHk7UU9Y3mtj6J5BdfSV61PJ2Mu';
@@ -19,7 +20,7 @@ var realUserName = 'paypal_api1.indigenous.io';
 var realPassword = '7ZQUHXA6AHBDZ4E5';
 var realSig = 'A3B-XY1YH2mVmpxut0JgN3TxM.FrAEkGvbCO9E4HhaLzYxnG-h-3Z84L';
 var realUrl = 'https://www.paypal.com/webapps/adaptivepayment/flow/pay';
-var realApplicationID = 'APP-4WL47068WP184600P';
+var realApplicationID = 'APP-10L3791004814583C';
 
 module.exports = {
 

@@ -1,4 +1,4 @@
-<div ng-controller="SSBComponentSettingsModalCtrl" class="container-fluid">
+<div ng-controller="SSBComponentSettingsModalCtrl">
   <div class="loadingNavigation" ng-if="!filteredPages">
       <div class="col-xs-12">
           <h4 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
@@ -6,16 +6,18 @@
           </h1>
       </div>
   </div>
-  <div ng-if="filteredPages">
-    <div class="row padding-10">
-      <div class="form-group">
-          <label for="component-title">Custom Nav</label>
-          <span tooltip-placement="right" tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
-          <switch ng-model="component.customnav" class="pull-right" ng-change="saveComponent()"></switch>
-      </div>
-    </div>
+    <div ng-if="filteredPages" class="padding-top-10">
+        <div class="row padding-10">
+            <div class="form-group">
+                <label for="component-title">
+                    Custom Nav
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
+                </label>
+                <switch ng-model="component.customnav" class="pull-right" ng-change="saveComponent()"></switch>
+            </div>
+        </div>
 
-    <div class="row padding-10">
+    <div ng-if="component.customnav" class="row padding-10">
       <div>
           <p class="col-xs-9" style="padding-left:0;">Drag and Drop your links to rearrange them.</p>
           <a href="" class="col-xs-3" ng-click="initializeLinks(true)" style="text-align: right;padding: 0;"><span class="fa fa-plus"></span> Add Link</a>
@@ -70,7 +72,7 @@
               <div class="clearfix margin-bottom-10"></div>
               <div>
                   <button type="button" ng-click="initializeLinks(false)" style="margin-bottom: 10px;" class="btn btn-primary pull-right">Cancel</button>
-                  <button type="button" style="margin-right: 5px;" ng-if="newLink.linkType && newLink.linkUrl && newLink.linkTitle" ng-click="addLinkToNav();" class="btn btn-primary pull-right">Add</button>
+                  <button type="button" style="margin-right: 5px;" ng-disabled="!newLink.linkType || !newLink.linkUrl || !newLink.linkTitle" ng-click="addLinkToNav();" class="btn btn-primary pull-right">Add</button>
               </div>
           </div>
       </div>

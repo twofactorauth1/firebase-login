@@ -1,12 +1,16 @@
 
 <div class="form-group hidden">
-    <label>Custom Spacing</label>
-    <span tooltip-placement="top" tooltip-html-unsafe="Use Page Settings for Spacing Settings"><i class="fa fa-info-circle" /></span>
+    <label>
+        Custom Spacing
+        <span tooltip-placement="top" tooltip-html-unsafe="Use Page Settings for Spacing Settings"><i class="fa fa-info-circle" /></span>
+    </label>
     <switch ng-model="component.spacing.usePage" class="pull-right"></switch>
     <span class="help-block">Spacing will inherit page spacing unless switched on.</span>
 </div>
 <div class="form-group">
-    <label>Max Width</label>
+    <label>
+        Max Width
+    </label>
     <ui-select ng-model="component.spacing.mw" theme="bootstrap" ng-disabled="component.spacing.usePage">
         <ui-select-match placeholder="Select a Resolution">
             <small ng-bind-html="$select.selected"></small>
@@ -17,7 +21,9 @@
     </ui-select>
 </div>
 <div class="well margin-bottom-0 partition-light-primary">
-    <label class="text-white lead">Margin</label>
+    <label class="text-white lead">
+        Margin
+    </label>
     <div class="spacing-mt">
         <input type="text" string-to-number touchspin ng-model="component.spacing.mt"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
     </div>
@@ -34,7 +40,9 @@
     </div>
     <div class="col-xs-8">
         <div class="well partition-dark-primary">
-            <label class="text-white lead">Padding</label>
+            <label class="text-white lead">
+                Padding
+            </label>
             <div class="spacing-pt">
                 <input type="text" string-to-number touchspin ng-model="component.spacing.pt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             </div>

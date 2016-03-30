@@ -1002,10 +1002,10 @@ module.exports = {
                     paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
                         if (err) {
                             log.error('Error creating paypal pay key: ' + err);
-                            return callback(err.message, savedOrder, null);
+                            callback(err.message, savedOrder, null);
                         } else {
                             log.debug('<< getPaypalPayKey');
-                            return callback(null, savedOrder, value);
+                            callback(null, savedOrder, value);
                         }
                     });
                 } else {
@@ -1019,10 +1019,10 @@ module.exports = {
                 dao.saveOrUpdate(savedOrder, function(err, savedOrder) {
                   if (err) {
                     log.error('Error updating order: ' + err);
-                    return callback(err.message, null);
+                    callback(err, null);
                   } else {
                     log.debug('<< updateOrder');
-                    return callback(null, savedOrder);
+                    callback(null, savedOrder);
                   }
                 });
             }
@@ -1030,7 +1030,7 @@ module.exports = {
         ], function done(err, result){
             if(err) {
                 log.error('Error creating order: ' + err);
-                return fn(err.message, null);
+                return fn(err, null);
             } else {
                 log.debug('<< createPaypalOrder');
                 return fn(null, result);

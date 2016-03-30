@@ -242,6 +242,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerId = null;
         var userEmail = null;
         var purchaseAmount = null;
+        var invoiceItems = [];
 
         async.waterfall([
             function getAccount(cb) {
@@ -264,6 +265,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self.log.error('Error creating signup fee as invoice item:', err);
                                 cb(err);
                             } else {
+                                invoiceItems.push(value);
                                 cb();
                             }
                         });
@@ -290,6 +292,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         self.log.error('Error creating Stripe Invoice Item:', err);
                                         done(err);
                                     } else {
+                                        invoiceItems.push(value);
                                         done();
                                     }
                                 });
@@ -310,6 +313,13 @@ _.extend(api.prototype, baseApi.prototype, {
             function createSubscription(cb){
                 paymentsManager.createStripeSubscription(customerId, planId, accountId, userId, coupon, setupFee, function(err, sub) {
                     if(err) {
+                        invoiceItems.forEach(function(item, index) {
+                            stripeDao.deleteInvoiceItem(item._id, null, function(err, confirmation) {
+                                if (err) {
+                                    self.log.error('Error deleting invoice item: ' + err);
+                                }
+                            });
+                        });
                         self.log.error('Error subscribing to Indigenous: ' + err);
                         cb(err);
                     } else {

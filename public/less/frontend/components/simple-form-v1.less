@@ -70,7 +70,7 @@
     }
     .btn.btn-simple-form,
     input {
-        height: 50px;
+        min-height: 50px;
         margin: 0;
         padding: 0;
         border: 0;
@@ -118,13 +118,13 @@
     }
     .has-error {
         .form-control {
-            border-color: #e74c3c;
+            border-color: #e74c3c !important;
         }
         .glyphicon {
-            color: #e74c3c;
+            color: #e74c3c !important;
         }
         .help-block {
-            color: #e74c3c;
+            color: #e74c3c !important;
         }
     }
     .has-feedback .form-control-feedback {
@@ -132,9 +132,19 @@
         top: 8px;
         right: 8px;
     }
-    @media(max-width:767px) {
-        .btn-simple-form {
-            width: 100% !important;
+
+
+    .btn-simple-form{
+        width:auto;
+        min-width: 25%;
+        padding-left: 25px !important;
+        padding-right: 25px !important;
+
+        .editable-title{
+            display:none !important;
+        }
+        .element-wrap{
+            padding: 5px !important
         }
     }
 
