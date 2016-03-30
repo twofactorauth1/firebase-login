@@ -28,7 +28,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="item in upcomingInvoice.lines.data">
-                <td>{{item.plan.statement_description}}</td>
+                <td>{{item.description || item.plan.name}}</td>
                 <td>${{(item.amount/100).toFixed( 2 )}}</td>
             </tr>
             <tr>
