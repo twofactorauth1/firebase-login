@@ -70,7 +70,7 @@
             <h3 class="modal-title">Transaction #{{selectedItemIndex + 1}}</h3>
         </div>
         <div class="modal-body view-transaction-modal">
-            <img src="../admin/assets/images/paid-in-full.png" class="center paid" width="100" />
+            <img src="../admin/assets/images/paid-in-full.png" class="center paid" width="100" ng-show='selectedInvoice.paid && !selectedInvoice.refunded' />
             <h4>Pay To:
                         <span class="pull-right">Indigenous Software Inc.</span>
                     </h4>
@@ -84,9 +84,12 @@
                     <h4 ng-repeat='item in selectedInvoice.lines.data'>Item #{{$index + 1}} ({{ item.description || item.plan.name}}):
                                 <span class="pull-right">${{(item.amount/100).toFixed( 2 )}}</span>
                             </h4>
-            <h4>Amount Paid:
+            <h4 ng-show='selectedInvoice.paid && !selectedInvoice.refunded'>Amount Paid:
                         <span class="pull-right">${{(selectedInvoice.total/100).toFixed( 2 )}}</span>
                     </h4>
+                    <h4 ng-show='!selectedInvoice.paid'>Amount Not Paid:
+                                <span class="pull-right">${{(selectedInvoice.total/100).toFixed( 2 )}}</span>
+                            </h4>
         </div>
     </script>
     <script type="text/ng-template" id="bill-summary-modal">
