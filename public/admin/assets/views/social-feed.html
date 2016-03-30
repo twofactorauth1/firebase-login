@@ -295,7 +295,7 @@
                         <!--</select>-->
                         <!--account in tempTrackedAccounts | filter: {'type': 'tw'}-->
                         <select class='form-control mb0' ng-model='addComment.socialId'>
-                            <option ng-repeat="account in tempTrackedAccounts | filter: {'type': 'tw'}" value="{{account.socialId}}">{{account.username}}</option>
+                            <option ng-repeat="account in tempTrackedAccounts | filter: {'type': 'tw'}" value="{{account.parentSocialAccount}}">{{account.username}}</option>
                         </select>
                     </div>
                     <div class="col-xs-3">
@@ -388,9 +388,8 @@
                             <!--&lt;!&ndash;<option ng-repeat="type in feedTypes" ng-show="type.type=='tw'" value="{{type.socialId}}">{{type.name}}</option>&ndash;&gt;-->
                         <!--</select>-->
                         <!--account in tempTrackedAccounts | filter: {'type': 'tw'}-->
-                        {{tempTrackedAccounts}}
                         <select class='form-control mb0' ng-model='addComment.socialId'>
-                            <option ng-repeat="account in tempTrackedAccounts | filter: {'type': 'tw'}" value="{{account.socialId}}">{{account.username}}</option>
+                            <option ng-repeat="account in tempTrackedAccounts | filter: {'type': 'tw'}" value="{{account.parentSocialAccount}}">{{account.username}}</option>
                         </select>
                     </div>
                     <div class="col-xs-3">
