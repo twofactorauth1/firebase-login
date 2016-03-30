@@ -48,6 +48,11 @@ function ssbEditWrap($compile, $timeout) {
 
             function handleSectionOrComponentMouseOver(e) {
 
+                //ignore hover on an edit-control
+                if ($(e.target).parents('ssb-edit-control').length > 0) {
+                    return
+                }
+
                 var hasSectionChildMouseOver = element.children().find('.ssb-edit-wrap.on').length > 0;
                 var hasComponentChildMouseOver = element.children().find('[data-edit]').length > 0;
                 var hasActiveEditControl = element.hasClass('ssb-active-edit-control');
