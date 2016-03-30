@@ -17,31 +17,73 @@
             </span>
         </label>
     </div>
-    <div class="form-group" ng-hide="isEmail">
-        <label for="bg_hide" class="margin-bottom-0">
-            Show image
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
-                <i class="fa fa-info-circle" />
-            </span>
-        </label>
-        <switch ng-model="component.bg.img.show" class="pull-right"></switch>
-    </div>
-    <div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
-        <div class="btn-wrap">
-            <input id="abi" ng-model="component.bg.img.url" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)">
+    <div ng-if="!vm.isHero">
+        <div class="form-group" ng-hide="isEmail">
+            <label for="bg_hide" class="margin-bottom-0">
+                Show image
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+            <switch ng-model="component.bg.img.show" class="pull-right"></switch>
+        </div>
+        <div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
+            <div class="btn-wrap">
+                <input id="abi" ng-model="component.bg.img.url" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)">
+            </div>
+        </div>
+
+        <div class="form-group ssb-background-image-picker" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
+            <label for="bg_hide" class="margin-bottom-0">
+                Select image
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select an image to use as a background.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+            <i class="fa fa-close" ng-click="vm.removeBackgroundImage(component)"></i>
+            <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)" class="img-thumbnail">
         </div>
     </div>
 
-    <div class="form-group ssb-background-image-picker" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
-        <label for="bg_hide" class="margin-bottom-0">
-            Select image
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select an image to use as a background.">
-                <i class="fa fa-info-circle" />
-            </span>
-        </label>
-        <i class="fa fa-close" ng-click="vm.removeBackgroundImage(component)"></i>
-        <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)" class="img-thumbnail">
+    <div ng-if="vm.isHero">
+        <div class="form-group" disabled ng-hide="isEmail">
+            <label for="bg_hide" class="margin-bottom-0">
+                Show image
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+            <switch disabled class="pull-right"></switch>
+        </div>
+        <div class="form-group add-image" ng-if="!component.components[0].src">
+            <div class="btn-wrap">
+                <input id="abi" ng-model="component.components[0].src" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addImage(vm.uiState.activeSectionIndex, 0)">
+            </div>
+        </div>
+
+        <div class="form-group ssb-background-image-picker" ng-if="component.components[0].src">
+            <label for="bg_hide" class="margin-bottom-0">
+                Select image
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select an image to use as a background.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+            <i class="fa fa-close" ng-click="vm.removeImage(component.components[0])"></i>
+            <img ng-src="{{component.components[0].src}}" ng-model="component.components[0].src" ng-click="vm.addImage(vm.uiState.activeSectionIndex, 0)" class="img-thumbnail">
+        </div>
     </div>
+
+        <!-- <div class="row padding-10">
+            <div class="form-group add-image" ng-if="!component.src">
+              <div class="btn-wrap">
+                <input id="abi" ng-model="component.src" type="button" class="pull-right btn btn-primary" value="Add Image" ng-click="vm.addImage(vm.uiState.activeSectionIndex, vm.uiState.activeComponentIndex)">
+              </div>
+            </div>
+            <div class="bgimg" id="bgimg" ng-if="component.src">
+              <i class="fa fa-close" ng-click="vm.removeImage(component)"></i>
+              <img ng-src="{{component.src}}" ng-model="component.src" ng-click="vm.addImage(vm.uiState.activeSectionIndex, vm.uiState.activeComponentIndex)" class="img-thumbnail">
+            </div>
+        </div> -->
 
     <!-- <div class="form-group" ng-show="component.bg.img.show">
         <div>

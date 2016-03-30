@@ -196,6 +196,11 @@ function ssbEditWrap($compile, $timeout) {
                         editControlComponent.addClass('ssb-active-edit-control');
 
                         /**
+                         * set hovered edit control on uiState
+                         */
+                        clickedComponentScope.vm.uiState.hoveredComponentEditControl = editControlComponent;
+
+                        /**
                          find index of section based on component _id
                          */
                         clickedComponentScope.vm.uiState.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
@@ -233,7 +238,7 @@ function ssbEditWrap($compile, $timeout) {
 
                 } else if (isElement) {
 
-                    //TODO: handle text elements, others
+                    //TODO: handle text elements, needs editable-cover?
                     console.log('isElement');
 
                 } else {
@@ -271,6 +276,12 @@ function ssbEditWrap($compile, $timeout) {
                     clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
+                    clickedComponentScope.vm.uiState.hoveredComponentEditControl = undefined;
+
+                    /**
+                     * set hovered edit control on uiState
+                     */
+                    clickedComponentScope.vm.uiState.hoveredComponentEditControl = el.prev('ssb-edit-control');
 
                     /**
                      * find index of section based on component _id
@@ -329,7 +340,7 @@ function ssbEditWrap($compile, $timeout) {
                     /**
                      * set current edit el on uiState
                      */
-                    clickedComponentScope.vm.uiState.hoveredComponentEditControl = clonedEditControl;
+                    // clickedComponentScope.vm.uiState.hoveredComponentEditControl = clonedEditControl;
 
                 });
 

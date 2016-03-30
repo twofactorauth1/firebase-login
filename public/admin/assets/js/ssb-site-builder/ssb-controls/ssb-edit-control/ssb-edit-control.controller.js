@@ -19,7 +19,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
      * Watch for hovered components and component areas
      */
     // if (vm.componentIndex !== undefined) {
-        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
+        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], _.debounce(setPosition, 100));
     // }
 
     //TODO: rework to have ssb-edit-wrap set uiState prop with all necessary info

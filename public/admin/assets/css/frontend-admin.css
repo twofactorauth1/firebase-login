@@ -6499,6 +6499,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
   clear: both;
   border: inset solid 1px transparent;
+  cursor: pointer;
 }
 .ssb-site-builder .ssb-edit-control.ssb-on {
   display: block;
@@ -6924,6 +6925,7 @@ ssb-topbar.dragging {
 }
 .ssb-sidebar .form-group {
   clear: both;
+  float: left;
   width: 100%;
 }
 .ssb-sidebar-heading {
@@ -8773,6 +8775,7 @@ ssb-topbar #ssb-froala-scrollable-container {
   color: inherit;
   overflow: hidden;
   padding: 4px;
+  cursor: text;
 }
 .fr-wrapper ::selection {
   background: rgba(21, 86, 103, 0.5) !important;
