@@ -825,6 +825,7 @@
 
     $scope.addRetweetFn = function (newComment) {
         SocialConfigService.addTwitterPostRetweet(newComment.socialId, newComment.post.sourceId, function(data) {
+            $scope.displayFeed[_.indexOf($scope.displayFeed, _.findWhere($scope.displayFeed, {sourceId: newComment.post.sourceId}))].retweet_count += 1;
             console.log('twitter retweet response >>', data);
             SocialConfigService.getTwitterFeed(newComment.socialId, function (posts) {
              var matchingPost = _.findWhere(posts, {
