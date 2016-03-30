@@ -26,6 +26,7 @@
         dashboardService.awayFromDashboard = false;
         dashboardService.polls = 0;
         dashboardService.numberPolling = 0;
+        dashboardService.doPolling = true;
 
         dashboardService.workstreamDisplayOrder = [
             'Build an Online Presence',
@@ -121,25 +122,26 @@
                  * TODO: should really be a server push w/ EventSource
                  * polyfill lib -> https://github.com/Yaffle/EventSource
                  */
-                if(dashboardService.numberPolling <=1) {
-                    dashboardService.numberPolling--;
-                    (function poll() {
+                if(dashboardService.doPolling) {
+                    if(dashboardService.numberPolling <=1) {
+                        dashboardService.numberPolling--;
+                        (function poll() {
 
-                        if (dashboardService.polls < 300 && dashboardService.loading.value === 0) {
-                            $timeout(dashboardService.getWorkstreams, 3000);
-                            dashboardService.numberPolling++;
-                            dashboardService.polls++;
-                            // console.log('dashboardService.polls', dashboardService.polls);
-                        } else {
-                            $timeout(poll, 1000);
-                        }
+                            if (dashboardService.polls < 300 && dashboardService.loading.value === 0) {
+                                $timeout(dashboardService.getWorkstreams, 3000);
+                                dashboardService.numberPolling++;
+                                dashboardService.polls++;
+                                // console.log('dashboardService.polls', dashboardService.polls);
+                            } else {
+                                $timeout(poll, 1000);
+                            }
 
-                    })();
-                } else {
-                    dashboardService.numberPolling--;
-                    // console.info('dashboardService skipping poll');
+                        })();
+                    } else {
+                        dashboardService.numberPolling--;
+                        // console.info('dashboardService skipping poll');
+                    }
                 }
-
             }
 
             function error(error) {
@@ -202,6 +204,9 @@
             function success(data) {
                 console.info('DashboardService getAccount:', JSON.stringify(data));
                 dashboardService.state.account = data;
+                if(data.ui_preferences && data.ui_preferences.polling === false) {
+                    dashboardService.doPolling = false;
+                }
             }
 
             function error(error) {

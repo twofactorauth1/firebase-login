@@ -342,7 +342,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var modified = {date: new Date(), by:self.userId(req)};
-                ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, function(err, page){
+                ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(resp, err, page, "Error fetching page");
                     pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
