@@ -50,13 +50,21 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
                 // var editControl =
 
                 if (editEl.length) {
+                    editElTop = editEl[0].getBoundingClientRect().top;
+                    editElLeft = editEl[0].getBoundingClientRect().left;
                     top = editEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
                     left = editEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
+                }
+
+                if (editElLeft === sidebarWidth) {
+                    top = editElTop - topbarHeight + scrollTop;
+                    left = 0;
                 }
 
                 if (editControl && editControl.length) {
                     $timeout(function() {
                         editControl.css({ top: top, left: left });
+                        editControl.addClass('ssb-on');
                     });
                 }
 

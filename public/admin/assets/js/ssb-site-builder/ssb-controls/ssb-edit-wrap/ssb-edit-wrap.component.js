@@ -48,6 +48,11 @@ function ssbEditWrap($compile, $timeout) {
 
             function handleSectionOrComponentMouseOver(e) {
 
+                //ignore hover on an edit-control
+                if ($(e.target).parents('ssb-edit-control').length > 0) {
+                    return
+                }
+
                 var hasSectionChildMouseOver = element.children().find('.ssb-edit-wrap.on').length > 0;
                 var hasComponentChildMouseOver = element.children().find('[data-edit]').length > 0;
                 var hasActiveEditControl = element.hasClass('ssb-active-edit-control');
@@ -96,7 +101,7 @@ function ssbEditWrap($compile, $timeout) {
                     if (!hasEditControl) {
                         var template = '<ssb-edit-control ' +
                                             'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-area" ' +
-                                            'component="component" ' +
+                                            'component="vm.component" ' +
                                             'state="vm.state" ' +
                                             'ui-state="vm.uiState" ' +
                                             'section-index="vm.sectionIndex" ' +
@@ -161,6 +166,8 @@ function ssbEditWrap($compile, $timeout) {
                         var clickedComponentData = clickedComponentScope.vm.component;
 
                         //reset uiState
+                        // clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
+                        // clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
@@ -221,7 +228,7 @@ function ssbEditWrap($compile, $timeout) {
                         if (clickedComponentScope.vm.uiState.showSectionPanel) {
                             editControlComponent.find('.ssb-settings-btn').click();
                         } else {
-                            editControlComponent.addClass('ssb-on');
+                            // editControlComponent.addClass('ssb-on');
                         }
 
                     }
@@ -263,6 +270,8 @@ function ssbEditWrap($compile, $timeout) {
                     angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
                     //reset uiState
+                    // clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
+                    // clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
@@ -306,9 +315,6 @@ function ssbEditWrap($compile, $timeout) {
                     //if contextual menu is already open, open directly from single click
                     if (clickedComponentScope.vm.uiState.showSectionPanel) {
                         el.prev('ssb-edit-control').find('.ssb-settings-btn').click();
-                    } else {
-                        //show edit-control for this component area
-                        el.prev('ssb-edit-control').addClass('ssb-on');
                     }
 
 
