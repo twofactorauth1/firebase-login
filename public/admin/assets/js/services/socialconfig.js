@@ -158,8 +158,8 @@
             });
         };
 
-        this.addTwitterDirectMessage = function(socialAccountId, username, msg, fn) {
-            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'name', username, 'dm'].join('/');
+        this.addTwitterDirectMessage = function(socialAccountId, userId, msg, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'user', userId, 'dm'].join('/');
             $http.post(apiUrl, {
                 msg: msg
             }).success(function(data, status, headers, config) {
