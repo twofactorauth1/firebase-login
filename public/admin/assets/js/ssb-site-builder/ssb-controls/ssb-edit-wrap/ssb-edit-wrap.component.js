@@ -100,6 +100,7 @@ function ssbEditWrap($compile, $timeout) {
 
                     if (!hasEditControl) {
                         var template = '<ssb-edit-control ' +
+                                            'ng-show="!vm.uiState.showSectionPanel"' +
                                             'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-area" ' +
                                             'component="vm.component" ' +
                                             'state="vm.state" ' +

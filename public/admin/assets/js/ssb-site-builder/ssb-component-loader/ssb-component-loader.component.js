@@ -44,6 +44,7 @@ function ssbComponentLoader($compile, $timeout) {
         //if edit mode
         if (ctrl.uiState) {
             template =  '<ssb-edit-control ' +
+                            'ng-show="!vm.uiState.showSectionPanel"' +
                             'class="ssb-edit-control ssb-edit-control-component" ' +
                             'component="vm.component" ' +
                             'state="vm.state" ' +
