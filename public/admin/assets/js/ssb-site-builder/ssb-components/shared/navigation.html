@@ -72,7 +72,7 @@
               <div class="clearfix margin-bottom-10"></div>
               <div>
                   <button type="button" ng-click="initializeLinks(false)" style="margin-bottom: 10px;" class="btn btn-primary pull-right">Cancel</button>
-                  <button type="button" style="margin-right: 5px;" ng-if="newLink.linkType && newLink.linkUrl && newLink.linkTitle" ng-click="addLinkToNav();" class="btn btn-primary pull-right">Add</button>
+                  <button type="button" style="margin-right: 5px;" ng-disabled="!newLink.linkType || !newLink.linkUrl || !newLink.linkTitle" ng-click="addLinkToNav();" class="btn btn-primary pull-right">Add</button>
               </div>
           </div>
       </div>
