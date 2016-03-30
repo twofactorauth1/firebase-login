@@ -10149,13 +10149,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
   clear: both;
   border: inset solid 1px transparent;
+  cursor: pointer;
 }
-.ssb-site-builder .ssb-page-section:hover .ssb-edit-control:not(.ssb-edit-control-component-btn),
-.ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
-  display: block;
-  opacity: 1;
-}
-.ssb-site-builder .ssb-active-section .ssb-edit-control {
+.ssb-site-builder .ssb-edit-control.ssb-on {
   display: block;
   opacity: 1;
 }
@@ -10283,6 +10279,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-site-builder .ssb-edit-control-component {
   width: auto;
+}
+.ssb-site-builder .ssb-edit-control-component.ssb-on {
+  display: block;
+  opacity: 1;
 }
 .ssb-site-builder .ssb-edit-control-component > *,
 .ssb-site-builder .ssb-edit-control-component > * > * {
@@ -10446,6 +10446,7 @@ div[class^="spacing-"] input {
   -webkit-user-select: text;
   user-select: text;
 }
+[data-edit][class*="ssb-active-edit-control"]:before,
 .ssb-theme-btn-active-element:before {
   display: block;
   opacity: .75;
@@ -10517,6 +10518,7 @@ ssb-topbar.dragging {
 }
 .ssb-sidebar .form-group {
   clear: both;
+  float: left;
   width: 100%;
 }
 .ssb-sidebar-heading {
@@ -12366,6 +12368,7 @@ ssb-topbar #ssb-froala-scrollable-container {
   color: inherit;
   overflow: hidden;
   padding: 4px;
+  cursor: text;
 }
 .fr-wrapper ::selection {
   background: rgba(21, 86, 103, 0.5) !important;

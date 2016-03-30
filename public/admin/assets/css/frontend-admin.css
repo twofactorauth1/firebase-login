@@ -6499,13 +6499,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
   clear: both;
   border: inset solid 1px transparent;
+  cursor: pointer;
 }
-.ssb-site-builder .ssb-page-section:hover .ssb-edit-control:not(.ssb-edit-control-component-btn),
-.ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
-  display: block;
-  opacity: 1;
-}
-.ssb-site-builder .ssb-active-section .ssb-edit-control {
+.ssb-site-builder .ssb-edit-control.ssb-on {
   display: block;
   opacity: 1;
 }
@@ -6633,6 +6629,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-site-builder .ssb-edit-control-component {
   width: auto;
+}
+.ssb-site-builder .ssb-edit-control-component.ssb-on {
+  display: block;
+  opacity: 1;
 }
 .ssb-site-builder .ssb-edit-control-component > *,
 .ssb-site-builder .ssb-edit-control-component > * > * {
@@ -6796,6 +6796,7 @@ div[class^="spacing-"] input {
   -webkit-user-select: text;
   user-select: text;
 }
+[data-edit][class*="ssb-active-edit-control"]:before,
 .ssb-theme-btn-active-element:before {
   display: block;
   opacity: .75;
@@ -6924,6 +6925,7 @@ ssb-topbar.dragging {
 }
 .ssb-sidebar .form-group {
   clear: both;
+  float: left;
   width: 100%;
 }
 .ssb-sidebar-heading {
@@ -8773,6 +8775,7 @@ ssb-topbar #ssb-froala-scrollable-container {
   color: inherit;
   overflow: hidden;
   padding: 4px;
+  cursor: text;
 }
 .fr-wrapper ::selection {
   background: rgba(21, 86, 103, 0.5) !important;
@@ -9717,6 +9720,86 @@ body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper div.fr-scroller div.f
 }
 body[ng-controller] .fr-overlay {
   background: #000000;
+}
+.ssb-edit-wrap.ssb-on:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  opacity: .85;
+  z-index: 5;
+  pointer-events: none;
+}
+.ssb-edit-wrap .editable-cover {
+  display: block;
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  opacity: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #47B8D9;
+  min-height: 0!important;
+  z-index: 5;
+}
+.ssb-component .ssb-edit-wrap .editable-cover,
+.ssb-edit-wrap [data-edit] .editable-cover {
+  border: 1px dashed #eda200;
+}
+.ssb-edit-wrap .editable-title {
+  position: absolute;
+  top: 0!important;
+  pointer-events: none;
+  opacity: 0;
+  left: 0;
+  background: #efa022;
+  color: #fff!important;
+  border-radius: 0px!important;
+  padding: 0 15px;
+  display: block;
+  z-index: 999;
+  font-family: Helvetica, Arial;
+  font-weight: 500;
+  font-size: 14px;
+  height: 20px;
+  line-height: 19px;
+  text-transform: capitalize;
+  min-height: 0!important;
+}
+.ssb-edit-wrap .editable-title.ssb-on,
+.ssb-edit-wrap [data-edit].ssb-on .editable-title,
+.ssb-edit-wrap .editable-cover.ssb-on,
+.ssb-edit-wrap [data-edit].ssb-on .editable-cover {
+  opacity: .85;
+  z-index: 5;
+}
+.ssb-edit-wrap.ssb-active-edit-control > .editable-cover {
+  opacity: .85;
+  border: 2px solid #47B8D9;
+  z-index: 5;
+}
+.ssb-component .ssb-edit-wrap .ssb-active-edit-control .editable-cover,
+.ssb-edit-wrap [data-edit].ssb-active-edit-control .editable-cover {
+  border: 2px solid #eda200;
+}
+.ssb-page-section.ssb-edit-wrap > .editable-title {
+  background: #47B8D9;
+}
+.ssb-component .ssb-edit-wrap:before > .editable-title {
+  background: #eda200;
+}
+.ssb-component .ssb-edit-wrap [data-edit] > .editable-title {
+  background: #eda200;
+}
+.ssb-element.ssb-edit-wrap:before > .editable-title {
+  background: #eda200;
+}
+.ssb-edit-mode .ssb-page-section-layout-header .navigation-logo img {
+  max-width: calc(100% - 4px);
 }
 /* DOHY */
 .main-navigation-menu .dashboard-update-icon {

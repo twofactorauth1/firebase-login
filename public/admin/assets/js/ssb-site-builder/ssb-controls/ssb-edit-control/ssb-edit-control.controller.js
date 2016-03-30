@@ -16,11 +16,13 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     vm.scrollToActiveSection = scrollToActiveSection;
 
     /**
-     * Watch for hovered components
+     * Watch for hovered components and component areas
      */
-    if (vm.componentIndex !== undefined) {
-        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
-    }
+    // if (vm.componentIndex !== undefined) {
+        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], _.debounce(setPosition, 100));
+    // }
+
+    //TODO: rework to have ssb-edit-wrap set uiState prop with all necessary info
 
 
     /*
@@ -32,31 +34,58 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         if (vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex) {
 
-            var section = vm.element.parent('section');
-            var sectionTop = parseInt(section.css('marginTop')) + parseInt(section.css('paddingTop'));
-            var sectionLeft = parseInt(section.css('marginLeft')) + parseInt(section.css('paddingLeft'));
+                var top = 0;
+                var left = 0;
+                var topbarHeight = 125;
+                var sidebarWidth = 140;
+                var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
+                var topOffset = 35;
+                var leftOffset = 35;
 
-            var top = vm.uiState.hoveredComponentPosition.top;
-            var left = vm.uiState.hoveredComponentPosition.left;
+                var editEl = vm.uiState.hoveredComponentEl;
+                var editControl = vm.uiState.hoveredComponentEditControl;
 
-            if (parseInt(top) === 0 || parseInt(top) - sectionTop === 0) {
-                top = 35;
-            }
+                // vm.state.page.sections[sectionIndex].components[componentIndex];
+                // var editEl =
+                // var editControl =
 
-            if (parseInt(left) === 0 || parseInt(left) - sectionLeft === 0) {
-                left = 5;
-            }
+                if (editEl.length) {
+                    top = editEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
+                    left = editEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
+                }
 
-            vm.element.css({
-                'top': top,
-                'left': left
-            });
+                if (editControl && editControl.length) {
+                    $timeout(function() {
+                        editControl.css({ top: top, left: left });
+                    });
+                }
 
-            $timeout(function() {
 
-                vm.element.addClass('on');
+            // var section = vm.element.parent('section');
+            // var sectionTop = parseInt(section.css('marginTop')) + parseInt(section.css('paddingTop'));
+            // var sectionLeft = parseInt(section.css('marginLeft')) + parseInt(section.css('paddingLeft'));
 
-            })
+            // var top = vm.uiState.hoveredComponentPosition.top;
+            // var left = vm.uiState.hoveredComponentPosition.left;
+
+            // if (parseInt(top) === 0 || parseInt(top) - sectionTop === 0) {
+            //     top = 35;
+            // }
+
+            // if (parseInt(left) === 0 || parseInt(left) - sectionLeft === 0) {
+            //     left = 5;
+            // }
+
+            // vm.element.css({
+            //     'top': top,
+            //     'left': left
+            // });
+
+            // $timeout(function() {
+
+            //     vm.element.addClass('on');
+
+            // })
 
         } else {
 
@@ -143,6 +172,11 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         });
 
+    }
+
+    function setActiveComponentArea(sectionIndex, componentIndex, area) {
+        // TODO: implement
+        // TODO: setActiveComponentArea
     }
 
     function setActiveElement() {
