@@ -27,7 +27,8 @@ app.directive('twitterFeed', function () {
             actionReply: '&',
             actionFavorite: '&',
             actionRetweet: '&',
-            actionDirectMessage: '&'
+            actionDirectMessage: '&',
+            showDm: '='
         }
     };
 });

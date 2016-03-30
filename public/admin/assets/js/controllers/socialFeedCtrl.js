@@ -15,6 +15,7 @@
       $scope.feedLengths = {};
       $scope.orderByAttribute = 'date';
       $scope.addComment = {};
+      $scope.followers = [];
     };
 
     // execute the 'constructor'
@@ -111,6 +112,7 @@
 
             // get followers
             SocialConfigService.getTwitterFollowers(trackedAccount.id, function (posts) {
+                $scope.followers = posts;
               // TODO: what does feedLengths need to be?
               $scope.feedLengths[trackedAccount.id] = posts.length;
               //$log.debug('number of twitter follower posts: ' + posts.length);
@@ -784,6 +786,14 @@
             console.log('twitter DM response >>', data);
             $scope.closeModal();
         });
+    };
+
+    $scope.isTwFollowerFn = function (sourceId) {
+        if (_.findWhere($scope.followers, {sourceId: String(sourceId)})) {
+            return true;
+        } else {
+            return false;
+        }
     };
   }]);
 }(angular));
