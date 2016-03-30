@@ -161,8 +161,8 @@ function ssbEditWrap($compile, $timeout) {
                         var clickedComponentData = clickedComponentScope.vm.component;
 
                         //reset uiState
-                        clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
-                        clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
+                        // clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
+                        // clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
@@ -223,7 +223,7 @@ function ssbEditWrap($compile, $timeout) {
                         if (clickedComponentScope.vm.uiState.showSectionPanel) {
                             editControlComponent.find('.ssb-settings-btn').click();
                         } else {
-                            editControlComponent.addClass('ssb-on');
+                            // editControlComponent.addClass('ssb-on');
                         }
 
                     }
@@ -265,8 +265,8 @@ function ssbEditWrap($compile, $timeout) {
                     angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
                     //reset uiState
-                    clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
-                    clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
+                    // clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
+                    // clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
@@ -310,9 +310,6 @@ function ssbEditWrap($compile, $timeout) {
                     //if contextual menu is already open, open directly from single click
                     if (clickedComponentScope.vm.uiState.showSectionPanel) {
                         el.prev('ssb-edit-control').find('.ssb-settings-btn').click();
-                    } else {
-                        //show edit-control for this component area
-                        el.prev('ssb-edit-control').addClass('ssb-on');
                     }
 
 

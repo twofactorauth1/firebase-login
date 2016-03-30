@@ -242,7 +242,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
 
 
-        if (vm.uiState && index === vm.uiState.activeComponentIndex) {
+        if (vm.uiState && vm.index === vm.uiState.activeComponentIndex) {
           classString += ' ssb-active-component ';
         }
 
