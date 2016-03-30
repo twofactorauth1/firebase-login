@@ -143,16 +143,6 @@ function ssbEditWrap($compile, $timeout) {
                 var el = angular.element(e.currentTarget);
                 var hasComponentChildMouseOver = el.find('[data-edit]').length > 0;
 
-                if (isElement) {
-                    type = 'element';
-                } else if (isComponent) {
-                    type = 'component';
-                } else if (isSection) {
-                    type = 'section';
-                } else {
-                    throw new Error('Unknown content type.');
-                }
-
                 //let section handle clicks if the component has [data-edit] areas to surface menu
                 if ((isSection || isComponent) && !(isComponent && hasComponentChildMouseOver)) {
 

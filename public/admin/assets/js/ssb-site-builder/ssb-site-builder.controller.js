@@ -57,7 +57,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             group: 'section',
             scroll: true,
             animation: 150,
-            disabled: false,
+            disabled: true,
             ghostClass: "sortable-ghost",  // Class name for the drop placeholder
             //chosenClass: "sortable-chosen",  // Class name for the chosen item
             onAdd: function (evt) {
