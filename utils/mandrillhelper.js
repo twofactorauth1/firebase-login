@@ -118,7 +118,7 @@ var mandrillHelper =  {
                          "_id": "abc123abc123abc123abc123abc123"
                          }]
                          */
-                        emailMessageManager.sendAccountWelcomeEmail(fromAddress, fromName, 'sendgrid@indigenous.io',
+                        emailMessageManager.sendAccountWelcomeEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io',
                             'Send Grid Test', subject, htmlContent, accountId, userId, vars, emailId, contactId,
                             function(err, response){console.log('sendgrid response:', response)});
                         fn(null, result);
@@ -265,7 +265,7 @@ var mandrillHelper =  {
                         message.html = html;
                         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                             self.log.debug('result >>> ', result);
-                            emailMessageManager.sendCampaignEmail(fromAddress, fromName, 'sendgrid@indigenous.io',
+                            emailMessageManager.sendCampaignEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io',
                                 'Send Grid Test', subject, htmlContent, accountId, campaignId, contactId, vars,
                                 stepSettings, emailId, function(err, value){console.log('Sendgrid response:', value)});
                             fn(null, result);
@@ -370,7 +370,7 @@ var mandrillHelper =  {
 
                 mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                     self.log.debug('result >>> ', result);
-                    emailMessageManager.sendOrderEmail(fromAddress, fromName, 'sendgrid@indigenous.io', 'Send Grid',
+                    emailMessageManager.sendOrderEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', 'Send Grid',
                         subject, htmlContent, accountId, orderId, vars, emailId, function(err, value){
                             console.log('Sendgrid result:', value)});
                     fn(null, result);
@@ -483,7 +483,7 @@ var mandrillHelper =  {
 
                     mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                         self.log.debug('result >>> ', result);
-                        emailMessageManager.sendFulfillmentEmail(fromAddress, fromName, 'sendgrid@indigenous.io', null,
+                        emailMessageManager.sendFulfillmentEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', null,
                             subject, htmlContent, accountId, orderId, vars, emailId, function(err, value){
                                 console.log('sendgrid result:', value)});
                         fn(null, result);
@@ -702,7 +702,7 @@ var mandrillHelper =  {
 
                     mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                         self.log.debug('result >>> ', result);
-                        emailMessageManager.sendBasicEmail(fromAddress, fromName, 'sendgrid@indigenous.io', 'Send Grid',
+                        emailMessageManager.sendBasicEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', 'Send Grid',
                             subject, htmlContent, accountId, vars, emailId, function(err, value){
                                 console.log('sendgrid result:', value)});
                         fn(null, result);
@@ -815,7 +815,7 @@ var mandrillHelper =  {
 
                         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                             self.log.debug('result >>> ', result);
-                            emailMessageManager.sendTestEmail(fromAddress, fromName, 'sendgrid@indigenous.io', '',
+                            emailMessageManager.sendTestEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', '',
                                 subject, htmlContent, accountId, vars, emailId, function(err, value){
                                     console.log('sendgrid result:', value)});
                             fn(null, result);
@@ -953,7 +953,7 @@ var mandrillHelper =  {
 
         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
             self.log.debug('result >>> ', result);
-            emailMessageManager.sendMailReplacement(from, 'sendgrid@indigenous.io', 'sendgrid+cc@indigenous.io', subject,
+            emailMessageManager.sendMailReplacement('sendgrid+sender@indigenous.io', 'sendgrid@indigenous.io', 'sendgrid+cc@indigenous.io', subject,
                 htmlText, text, function(err, value){console.log('sendgrid result:', value)});
             fn(null, result);
         }, function(e) {
