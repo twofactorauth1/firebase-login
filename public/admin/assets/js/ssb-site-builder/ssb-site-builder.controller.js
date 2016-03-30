@@ -57,6 +57,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             group: 'section',
             scroll: true,
             animation: 150,
+            disabled: false,
             ghostClass: "sortable-ghost",  // Class name for the drop placeholder
             //chosenClass: "sortable-chosen",  // Class name for the chosen item
             onAdd: function (evt) {
@@ -69,7 +70,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             },
             onEnd: function (evt) {
                console.log("Dragging End");
-            },
+            }
         },
 
         sortableListAddContentConfig: {
@@ -96,7 +97,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             onEnd: function (evt) {
                 angular.element(".sortable-page-content").removeClass("dragging");
                 angular.element(".sortable-page-content").css('height','auto');
-                $timeout(function() { vm.uiState.openSidebarPanel = ''; });
+                $timeout(function() {
+                    vm.uiState.sortableListPageContentConfig.disabled = true;
+                    vm.uiState.openSidebarPanel = '';
+                });
             },
             onSort: function (evt) {
                 console.log("On Sort");
