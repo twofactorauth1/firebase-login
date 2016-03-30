@@ -431,6 +431,23 @@
       $scope.openModal('twitter-direct-message-modal');
     };
 
+    $scope.showRetweetModal = function (post) {
+      _.each(post.comments, function (comment) {
+        //comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
+      });
+      $scope.addComment.post = post;
+      $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
+      //$scope.visibleComments = post.comments;
+
+      // set the intitial value of the textarea because
+      // "reply" means their handle is supposed to come before the message
+
+
+      //$scope.updateComments(post, 'tw');
+
+      $scope.openModal('twitter-retweet-modal');
+    };
+
     /*
      * @showCommentModal
      * -
@@ -804,6 +821,24 @@
         } else {
             return false;
         }
+    };
+
+    $scope.addRetweetFn = function (newComment) {
+        SocialConfigService.addTwitterPostRetweet(newComment.socialId, newComment.post.sourceId, function(data) {
+            $scope.displayFeed[_.indexOf($scope.displayFeed, _.findWhere($scope.displayFeed, {sourceId: newComment.post.sourceId}))].retweet_count += 1;
+            console.log('twitter retweet response >>', data);
+            SocialConfigService.getTwitterFeed(newComment.socialId, function (posts) {
+             var matchingPost = _.findWhere(posts, {
+               sourceId: data.id_str
+             });
+             if(matchingPost){
+                 $scope.displayFeed.push(matchingPost);
+                 $scope.feedLengths[newComment.socialId] = posts.length;
+               }
+             $scope.afterPosting();
+             $scope.closeModal();
+            });
+        });
     };
   }]);
 }(angular));

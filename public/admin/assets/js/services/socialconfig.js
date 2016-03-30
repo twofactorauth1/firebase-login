@@ -149,11 +149,9 @@
             });
         };
 
-        this.addTwitterPostRetweet = function(socialAccountId, postId, username, comment, fn) {
+        this.addTwitterPostRetweet = function(socialAccountId, postId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'retweet'].join('/');
-            $http.post(apiUrl, {
-                post: '@' + username + ' ' + comment
-            }).success(function(data, status, headers, config) {
+            $http.post(apiUrl).success(function(data, status, headers, config) {
                 fn(data);
             });
         };
@@ -280,16 +278,6 @@
             $http.post(apiUrl, {
                     post: '@' + username + ' ' + comment
                 })
-                .success(function(data, status, headers, config) {
-                    fn(data);
-                });
-        };
-
-        this.addTwitterPostRetweet = function(socialAccountId, postId, username, comment, fn) {
-            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'retweet'].join('/');
-            $http.post(apiUrl, {
-                post: '@' + username + ' ' + comment
-            })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
