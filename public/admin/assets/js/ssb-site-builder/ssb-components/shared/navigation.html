@@ -1,4 +1,4 @@
-<div ng-controller="SSBComponentSettingsModalCtrl" class="container-fluid">
+<div ng-controller="SSBComponentSettingsModalCtrl">
   <div class="loadingNavigation" ng-if="!filteredPages">
       <div class="col-xs-12">
           <h4 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
@@ -6,7 +6,7 @@
           </h1>
       </div>
   </div>
-    <div ng-if="filteredPages">
+    <div ng-if="filteredPages" class="padding-top-10">
         <div class="row padding-10">
             <div class="form-group">
                 <label for="component-title">
@@ -17,7 +17,7 @@
             </div>
         </div>
 
-    <div class="row padding-10">
+    <div ng-if="component.customnav" class="row padding-10">
       <div>
           <p class="col-xs-9" style="padding-left:0;">Drag and Drop your links to rearrange them.</p>
           <a href="" class="col-xs-3" ng-click="initializeLinks(true)" style="text-align: right;padding: 0;"><span class="fa fa-plus"></span> Add Link</a>
