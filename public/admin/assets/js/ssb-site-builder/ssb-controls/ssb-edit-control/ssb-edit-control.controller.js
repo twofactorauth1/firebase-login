@@ -19,7 +19,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
      * Watch for hovered components and component areas
      */
     // if (vm.componentIndex !== undefined) {
-        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], _.debounce(setPosition, 100));
+        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
     // }
 
     //TODO: rework to have ssb-edit-wrap set uiState prop with all necessary info
@@ -59,6 +59,10 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
                 if (left < 0) {
                     left = 0;
                 }
+
+                // if (top < (topbarHeight + 3)) {
+                //     top = (topbarHeight + 3);
+                // }
 
                 if (editElLeft === sidebarWidth) {
                     top = editElTop - topbarHeight + scrollTop;

@@ -325,6 +325,10 @@ function ssbEditWrap($compile, $timeout) {
                     //highlight component area
                     el.addClass('ssb-active-edit-control');
 
+                    $timeout(function() {
+                        el.prev('ssb-edit-control').addClass('ssb-on');
+                    }, 500);
+
                     //if contextual menu is already open, open directly from single click
                     if (clickedComponentScope.vm.uiState.showSectionPanel) {
                         el.prev('ssb-edit-control').find('.ssb-settings-btn').click();
