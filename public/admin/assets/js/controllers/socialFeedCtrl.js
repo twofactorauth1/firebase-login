@@ -777,12 +777,22 @@
     $scope.addTwCommentFn = function (newComment) {
         SocialConfigService.addTwitterPostReply(newComment.socialId, newComment.post._id, newComment.comment, function(data) {
             console.log('twitter post reply response >>', data);
-            $scope.closeModal();
+            SocialConfigService.getTwitterFeed(newComment.socialId, function (posts) {
+             var matchingPost = _.findWhere(posts, {
+               sourceId: data.id_str
+             });
+             if(matchingPost){
+                 $scope.displayFeed.push(matchingPost);
+                 $scope.feedLengths[newComment.socialId] = posts.length;
+               }
+             $scope.afterPosting();
+             $scope.closeModal();
+            });
         });
     };
 
     $scope.addTwDMFn = function (newComment) {
-        SocialConfigService.addTwitterDirectMessage(newComment.socialId, newComment.post.from.sourceId, newComment.comment, function(data) {
+        SocialConfigService.addTwitterDirectMessage(newComment.socialId, newComment.post.from.sourceId || newComment.post.sourceId, newComment.comment, function(data) {
             console.log('twitter DM response >>', data);
             $scope.closeModal();
         });
