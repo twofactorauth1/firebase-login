@@ -40,6 +40,8 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.addCustomField = addCustomField;
     vm.checkDuplicateField = checkDuplicateField;
 
+    vm.isHero = vm.component.title.toLowerCase() === 'hero';
+
 
     //TODO: move into config services
     vm.spectrum = {

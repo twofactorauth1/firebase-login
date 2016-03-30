@@ -73,7 +73,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //     }
     // });
     var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
-        console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
+        // console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
     });
 
 
@@ -176,6 +176,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var version = parseInt(vm.elementData.version);
         var versionIsNumber = typeof parseInt(vm.elementData.version) === "number";
         var versionIsNaN = isNaN(parseInt(vm.elementData.version));
+
+        classObj['ssb-element'] = true;
 
         classObj[vm.elementData.type] = true;
 

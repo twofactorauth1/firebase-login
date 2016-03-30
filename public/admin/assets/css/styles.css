@@ -41,8 +41,9 @@
 37 - Tooltips
 38 - Popovers
 39 - Date Picker
-40 - Pages
-41 - Posts
+40 - Getting Started
+41 - Pages
+42 - Posts
 /* ---------------------------------------------------------------------- */
 /*
 
@@ -12053,6 +12054,29 @@ table.grid thead tr {
 .ui-select-multiple.ui-select-bootstrap .ui-select-match-item .close.ui-select-match-close {
   margin-left: 0px;
   margin-top: 5px;
+}
+/* ---------------------------------------------------------------------- */
+/*  Getting Started
+/* ---------------------------------------------------------------------- */
+.getting-started .list-group h3 {
+  margin: 0;
+  margin-top: 7px;
+  color: #fcb040;
+}
+.dropdown-menu > li > span {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+}
+.dropdown-menu > li > span:focus,
+.dropdown-menu > li > span:hover {
+  color: #262626;
+  text-decoration: none;
+  background-color: #f5f5f5;
 }
 /* ---------------------------------------------------------------------- */
 /*  Pages

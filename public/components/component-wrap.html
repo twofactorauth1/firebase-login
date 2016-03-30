@@ -7,12 +7,14 @@
        opacity: {{component.bg.opacity === 0 ? 0 : component.bg.opacity || 1}};
     }
 </style>
-<div class="component-wrap component_wrap_{{component._id}}"
+<div class="component-wrap ssb-edit-wrap component_wrap_{{component._id}}"
      ng-if="component.visibility"
      ng-class="{'editing': isEditing,
         'undernav200':component.type == 'masthead',
         'undernav':component.type == 'navigation',
         'component-wrap-post':isSinglePost}">
+    <span ng-if="$parent.ssbEditor" class="editable-title">{{component.type}}</span>
+    <span ng-if="$parent.ssbEditor" class="editable-cover"></span>
     <div class="component {{component.type}}{{component._id}}">
         <div id="{{component.anchor || component._id}}"
              ng-style="{'color':component.txtcolor||primaryTextColor}">
