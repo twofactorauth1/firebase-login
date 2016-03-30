@@ -225,12 +225,15 @@ function ssbEditWrap($compile, $timeout) {
                         //if contextual menu is already open, open directly from single click
                         if (clickedComponentScope.vm.uiState.showSectionPanel) {
                             editControlComponent.find('.ssb-settings-btn').click();
+                        } else {
+                            editControlComponent.addClass('ssb-on');
                         }
 
                     }
 
                 } else if (isElement) {
 
+                    //TODO: handle text elements, others
                     console.log('isElement');
 
                 } else {
