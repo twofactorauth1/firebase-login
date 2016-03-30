@@ -10171,7 +10171,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: static;
   height: 38px;
   line-height: 38px;
-  color: white;
+  color: white!important;
   vertical-align: top;
   opacity: 1;
   font-size: 1em;
@@ -10278,6 +10278,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   opacity: 1!important;
 }
 .ssb-site-builder .ssb-edit-control-component {
+  position: fixed;
   width: auto;
 }
 .ssb-site-builder .ssb-edit-control-component.ssb-on {

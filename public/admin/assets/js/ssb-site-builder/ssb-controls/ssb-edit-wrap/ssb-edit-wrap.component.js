@@ -96,7 +96,7 @@ function ssbEditWrap($compile, $timeout) {
                     if (!hasEditControl) {
                         var template = '<ssb-edit-control ' +
                                             'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-area" ' +
-                                            'component="component" ' +
+                                            'component="vm.component" ' +
                                             'state="vm.state" ' +
                                             'ui-state="vm.uiState" ' +
                                             'section-index="vm.sectionIndex" ' +
@@ -161,6 +161,8 @@ function ssbEditWrap($compile, $timeout) {
                         var clickedComponentData = clickedComponentScope.vm.component;
 
                         //reset uiState
+                        clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
+                        clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
@@ -263,6 +265,8 @@ function ssbEditWrap($compile, $timeout) {
                     angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
                     //reset uiState
+                    clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
+                    clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                     clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
