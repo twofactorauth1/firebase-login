@@ -106,7 +106,6 @@ function ssbEditWrap($compile, $timeout) {
 
                     if (!hasEditControl) {
                         var template = '<ssb-edit-control ' +
-                                            'ng-show="!vm.uiState.showSectionPanel"' +
                                             'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-area" ' +
                                             'component="vm.component" ' +
                                             'state="vm.state" ' +
@@ -187,12 +186,15 @@ function ssbEditWrap($compile, $timeout) {
                     if (isSection) {
                         el.addClass('ssb-active-edit-control');
 
+                        $timeout(function() {
+                            el.find('> ssb-edit-control').addClass('ssb-on');
+                        }, 500);
+
                         //if contextual menu is already open, open directly from single click
                         if (el.scope().vm.uiState.showSectionPanel) {
                             el.find('> ssb-edit-control .ssb-settings-btn').click();
-                        } else {
-                            el.find('> ssb-edit-control').addClass('ssb-on');
                         }
+
 
                     } else if (isComponent) {
 

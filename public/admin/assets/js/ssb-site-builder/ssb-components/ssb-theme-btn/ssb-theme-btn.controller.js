@@ -309,7 +309,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         if (!SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId)) {
             $scope.component = { title: 'Button_'+elementId, type: 'Button' }; //TODO: make generic/configurable
             var template = '<ssb-edit-control ' +
-                                'ng-show="!pvm.uiState.showSectionPanel"' +
+                                'ng-hide="pvm.uiState.showSectionPanel"' +
                                 'data-compiled-control-id="control_' + elementId + '" ' +
                                 'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-btn on" ' +
                                 'component="component" ' +
