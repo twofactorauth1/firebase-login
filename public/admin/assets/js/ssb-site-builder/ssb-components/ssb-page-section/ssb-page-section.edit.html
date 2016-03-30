@@ -4,7 +4,14 @@
 <span class="editable-title">{{vm.section.title || vm.section.name}}</span>
 <span class="editable-cover"></span>
 
-<ssb-edit-control class="ssb-edit-control ssb-edit-control-section" component="vm.section" state="vm.state" ui-state="vm.uiState" section-index="vm.index"></ssb-edit-control>
+<ssb-edit-control
+    ng-show="!vm.uiState.showSectionPanel"
+    class="ssb-edit-control ssb-edit-control-section"
+    component="vm.section"
+    state="vm.state"
+    ui-state="vm.uiState"
+    section-index="vm.index">
+</ssb-edit-control>
 
 <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html' "></div>
 

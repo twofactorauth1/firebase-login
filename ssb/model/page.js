@@ -118,6 +118,11 @@ var page = $$.m.ModelBase.extend({
             latest:true,
 
             /**
+             * Status of the page.  Can be either DRAFT or PUBLISHED
+             */
+            status:'PUBLISHED',
+
+            /**
              * Created by data
              *
              * @property created

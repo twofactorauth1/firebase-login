@@ -10,7 +10,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
       title: '@ngModel',
       className: '@className'
     },
-    template: '<div class="edit-wrap ssb-edit-wrap ssb-element"><span class="editable-title">{{title | formatText}}</span><div class="editable element-wrap {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
+    template: '<div class="edit-wrap ssb-edit-wrap ssb-element"><span class="editable-title">{{title | formatText}}</span><div data-edit="{ type: \'component\' }" class="editable element-wrap {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
     link: function(scope, element, attrs, ngModel) {
 
         scope.update = function(e) {
