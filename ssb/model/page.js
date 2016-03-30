@@ -157,6 +157,20 @@ var page = $$.m.ModelBase.extend({
         return (visibility.displayOn != null && visibility.displayOn < new Date().getTime());
     },
 
+    hasSectionReferences: function() {
+        var refsList = _.filter(this.get('sections'), function(section){
+            return section.hasOwnProperty('_id') && !section.hasOwnProperty('type');
+        });
+        return refsList.length > 0;
+    },
+
+    hasSectionObjects: function() {
+        var objsList = _.filter(this.get('sections'), function(section){
+            return section.hasOwnProperty('type');
+        });
+        return objsList.length > 0;
+    },
+
     transients: {
         deepCopy: true,
         frontend: [
