@@ -594,16 +594,22 @@ div[class^="spacing-"] {
 }
 
 
-.sortable-page-content.dragging .ssb-page-section {
-    float: none !important;
+#topnav.dragging, ssb-topbar.dragging{
+    display:none;
+
 }
 
-.ssb-add-content-sortable-chosen {
+.sortable-page-content.dragging {
+    overflow: hidden;
+    .ssb-page-section{
+        float: none !important;
+    }
+
+}
+
+.list-add-sortable-chosen {
     cursor: move!important;
     cursor: -webkit-grabbing!important;
-}
-
-.ssb-add-content-sortable-chosen {
     opacity: .5;
 }
 

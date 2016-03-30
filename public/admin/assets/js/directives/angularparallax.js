@@ -67,14 +67,23 @@ angular.module('angular-parallax', [
           if ($window.pageYOffset == 0){
             yoffset = 10;
           }
-          calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
-          calcValY = calcValY - yoffset;          
-          elem.css('background-position', calcValX + " " + calcValY + "px"); 
-          elem.css('background-attachment', "fixed");         
+          var calcValY = 0;
+          if(angular.element(".sortable-page-content").length > 0){
+                calcValY = (elem.offset().top - $scope.offsetTop - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1) - ($scope.parallaxVerticalOffset || 0);
+                elem.css('background-position', "50% " + calcValY + "px");
+                elem.css('background-attachment', "fixed");
+          }
+          else{
+                calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
+                calcValY = calcValY - yoffset;
+                elem.css('background-position', calcValX + " " + calcValY + "px");
+                elem.css('background-attachment', "fixed");
+          }
+
         }
         else
         {
-          elem.css('background-position', calcValX + " " + calcValY + "px"); 
+          elem.css('background-position', calcValX + " " + calcValY + "px");
           elem.css('background-attachment', "inherit");
         }
       };
@@ -93,13 +102,32 @@ angular.module('angular-parallax', [
 
       // set our initial position - fixes webkit background render bug
       $(document).ready(function() {
-          setTimeout(function() {
-          setPosition();
+        setTimeout(function() {
+            setPosition();
         }, 500)
+        var unbindWatcher = $scope.$watch(function() {
+                return angular.element(".sortable-page-content").length
+            }, function(newValue, oldValue) {
+            if (newValue && newValue > 0) {
+                var _top = angular.element("ssb-topbar").offset().top;
+                var _height = angular.element("ssb-topbar").height();
+                var _winHeight = angular.element(window).height();
+                var _heightDiff = _height + _top;
+                $scope.offsetTop = _heightDiff;
+                 angular.element(".ssb-site-builder-container").scroll(function() {
+                    setPosition();
+                });
+                setTimeout(function() {
+                    setPosition();
+                }, 3000)
+                unbindWatcher();
+            }
+        });
       })
-      
+
       angular.element($window).bind("scroll", setPosition);
       angular.element($window).bind("touchmove", setPosition);
+
     }  // link function
   };
 }]);

@@ -179,7 +179,7 @@
       if (socialAccount === 'Paypal') {
         //$state.go('app.support.helptopics');
         //return;
-          _redirectUrl = '/admin/#/support/help-topics?topic=bc373213-58ab-4581-9844-d69014d91f37'
+          _redirectUrl = '/admin/#/support/help-topics?title=adding-paypal-as-an-payment-option'
       }
       window.location = _redirectUrl;
     };

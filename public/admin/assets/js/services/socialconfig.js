@@ -140,10 +140,10 @@
             });
         };
 
-        this.addTwitterPostReply = function(socialAccountId, postId, username, comment, fn) {
+        this.addTwitterPostReply = function(socialAccountId, postId, comment, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'reply'].join('/');
             $http.post(apiUrl, {
-                post: '@' + username + ' ' + comment
+                post: comment
             }).success(function(data, status, headers, config) {
                     fn(data);
             });
@@ -158,10 +158,10 @@
             });
         };
 
-        this.addTwitterDirectMessage = function(socialAccountId, username, comment, fn) {
-            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'dm'].join('/');
+        this.addTwitterDirectMessage = function(socialAccountId, username, msg, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'name', username, 'dm'].join('/');
             $http.post(apiUrl, {
-                post: '@' + username + ' ' + comment
+                msg: msg
             }).success(function(data, status, headers, config) {
                 fn(data);
             });

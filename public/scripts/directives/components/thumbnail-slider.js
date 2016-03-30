@@ -1,4 +1,4 @@
-app.directive('thumbnailSliderComponent', ['$window', function ($window) {
+app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($window, $timeout) {
   return {
     scope: {
       component: '='
@@ -41,9 +41,18 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
         return newArr;
       };
       angular.element(document).ready(function () {
-        setTimeout(function () {
-          $('.carousel-control.right').trigger('click');
-        }, 2000)
+
+        var unbindWatcher = scope.$watch(function() {
+                return angular.element(".carousel-control.right").length
+            }, function(newValue, oldValue) {
+            if (newValue && newValue > 0) {
+                $timeout(function() {
+                    $('.carousel-control.right').trigger('click');
+                    $(window).trigger('resize');
+                }, 500)
+                unbindWatcher();
+            }
+        });
       });
     }
   }

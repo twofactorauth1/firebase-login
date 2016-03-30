@@ -11,6 +11,12 @@ var log = $$.g.getLogger("asset_manager");
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
 
+var deferred = require("jquery-deferred");
+if (typeof $ == 'undefined') {
+    $ = {};
+}
+_.extend($, deferred);
+
 module.exports = {
 
     /**
@@ -48,7 +54,7 @@ module.exports = {
 		    if (value.url.substring(0, 5) == 'http:') {
 		      asset.set('url', value.url.substring(5, value.url.length));
 		    } else {
-		      asset.set('url', value.url);  
+		      asset.set('url', value.url);
 		    }
 		    console.log(asset);
                     uploadPromise.resolve(value);

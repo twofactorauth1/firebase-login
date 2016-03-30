@@ -14,6 +14,7 @@
       $scope.feed = [];
       $scope.feedLengths = {};
       $scope.orderByAttribute = 'date';
+      $scope.addComment = {};
     };
 
     // execute the 'constructor'
@@ -398,17 +399,34 @@
       _.each(post.comments, function (comment) {
         //comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
       });
-      $scope.tempPost = post;
+      $scope.addComment.post = post;
       $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
       //$scope.visibleComments = post.comments;
 
       // set the intitial value of the textarea because
       // "reply" means their handle is supposed to come before the message
-      $scope.addComment = '@' + $scope.tempPost.from.name + ' ';
+      $scope.addComment.comment = '@' + post.from.name + ' ';
 
       //$scope.updateComments(post, 'tw');
 
       $scope.openModal('twitter-comments-modal');
+    };
+
+    $scope.showTweetDMModal = function (post) {
+      _.each(post.comments, function (comment) {
+        //comment.picture = 'https://graph.facebook.com/' + comment.sourceId + '/picture?width=32&height=32';
+      });
+      $scope.addComment.post = post;
+      $scope.tempTrackedAccounts = angular.copy($scope.trackedAccounts);
+      //$scope.visibleComments = post.comments;
+
+      // set the intitial value of the textarea because
+      // "reply" means their handle is supposed to come before the message
+
+
+      //$scope.updateComments(post, 'tw');
+
+      $scope.openModal('twitter-direct-message-modal');
     };
 
     /*
@@ -754,5 +772,18 @@
       }
     })
 
+    $scope.addTwCommentFn = function (newComment) {
+        SocialConfigService.addTwitterPostReply(newComment.socialId, newComment.post._id, newComment.comment, function(data) {
+            console.log('twitter post reply response >>', data);
+            $scope.closeModal();
+        });
+    };
+
+    $scope.addTwDMFn = function (newComment) {
+        SocialConfigService.addTwitterDirectMessage(newComment.socialId, newComment.post.from.name, newComment.comment, function(data) {
+            console.log('twitter DM response >>', data);
+            $scope.closeModal();
+        });
+    };
   }]);
 }(angular));

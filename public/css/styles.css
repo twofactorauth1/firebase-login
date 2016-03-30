@@ -2659,7 +2659,7 @@ div[data-type="feature-block"] .component-inner {
 }
 .simple-form-v1 .btn.btn-simple-form,
 .simple-form-v1 input {
-  height: 50px;
+  min-height: 50px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -2772,7 +2772,7 @@ div[data-type="feature-block"] .component-inner {
   -moz-user-select: text;
 }
 .simple-form-v2 .btn.btn-simple-form {
-  height: 50px;
+  min-height: 50px;
   margin: 0;
   padding: 0;
   text-transform: uppercase;
@@ -10460,14 +10460,19 @@ div[class^="spacing-"] input {
 .ssb-hide-during-load {
   opacity: 0;
 }
+#topnav.dragging,
+ssb-topbar.dragging {
+  display: none;
+}
+.sortable-page-content.dragging {
+  overflow: hidden;
+}
 .sortable-page-content.dragging .ssb-page-section {
   float: none !important;
 }
-.ssb-add-content-sortable-chosen {
+.list-add-sortable-chosen {
   cursor: move!important;
   cursor: -webkit-grabbing !important;
-}
-.ssb-add-content-sortable-chosen {
   opacity: .5;
 }
 .ssb-sidebar {

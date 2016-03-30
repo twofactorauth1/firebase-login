@@ -57,8 +57,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             group: 'section',
             scroll: true,
             animation: 150,
-            ghostClass: "ssb-section-sortable-ghost",  // Class name for the drop placeholder
-            chosenClass: "ssb-section-sortable-chosen",  // Class name for the chosen item
+            ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+            //chosenClass: "sortable-chosen",  // Class name for the chosen item
             onAdd: function (evt) {
                 if(vm.uiState.draggedSection)
                     SimpleSiteBuilderService.getSection(vm.uiState.draggedSection, vm.uiState.draggedSection.version || 1).then(function(response) {
@@ -81,15 +81,22 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 model: 'vm.uiState.filteredSections'
             },
             animation: 150,
-            ghostClass: "ssb-add-content-sortable-ghost",  // Class name for the drop placeholder
-            chosenClass: "ssb-add-content-sortable-chosen",  // Class name for the chosen item
+            ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+            chosenClass: "list-add-sortable-chosen",  // Class name for the chosen item
             scroll: true,
             onStart: function (evt) {
+                vm.uiState.sortableListPageContentConfig.disabled = false;
                 angular.element(".sortable-page-content").addClass("dragging");
+                var _top = angular.element("ssb-topbar").offset().top;
+                var _height = angular.element("ssb-topbar").height();
+                var _winHeight = angular.element(window).height();
+                var _heightDiff = _height + _top;
+                angular.element(".sortable-page-content").height(_winHeight - _heightDiff);
             },
             onEnd: function (evt) {
-               angular.element(".sortable-page-content").removeClass("dragging");
-               $timeout(function() { vm.uiState.openSidebarPanel = ''; });
+                angular.element(".sortable-page-content").removeClass("dragging");
+                angular.element(".sortable-page-content").css('height','auto');
+                $timeout(function() { vm.uiState.openSidebarPanel = ''; });
             },
             onSort: function (evt) {
                 console.log("On Sort");

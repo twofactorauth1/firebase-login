@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.emails.MAIN"></h1>
-                <span ng-if="emails" class="mainDescription">There are currently {{emails.length}} emails.</span>
+                <span ng-if="emails" class="mainDescription">There are currently {{emails.length}} emails. ({{displayedEmails.length || 0}} in filtered view)</span>
                 <span ng-if="!emails" class="mainDescription">Loading emails...</span>
             </div>
         </div>

@@ -222,12 +222,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/support',
         template: '<div ui-view class="fade-in-up"></div>',
         title: 'Support'
-    }).state('app.support.gettingstarted', {
-        url: '/getting-started',
-        templateUrl: "/admin/assets/views/getting-started.html",
-        title: 'Getting Started',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('gettingStartedCtrl')
     }).state('app.support.helptopics', {
         url: '/help-topics',
         templateUrl: "/admin/assets/views/help-topics.html",

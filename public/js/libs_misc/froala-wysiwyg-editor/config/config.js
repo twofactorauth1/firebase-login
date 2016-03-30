@@ -80,7 +80,7 @@ $.FroalaEditor.config = {
         "Montserrat,sans-serif": 'Montserrat',
         "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
     },
-    imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+    //imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
     linkEditButtons: ['linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
     imageEditButtons: ["imageReplace", "imageAlign", "imageRemove", "|", "imageLink", "linkOpen", "linkEdit", "linkRemove", "imageDisplay", "imageStyle", "imageAlt", "imageSize"],
     colorsText: [].concat.apply([], spectrumColors),
@@ -119,27 +119,6 @@ $.FroalaEditor.config = {
         'ssb-editor-style-line-height-3': 'Line Height 3',
         'ssb-editor-style-line-height-4': 'Line Height 4',
         'ssb-editor-style-line-height-5': 'Line Height 5',
-    }
-    // imageUploadToS3: {
-    //     bucket: 'indigenous-digital-assets',
-    //     region: 's3',
-    //     keyStart: 'account_6/',
-    //     callback: function (url, key) {
-    //       // The URL and Key returned from Amazon.
-    //       console.log (url);
-    //       console.log (key);
-    //     },
-    //     params: {
-    //       acl: 'public-read', // ACL according to Amazon Documentation.
-    //       AWSAccessKeyId: 'AKIAIF4QBTOMBZRWROGQ', // Access Key from Amazon.
-    //       policy: '', // Policy string computed in the backend.
-    //       signature: '', // Signature computed in the backend.
-    //     }
-    // },
-    //  requestWithCORS: false
-     // initOnClick: true,
-     // editInPopup: true,
-     // spellcheck: true,
-     // toolbarSticky: false
-
+    },
+    imageUploadURL: "/api/1.0/assets/editor/upload"
 }
