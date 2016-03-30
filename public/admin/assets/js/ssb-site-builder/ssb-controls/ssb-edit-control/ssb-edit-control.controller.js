@@ -56,6 +56,10 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
                     left = editEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
                 }
 
+                if (left < 0) {
+                    left = 0;
+                }
+
                 if (editElLeft === sidebarWidth) {
                     top = editElTop - topbarHeight + scrollTop;
                     left = 0;

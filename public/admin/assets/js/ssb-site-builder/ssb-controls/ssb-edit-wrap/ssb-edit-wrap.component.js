@@ -49,9 +49,11 @@ function ssbEditWrap($compile, $timeout) {
             function handleSectionOrComponentMouseOver(e) {
 
                 //ignore hover on an edit-control
-                if ($(e.target).parents('ssb-edit-control').length > 0) {
-                    return
-                }
+                // if ($(e.target).parents('.ssb-edit-control-component').length > 0) {
+                //     return
+                // }
+
+                console.log('handleSectionOrComponentMouseOver', e.target);
 
                 var hasSectionChildMouseOver = element.children().find('.ssb-edit-wrap.on').length > 0;
                 var hasComponentChildMouseOver = element.children().find('[data-edit]').length > 0;
@@ -73,6 +75,10 @@ function ssbEditWrap($compile, $timeout) {
             }
 
             function handleComponentAreaMouseOver(e) {
+
+                console.log('handleComponentAreaMouseOver', e.target);
+                console.log('handleComponentAreaMouseOver', e.currentTarget);
+
                 var el = angular.element(e.currentTarget);
                 var hasActiveEditControl = el.hasClass('ssb-active-edit-control');
                 if (!hasActiveEditControl) {
@@ -160,8 +166,11 @@ function ssbEditWrap($compile, $timeout) {
                     angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
                     angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
+                    var clickedComponent = el.closest('.ssb-component');
+                    angular.element('.ssb-component').removeClass('ssb-active-component');
+
                     //get related component data
-                    var clickedComponentScope = el.closest('.ssb-component').scope();
+                    var clickedComponentScope = clickedComponent.scope();
 
                     if (clickedComponentScope) {
                         var clickedComponentData = clickedComponentScope.vm.component;
@@ -192,6 +201,7 @@ function ssbEditWrap($compile, $timeout) {
                         var editControlComponent = el.parent().prev('.ssb-edit-control-component');
 
                         editControlComponent.addClass('ssb-active-edit-control');
+                        clickedComponent.addClass('ssb-active-component');
 
                         /**
                          * set hovered edit control on uiState
