@@ -834,6 +834,7 @@ module.exports = {
                 });
             },
             function getGlobalFooter(existingPage, globalHeader, cb){
+                self.log.info('getGlobalFooter');
                 var query = {
                     accountId:accountId,
                     globalFooter:true
@@ -848,6 +849,7 @@ module.exports = {
                 });
             },
             function getExistingSections(existingPage, globalHeader, globalFooter, cb) {
+                self.log.info('getExistingSections');
                 if(existingPage.hasSectionReferences()) {
                     sectionDao.dereferenceSections(existingPage.get('sections'), function(err, existingSectionAry){
                         if(err) {
@@ -862,6 +864,7 @@ module.exports = {
                 }
             },
             function getNewSections(existingPage, globalHeader, globalFooter, existingSections, cb) {
+                self.log.info('getNewSections');
                 if(page.hasSectionReferences()) {
                     sectionDao.dereferenceSections(page.get('sections'), function(err, pageSectionAry){
                         if(err) {
@@ -873,7 +876,7 @@ module.exports = {
                         }
                     });
                 } else {
-                    cb(null, existingPage, globalHeader, globalFooter, existingPage.get('sections'));
+                    cb(null, existingPage, globalHeader, globalFooter, existingSections);
                 }
             },
             function dereferenceSections(existingPage, globalHeader, globalFooter, existingSections, cb) {
@@ -933,7 +936,7 @@ module.exports = {
                 self.log.info('updateSections');
                 var otherPagesWithSectionReferences = [];
                 async.eachSeries(dereferencedSections, function(section, callback){
-                    var existingSection = _.find(existingSections, function(existingSection){return section.id() === existingSection.id()});
+                    var existingSection = _.find(existingSections, function(existingSection){self.log.debug('existing section?', existingSection);return section.id() === existingSection.id()});
                     if(existingSection) {
                         if(!_.isEqual(existingSection, section)){
 
