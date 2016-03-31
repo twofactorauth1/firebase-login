@@ -188,6 +188,9 @@ function ssbEditWrap($compile, $timeout) {
 
                     //show edit-control for this section|component|element
                     if (isSection) {
+                        el.scope().vm.uiState.hoveredSectionIndex = undefined;
+                        el.scope().vm.uiState.hoveredComponentIndex = undefined;
+                        el.scope().vm.uiState.hoveredComponentEl = undefined;
                         el.addClass('ssb-active-edit-control');
 
                         $timeout(function() {
