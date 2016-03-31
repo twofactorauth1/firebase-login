@@ -2,9 +2,9 @@
 
 app.directive('ssbEditWrap', ssbEditWrap);
 
-ssbEditWrap.$inject = ['$compile', '$timeout'];
+ssbEditWrap.$inject = ['$rootScope', '$compile', '$timeout'];
 /* @ngInject */
-function ssbEditWrap($compile, $timeout) {
+function ssbEditWrap($rootScope, $compile, $timeout) {
 
     return {
         restrict: 'C',
@@ -237,6 +237,8 @@ function ssbEditWrap($compile, $timeout) {
                          */
                         clickedComponentScope.vm.uiState.hoveredComponentEl = el;
 
+                        $rootScope.$broadcast('$ssbMenuOpen');
+
                         //if contextual menu is already open, open directly from single click
                         if (clickedComponentScope.vm.uiState.showSectionPanel) {
                             editControlComponent.find('.ssb-settings-btn').click();
@@ -282,6 +284,9 @@ function ssbEditWrap($compile, $timeout) {
                     angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
                     angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
+                    //remove component active border
+                    angular.element('.ssb-component').removeClass('ssb-active-component');
+
                     //reset uiState
                     // clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
                     // clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
@@ -321,6 +326,8 @@ function ssbEditWrap($compile, $timeout) {
                      * set current el on uiState
                      */
                     clickedComponentScope.vm.uiState.hoveredComponentEl = el;
+
+                    $rootScope.$broadcast('$ssbMenuOpen');
 
                     //highlight component area
                     el.addClass('ssb-active-edit-control');

@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderEditControlController', ssbSiteBuilderEditControlController);
 
-ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
+ssbSiteBuilderEditControlController.$inject = ['$scope', '$rootScope', '$interval', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
+function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
 
     var vm = this;
 
@@ -19,10 +19,17 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
      * Watch for hovered components and component areas
      */
     // if (vm.componentIndex !== undefined) {
-        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
+        // $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
     // }
 
-    //TODO: rework to have ssb-edit-wrap set uiState prop with all necessary info
+    // $interval(setPosition, 1000, false);
+
+    /**
+     * Events for compiled editor elememts
+     */
+    $rootScope.$on('$ssbMenuOpen', function(event, componentId, editorId, elementId) {
+        setPosition();
+    });
 
 
     /*
