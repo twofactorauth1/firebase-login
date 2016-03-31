@@ -6893,7 +6893,7 @@ ssb-topbar.dragging {
   min-height: 400px;
 }
 .ssb-sidebar {
-  background: #131e26;
+  background: #1c2b36;
 }
 .ssb-sidebar img {
   max-width: 100%;
@@ -7147,13 +7147,13 @@ ssb-topbar.dragging {
   .ssb-sidebar-icons {
     position: static;
     float: left;
-    background: #131e26;
+    background: #1c2b36;
     height: 100%;
     width: auto;
   }
 }
 .ssb-sidebar-icons .nav {
-  background: #131e26;
+  background: #1c2b36;
 }
 @media (max-width: 768px) {
   .ssb-sidebar-icons .nav {
@@ -7168,7 +7168,7 @@ ssb-topbar.dragging {
   margin: 0;
   cursor: pointer;
   text-align: center!important;
-  background: #131e26;
+  background: #1c2b36;
   padding: 1em;
 }
 .ssb-sidebar-icons .nav-tab:hover {
@@ -7378,7 +7378,6 @@ ssb-topbar {
   background: #1c2b36;
   color: white;
   text-align: center;
-  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
   line-height: 60px;
 }
 @media screen and (min-width: 768px) {
@@ -10646,4 +10645,12 @@ indi-login-modal .modal-title {
   border-color: #dddddd;
   cursor: pointer;
   height: 50px;
+}
+.ssb-site-builder .form-control.ui-select-toggle {
+  background: #131e26;
+  color: white;
+  border-color: black;
+}
+.ssb-site-builder .form-control.ui-select-toggle .caret {
+  border-top-color: white;
 }
