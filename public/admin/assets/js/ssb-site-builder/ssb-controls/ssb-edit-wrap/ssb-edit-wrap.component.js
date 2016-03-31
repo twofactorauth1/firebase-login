@@ -156,7 +156,11 @@ function ssbEditWrap($compile, $timeout) {
 
                 //let section handle clicks if the component has [data-edit] areas to surface menu
                 if ((isSection || isComponent) && !(isComponent && hasComponentChildMouseOver)) {
-
+                    var clickedComponent = el.closest('.ssb-component');
+                    if(isComponent && clickedComponent.prev().hasClass("ssb-on")){
+                        e.stopPropagation();
+                        return;
+                    }
                     //hide editable-title
                     angular.element('.ssb-edit-wrap, .editable-title, [data-edit]', '.ssb-main').removeClass('ssb-on');
                     angular.element('.editable-title').removeClass('ssb-on');
@@ -165,7 +169,7 @@ function ssbEditWrap($compile, $timeout) {
                     angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
                     angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
-                    var clickedComponent = el.closest('.ssb-component');
+
                     angular.element('.ssb-component').removeClass('ssb-active-component');
 
                     //get related component data
