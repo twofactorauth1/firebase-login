@@ -200,49 +200,56 @@ function ssbEditWrap($compile, $timeout) {
 
                         e.stopPropagation();
 
-                        var editControlComponent = el.parent().prev('.ssb-edit-control-component');
+                        $timeout(function() {
+                            var editControlComponent = el.parent().prev('.ssb-edit-control-component');
 
-                        editControlComponent.addClass('ssb-active-edit-control');
-                        clickedComponent.addClass('ssb-active-component');
+                            editControlComponent.addClass('ssb-active-edit-control');
+                            clickedComponent.addClass('ssb-active-component');
 
-                        /**
-                         * set hovered edit control on uiState
-                         */
-                        clickedComponentScope.vm.uiState.hoveredComponentEditControl = editControlComponent;
+                            /**
+                             * set hovered edit control on uiState
+                             */
+                            clickedComponentScope.vm.uiState.hoveredComponentEditControl = editControlComponent;
 
-                        /**
-                         find index of section based on component _id
-                         */
-                        clickedComponentScope.vm.uiState.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
-                            .pluck('components')
-                            .map(function(components){
-                                return _.pluck(components, '_id')
-                            })
-                            .findIndex(function(component) {
-                                return -1 !== _.indexOf(component, clickedComponentData._id)
-                            })
-                            .value()
+                            /**
+                             find index of section based on component _id
+                             */
 
-                        /**
-                         find index of component based on component _id
-                         */
-                        clickedComponentScope.vm.uiState.hoveredComponentIndex = _(clickedComponentScope.vm.state.page.sections[clickedComponentScope.vm.uiState.hoveredSectionIndex].components).chain()
-                            .findIndex(function(component) {
-                                return component._id === clickedComponentData._id
-                            })
-                            .value()
 
-                        /**
-                         * set current el on uiState
-                         */
-                        clickedComponentScope.vm.uiState.hoveredComponentEl = el;
+                            clickedComponentScope.vm.uiState.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
+                                .pluck('components')
+                                .map(function(components){
+                                    return _.pluck(components, '_id')
+                                })
+                                .findIndex(function(component) {
+                                    return -1 !== _.indexOf(component, clickedComponentData._id)
+                                })
+                                .value()
 
-                        //if contextual menu is already open, open directly from single click
-                        if (clickedComponentScope.vm.uiState.showSectionPanel) {
-                            editControlComponent.find('.ssb-settings-btn').click();
-                        } else {
-                            // editControlComponent.addClass('ssb-on');
-                        }
+                            /**
+                             find index of component based on component _id
+                             */
+                            clickedComponentScope.vm.uiState.hoveredComponentIndex = _(clickedComponentScope.vm.state.page.sections[clickedComponentScope.vm.uiState.hoveredSectionIndex].components).chain()
+                                .findIndex(function(component) {
+                                    return component._id === clickedComponentData._id
+                                })
+                                .value()
+
+                            /**
+                             * set current el on uiState
+                             */
+                            clickedComponentScope.vm.uiState.hoveredComponentEl = el;
+
+                            //if contextual menu is already open, open directly from single click
+                            if (clickedComponentScope.vm.uiState.showSectionPanel) {
+                                editControlComponent.find('.ssb-settings-btn').click();
+                            } else {
+                                // editControlComponent.addClass('ssb-on');
+                            }
+
+                        }, 100);
+
+
 
                     }
 

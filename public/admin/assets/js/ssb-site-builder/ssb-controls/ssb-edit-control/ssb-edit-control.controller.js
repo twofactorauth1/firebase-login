@@ -70,10 +70,10 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
                 }
 
                 if (editControl && editControl.length) {
-                    $timeout(function() {
+                    //$timeout(function() {
                         editControl.css({ top: top, left: left });
                         editControl.addClass('ssb-on');
-                    });
+                    //});
                 }
 
 
