@@ -24,6 +24,7 @@ module.exports = {
 
     log:log,
 
+    //TODO: add reply-to
     sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
                                       vars, emailId, contactId, fn) {
         var self = this;
