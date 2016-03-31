@@ -36,6 +36,8 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
                 var top = 0;
                 var left = 0;
+                var editElTop = 0;
+                var editElLeft = 0;
                 var topbarHeight = 125;
                 var sidebarWidth = 140;
                 var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
