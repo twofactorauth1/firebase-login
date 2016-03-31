@@ -43,6 +43,8 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
 
                 var top = 0;
                 var left = 0;
+                var editElTop = 0;
+                var editElLeft = 0;
                 var topbarHeight = 125;
                 var sidebarWidth = 140;
                 var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
@@ -77,10 +79,10 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                 }
 
                 if (editControl && editControl.length) {
-                    $timeout(function() {
+                    //$timeout(function() {
                         editControl.css({ top: top, left: left });
                         editControl.addClass('ssb-on');
-                    });
+                    //});
                 }
 
 

@@ -207,10 +207,17 @@
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
-                            ng-if="page._id === vm.state.page._id"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false"
                             ng-click="vm.hideFromMenu()"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Hide this page from main menu">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false"
+                            ng-click="vm.showPageOnMenu()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Show this page on main menu">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-files"
