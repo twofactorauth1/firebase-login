@@ -715,9 +715,6 @@ app.constant('JS_REQUIRES', {
     name: 'ng-nestable',
     files: ['../js/libs/ng-nestable/src/angular-nestable.js']
   }, {
-    name: 'vAccordion',
-    files: ['../js/libs/v-accordion/dist/v-accordion.min.js', '../js/libs/v-accordion/dist/v-accordion.min.css']
-  }, {
     name: 'xeditable',
     files: ['../js/libs/angular-xeditable/dist/js/xeditable.min.js', '../js/libs/angular-xeditable/dist/css/xeditable.css']
   }, {
