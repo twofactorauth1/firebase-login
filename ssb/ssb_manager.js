@@ -861,11 +861,31 @@ module.exports = {
                     cb(null, existingPage, globalHeader, globalFooter, existingPage.get('sections'));
                 }
             },
+            function getNewSections(existingPage, globalHeader, globalFooter, existingSections, cb) {
+                if(page.hasSectionReferences()) {
+                    sectionDao.dereferenceSections(page.get('sections'), function(err, pageSectionAry){
+                        if(err) {
+                            self.log.error('Error dereferencing page sections:', err);
+                            cb(err);
+                        } else {
+                            page.set('sections', pageSectionAry);
+                            cb(null, existingPage, globalHeader, globalFooter, existingSections);
+                        }
+                    });
+                } else {
+                    cb(null, existingPage, globalHeader, globalFooter, existingPage.get('sections'));
+                }
+            },
             function dereferenceSections(existingPage, globalHeader, globalFooter, existingSections, cb) {
+                self.log.info('dereferenceSections');
                 var sections = page.get('sections');
                 var dereferencedSections = [];
 
                 async.eachSeries(sections, function(section, callback){
+                    //if we are not working with an object for some reason, fix it.
+                    if(section.hasOwnProperty('_id')) {
+                        section = new $$.m.ssb.Section(section);
+                    }
                     self.log.debug(section.get('name') + ' :: ' + section.get('title'));
 
                     if (section.get('accountId') === 0) {
@@ -910,7 +930,7 @@ module.exports = {
                  *  -- bump version
                  *  -- update other pages with reference
                  */
-
+                self.log.info('updateSections');
                 var otherPagesWithSectionReferences = [];
                 async.eachSeries(dereferencedSections, function(section, callback){
                     var existingSection = _.find(existingSections, function(existingSection){return section.id() === existingSection.id()});
@@ -959,6 +979,7 @@ module.exports = {
 
             },
             function updateOtherPagesWithSectionReferences(existingPage, updatedSections, otherPagesWithSectionReferences, cb) {
+                self.log.info('updateOtherPagesWithSectionReferences');
                 async.eachSeries(otherPagesWithSectionReferences, function(obj, callback){
                     var pageId = obj.pageId;
                     var oldId = obj.oldId;
@@ -998,6 +1019,7 @@ module.exports = {
                 });
             },
             function incrementPageVersion(existingPage, updatedSections, cb) {
+                self.log.info('incrementPageVersion');
                 var currentVersion = existingPage.get('version') || 0;
                 var newVersion = currentVersion + 1;
                 existingPage.set('latest', false);
@@ -1013,6 +1035,7 @@ module.exports = {
 
             },
             function updateThePage(existingPage, updatedSections, newVersion, cb){
+                self.log.info('updateThePage');
                 //var sections = page.get('sections');
                 page.set('modified', modified);
                 var jsonSections = [];
@@ -1033,7 +1056,7 @@ module.exports = {
                 });
             },
             function deleteRemovedSections(existingPage, updatedPage, updatedSections, cb){
-
+                self.log.info('deleteRemovedSections');
                 var updatedSectionIDs =_.map(updatedSections, function(section){
                     return section.id();
                 });
@@ -1061,6 +1084,7 @@ module.exports = {
                 });
             },
             function setAsHomePage(existingPage, updatedPage, updatedSections, cb){
+                self.log.info('setAsHomePage');
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
                     self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
                         if (err) {
@@ -1134,6 +1158,7 @@ module.exports = {
                 }
             },
             function listPages(existingPage, updatedPage, updatedSections, cb){
+                self.log.info('listPages');
                 self.listPages(accountId, updatedPage.get('websiteId'), function(err, pages){
                     if (err) {
                         self.log.error('Error getting index page: ' + err);
@@ -1145,6 +1170,7 @@ module.exports = {
                 })
             },
             function updateLinkList(existingPage, updatedPage, updatedSections, pages, cb){
+                self.log.info('updateLinkList');
                 if (updatedPage.get('mainmenu') === false) {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
@@ -1245,6 +1271,7 @@ module.exports = {
             },
             // update existing pages if global sections set as true OR false
             function updateExistingPages(updatedPage, updatedSections, pages, cb){
+                self.log.info('updateExistingPages');
                 var _update = false;
                 self.rejectSystemPages(pages, function(err, filteredPages) {
                     pages = filteredPages;
@@ -1367,6 +1394,7 @@ module.exports = {
 
             }
         ], function done(err, updatedPage, updatedSections){
+            self.log.info('done');
             if(updatedPage) {
                 var sectionArray = [];
 
@@ -1657,14 +1685,25 @@ module.exports = {
                                             page.set('siteTemplateId', siteTemplateId);
                                             page.set('title', pageData.pageTitle);
                                             page.set('handle', pageData.pageHandle);
+                                            //reset each section id and accountId
+                                            /*
+                                             * The sections Array is an array of section References that belong to the site template.
+                                             * We need to make a copy of these sections for the page.
+                                             */
+                                            self._copySectionsForAccount(page.get('sections'), accountId, function(err, sectionRefAry){
+                                                if(err) {
+                                                    callback(err);
+                                                } else {
+                                                    page.set('sections', sectionRefAry);
+                                                    if (page.get('handle') === 'index') {
+                                                        indexPageId = pageId;
+                                                    }
 
-                                            if (page.get('handle') === 'index') {
-                                                indexPageId = pageId;
-                                            }
-
-                                            self.updatePage(accountId, pageId, page, created, null, function(err, savedPage){
-                                                self.log.debug('updated page using siteTemplate data');
-                                                callback(err);
+                                                    self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
+                                                        self.log.debug('updated page using siteTemplate data');
+                                                        callback(err);
+                                                    });
+                                                }
                                             });
                                         });
 
@@ -1681,15 +1720,13 @@ module.exports = {
                             website.set('linkLists', linkLists);
 
                             self.updateWebsite(accountId, websiteId, created, website, function(err, website) {
-
                                 if (err) {
-                                    return cb(err);
+                                    cb(err);
+                                } else {
+                                    self.log.debug('finished updating website linkList', website.get('linkLists'));
+                                    //finally done...
+                                    cb(err, indexPageId);
                                 }
-
-                                self.log.debug('finished updating website linkList', website.get('linkLists'));
-
-                                //finally done...
-                                cb(err, indexPageId);
                             });
 
                         });
@@ -1716,6 +1753,40 @@ module.exports = {
             fn(err, responseObj);
         });
 
+    },
+
+    _copySectionsForAccount: function(sectionRefAry, accountId, fn) {
+        var self = this;
+        /*
+         * 1. Deferenece the sections
+         * 2. Change accountId
+         * 3. Change ID and Anchor
+         * 4. Save
+         * 5. Return array of new ID references
+         */
+        async.waterfall([
+            function(cb) {
+                sectionDao.dereferenceSections(sectionRefAry, cb);
+            },
+            function(dereffedSections, cb) {
+                _.each(dereffedSections, function(section){
+                    var id = $$.u.idutils.generateUUID();
+                    section.set('accountId', accountId);
+                    section.set('_id', id);
+                    section.set('anchor', id);
+                });
+                sectionDao.saveSectionObjects(dereffedSections, cb);
+            },
+            function(savedSections, cb) {
+                var refAry = [];
+                _.each(savedSections, function(section){
+                    refAry.push(section.toReference());
+                });
+                cb(null, refAry);
+            }
+        ], function done(err, sectionRefAry){
+            fn(err, sectionRefAry);
+        });
     },
 
     /**
