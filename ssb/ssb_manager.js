@@ -885,33 +885,36 @@ module.exports = {
                 var dereferencedSections = [];
 
                 async.eachSeries(sections, function(section, callback){
-                    //if we are not working with an object for some reason, fix it.
-                    if(section.hasOwnProperty('_id')) {
-                        section = new $$.m.ssb.Section(section);
-                    }
-                    self.log.debug(section.get('name') + ' :: ' + section.get('title'));
+                    console.dir(section);
+                    //if(section){
+                        //if we are not working with an object for some reason, fix it.
+                        if(!section || section.hasOwnProperty('_id')) {
+                            section = new $$.m.ssb.Section(section);
+                        }
+                        self.log.debug(section.get('name') + ' :: ' + section.get('title'));
 
-                    if (section.get('accountId') === 0) {
-                        var id = $$.u.idutils.generateUUID();
-                        section.set('_id', id);
-                        section.set('anchor', id);
-                    }
+                        if (section.get('accountId') === 0) {
+                            var id = $$.u.idutils.generateUUID();
+                            section.set('_id', id);
+                            section.set('anchor', id);
+                        }
 
-                    // section is globalHeader reference and user already has globalHeader in their account's section collection
-                    if (section.get('globalHeader') && globalHeader) {
-                        self.log.debug('page has globalHeader ref, account has globalHeader');
-                        section.set('_id', globalHeader.id());
-                        section.set('refId', section.id());
-                    }
+                        // section is globalHeader reference and user already has globalHeader in their account's section collection
+                        if (section.get('globalHeader') && globalHeader) {
+                            self.log.debug('page has globalHeader ref, account has globalHeader');
+                            section.set('_id', globalHeader.id());
+                            section.set('refId', section.id());
+                        }
 
-                    if (section.get('globalFooter') && globalFooter) {
-                        self.log.debug('page has globalFooter ref, account has globalFooter');
-                        section.set('_id', globalFooter.id());
-                        section.set('refId', section.id());
-                    }
+                        if (section.get('globalFooter') && globalFooter) {
+                            self.log.debug('page has globalFooter ref, account has globalFooter');
+                            section.set('_id', globalFooter.id());
+                            section.set('refId', section.id());
+                        }
 
-                    section.set('accountId', accountId);
-                    dereferencedSections.push(section);
+                        section.set('accountId', accountId);
+                        dereferencedSections.push(section);
+                    //}
                     callback();
 
 
@@ -1773,10 +1776,14 @@ module.exports = {
             },
             function(dereffedSections, cb) {
                 _.each(dereffedSections, function(section){
-                    var id = $$.u.idutils.generateUUID();
-                    section.set('accountId', accountId);
-                    section.set('_id', id);
-                    section.set('anchor', id);
+                    console.dir(section);
+                    if(section)
+                    {
+                        var id = $$.u.idutils.generateUUID();
+                        section.set('accountId', accountId);
+                        section.set('_id', id);
+                        section.set('anchor', id);
+                    }
                 });
                 sectionDao.saveSectionObjects(dereffedSections, cb);
             },
