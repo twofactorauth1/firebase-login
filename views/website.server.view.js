@@ -234,7 +234,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
                 value.website = value.website || {};
-                data.title = value.website.title;
+                data.title = pageHolder[handle].title || value.website.title;
                 data.author = 'Indigenous';//TODO: wut?
                 data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
                 data.website = value.website || {};
@@ -244,7 +244,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 };
                 data.og = {
                     type: 'website',
-                    title: value.website.title,
+                    title: pageHolder[handle].title || value.website.title,
                     image: value.website.settings.favicon
                 };
                 if (data.og.image && data.og.image.indexOf('//') === 0) {
