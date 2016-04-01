@@ -7229,7 +7229,7 @@ ssb-topbar.dragging {
   font-size: 12px;
   max-height: calc(100% - 182px);
   width: 300px;
-  border: 10px solid rgba(255, 255, 255, 0.15);
+  border: 10px solid rgba(255, 255, 255, 0.75);
 }
 @media (max-width: 767px) {
   .ssb-sidebar-section-panel {
