@@ -630,6 +630,7 @@ app.constant('JS_REQUIRES', {
     'propsFilter': 'assets/js/filters/propsFilter.js',
     'cleanType': 'assets/js/filters/cleanType.js',
     'filterPages': 'assets/js/filters/filterPages.js',
+    'sortListPages': 'assets/js/filters/sortListPages.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js'
