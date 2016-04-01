@@ -889,7 +889,7 @@ iframe.fr-iframe {
   }
 }
 @media (max-width: 767px) {
-  .fr-toolbar.fr-inline .fr-separator.fr-vs {    
+  .fr-toolbar.fr-inline .fr-separator.fr-vs {
     display: none;
   }
 }
@@ -936,7 +936,7 @@ iframe.fr-iframe {
   height: 18px !important;
   margin: 2px;
 }
-.fr-popup .fr-color-set > span.fr-selected-color::after {  
+.fr-popup .fr-color-set > span.fr-selected-color::after {
   line-height: 18px !important;
 }
 .fr-popup .fr-color-set > span > i {
@@ -950,4 +950,8 @@ iframe.fr-iframe {
 }
 .fr-image-size-layer .fr-image-group .fr-input-line {
    width: calc(50% - 2em) !important;
+}
+
+.fr-view h1 *,h2 *,h3 *,h4 *,h5 *,h6 * {
+  font-size: inherit !important;
 }
