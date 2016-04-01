@@ -641,7 +641,7 @@ module.exports = {
             // check and get fulfillment email products
             function(account, order, callback) {
                 log.debug('Order is', order);
-                if(order.get('payment_details') && order.get('payment_details').card_token && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
+                if(order.get('payment_details') && order.get('payment_details').charge && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
                     var productAry = [];
                     async.each(order.get('line_items'), function iterator(item, cb){
                         productManager.getProduct(item.product_id, function(err, product){
