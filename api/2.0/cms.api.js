@@ -71,7 +71,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('pages/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
         //app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
 
-        app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page versions
+        app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersions.bind(this));//get page versions
         app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//revert page to version
 
 
@@ -334,7 +334,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var homePage = _page.homePage;
         delete _page.homePage;
         var updatedPage = new $$.m.ssb.Page(_page);
-        
+
         updatedPage.set('_id', pageId);//make sure we don't change the ID
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
@@ -511,6 +511,16 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< setSiteTemplate');
             return self.sendResultOrError(resp, err, value, "Error setting Site Template");
         });
+    },
+
+    getPageVersions: function (req, resp) {
+        var self = this;
+        self.log.debug('>> getPageVersions');
+        var pageId = req.params.id;
+        cmsManager.getPageVersions(pageId, 'all', function (err, versions) {
+            self.log.debug('<< getPageVersions');
+            return self.sendResultOrError(resp, err, versions, "Error getting versions of a page");
+        });
     }
 
 
@@ -518,4 +528,3 @@ _.extend(api.prototype, baseApi.prototype, {
 });
 
 module.exports = new api({version:'2.0'});
-
