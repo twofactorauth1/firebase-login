@@ -1504,7 +1504,7 @@ module.exports = {
                     },
                     //get email template
                     function (contact, account, callback) {
-                        cmsManager.getEmailPage(account._id, 'new-order', function(err, template) {
+                        cmsManager.getEmailPage(accountId, 'new-order', function(err, template) {
                             callback(err, template, contact, account);
                         });
                     },
