@@ -234,24 +234,38 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
                 value.website = value.website || {};
-                data.title = pageHolder[handle].title || value.website.title;
+                if(pageHolder[handle]) {
+                    data.title = pageHolder[handle].title || value.website.title;
+                } else {
+                    data.title = value.website.title;
+                }
+
                 data.author = 'Indigenous';//TODO: wut?
                 data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
                 data.website = value.website || {};
-                data.seo = {
-                    description: pageHolder[handle].seo.description || value.website.seo.description,
-                    keywords: ''
-                };
+                if(pageHolder[handle] && pageHolder[handle].seo) {
+                    data.seo = {
+                        description: pageHolder[handle].seo.description || value.website.seo.description,
+                        keywords: ''
+                    };
+                } else {
+                    data.seo = {
+                        description: value.website.seo.description,
+                        keywords: ''
+                    };
+                }
 
-                if (pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
+
+                if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
                     data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
                 } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
                     data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
                 }
 
+
                 data.og = {
                     type: 'website',
-                    title: pageHolder[handle].title || value.website.title,
+                    title: (pageHolder[handle] || {}).title || value.website.title,
                     image: value.website.settings.favicon
                 };
                 if (data.og.image && data.og.image.indexOf('//') === 0) {
