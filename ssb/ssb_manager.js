@@ -45,7 +45,7 @@ module.exports = {
                 self.log.error('Error getting template:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< getTemplate');
+                self.log.debug('<< getTemplate', template);
                 return fn(null, template);
             }
         });
@@ -885,36 +885,34 @@ module.exports = {
                 var dereferencedSections = [];
 
                 async.eachSeries(sections, function(section, callback){
-                    console.dir(section);
-                    //if(section){
-                        //if we are not working with an object for some reason, fix it.
-                        if(!section || section.hasOwnProperty('_id')) {
-                            section = new $$.m.ssb.Section(section);
-                        }
-                        self.log.debug(section.get('name') + ' :: ' + section.get('title'));
+                    //if we are not working with an object for some reason, fix it.
+                    if(!section || section.hasOwnProperty('_id')) {
+                        section = new $$.m.ssb.Section(section);
+                    }
+                    self.log.debug(section.get('name') + ' :: ' + section.get('title'));
 
-                        if (section.get('accountId') === 0) {
-                            var id = $$.u.idutils.generateUUID();
-                            section.set('_id', id);
-                            section.set('anchor', id);
-                        }
+                    if (section.get('accountId') === 0) {
+                        var id = $$.u.idutils.generateUUID();
+                        section.set('_id', id);
+                        section.set('anchor', id);
+                    }
 
-                        // section is globalHeader reference and user already has globalHeader in their account's section collection
-                        if (section.get('globalHeader') && globalHeader) {
-                            self.log.debug('page has globalHeader ref, account has globalHeader');
-                            section.set('_id', globalHeader.id());
-                            section.set('refId', section.id());
-                        }
+                    // section is globalHeader reference and user already has globalHeader in their account's section collection
+                    if (section.get('globalHeader') && globalHeader) {
+                        self.log.debug('page has globalHeader ref, account has globalHeader');
+                        section.set('_id', globalHeader.id());
+                        section.set('refId', section.id());
+                    }
 
-                        if (section.get('globalFooter') && globalFooter) {
-                            self.log.debug('page has globalFooter ref, account has globalFooter');
-                            section.set('_id', globalFooter.id());
-                            section.set('refId', section.id());
-                        }
+                    if (section.get('globalFooter') && globalFooter) {
+                        self.log.debug('page has globalFooter ref, account has globalFooter');
+                        section.set('_id', globalFooter.id());
+                        section.set('refId', section.id());
+                    }
 
-                        section.set('accountId', accountId);
-                        dereferencedSections.push(section);
-                    //}
+                    section.set('accountId', accountId);
+                    dereferencedSections.push(section);
+
                     callback();
 
 
@@ -1614,9 +1612,7 @@ module.exports = {
             function setSiteTemplateAndTheme(website, cb){
                 var currentSiteTemplate = website.get('siteTemplateId');
                 var createPages = true;
-                // if(currentSiteTemplate) {
-                //     createPages = false;
-                // }
+
                 website.set('siteTemplateId', siteTemplateId);
                 website.set('themeId', siteThemeId);
                 website.set('modified', created);
@@ -1679,40 +1675,39 @@ module.exports = {
                                         self.getTemplate(pageData.pageTemplateId, function(err, template) {
 
                                             if (err) {
-                                                return callback(err);
-                                            }
-
-                                            var templateObj = template.toJSON();
-                                            var page = new $$.m.ssb.Page(templateObj);
-                                            page.set('_id', pageId);
-                                            page.set('created', created);
-                                            page.set('accountId', accountId);
-                                            page.set('websiteId', websiteId);
-                                            page.set('siteTemplateId', siteTemplateId);
-                                            page.set('title', pageData.pageTitle);
-                                            page.set('handle', pageData.pageHandle);
-                                            //reset each section id and accountId
-                                            /*
-                                             * The sections Array is an array of section References that belong to the site template.
-                                             * We need to make a copy of these sections for the page.
-                                             */
-                                            self._copySectionsForAccount(page.get('sections'), accountId, function(err, sectionRefAry){
-                                                if(err) {
-                                                    callback(err);
-                                                } else {
-                                                    page.set('sections', sectionRefAry);
-                                                    if (page.get('handle') === 'index') {
-                                                        indexPageId = pageId;
-                                                    }
-
-                                                    self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
-                                                        self.log.debug('updated page using siteTemplate data');
+                                                callback(err);
+                                            } else {
+                                                var templateObj = template.toJSON();
+                                                var page = new $$.m.ssb.Page(templateObj);
+                                                page.set('_id', pageId);
+                                                page.set('created', created);
+                                                page.set('accountId', accountId);
+                                                page.set('websiteId', websiteId);
+                                                page.set('siteTemplateId', siteTemplateId);
+                                                page.set('title', pageData.pageTitle);
+                                                page.set('handle', pageData.pageHandle);
+                                                //reset each section id and accountId
+                                                /*
+                                                 * The sections Array is an array of section References that belong to the site template.
+                                                 * We need to make a copy of these sections for the page.
+                                                 */
+                                                self._copySectionsForAccount(page.get('sections'), accountId, function(err, sectionRefAry){
+                                                    if(err) {
                                                         callback(err);
-                                                    });
-                                                }
-                                            });
-                                        });
+                                                    } else {
+                                                        page.set('sections', sectionRefAry);
+                                                        if (page.get('handle') === 'index') {
+                                                            indexPageId = pageId;
+                                                        }
 
+                                                        self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
+                                                            self.log.debug('updated page using siteTemplate data');
+                                                            callback(err);
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
                                     //else error pageData doesn't have template reference
                                     } else {
                                         callback("No template referenced in siteTemplate");
@@ -1770,20 +1765,17 @@ module.exports = {
          * 4. Save
          * 5. Return array of new ID references
          */
+
         async.waterfall([
             function(cb) {
                 sectionDao.dereferenceSections(sectionRefAry, cb);
             },
             function(dereffedSections, cb) {
                 _.each(dereffedSections, function(section){
-                    console.dir(section);
-                    if(section)
-                    {
-                        var id = $$.u.idutils.generateUUID();
-                        section.set('accountId', accountId);
-                        section.set('_id', id);
-                        section.set('anchor', id);
-                    }
+                    var id = $$.u.idutils.generateUUID();
+                    section.set('accountId', accountId);
+                    section.set('_id', id);
+                    section.set('anchor', id);
                 });
                 sectionDao.saveSectionObjects(dereffedSections, cb);
             },
