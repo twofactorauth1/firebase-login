@@ -900,10 +900,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 console.log('page deleted');
                 toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
                   $timeout(function () {
-                    if(pages["index"])
-                        vm.uiState.navigation.loadPage(pages["index"]._id);
-                      else
-                        $location.path('/website/site-builder/pages/');
+                    $location.path('/website/site-builder/pages/');
                 }, 0);
             });
           })
