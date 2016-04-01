@@ -9750,11 +9750,11 @@ body[ng-controller] .fr-overlay {
   background: #000000;
 }
 .fr-view h1 *,
-h2 *,
-h3 *,
-h4 *,
-h5 *,
-h6 * {
+.fr-view h2 *,
+.fr-view h3 *,
+.fr-view h4 *,
+.fr-view h5 *,
+.fr-view h6 * {
   font-size: inherit !important;
 }
 .ssb-edit-wrap.ssb-on:before {
