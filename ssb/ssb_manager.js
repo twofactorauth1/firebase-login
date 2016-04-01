@@ -1773,10 +1773,14 @@ module.exports = {
             },
             function(dereffedSections, cb) {
                 _.each(dereffedSections, function(section){
-                    var id = $$.u.idutils.generateUUID();
-                    section.set('accountId', accountId);
-                    section.set('_id', id);
-                    section.set('anchor', id);
+                    console.dir(section);
+                    if(section)
+                    {
+                        var id = $$.u.idutils.generateUUID();
+                        section.set('accountId', accountId);
+                        section.set('_id', id);
+                        section.set('anchor', id);
+                    }
                 });
                 sectionDao.saveSectionObjects(dereffedSections, cb);
             },
