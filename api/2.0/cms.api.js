@@ -72,7 +72,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
 
         app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersions.bind(this));//get page versions
-        app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//revert page to version
+        app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));//revert page to version
 
 
         // COMPONENTS
@@ -521,9 +521,18 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getPageVersions');
             return self.sendResultOrError(resp, err, versions, "Error getting versions of a page");
         });
+    },
+
+    revertPage: function (req, resp) {
+        var self = this;
+        self.log.debug('>> revertPage');
+        var pageId = req.params.id;
+        var versionId = parseInt(req.params.versionId);
+        cmsManager.revertPage(pageId, versionId, function (err, revertedPage) {
+            self.log.debug('<< getPageVersions');
+            return self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
+        });
     }
-
-
 
 });
 
