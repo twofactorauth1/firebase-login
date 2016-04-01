@@ -15,13 +15,11 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
 
   function duplicatePage(){
     vm.saveLoading = true;
-    saveWebsite().then(function(){
-      SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
-        vm.parentVm.closeModal();
-        vm.saveLoading = false;
-        vm.parentVm.uiState.navigation.loadPage(page.data._id);
-      });
-    })
+	  SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
+	    vm.parentVm.closeModal();
+	    vm.saveLoading = false;
+	    vm.parentVm.uiState.navigation.loadPage(page.data._id);
+	  });
 
   }
   function hideFromMenu(){
@@ -109,7 +107,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
 
           vm.saveLoading = true;
           angular.element('.modal.in').show();
-          saveWebsite().then(function(){
             SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
                 console.log('page deleted');
                 SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
@@ -127,7 +124,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                   });
                 })
             })
-          })
       } else {
         vm.saveLoading = false;
         angular.element('.modal.in').show();
@@ -138,7 +134,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
   function savePage(page, hide){
     vm.saveLoading = true;
       return(
-        saveWebsite().then(function(){
           SimpleSiteBuilderService.savePage(page, true).then(function(data) {
             SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function(pages) {
@@ -159,13 +154,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                   }
               })
             })
-          })
-        }).catch(function(err) {
-            vm.saveLoading = false;
-            if(err.message)
-               toaster.pop('error', error.message);
-            else
-              toaster.pop('error', "Setting not saved", "Error while saving page settings");
           })
       )
   }
