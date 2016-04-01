@@ -18,12 +18,6 @@ var awsConfig = require('../configs/aws.config');
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
 
-var deferred = require("jquery-deferred");
-if (typeof $ == 'undefined') {
-    $ = {};
-}
-_.extend($, deferred);
-
 module.exports = {
 
     /*
