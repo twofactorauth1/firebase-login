@@ -239,9 +239,16 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
                 data.website = value.website || {};
                 data.seo = {
-                    description: '',
+                    description: pageHolder[handle].seo.description || value.website.seo.description,
                     keywords: ''
                 };
+
+                if (pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
+                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
+                } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
+                    data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
+                }
+
                 data.og = {
                     type: 'website',
                     title: pageHolder[handle].title || value.website.title,
