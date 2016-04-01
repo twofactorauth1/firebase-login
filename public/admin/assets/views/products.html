@@ -2,9 +2,10 @@
     <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
     <div ng-if="noPaymentAccount" class="no-stripe" ct-fullheight="window" data-ct-fullheight-exclusion="header, #page-title, footer">
         <div class="text-center no-stripe-wrap">
-            <h1><span class="fa fa-cc-stripe fa fa-2x"></span></h1>
-            <h4>Please integrate your stripe account before managing your products.</h4>
+            <h1><span class="fa fa-cc-stripe fa fa-2x"></span><span class="fa fa-cc-paypal fa fa-2x"></span></h1>
+            <h4>Please integrate your stripe / paypal account before managing your products.</h4>
             <button class="btn btn-primary btn-o btn-wide btn-lg margin-top-10" ng-click="socailRedirect('Stripe')">Connect Stripe</button>
+            <button class="btn btn-primary btn-o btn-wide btn-lg margin-top-10" ng-click="socailRedirect('Paypal')">Connect Paypal</button>
         </div>
     </div>
     <section id="page-title" class="padding-top-15 padding-bottom-15">
