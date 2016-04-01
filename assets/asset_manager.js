@@ -11,12 +11,6 @@ var log = $$.g.getLogger("asset_manager");
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
 
-var deferred = require("jquery-deferred");
-if (typeof $ == 'undefined') {
-    $ = {};
-}
-_.extend($, deferred);
-
 module.exports = {
 
     /**
