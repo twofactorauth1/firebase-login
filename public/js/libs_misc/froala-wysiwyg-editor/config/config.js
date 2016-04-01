@@ -21,7 +21,8 @@ var toolbarbuttons = [
         'insertFile',
         'insertTable',
         'undo',
-        'redo',
+        'redo'//,
+        //'insertIcon'
         // 'clearFormatting',
         // 'selectAll'
     ];
