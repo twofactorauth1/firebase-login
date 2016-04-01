@@ -533,8 +533,25 @@ div[data-type='campaign'] .inner-page .overlay {
   border: none !important;
   width: 100%;
 }
+.contact-us-v1 .widget-weather .rg-right span {
+  border-left: 1px solid #efa022;
+  border-right: 1px solid #efa022;
+}
+.contact-us-v1 .widget-weather .rg-bottom span {
+  border-top: 1px solid #efa022;
+  border-bottom: 1px solid #efa022;
+}
 .contact-us-v1 .leaflet-popup-pane {
   color: #000;
+}
+.contact-us-v1 .widget-weather.no-info .settings {
+  background: transparent !important;
+}
+.contact-us-v1 .widget-weather.no-info .rg-right span {
+  display: none;
+}
+.contact-us-v1 .widget-weather.no-info .rg-bottom span {
+  display: none;
 }
 .component-wrap {
   display: block;
@@ -13343,10 +13360,10 @@ body[ng-controller] .fr-overlay {
   background: #000000;
 }
 .fr-view h1 *,
-h2 *,
-h3 *,
-h4 *,
-h5 *,
-h6 * {
+.fr-view h2 *,
+.fr-view h3 *,
+.fr-view h4 *,
+.fr-view h5 *,
+.fr-view h6 * {
   font-size: inherit !important;
 }
