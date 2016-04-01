@@ -10671,11 +10671,11 @@ indi-login-modal .modal-title {
   cursor: pointer;
   height: 50px;
 }
-.ssb-site-builder .form-control.ui-select-toggle {
+.ssb-ui-select-dark .form-control.ui-select-toggle {
   background: #131e26;
   color: white;
   border-color: black;
 }
-.ssb-site-builder .form-control.ui-select-toggle .caret {
+.ssb-ui-select-dark .form-control.ui-select-toggle .caret {
   border-top-color: white;
 }
