@@ -32,7 +32,7 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
                 $(element).on('mouseleave', '[data-edit]', handleComponentAreaMouseLeave);
 
-                $(element).on('click', '[data-edit]', function(e) {
+                $(element).on('click', '[data-edit]:not(".ssb-active-edit-control")', function(e) {
                     e.stopPropagation();
                     handleComponentAreaClick(e);
                 });
@@ -98,9 +98,15 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
                     if (!hasEditableCover) {
                         if (!isList) {
-                            el.append('<span class="editable-cover"></span><span class="editable-title">' + editableTitleText + '</span>')
+                            el.append(
+                                '<span id="editable_cover_' + componentScope.vm.component._id + '" class="editable-cover"></span>' +
+                                '<span id="editable_title_' + componentScope.vm.component._id + '"class="editable-title">' + editableTitleText + '</span>'
+                            )
                         } else {
-                            el.append('<li class="editable-cover"></li><li class="editable-title">' + editableTitleText + '</li>')
+                            el.append(
+                                '<li id="editable_cover_' + componentScope.vm.component._id + '"class="editable-cover"></li>' +
+                                '<li id="editable_title_' + componentScope.vm.component._id + '"class="editable-title">' + editableTitleText + '</li>'
+                            )
                         }
                     }
 
@@ -270,7 +276,6 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
                 } else if (isElement) {
 
-                    //TODO: handle text elements, needs editable-cover?
                     console.log('isElement');
 
                 } else {
@@ -287,6 +292,12 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
                 e.preventDefault();
 
                 var el = angular.element(e.currentTarget);
+
+                if (el.hasClass('ssb-active-edit-control')) {
+                    e.stopPropagation();
+                    return
+                }
+
                 var hasComponentChildMouseOver = el.find('[data-edit]').length > 0;
 
                 //let section handle clicks if the component has [data-edit] areas to surface menu

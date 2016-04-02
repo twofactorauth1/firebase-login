@@ -15,7 +15,7 @@
     .navigation-v3 .navbar ul.navbar-nav li {
         border-bottom: 4px solid transparent;
     }
-    
+
 </style>
 <div ng-class="component.type+'-v'+component.version">
     <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox, 'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" role="navigation">
@@ -46,7 +46,7 @@
         <div class="col-sm-9">
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                <ul class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li class="top-menu-link" data-ng-repeat="link in mainMenu.links track by $index">
                         <a data-ng-show="link.linkTo.type == 'section'" data-ng-if="link.linkTo.page === currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="active" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a data-ng-show="link.linkTo.type == 'section'" data-ng-if="link.linkTo.page !== currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>

@@ -54,10 +54,6 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                 var editEl = vm.uiState.hoveredComponentEl;
                 var editControl = vm.uiState.hoveredComponentEditControl;
 
-                // vm.state.page.sections[sectionIndex].components[componentIndex];
-                // var editEl =
-                // var editControl =
-
                 if (editEl.length) {
                     editElTop = editEl[0].getBoundingClientRect().top;
                     editElLeft = editEl[0].getBoundingClientRect().left;
@@ -65,52 +61,19 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                     left = editEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
                 }
 
-                if (left < 0) {
+                if (left < 0 || editElLeft === sidebarWidth) {
                     left = 0;
                 }
 
-                // if (top < (topbarHeight + 3)) {
-                //     top = (topbarHeight + 3);
-                // }
-
-                if (editElLeft === sidebarWidth) {
-                    top = editElTop - topbarHeight + scrollTop;
-                    left = 0;
+                if (editElTop - topbarHeight < 30) {
+                    top = editElTop - topbarHeight;
+                    left = left + 36;
                 }
 
                 if (editControl && editControl.length) {
-                    //$timeout(function() {
-                        editControl.css({ top: top, left: left });
-                        editControl.addClass('ssb-on');
-                    //});
+                    editControl.css({ top: top, left: left });
+                    editControl.addClass('ssb-on');
                 }
-
-
-            // var section = vm.element.parent('section');
-            // var sectionTop = parseInt(section.css('marginTop')) + parseInt(section.css('paddingTop'));
-            // var sectionLeft = parseInt(section.css('marginLeft')) + parseInt(section.css('paddingLeft'));
-
-            // var top = vm.uiState.hoveredComponentPosition.top;
-            // var left = vm.uiState.hoveredComponentPosition.left;
-
-            // if (parseInt(top) === 0 || parseInt(top) - sectionTop === 0) {
-            //     top = 35;
-            // }
-
-            // if (parseInt(left) === 0 || parseInt(left) - sectionLeft === 0) {
-            //     left = 5;
-            // }
-
-            // vm.element.css({
-            //     'top': top,
-            //     'left': left
-            // });
-
-            // $timeout(function() {
-
-            //     vm.element.addClass('on');
-
-            // })
 
         } else {
 
@@ -123,21 +86,6 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     }
 
     function setActive(sectionIndex, componentIndex, compiled) {
-
-        //if panel already open, a click on edit control should toggle it off
-        if (vm.uiState.showSectionPanel === true) {
-            var isActiveSection = vm.uiState.activeSectionIndex === sectionIndex;
-            var isActiveComponent = vm.uiState.activeComponentIndex === componentIndex;
-
-            if ((isActiveSection && componentIndex === undefined && vm.uiState.activeComponentIndex === undefined) ||
-                (isActiveSection && isActiveComponent)) {
-
-                vm.uiState.showSectionPanel = false;
-                return
-
-            }
-
-        }
 
         vm.uiState.showSectionPanel = false;
         vm.uiState.navigation.sectionPanel.reset();
