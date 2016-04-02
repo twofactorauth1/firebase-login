@@ -9863,6 +9863,9 @@ body[ng-controller] .fr-overlay {
 [class*="ssb-theme-"] .ssb-element.ssb-edit-wrap:before > .editable-title {
   background: #eda200;
 }
+.ssb-edit-mode [data-edit] {
+  position: relative;
+}
 .ssb-edit-mode .ssb-page-section-layout-header .navigation-logo img {
   max-width: calc(100% - 4px);
 }
