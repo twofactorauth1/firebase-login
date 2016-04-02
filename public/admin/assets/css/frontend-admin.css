@@ -4677,6 +4677,14 @@
   margin-bottom: 20px;
   padding-top: 20px;
 }
+#componentloader .social-link-v1 ul li.editable-title {
+  width: auto !important;
+  height: auto !important;
+}
+#componentloader .social-link-v1 ul li.editable-cover {
+  width: 100% !important;
+  height: 100% !important;
+}
 #componentloader .social-link-v1 ul li {
   width: 48px;
   height: 48px;

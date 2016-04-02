@@ -4685,6 +4685,14 @@ div[data-type="social-link"] .inner-page {
   margin-bottom: 20px;
   padding-top: 20px;
 }
+.social-link-v1 ul li.editable-title {
+  width: auto !important;
+  height: auto !important;
+}
+.social-link-v1 ul li.editable-cover {
+  width: 100% !important;
+  height: 100% !important;
+}
 .social-link-v1 ul li {
   width: 48px;
   height: 48px;

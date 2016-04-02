@@ -1815,11 +1815,11 @@ module.exports = {
 
                 if (isString && isGoodKey) {
 
-                    // $ = cheerio.load(value);
-                    $ = cheerio.load('<div id="temp_wrap"></div>');
-                    $('#temp_wrap').append(value);
-                    var $classSelection = $(classesToRemove.split(' ').map(function(c) { return '.' + c }).join(', '));
-                    var $attrSelection = $(attributesToRemove.split(' ').map(function(a) { return '[' + a + ']'; }).join(', '));
+                    // $$$ = cheerio.load(value);
+                    $$$ = cheerio.load('<div id="temp_wrap"></div>');
+                    $$$('#temp_wrap').append(value);
+                    var $classSelection = $$$(classesToRemove.split(' ').map(function(c) { return '.' + c }).join(', '));
+                    var $attrSelection = $$$(attributesToRemove.split(' ').map(function(a) { return '[' + a + ']'; }).join(', '));
                     var hasClass = $classSelection.length > 0;
                     var hasAttr = $attrSelection.length > 0;
 
@@ -1830,14 +1830,14 @@ module.exports = {
 
                         var htmlString = '';
 
-                        // console.log('before ::', $('#temp_wrap').html());
+                        // console.log('before ::', $$$('#temp_wrap').html());
 
-                        $('#temp_wrap').find('.ssb-theme-btn')
+                        $$$('#temp_wrap').find('.ssb-theme-btn')
                             .removeClass(classesToRemove)
                             .removeAttr(attributesToRemove);
-                        // console.log('after ::', $('#temp_wrap').html());
+                        // console.log('after ::', $$$('#temp_wrap').html());
 
-                        htmlString = $('#temp_wrap').html();
+                        htmlString = $$$('#temp_wrap').html();
 
                         if (htmlString.length) {
                             obj[key] = htmlString;
