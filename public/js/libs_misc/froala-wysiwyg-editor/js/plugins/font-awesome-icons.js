@@ -54,8 +54,8 @@
             return b.opts.fontAwesomeIconsUseImage && (a), a += "</div>"
         }
 
-        function g(c, d) {
-            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon' + (d ? " fr-fontAwesomeIcon-img fr-emoticon-img" : "") + '"' + (d ? ' style="background: url(' + d + ')"' : "") + ">" + (d ? "&nbsp;" : c) + "</span>" + a.FroalaEditor.MARKERS, !0)
+        function g(d) {
+            b.html.insert('<span class="fr-fontAwesomeIcon fa fa-' + d + '"' + ">&nbsp;</span>" + a.FroalaEditor.MARKERS, !0)
         }
 
         function h() {
@@ -103,7 +103,7 @@
             back: h
         }
     }, a.FroalaEditor.DefineIcon("fontAwesomeIcons", {
-        NAME: "flag-o"
+        NAME: "flag"
     }), a.FroalaEditor.RegisterCommand("fontAwesomeIcons", {
         title: "Font Awesome Icons",
         undo: !1,
@@ -116,7 +116,7 @@
         plugin: "fontAwesomeIcons"
     }), a.FroalaEditor.RegisterCommand("insertFontAwesomeIcon", {
         callback: function(a, b) {
-            this.fontAwesomeIcons.insert("&#x" + b + ";", this.opts.fontAwesomeIconsUseImage ? "https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/" + b + ".svg" : null), this.fontAwesomeIcons.hideFontAwesomeIconsPopup()
+            this.fontAwesomeIcons.insert(b), this.fontAwesomeIcons.hideFontAwesomeIconsPopup()
         }
     }), a.FroalaEditor.DefineIcon("fontAwesomeIconsBack", {
         NAME: "arrow-left"

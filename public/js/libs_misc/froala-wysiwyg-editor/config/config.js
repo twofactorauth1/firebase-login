@@ -22,7 +22,6 @@ var toolbarbuttons = [
         'insertTable',
         'undo',
         'redo',
-        'insertIcon',
         'fontAwesomeIcons'
         // 'clearFormatting',
         // 'selectAll'
