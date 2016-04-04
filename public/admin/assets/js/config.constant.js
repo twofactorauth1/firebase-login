@@ -828,6 +828,7 @@ app.constant('JS_REQUIRES', {
     name: 'custom-froala-wysiwyg-editor',
     files: [
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/media_manager.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font-awesome.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/button.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font-awesome-icons.js",
       "../js/libs_misc/froala-wysiwyg-editor/css/plugins/font-awesome.css",
