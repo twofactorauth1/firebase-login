@@ -10820,6 +10820,15 @@ ssb-topbar.dragging {
 .ssb-sidebar-add-section .ssb-sidebar-add-section-img {
   background: lightGray;
 }
+.ssb-sidebar-add-section.ssb-sidebar-layout-version .ssb-sidebar-add-section-img a > span {
+  background-size: 120% auto;
+  height: 115px;
+  background-position: center;
+  border-radius: 5px;
+  border: 1px solid #e7e7e7;
+  display: block;
+  background-repeat: no-repeat;
+}
 .ssb-sidebar-add-section .fa-info {
   color: #48b1cc;
   position: absolute;
