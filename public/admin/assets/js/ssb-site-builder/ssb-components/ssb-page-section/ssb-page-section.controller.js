@@ -223,7 +223,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
           classString += ' col-md-3';
         }
 
-        if (index) {
+        if (index !== undefined) {
           classString += ' ssb-component-index-' + index + ' ';
         }
 
@@ -242,9 +242,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
 
 
-        if (vm.uiState && index === vm.uiState.activeComponentIndex) {
-          classString += ' ssb-active-component ';
-        }
+        // if (vm.uiState && index === vm.uiState.activeComponentIndex) {
+        //   classString += ' ssb-active-component ';
+        // }
 
         return classString;
 

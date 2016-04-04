@@ -1,7 +1,12 @@
 <div class="form-builder-{{vm.component._id}} form-builder-component">
-        <div class="col-xs-12 component-body" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}" style="{{vm.formStyle(vm.component.formSettings)}}">
-            <div>
-                <div class="inner-page row">
+
+        <div
+            class="col-xs-12 component-body"
+            ng-class="{'default-font-size': vm.component.formSettings.formTextSize}"
+            style="{{vm.formStyle(vm.component.formSettings)}}">
+
+            <div class="inner-page">
+                <div data-edit class="row">
                     <div class="form-title ssb-theme-heading-text">
                         <div elem ng-model="vm.component.maintitle"></div>
                     </div>
@@ -106,6 +111,7 @@
                     </form>
                 </div>
             </div>
+
         </div>
         <style>
             .form-builder-{{vm.component._id}} .form-builder-title {

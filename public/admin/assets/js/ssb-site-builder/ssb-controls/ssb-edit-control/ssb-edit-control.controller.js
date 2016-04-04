@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderEditControlController', ssbSiteBuilderEditControlController);
 
-ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
+ssbSiteBuilderEditControlController.$inject = ['$scope', '$rootScope', '$interval', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
+function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
 
     var vm = this;
 
@@ -16,11 +16,20 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     vm.scrollToActiveSection = scrollToActiveSection;
 
     /**
-     * Watch for hovered components
+     * Watch for hovered components and component areas
      */
-    if (vm.componentIndex !== undefined) {
-        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
-    }
+    // if (vm.componentIndex !== undefined) {
+        // $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
+    // }
+
+    // $interval(setPosition, 1000, false);
+
+    /**
+     * Events for compiled editor elememts
+     */
+    $rootScope.$on('$ssbMenuOpen', function(event, componentId, editorId, elementId) {
+        setPosition();
+    });
 
 
     /*
@@ -32,31 +41,39 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         if (vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex) {
 
-            var section = vm.element.parent('section');
-            var sectionTop = parseInt(section.css('marginTop')) + parseInt(section.css('paddingTop'));
-            var sectionLeft = parseInt(section.css('marginLeft')) + parseInt(section.css('paddingLeft'));
+                var top = 0;
+                var left = 0;
+                var editElTop = 0;
+                var editElLeft = 0;
+                var topbarHeight = 125;
+                var sidebarWidth = 140;
+                var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
+                var topOffset = 35;
+                var leftOffset = 35;
 
-            var top = vm.uiState.hoveredComponentPosition.top;
-            var left = vm.uiState.hoveredComponentPosition.left;
+                var editEl = vm.uiState.hoveredComponentEl;
+                var editControl = vm.uiState.hoveredComponentEditControl;
 
-            if (parseInt(top) === 0 || parseInt(top) - sectionTop === 0) {
-                top = 35;
-            }
+                if (editEl.length) {
+                    editElTop = editEl[0].getBoundingClientRect().top;
+                    editElLeft = editEl[0].getBoundingClientRect().left;
+                    top = editEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
+                    left = editEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
+                }
 
-            if (parseInt(left) === 0 || parseInt(left) - sectionLeft === 0) {
-                left = 5;
-            }
+                if (left < 0 || editElLeft === sidebarWidth) {
+                    left = 0;
+                }
 
-            vm.element.css({
-                'top': top,
-                'left': left
-            });
+                if (editElTop - topbarHeight < 30) {
+                    top = editElTop - topbarHeight;
+                    left = left + 36;
+                }
 
-            $timeout(function() {
-
-                vm.element.addClass('on');
-
-            })
+                if (editControl && editControl.length) {
+                    editControl.css({ top: top, left: left });
+                    editControl.addClass('ssb-on');
+                }
 
         } else {
 
@@ -69,21 +86,6 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     }
 
     function setActive(sectionIndex, componentIndex, compiled) {
-
-        //if panel already open, a click on edit control should toggle it off
-        if (vm.uiState.showSectionPanel === true) {
-            var isActiveSection = vm.uiState.activeSectionIndex === sectionIndex;
-            var isActiveComponent = vm.uiState.activeComponentIndex === componentIndex;
-
-            if ((isActiveSection && componentIndex === undefined && vm.uiState.activeComponentIndex === undefined) ||
-                (isActiveSection && isActiveComponent)) {
-
-                vm.uiState.showSectionPanel = false;
-                return
-
-            }
-
-        }
 
         vm.uiState.showSectionPanel = false;
         vm.uiState.navigation.sectionPanel.reset();
@@ -103,7 +105,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     function setActiveSection(index) {
 
         var section = vm.state.page.sections[index];
-        var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-');
+        var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-') + ' Section';
 
         $timeout(function() {
             SimpleSiteBuilderService.setActiveSection(index);
@@ -143,6 +145,11 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         });
 
+    }
+
+    function setActiveComponentArea(sectionIndex, componentIndex, area) {
+        // TODO: implement
+        // TODO: setActiveComponentArea
     }
 
     function setActiveElement() {

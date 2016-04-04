@@ -6,13 +6,14 @@
             ng-model="vm.uiState.selectedPage"
             ng-change="vm.loadPage($select.selected);"
             theme="bootstrap"
+            class="ssb-ui-select-dark"
             search-enabled="false">
 
             <ui-select-match>
                 <small ng-bind-html="$select.selected.title"></small>
             </ui-select-match>
 
-            <ui-select-choices class="margin-top-20" repeat="page in vm.state.pages">
+            <ui-select-choices class="margin-top-20" repeat="page in vm.state.pages | sortListPages:vm.state.page._id">
                 <small ng-bind-html="page.title"></small>
             </ui-select-choices>
 

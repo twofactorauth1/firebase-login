@@ -57,6 +57,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             group: 'section',
             scroll: true,
             animation: 150,
+            disabled: true,
             ghostClass: "sortable-ghost",  // Class name for the drop placeholder
             //chosenClass: "sortable-chosen",  // Class name for the chosen item
             onAdd: function (evt) {
@@ -69,7 +70,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             },
             onEnd: function (evt) {
                console.log("Dragging End");
-            },
+            }
         },
 
         sortableListAddContentConfig: {
@@ -96,7 +97,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             onEnd: function (evt) {
                 angular.element(".sortable-page-content").removeClass("dragging");
                 angular.element(".sortable-page-content").css('height','auto');
-                $timeout(function() { vm.uiState.openSidebarPanel = ''; });
+                $timeout(function() {
+                    vm.uiState.sortableListPageContentConfig.disabled = true;
+                    vm.uiState.openSidebarPanel = '';
+                });
             },
             onSort: function (evt) {
                 console.log("On Sort");
@@ -210,6 +214,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }, true);
 
+    $scope.$watch('vm.state.website.linkLists', function(linkLists) {
+        if(linkLists){
+            sortPageList();
+        }
+    }, true);
+
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       // To track duplicate pages
       vm.state.originalPages = angular.copy(pages);
@@ -219,6 +229,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       if(pages){
         vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" || page.handle === "signup" });
       }
+      if(vm.state.website)
+        sortPageList();
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
@@ -666,6 +678,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function checkNavigation(e) {
         // debugger;
+    }
+
+    function sortPageList(){
+        _.each(vm.state.website.linkLists, function (value, index) {
+            if (value.handle === "head-menu") {
+                var handlesArr = _(value.links).chain().pluck("linkTo")
+                            .where({type: 'page'})
+                            .pluck("data")
+                            .value()
+                var _sortOrder = _.invert(_.object(_.pairs(handlesArr)));
+                vm.state.pages = _.sortBy(vm.state.pages, function(x) {
+                    return _sortOrder[x.handle]
+                });
+            }
+        });
     }
 
 

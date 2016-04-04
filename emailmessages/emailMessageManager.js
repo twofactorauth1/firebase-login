@@ -24,6 +24,7 @@ module.exports = {
 
     log:log,
 
+    //TODO: add reply-to
     sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
                                       vars, emailId, contactId, fn) {
         var self = this;
@@ -275,7 +276,7 @@ module.exports = {
                     }
                 );
                 //TODO: Handle SENDDATE and ORDERID
-                juice.juiceResources(message.html, {}, function(err, html) {
+                juice.juiceResources(htmlContent, {}, function(err, html) {
                     if (err) {
                         self.log.error('A juice error occurred. Failed to set styles inline.');
                         self.log.error(err);
@@ -463,7 +464,7 @@ module.exports = {
                 fn('skipping email for user on unsubscribed list');
             } else {
                 self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
-                    juice.juiceResources(message.html, {}, function(err, html) {
+                    juice.juiceResources(mergedHtml, {}, function(err, html) {
                         if (err) {
                             self.log.error('A juice error occurred. Failed to set styles inline.');
                             self.log.error(err);

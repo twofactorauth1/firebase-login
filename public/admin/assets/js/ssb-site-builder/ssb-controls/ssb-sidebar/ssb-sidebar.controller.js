@@ -56,6 +56,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.deletePage = deletePage;
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
+    vm.showPageOnMenu = showPageOnMenu;
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
     vm.validateDuplicatePage = validateDuplicatePage;
@@ -820,12 +821,57 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       }, function (isConfirm) {
         if (isConfirm) {
             vm.state.page.mainmenu = false;
-        }
-        else{
-          vm.state.page.mainmenu = true;
+            updateLinkList(false);
         }
       });
     }
+
+
+    function showPageOnMenu(){
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to show this page on main menu",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, show page!",
+        cancelButtonText: "No, do not show page!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+            vm.state.page.mainmenu = true;
+            updateLinkList(true);
+        }
+      });
+    }
+
+
+    function updateLinkList(state){
+        _.each(vm.state.website.linkLists, function (value, index) {
+            if (value.handle === "head-menu") {
+                if(!state){
+                    var _list = _.reject(value.links, function(link){
+                        return link.linkTo.data === vm.state.page.handle &&
+                        (link.linkTo.type === "page" || link.linkTo.type === "home")
+                    });
+                    if(_list){
+                        value.links = _list;
+                    }
+                }
+                else{
+                    value.links.push({
+                        label: vm.state.page.menuTitle || vm.state.page.title,
+                        type: "link",
+                        linkTo: {
+                            data: vm.state.page.handle,
+                            type: 'page'
+                        }
+                    });
+                }
+            }
+        });
+    };
 
     function deletePage() {
       var _deleteText = "Do you want to delete this page";
@@ -854,10 +900,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 console.log('page deleted');
                 toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
                   $timeout(function () {
-                    if(pages["index"])
-                        vm.uiState.navigation.loadPage(pages["index"]._id);
+                    var pages = _.reject(vm.state.pages, function(page){ return page.handle === vm.state.page.handle});
+                    if(pages.length)
+                        vm.uiState.navigation.loadPage(pages[0]._id);
                       else
-                        $location.path('/website/site-builder/pages/');
+                        SimpleSiteBuilderService.getPages().then(function(pages) {
+                            $location.path('/website/site-builder/pages/');
+                        })
                 }, 0);
             });
           })

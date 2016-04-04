@@ -37,113 +37,6 @@ app.constant('formValidations', {
 
 */
 
-app.constant('ONBOARDINGCONSTANT', {
-
-  tasks: [{
-    pane: {
-      heading: "Sign up for Indigenous",
-      text: "You have taken the first step in growing your business.",
-      taskKey: 'sign_up',
-      state: 'app.support.gettingstarted',
-      minRequire: false
-    },
-    steps: []
-  }, {
-    pane: {
-      heading: "Basic account information",
-      text: "Enter basic information about your business like your address and logo.",
-      taskKey: 'profile_business',
-      state: 'app.account.profilebusiness',
-      minRequire: true
-    },
-    steps: [{
-      type: 'title',
-      heading: "Basic account information",
-      text: "Enter basic information about your business like your address and logo."
-    }]
-  }, {
-    pane: {
-      heading: "Website",
-      text: "Choose a template and begin customizing your site.",
-      taskKey: 'single_page',
-      state: 'app.website.pages',
-      minRequire: true
-    },
-    steps: [{
-      type: "title",
-      heading: "Choose a template and customize your site",
-      text: "Click on New Page in the upper right corner and select a template. Name the page and check the box by Add to Main Menu.",
-    }]
-  }, {
-    pane: {
-      heading: "Social accounts",
-      text: "Connect your social accounts so you can import contacts and create targeted marketing campaigns.",
-      taskKey: 'integrations',
-      state: 'app.account.integrations',
-      minRequire: true
-    },
-    steps: [{
-      type: 'title',
-      heading: "Social accounts",
-      text: "Connect your social accounts so you can import contacts and create targeted marketing campaigns."
-    }]
-  }, {
-    pane: {
-      heading: "Contacts",
-      text: "Import contacts from various accounts or create them individually.",
-      taskKey: 'customers',
-      state: 'app.customers',
-      minRequire: true
-    },
-    steps: [{
-      type: 'title',
-      heading: "Contacts",
-      text: "Import contacts from various accounts or create them individually."
-    }]
-  }, {
-    pane: {
-      heading: "Social Feed",
-      text: "Add social feeds of your friends.",
-      taskKey: 'social_feed',
-      state: 'app.marketing.socialfeed',
-      minRequire: true
-    },
-    steps: [{
-      type: 'title',
-      heading: "Social Feed",
-      text: "Add social feeds of your friends."
-    }]
-
-  }, {
-    pane: {
-      heading: "Blog",
-      text: "Keep everyone up to date and informed with a regular blog.",
-      taskKey: 'single_post',
-      state: 'app.website.posts',
-      minRequire: true
-    },
-    steps: [{
-      type: 'title',
-      heading: "Blog",
-      text: "Keep everyone up to date and informed with a regular blog."
-    }]
-  }, {
-    pane: {
-      heading: "Commerce",
-      text: "Import or create new products to start selling and creating revenue.",
-      taskKey: 'commerce',
-      state: 'app.commerce.products',
-      minRequire: true
-    },
-    steps: [{
-      type: 'title',
-      heading: "Commerce",
-      text: "Import or create new products to start selling and creating revenue.",
-    }]
-  }]
-
-});
-
 app.constant('orderConstant', {
   order_status: {
     PENDING_PAYMENT: "pending_payment",
@@ -651,7 +544,6 @@ app.constant('JS_REQUIRES', {
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
     'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
-    'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
     'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
     'editorCtrl': 'assets/js/controllers/editorCtrl.js',
@@ -738,6 +630,7 @@ app.constant('JS_REQUIRES', {
     'propsFilter': 'assets/js/filters/propsFilter.js',
     'cleanType': 'assets/js/filters/cleanType.js',
     'filterPages': 'assets/js/filters/filterPages.js',
+    'sortListPages': 'assets/js/filters/sortListPages.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js'
@@ -823,9 +716,6 @@ app.constant('JS_REQUIRES', {
     name: 'ng-nestable',
     files: ['../js/libs/ng-nestable/src/angular-nestable.js']
   }, {
-    name: 'vAccordion',
-    files: ['../js/libs/v-accordion/dist/v-accordion.min.js', '../js/libs/v-accordion/dist/v-accordion.min.css']
-  }, {
     name: 'xeditable',
     files: ['../js/libs/angular-xeditable/dist/js/xeditable.min.js', '../js/libs/angular-xeditable/dist/css/xeditable.css']
   }, {
@@ -910,7 +800,7 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
-      "../js/libs/froala-wysiwyg-editor/js/plugins/image.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/image-manager.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/inline_style.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/line_breaker.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/link.min.js",

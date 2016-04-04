@@ -73,7 +73,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //     }
     // });
     var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
-        console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
+        // console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
     });
 
 
@@ -176,6 +176,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var version = parseInt(vm.elementData.version);
         var versionIsNumber = typeof parseInt(vm.elementData.version) === "number";
         var versionIsNaN = isNaN(parseInt(vm.elementData.version));
+
+        classObj['ssb-element'] = true;
 
         classObj[vm.elementData.type] = true;
 
@@ -307,6 +309,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         if (!SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId)) {
             $scope.component = { title: 'Button_'+elementId, type: 'Button' }; //TODO: make generic/configurable
             var template = '<ssb-edit-control ' +
+                                'ng-hide="pvm.uiState.showSectionPanel"' +
                                 'data-compiled-control-id="control_' + elementId + '" ' +
                                 'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-btn on" ' +
                                 'component="component" ' +

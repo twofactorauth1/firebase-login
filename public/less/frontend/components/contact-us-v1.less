@@ -82,7 +82,7 @@
     }
     .current-day {
         font-weight: bold;
-    }    
+    }
     .widget-weather {
         .settings {
           position: relative !important;
@@ -91,8 +91,28 @@
           border: none !important;
           width: 100%;
         }
+        .rg-right span{
+            border-left: 1px solid #efa022;
+            border-right: 1px solid #efa022;
+        }
+        .rg-bottom span{
+            border-top: 1px solid #efa022;
+            border-bottom: 1px solid #efa022;
+        }
     }
     .leaflet-popup-pane {
         color: #000;
+    }
+
+    .widget-weather.no-info {
+        .settings {
+            background: transparent !important;
+        }
+        .rg-right span{
+            display:none;
+        }
+        .rg-bottom span{
+            display:none;
+        }
     }
 }

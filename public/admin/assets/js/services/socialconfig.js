@@ -149,17 +149,15 @@
             });
         };
 
-        this.addTwitterPostRetweet = function(socialAccountId, postId, username, comment, fn) {
+        this.addTwitterPostRetweet = function(socialAccountId, postId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'retweet'].join('/');
-            $http.post(apiUrl, {
-                post: '@' + username + ' ' + comment
-            }).success(function(data, status, headers, config) {
+            $http.post(apiUrl).success(function(data, status, headers, config) {
                 fn(data);
             });
         };
 
-        this.addTwitterDirectMessage = function(socialAccountId, username, msg, fn) {
-            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'name', username, 'dm'].join('/');
+        this.addTwitterDirectMessage = function(socialAccountId, userId, msg, fn) {
+            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'user', userId, 'dm'].join('/');
             $http.post(apiUrl, {
                 msg: msg
             }).success(function(data, status, headers, config) {
@@ -280,16 +278,6 @@
             $http.post(apiUrl, {
                     post: '@' + username + ' ' + comment
                 })
-                .success(function(data, status, headers, config) {
-                    fn(data);
-                });
-        };
-
-        this.addTwitterPostRetweet = function(socialAccountId, postId, username, comment, fn) {
-            var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'post', postId, 'retweet'].join('/');
-            $http.post(apiUrl, {
-                post: '@' + username + ' ' + comment
-            })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });

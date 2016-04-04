@@ -533,8 +533,25 @@ div[data-type='campaign'] .inner-page .overlay {
   border: none !important;
   width: 100%;
 }
+.contact-us-v1 .widget-weather .rg-right span {
+  border-left: 1px solid #efa022;
+  border-right: 1px solid #efa022;
+}
+.contact-us-v1 .widget-weather .rg-bottom span {
+  border-top: 1px solid #efa022;
+  border-bottom: 1px solid #efa022;
+}
 .contact-us-v1 .leaflet-popup-pane {
   color: #000;
+}
+.contact-us-v1 .widget-weather.no-info .settings {
+  background: transparent !important;
+}
+.contact-us-v1 .widget-weather.no-info .rg-right span {
+  display: none;
+}
+.contact-us-v1 .widget-weather.no-info .rg-bottom span {
+  display: none;
 }
 .component-wrap {
   display: block;
@@ -4667,6 +4684,14 @@ div[data-type="social-link"] .inner-page {
   padding-left: 0;
   margin-bottom: 20px;
   padding-top: 20px;
+}
+.social-link-v1 ul li.editable-title {
+  width: auto !important;
+  height: auto !important;
+}
+.social-link-v1 ul li.editable-cover {
+  width: 100% !important;
+  height: 100% !important;
 }
 .social-link-v1 ul li {
   width: 48px;
@@ -10149,13 +10174,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
   clear: both;
   border: inset solid 1px transparent;
+  cursor: pointer;
 }
-.ssb-site-builder .ssb-page-section:hover .ssb-edit-control:not(.ssb-edit-control-component-btn),
-.ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
-  display: block;
-  opacity: 1;
-}
-.ssb-site-builder .ssb-active-section .ssb-edit-control {
+.ssb-site-builder .ssb-edit-control.ssb-on {
   display: block;
   opacity: 1;
 }
@@ -10175,7 +10196,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: static;
   height: 38px;
   line-height: 38px;
-  color: white;
+  color: white!important;
   vertical-align: top;
   opacity: 1;
   font-size: 1em;
@@ -10282,7 +10303,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
   opacity: 1!important;
 }
 .ssb-site-builder .ssb-edit-control-component {
+  position: fixed;
   width: auto;
+}
+.ssb-site-builder .ssb-edit-control-component.ssb-on {
+  display: block;
+  opacity: 1;
 }
 .ssb-site-builder .ssb-edit-control-component > *,
 .ssb-site-builder .ssb-edit-control-component > * > * {
@@ -10318,8 +10344,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control-component .ssb-sidebar-item-icon {
   display: none;
 }
-.ssb-site-builder .ssb-active-section:before,
-.ssb-site-builder .ssb-active-section .ssb-active-component:before {
+.ssb-site-builder .ssb-page-section.ssb-active-edit-control:before {
   z-index: 2;
   position: absolute;
   top: 0;
@@ -10328,11 +10353,20 @@ a[href="https://froala.com/wysiwyg-editor"] {
   height: 100%;
   content: '';
   display: block;
-  box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
+  box-shadow: inset 0px 0px 0px 4px rgba(71, 184, 217, 0.75);
   pointer-events: none;
 }
-.ssb-site-builder:hover .ssb-active-section .ssb-active-component:before {
+.ssb-site-builder .ssb-active-component:before {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: '';
+  display: block;
   box-shadow: inset 0px 0px 0px 4px #eda200;
+  pointer-events: none;
 }
 .ssb-section-modal .ssb-section-modal-list-item {
   padding: 1em;
@@ -10446,6 +10480,7 @@ div[class^="spacing-"] input {
   -webkit-user-select: text;
   user-select: text;
 }
+[data-edit][class*="ssb-active-edit-control"]:before,
 .ssb-theme-btn-active-element:before {
   display: block;
   opacity: .75;
@@ -10476,7 +10511,7 @@ ssb-topbar.dragging {
   opacity: .5;
 }
 .ssb-sidebar {
-  background: #131e26;
+  background: #1c2b36;
 }
 .ssb-sidebar img {
   max-width: 100%;
@@ -10517,6 +10552,7 @@ ssb-topbar.dragging {
 }
 .ssb-sidebar .form-group {
   clear: both;
+  float: left;
   width: 100%;
 }
 .ssb-sidebar-heading {
@@ -10684,7 +10720,7 @@ ssb-topbar.dragging {
     position: relative;
     top: auto;
     box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, 0.5);
-    min-width: 470px;
+    min-width: 510px;
   }
 }
 .ssb-sidebar-inner .editor-group .ssb-sidebar-sub-heading {
@@ -10729,13 +10765,13 @@ ssb-topbar.dragging {
   .ssb-sidebar-icons {
     position: static;
     float: left;
-    background: #131e26;
+    background: #1c2b36;
     height: 100%;
     width: auto;
   }
 }
 .ssb-sidebar-icons .nav {
-  background: #131e26;
+  background: #1c2b36;
 }
 @media (max-width: 768px) {
   .ssb-sidebar-icons .nav {
@@ -10750,7 +10786,7 @@ ssb-topbar.dragging {
   margin: 0;
   cursor: pointer;
   text-align: center!important;
-  background: #131e26;
+  background: #1c2b36;
   padding: 1em;
 }
 .ssb-sidebar-icons .nav-tab:hover {
@@ -10811,7 +10847,7 @@ ssb-topbar.dragging {
   font-size: 12px;
   max-height: calc(100% - 182px);
   width: 300px;
-  border: 10px solid rgba(255, 255, 255, 0.15);
+  border: 10px solid rgba(255, 255, 255, 0.75);
 }
 @media (max-width: 767px) {
   .ssb-sidebar-section-panel {
@@ -10960,7 +10996,6 @@ ssb-topbar {
   background: #1c2b36;
   color: white;
   text-align: center;
-  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
   line-height: 60px;
 }
 @media screen and (min-width: 768px) {
@@ -11337,6 +11372,11 @@ ssb-topbar .ui-select-match-text > small {
   float: right;
   width: 50%;
 }
+[class*="ssb-theme-"][data-eq-state$="medium"] .ssb-page-section-layout-header [ssb-text-component],
+[class*="ssb-theme-"][data-eq-state$="large"] .ssb-page-section-layout-header [ssb-text-component] {
+  width: 75%;
+  margin: 0 auto;
+}
 @media screen and (min-width: 768px) {
   [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header-v1 .navigation-v2 .navbar .nav > li > a {
     padding: 10px 25px 10px;
@@ -11354,6 +11394,10 @@ ssb-topbar .ui-select-match-text > small {
   [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header-v1 [social-link-component] {
     float: right;
     width: 50%;
+  }
+  [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header [ssb-text-component] {
+    width: 75%;
+    margin: 0 auto;
   }
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header-v1 [social-link-component] .component-inner .container {
@@ -11460,7 +11504,7 @@ ssb-topbar .ui-select-match-text > small {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100%;
+  width: 75%;
 }
 @media screen and (min-width: 768px) {
   [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) {
@@ -11468,7 +11512,7 @@ ssb-topbar .ui-select-match-text > small {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 100%;
+    width: 75%;
   }
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-image-component][data-eq-state$="small"] {
@@ -12366,6 +12410,7 @@ ssb-topbar #ssb-froala-scrollable-container {
   color: inherit;
   overflow: hidden;
   padding: 4px;
+  cursor: text;
 }
 .fr-wrapper ::selection {
   background: rgba(21, 86, 103, 0.5) !important;
@@ -13090,6 +13135,17 @@ body[ng-controller] .fr-image-resizer .fr-handler.fr-hse {
 body[ng-controller] .fr-image-upload-layer {
   border: dashed 2px #ffffff;
 }
+body[ng-controller] .fr-image-upload-media-layer {
+  border: dashed 2px #ffffff;
+}
+body[ng-controller] .fr-image-upload-media-layer button {
+  width: 100% !important;
+  background: #243948 !important;
+  border: 0 !important;
+}
+body[ng-controller] .fr-image-upload-media-layer button span {
+  margin-left: 5px;
+}
 body[ng-controller] .fr-image-upload-layer:hover {
   background: #243948;
 }
@@ -13310,4 +13366,12 @@ body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper div.fr-scroller div.f
 }
 body[ng-controller] .fr-overlay {
   background: #000000;
+}
+.fr-view h1 *,
+.fr-view h2 *,
+.fr-view h3 *,
+.fr-view h4 *,
+.fr-view h5 *,
+.fr-view h6 * {
+  font-size: inherit !important;
 }

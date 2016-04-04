@@ -34,13 +34,31 @@ var dao = {
 
     },
 
+    saveSectionObjects: function(sectionObjAry, fn) {
+        var self = this;
+        var savedAry = [];
+        async.eachSeries(sectionObjAry, function(sectionObj, cb){
+            self.saveOrUpdate(sectionObj, function(err, savedSection){
+                if(err) {
+                    self.log.error('Error saving section:',err);
+                    cb(err);
+                } else {
+                    savedAry.push(savedSection);
+                    cb();
+                }
+            });
+        }, function done(err){
+            fn(err, savedAry);
+        });
+    },
+
     dereferenceSections: function(sectionAry, fn) {
         var self = this;
         var deReffedAry = [];
         async.eachSeries(sectionAry, function(section, cb){
-            //self.log.debug('Section:', section);
-            if(section && section._id)
-                self.getById(section._id, $$.m.ssb.Section, function(err, section){
+            self.log.debug('Section:', section);
+            if(section._id) {
+                self.findOne({"_id":section._id}, $$.m.ssb.Section, function(err, section){
                     if(err) {
                         cb(err);
                     } else {
@@ -48,10 +66,11 @@ var dao = {
                         cb();
                     }
                 });
-            else
+            } else {
+                self.log.warn('The sectionAry contains a section that cannot be dereferenced:', sectionAry);
                 cb();
+            }
         }, function done(err){
-            //self.log.debug('Array:', deReffedAry);
             fn(err, deReffedAry);
         });
     },

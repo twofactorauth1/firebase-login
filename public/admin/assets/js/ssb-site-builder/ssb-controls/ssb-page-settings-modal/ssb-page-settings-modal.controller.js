@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', '$filter', function ($scope, $timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location, $filter) {
+app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', '$filter', 'WebsiteService', function ($scope, $timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location, $filter, WebsiteService) {
 
 	var sectionLabel;
 	var vm = this;
@@ -172,9 +172,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
 
   function saveWebsite() {
       return (
-          SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
-              console.log('website saved');
-          })
+		  SimpleSiteBuilderService.getSite(vm.parentVm.state.website._id).then(function (site) {
+			  vm.parentVm.state.website = site.data;
+			  SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
+				  console.log('website saved');
+			  });
+		  })
       )
   }
 

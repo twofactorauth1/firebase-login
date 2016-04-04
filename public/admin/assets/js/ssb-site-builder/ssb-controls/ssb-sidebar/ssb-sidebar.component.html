@@ -30,7 +30,7 @@
             <section>
 
                 <h4 class="ssb-sidebar-sub-heading">
-                    Add Content
+                    Add Section
                 </h4>
 
                 <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
@@ -71,7 +71,7 @@
                                         <div class="img-wrap">
                                             <a href>
                                                 <span
-                                                    style=" background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;cursor: move;cursor: -webkit-grabbing;">
+                                                    style=" background: url('{{section.preview}}');background-size: cover;height: 190px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;cursor: move;cursor: -webkit-grabbing;">
                                                 </span>
                                             </a>
                                         </div>
@@ -207,10 +207,17 @@
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
-                            ng-if="page._id === vm.state.page._id"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false"
                             ng-click="vm.hideFromMenu()"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Hide this page from main menu">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false"
+                            ng-click="vm.showPageOnMenu()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Show this page on main menu">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-files"
