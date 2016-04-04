@@ -4,9 +4,8 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.support.MANAGETOPICS"></h1>
-                <span ng-if="topics" class="mainDescription">There are currently {{topics.length}} topics.</span>
+                <span ng-if="topics" class="mainDescription">There are currently {{topics.length}} topics. ({{displayedTopics.length || 0}} in filtered view)</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->

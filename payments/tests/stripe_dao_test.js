@@ -54,7 +54,7 @@ exports.stripe_dao_test = {
         var self = this;
         test.expect(1);
         _log.info('>>testCreateStripeCustomer');
-        stripeDao.createStripeCustomer(null, testContext.contact, 0, function(err, contact){
+        stripeDao.createStripeCustomer(null, testContext.contact, 0, 0, null, function(err, contact){
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -76,7 +76,7 @@ exports.stripe_dao_test = {
             }
             var accountId = args.accountId;
             var user = args.user;
-            stripeDao.createStripeCustomerForUser(null, user, accountId, 0, function(err, customer){
+            stripeDao.createStripeCustomerForUser(null, user, accountId, 0, 0, null, function(err, customer){
                 if(err) {
                     test.ok(false, err);
                     return test.done();
@@ -91,7 +91,7 @@ exports.stripe_dao_test = {
                         return test.done();
                     }
                     test.equals(customerId, user1.get('stripeId'));
-                    stripeDao.createStripeCustomerForUser(null, user, accountId, 0, function(err, customer) {
+                    stripeDao.createStripeCustomerForUser(null, user, accountId, 0, 0, null, function(err, customer) {
                         if (err) {
                             test.ok(false, err);
                             return test.done();
@@ -118,7 +118,7 @@ exports.stripe_dao_test = {
     testListStripeCustomers: function(test) {
         var self = this;
         _log.info('>> testListStripeCustomers');
-        stripeDao.listStripeCustomers('0', '10', function(err, customers){
+        stripeDao.listStripeCustomers('0', '10', null, function(err, customers){
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -133,7 +133,7 @@ exports.stripe_dao_test = {
     testGetStripeCustomer: function(test) {
         var self = this;
         _log.info('>> testGetStripeCustomer');
-        stripeDao.getStripeCustomer(testContext.customerId, function(err, customer){
+        stripeDao.getStripeCustomer(testContext.customerId, null, function(err, customer){
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -148,7 +148,7 @@ exports.stripe_dao_test = {
         var self = this;
         _log.info('>> testUpdateStripeCustomer');
         test.expect(2);
-        stripeDao.getStripeCustomer(testContext.customerId, function(err, customer){
+        stripeDao.getStripeCustomer(testContext.customerId, null, function(err, customer){
             if (err) {
                 test.ok(false, err);
                 return test.done();
@@ -164,7 +164,7 @@ exports.stripe_dao_test = {
 
             };
 
-            stripeDao.updateStripeCustomer(testContext.customerId, null, card, null, null, 'New Description!', null, null, function(err, updatedCustomer){
+            stripeDao.updateStripeCustomer(testContext.customerId, null, card, null, null, 'New Description!', null, null, null, function(err, updatedCustomer){
                 if (err) {
                     test.ok(false, err);
                     return test.done();
@@ -424,7 +424,7 @@ exports.stripe_dao_test = {
             'cvc': '111'
         };
 
-        stripeDao.createStripeCard(customerId, card, function(err, _card){
+        stripeDao.createStripeCard(customerId, card, null, function(err, _card){
             if(err) {
                 test.ok(false, err);
                 test.done();
@@ -440,7 +440,7 @@ exports.stripe_dao_test = {
 
     testGetStripeCard: function(test) {
         test.expect(1);
-        stripeDao.getStripeCard(testContext.customerId, testContext.cardId, function(err, card){
+        stripeDao.getStripeCard(testContext.customerId, testContext.cardId, null, function(err, card){
                 if(err) {
                     test.ok(false, err);
                     test.done();
@@ -464,7 +464,7 @@ exports.stripe_dao_test = {
         var newMonth = '12';
         var newYear = '2017';
 
-        stripeDao.updateStripeCard(customerId, cardId, name, null, null, null, null, null, null,newMonth, newYear,
+        stripeDao.updateStripeCard(customerId, cardId, name, null, null, null, null, null, null,newMonth, newYear, null,
             function(err, card){
                 if(err) {
                     test.ok(false, err);
@@ -482,7 +482,7 @@ exports.stripe_dao_test = {
     },
 
     testListStripeCards: function(test) {
-        stripeDao.listStripeCards(testContext.customerId, function(err, cards){
+        stripeDao.listStripeCards(testContext.customerId, null, function(err, cards){
                 if(err) {
                     test.ok(false, err);
                     test.done();
@@ -867,7 +867,7 @@ exports.stripe_dao_test = {
 
     testDeleteStripeCard: function(test) {
 
-        stripeDao.deleteStripeCard(testContext.customerId, testContext.cardId, function(err, value){
+        stripeDao.deleteStripeCard(testContext.customerId, testContext.cardId, null, function(err, value){
             if(err) {
                 test.ok(false, err);
                 test.done();
@@ -882,20 +882,20 @@ exports.stripe_dao_test = {
     testDeleteStripeCustomer: function(test) {
         var self = this;
         test.expect(1);
-        stripeDao.getStripeCustomer(testContext.customerId, function(err, customer) {
+        stripeDao.getStripeCustomer(testContext.customerId, null, function(err, customer) {
             if (err) {
                 test.ok(false, err);
                 return test.done();
             }
             _log.info('got customer... now try to delete it.');
-            stripeDao.deleteStripeCustomer(testContext.customerId, null, null, function(err, confirmation){
+            stripeDao.deleteStripeCustomer(testContext.customerId, null, null, null, function(err, confirmation){
                 if (err) {
                     test.ok(false, err);
                     return test.done();
                 }
                 console.dir(confirmation);
                 _log.info('deleted customer.  Make sure when we get customer again, it shows deleted.');
-                stripeDao.getStripeCustomer(testContext.customerId, function(err, customer) {
+                stripeDao.getStripeCustomer(testContext.customerId, null, function(err, customer) {
                     if(err) {
                         test.ok(false, err);
                         return test.done();

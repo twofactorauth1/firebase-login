@@ -8,21 +8,24 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
       console.log('scope.component ', scope.component);
+      scope.nthRow = 'nth-row';
       if(!angular.isDefined(scope.component.tags)){
         scope.component.tags = [];
         if(scope.component.contact_type)
           scope.component.tags.push(scope.component.contact_type);
       }
-      scope.fieldsLength = function () {
-        return _.filter(scope.component.fields, function (_field) {
-          return _field.value === true;
-        }).length;
-      };
 
 
 
-      scope.clearValidations= function(){
-        scope.userExists = false;
+      scope.fieldClass = function(field){
+        var classString = 'col-sm-12';
+
+        if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
+          classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);
+          if(scope.component.formSettings.spacing && scope.component.formSettings.spacing.pr)
+            scope.nthRow = 'nth-row' + scope.component.formSettings.fieldsPerRow;
+        }
+        return classString;
       };
 
       scope.fieldShow = function (name) {
@@ -36,6 +39,66 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           }
         }
       };
+
+      scope.fieldStyle = function(field){
+        var styleString = ' ';
+        if (field && field.spacing) {
+            if (field.spacing.mb) {
+                styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
+            }
+        }
+        return styleString;
+      };
+
+      scope.inputStyle = function(field){
+        var styleString = ' ';
+        if (field && field.align) {
+            styleString += 'text-align: ' + field.align + ";";
+        }
+        if (field && field.inputTextSize) {
+            styleString += 'font-size: ' + field.inputTextSize  + 'px !important;';
+        }
+        if (field && field.inputFontFamily) {
+            styleString += 'font-family: ' + field.inputFontFamily + ";";
+        }
+        if (field && field.inputBgColor) {
+            styleString += 'background-color: ' + field.inputBgColor + "!important;";
+        }
+        if (field && field.inputBorderColor) {
+            styleString += 'border-color: ' + field.inputBorderColor + ";";
+        }
+        if (field && field.inputTextColor) {
+            styleString += 'color: ' + field.inputTextColor + ";";
+        }
+        return styleString;
+      };
+
+      scope.buttonStyle = function(btn){
+        var styleString = '';
+        if (btn && btn.align) {
+            if(btn.align === 'left' || btn.align === 'right')
+              styleString += 'float: ' + btn.align + ";";
+
+            if(btn.align === 'center'){
+              styleString += 'margin: 0 auto;';
+            }
+        }
+        return styleString;
+      };
+
+      scope.formStyle = function(form){
+        var styleString = '';
+        if(form){
+            if (form.formFontFamily) {
+                styleString += 'font-family: ' + form.formFontFamily + ";";
+            }
+            if (form.formTextColor) {
+                styleString += 'color: ' + form.formTextColor + ";";
+            }
+        }
+        return styleString;
+      };
+
       scope.formValidations = formValidations;
       scope.user = {};
       scope.createUser = function (simpleForm) {
@@ -95,8 +158,14 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         userService.addContact(formatted, function (data, err) {
           if (err && err.code === 409) {
             scope.userExists = true;
-
-          } else if (data) {
+          }
+          else if(err && err.code !== 409){
+              scope.formError = true;
+              $timeout(function () {
+                scope.formError = false;
+              }, 5000);
+          }
+          else if (data) {
             var name;
             if (scope.user.first && scope.user.last) {
               name = scope.user.first + ' ' + scope.user.last;

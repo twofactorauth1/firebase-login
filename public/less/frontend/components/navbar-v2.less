@@ -22,6 +22,12 @@
             min-height: 150px;
             .navbar-toggle {
                 margin-top: 50px;
+
+                @media screen and (max-width: 767px) {
+                    position: absolute;
+                    right: 0;
+                }
+
             }
         }
         .navbar-brand {
@@ -68,7 +74,7 @@
             margin: 5px auto;
             max-width: 500px;
             text-align: center;
-            img {
+            img:not(.fr-dii) {
                 margin: 0 auto;
                 display: block;
             }

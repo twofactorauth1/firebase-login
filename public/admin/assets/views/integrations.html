@@ -6,7 +6,6 @@
                 <h1 class="mainTitle" translate="sidebar.nav.account.INTEGRATIONS"></h1>
                 <span class="mainDescription">View and Manage all your social networks</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <div class="container-fluid container-fullw bg-white">
@@ -17,27 +16,32 @@
                         <label>Choose an Integration</label>
                         <ul>
                             <li class="social-twitter" tooltip="Twitter" tooltip-placement="top">
-                                <a ng-click="socailRedirect('Twitter', 'tw');">
+                                <a class="btn-icon-twitter" ng-click="socailRedirect('Twitter', 'tw');">
                                     Twitter
                                 </a>
                             </li>
                             <li class="social-facebook" tooltip="Facebook" tooltip-placement="top">
-                                <a ng-click="socailRedirect('Facebook', 'fb');">
+                                <a class="btn-icon-facebook" ng-click="socailRedirect('Facebook', 'fb');">
                                     Facebook
                                 </a>
                             </li>
                             <li class="social-google" tooltip="Google" tooltip-placement="top">
-                                <a ng-click="socailRedirect('Google', 'go');">
-                                    Google+
+                                <a class="btn-icon-google-plus" ng-click="socailRedirect('Google', 'go');">
+                                    Google
                                 </a>
                             </li>
                             <li class="social-stripe" tooltip="Stripe" tooltip-placement="top">
-                                <a ng-click="socailRedirect('Stripe', 'st');">
+                                <a class="btn-icon-stripe" ng-click="socailRedirect('Stripe', 'st');">
                                     Stripe
                                 </a>
                             </li>
+                            <li class="social-paypal" tooltip="PayPal" tooltip-placement="top">
+                                <a  class="btn-icon-paypal" ng-click="socailRedirect('Paypal', 'pp');">
+                                    PayPal
+                                </a>
+                            </li>
                         </ul>
-                    </div>
+                    </div>                    
                     <div class="col-sm-8">
                         <label class="text-muted">Integrations Coming Soon</label>
                         <ul>
@@ -69,11 +73,6 @@
                             <li class="social-authorize" tooltip="Authorize" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
                                     Authorize.Net
-                                </a>
-                            </li>
-                            <li class="social-paypal" tooltip="PayPal" tooltip-placement="top">
-                                <a href="#" disabled="disabled">
-                                    Paypal
                                 </a>
                             </li>
                             <li class="social-wallet" tooltip="Wallet" tooltip-placement="top">

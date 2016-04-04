@@ -7,7 +7,6 @@
                 <h1 class="mainTitle" translate="sidebar.nav.website.ANALYTICS"></h1>
                 <span class="mainDescription">View all the statistics of your website</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
@@ -220,7 +219,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'">
+                            <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'|limitTo:25">
                                 <td>
                                     {{topPage.page}}
                                     <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>

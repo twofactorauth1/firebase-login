@@ -11,7 +11,6 @@ var testHelpers = require('../../testhelpers/testhelpers.js');
 var subscriptionDao = require('../dao/subscription.dao.js');
 var async = require('async');
 
-var stripeDao = require('../dao/stripe.dao.js');
 var _log = $$.g.getLogger("subscription.dao.test");
 var testContext = {};
 testContext.plans = [];

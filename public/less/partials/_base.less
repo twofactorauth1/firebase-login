@@ -68,11 +68,11 @@ button {
 }
 
 a {
-    color: @link-color;
+    // color: @link-color;
     &:hover,
     &:focus,
     &:active {
-        color: darken(@link-color, 20%);
+        // color: darken(@link-color, 20%);
     }
 }
 
@@ -219,22 +219,6 @@ h5.over-title {
                 position: absolute;
                 -webkit-transform: translate3d(@sideBar-width, 0, 0);
                 transform: translate3d(@sideBar-width, 0, 0);
-                .transition(transform 300ms ease 0s);
-            }
-            > #off-sidebar {
-                -webkit-transform: translate3d(@sideBar-width, 0, 0);
-                transform: translate3d(@sideBar-width, 0, 0);
-                .transition(transform 300ms ease 0s);
-            }
-        }
-        &.app-offsidebar-open {
-            > .app-content {
-                box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
-                overflow: hidden;
-                z-index: 2;
-                position: absolute;
-                -webkit-transform: translate3d(-@sideBar-width, 0, 0);
-                transform: translate3d(-@sideBar-width, 0, 0);
                 .transition(transform 300ms ease 0s);
             }
         }

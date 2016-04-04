@@ -30,7 +30,10 @@ app.directive('touchspin', function() {
 			for(var i = 0, l = tsOptions.length; i < l; i++) {
 				var opt = tsOptions[i];
 				if(attr[opt] !== undefined) {
-					options[opt] = attr[opt];
+					if(opt === 'max' || opt === 'min' )
+						options[opt] = parseInt(attr[opt], 10);
+					else
+						options[opt] = attr[opt];
 				}
 			}
 			elem.TouchSpin(options);

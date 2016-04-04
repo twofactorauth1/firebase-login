@@ -6,6 +6,7 @@
  */
 
 require('./base.model.js');
+var moment = require('moment');
 
 var post = $$.m.ModelBase.extend({
 
@@ -79,7 +80,8 @@ var post = $$.m.ModelBase.extend({
         }
 
         if (post.created_time) {
-            obj.date = new Date(post.created_time).getTime();
+            // obj.date = new Date(post.created_time).getTime();
+            obj.date = moment.utc(moment(post.created_time)).format();
             obj.pagingId = new Date(post.created_time).getTime() / 1000;
         }
 
@@ -117,7 +119,7 @@ var post = $$.m.ModelBase.extend({
 
             post.comments.data.forEach(function(comment) {
                 var comment_obj = {
-                    
+
                     comment: comment.message,
                     created: comment.created_time,
                     like_count: comment.like_count
@@ -198,7 +200,8 @@ var post = $$.m.ModelBase.extend({
         }
 
         if (tweet.created_at) {
-            obj.date = new Date(tweet.created_at).getTime();
+            // obj.date = new Date(tweet.created_at).getTime();
+            obj.date = moment.utc(moment(tweet.created_at)).format();
         }
 
         obj.message = tweet.text;
@@ -233,7 +236,8 @@ var post = $$.m.ModelBase.extend({
         };
 
         if (follower.created_at) {
-            obj.date = new Date(follower.created_at).getTime();
+            // obj.date = new Date(follower.created_at).getTime();
+            obj.date = moment.utc(moment(follower.created_at)).format();
         }
 
         this.set(obj);

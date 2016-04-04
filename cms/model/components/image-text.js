@@ -72,7 +72,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor : "#ffffff",
+            txtcolor : "",
 
             /**
              * The position of the image relative to the text, left, right, center
@@ -100,7 +100,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: false
                 },
-                color : "#32373f"
+                color : ""
             },
 
             /**

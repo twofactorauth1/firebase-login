@@ -62,7 +62,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            title : "",
+            title : '<div style="text-align: center;"><span style="font-size: 24px;"><strong><em>IMAGE GALLERY</em></strong></span><span style="font-size: 14px;"></span></div>',
 
             /**
              *
@@ -78,29 +78,34 @@ var component = $$.m.ModelBase.extend({
              *      url:                        // The url of the image
              * }]
              */
-            images : [
-                    {
-                        label : "Project A",
-                        description : "Image Description",
-                        url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/cub_1425550421494.png"
-                    },
-                    {
-                        label : "Project A",
-                        description : "Image Description",
-                        url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/cub_1425550421494.png"
-                    },
-                    {
-                        label : "Project A",
-                        description : "Image Description",
-                        url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/cub_1425550421494.png"
-                    }
+            "images": [
+                {
+                    "label": "Project A",
+                    "description": "Image Description",
+                    "url": "//s3.amazonaws.com/indigenous-digital-assets/account_1622/38895532_m_1454104745785.jpg"
+                },
+                {
+                    "label": "Project B",
+                    "description": "Image Description",
+                    "url": "//s3.amazonaws.com/indigenous-digital-assets/account_1622/14360621_ml_1454084709041.jpg"
+                },
+                {
+                    "label": "Project C",
+                    "description": "Image Description",
+                    "url": "http://s3.amazonaws.com/indigenous-digital-assets/account_1622/28047387_ml_1454170014218.jpg"
+                },
+                {
+                    "label": "Project D",
+                    "description": "Image Description",
+                    "url": "http://s3.amazonaws.com/indigenous-digital-assets/account_1622/24693427_ml_1454170033689.jpg"
+                }
             ],
 
             /**
              *
              *
              */
-            txtcolor : "#ffffff",
+            txtcolor : "",
 
             /**
              *
@@ -116,7 +121,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: false
                 },
-                color : "#4bb0cb"
+                color : ""
             },
 
             /**

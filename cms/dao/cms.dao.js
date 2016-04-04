@@ -20,6 +20,8 @@ var Page = require('../model/page');
 var Email = require('../model/email');
 var BlogPost = require('../model/blogpost');
 
+var ssbThemeDao = require('../../ssb/dao/theme.dao.js');
+
 var dao = {
 
     options: {
@@ -1214,9 +1216,33 @@ var dao = {
             }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
-                obj.website = website.toJSON('public');
-                self.log.debug('<< getDataForWebpage');
-                fn(err, obj);
+
+                if (website.get('themeId')) {
+                    var themeId = website.get('themeId').valueOf();
+                    self.log.debug('>> getThemeById');
+                    ssbThemeDao.getThemeById(themeId, function(err, theme) {
+                        if(err || !theme) {
+                            self.log.error('Error getting theme, err:', err);
+                            self.log.error('Error getting theme, themeId:', themeId);
+                            return fn(err, obj);
+                        } else {
+                            self.log.debug('<< getThemeById', theme);
+                            if (theme) {
+                                website.set('theme', theme.toJSON('public'));
+                            } else {
+                                website.set('theme', {});
+                            }
+                            obj.website = website.toJSON('public');
+                            self.log.debug('<< getDataForWebpage');
+                            return fn(null, obj);
+                        }
+                    });
+                } else {
+                    obj.website = website.toJSON('public');
+                    self.log.debug('<< getDataForWebpage');
+                    return fn(null, obj);
+                }
+
             });
         });
     },
@@ -1224,7 +1250,7 @@ var dao = {
     createDefaultPageForAccount: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug('>> createDefaultPageForAccount');
-        
+
         var page = new $$.m.cms.Page({
             "accountId" : accountId,
             "websiteId" : websiteId,
@@ -1328,7 +1354,6 @@ var dao = {
                     "title" : "<h2 class='center'>Thanks for Checking Us Out</h2>",
                     "subtitle" : "subtitle",
                     "text" : "We will get back to you shortly.",
-                    "from_email" : "",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1370,7 +1395,6 @@ var dao = {
                     "title" : "<h2 class='center'>New Order</h2>",
                     "subtitle" : "subtitle",
                     "text" : "New Order",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1411,7 +1435,6 @@ var dao = {
                     "title" : "<h2 class='center'>Order Processing</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Order Processing",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1452,7 +1475,6 @@ var dao = {
                     "title" : "<h2 class='center'>Order Completed</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Order Completed",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1493,7 +1515,6 @@ var dao = {
                     "title" : "<h2 class='center'>Order Cancelled</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Order Cancelled",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1534,7 +1555,6 @@ var dao = {
                     "title" : "<h2 class='center'>Customer Invoice</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Customer Invoice",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",

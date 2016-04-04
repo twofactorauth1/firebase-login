@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($window, $timeout) {
+app.directive('thumbnailSliderComponent', ['$window', '$timeout', '$rootScope', function ($window, $timeout, $rootScope) {
   return {
     scope: {
       component: '=',
@@ -67,11 +67,13 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
         return newArr;
       }
 
-      if(!scope.ssbEditor){
-        scope.control.refreshSlider = function () {
-          scope.bindThumbnailSlider(winWidth, check_if_mobile);
-        };
-      }
+      scope.$on('refreshThumbnailSlider', function (event, args) {         
+        scope.bindThumbnailSlider(winWidth, check_if_mobile);
+      });
+
+      scope.control.refreshSlider = function () {
+        scope.bindThumbnailSlider(winWidth, check_if_mobile);
+      };
 
       /*
        * @addImageFromMedia

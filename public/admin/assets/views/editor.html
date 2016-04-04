@@ -3,7 +3,7 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 ng-if="isSinglePost && !isTopic" class="mainTitle">{{ blog.post.post_title || 'Single Post' | htmlToPlaintext}}</h1>
+                <h1 ng-if="isSinglePost && !isTopic" class="mainTitle"><span ng-bind-html="blog.post.post_title || 'Single Post' | unsafe"></span></h1>
                 <h1 ng-if="!isSinglePost && !isTopic" class="mainTitle">{{ page.title || 'Title'}}</h1>
                 <h1 ng-if="isTopic" class="mainTitle">{{ topic.title || 'Title'}}</h1>
                 <span ng-if="isTopic" class="mainDescription">Listed under the {{topic.category}} category.</span>
@@ -11,7 +11,6 @@
                 <span ng-if="!isSinglePost && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
                 <span ng-if="templateActive" class="mainDescription">There are currently {{page.config.components.length}} components.</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->

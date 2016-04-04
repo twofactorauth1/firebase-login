@@ -1,13 +1,60 @@
-<div class="ssb-settings-btn" ng-click="vm.setActiveSection(vm.index)"><i class="fa fa-pencil"></i></div>
-<!-- <div class="ssb-edit-control-inactive"></div> -->
-<div class="ssb-edit-control-active">
-	
-	<a href ng-click="vm.setActiveSection(vm.index)">Edit</a>
-	<a href>ActionLink2</a>
-	<a href>ActionLink3</a>
+<div class="ssb-settings-btn" ng-click="vm.setActive(vm.sectionIndex, vm.componentIndex, vm.compiledControlId)">
+    <i class="fa fa-pencil"></i>
+</div>
 
-	<button type="button" class="close" ng-click="vm.setActiveSection(undefined)">
-		<i class="ti-close"></i>
-	</button>
+<div class="ssb-edit-control-active">
+
+	<a
+        href
+        class="ssb-edit-control-active-title"
+        ng-click="vm.setActive(vm.sectionIndex, vm.componentIndex, vm.compiledControlId)">
+
+        <span ng-if="vm.componentIndex !== undefined">
+            Edit {{(vm.component.name || vm.component.type || vm.component.title) | cleanType}}
+        </span>
+
+        <span ng-if="vm.componentIndex === undefined">
+            Edit Section
+        </span>
+
+    </a>
+
+    <div
+        ng-if="vm.sectionIndex !== 0"
+        class="ssb-sidebar-item-icon display-ib ti-arrow-up ng-scope"
+        ng-click="vm.moveSection('up', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
+        tooltip-animation="false"
+        tooltip-placement="bottom"
+        tooltip-html-unsafe="Move section up"
+        tooltip-append-to-body="true">
+    </div>
+
+    <div
+        ng-if="vm.sectionIndex !== (vm.state.page.sections.length - 1)"
+        class="ssb-sidebar-item-icon display-ib ti-arrow-down ng-scope"
+        ng-click="vm.moveSection('down', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
+        tooltip-animation="false"
+        tooltip-placement="bottom"
+        tooltip-html-unsafe="Move section down"
+        tooltip-append-to-body="true">
+    </div>
+
+    <div
+        class="ssb-sidebar-item-icon display-ib ti-files ng-scope"
+        ng-click="vm.duplicateSection(vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
+        tooltip-animation="false"
+        tooltip-placement="bottom"
+        tooltip-html-unsafe="Duplicate section"
+        tooltip-append-to-body="true">
+    </div>
+
+    <div
+        class="ssb-sidebar-item-icon fa fa-trash-o display-ib"
+        ng-click="vm.removeSectionFromPage(vm.sectionIndex)"
+        tooltip-animation="false"
+        tooltip-placement="bottom"
+        tooltip-html-unsafe="Remove section"
+        tooltip-append-to-body="true">
+    </div>
 
 </div>

@@ -80,13 +80,14 @@
         "MAIN": "Dashboard"
       },
       "emails": {
-        "MAIN": "Emails"
+        "MAIN": "Emails",
+        "MANAGE": "Manage"
       },
       "website": {
         "MAIN": "Website",
         "ANALYTICS": "Site Analytics",
         "PAGES": "Pages",
-        "POSTS": "Posts",
+        "POSTS": "Blog Posts",
         "TEMPLATES": "Templates",
         "SETTINGS": "Settings"
       },
@@ -116,7 +117,6 @@
       },
       "support": {
         "MAIN": "Support",
-        "GETTINGSTARTED": "Getting Started",
         "HELPTOPICS": "Help Topics",
         "MANAGETOPICS": "Manage Topics"
       },

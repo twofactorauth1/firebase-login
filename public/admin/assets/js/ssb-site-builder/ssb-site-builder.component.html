@@ -1,43 +1,141 @@
+<link ng-if="vm.state.permissions.html" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.css">
+
 <style>
-	.wf-active .ssb-main.custom-fonts{
-		font-family:{{vm.state.website.themeOverrides.defaultFontStack}}
-	}
+    /*
+
+    TODO:
+        - decide on classnames for all hook-able stuff
+        - mirror classnames here and in theme stylesheet(s)
+        - add the hook classes to all relevant component markup
+
+    */
+
+
+.ssb-theme-{{vm.state.website.theme.handle}} {
+    color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
+    font-family: {{vm.state.website.themeOverrides.defaultFontStack}};
+    background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout {
+    background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-navigation a {
+    color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header {
+    background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};
+    color: {{vm.state.website.themeOverrides.styles.headerTextColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
+    /*color: {{vm.state.website.themeOverrides.styles.headerTextColor}};*/
+    /*font-size: {{vm.state.website.themeOverrides.styles.headerSize}};*/
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero {
+    background-color: {{vm.state.website.themeOverrides.styles.heroBackgroundColor}};
+    color: {{vm.state.website.themeOverrides.styles.heroTextColor}};
+    text-align: center;
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
+    /*color: {{vm.state.website.themeOverrides.styles.heroTextColor}};*/
+    /*font-size: {{vm.state.website.themeOverrides.styles.heroSize}};*/
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-heading-text {
+    font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-paragraph-text {
+    font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:hover {
+    background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
+    color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
+    border-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:hover, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:active, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:focus {
+    background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}}!important;
+}
+
+.ssb-theme-young-soul .navbar-toggle .icon-bar {
+    /*background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};*/
+}
+
+@media screen and (min-width: 768px) {
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
+        font-size: {{vm.state.website.themeOverrides.styles.headerSize}};
+    }
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
+        font-size: {{vm.state.website.themeOverrides.styles.heroSize}};
+    }
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-heading-text {
+        font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
+    }
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-paragraph-text {
+        font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
+    }
+
+}
+
 </style>
-<link rel="stylesheet" ng-href="css/ssb-site-builder/ssb-themes/ssb-theme-{{ vm.state.website.theme.name | slugify}}.css">
-<style>
-    /* TODO: theme overrides */
+
+<style ng-if="vm.uiState.showSectionPanel">
+.ssb-edit-control {
+    display: none!important;
+}
 </style>
+
+
+<!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
 <div>
+    <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
+             Hang tight, we're loading your page...
+            </h1>
+        </div>
+    </div>
 
-	<div class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240">
+	<div id="ssb-main" class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
 
-		<div class="csspinner center"></div>
-		<!-- <div class="csspinner center" ng-if="vm.uiState.loading > 0"></div> -->
 
 		<div id="componentloader">
 
 
-            <ul ng-if="!vm.state.page.sections.length" class="list-unstyled margin-bottom-0">
+            <ul ng-if="vm.state.page && !vm.state.page.sections.length && vm.uiState.loaded" class="list-unstyled margin-bottom-0">
                 <li>
                     <div class="well empty-page center">
-                        <h1 >This Page is Empty.</h1>
+                        <h1>This Page is Empty.</h1>
                         <h4>Add some sections and start editing!</h4>
-                        <button class="btn btn-info margin-top-15" ng-click="vm.uiState.openSidebarPanel = 'add'">Add Section</button>
+                        <button class="ssb-empty-page-add-btn btn btn-info margin-top-15" ng-click="vm.uiState.openSidebarPanel = 'add'">Add Section</button>
                     </div>
                     <div class="clearfix mb15"></div>
                 </li>
             </ul>
 
-			<div ng-if="vm.state.page.sections.length">
+			<div class="sortable-page-content" ng-sortable="vm.uiState.sortableListPageContentConfig" ng-if="vm.state.page.sections.length">
 
 				<ssb-page-section
-					ng-repeat="section in vm.state.page.sections track by section._id"
+					ng-repeat="section in vm.state.page.sections"
 					section="section"
 					index="$index"
 					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
 					class="ssb-page-section"
 					state="vm.state"
-					ui-state="vm.uiState">
+					ui-state="vm.uiState"
+                    ng-if="section.visibility || vm.section.visibility === undefined">
 				</ssb-page-section>
 
 			</div>
@@ -46,13 +144,17 @@
 
 	</div>
 
-    <ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
+    <ssb-sidebar ng-if="vm.state.page" class="fade-in-left ssb-sidebar" state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar }"></ssb-sidebar>
 
-    <ssb-topbar state="vm.state" ui-state="vm.uiState"></ssb-topbar>
+    <ssb-topbar ng-if="vm.state.page" class="fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
 
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-page-settings-modal/ssb-page-settings-modal.component.html' " ></div>
+    <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/social-link/modal.settings.html' " ></div>
+    <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/contact-us/modal.settings.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/ssb-new-page-modal.html' " ></div>
 
+
+    <!-- <div id="ssb-froala-scrollable-container"></div> -->
 </div>

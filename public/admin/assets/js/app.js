@@ -12,12 +12,12 @@ angular.module("indigenous", [
     'oc.lazyLoad',
     'gavruk.card',
     'cfp.loadingBar',
-    'ncy-angular-breadcrumb',
     'duScroll',
     'pascalprecht.translate',
     'autocomplete',
     'config',
     'angular-parallax',
     'google.places',
-    'ng-sortable'
+    'ng-sortable',
+    'http-auth-interceptor'
 ]);

@@ -4,10 +4,9 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.marketing.CAMPAIGNS"></h1>
-                <span ng-if="campaigns" class="mainDescription">There are currently {{campaigns.length}} campaigns.</span>
+                <span ng-if="campaigns" class="mainDescription">There are currently {{campaigns.length}} campaigns. ({{displayedCampaigns.length || 0}} in filtered view)</span>
                 <span ng-if="!campaigns" class="mainDescription">Loading campaigns...</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
@@ -141,35 +140,35 @@
                                                 <div class="col-xs-12">
                                                     <div class="col-xs-6 text-center border-right border-bottom">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.participants || 0 }}</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.participants || 0 }}</span>
                                                         </div>
                                                         Participants
                                                     </div>
                                                     <div class="col-xs-6 text-center border-bottom">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsSent || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsSent/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsSent || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsSent/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
                                                         </div>
                                                         Sent
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="row">  
-                                                <div class="col-xs-12">  
+                                            <div class="row">
+                                                <div class="col-xs-12">
                                                     <div class="col-xs-6 text-center border-right">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsOpened/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsOpened/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
                                                         </div>
                                                         Opened
                                                     </div>
                                                     <div class="col-xs-6 text-center">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsClicked/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsClicked/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
                                                         </div>
                                                         Clicked
                                                     </div>
-                                                </div>    
-                                            </div>    
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -190,12 +189,12 @@
                                         </span>
                                     </span>
                                 </td>
-                                <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong> <span ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
+                                <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Participants: </strong><span class="text-large text-bold">{{campaign.statistics.participants || 0}}</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class="text-large text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsSent/campaign.statistics.participants)*100) * 100) / 100}}%)</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Opened: </strong><span class="text-large text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsOpened/campaign.statistics.participants)*100) * 100) / 100}}%)</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class="text-large text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsClicked/campaign.statistics.participants)*100) * 100) / 100}}%)</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Participants: </strong><span class=" text-bold">{{campaign.statistics.participants || 0}}</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsSent/campaign.statistics.participants)*100) * 100) / 100}}%)</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Opened: </strong><span class=" text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsOpened/campaign.statistics.participants)*100) * 100) / 100}}%)</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsClicked/campaign.statistics.participants)*100) * 100) / 100}}%)</span></td>
                                 <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
                                 <!-- <td ng-if="tableView != 'grid'" class="center">
                                     <div class="dropdown">

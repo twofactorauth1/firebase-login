@@ -155,7 +155,7 @@
 
     /*
      * @switchSubscriptionPlanFn
-     * -  
+     * -
      */
 
     $scope.switchSubscriptionPlanFn = function (planId) {
@@ -203,11 +203,11 @@
      * - TODO: setup fee, coupon
      */
 
-    $scope.savePlanFn = function (planId) {
+    $scope.savePlanFn = function (planId, coupon) {
       console.log('savePlanFn >>');
 
       if ($scope.account.billing.stripeCustomerId) {
-        PaymentService.postSubscribeToIndigenous($scope.account.billing.stripeCustomerId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, $scope.Coupon, function (subscription) {
+        PaymentService.postSubscribeToIndigenous($scope.account.billing.stripeCustomerId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, coupon, function (subscription) {
           $scope.cancelOldSubscriptionsFn();
           $scope.selectedPlan = subscription;
           console.log('$scope.selectedPlan:');
@@ -297,7 +297,7 @@
             if (cards.data.length) {
               $scope.hasCard = true;
             }
-          });
+        }, function() {});
 
           //TODO: need this?
           // if ($scope.firstTime) {
@@ -327,13 +327,13 @@
         $scope.selectedPlan.paymentProcessing = false;
 
         console.warn('BillingCtrl, received account:\n', account);
-        
+
         if (account.billing.subscriptionId) {
           PaymentService.getStripeSubscription(
             account.billing.stripeCustomerId,
             account.billing.subscriptionId,
             function(subscription) {
-              // $scope.subscription = subscription; 
+              // $scope.subscription = subscription;
               $scope.selectedPlan = $scope.planlist.list.filter(function(plan) {
                 return plan.product_attributes.stripePlans[0].id === subscription.plan.id;
               })[0];

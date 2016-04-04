@@ -24,9 +24,14 @@
   }
   .navbar-nav {
     text-align: center;
-    float: right!important;
+    float: none;
     margin-top: 0;
     margin-right: 0;
+
+    @media screen and (min-width: 767px) {
+        float: right;
+    }
+
     > li {
       float: left;
       display: inline-block;
@@ -45,6 +50,7 @@
       div.editable, .fr-element {
           min-height: 100px;
       }
+
     }
     li {
       min-height: 125px;
@@ -71,8 +77,29 @@
     }
   }
 
+   @media (max-width: 767px) {
+    .navbar-nav {
+      margin: 0 !important;
+      > li {
+        min-height: 50px;
+        float:none;
+        display: inherit;
+      }
+    }
+    .navbar {
+      .nav > li > a {
+        line-height: 30px;
+      }
+    }
+  }
+
 }
 .navigation1 {
   position: relative;
   z-index: 5;
+}
+.navigation-logo{
+  img{
+    max-width :100%;
+  }
 }

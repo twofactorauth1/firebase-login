@@ -1,16 +1,30 @@
-// ssb-topbar.less
+
+.app-sidebar-closed ssb-topbar {
+    left: 0;
+    width: 100%;
+}
 
 ssb-topbar {
     position: fixed;
     top: 65px;
     left: 0;
-    height: 60px;
     width: 100%;
-    background: #1c2b36;
+    height: 60px;
+    background: @ssb-chrome-medium-blue-gray-bg-color;
     color: white;
     text-align: center;
-    box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
+    // box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
     line-height: 60px;
+    // transform: translate3d(0,0,0);
+    // opacity: 0;
+    // animation: fadeIn .5s 1s forwards;
+    // transition: opacity 500ms cubic-bezier(0.550, 0.085, 0.680, 0.530); /* easeInQuad */
+    // backface-visibility: hidden;
+
+    @media screen and (min-width: 768px) {
+        left: 125px;
+        width: calc(~'100% - 125px');
+    }
 
     @media screen and (min-width: 992px) {
 
@@ -19,9 +33,64 @@ ssb-topbar {
         }
 
     }
+
+    .ssb-topbar-inner > .pull-left,
+    .ssb-topbar-inner > .pull-right {
+        @media screen and (min-width: 768px) {
+            border-right: 1px solid black;
+        }
+        z-index: 4;
+        padding: 0 10px;
+    }
+
+    .ssb-topbar-inner > .pull-left {
+        width: 100px;
+        @media screen and (min-width: 768px) {
+            width: auto;
+        }
+    }
+
+    .ssb-topbar-inner > .pull-right {
+        @media screen and (min-width: 768px) {
+            border: 0 none;
+            border-left: 1px solid black;
+        }
+    }
+
+    .ui-select-match {
+        outline: none;
+        box-shadow: none;
+        background-color: transparent;
+        width: 150px;
+        max-width: 100%;
+    }
+
+    .ui-select-match-text > small {
+        width: 125px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: middle;
+    }
 }
 
 .ssb-topbar-icon {
     font-size: 2em;
 
+}
+
+.ssb-control-bar {
+    .btn {
+        font-size: 15px; //matches froala buttons
+        border: 0 none;
+        color: white;
+        position: relative;
+        top: -2px;
+    }
+
+    .btn[disabled] {
+        pointer-events: none;
+        color: white;
+        opacity: .5;
+    }
 }

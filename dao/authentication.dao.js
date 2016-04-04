@@ -224,7 +224,7 @@ var dao = {
                                             req.session.subdomain = account.get('subdomain');
                                             req.session.domain = account.get('domain');
                                             if(!self._verifyActiveTrialOrSub(account) ) {
-                                                log.debug('locking session for account ' + req.session.accountId);
+                                                self.log.debug('locking session for account ' + req.session.accountId);
                                                 req.session.locked_sub = true;
                                                 account.set('locked_sub', true);
                                                 accountDao.saveOrUpdate(account, function(err, savedAccount){
@@ -275,7 +275,7 @@ var dao = {
                                 req.session.domain = account.get('domain');
                                 self.log.info("Login successful. AccountId is now " + req.session.accountId);
                                 if(!self._verifyActiveTrialOrSub(account) ) {
-                                    log.debug('locking session for account ' + req.session.accountId);
+                                    self.log.debug('locking session for account ' + req.session.accountId);
                                     req.session.locked_sub = true;
                                     account.set('locked_sub', true);
                                     accountDao.saveOrUpdate(account, function(err, savedAccount){
@@ -300,7 +300,7 @@ var dao = {
                 req.session.subdomain = account.get('subdomain');
                 req.session.domain = account.get('domain');
                 if(!self._verifyActiveTrialOrSub(account) ) {
-                    log.debug('locking session for account ' + req.session.accountId);
+                    self.log.debug('locking session for account ' + req.session.accountId);
                     req.session.locked_sub = true;
                     account.set('locked_sub', true);
                     accountDao.saveOrUpdate(account, function(err, savedAccount){
@@ -544,7 +544,7 @@ var dao = {
                             user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, hash, null, null);
                         }
                     });
-                    
+
                     userDao.saveOrUpdate(user, function (err, value) {
                         if (!err) {
                             var userActivity = new $$.m.UserActivity({accountId:accountId, userId:user.id(), type:'RESET_PASSWORD'});
@@ -747,7 +747,7 @@ var dao = {
         if(!billing.subscriptionId || billing.subscriptionId.indexOf('sub_') ===0) {
             return true;
         }
-        var trialDays = billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
+        var trialDays = billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
         var endDate = moment(billing.signupDate).add(trialDays, 'days');
 
         var trialDaysRemaining = endDate.diff(moment(), 'days');
@@ -766,4 +766,3 @@ dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();
 $$.dao.AuthenticationDao = dao;
 
 module.exports = dao;
-

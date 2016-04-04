@@ -36,7 +36,7 @@ exports.stripe_dao_test = {
     },
 
     cleanupCustomers: function(test) {
-        stripeDao.listStripeCustomers(0, 100, function(err, customers){
+        stripeDao.listStripeCustomers(0, 100, null, function(err, customers){
             var numDeleted = 0;
             var customerId = '';
             if(customers.data.length > 0) {
@@ -45,7 +45,7 @@ exports.stripe_dao_test = {
 
             async.each(customers.data, function(customer, cb){
                 if(customer.email === 'test@example.com' || customer.email == null) {
-                    stripeDao.deleteStripeCustomer(customer.id, null, null, function(err, value){
+                    stripeDao.deleteStripeCustomer(customer.id, null, null, null, function(err, value){
                         if(err) {
                             _log.error('Error deleting customer:', err);
                         } else {

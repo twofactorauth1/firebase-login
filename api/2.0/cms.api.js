@@ -46,6 +46,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
         app.delete(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
+        // SITE TEMPLATES
+        app.get(this.url('sitetemplates'), this.isAuthAndSubscribedApi.bind(this), this.listSiteTemplates.bind(this));
+        app.get(this.url('sitetemplates/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSiteTemplate.bind(this));
+
         // WEBSITE - work with website objects
         app.get(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.listWebsites.bind(this));//get default (0th) website for current account
         app.get(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.getWebsite.bind(this));//get
@@ -54,19 +58,21 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
         app.get(this.url('websites/:id/theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get theme
+        app.post(this.url('websites/:id/sitetemplates/:siteTemplateId'), this.isAuthAndSubscribedApi.bind(this), this.setSiteTemplate.bind(this));
 
         //PAGE
         app.get(this.url('websites/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.listPages.bind(this));//get pages
         app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
         app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPage.bind(this));//get page
         app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));//update page
-        app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete page
+        app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));//delete page
+        app.post(this.url('websites/:websiteId/duplicate/page'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePage.bind(this));//create duplicate page
 
         app.get(this.url('pages/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
         //app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
 
-        app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page versions
-        app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//revert page to version
+        app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersions.bind(this));//get page versions
+        app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));//revert page to version
 
 
         // COMPONENTS
@@ -91,6 +97,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.log.debug('<< noop');
         self.sendResult(resp, {msg:'method not implemented'});
+    },
+
+    deletePage: function(req, resp) {
+
+        var self = this;
+        self.log.debug('>> deletePage');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var pageId = req.params.id;
+
+                ssbManager.deletePage(pageId, accountId, function (err, page) {
+                    if(err) {
+                        self.wrapError(resp, 500, err, "Error deleting page");
+                    } else {
+                        self.send200(resp);
+                    }
+                });
+            }
+        });
     },
 
     listTemplates: function(req, resp) {
@@ -255,6 +284,29 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    createDuplicatePage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createDuplicatePage');
+        var _page = req.body;
+        // Delete _id of the existing page;
+        delete _page._id;
+        var duplicatePage = new $$.m.ssb.Page(req.body);
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var created = {date: new Date(), by:self.userId(req)};
+                ssbManager.createDuplicatePage(accountId, duplicatePage, created, function(err, page){
+                    self.log.debug('<< createDuplicatePage');
+                    return self.sendResultOrError(resp, err, page, "Error creating page");
+                });
+            }
+        });
+
+    },
+
     getPage: function(req, resp) {
         var self = this;
         self.log.debug('>> getPage');
@@ -278,7 +330,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updatePage');
         var accountId = parseInt(self.accountId(req));
         var pageId = req.params.id;
-        var updatedPage = new $$.m.ssb.Page(req.body);
+        var _page = req.body;
+        var homePage = _page.homePage;
+        delete _page.homePage;
+        var updatedPage = new $$.m.ssb.Page(_page);
+
         updatedPage.set('_id', pageId);//make sure we don't change the ID
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
@@ -286,7 +342,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var modified = {date: new Date(), by:self.userId(req)};
-                ssbManager.updatePage(accountId, pageId, updatedPage, modified, function(err, page){
+                ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(resp, err, page, "Error fetching page");
                     pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
@@ -412,11 +468,72 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< listPagesWithSections');
             return self.sendResultOrError(resp, err, pages, "Error listing pages");
         });
+    },
+
+    listSiteTemplates: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listSiteTemplates');
+        var accountId = parseInt(self.accountId(req));
+
+        ssbManager.listSiteTemplates(accountId, function(err, templates){
+            self.log.debug('<< listSiteTemplates');
+            return self.sendResultOrError(resp, err, templates, "Error listing Site Templates");
+        });
+    },
+
+    getSiteTemplate: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getSiteTemplate');
+        var accountId = parseInt(self.accountId(req));
+        var siteTemplateId = req.params.id;
+
+        ssbManager.getSiteTemplate(accountId, siteTemplateId, function(err, template){
+            self.log.debug('<< getSiteTemplate');
+            return self.sendResultOrError(resp, err, template, "Error getting Site Template");
+        });
+    },
+
+    setSiteTemplate: function(req, resp) {
+        var self = this;
+        self.log.debug('>> setSiteTemplate');
+        var accountId = parseInt(self.accountId(req));
+        var websiteId = req.params.id;
+        var siteTemplateId = req.params.siteTemplateId;
+        var siteThemeId = req.body.siteThemeId;
+        var created = {
+            date: new Date(),
+            by: self.userId(req)
+        };
+
+        self.log.debug('siteThemeId', siteThemeId)
+
+        ssbManager.setSiteTemplate(accountId, siteTemplateId, siteThemeId, websiteId, created, function(err, value){
+            self.log.debug('<< setSiteTemplate');
+            return self.sendResultOrError(resp, err, value, "Error setting Site Template");
+        });
+    },
+
+    getPageVersions: function (req, resp) {
+        var self = this;
+        self.log.debug('>> getPageVersions');
+        var pageId = req.params.id;
+        cmsManager.getPageVersions(pageId, 'all', function (err, versions) {
+            self.log.debug('<< getPageVersions');
+            return self.sendResultOrError(resp, err, versions, "Error getting versions of a page");
+        });
+    },
+
+    revertPage: function (req, resp) {
+        var self = this;
+        self.log.debug('>> revertPage');
+        var pageId = req.params.id;
+        var versionId = parseInt(req.params.versionId);
+        cmsManager.revertPage(pageId, versionId, function (err, revertedPage) {
+            self.log.debug('<< getPageVersions');
+            return self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
+        });
     }
-
-
 
 });
 
 module.exports = new api({version:'2.0'});
-

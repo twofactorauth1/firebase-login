@@ -1,4 +1,4 @@
-<div ng-class="component.type+'-v'+component.version">
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div class="title">
         <div elem ng-model="component.title"></div>
     </div>
@@ -37,5 +37,5 @@
             <div class="clearfix mb30"></div>
         </div>
     </div>
-    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(0)" class="btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
+    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(0)" class="btn ssb-theme-btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
 </div>

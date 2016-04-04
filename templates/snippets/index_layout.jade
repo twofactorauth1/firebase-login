@@ -16,8 +16,6 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
     // <![endif]
     head
         block head
-            if account.accountUrl == 'https://main.indigenous.io'
-                script(src='//cdn.optimizely.com/js/3536810180.js')
             //- override this to include a different head section (e.g. requirehead.jade)
             block headattributes
                 include index_head_styles
@@ -25,8 +23,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             title=title
             meta(charset="utf-8")
             meta(name="viewport", content="width=device-width, initial-scale=1.0")
-            meta(name="description", content="#{account.website.seo.description}")
-            meta(name="keywords", content='#{_.pluck(account.website.seo.keywords,"text").join(",")}')
+            meta(name="description", content=seo.description)
+            meta(name="keywords", content=seo.keywords)
             meta(name="author", content=author)
             meta(name="fragment" content="!")
             meta(property='og:type', content=og.type)
@@ -53,7 +51,10 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     window.indigenous.precache = window.indigenous.precache || {};
                     window.indigenous.precache.pages = {components:components};
 
-    body(class='theme-main navbar-v#{ account.website.nav_version } ng-cloak', ng-cloak)
+        //- script.
+        //-     var test = !{JSON.stringify(account.website)};
+
+    body(class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), ng-cloak)
         block body_content
             div(id='fb-root')
             div(id='toolbar')

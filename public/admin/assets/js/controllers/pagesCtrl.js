@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "pageConstant", "$timeout", function ($scope, $location, toaster, $filter, $modal, WebsiteService, pageConstant, $timeout) {
+  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "pageConstant", "$timeout", "SimpleSiteBuilderService", function ($scope, $location, toaster, $filter, $modal, WebsiteService, pageConstant, $timeout, SimpleSiteBuilderService) {
     $scope.tableView = 'list';
     $scope.itemPerPage = 40;
     $scope.showPages = 15;
@@ -68,6 +68,12 @@
         fn(pagesArr);
       }
     };
+
+    $scope.$watch('pages.length', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.totalPages = $scope.pages.filter(function(page) { return !page.ssb; }).length;
+      }
+    });
 
     WebsiteService.getTemplates(function (templates) {
       $scope.templates = templates;
@@ -172,6 +178,13 @@
         mainmenu: page.mainmenu
       };
 
+      var error = WebsiteService.checkSystemRoute(page.handle);
+      if(error){        
+        toaster.pop('error', error);
+        $scope.saveLoading = false;
+        return false;
+      }
+
 
       var hasHandle = false;
       _.each($scope.pages, function (_page) {
@@ -179,6 +192,9 @@
           hasHandle = true;
         }
       });
+
+      
+      
 
       if (!hasHandle) {
         WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage, error) {
@@ -212,6 +228,7 @@
           page.handle = "";
           $scope.checkAndSetIndexPage($scope.pages);
           $scope.resetTemplateDetails();
+          resetSitebuilderPages();
         });
       } else {
         toaster.pop('error', "Page URL " + page.handle, "Already exists");
@@ -308,5 +325,18 @@
 
     $scope.getPages();
 
+    function resetSitebuilderPages(){
+      SimpleSiteBuilderService.pages = null;
+    }
+
   }]);
+  app.filter('ignoreSsbPages', function () {
+  return function (pages) {
+    if (pages) {
+      return pages.filter(function (page) {        
+            return !page.ssb;          
+      });
+    }
+  };
+});
 }(angular));

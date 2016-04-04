@@ -139,7 +139,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 if(billingObj.cardToken && billingObj.stripeCustomerId) {
                                     //we need to add a cardToken to a customer
-                                    paymentManager.addCardToCustomer(billingObj.cardToken, billingObj.stripeCustomerId, function(err, value){
+                                    paymentManager.addCardToCustomer(billingObj.cardToken, billingObj.stripeCustomerId, null, function(err, value){
                                         if(err) {
                                             self.log.error('Error updating Stripe');
                                             return self.wrapError(res, 500, null, err.message, err.message);
@@ -311,7 +311,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
-                
+
             }
         });
 
@@ -595,7 +595,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     _addTrialDaysToAccount: function(account) {
         var billing = account.get('billing') || {};
-        var trialDays = billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
+        var trialDays = billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
         var endDate = moment(billing.signupDate).add(trialDays, 'days');
 
         var trialDaysRemaining = endDate.diff(moment(), 'days');
@@ -607,4 +607,3 @@ _.extend(api.prototype, baseApi.prototype, {
 });
 
 module.exports = new api();
-

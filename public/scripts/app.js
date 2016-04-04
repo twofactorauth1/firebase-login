@@ -33,12 +33,14 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.poster",
         "truncate",
         'angular-jqcloud',
-        'socialLinks',
-        'slick',
-        'ngMap',
-        'wu.masonry'
+        '720kb.socialshare',
+        'slick',        
+        'wu.masonry',
+        'slugifier',
+        'LocalStorageModule',
+        'ngMap'
     ])
-    .config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
+    .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
         //$locationProvider.html5Mode(true);
         if (window.history && window.history.pushState) {
             $locationProvider.html5Mode(true).hashPrefix('!');
@@ -61,19 +63,11 @@ var mainApp = angular
                 */
                 template: function(urlattr) {
                     var s = '<div data-ng-include="';
-                    s += " '/template/index'";
-                    s += ' "></div>';
-                    return s;
-                },
-                controller: 'CacheCtrl as cacheCtrl'
-            })
-            .when('/:name', {
-                /*templateUrl: function(urlattr){
-                    return '/template/' + urlattr.name;
-                },*/
-                template: function(urlattr) {
-                    var s = '<div data-ng-include="';
-                    s += " '/template/" + urlattr.name + "'";
+                    s += " '/template/index";
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
                     s += ' "></div>';
                     return s;
                 },
@@ -82,6 +76,20 @@ var mainApp = angular
             .when('/404', {
                 templateUrl: '../views/404.html',
                 controller: 'NotFoundCtrl as notfound'
+            })
+            .when('/:name', {
+                template: function(urlattr) {
+
+                    var s = '<div data-ng-include="';
+                    s += " '/template/" + urlattr.name.toLowerCase();
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
+                },
+                controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/cached/:page', {
                 controller: 'CacheCtrl as cacheCtrl',
@@ -92,6 +100,7 @@ var mainApp = angular
                 controller: 'LayoutCtrl as layout'
             });
 
+            localStorageServiceProvider.setPrefix('indi');
 
     }])
     // .factory('noCacheInterceptor', function () {

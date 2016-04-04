@@ -1,0 +1,1183 @@
+#ssb-froala-scrollable-container {
+    //bottom positioning
+}
+
+ssb-topbar #ssb-froala-scrollable-container {
+    position: absolute;
+    left: 70px;
+    width: 100%;
+
+    //topbar positioning
+    @media (min-width: 1280px) {
+        width: calc(~"100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+        left: calc(~"16.66666667% + 85px + 15px + 15px + 3px");
+        right: calc(~"16.66666667% + 15px + 15px + 1px");
+        white-space: nowrap;
+        height: 60px;
+        border-top: 0;
+        border-bottom: 0;
+    }
+
+    // @media (min-width: 1330px) {
+    //     width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+    //     left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
+    // }
+
+}
+
+.fr-popup.fr-desktop.fr-inline,
+.fr-toolbar.fr-inline.fr-desktop {
+    transition: opacity .25s ease-in-out;
+    max-width: 330px;
+
+    //topbar positioning
+    @media (min-width: 1280px) {
+        pointer-events: none;
+        border: 0 none!important;
+        box-shadow: none!important;
+        // height: 60px;
+        position: relative!important;
+        top: 0!important;
+        left: 0!important;
+        margin: 0!important;
+        max-width: none;
+    }
+
+    //bottom positioning
+    // position: fixed!important;
+    // transform: translate(-50%,0);
+    // top: auto!important;
+    // bottom: 0!important;
+    // left: 50%!important;
+    // width: 100%;
+    // @media (min-width: 768px) {
+    //     //bottom positioning
+    //     // margin-left: 70px;
+    // }
+    // @media (min-width: 992px) {
+    //     //bottom positioning
+    //     // margin-left: 140px;
+    // }
+}
+
+.fr-popup.fr-desktop.fr-inline {
+    //topbar positioning
+    @media (min-width: 1280px) {
+
+        // position: absolute!important;
+        // width: 100%;
+        text-align: center;
+
+        &:before {
+            content: "";
+            display: inline-block;
+            vertical-align: middle;
+            height: 100%;
+        }
+
+        .fr-buttons {
+            position: relative;
+            display: inline-block;
+            box-shadow: none;
+            vertical-align: middle;
+            text-align: center;
+        }
+        // position: fixed;
+        // transform: translate(calc(-1 * ((16.666667% + 15px + 15px + 3px) + (16.66666667% + 15px + 15px + 1px))),0)
+    }
+}
+
+.fr-wrapper.show-placeholder .fr-placeholder {
+    pointer-events: none;
+}
+
+.fr-wrapper .fr-element {
+    text-align: inherit!important;
+    color: inherit;
+    overflow: hidden;
+    padding: 4px;
+    cursor: text;
+}
+
+.fr-wrapper ::selection {
+    background: rgba(21, 86, 103, 0.5) !important;
+    color: inherit!important;
+}
+
+.fr-wrapper ::-moz-selection {
+    background: rgba(21, 86, 103, 0.5) !important;
+    color: inherit!important;
+}
+
+/*
+ * This element prevents inserted HTML elements from
+ * being deleted when they have no text in them. We
+ * want to hide it visually so that it doesn't mess
+ * with centering, etc.
+ *
+ * - See /indigeweb/public/js/libs_misc/froala-wysiwyg-editor/config/config.js for usage
+ */
+.ssb-froala-content-editable-false {
+    display: none!important;
+}
+
+/*
+ * Style the first instance to use as a "disabled" state
+ */
+.fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
+    //topbar positioning
+    @media (min-width: 1280px) {
+        // display: inline-block!important;
+
+        button {
+            opacity: .5;
+        }
+    }
+}
+
+/*
+ * Style the active instance of the editor toolbar
+ */
+.fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
+
+    //topbar positioning
+    @media (min-width: 1280px) {
+        position: absolute!important;
+        z-index: 5;
+        pointer-events: auto!important;
+        display: block!important;
+        left: 50%!important;
+        transform: translateX(-50%);
+
+        button {
+            opacity: 1;
+        }
+    }
+
+    //topbar positioning for wider screens
+    // @media (min-width: 1300px) {
+    //     left: 50%!important;
+    //     transform: translateX(-50%);
+    // }
+
+}
+
+.fr-popup.fr-inline.fr-desktop.fr-active {
+    //topbar positioning for wider screens
+    @media (min-width: 1280px) {
+        // position: absolute!important;
+        z-index: 5;
+        pointer-events: auto!important;
+        display: inline-block!important;
+        // width: 100%;
+        // top: -60px!important;
+
+        // left: 50%!important;
+        // transform: translateX(-50%);
+    }
+}
+
+.fr-box.fr-code-view .CodeMirror {
+    font-size: 16px!important;
+    text-align: left;
+}
+
+//various tweaks to layout within topbar
+@media (min-width: 1280px) {
+    .fr-popup .fr-arrow,
+    .fr-toolbar .fr-arrow {
+        opacity: 0!important;
+    }
+
+    .fr-popup .fr-input-line, .fr-popup .fr-action-buttons {
+        display: inline-block!important;
+        margin: 0 1em;
+    }
+
+    .fr-popup .fr-input-line {
+        padding: 0!important;
+    }
+
+    .fr-popup .fr-input-line input + span {
+
+    }
+
+    body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus {
+        // background: transparent!important;
+        // color: #808080!important;
+    }
+
+    body[ng-controller] .fr-popup .fr-active.fr-layer {
+        margin: 0!important;
+        display: block;
+        width: auto!important;
+        margin: 0 auto!important;
+        min-width: 310px;
+    }
+
+    body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
+    body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+        color: #808080!important;
+        line-height: 0;
+    }
+}
+
+body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
+body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+    line-height: 1;
+}
+
+body[ng-controller] .fr-popup .fr-input-line input[type="text"] {
+    padding: 1em;
+}
+
+body[ng-controller] .fr-popup .fr-input-line textarea {
+    padding-top: 1em;
+}
+
+body[ng-controller] .fr-popup .fr-action-buttons button.fr-command {
+    height: 2.5em;
+}
+
+body[ng-controller] .fr-image-progress-bar-layer > h3 {
+    color: inherit;
+}
+
+body[ng-controller] .fr-popup .fr-buttons {
+    white-space: normal;
+}
+
+.ssb-table-transparent-border {
+    border: 1px double transparent!important;
+}
+.ssb-table-black-border {
+    border: 1px double #000!important;
+}
+.ssb-table-white-border {
+    border: 1px double #fff!important;
+}
+.ssb-editor-style-line-height-small-1 {
+    line-height: .5em;
+}
+.ssb-editor-style-line-height-small-2 {
+    line-height: .85em;
+}
+.ssb-editor-style-line-height-1 {
+    line-height: 1em;
+}
+.ssb-editor-style-line-height-2 {
+    line-height: 1.25em;
+}
+.ssb-editor-style-line-height-3 {
+    line-height: 1.5em;
+}
+.ssb-editor-style-line-height-4 {
+    line-height: 1.75em;
+}
+.ssb-editor-style-line-height-5 {
+    line-height: 2em;
+}
+
+
+
+
+
+
+
+/*
+ * Code originally auto-generated from https://www.froala.com/wysiwyg-editor/customize
+ * - replaced .custom-theme class with bodybody[ng-controller] selector
+ * - changed various styles to match out design
+ */
+// body[ng-controller] .fr-view table td,
+// body[ng-controller] .fr-view table th {
+//   border: 1px solid #dddddd;
+// }
+// body[ng-controller] .fr-view blockquote {
+//   border-left: solid 2px #5e35b1;
+//   color: #5e35b1;
+// }
+// body[ng-controller] .fr-view blockquote blockquote {
+//   border-color: #00bcd4;
+//   color: #00bcd4;
+// }
+// body[ng-controller] .fr-view blockquote blockquote blockquote {
+//   border-color: #43a047;
+//   color: #43a047;
+// }
+body[ng-controller] a.fr-floating-btn {
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  height: 32px;
+  width: 32px;
+  background: #ffffff;
+  color: #ffffff;
+  -webkit-transition: background 0.2s ease 0s, color 0.2s ease 0s, transform 0.2s ease 0s;
+  -moz-transition: background 0.2s ease 0s, color 0.2s ease 0s, transform 0.2s ease 0s;
+  -ms-transition: background 0.2s ease 0s, color 0.2s ease 0s, transform 0.2s ease 0s;
+  -o-transition: background 0.2s ease 0s, color 0.2s ease 0s, transform 0.2s ease 0s;
+  line-height: 32px;
+  border: none;
+}
+body[ng-controller] a.fr-floating-btn svg {
+  -webkit-transition: transform 0.2s ease 0s;
+  -moz-transition: transform 0.2s ease 0s;
+  -ms-transition: transform 0.2s ease 0s;
+  -o-transition: transform 0.2s ease 0s;
+  fill: #ffffff;
+}
+body[ng-controller] a.fr-floating-btn:hover {
+  background: #243948;
+}
+body[ng-controller] a.fr-floating-btn:hover svg {
+  fill: #ffffff;
+}
+body[ng-controller] .fr-visible a.fr-floating-btn {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  -o-transform: scale(1);
+}
+
+body[ng-controller] .fr-dii,
+body[ng-controller] .fr-dib {
+    max-width: 100%;
+}
+
+// body[ng-controller] img.fr-dib {
+//   margin-top: 5px;
+//   margin-bottom: 5px;
+// }
+// body[ng-controller] img.fr-dib.fr-fil {
+//   margin: 5px auto 5px 0;
+//   left: 5px;
+// }
+// body[ng-controller] img.fr-dib.fr-fir {
+//   margin: 5px 0 5px auto;
+//   right: 5px;
+// }
+// body[ng-controller] img.fr-dii {
+//   margin-top: 5px;
+//   margin-bottom: 5px;
+// }
+// body[ng-controller] img.fr-dii.fr-fil {
+//   margin: 5px 10px 5px 0;
+//   left: 5px;
+// }
+// body[ng-controller] img.fr-dii.fr-fir {
+//   margin: 5px 0 5px 10px;
+//   right: 5px;
+// }
+body[ng-controller] .fr-tooltip {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  background: #222222;
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 22px;
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-transition: opacity 0.2s ease 0s;
+  -moz-transition: opacity 0.2s ease 0s;
+  -ms-transition: opacity 0.2s ease 0s;
+  -o-transition: opacity 0.2s ease 0s;
+}
+// body[ng-controller] .fr-element {
+//   color: #000000;
+// }
+// body[ng-controller] .fr-box.fr-basic .fr-element {
+//   padding: 10px;
+// }
+// body[ng-controller] .fr-wrapper .fr-placeholder {
+//   font-size: 12px;
+//   color: #aaaaaa;
+// }
+// body[ng-controller] .fr-wrapper ::selection {
+//   background: #b5d6fd;
+//   color: #000000;
+// }
+// body[ng-controller] .fr-wrapper ::-moz-selection {
+//   background: #b5d6fd;
+//   color: #000000;
+// }
+body[ng-controller] .fr-box.fr-basic .fr-wrapper {
+  background: #ffffff;
+  border: 0px;
+  border-top: 0;
+}
+body[ng-controller] .fr-box.fr-basic .fr-wrapper .fr-placeholder {
+  top: 10px;
+  left: 10px;
+}
+body[ng-controller] .fr-box.fr-basic.fr-top .fr-wrapper {
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 0 0 2px 2px;
+  -moz-border-radius: 0 0 2px 2px;
+  -webkit-border-radius: 0 0 2px 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+body[ng-controller] .fr-box.fr-basic.fr-bottom .fr-wrapper {
+  -webkit-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+  border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn,
+body[ng-controller] .fr-popup .fr-command.fr-btn {
+  color: #ffffff;
+  margin: 0px 2px;
+  -webkit-transition: background 0.2s ease 0s;
+  -moz-transition: background 0.2s ease 0s;
+  -ms-transition: background 0.2s ease 0s;
+  -o-transition: background 0.2s ease 0s;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn i,
+body[ng-controller] .fr-popup .fr-command.fr-btn i {
+  font-size: 15px;
+  width: 15px;
+  margin: 11px 11.5px;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn span,
+body[ng-controller] .fr-popup .fr-command.fr-btn span {
+  font-size: 14px;
+  line-height: 14px;
+  margin: 11px 11.5px;
+  min-width: 15px;
+  height: 15px;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn img,
+body[ng-controller] .fr-popup .fr-command.fr-btn img {
+  margin: 11px 11.5px;
+  width: 15px;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-active,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-active {
+  color: #4bb0cb;
+  background: transparent;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown i,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown i,
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown span,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown span,
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown img,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown img {
+  margin-left: 7.5px;
+  margin-right: 15.5px;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown.fr-active,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown.fr-active {
+  color: #ffffff;
+  background: #243948;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown.fr-active:hover,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown.fr-active:hover,
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown.fr-active:focus,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown.fr-active:focus {
+  background: #243948 !important;
+  color: #ffffff !important;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown.fr-active:hover::after,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown.fr-active:hover::after,
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown.fr-active:focus::after,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown.fr-active:focus::after {
+  border-top-color: #ffffff !important;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-dropdown::after,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown::after {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 4px solid #ffffff;
+  right: 3.75px;
+  top: 16.5px;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-disabled,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-disabled {
+  color: #ffffff;
+}
+body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-disabled::after,
+body[ng-controller] .fr-popup .fr-command.fr-btn.fr-disabled::after {
+  border-top-color: #ffffff;
+}
+body[ng-controller] .fr-toolbar.fr-disabled .fr-btn,
+body[ng-controller] .fr-popup.fr-disabled .fr-btn,
+body[ng-controller] .fr-toolbar.fr-disabled .fr-btn.fr-active,
+body[ng-controller] .fr-popup.fr-disabled .fr-btn.fr-active {
+  color: #ffffff;
+}
+body[ng-controller] .fr-toolbar.fr-disabled .fr-btn.fr-dropdown::after,
+body[ng-controller] .fr-popup.fr-disabled .fr-btn.fr-dropdown::after,
+body[ng-controller] .fr-toolbar.fr-disabled .fr-btn.fr-active.fr-dropdown::after,
+body[ng-controller] .fr-popup.fr-disabled .fr-btn.fr-active.fr-dropdown::after {
+  border-top-color: #ffffff;
+}
+body[ng-controller] .fr-desktop .fr-command:hover,
+body[ng-controller] .fr-desktop .fr-command:focus {
+  color: #ffffff;
+  background: #243948;
+}
+body[ng-controller] .fr-desktop .fr-command:hover::after,
+body[ng-controller] .fr-desktop .fr-command:focus::after {
+  border-top-color: #ffffff !important;
+}
+body[ng-controller] .fr-desktop .fr-command.fr-selected {
+  color: #ffffff;
+  background: #243948;
+}
+body[ng-controller] .fr-desktop .fr-command.fr-active:hover,
+body[ng-controller] .fr-desktop .fr-command.fr-active:focus {
+  color: #4bb0cb;
+  background: #243948;
+}
+body[ng-controller] .fr-desktop .fr-command.fr-active.fr-selected {
+  color: #ffffff;
+  background: #243948;
+}
+body[ng-controller] .fr-desktop .fr-command.fr-disabled:hover,
+body[ng-controller] .fr-desktop .fr-command.fr-disabled:focus,
+body[ng-controller] .fr-desktop .fr-command.fr-disabled.fr-selected {
+  background: transparent;
+}
+body[ng-controller] .fr-toolbar.fr-mobile .fr-command.fr-blink,
+body[ng-controller] .fr-popup.fr-mobile .fr-command.fr-blink {
+  background: transparent;
+}
+body[ng-controller] .fr-command.fr-btn + .fr-dropdown-menu {
+  -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  border-radius: 0 0 2px 2px;
+  -moz-border-radius: 0 0 2px 2px;
+  -webkit-border-radius: 0 0 2px 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+body[ng-controller] .fr-command.fr-btn + .fr-dropdown-menu .fr-dropdown-wrapper {
+  background: #1c2b36;
+  -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  -webkit-transition: max-height 0.2s ease 0s;
+  -moz-transition: max-height 0.2s ease 0s;
+  -ms-transition: max-height 0.2s ease 0s;
+  -o-transition: max-height 0.2s ease 0s;
+}
+body[ng-controller] .fr-command.fr-btn + .fr-dropdown-menu .fr-dropdown-wrapper .fr-dropdown-content {
+  max-height: 275px;
+}
+body[ng-controller] .fr-command.fr-btn + .fr-dropdown-menu .fr-dropdown-wrapper .fr-dropdown-content ul.fr-dropdown-list li a.fr-active {
+  background: #243948;
+}
+body[ng-controller] .fr-command.fr-btn + .fr-dropdown-menu .fr-dropdown-wrapper .fr-dropdown-content ul.fr-dropdown-list li a.fr-disabled {
+  color: #ffffff;
+}
+body[ng-controller] .fr-command.fr-btn.fr-active + .fr-dropdown-menu .fr-dropdown-wrapper {
+  max-height: 275px;
+}
+body[ng-controller] .fr-bottom > .fr-command.fr-btn + .fr-dropdown-menu {
+  -webkit-box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16), 0 -2px 4px rgba(0, 0, 0, 0.23);
+  -moz-box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16), 0 -2px 4px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 -3px 6px rgba(0, 0, 0, 0.16), 0 -2px 4px rgba(0, 0, 0, 0.23);
+  border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+body[ng-controller] .fr-popup {
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  color: #ffffff;
+  background: #1c2b36;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  font-family: Arial, Helvetica, sans-serif;
+  border: 0px;
+  border-top: 5px solid #222222;
+}
+body[ng-controller] .fr-popup.fr-above {
+  border-bottom: 5px solid #222222;
+  -webkit-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-popup .fr-input-line input[type="text"],
+body[ng-controller] .fr-popup .fr-input-line textarea {
+  color: #ffffff;
+  border-bottom: solid 1px #bdbdbd;
+}
+body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus,
+body[ng-controller] .fr-popup .fr-input-line textarea:focus {
+  border-bottom: solid 2px #ffffff;
+  background-color: inherit!important;
+}
+body[ng-controller] .fr-popup .fr-input-line input + span,
+body[ng-controller] .fr-popup .fr-input-line textarea + span {
+  -webkit-transition: color 0.2s ease 0s;
+  -moz-transition: color 0.2s ease 0s;
+  -ms-transition: color 0.2s ease 0s;
+  -o-transition: color 0.2s ease 0s;
+}
+body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty:focus + span,
+body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty:focus + span {
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
+body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+  color: #808080;
+}
+body[ng-controller] .fr-popup .fr-buttons {
+  padding: 0 2px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border-bottom: 0px;
+}
+body[ng-controller] .fr-popup .fr-layer {
+  width: 225px;
+}
+@media (min-width: 768px) {
+  body[ng-controller] .fr-popup .fr-layer {
+    width: 300px;
+  }
+}
+body[ng-controller] .fr-popup .fr-action-buttons button.fr-command {
+  background: @indigenous-blue;
+  color: #ffffff;
+  -webkit-transition: background 0.2s ease 0s;
+  -moz-transition: background 0.2s ease 0s;
+  -ms-transition: background 0.2s ease 0s;
+  -o-transition: background 0.2s ease 0s;
+}
+body[ng-controller] .fr-popup .fr-action-buttons button.fr-command:hover,
+body[ng-controller] .fr-popup .fr-action-buttons button.fr-command:focus {
+  background: #243948;
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-action-buttons button.fr-command:active {
+  background: #243948;
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-checkbox span {
+  border: solid 1px #ffffff;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-transition: background 0.2s ease 0s, border-color 0.2s ease 0s;
+  -moz-transition: background 0.2s ease 0s, border-color 0.2s ease 0s;
+  -ms-transition: background 0.2s ease 0s, border-color 0.2s ease 0s;
+  -o-transition: background 0.2s ease 0s, border-color 0.2s ease 0s;
+}
+body[ng-controller] .fr-popup .fr-checkbox input:checked + span {
+  background: #ffffff;
+  border-color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-checkbox input:focus + span {
+  border-color: #ffffff;
+}
+body[ng-controller] .fr-popup.fr-desktop .fr-arrow {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #222222;
+  top: -9px;
+  margin-left: -5px;
+}
+body[ng-controller] .fr-popup.fr-desktop.fr-above .fr-arrow {
+  // bottom: -9px;
+  // border-top-width: 5px;
+    bottom: -15px;
+    border-top-width: 5px;
+    top: auto;
+    border-top-color: black;
+    border-bottom-color: transparent;
+}
+body[ng-controller] .fr-toolbar {
+  color: #ffffff;
+  background: #1c2b36;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0 2px;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  border: 0px;
+  border-top: 5px solid #222222;
+}
+body[ng-controller] .fr-toolbar.fr-inline.fr-desktop .fr-arrow {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #222222;
+  top: -9px;
+  margin-left: -5px;
+}
+body[ng-controller] .fr-toolbar.fr-inline.fr-desktop.fr-above {
+  border-bottom: 5px solid #222222;
+  -webkit-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-toolbar.fr-inline.fr-desktop.fr-above .fr-arrow {
+  // bottom: -9px;
+  // border-top-width: 5px;
+    bottom: -15px;
+    border-top-width: 5px;
+    top: auto;
+    border-top-color: black;
+    border-bottom-color: transparent;
+}
+body[ng-controller] .fr-toolbar.fr-top {
+  border-radius: 2px 2px 0 0;
+  -moz-border-radius: 2px 2px 0 0;
+  -webkit-border-radius: 2px 2px 0 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-toolbar.fr-bottom {
+  border-radius: 0 0 2px 2px;
+  -moz-border-radius: 0 0 2px 2px;
+  -webkit-border-radius: 0 0 2px 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-separator {
+  background: #a3a3a3;
+}
+body[ng-controller] .fr-separator.fr-vs {
+  height: 33px;
+  width: 1px;
+  margin: 2px;
+}
+body[ng-controller] .fr-separator.fr-hs {
+  height: 1px;
+  width: calc(96%);
+  margin: 0 2px;
+}
+body[ng-controller] .fr-box .fr-counter {
+  color: #cccccc;
+  background: #ffffff;
+  border-top: solid 1px #ebebeb;
+  border-left: solid 1px #ebebeb;
+  border-radius: 2px 0 0 0;
+  -moz-border-radius: 2px 0 0 0;
+  -webkit-border-radius: 2px 0 0 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+body[ng-controller] .fr-box.fr-rtl .fr-counter {
+  border-right: solid 1px #ebebeb;
+  border-radius: 0 2px 0 0;
+  -moz-border-radius: 0 2px 0 0;
+  -webkit-border-radius: 0 2px 0 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+body[ng-controller] textarea.fr-code {
+  background: #ffffff;
+  color: #000000;
+}
+body[ng-controller] .fr-box.fr-code-view.fr-inline {
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-box.fr-inline .fr-command.fr-btn.html-switch {
+  background: @indigenous-gray-blue;
+  top: auto;
+  bottom: 0;
+  font-size: 16px;
+  color: #ffffff;
+  padding: 11px 11.5px;
+  -webkit-transition: background 0.2s ease 0s;
+  -moz-transition: background 0.2s ease 0s;
+  -ms-transition: background 0.2s ease 0s;
+  -o-transition: background 0.2s ease 0s;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-box.fr-inline .fr-command.fr-btn.html-switch i {
+  font-size: 15px;
+  width: 15px;
+}
+body[ng-controller] .fr-box.fr-inline .fr-command.fr-btn.html-switch.fr-desktop:hover {
+  background: #243948;
+}
+body[ng-controller] .fr-popup .fr-colors-tabs {
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-popup .fr-colors-tabs .fr-colors-tab {
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-colors-tabs .fr-colors-tab:hover {
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-colors-tabs .fr-colors-tab[data-param1="background"]::after {
+  background: #ffffff;
+  -webkit-transition: transform 0.2s ease 0s;
+  -moz-transition: transform 0.2s ease 0s;
+  -ms-transition: transform 0.2s ease 0s;
+  -o-transition: transform 0.2s ease 0s;
+}
+body[ng-controller] .fr-popup .fr-colors-tabs .fr-colors-tab.fr-selected-tab {
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-color-set > span.fr-selected-color::after {
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-color-set > span:hover,
+body[ng-controller] .fr-popup .fr-color-set > span.fr-selected-color {
+  outline: 1px solid #ffffff;
+}
+body[ng-controller] .fr-file-upload-layer {
+  border: dashed 2px #ffffff;
+}
+body[ng-controller] .fr-file-upload-layer:hover {
+  background: #243948;
+}
+body[ng-controller] .fr-file-upload-layer.fr-drop {
+  background: #243948;
+  border-color: #ffffff;
+}
+body[ng-controller] .fr-file-progress-bar-layer > div.fr-loader {
+  background: #ffffff;
+}
+body[ng-controller] .fr-file-progress-bar-layer > div.fr-loader span {
+  background: #ffffff;
+  -webkit-transition: width 0.2s ease 0s;
+  -moz-transition: width 0.2s ease 0s;
+  -ms-transition: width 0.2s ease 0s;
+  -o-transition: width 0.2s ease 0s;
+}
+body[ng-controller] .fr-image-resizer {
+  border: solid 1px #ffffff;
+}
+body[ng-controller] .fr-image-resizer .fr-handler {
+  background: #ffffff;
+  border: solid 1px #ffffff;
+}
+body[ng-controller] .fr-image-resizer .fr-handler {
+  width: 12px;
+  height: 12px;
+}
+body[ng-controller] .fr-image-resizer .fr-handler.fr-hnw {
+  left: -6px;
+  top: -6px;
+}
+body[ng-controller] .fr-image-resizer .fr-handler.fr-hne {
+  right: -6px;
+  top: -6px;
+}
+body[ng-controller] .fr-image-resizer .fr-handler.fr-hsw {
+  left: -6px;
+  bottom: -6px;
+}
+body[ng-controller] .fr-image-resizer .fr-handler.fr-hse {
+  right: -6px;
+  bottom: -6px;
+}
+@media (min-width: 1200px) {
+  body[ng-controller] .fr-image-resizer .fr-handler {
+    width: 10px;
+    height: 10px;
+  }
+  body[ng-controller] .fr-image-resizer .fr-handler.fr-hnw {
+    left: -5px;
+    top: -5px;
+  }
+  body[ng-controller] .fr-image-resizer .fr-handler.fr-hne {
+    right: -5px;
+    top: -5px;
+  }
+  body[ng-controller] .fr-image-resizer .fr-handler.fr-hsw {
+    left: -5px;
+    bottom: -5px;
+  }
+  body[ng-controller] .fr-image-resizer .fr-handler.fr-hse {
+    right: -5px;
+    bottom: -5px;
+  }
+}
+body[ng-controller] .fr-image-upload-layer {
+  border: dashed 2px #ffffff;
+}
+body[ng-controller] .fr-image-upload-media-layer {
+    border: dashed 2px #ffffff;
+    button{
+        width: 100% !important;
+        background: #243948 !important;
+        border: 0 !important;
+        span{
+            margin-left:5px;
+        }
+    }
+}
+body[ng-controller] .fr-image-upload-layer:hover {
+  background: #243948;
+}
+body[ng-controller] .fr-image-upload-layer.fr-drop {
+  background: #243948;
+  border-color: #ffffff;
+}
+body[ng-controller] .fr-image-progress-bar-layer > div.fr-loader {
+  background: #ffffff;
+}
+body[ng-controller] .fr-image-progress-bar-layer > div.fr-loader span {
+  background: #ffffff;
+  -webkit-transition: width 0.2s ease 0s;
+  -moz-transition: width 0.2s ease 0s;
+  -ms-transition: width 0.2s ease 0s;
+  -o-transition: width 0.2s ease 0s;
+}
+body[ng-controller] .fr-line-breaker {
+  border-top: 1px solid #ffffff;
+}
+body[ng-controller] .fr-line-breaker a.fr-floating-btn {
+  left: calc(34%);
+  top: -16px;
+}
+body[ng-controller] table td.fr-selected-cell,
+body[ng-controller] table th.fr-selected-cell {
+  border: 1px double #ffffff;
+}
+body[ng-controller] .fr-table-resizer div {
+  border-right: 1px solid #ffffff;
+}
+body[ng-controller] .fr-popup .fr-table-size .fr-select-table-size > span > span {
+  border: 1px solid #dddddd;
+}
+body[ng-controller] .fr-popup .fr-table-size .fr-select-table-size > span:hover > span,
+body[ng-controller] .fr-popup .fr-table-size .fr-select-table-size > span.hover > span {
+  background: rgba(255, 255, 255, 0.3);
+  border: solid 1px #ffffff;
+}
+body[ng-controller] .fr-popup .fr-table-colors > span.fr-selected-color::after {
+  color: #ffffff;
+}
+body[ng-controller] .fr-popup .fr-table-colors > span:hover,
+body[ng-controller] .fr-popup .fr-table-colors > span.fr-selected-color {
+  outline: 1px solid #ffffff;
+}
+body[ng-controller] .fr-box .fr-video-resizer {
+  border: solid 1px #ffffff;
+}
+body[ng-controller] .fr-box .fr-video-resizer .fr-handler {
+  background: #ffffff;
+  border: solid 1px #ffffff;
+}
+body[ng-controller] .fr-box .fr-video-resizer .fr-handler {
+  width: 12px;
+  height: 12px;
+}
+body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hnw {
+  left: -6px;
+  top: -6px;
+}
+body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hne {
+  right: -6px;
+  top: -6px;
+}
+body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hsw {
+  left: -6px;
+  bottom: -6px;
+}
+body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hse {
+  right: -6px;
+  bottom: -6px;
+}
+@media (min-width: 1200px) {
+  body[ng-controller] .fr-box .fr-video-resizer .fr-handler {
+    width: 10px;
+    height: 10px;
+  }
+  body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hnw {
+    left: -5px;
+    top: -5px;
+  }
+  body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hne {
+    right: -5px;
+    top: -5px;
+  }
+  body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hsw {
+    left: -5px;
+    bottom: -5px;
+  }
+  body[ng-controller] .fr-box .fr-video-resizer .fr-handler.fr-hse {
+    right: -5px;
+    bottom: -5px;
+  }
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  background: #ffffff;
+  -webkit-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+  -moz-box-shadow: 0 5px 8px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 5px 8px rgba(0, 0, 0, 0.19), 0 4px 6px rgba(0, 0, 0, 0.23);
+  border: 0px;
+  border-top: 5px solid #222222;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title {
+  background: #1c2b36;
+  -webkit-transition: height 0.2s ease 0s;
+  -moz-transition: height 0.2s ease 0s;
+  -ms-transition: height 0.2s ease 0s;
+  -o-transition: height 0.2s ease 0s;
+  -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
+  border-bottom: 0px;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title .fr-modal-title-line h4 {
+  color: #ffffff;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title .fr-modal-title-line i {
+  color: #ffffff;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title .fr-modal-title-line i.fr-modal-more {
+  -webkit-transition: padding 0.2s ease 0s, width 0.2s ease 0s, opacity 0.2s ease 0s;
+  -moz-transition: padding 0.2s ease 0s, width 0.2s ease 0s, opacity 0.2s ease 0s;
+  -ms-transition: padding 0.2s ease 0s, width 0.2s ease 0s, opacity 0.2s ease 0s;
+  -o-transition: padding 0.2s ease 0s, width 0.2s ease 0s, opacity 0.2s ease 0s;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title .fr-modal-title-line i.fr-modal-close {
+  -webkit-transition: color 0.2s ease 0s;
+  -moz-transition: color 0.2s ease 0s;
+  -ms-transition: color 0.2s ease 0s;
+  -o-transition: color 0.2s ease 0s;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title .fr-modal-tags a {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  color: #ffffff;
+  -webkit-transition: opacity 0.2s ease 0s, background 0.2s ease 0s;
+  -moz-transition: opacity 0.2s ease 0s, background 0.2s ease 0s;
+  -ms-transition: opacity 0.2s ease 0s, background 0.2s ease 0s;
+  -o-transition: opacity 0.2s ease 0s, background 0.2s ease 0s;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title .fr-modal-tags a.fr-selected-tag {
+  background: #243948;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container.fr-image-deleting::after {
+  -webkit-transition: opacity 0.2s ease 0s;
+  -moz-transition: opacity 0.2s ease 0s;
+  -ms-transition: opacity 0.2s ease 0s;
+  -o-transition: opacity 0.2s ease 0s;
+  background: #000000;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container.fr-image-deleting::before {
+  color: #ffffff;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container.fr-empty {
+  background: #cccccc;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container img {
+  -webkit-transition: opacity 0.2s ease 0s, filter 0.2s ease 0s;
+  -moz-transition: opacity 0.2s ease 0s, filter 0.2s ease 0s;
+  -ms-transition: opacity 0.2s ease 0s, filter 0.2s ease 0s;
+  -o-transition: opacity 0.2s ease 0s, filter 0.2s ease 0s;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container .fr-delete-img,
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container .fr-insert-img {
+  -webkit-transition: background 0.2s ease 0s, color 0.2s ease 0s;
+  -moz-transition: background 0.2s ease 0s, color 0.2s ease 0s;
+  -ms-transition: background 0.2s ease 0s, color 0.2s ease 0s;
+  -o-transition: background 0.2s ease 0s, color 0.2s ease 0s;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container .fr-delete-img {
+  background: #b8312f;
+  color: #ffffff;
+}
+body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container .fr-insert-img {
+  background: #1c2b36;
+  color: #ffffff;
+}
+body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper .fr-modal-title .fr-modal-title-line i:hover {
+  background: #243948;
+}
+body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper .fr-modal-title .fr-modal-tags a:hover {
+  background: #243948;
+}
+body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper .fr-modal-title .fr-modal-tags a.fr-selected-tag {
+  background: #243948;
+}
+body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container .fr-delete-img:hover {
+  background: #bf4644;
+  color: #ffffff;
+}
+body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container .fr-insert-img:hover {
+  background: #243948;
+}
+body[ng-controller] .fr-overlay {
+  background: #000000;
+}
+.fr-view {
+    h1 *,h2 *,h3 *,h4 *,h5 *,h6 *{
+        font-size: inherit !important;
+    }
+
+}
+

@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService, toaster) {
 
     console.info('site-build sidebar directive init...')
 
@@ -26,15 +26,17 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
-    vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
+    vm.setActiveComponent = setActiveComponent;
     vm.setActiveSection = setActiveSection;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
+    vm.scrollToActiveSection = scrollToActiveSection;
     vm.removeSectionFromPage = removeSectionFromPage;
     vm.removeComponentFromSection = removeComponentFromSection;
     vm.addComponentToSection = addComponentToSection;
     vm.addBackground = addBackground;
+    vm.addBackgroundVideo = addBackgroundVideo;
     vm.addImage = addImage;
     vm.openModal = openModal;
     vm.openPageSettingsModal = openPageSettingsModal;
@@ -49,53 +51,26 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.removeImage = removeImage;
     vm.createPage = createPage;
     vm.getTemplateById = getTemplateById;
+    vm.editSectionName = editSectionName;
+    vm.hideSectionFromPage = hideSectionFromPage;
+    vm.deletePage = deletePage;
+    vm.duplicatePage = duplicatePage;
+    vm.hideFromMenu = hideFromMenu;
+    vm.showPageOnMenu = showPageOnMenu;
+    vm.moveSection = moveSection;
+    vm.duplicateSection = duplicateSection;
+    vm.validateDuplicatePage = validateDuplicatePage;
+    vm.constructVideoUrl = constructVideoUrl;
+    vm.closeSectionPanel = closeSectionPanel;
 
     editableOptions.theme = 'bs3';
 
-    // $scope.$watch('vm.uiState.activeSectionIndex', function(index) {
-    //     console.log('activeSectionIndex changed: ', index);
-    //     vm.navigation.loadPage();
-    // }, true);
-
-    vm.navigation = {
-    	back: function() {
-    		vm.navigation.index = 0;
-    		vm.navigation.indexClass = 'ssb-sidebar-position-0';
-    	},
-    	loadPage: function(pageId) {
-            if (pageId && pageId !== vm.state.page._id) {
-                vm.state.page = null;
-                vm.uiState = {
-                    loading: 0,
-                    activeSectionIndex: undefined,
-                    activeComponentIndex: undefined,
-                    show: {
-                        flyover: true,
-                        sidebar: true
-                    },
-                    accordion: {
-                        site: {},
-                        page: {},
-                        sections: {}
-                    }
-                };
-                $location.path('/website/site-builder/pages/' + pageId);
-            } else {
-                vm.navigation.index = 1;
-                vm.navigation.indexClass = 'ssb-sidebar-position-1';
-            }
-    	},
-    	goToPagesListPage: function() {
-    		$location.url('/website/site-builder/pages/');
-    	},
-    	index: 0,
-    	indexClass: 'ssb-sidebar-position-1'
-    };
 
     vm.sortableOptions = {
     	handle: '.ssb-sidebar-move-handle',
 		onSort: function (evt) {
 			console.log(evt);
+            vm.setActiveSection(evt.newIndex);
 		},
 		onStart: function (evt) {
 			vm.dragging = true;
@@ -107,32 +82,137 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     //TODO: move into config services
     vm.spectrum = {
-  	  options: {
-  	    showPalette: true,
-  	    clickoutFiresChange: true,
-  	    showInput: true,
-  	    showButtons: true,
-  	    allowEmpty: true,
-  	    hideAfterPaletteSelect: false,
-  	    showPaletteOnly: false,
-  	    togglePaletteOnly: true,
-  	    togglePaletteMoreText: 'more',
-  	    togglePaletteLessText: 'less',
-  	    preferredFormat: 'hex',
-  	    appendTo: 'body',
-  	    palette: [
-  	      ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
-  	      ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
-  	      ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
-  	      ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
-  	      ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
-  	      ["#26C281", "#049372", "#2ABB9B", "#16A085", "#36D7B7", "#03A678", "#4DAF7C", "#D9B611", "#F3C13A", "#F7CA18"],
-  	      ["#E2B13C", "#A17917", "#F5D76E", "#F4D03F", "#FFA400", "#E08A1E", "#FFB61E", "#FAA945", "#FFA631", "#FFB94E"],
-  	      ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
-  	      ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6", "#9ACCCB", "#E8E7E7", "#000000", "#FFFFFF", "#50c7e8"]
-  	    ]
-  	  }
+  	  options: SimpleSiteBuilderService.getSpectrumColorOptions()
   	};
+
+    //TODO: move into config services
+    vm.social_links = [{
+        name: "adn",
+        icon: "adn",
+        tooltip: "Adn",
+        url: "http://www.adn.com"
+      }, {
+        name: "bitbucket",
+        icon: "bitbucket",
+        tooltip: "BitBucket",
+        url: "https://bitbucket.org"
+      }, {
+        name: "dropbox",
+        icon: "dropbox",
+        tooltip: "Dropbox",
+        url: "https://www.dropbox.com"
+      }, {
+        name: "facebook",
+        icon: "facebook",
+        tooltip: "Facebook",
+        url: "https://www.facebook.com"
+      }, {
+        name: "flickr",
+        icon: "flickr",
+        tooltip: "Flickr",
+        url: "https://www.flickr.com"
+      }, {
+        name: "foursquare",
+        icon: "foursquare",
+        tooltip: "Four Square",
+        url: "https://foursquare.com"
+      }, {
+        name: "github",
+        icon: "github",
+        tooltip: "Github",
+        url: "https://github.com"
+      }, {
+        name: "google-plus",
+        icon: "google-plus",
+        tooltip: "Google Plus",
+        url: "https://www.gmail.com"
+      }, {
+        name: "instagram",
+        icon: "instagram",
+        tooltip: "Instagram",
+        url: "https://instagram.com"
+      }, {
+        name: "linkedin",
+        icon: "linkedin",
+        tooltip: "Linkedin",
+        url: "https://www.linkedin.com"
+      }, {
+        name: "microsoft",
+        icon: "windows",
+        tooltip: "Microsoft",
+        url: "http://www.microsoft.com"
+      }, {
+        name: "openid",
+        icon: "openid",
+        tooltip: "Open Id",
+        url: "http://openid.com"
+      }, {
+        name: "pinterest",
+        icon: "pinterest",
+        tooltip: "Pinterest",
+        url: "https://www.pinterest.com"
+      }, {
+        name: "reddit",
+        icon: "reddit",
+        tooltip: "Reddit",
+        url: "http://www.reddit.com"
+      }, {
+        name: "comment-o",
+        icon: "comment-o",
+        tooltip: "Snapchat",
+        url: "https://www.snapchat.com"
+      }, {
+        name: "soundcloud",
+        icon: "soundcloud",
+        tooltip: "Sound Cloud",
+        url: "https://soundcloud.com"
+      }, {
+        name: "tumblr",
+        icon: "tumblr",
+        tooltip: "Tumblr",
+        url: "https://www.tumblr.com"
+      }, {
+        name: "twitter",
+        icon: "twitter",
+        tooltip: "Twitter",
+        url: "https://twitter.com"
+      }, {
+        name: "vimeo",
+        icon: "vimeo-square",
+        tooltip: "Vimeo",
+        url: "https://vimeo.com"
+      }, {
+        name: "vine",
+        icon: "vine",
+        tooltip: "Vine",
+        url: "http://www.vinemarket.com"
+      }, {
+        name: "vk",
+        icon: "vk",
+        tooltip: "Vk",
+        url: "http://vk.com"
+      }, {
+        name: "desktop",
+        icon: "desktop",
+        tooltip: "Website",
+        url: "http://www.website.com"
+      }, {
+        name: "yahoo",
+        icon: "yahoo",
+        tooltip: "Yahoo",
+        url: "https://yahoo.com"
+      }, {
+        name: "youtube",
+        icon: "youtube",
+        tooltip: "Youtube",
+        url: "https://www.youtube.com"
+      }, {
+        name: "yelp",
+        icon: "yelp",
+        tooltip: "Yelp",
+        url: "http://www.yelp.com"
+      }];
+
 
     function insertMedia(asset) {
       vm.insertMediaCallback(asset);
@@ -151,7 +231,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
   	function getPlatformSections() {
-        alert('used!')
+        // alert('used!')
   		// SimpleSiteBuilderService.getPlatformSections().then(function(data) {
     //     vm.platformSections = data;
       // });
@@ -170,8 +250,93 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	)
     }
 
-    function addSectionToPage(section, version) {
-      SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance);
+    function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
+        return (
+            SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex], copyAtIndex).then(function() {
+                vm.scrollToActiveSection();
+            }, function(error) {
+                console.error('section panel -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
+            })
+        )
+    }
+
+    function scrollToActiveSection() {
+        $timeout(function () {
+            var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
+            var activeSection = document.querySelector('.ssb-active-section');
+            if (activeSection) {
+              scrollContainerEl.scrollTop = activeSection.offsetTop;
+            }
+        }, 500);
+    }
+
+    function editSectionName(id) {
+      $timeout(function () {
+        angular.element(document.getElementById(id)).click();
+      },0);
+    }
+
+    function hideSectionFromPage(section, index) {
+
+        if(section.visibility){
+
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Do you want to hide this section from page?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, hide it!",
+                cancelButtonText: "No, do not hide it!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    section.visibility = false;
+                    setActiveSection(index);
+                }
+            });
+
+        } else {
+            section.visibility = true;
+            setActiveSection(index);
+        }
+
+    }
+
+    function moveSection(direction, section, index) {
+
+        var sectionsArray = vm.state.page.sections;
+        var toIndex;
+        var fromIndex = index;
+
+        if (direction === 'up') {
+            toIndex = fromIndex - 1;
+        }
+
+        if (direction === 'down') {
+            toIndex = fromIndex + 1;
+        }
+
+        sectionsArray.splice(toIndex, 0, sectionsArray.splice(fromIndex, 1)[0] );
+
+        vm.setActiveSection(toIndex);
+
+    }
+
+    function duplicateSection(section, index) {
+
+        var insertAtIndex = (index > 0) ? (index - 1) : index;
+
+        section = SimpleSiteBuilderService.setTempUUIDForSection(section);
+
+        section.accountId = 0;
+
+        vm.addSectionToPage(section, null, null, null, index).then(function() {
+            vm.setActiveSection(insertAtIndex);
+        });
+
     }
 
     function removeSectionFromPage(index) {
@@ -188,9 +353,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       },
       function (isConfirm) {
         if (isConfirm) {
-          vm.state.page.sections.splice(index, 1);
-          vm.uiState.activeSectionIndex = undefined;
-          vm.uiState.activeComponentIndex = undefined;
+          SimpleSiteBuilderService.removeSectionFromPage(index)
         }
       });
     }
@@ -216,7 +379,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
   	function saveWebsite() {
-  		vm.state.pendingChanges = false;
+  		vm.state.pendingWebsiteChanges = false;
   		return (
   			SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
   				console.log('website saved');
@@ -224,39 +387,90 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   		)
   	}
 
+    //TODO: refactor, this function exists in multiple controllers :)
   	function savePage() {
-  		SweetAlert.swal({
-        title: "Are you sure?",
-        text: "CAUTION: For testing purposes only! Do not save your edits here unless you're OK with your pages breaking. This editor is under active development. Pages saved in Simple Site Builder will not render and will not be editable in the legacy editor.",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes — I'll use Simple Site Builder going forward.",
-        cancelButtonText: "No — I will use the legacy editor for now.",
-        closeOnConfirm: true,
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
+        vm.state.saveLoading = true;
+        var isLegacyPage = !vm.state.page.ssb;
+        console.log(isLegacyPage);
 
-          vm.state.pendingChanges = false;
+        if (!vm.uiState.hasSeenWarning && isLegacyPage) {
 
-          saveWebsite();
+            SweetAlert.swal({
+              title: "Are you sure?",
+              text: "CAUTION: This editor is under active development. Pages saved in Site Builder will not render or be editable in the legacy Pages editor.",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes — Use Site Builder editor.",
+              cancelButtonText: "No — Use the legacy editor.",
+              closeOnConfirm: true,
+              closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
 
-          return (
-            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-              console.log('page saved');
+                    vm.uiState.hasSeenWarning = true;
+
+                    vm.state.pendingPageChanges = false;
+
+                    //hide section panel
+                    vm.uiState.showSectionPanel = false;
+
+                    //reset section panel
+                    vm.uiState.navigation.sectionPanel.reset();
+
+                    saveWebsite().then(function(){
+                        return (
+                            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                    console.log('page saved');
+                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    vm.state.saveLoading = false;
+                                })
+                            }).catch(function(err) {
+                                vm.state.saveLoading = false;
+                                toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                            })
+                        )
+                    })
+                }
+                else{
+                    vm.state.saveLoading = false;
+                }
+            });
+
+        } else {
+            vm.state.pendingPageChanges = false;
+
+            //hide section panel
+            vm.uiState.showSectionPanel = false;
+
+            //reset section panel
+            vm.uiState.navigation.sectionPanel.reset();
+
+            saveWebsite().then(function(){
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                        })
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
+                    })
+                )
             })
-          )
-
         }
-      });
-  	}
+
+    }
 
   	function cancelPendingEdits() {
-      vm.state.pendingChanges = false;
-      vm.state.website = vm.state.originalWebsite;
-      vm.state.page = vm.state.originalPage;
+      vm.state.pendingPageChanges = false;
+      vm.state.pendingWebsiteChanges = false;
+      SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
+      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
   	function togglePageSectionAccordion(index) {
@@ -265,63 +479,69 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   		}
     }
 
-    function togglePageSectionComponentAccordion(index) {
+    function setActiveComponent(index) {
   		//TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
   		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
     function setActiveSection(index) {
-        SimpleSiteBuilderService.setActiveSection(index);
+      vm.uiState.showSectionPanel = false;
+      SimpleSiteBuilderService.setActiveSection(index);
+      if (vm.state.page.sections[index].visibility) {
+        vm.uiState.showSectionPanel = true;
+        vm.scrollToActiveSection();
+      }
 
-        //TODO: not working...
-        $timeout(function () {
-            var elementId = vm.state.page.sections[index]._id;
-            var element = angular.element(document.getElementById(elementId));
-            if (element) {
-              $document.scrollToElement(element, 175, 1000);
-            }
-        }, 0);
     }
 
     function addBackground(sectionIndex, componentIndex) {
-    	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+        vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
-      vm.insertMediaCallback = function(asset) {
-        if (componentIndex) {
-          vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-        } else {
-          vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
+        vm.insertMediaCallback = function(asset) {
+            if (componentIndex !== undefined && componentIndex !== null) {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+            } else {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
+            }
         }
-      }
 
-      if (sectionIndex) {
-        SimpleSiteBuilderService.setActiveSection(sectionIndex);
-        SimpleSiteBuilderService.setActiveComponent(undefined);
-      } else {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(componentIndex);
-      }
+    }
 
+    function addBackgroundVideo(sectionIndex, componentIndex) {
+        vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+
+        vm.insertMediaCallback = function(asset) {
+            if (componentIndex !== undefined && componentIndex !== null) {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.video.url = asset.url;
+            } else {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].bg.video.url = asset.url;
+            }
+        }
+
+        SimpleSiteBuilderService.setActiveSection(sectionIndex);
+        SimpleSiteBuilderService.setActiveComponent(componentIndex);
     }
 
     function addImage(sectionIndex, componentIndex) {
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
       vm.insertMediaCallback = function(asset) {
-        if (componentIndex) {
+        if (componentIndex !== undefined && componentIndex !== null) {
           vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].src = asset.url;
         } else {
           vm.state.page.sections[vm.uiState.activeSectionIndex].src = asset.url;
         }
       }
 
-      if (sectionIndex) {
-        SimpleSiteBuilderService.setActiveSection(sectionIndex);
-        SimpleSiteBuilderService.setActiveComponent(undefined);
-      } else {
+      // if (sectionIndex !== undefined) {
+      //   SimpleSiteBuilderService.setActiveSection(sectionIndex);
+      //   SimpleSiteBuilderService.setActiveComponent(undefined);
+      // } else {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(componentIndex);
-      }
+      // }
 
     }
 
@@ -422,6 +642,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         _modal.resolve.insertMedia = function () {
           return vm.insertMedia;
         };
+
+        _modal.resolve.isSingleSelect = function () {
+            return true;
+        };
       }
 
       if (size) {
@@ -450,109 +674,365 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function createPage(template) {
-
-        return (
+        if (vm.state.saveLoading) {
+            return;
+        }
+        vm.state.saveLoading = true;
+        vm.saveWebsite().then(function(){
+          return (
             SimpleSiteBuilderService.createPage(template._id).then(function(data) {
-                vm.closeModal();
-                vm.navigation.loadPage(data.data._id);
+                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                    vm.closeModal();
+                    vm.state.saveLoading = false;
+                    vm.uiState.navigation.loadPage(data.data._id);
+                })
             })
-        )
-
+          )
+        })
     };
+
 
     function getTemplateById(id) {
         SimpleSiteBuilderService.getTemplateById(id);
     };
 
+    /*
+     * Transforms the content data to be used in the tabset UI
+     *
+     */
     function setupSectionContent() {
 
-        var sectionLabel;
+        var unbindWatcher = $scope.$watch(function() {
+            return SimpleSiteBuilderService.platformSections
+        }, function(newValue, oldValue) {
 
-        var featured = ['header', 'hero image', 'feature block', 'meet team', 'testimonials'];
+            if (newValue) {
 
-        /*
-        * @platformSections
-        * - an array of section types and icons for the add section modal
-        */
-        vm.enabledPlatformSections = _.where(vm.state.platformSections, {
-            enabled: true
-        });
+                var sectionLabel;
 
-        _.each(vm.enabledPlatformSections, function (element, index) {
-            if (featured.indexOf(element.title.toLowerCase()) !== -1) {
-                element.featured = true;
+                /*
+                * @platformSections
+                * - an array of sections to add to a page, sorted and filtered
+                */
+                vm.uiState.contentSectionDisplayOrder = _.invert(_.object(_.pairs(SimpleSiteBuilderService.contentSectionDisplayOrder)));
+                vm.enabledPlatformSections = _(vm.state.platformSections).chain() // allow chaining underscore methods
+
+                                                .sortBy(function(x) { // sort by predetermined order
+                                                    return vm.uiState.contentSectionDisplayOrder[x.filter]
+                                                })
+
+                                                .filter(function(x) { //filter out any not enabled
+                                                    return x.enabled;
+                                                })
+
+                                                .value(); //return the new array
+
+
+
+                /*
+                * @userSections
+                * - an array of sections created by current user
+                */
+                vm.enabledUserSections = _.where(vm.state.userSections, {
+                    enabled: true
+                });
+
+
+                /*
+                 * The unique filter values of all the enabled components, sorted
+                 */
+                vm.sectionFilters = _(vm.enabledPlatformSections).chain()
+
+                                        .pluck('filter') // get just the filter values
+
+                                        .uniq() // get just unique values
+
+                                        .without('misc') // remove misc, put at end of array later
+
+                                        .sortBy(function(x) { // sort by predetermined order
+                                            return vm.uiState.contentSectionDisplayOrder[x] && parseInt(vm.uiState.contentSectionDisplayOrder[x], 10)
+                                        })
+
+                                        .value(); // return the new array
+
+
+
+                // Iterates through the array of filters and replaces each one with an object containing an
+                // upper and lowercase version
+                // Note: not sure why this was done, could be handled in CSS? - Jack
+                _.each(vm.sectionFilters, function (element, index) {
+                    sectionLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+                    vm.sectionFilters[index] = {
+                      'capitalized': sectionLabel,
+                      'lowercase': element
+                    };
+                    sectionLabel = null;
+                });
+
+                // Manually add the Misc section back on to the end of the list
+                vm.sectionFilters.push({
+                  'capitalized': 'Misc',
+                  'lowercase': 'misc'
+                });
+
+                // Manually add the All option to the end of the list
+                vm.sectionFilters.push({
+                    'capitalized': 'All',
+                    'lowercase': 'all'
+                });
+
+                vm.setFilterType = function (label) {
+                    vm.typefilter = label;
+                };
+
+                //initially show platform sections
+                //TODO: when we implement section reuse
+                vm.sections = vm.enabledPlatformSections;
+                vm.sectionType = 'enabledPlatformSections';
+
+                // type is 'enabledPlatformSections' or 'enabledUserSections'
+                // TODO: when we implement section reuse
+                vm.setSectionType = function (type) {
+                    SimpleSiteBuilderService.getUserSections().then(function() {
+                        vm.sectionType = type;
+                        vm.sections = vm[type];
+                    })
+                };
+
+
+                unbindWatcher();
+
+            }
+        }, true);
+
+    }
+
+    function hideFromMenu(){
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to hide this page from main menu",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, hide page!",
+        cancelButtonText: "No, do not hide page!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+            vm.state.page.mainmenu = false;
+            updateLinkList(false);
+        }
+      });
+    }
+
+
+    function showPageOnMenu(){
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to show this page on main menu",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, show page!",
+        cancelButtonText: "No, do not show page!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+            vm.state.page.mainmenu = true;
+            updateLinkList(true);
+        }
+      });
+    }
+
+
+    function updateLinkList(state){
+        _.each(vm.state.website.linkLists, function (value, index) {
+            if (value.handle === "head-menu") {
+                if(!state){
+                    var _list = _.reject(value.links, function(link){
+                        return link.linkTo.data === vm.state.page.handle &&
+                        (link.linkTo.type === "page" || link.linkTo.type === "home")
+                    });
+                    if(_list){
+                        value.links = _list;
+                    }
+                }
+                else{
+                    value.links.push({
+                        label: vm.state.page.menuTitle || vm.state.page.title,
+                        type: "link",
+                        linkTo: {
+                            data: vm.state.page.handle,
+                            type: 'page'
+                        }
+                    });
+                }
             }
         });
+    };
 
-        /*
-        * @userSections
-        * - an array of sections created by current user
-        */
-        vm.enabledUserSections = _.where(vm.state.userSections, {
-            enabled: true
-        });
+    function deletePage() {
+      var _deleteText = "Do you want to delete this page";
+      if(vm.state.page.handle === 'index')
+      {
+        var _deleteText = "This is home page of the website. Do you want to delete this page";
+      }
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: _deleteText,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          vm.state.saveLoading = true;
+          vm.state.pendingPageChanges = false;
+          vm.state.pendingWebsiteChanges = false;
+          SimpleSiteBuilderService.deletePage(vm.state.page).then(function(response){
+            SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
+                vm.state.saveLoading = false;
+                console.log('page deleted');
+                toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
+                  $timeout(function () {
+                    var pages = _.reject(vm.state.pages, function(page){ return page.handle === vm.state.page.handle});
+                    if(pages.length)
+                        vm.uiState.navigation.loadPage(pages[0]._id);
+                      else
+                        SimpleSiteBuilderService.getPages().then(function(pages) {
+                            $location.path('/website/site-builder/pages/');
+                        })
+                }, 0);
+            });
+          })
+        }
+      });
+    };
 
-        //initially show platform sections
-        vm.sections = vm.enabledPlatformSections;
-        vm.sectionType = 'enabledPlatformSections';
-
-        /************************************************************************************************************
-        * Takes the platformSections object and gets the value for the filter property from any that are enabled.
-        * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
-        * it exists. (The misc value is added back on to the end of the list later)
-        ************************************************************************************************************/
-        vm.sectionFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledPlatformSections, 'filter'), 'filter')), 'misc');
-
-        // Iterates through the array of filters and replaces each one with an object containing an
-        // upper and lowercase version
-        _.each(vm.sectionFilters, function (element, index) {
-            sectionLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
-            vm.sectionFilters[index] = {
-              'capitalized': sectionLabel,
-              'lowercase': element
-            };
-            sectionLabel = null;
-        });
-
-        // Manually add the FEATURED option to the beginning of the list
-        vm.sectionFilters.unshift({
-            'capitalized': 'Featured',
-            'lowercase': 'featured'
-        });
-
-        // Manually add the Misc section back on to the end of the list
-        // Exclude 'Misc' filter for emails
-        vm.sectionFilters.push({
-          'capitalized': 'Misc',
-          'lowercase': 'misc'
-        });
-
-        // Manually add the All option to the end of the list
-        vm.sectionFilters.push({
-            'capitalized': 'All',
-            'lowercase': 'all'
-        });
-
-        vm.setFilterType = function (label) {
-            vm.typefilter = label;
-        };
-
-        // type is 'enabledPlatformSections' or 'enabledUserSections'
-        vm.setSectionType = function (type) {
-            SimpleSiteBuilderService.getUserSections().then(function() {
-                vm.sectionType = type;
-                vm.sections = vm[type];
+    function duplicatePage(){
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to create a duplicate page?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          vm.state.saveLoading = true;
+          saveWebsite().then(function(){
+            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
+              vm.state.saveLoading = false;
+              vm.uiState.navigation.loadPage(page.data._id);
             })
-        };
+          })
+        }
+      });
+    }
 
+    function validateDuplicatePage(pageHandle) {
+
+        var _page = vm.state.pages.filter(function(page){return page.handle.toLowerCase() === pageHandle.toLowerCase()})[0]
+
+        if (_page && _page._id !== vm.state.page._id) {
+            return "Page handles must be unique.";
+        } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
+            return "Page handle cannot be a system route.";
+        }
+    }
+
+    $scope.$watch('vm.state.page.handle', function(handle, oldHandle){
+        if(handle && !angular.equals(oldHandle, handle)){
+            vm.state.page.handle = $filter('slugify')(handle);
+        }
+    });
+
+    function getYoutubeVideoUrl(videoIdReplaceToken, url) {
+        var returnUrl;
+        var id;
+        var defaultUrl = '//www.youtube.com/embed/#VIDEO_ID#?playlist=#VIDEO_ID#&autoplay=1&controls=0&loop=1&rel=0&showinfo=0&autohide=1&wmode=transparent&hd=1';
+        var regex = /^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?.*?(?:v|list)=(.*?)(?:&|$)|^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?(?:(?!=).)*\/(.*)$/;
+
+        if (url) {
+            var match = url.match(regex);
+
+            if (match.length) {
+                match = _.filter(match, function(val) { return val !== undefined });
+            }
+
+            var id = match && match[1] ? match[1] : null;
+
+            returnUrl = defaultUrl.replace(videoIdReplaceToken, id).replace(videoIdReplaceToken, id);
+        }
+
+        return {
+            url: returnUrl,
+            id: id
+        }
+    }
+
+    function getVimeoVideoUrl(videoIdReplaceToken, url) {
+        var returnUrl;
+        var id;
+        var defaultUrl = '//vimeo.com/#VIDEO_ID#?autopause=0&autoplay=1&badge=0&byline=0&color=&loop=0&player_id=0&portrait=0&title=0';
+        var regex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
+
+        if (url) {
+            var match = url.match(regex);
+            var id = match && match[4] ? match[4] : null;
+
+            returnUrl = defaultUrl.replace(videoIdReplaceToken, id);
+        }
+
+        return {
+            url: returnUrl,
+            id: id
+        }
+    }
+
+    function constructVideoUrl(section) {
+        var videoData = {};
+        var videoIdReplaceToken = '#VIDEO_ID#';
+
+        if (section.bg.video.type === 'youtube') {
+            videoData = getYoutubeVideoUrl(videoIdReplaceToken, section.bg.video.url);
+        } else if (section.bg.video.type === 'vimeo') {
+            videoData = getVimeoVideoUrl(videoIdReplaceToken, section.bg.video.url);
+        }
+
+        section.bg.video.urlProcessed = videoData.url;
+        section.bg.video.id = videoData.id;
+
+        console.log(videoData);
+
+        return videoData;
+    }
+
+    function closeSectionPanel() {
+        vm.uiState.activeElement = {};
+        vm.uiState.showSectionPanel = false;
+        vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
     }
 
     function init(element) {
-    	vm.element = element;
+
+        vm.element = element;
 
         setupSectionContent();
+        CustomerService.getCustomers(function(customers){
+          CustomerService.getAllCustomerTags(customers,function(tags){
+            vm.customerTags = tags;
+          });
+        })
     }
-
 }
 
 })();

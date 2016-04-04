@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('socialLinkComponent', ["$modal", function ($modal) {
+app.directive('socialLinkComponent', ["$modal", "$timeout", function ($modal, $timeout) {
   return {
     scope: {
       component: '=',
@@ -9,19 +9,26 @@ app.directive('socialLinkComponent', ["$modal", function ($modal) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
+
       scope.isEditing = true;
       scope.sortableConfig = {
-        animation: 150, 
+        animation: 150,
         onSort: function (evt) {
-          
+
         },
         onStart: function (evt) {
-          console.log("Start")
+          if(scope.$parent.vm)
+            scope.$parent.vm.uiState.sortableListPageContentConfig.disabled = true;
         },
         onEnd: function (evt) {
-          
+
         }
       };
+
+
+      $timeout(function() {
+        scope.loadSocialLinks = true;
+      },500);
     }
   };
 }]);

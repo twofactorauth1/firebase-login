@@ -1,27 +1,28 @@
-<div ng-class="component.type+'-v'+component.version">
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div data-class="blog" data-id="{{component._id}}">
         <div id="content-area">
             <div class="container clearfix row-fluid">
                 <div id="main-area" class="col-sm-8">
                     <div class="currently-viewing" ng-show="blog.currentTag">
-                        <h4> Currently Viewing Tag: <strong>{{blog.currentTag}}</strong> </h4>
+                        <h4 ng-bind-html="blog.currentTag"> Currently Viewing Tag: <strong></strong> </h4>
                     </div>
                     <div class="currently-viewing" ng-show="blog.currentCat">
-                        <h4> Currently Viewing Category: <strong>{{blog.currentCat}}</strong> </h4>
+                        <h4 ng-bind-html="blog.currentCat"> Currently Viewing Category: <strong></strong> </h4>
                     </div>
                     <div class="currently-viewing" ng-show="blog.currentAuthor">
-                        <h4> Currently Viewing Author: <strong>{{blog.currentAuthor}}</strong> </h4>
+                        <h4 ng-bind-html="blog.currentAuthor"> Currently Viewing Author: <strong></strong> </h4>
                     </div>
                     <article class="entry clearfix" ng-if="blog.blogposts">
                         <div class="single-blog responsive clearfix" ng-repeat="blogpost in blog.blogposts | filter: blogpost.publish_date || blogpost.created.date | orderBy : sortBlogFn(component): customSortOrder(component) | offset:  curPage * pageSize | limitTo: pageSize" data-postId="{{blogpost._id}}">
                             <div class="blog-entry clearfix" data-id="{{blogpost._id}}">
                                 <h2 class="blog-title">
                                     <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}">
-                                        <div class="editable post_title" data-class="post_title"
-                                             data-ng-if="blogpost.post_title" ng-bind-html="blogpost.post_title | unsafe">
-                                        </div>
+
+                                    <div class="post_title" data-class="post_title"
+                                            data-ng-if="blogpost.post_title" ng-bind-html="blogpost.post_title | unsafe">
+                                    </div>
                                     </a>
-                                    <a ng-if="isEditing" class="btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deleteBlogPost(blogpost._id, blogpost)" style="margin-right:10px">
+                                    <a ng-if="isEditing" class="btn ssb-theme-btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deleteBlogPost(blogpost._id, blogpost)" style="margin-right:10px">
                                         <span class="fa fa-times"></span>
                                         <span class="hidden-xs">Delete</span>
                                     </a>
@@ -31,7 +32,7 @@
                                      • {{blogpost.publish_date || blogpost.created.date | date: 'MM/dd/yyyy'}}
                                     </span>
                                     <span data-ng-if="blogpost.post_author">
-                                       Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
+                                       Posted by <a ng-bind-html="blogpost.post_author" href="/author/{{blogpost.post_author}}"></a>
                                     </span>
                                     <span data-ng-if="blogpost.post_category">
                                       in <a href="/category/{{blogpost.post_category}}">{{blogpost.post_category}}</a>
@@ -43,7 +44,7 @@
                                 <div class="blog-thumb alignleft" ng-if="blogpost.featured_image">
                                     <img ng-src="{{blogpost.featured_image}}" />
                                 </div>
-                                <a ng-if="isEditing" class="btn btn-warning" type="button" ng-click="changeBlogImage(blogpost, $index, true)" style="margin-right:10px">
+                                <a ng-if="isEditing" class="btn ssb-theme-btn btn-warning" type="button" ng-click="changeBlogImage(blogpost, $index, true)" style="margin-right:10px">
                                     <span class="fa fa-edit"></span>
                                     <span ng-if="blogpost.featured_image" class="hidden-xs">Change Image</span>
                                     <span ng-if="!blogpost.featured_image" class="hidden-xs">Add Image</span>
@@ -51,13 +52,10 @@
                                 <!-- end .thumb -->
                                 <div class="entry-excerpt">
                                     <p>
-                                        <div class="editable post_excerpt" data-class="post_excerpt" ng-bind-html="blogpost.post_excerpt | unsafe" data-ng-if="blogpost.post_excerpt">
-                                        </div>
-                                        <div class="editable post_excerpt" data-class="post_excerpt" data-ng-if="!blogpost.post_excerpt">
-                                        </div>
+                                        <div elem ng-model="blogpost.post_excerpt"></div>
                                     </p>
                                 </div>
-                                <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+                                <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}" class="btn ssb-theme-btn btn-orange pull-right"><span>READ MORE</span></a>
                                 <div class="clearfix"></div>
                                 <hr></hr>
                             </div>
@@ -66,12 +64,12 @@
                         <!-- end #et_pt_blog -->
                     </article>
                     <div class="pagination pagination-centered" ng-show="(!isEditing && blog.blogposts.length) > pageSize">
-                        <button type="button" class="btn btn-primary" ng-disabled="curPage == 0" ng-click="curPage=curPage-1">
+                        <button type="button" class="btn ssb-theme-btn btn-primary" ng-disabled="curPage == 0" ng-click="curPage=curPage-1">
                             <span class="fa fa-arrow-left"></span>
                             <span class="hidden-xs">PREV</span>
                         </button>
                         <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
-                        <button type="button" class="btn btn-primary" ng-disabled="curPage >= (layout.blogposts||blog.blogposts).length/pageSize - 1" ng-click="curPage = curPage+1">
+                        <button type="button" class="btn ssb-theme-btn btn-primary" ng-disabled="curPage >= (layout.blogposts||blog.blogposts).length/pageSize - 1" ng-click="curPage = curPage+1">
                             <span class="hidden-xs">Next</span>
                             <span class="fa fa-arrow-right"></span>
                         </button>
@@ -96,8 +94,8 @@
                                 <a href="/page/blog/{{blogPost.post_url}}">
                                     <span data-ng-if="blogPost.post_title" ng-bind-html="blogpost.post_title | unsafe"></span>
                                 </a>
-                                <span data-ng-if="blogPost.post_author"> by <a
-                                        href="/author/{{blogPost.post_author}}">{{blogPost.post_author}}</a></span>
+                                <span data-ng-if="blogPost.post_author"> by <a ng-bind-html="blogPost.post_author"
+                                        href="/author/{{blogPost.post_author}}"></a></span>
                             </li>
                         </ul>
                     </div>
@@ -177,8 +175,8 @@
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="createPost(post, $event)" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn ssb-theme-btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn ssb-theme-btn btn-primary" ng-click="createPost(post, $event)" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>

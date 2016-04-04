@@ -26,31 +26,33 @@ var dao = {
     },
 
     /**
-     * Customers are created on the application account
      * @param cardToken
      * @param contact
      * @param accountId
      * @param fn
      */
-    createStripeCustomer: function(cardToken, contact, accountId, fn) {
+    createStripeCustomer: function(cardToken, contact, accountId, newAccountId, accessToken, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomer");
         var params = {};
-        params.email = contact.getEmails()[0];
+        params.email = contact.getPrimaryEmail();
         params.description = 'Customer for ' + contact.getEmails()[0];
         params.metadata = {};
         params.metadata.contactId = contact.get('id');
         params.metadata.accountId_0 = accountId;
+        params.metadata.accounts = [];
+        params.metadata.accounts.push(newAccountId);
         if(cardToken && cardToken.length > 0) {
             params.card = cardToken;
         }
-
-        stripe.customers.create(params, function(err, customer) {
+        var apiToken = self.delegateStripe(accessToken);
+        self.log.debug('creating with params', params);
+        stripe.customers.create(params, apiToken, function(err, customer) {
 
             if(err) {
                 fn(err, customer);
-                fn = null;
+                return fn = null;
             }
             contact.set('stripeId', customer.id);
             self.log.debug('Setting contact stripeId to ' + contact.get('stripeId'));
@@ -83,7 +85,7 @@ var dao = {
         });
     },
 
-    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, newAccountId, accessToken, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomerForUser");
@@ -97,12 +99,15 @@ var dao = {
         params.metadata = {};
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;
+        params.metadata.accounts = [];
+        params.metadata.accounts.push(newAccountId);
         if(cardToken && cardToken.length > 0) {
             params.card = cardToken;
         }
-        //TODO: CHeck
+        var apiToken = self.delegateStripe(accessToken);
+
         if(user.get('stripeId') === '') {
-            stripe.customers.create(params, function(err, customer) {
+            stripe.customers.create(params, apiToken, function(err, customer) {
 
                 if(err) {
                     fn(err, customer);
@@ -148,7 +153,7 @@ var dao = {
             });
         } else {
             self.log.warn('Attempted to create customer that already exists.');
-            stripe.customers.retrieve(user.get('stripeId'), function(err, customer) {
+            stripe.customers.retrieve(user.get('stripeId'), apiToken, function(err, customer) {
                 // asynchronously called
                 if (err) {
                     fn(err, customer);
@@ -163,16 +168,12 @@ var dao = {
 
     },
 
-    /*
-     * Because we are sharing customers across accounts, all customers will be saved to the
-     * main indigenous account.  When we list customers for a specific account, we will need
-     * to filter them out.
-     */
-    listStripeCustomers: function(accountId, limit, fn) {
+    listStripeCustomers: function(accountId, limit, accessToken, fn) {
         var self = this;
         self.log.debug('>> listStripeCustomers');
         var _limit = limit || 100;
-        stripe.customers.list({limit: _limit}, function(err, customers) {
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.customers.list({limit: _limit}, apiToken, function(err, customers) {
             // asynchronously called
             if (err) {
                 fn(err, customers);
@@ -190,11 +191,11 @@ var dao = {
      * @param stripeCustomerId
      * @param fn
      */
-    getStripeCustomer: function(stripeCustomerId, fn) {
-        //stripe.customers.retrieve({CUSTOMER_ID});
+    getStripeCustomer: function(stripeCustomerId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeCustomer');
-        stripe.customers.retrieve(stripeCustomerId, function(err, customer) {
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.customers.retrieve(stripeCustomerId, apiToken, function(err, customer) {
             // asynchronously called
             if (err) {
                 fn(err, customer);
@@ -239,7 +240,7 @@ var dao = {
      * @param fn
      */
     updateStripeCustomer: function(stripeCustomerId, account_balance, cardToken, coupon, default_card, description,
-                                   email, metadata, fn) {
+                                   email, metadata, accessToken, fn) {
         var self = this;
         self.log.debug('>> updateStripeCustomer');
         var params = {};
@@ -250,8 +251,9 @@ var dao = {
         if(description) {params.description = description;}
         if(email) {params.email = email;}
         if(metadata) {params.metadata = metadata;}
+        var apiToken = self.delegateStripe(accessToken);
 
-        stripe.customers.update(stripeCustomerId, params, function(err, customer){
+        stripe.customers.update(stripeCustomerId, params, apiToken, function(err, customer){
             if (err) {
                 self.log.error('error updating customer: ' + err);
                 fn(err, customer);
@@ -274,16 +276,16 @@ var dao = {
      * @param fn
      */
         //TODO: handle customers on a user
-    deleteStripeCustomer: function(stripeCustomerId, contactId, userId, fn) {
+    deleteStripeCustomer: function(stripeCustomerId, contactId, userId, accessToken, fn) {
         var self = this;
         self.log.debug('>> deleteStripeCustomer');
         if(fn === null) {
             fn = userId;
             userId = null;
         }
+        var apiToken = self.delegateStripe(accessToken);
 
-
-        stripe.customers.del(stripeCustomerId, function(err, confirmation){
+        stripe.customers.del(stripeCustomerId, apiToken, function(err, confirmation){
             if(err) {
                 fn(err, confirmation);
                 fn = null;
@@ -689,17 +691,17 @@ var dao = {
 
     //cards
     /**
-     * This is an operation on a customer.  No accessToken is needed, because customers are stored on the app account.
      * @param customerId
      * @param card - can be a token or a card object.
      * @param fn
      */
-    createStripeCard: function(customerId, card, fn) {
+    createStripeCard: function(customerId, card, accessToken, fn) {
         var self = this;
         self.log.debug('>> createStripeCard');
         var params = {};
         params.card = card;
-        stripe.customers.createCard( customerId, params, function(err, card) {
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.customers.createCard( customerId, params, apiToken, function(err, card) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, card);
@@ -710,10 +712,12 @@ var dao = {
         );
     },
 
-    getStripeCard: function(customerId, cardId, fn) {
+    getStripeCard: function(customerId, cardId, accessToken, fn) {
         var self = this;
         self.log.debug('>> getStripeCard');
-        stripe.customers.retrieveCard(customerId, cardId, function(err, card) {
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.customers.retrieveCard(customerId, cardId, apiToken, function(err, card) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, card);
@@ -725,7 +729,7 @@ var dao = {
     },
 
     updateStripeCard: function(customerId, cardId, name, address_city, address_country, address_line1, address_line2,
-        address_state, address_zip, exp_month, exp_year, fn) {
+        address_state, address_zip, exp_month, exp_year, accessToken, fn) {
         var self = this;
         self.log.debug('>> updateStripeCard');
         var params = {};
@@ -739,7 +743,9 @@ var dao = {
         if(exp_month && exp_month.length>0) {params.exp_month = exp_month;}
         if(exp_year && exp_year.length>0) {params.exp_year = exp_year;}
 
-        stripe.customers.updateCard(customerId, cardId, params, function(err, card) {
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.customers.updateCard(customerId, cardId, params, apiToken, function(err, card) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, card);
@@ -750,10 +756,11 @@ var dao = {
         );
     },
 
-    deleteStripeCard: function(customerId, cardId, fn) {
+    deleteStripeCard: function(customerId, cardId, accessToken, fn) {
         var self = this;
         self.log.debug('>> deleteStripeCard');
-        stripe.customers.deleteCard(customerId, cardId, function(err, confirmation) {
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.customers.deleteCard(customerId, cardId, apiToken, function(err, confirmation) {
                 if(err) {
                     self.log.error('error: ' + err);
                     return fn(err, confirmation);
@@ -764,10 +771,11 @@ var dao = {
         );
     },
 
-    listStripeCards: function(customerId, fn) {
+    listStripeCards: function(customerId, accessToken, fn) {
         var self = this;
         self.log.debug('>> listStripeCards');
-        stripe.customers.listCards(customerId, function(err, cards) {
+        var apiToken = self.delegateStripe(accessToken);
+        stripe.customers.listCards(customerId, apiToken, function(err, cards) {
             if(err) {
                 self.log.error('error: ' + err);
                 return fn(err, cards);
@@ -808,8 +816,15 @@ var dao = {
 
         params.amount = amount;
         params.currency = currency;
-        if(card) {params.card = card;}
-        if(customerId) {params.customer = customerId;}
+        if(customerId) {
+            params.customer = customerId;
+        } else if (card) {
+            params.card = card;
+        } else {
+            self.log.error('Either a customerId or a card token is required.');
+            return fn('Either a customerId or a card token is required');
+        }
+
         if(description && description.length>0) {params.description = description;}
         if(!metadata) {
             metadata = {};
@@ -822,7 +837,7 @@ var dao = {
         if(statement_description && statement_description.length>0) {params.statement_description = statement_description;}
         if(receipt_email && receipt_email.length>0) {params.receipt_email = receipt_email;}
         if(application_fee && application_fee > 0) {params.application_fee = application_fee;}
-
+        self.log.debug('Creating charge with params:', params);
         stripe.charges.create(params, apiToken, function(err, charge) {
             if(err) {
                 self.log.error('error: ' + err);

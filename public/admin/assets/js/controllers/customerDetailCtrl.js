@@ -37,6 +37,9 @@
           },
           insertMedia: function () {
             return $scope.insertPhoto;
+          },
+          isSingleSelect: function () {
+              return true;
           }
         }
       });
@@ -63,10 +66,10 @@
     };
 
     if ($location.search().order) {
-      $scope.redirectToOrder = true;   
+      $scope.redirectToOrder = true;
       $scope.orderId=$location.search().id;
       $stateParams.orderId=$scope.orderId;
-      //alert("orderId: "+$scope.orderId);   
+      //alert("orderId: "+$scope.orderId);
     }
 
     $scope.backToOrder = function()
@@ -79,7 +82,7 @@
       {
         window.history.back();
       }
-      
+
     };
     /*
      * @addNote
@@ -106,7 +109,7 @@
       $scope.customer_data.tags = $scope.unsetTags();
       console.log('customer_data:', $scope.customer_data);
       CustomerService.saveCustomer($scope.customer_data, function (customer) {
-        $scope.customer = customer;        
+        $scope.customer = customer;
         $scope.setTags();
         $scope.originalCustomer = angular.copy($scope.customer);
         toaster.pop('success', 'Notes Added.');
@@ -136,8 +139,8 @@
             return _user._id === _note.user_id;
           });
 
-          // This code is used to show related user profile image in notes         
-          
+          // This code is used to show related user profile image in notes
+
           if (matchingUser) {
             if(matchingUser.profilePhotos && matchingUser.profilePhotos[0])
             _note.user_profile_photo = matchingUser.profilePhotos[0];
@@ -166,7 +169,13 @@
 
     $scope.getCustomer = function () {
       console.log('getCustomer >>>');
-      CustomerService.getCustomer($stateParams.contactId, function (customer) {
+      CustomerService.getCustomer($stateParams.contactId, function (customer, error) {
+        if(error){
+            toaster.pop('warning', error.message);
+            if(error.code === 404)
+                $location.path('/customers');
+            return;
+        }
         customer.notes = $scope.matchUsers(customer);
         $scope.customer = customer;
         $scope.setTags();
@@ -418,8 +427,8 @@
 
         if(!hideToaster && $scope.inValidateTags())
         {
-          $scope.saveLoading = false;          
-          if(showAlert)            
+          $scope.saveLoading = false;
+          if(showAlert)
             SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
           toaster.pop('warning', 'Please add at least one tag.');
           return;
@@ -467,7 +476,7 @@
                     $scope.saveLoading = false;
                   }
                 });
-                if(showAlert)                    
+                if(showAlert)
                     SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
               }
             }
@@ -505,7 +514,7 @@
             }
           }
           if(showAlert){
-            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");                
+            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
             window.location = newUrl;
           }
         });
@@ -958,9 +967,9 @@
             data : tag,
             label : tag
           });
-        }        
+        }
       });
-      $scope.myCustomerTags = cutomerTags.join(",");
+      $scope.myCustomerTags = cutomerTags.join(", ");
       $scope.customer.tags = tempTags;
       console.log('$scope.customer.tags >>>', $scope.customer.tags);
     };
@@ -984,16 +993,21 @@
     console.log('$stateParams.contactId ', $stateParams.contactId);
     OrderService.getCustomerOrders($stateParams.contactId, function (orders) {
       console.log('orders ', orders);
-      if (orders.length > 0) {
-        _.each(orders, function (order) {
-          if (order.line_items) {
-            order.line_items_total = order.line_items.length;
-          } else {
-            order.line_items_total = 0;
-          }
-        });
-        $scope.orders = orders;
-      }
+      $scope.orders = _.filter(orders, function(order) {
+          return order.line_items[0].type !== 'DONATION';
+      });
+      $scope.donations = _.filter(orders, function(order) {
+          return order.line_items[0].type == 'DONATION';
+      });
+    //   if (orders.length > 0) {
+    //     _.each(orders, function (order) {
+    //       if (order.line_items) {
+    //         order.line_items_total = order.line_items.length;
+    //       } else {
+    //         order.line_items_total = 0;
+    //       }
+    //     });
+    //   }
     });
 
     /*
@@ -1055,7 +1069,7 @@
       $scope.customer = null;
     }
 
-    CustomerService.getCustomers(function (customers) {        
+    CustomerService.getCustomers(function (customers) {
       CustomerService.getAllCustomerTags(customers, function(tags){
         $scope.customerTags = tags;
       });
@@ -1063,6 +1077,10 @@
 
     $scope.tagToCustomer = function(value) {
      return CustomerService.tagToCustomer(value);
+    }
+
+    $scope.viewSingleOrder = function(orderId) {
+        $location.path('/commerce/orders/'+ orderId);
     }
 
   }]);

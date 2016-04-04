@@ -12,10 +12,10 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$time
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.isEditing = true;
-      if(!angular.isDefined(scope.component.shownavbox))
-        scope.component.shownavbox = true;
+      scope.isEditing = true;      
       if(!scope.ssbEditor){
+        if(!angular.isDefined(scope.component.shownavbox))
+          scope.component.shownavbox = true;
         scope.control.refreshWebsiteLinks = function (lnklist) {
           scope.website.linkLists = lnklist;
         };
@@ -42,6 +42,11 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$time
         }
       }
       $scope.currentpage = $scope.$parent.page;
+
+      $scope.$parent.$watch('vm.state.page', function(page) {
+        if(page)
+          $scope.currentpage = page;
+      }, true);
     }
   };
 }]);

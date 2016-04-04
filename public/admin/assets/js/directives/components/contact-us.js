@@ -5,7 +5,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
   return {
     scope: {
       component: '=',
-      control: '=',
+      control: '=?',
       ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
@@ -27,19 +27,19 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
       {
         scope.component.boxProperties = {};
       }
-      
+
       // Set bg image show always false for contact component
 
       if(!angular.isDefined(scope.component.bg))
         scope.component.bg = {};
       if(!angular.isDefined(scope.component.bg.img))
-        scope.component.bg.img = {};   
+        scope.component.bg.img = {};
       if(!angular.isDefined(scope.component.bg.img.show))
-        scope.component.bg.img.show = false;   
-           
+        scope.component.bg.img.show = false;
+
       scope.component.bg.img.show = false;
 
-      function hexToRgb(hex, opacity) {      
+      function hexToRgb(hex, opacity) {
         var c;
         opacity = angular.isDefined(opacity) ? opacity : 1;
         c = hex.substring(1).split('');
@@ -61,7 +61,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         if (angular.isDefined(newValue) && scope.component.boxColor) {
           scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
         }
-      });     
+      });
 
       scope.setBusinessDetails = function(is_address, fn)
       {
@@ -92,30 +92,35 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
           if (scope.component.location.lat && scope.component.location.lon) {
             scope.reloadMap();
           } else {
-            GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
-              if (data.lat && data.lon) {
-                scope.component.location.lat = data.lat;
-                scope.component.location.lon = data.lon;
-                scope.reloadMap();
-              }
-              else
-                GeocodeService.validateAddress(scope.component.location, null, function (data, results) {
-                  if (data && results.length === 1) {
-                    scope.component.location.lat = results[0].geometry.location.lat();
-                    scope.component.location.lon = results[0].geometry.location.lng();
-                    scope.reloadMap();
-                  } 
-                });
-            });
-          }
-        }, 500);   
+              GeocodeService.validateAddress(scope.component.location, null, function (data, results) {
+                if (data && results.length === 1) {
+                  scope.component.location.lat = results[0].geometry.location.lat();
+                  scope.component.location.lon = results[0].geometry.location.lng();
+                  scope.reloadMap();
+                }
+                else{
+                  GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
+                    if (data.lat && data.lon) {
+                      scope.component.location.lat = data.lat;
+                      scope.component.location.lon = data.lon;
+                      scope.reloadMap();
+                    }
+                  })
+                }
+              });
+            }
+        }, 500);
       };
       scope.$on('mapInitialized', function(event, map) {
         scope.map = map;
         google.maps.event.trigger(scope.map, 'resize');
         scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
-      if(!scope.ssbEditor){
+
+        // if (!scope.control) {
+        //     scope.control = {};
+        // }
+
         scope.control.refreshMap = function () {
           if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
             scope.setBusinessDetails(true, function () {
@@ -132,46 +137,73 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
               console.log("hours refreshed");
             });
         };
-      }
-      
 
-      scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
-        if(newValue)
-        {
-          AccountService.getAccount(function (account) {
-            scope.account = account;
-            if(!scope.component.custom.hours)
-            {
-              scope.setBusinessDetails(false, function () {
-                console.log("hours refreshed");
-              });
-            }
-            if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
-            scope.setBusinessDetails(true, function () {
-              $timeout(function () {
-                scope.updateContactUsAddress();
-              },500);
-            });
-            } else {
-              $timeout(function () {
-                scope.updateContactUsAddress();
-              },500);
-            }
-          });
-        }
-      })
 
-      scope.$on("angular-resizable.resizeEnd", function (event, args) {
-        var calculated_size = args;
-        if(calculated_size.width === false)
-        {
-          scope.component.boxProperties.height = calculated_size.height;
+        scope.$parent.$watchGroup(['ckeditorLoaded', 'vm.uiState.loaded'], function (newValue, oldValue) {
+            if (newValue[0] || newValue[1] && scope.component.visibility) {
+                AccountService.getAccount(function (account) {
+
+                    scope.account = account;
+
+                    if (!scope.component.custom.hours) {
+                        scope.setBusinessDetails(false, function () {
+                            console.log("hours refreshed");
+                        });
+                    }
+
+                    if ((!scope.component.location.address &&
+                        !scope.component.location.address2 &&
+                        !scope.component.location.city &&
+                        !scope.component.location.state &&
+                        !scope.component.location.zip) ||
+                        !scope.component.custom.address) {
+
+                        scope.setBusinessDetails(true, function () {
+                            $timeout(function () {
+                                scope.updateContactUsAddress();
+                            }, 500);
+                        });
+
+                    } else {
+
+                        $timeout(function () {
+                            scope.updateContactUsAddress();
+                        }, 500);
+                    }
+
+                });
+            }
+        });
+
+        scope.$on("angular-resizable.resizeEnd", function (event, args) {
+            var calculated_size = args;
+            if (calculated_size.width === false) {
+                scope.component.boxProperties.height = calculated_size.height;
+            } else if (calculated_size.height === false) {
+                scope.component.boxProperties.width = calculated_size.width;
+            }
+        });
+
+        scope.calcMaxWidth = function(element){
+            var el = angular.element("."+element);
+            if(el.length){
+                var w = el.width();
+                // - 100 margin-left
+                // -50 margin right
+                return (w - 100 - 50) + 'px';
+            }
         }
-        else if(calculated_size.height === false)
-        {
-          scope.component.boxProperties.width = calculated_size.width;
-        }
-      })
+
+        angular.element($window).bind('resize', function () {
+            if(scope.map){
+                $timeout(function () {
+                    google.maps.event.trigger(scope.map, 'resize');
+                }, 500);
+            }
+        });
+
     }
+
   };
+
 }]);

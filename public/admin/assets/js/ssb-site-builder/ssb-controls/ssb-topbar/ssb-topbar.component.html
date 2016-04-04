@@ -1,24 +1,28 @@
 <div class="ssb-topbar-inner">
 
-    <div class="col-xs-2 pull-left">
+    <div class="pull-left">
         <ui-select
-            ng-model="vm.state.page"
-            ng-change="vm.navigation.loadPage(vm.state.page._id);"
+            ng-init="vm.uiState.selectedPage = vm.state.page"
+            ng-model="vm.uiState.selectedPage"
+            ng-change="vm.loadPage($select.selected);"
             theme="bootstrap"
+            class="ssb-ui-select-dark"
             search-enabled="false">
 
             <ui-select-match>
                 <small ng-bind-html="$select.selected.title"></small>
             </ui-select-match>
 
-            <ui-select-choices repeat="page in vm.state.arr_pages track by $index">
+            <ui-select-choices class="margin-top-20" repeat="page in vm.state.pages | sortListPages:vm.state.page._id">
                 <small ng-bind-html="page.title"></small>
             </ui-select-choices>
 
         </ui-select>
     </div>
 
-    <div class="col-xs-10 text-right">
+    <div id="ssb-froala-scrollable-container"></div>
+
+    <div class="pull-right text-right">
         <ssb-action-buttons class="ssb-control-bar" save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" state="vm.state"></ssb-action-buttons>
     </div>
 

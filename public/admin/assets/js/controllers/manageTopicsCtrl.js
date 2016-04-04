@@ -83,6 +83,7 @@
 
 
       // if (!hasHandle) {
+        newtopic.handle = $filter('slugify')(newtopic.title);
         WebsiteService.createTopic(newtopic, function (createdTopic) {
           toaster.pop('success', 'Topic Created', 'The ' + createdTopic.title + ' topic was created successfully.');
           $scope.closeModal();
@@ -93,7 +94,7 @@
           newtopic.title = "";
           newtopic.category = "";
 
-          $scope.resetTopicsDetails();
+          //$scope.resetTopicsDetails();
         });
       // } else {
       //   toaster.pop('error', "Page URL " + page.handle, "Already exists");

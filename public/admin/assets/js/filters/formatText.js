@@ -11,7 +11,7 @@ app.filter('formatText', function () {
   			res = 'Post Content';
   		}
   		if (!res) {
-  			res = string.replace("_", " ").replace(".", " ").replace("component", "").replace("img", "Image ");
+  			res = string.replace("_", " ").replace(".", " ").replace("component", "").replace("img", "Image ").replace("vm .text", "Text");
   		}
 	    var newVal = '';
 	    res = res.split(' ');

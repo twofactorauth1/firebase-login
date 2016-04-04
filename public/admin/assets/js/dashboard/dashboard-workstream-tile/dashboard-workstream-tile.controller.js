@@ -2,9 +2,9 @@
 
 app.controller('DashboardWorkstreamTileComponentController', dashboardWorkstreamTileComponentController);
 
-dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout', '$document', '$interval'];
+dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', '$location', 'DashboardService', '$modal', '$timeout', '$document', '$interval'];
 /* @ngInject */
-function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout, $document, $interval) {
+function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, $location, DashboardService, $modal, $timeout, $document, $interval) {
 
     var vm = this;
 
@@ -36,6 +36,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
         videoControls: false
 
     }
+
+    vm.ssbPath = '/website/site-builder/pages/';
+    vm.pagesPath = '/website/pages';
 
     // vm.onPlayerReady = onPlayerReady;
 
@@ -149,7 +152,22 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             break;
         case "chatwithsupport":
             Intercom('showNewMessage', '');
-            break;    
+            break;
+        case "createpage":
+
+            if (DashboardService.state.account.showhide.ssbSiteBuilder) {
+                //navigate to sitebuilder
+                // $timeout(function() {
+                    $location.path(vm.ssbPath);
+                // })
+            } else {
+                //navigate to pages
+                // $timeout(function() {
+                    $location.path(vm.pagesPath);
+                // });
+            }
+
+            break;
         default:
             //code
         }
@@ -182,6 +200,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             };
             _modal.resolve.insertMedia = function () {
               return vm.callbackOnMediaClose;
+            };
+            _modal.resolve.isSingleSelect = function () {
+              return true;
             };
         }
 
@@ -219,7 +240,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
                 $interval.cancel(stop);
             }
             vm.completeStyle = p;
-            p = p + 1;            
+            p = p + 1;
             vm.completePercentageStyle = p + '%';
 
         }, 10);
@@ -227,7 +248,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     }
 
     // Added a watch for completed worksreams
-   
+
     $scope.$watch(function() { return vm.workstream.completePercentage }, function(newValue) {
         if(newValue && vm.completeStyle && newValue != vm.completeStyle ){
              vm.augmentCompletePercentage(parseInt(newValue, 10));

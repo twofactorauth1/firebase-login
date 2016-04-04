@@ -13,7 +13,8 @@ defaultWorkstreams[0] = {
         {
             "_id" : 0,
             "name" : "Create a page",
-            "link" : "/admin/#/website/pages",
+            "link" : "",
+            "alias": "createPage",
             "helpText" : "Use templates or build original pages for your website.",
             "complete" : false,
             "optional" : false,
@@ -227,7 +228,7 @@ defaultWorkstreams[3] = {
             "complete" : false,
             "optional" : false,
             "helpLinks": [
-                { type: "help", name: "Create and post a product", link: "/admin/#/support/help-topics?topic=4c032f2d-0ef3-4fe5-946d-6970ae567333" }
+                { type: "help", name: "Integrate Stripe", link: "/admin/#/support/help-topics?topic=4c032f2d-0ef3-4fe5-946d-6970ae567333" }
             ]
         },
         {

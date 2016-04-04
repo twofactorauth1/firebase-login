@@ -1,3 +1,14 @@
+.ssb-media-query-small-only(@rules) {
+  &[data-eq-state$="small"] {
+    @rules();
+  }
+  @media screen and (max-width: 767px) {
+    &:not([class*="ssb-edit-mode"]) {
+      @rules();
+    }
+  }
+}
+
 .ssb-media-query-medium(@rules) {
   &[data-eq-state$="medium"],
   &[data-eq-state$="large"] {
@@ -21,8 +32,54 @@
   }
 }
 
-.ssb-theme {
+
+[class*="ssb-theme-"] {
+
+    -webkit-font-smoothing: antialiased !important;
+
+    .ssb-media-query-small-only({
+        .container {
+            padding-right: 15px!important;
+            padding-left: 15px!important;
+        }
+    });
+
+
+    .ssb-page-section-layout-header [ssb-text-component],
+    .ssb-page-section-layout-hero [ssb-text-component] {
+
+        .ssb-media-query-small-only({
+            font-size: 14vw;
+            text-align: center;
+            line-height: 1;
+            width: 100%!important;
+            margin: 0!important;
+            padding: 0!important;
+
+            .element-wrap {
+                width: 60%;
+                margin: .25em auto 0;
+            }
+
+            span[style] {
+                font-size: 14vw!important;
+            }
+        });
+
+        .ssb-media-query-medium({
+            font-size: 96px;
+            margin: initial;
+            width: 100%;
+
+            span[style] {
+                font-size: inherit;
+            }
+        });
+    }
 
 }
 
+
+@import "ssb-themes/ssb-theme-default.less";
 @import "ssb-themes/ssb-theme-young-soul.less";
+

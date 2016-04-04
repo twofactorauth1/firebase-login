@@ -5,7 +5,6 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 var jade = require('jade');
-var stripeDao = require('./dao/stripe.dao.js');
 var eventDao = require('./dao/stripe_event.dao.js');
 var userDao = require('../dao/user.dao.js');
 var subscriptionDao = require('./dao/subscription.dao.js');

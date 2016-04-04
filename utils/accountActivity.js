@@ -295,10 +295,13 @@ var accountActivity = {
                 });
             },
             function getAccountAttributes(account, cb) {
+                var billing = account.get('billing');
+
                 activity.name = account.get('subdomain');
                 activity.customDomain = account.get('customDomain');
                 activity.signupDate = moment(account.get('created').date).format('MM/DD/YYYY HH:mm');
-                var endDate = moment(activity.signupDate).add(14, 'days');
+                var _trial = billing.trialLength;
+                var endDate = moment(activity.signupDate).add(_trial, 'days');
                 activity.trialDaysRemaining = endDate.diff(moment(), 'days');
                 if(activity.trialDaysRemaining < 0) {
                     activity.trialDaysRemaining = 0;
@@ -321,7 +324,6 @@ var accountActivity = {
 
                 activity.day11 = moment(activity.signupDate).add(11, 'days').format('MM/DD/YYYY');
                 activity.day14 = endDate.format('MM/DD/YYYY');
-                var billing = account.get('billing');
                 if(billing.conversionDate) {
                     activity.conversionDate = moment(billing.conversionDate).format('MM/DD/YYYY HH:mm');
                 } else {

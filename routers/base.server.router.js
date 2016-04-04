@@ -121,8 +121,10 @@ _.extend(baseRouter.prototype, {
             });
         } else {
             logger.debug('setting session account and subdomain to new');
-            req.session.accountId = 'new';
-            req.session.subdomain = 'new';
+            //req.session.accountId = 'new';
+            //req.session.subdomain = 'new';
+            req.session.unAuthAccountId = 'new';
+            req.session.unAuthSubdomain = 'new';
             return next();
         }
     },
@@ -340,7 +342,7 @@ _.extend(baseRouter.prototype, {
             }
         } else if(req.isAuthenticated() && (self.matchHostToSession(req) === false || req.session.midSignup === true)){
             logger.debug('authenticated to the wrong session.  logging out.');
-            req.logout();
+            self.logout(req, resp);
             //cookies.setRedirectUrl(req, resp, path);
             resp.redirect('/login?redirectTo=' + path.replace('/#', ''));
         } else {
@@ -496,6 +498,16 @@ _.extend(baseRouter.prototype, {
         userActivityManager.createUserActivity(activity, function(err, value){
             return fn(err, value);
         });
+    },
+
+    logout: function(req, resp) {
+        req.session.cookie = null;
+        req.session.accountId = null;
+        req.logout();
+        req.session.destroy();
+        req.session = null;
+        req.user = null;
+        resp.clearCookie(appConfig.cookie_name, { path: '/' });
     }
 });
 

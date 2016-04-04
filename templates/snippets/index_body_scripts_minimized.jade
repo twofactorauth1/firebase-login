@@ -9,6 +9,7 @@ script(src="../js/ng-indigenous.js")
 script(src="../js/libs_misc/crypto/hmac-sha256.js")
 script(src="../js/libs_misc/crypto/enc-base64-min.js")
 script(type="text/javascript" src="https://static.leaddyno.com/js")
+script(src="https://www.paypalobjects.com/js/external/dg.js")
 
 if account.accountUrl == 'http://main.test.indigenous.io'
     script.
@@ -70,7 +71,7 @@ if account.accountUrl == 'https://main.indigenous.io'
         }());
 
     script(src="//fast.wistia.net/assets/external/E-v1.js" async).
-    
+
     script(type='text/javascript').
       (function() {
       window._pa = window._pa || {};
@@ -110,6 +111,11 @@ if account._id == 37
            if(oldonload){oldonload()}};
         }());
 
+script.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 if includeEditor
     include _aloha_editor

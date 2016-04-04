@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
+  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", "SimpleSiteBuilderService", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window, SimpleSiteBuilderService) {
 
     /*
      * @circleOptions
@@ -29,7 +29,7 @@
       'mw': '100%',
       'usePage': false
     };
-    
+
     $scope.duplicate = false;
 
     $scope.circleOptions = {
@@ -81,7 +81,7 @@
         }
       }, {
         type: 'delete',
-        content: '<span class="fa fa-times"></span> Delete',        
+        content: '<span class="fa fa-times"></span> Delete',
         cssClass: "",
         onclick: function (options, item, val, i) {
           $scope.deleteComponent(parseInt(i, 10));
@@ -101,8 +101,17 @@
       }]
     };
 
+    $scope.changesConfirmed = false;
+
+    $scope.cancelChanges = false;
+
     $scope.setDirty = function(is_dirty){
-      $scope.isDirty.dirty = is_dirty;      
+      $scope.isDirty.dirty = is_dirty;
+
+        if(is_dirty)
+          $scope.changesConfirmed = false;
+
+
     }
 
 
@@ -129,7 +138,7 @@
 
     $scope.ckeditorLoaded = false;
     $scope.activeEditor = null;
-    
+
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
 
@@ -144,7 +153,7 @@
           angular.element('.cke_button__doksoft_button_email').hide();
         }
         ev.editor.on('key', function () {
-          $scope.setDirty(true);         
+          $scope.setDirty(true);
         });
         ev.editor.on('change', function () {
           $scope.setDirty(true);
@@ -215,8 +224,8 @@
         type: 'contact-us'
       });
       if ($scope.contactComponentType) {
-        GeocodeService.validateAddress($scope.contactComponentType.location, null, function (data) {
-          if (!data) {
+        GeocodeService.validateAddress($scope.contactComponentType.location, null, function (data, results) {
+          if (!data || (results && !results.length)) {
             toaster.pop('warning', 'Address could not be found for contact component. Please enter valid address');
             $scope.saveLoading = false;
             fn(false);
@@ -242,7 +251,7 @@
       });
     }
 
-    $scope.redirectAfterSave = function(redirect_url, reload){    
+    $scope.redirectAfterSave = function(redirect_url, reload){
     if(redirect_url){
         SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
             $timeout(function () {
@@ -259,13 +268,16 @@
 
     $scope.redirectWithoutSave = function(redirect_url, show_alert, reload){
     $scope.changesConfirmed = true;
-    if(redirect_url){       
-          if(show_alert)
-              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+    $scope.originalPage = null;
+    $scope.originalPost = null;
+    $scope.cancelChanges = true;
+    if(redirect_url){
+      if(show_alert)
+        SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
           window.location = redirect_url;
-          if (reload) {
-            window.location.reload();
-          }
+      if (reload) {
+        window.location.reload();
+      }
       }
     }
 
@@ -306,18 +318,18 @@
               $scope.saveLoading = false;
               if (error) {
                 if(error.message)
-                  toaster.pop('error', error.message);   
+                  toaster.pop('error', error.message);
                 else
-                    toaster.pop('error', "Error while updating post");               
+                    toaster.pop('error', "Error while updating post");
                 return;
               }
-              if (post_data.post_url !== $scope.originalPost.post_url) {               
+              if (post_data.post_url !== $scope.originalPost.post_url) {
                 $location.search('posthandle', post_data.post_url);
               }
-             
+
               $scope.blog.post = $scope.postControl.getSinglePost();
               angular.copy($scope.blog.post, $scope.originalPost);
-              toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
+              toaster.pop('success', "Post Saved", "The post was saved successfully.");
               $scope.redirectAfterSave(redirect_url, reload);
             });
           }
@@ -329,9 +341,9 @@
           $scope.saveLoading = false;
           if (error) {
             if(error.message)
-              toaster.pop('error', error.message);   
+              toaster.pop('error', error.message);
             else
-                toaster.pop('error', "Error while updating template");               
+                toaster.pop('error', "Error while updating template");
             return;
           }
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
@@ -339,13 +351,14 @@
         });
       } else if ($scope.isTopic) {
         console.log('saving topic');
+        $scope.topic.handle = $filter('slugify')($scope.topic.title);
         WebsiteService.updateTopic($scope.topic, function (data, error) {
           $scope.saveLoading = false;
           if (error) {
             if(error.message)
-              toaster.pop('error', error.message);   
+              toaster.pop('error', error.message);
             else
-                toaster.pop('error', "Error while updating topic");               
+                toaster.pop('error', "Error while updating topic");
             return;
           }
           toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
@@ -369,19 +382,19 @@
                   $scope.saveLoading = false;
                   if (error) {
                     if(error.message)
-                      toaster.pop('error', error.message);   
+                      toaster.pop('error', error.message);
                     else
-                      toaster.pop('error', "Error while updating page");               
+                      toaster.pop('error', "Error while updating page");
                     return;
                   }
                   console.log($scope.page.handle, $scope.originalPage.handle);
-                  
+
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
                   $scope.redirectAfterSave(redirect_url, reload);
                   //$scope.page = data;
                   var originalPageHandle = angular.copy($scope.originalPage.handle);
                   $scope.originalPage = angular.copy($scope.page);
-                  
+                  resetSitebuilderPages();
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
                     if (value.handle === "head-menu") {
@@ -389,7 +402,7 @@
                         $location.search('pagehandle', $scope.page.handle);
                         $scope.refreshLinkList(value, originalPageHandle);
                       }
-                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {                                               
+                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
                         console.log('Updated linked list');
 
                       });
@@ -527,7 +540,6 @@
         $scope.originalPage = angular.copy(data);
         $scope.activePage = true;
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.page.title;
         if($scope.page.templateId)
           WebsiteService.getTemplates(function (templates) {
             $scope.pageTemplate = _.findWhere(templates, {
@@ -549,22 +561,21 @@
           console.log('data ', data);
           $scope.page = angular.copy(data);
           $scope.components = $scope.page.components;
-          
+
           $scope.originalPage = angular.copy(data);
           $scope.activePage = true;
           $scope.activateCKeditor();
-          $rootScope.breadcrumbTitle = $scope.page.title;
+
         });
       }
 
       if (_email) {
         $scope.setIsEmail(true);
         $scope.page = _email;
-        $scope.components = _email.components;        
+        $scope.components = _email.components;
         $scope.originalPage = angular.copy(_email);
         $scope.activePage = true;
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.page.title;
       }
     };
 
@@ -587,12 +598,11 @@
           $scope.single_post = true;
           $scope.components = $scope.page.components;
           $scope.originalPost = angular.copy(data);
-          $rootScope.breadcrumbTitle = $filter('htmlToPlaintext')($scope.blog.post.post_title);
           $scope.activateCKeditor();
         });
 
       });
-    };    
+    };
     /*
      * @statusUpdated
      * the order status has been updated
@@ -615,7 +625,7 @@
           closeOnConfirm: false,
           closeOnCancel: true
         }, function (isConfirm) {
-        if (isConfirm) {          
+        if (isConfirm) {
           WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
             $scope.blog.post.post_status = newStatus;
             $scope.originalPost = angular.copy($scope.blog.post);
@@ -624,8 +634,8 @@
             SweetAlert.swal("Saved!", "Post status updated successfully.", "success");
             angular.element('.modal.in').show();
           });
-        } 
-        else 
+        }
+        else
           angular.element('.modal.in').show();
         });
       }
@@ -651,7 +661,7 @@
         $scope.components = $scope.page.config.components;
         $scope.originalPage = angular.copy($scope.page);
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.page.title || $scope.page.handle;
+
       });
     };
 
@@ -683,7 +693,6 @@
 
         $scope.components = $scope.topic.components;
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.topic.title;
       });
     };
 
@@ -859,7 +868,7 @@
      * @addCKEditorImage
      * -
      */
-    $scope.addCKEditorImage = function (url, inlineInput, edit) {     
+    $scope.addCKEditorImage = function (url, inlineInput, edit) {
     WebsiteService.isImage(url).then(function(result) {
       var _image = result;
       if (inlineInput) {
@@ -873,12 +882,12 @@
             var _text = inlineInput && inlineInput.getSelection() && inlineInput.getSelection().getSelectedText();
             if(!_text)
                _text = getFilename(url)
-            inlineInput.insertHtml('<a target="_blank" data-cke-saved-href="' + url + '" href="' + url + '">' + _text + '</a>');            
+            inlineInput.insertHtml('<a target="_blank" data-cke-saved-href="' + url + '" href="' + url + '">' + _text + '</a>');
           }
         }
       }
-    });     
-      
+    });
+
     };
 
     /*
@@ -1076,6 +1085,10 @@
         _modal.resolve.websiteLinks = function () {
           return $scope.websiteLinks;
         };
+
+        _modal.resolve.isSingleSelect = function () {
+          return true;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
@@ -1083,9 +1096,9 @@
         _modal.resolve.clickedIndex = function () {
           return index;
         };
-        if($scope.page)
+
           _modal.resolve.pageHandle = function () {
-            return $scope.page.handle;
+             return $scope.page ? $scope.page.handle : null;
           };
       }
 
@@ -1129,7 +1142,7 @@
      * @deleteTopic
      * -
      */
-    
+
     $scope.topicCategories = ['Account', 'Billing', 'Contacts', 'Campaigns', 'Dashboard', 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Pages', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed'];
 
 
@@ -1187,8 +1200,16 @@
 
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
-      if ($scope.editPageValidated && !$scope.isEmail)
-        WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
+      if ($scope.editPageValidated && !$scope.isEmail){
+        var error = WebsiteService.checkSystemRoute($scope.page.handle);
+        if(error){
+          $scope.duplicateUrl = true;
+          toaster.pop('error', error);
+          if (fn)
+            fn();
+        }
+        else{
+          WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
           if (data) {
             $scope.duplicateUrl = true;
             toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
@@ -1197,7 +1218,10 @@
           }
           if (fn)
             fn();
-        });
+          });
+        }
+
+      }
       else
       if (fn)
         fn();
@@ -1234,7 +1258,7 @@
 
     /*
      * @slugifyHandle
-     * - 
+     * -
      */
 
     $scope.slugifyHandle = function (title) {
@@ -1245,24 +1269,20 @@
 
     $scope.slugifyPostHandle = function (title, post) {
       if (title && post)
-        post.post_url = $filter('slugify')(title);      
+        post.post_url = $filter('slugify')(title);
       $scope.updatePostData();
     };
 
     $scope.slugifyDuplicatePostHandle = function (title, post) {
       if (title && post)
-        post.post_url = $filter('slugify')(title); 
-    };
-
-    $scope.plainTextTitle = function () {
-      $scope.blog.post.post_title = $filter('htmlToPlaintext')($scope.blog.post.post_title);
+        post.post_url = $filter('slugify')(title);
     };
 
     $scope.newPage = {};
 
     /*
      * @watch:page.handle
-     * - 
+     * -
      */
 
     $scope.$watch('page.handle', function (newValue, oldValue) {
@@ -1271,11 +1291,11 @@
       }
     });
 
-    $scope.$watch('isDirty.confirmed', function (newValue, oldValue) {      
+    $scope.$watch('isDirty.confirmed', function (newValue, oldValue) {
       console.log(newValue);
     });
 
-    $scope.createDuplicatePage = function (newPage) {      
+    $scope.createDuplicatePage = function (newPage) {
       if ($scope.isPage) {
         newPage.type = "page";
       }
@@ -1283,6 +1303,11 @@
       $scope.validateNewPage(newPage);
       if (!$scope.newPageValidated) {
         toaster.pop('error', "Page Title or URL can not be blank.");
+        return false;
+      }
+      var error = WebsiteService.checkSystemRoute(newPage.handle);
+      if(error){
+        toaster.pop('error', error);
         return false;
       }
       WebsiteService.checkDuplicatePage(newPage.handle, newPage._id, function (data) {
@@ -1295,6 +1320,7 @@
           $scope.single_post = false;
           $scope.post_blog_page = false;
           $scope.duplicate = true;
+          resetSitebuilderPages();
           $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });
       });
@@ -1324,7 +1350,7 @@
           $timeout(function () {
             //$scope.checkForSaveBeforeLeave();
           }, 100);
-          
+
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
@@ -1457,7 +1483,7 @@
         $scope.editPostValidated = true;
       } else {
         $scope.editPostValidated = false;
-      }      
+      }
     };
 
     $scope.updatePostData = function(){
@@ -1474,13 +1500,13 @@
       }
       if ($scope.isSinglePost) {
           var post_data = angular.copy($scope.blog.post);
-          if($scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
+          if($scope.originalPost && $scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
             post_data.post_tags.forEach(function (v, i) {
               if (v.text) {
                 post_data.post_tags[i] = v.text;
               }
             });
-        if (post_data && !angular.equals($scope.originalPost, post_data)) {
+        if (post_data && $scope.originalPost && !angular.equals($scope.originalPost, post_data)) {
           $scope.setDirty(true);
         }
       }
@@ -1499,8 +1525,8 @@
     }
 
     var checkBeforeRedirect = function(url, reload)
-    {   
-      checkIfPageDirty(url, function (redirectUrl) {  
+    {
+      checkIfPageDirty(url, function (redirectUrl) {
         var condition = $scope.isDirty.dirty;
         if (condition) {
           SweetAlert.swal({
@@ -1512,9 +1538,9 @@
             confirmButtonText: "Yes, save changes!",
             cancelButtonText: "No, do not save changes!",
             closeOnConfirm: false,
-            closeOnCancel: false
+            closeOnCancel: true
           }, function (isConfirm) {
-            if (isConfirm) {            
+            if (isConfirm) {
               //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
               $scope.redirect = true;
               $scope.savePage(redirectUrl, reload);
@@ -1524,10 +1550,10 @@
             }
           });
         } else {
-          $scope.redirectWithoutSave(redirectUrl, false, reload);         
+          $scope.redirectWithoutSave(redirectUrl, false, reload);
         }
-    }) 
-     
+    })
+
     };
     /*
      * @checkForSaveBeforeLeave
@@ -1536,7 +1562,7 @@
 
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
-      checkBeforeRedirect(url, reload);      
+      checkBeforeRedirect(url, reload);
     };
 
     $scope.viewTopic = function(topicId) {
@@ -1578,6 +1604,7 @@
           WebsiteService.deletePage($scope.page, websiteId, title, function (data) {
             toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
             $scope.closeModal();
+            resetSitebuilderPages();
             $timeout(function () {
               window.location = '/admin/#/website/pages';
             }, 500);
@@ -1669,7 +1696,7 @@
      * -
      */
 
-    $scope.deleteComponent = function (index) {      
+    $scope.deleteComponent = function (index) {
         SweetAlert.swal({
           title: "Are you sure?",
           text: "Do you want to delete this component?",
@@ -1721,8 +1748,8 @@
       $scope.components.forEach(function (value, index) {
         if (value && value.type === 'masthead' && value._id == masthead_id) {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            data.allowUndernav = true; 
-            data.navComponent =  $scope.components[index - 1];         
+            data.allowUndernav = true;
+            data.navComponent =  $scope.components[index - 1];
           } else
             data.allowUndernav = false;
         }
@@ -1759,15 +1786,33 @@
       }
     };
 
+    $scope.$watch('app.layout.isSidebarClosed', function (newValue, oldValue) {
+      resetEditorPosition();
+    });
+
+    angular.element($window).bind('resize', function () {
+      resetEditorPosition();
+    });
+
+    function resetEditorPosition(){
+      var x = window.scrollX
+      var y = window.scrollY
+      $window.scrollTo(0, 0);
+      $timeout(function() {
+        $window.scrollTo(x, y);
+      },0);
+
+    }
+
     /*
      * @locationChangeStart
      * - Before user leaves editor, ask if they want to save changes
      */
-    $scope.changesConfirmed = false;
+
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-        checkIfPageDirty(newUrl, function (redirectUrl) {  
-          var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
-          if (condition && !$scope.isCampaign) {
+      checkIfPageDirty(newUrl, function (redirectUrl) {
+          var condition = $scope.isDirty.dirty && !$scope.changesConfirmed && !$scope.cancelChanges;
+          if (condition && !$scope.isCampaign && !$scope.isProduct) {
             event.preventDefault();
             SweetAlert.swal({
               title: "Are you sure?",
@@ -1778,22 +1823,24 @@
               confirmButtonText: "Yes, save changes!",
               cancelButtonText: "No, do not save changes!",
               closeOnConfirm: false,
-              closeOnCancel: false
+              closeOnCancel: true
             }, function (isConfirm) {
               if (isConfirm) {
                 $scope.redirect = true;
                 $scope.savePage(redirectUrl);
                 $scope.setDirty(false);
               } else {
-                $scope.redirectWithoutSave(newUrl, true);  
+                  $scope.redirectWithoutSave(newUrl, true);
               }
               offFn();
             });
-          } else {
-            $scope.redirectWithoutSave(newUrl, false);
-        }
-      }) 
+          }
+      })
     });
+
+    function resetSitebuilderPages(){
+      SimpleSiteBuilderService.pages = null;
+    }
 
   }]);
 }(angular));

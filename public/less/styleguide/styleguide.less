@@ -1,0 +1,111 @@
+
+
+//styled version of default spectrum
+.ssb-spectrum-color-picker-small {
+
+    .ssb-spectrum-color-picker-background-container {
+        float: right;
+        background: #fff;
+        border: 1px solid @ui-color-picker-container-border-color;
+        border-radius: 5px 5px;
+    }
+
+    .sp-replacer {
+        border: none; //solid 1px #91765d;
+        background: none;//#eee;
+    }
+
+    .sp-preview, .sp-preview-inner {
+        width: 2em;
+        height: 2em;
+        border-radius: 4em;
+        border-color: @ui-color-picker-preview-border-color;
+    }
+
+    .sp-preview {
+        margin-right: 1px;
+    }
+
+    .fa-eyedropper {
+        position: relative;
+        left: -.5em;
+        display: none; //will show when/if implemented
+    }
+
+    .sp-dd {
+        display: none;
+    }
+
+}
+
+//large circle showing current selection
+.ssb-spectrum-color-picker-large {
+
+    text-align: center;
+
+    label {
+        position: relative!important;
+        width: 100%;
+    }
+
+    .fa-eyedropper {
+        display: none;
+    }
+
+    .sp-replacer {
+        padding: 0;
+        border: none; //solid 1px #91765d;
+        background: none;//#eee;
+        border-radius: 10em;
+        width: 5em;
+        height: 5em;
+        box-shadow: 0px 1px 2px rgba(0,0,0,.2);
+        margin: 1px 0 1em 0;
+    }
+
+    .sp-preview {
+        background: transparent;
+        border: 0 none;
+        width: 100%;
+        height: 100%;
+    }
+
+    .sp-dd {
+        display: none;
+    }
+
+}
+
+
+.ssb-background-image-picker {
+
+    .fa-close {
+        position: absolute;
+        top: 3px;
+        right: 4px;
+        padding: 10px 10px 0 0;
+        margin: -10px -10px 0 0;
+        cursor: pointer;
+    }
+
+    .img-thumbnail {
+        padding: 5px 15px 5px 5px;
+        float: right;
+        border-radius: 5px 5px;
+        border-color: @ui-color-picker-preview-border-color;
+        cursor: pointer;
+        height: 50px;
+    }
+
+}
+
+.ssb-ui-select-dark .form-control.ui-select-toggle {
+    background: @ssb-chrome-dark-blue-gray-bg-color;
+    color: white;
+    border-color: black;
+
+    .caret {
+        border-top-color: white;
+    }
+}
+

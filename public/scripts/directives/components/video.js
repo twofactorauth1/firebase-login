@@ -5,13 +5,17 @@ app.directive('videoComponent',['$sce', function ($sce) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-      scope.flvVideoUrl = function (iframeUrl, url, autoPlay) {
+      scope.flvVideoUrl = function (iframeUrl, url, autoPlay, controls, branding) {
         var parsedUrl = urlParser.parse(url);
         var retUrl = "";
         if (parsedUrl) {
           retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0&hd=1';
           if(autoPlay)
             retUrl = retUrl + '&autoplay=1';
+          if(!controls)
+            retUrl = retUrl + '&controls=0';
+          if(!branding)
+            retUrl = retUrl + '&modestbranding=1';
         }
         else
           retUrl = iframeUrl
@@ -22,13 +26,11 @@ app.directive('videoComponent',['$sce', function ($sce) {
         return $sce.trustAsResourceUrl(src);
       };
 
-      scope.config = {
-        width: 780,
-        height: 320,
+      scope.config = {        
         autoHide: true,
         autoPlay: false,
         autoHideTime: 1500,
-        responsive: false,
+        responsive: true,
         stretch: 'fit',
         theme: {
           url: "../../js/libs/videogular-themes-default/videogular.css",

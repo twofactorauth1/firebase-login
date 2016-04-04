@@ -129,7 +129,13 @@ _.extend(api.prototype, baseApi.prototype, {
         // ------------------------------------------------
         //  Webhook
         // ------------------------------------------------
-        app.post('stripe/webhook', this.verifyEvent.bind(this), this.handleEvent.bind(this));
+        app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
+
+        // ------------------------------------------------
+        // Paypal?
+        // ------------------------------------------------
+        //TODO: for testing only.  This can be removed
+        app.get(this.url('paypal'), this.setup.bind(this), this.trytomakeapayment.bind(this));
 
     },
 
@@ -236,6 +242,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerId = null;
         var userEmail = null;
         var purchaseAmount = null;
+        var invoiceItems = [];
 
         async.waterfall([
             function getAccount(cb) {
@@ -258,6 +265,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self.log.error('Error creating signup fee as invoice item:', err);
                                 cb(err);
                             } else {
+                                invoiceItems.push(value);
                                 cb();
                             }
                         });
@@ -284,6 +292,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         self.log.error('Error creating Stripe Invoice Item:', err);
                                         done(err);
                                     } else {
+                                        invoiceItems.push(value);
                                         done();
                                     }
                                 });
@@ -304,6 +313,13 @@ _.extend(api.prototype, baseApi.prototype, {
             function createSubscription(cb){
                 paymentsManager.createStripeSubscription(customerId, planId, accountId, userId, coupon, setupFee, function(err, sub) {
                     if(err) {
+                        invoiceItems.forEach(function(item, index) {
+                            stripeDao.deleteInvoiceItem(item._id, null, function(err, confirmation) {
+                                if (err) {
+                                    self.log.error('Error deleting invoice item: ' + err);
+                                }
+                            });
+                        });
                         self.log.error('Error subscribing to Indigenous: ' + err);
                         cb(err);
                     } else {
@@ -463,43 +479,14 @@ _.extend(api.prototype, baseApi.prototype, {
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                stripeDao.listStripeCustomers(accountId, limit, function(err, customers){
-
-
-                    if(accountId > 0) {//TODO: fix this logic.  We no longer assume mainAccountId === 0
-//                        customerLinkDao.getLinksByAccountId(accountId, function(err, accounts){
-//                            if(err) {
-//                                self.wrapError(resp, null, 500, 'Error building customer list.');
-//                            }
-//                            //verify customer/account relationship
-//                            var customerIDs = _.map(accounts, function(account){return account.get('customerId');});
-//                            var results = [];
-//                            if(customers && customers.data) {
-//                                _.each(customers.data, function(elem){
-//                                    if(_.contains(customerIDs, elem.id)) {
-//                                        results.push(elem);
-//                                    }
-//                                });
-//                            }
-//
-//                            self.log.debug('<< listCustomers');
-//                            self.sendResultOrError(resp, err, results, "Error listing Stripe Customers");
-//                        });
-                            self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
-
-                    } else {
-                        //accountId ==0; return ALL customers
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.listStripeCustomers(accountId, limit, accessToken, function(err, customers){
                         self.log.debug('<< listCustomers');
                         self.sendResultOrError(resp, err, customers.data, "Error listing Stripe Customers");
-                    }
-
+                    });
                 });
-
             }
         });
-
-
-
     },
 
     /*
@@ -652,10 +639,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
 
                 $.when(p1).done(function(){
-                    stripeDao.getStripeCustomer(customerId, function(err, value){
-                        self.log.debug('<< getCustomer');
-                        self.sendResultOrError(resp, err, value, "Error retrieving Stripe Customer");
+                    self.getStripeTokenFromAccount(req, function(err, accessToken){
+                        stripeDao.getStripeCustomer(customerId, accessToken, function(err, value){
+                            self.log.debug('<< getCustomer');
+                            self.sendResultOrError(resp, err, value, "Error retrieving Stripe Customer");
+                        });
                     });
+
                 });
             }
         });
@@ -689,7 +679,6 @@ _.extend(api.prototype, baseApi.prototype, {
          * This can be called before we have a subscription
          */
 
-
         //validate arguments
         if(!cardToken && cardToken.length ===0) {
             return this.wrapError(resp, 400, null, "Invalid parameter for cardToken.");
@@ -701,27 +690,26 @@ _.extend(api.prototype, baseApi.prototype, {
             return this.wrapError(resp, 409, null, "Customer already exists.");
         }
         self.createUserActivityWithParams(_accountId, user.id(), 'CREATE_STRIPE_CUSTOMER', null, null, function(){});
-
-        if(contact) {
-            stripeDao.createStripeCustomer(cardToken, contact, _accountId, function(err, value){
-                self.log.debug('<< createCustomer');
-                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-                self = value = null;
-            });
-        } else {
-            stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, function(err, value){
-                self.log.debug('<< createCustomer');
-                self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
-            });
-        }
-
+        self.getStripeTokenFromAccount(req, function(err, accessToken){
+            if(contact) {
+                stripeDao.createStripeCustomer(cardToken, contact, _accountId, _accountId, accessToken, function(err, value){
+                    self.log.debug('<< createCustomer');
+                    self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                    self = value = null;
+                });
+            } else {
+                stripeDao.createStripeCustomerForUser(cardToken, user, _accountId, 0, _accountId, accessToken, function(err, value){
+                    self.log.debug('<< createCustomer');
+                    self.sendResultOrError(resp, err, value, "Error creating Stripe Customer");
+                });
+            }
+        });
 
     },
 
     updateCustomer: function(req, resp) {
         var self = this;
         self.log.debug('>> updateCustomer');
-        //var accountId = parseInt(self.accountId(req));
 
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -765,15 +753,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(hasUpdates!==true) {
                     return this.wrapError(resp, 400, null, "Invalid parameters for updateCustomer.");
                 }
-
-                stripeDao.updateStripeCustomer(customerId, params.account_balance, params.cardToken, params.coupon, params.default_card,
-                    params.description, params.email, params.metadata, function(err, value){
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.updateStripeCustomer(customerId, params.account_balance, params.cardToken, params.coupon, params.default_card,
+                            params.description, params.email, params.metadata, accessToken, function(err, value){
                         self.log.debug('<< updateCustomer');
                         self.sendResultOrError(resp, err, value, "Error updating Stripe Customer");
                         self.createUserActivity(req, 'UPDATE_STRIPE_CUSTOMER', null, {customerId: customerId}, function(){});
                         return;
                     });
-
+                });
             }
         });
 
@@ -805,17 +793,18 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     var contactId = req.body.contactId;
                     var userId = req.body.userId;
-
-                    //delete Stripe Customer AND all links
-                    stripeDao.deleteStripeCustomer(customerId, contactId, userId, function(err, value){
-                        if(err) {
-                            self.log.error('Error deleting customer from Stripe: ' + err);
-                            return self.wrapError(resp, null, 500, 'Error removing Stripe Customer');
-                        }
-                        self.createUserActivity(req, 'DELETE_STRIPE_CUSTOMER', null, {customerId: customerId}, function(){});
-                        customerLinkDao.removeLinksByCustomer(customerId, function(err, value){
-                            self.log.debug('<< deleteCustomer');
-                            return self.sendResultOrError(resp, err, value, "Error removing Stripe Customer");
+                    self.getStripeTokenFromAccount(req, function(err, accessToken){
+                        //delete Stripe Customer AND all links
+                        stripeDao.deleteStripeCustomer(customerId, contactId, userId, accessToken, function(err, value){
+                            if(err) {
+                                self.log.error('Error deleting customer from Stripe: ' + err);
+                                return self.wrapError(resp, null, 500, 'Error removing Stripe Customer');
+                            }
+                            self.createUserActivity(req, 'DELETE_STRIPE_CUSTOMER', null, {customerId: customerId}, function(){});
+                            customerLinkDao.removeLinksByCustomer(customerId, function(err, value){
+                                self.log.debug('<< deleteCustomer');
+                                return self.sendResultOrError(resp, err, value, "Error removing Stripe Customer");
+                            });
                         });
                     });
                 }
@@ -1186,12 +1175,7 @@ _.extend(api.prototype, baseApi.prototype, {
          */
 
         var accountId = parseInt(self.accountId(req));
-        /*
-        var accessToken = self._getAccessToken(req);
-        if(accessToken === null && accountId != appConfig.mainAccountID) {
-            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-        }
-        */
+
         var customerId = req.params.id;
 
         var cardToken = req.params.cardToken;
@@ -1202,11 +1186,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(!cardToken || cardToken.length < 1) {
                     return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
                 }
-                stripeDao.createStripeCard(customerId, cardToken, function(err, value){
-                    self.log.debug('<< createCard');
-                    self.sendResultOrError(resp, err, value, "Error creating card");
-                    self.createUserActivity(req, 'CREATE_STRIPE_CARD', null, {customerId: customerId}, function(){});
-                    return;
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.createStripeCard(customerId, cardToken, accessToken, function(err, value){
+                        self.log.debug('<< createCard');
+                        self.sendResultOrError(resp, err, value, "Error creating card");
+                        self.createUserActivity(req, 'CREATE_STRIPE_CARD', null, {customerId: customerId}, function(){});
+                        return;
+                    });
                 });
             }
         });
@@ -1226,7 +1212,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 if (isAllowed !== true) {
                     return self.send403(resp);
                 } else {
-                    stripeDao.getStripeCard(customerId, cardId, function(err, value){
+                    stripeDao.getStripeCard(customerId, cardId, accessToken, function(err, value){
                         self.log.debug('<< getCard');
                         return self.sendResultOrError(resp, err, value, "Error creating card");
                     });
@@ -1243,12 +1229,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accountId = parseInt(self.accountId(req));
-                /*
-                var accessToken = self._getAccessToken(req);
-                if(accessToken === null && accountId != appConfig.mainAccountID) {
-                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-                }
-                */
+
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
 
@@ -1271,17 +1252,17 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.error('No parameters passed to updateCard.');
                     return self.wrapError(resp, 400, null, "Invalid card parameters.");
                 }
-
-                stripeDao.updateStripeCard(customerId, cardId, name, address_city, address_country, address_line1,
-                    address_line2, address_state, address_zip, exp_month, exp_year, function(err, value){
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.updateStripeCard(customerId, cardId, name, address_city, address_country, address_line1,
+                            address_line2, address_state, address_zip, exp_month, exp_year, accessToken, function(err, value){
                         self.log.debug('<< updateCard');
                         self.sendResultOrError(resp, err, value, "Error updating card");
                         self.createUserActivity(req, 'UPDATE_STRIPE_CARD', null, {customerId: customerId, cardId: cardId}, function(){});
                         return;
+                    });
                 });
             }
         });
-
     },
 
     listCards: function(req, resp) {
@@ -1294,21 +1275,12 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var accountId = parseInt(self.accountId(req));
 
-                /*
-                 * This operation is done on customers, which belong to the main account.
-                 * No access token is needed.
-                 */
-                /*
-                var accessToken = self._getAccessToken(req);
-                if(accessToken === null && accountId != appConfig.mainAccountID) {
-                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-                }
-                */
                 var customerId = req.params.id;
-
-                stripeDao.listStripeCards(customerId, function(err, value){
-                    self.log.debug('<< listCards');
-                    return self.sendResultOrError(resp, err, value, "Error listing cards");
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.listStripeCards(customerId, accessToken, function(err, value){
+                        self.log.debug('<< listCards');
+                        return self.sendResultOrError(resp, err, value, "Error listing cards");
+                    });
                 });
             }
         });
@@ -1324,20 +1296,16 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var accountId = parseInt(self.accountId(req));
-                /*
-                var accessToken = self._getAccessToken(req);
-                if(accessToken === null && accountId != appConfig.mainAccountID) {
-                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-                }
-                */
+
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
-
-                stripeDao.deleteStripeCard(customerId, cardId, function(err, value){
-                    self.log.debug('<< deleteCard');
-                    self.sendResultOrError(resp, err, value, "Error listing cards");
-                    self.createUserActivity(req, 'DELETE_STRIPE_CARD', null, {customerId: customerId, cardId: cardId}, function(){});
-                    return;
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.deleteStripeCard(customerId, cardId, accessToken, function(err, value){
+                        self.log.debug('<< deleteCard');
+                        self.sendResultOrError(resp, err, value, "Error listing cards");
+                        self.createUserActivity(req, 'DELETE_STRIPE_CARD', null, {customerId: customerId, cardId: cardId}, function(){});
+                        return;
+                    });
                 });
             }
         });
@@ -2086,22 +2054,18 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                //No need for access token.  customers are stored on main account.
-                /*var accessToken = self._getAccessToken(req);
-                var accountId = parseInt(self.accountId(req));
-                if(accessToken === null && accountId != appConfig.mainAccountID) {
-                    return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-                }
-                */
+
                 var customerId = req.params.id;
                 var cardId = req.params.cardId;
-
-                stripeDao.createToken(cardId, customerId, null, function(err, value){
-                    self.log.debug('<< createToken');
-                    self.sendResultOrError(resp, err, value, "Error creating token.");
-                    self.createUserActivity(req, 'CREATE_STRIPE_TOKEN', null, {customerId: customerId, cardId: cardId}, function(){});
-                    return;
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.createToken(cardId, customerId, accessToken, function(err, value){
+                        self.log.debug('<< createToken');
+                        self.sendResultOrError(resp, err, value, "Error creating token.");
+                        self.createUserActivity(req, 'CREATE_STRIPE_TOKEN', null, {customerId: customerId, cardId: cardId}, function(){});
+                        return;
+                    });
                 });
+
             }
         });
 
@@ -2233,6 +2197,21 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    //TODO: this can be removed...
+    trytomakeapayment: function(req, resp) {
+        var self = this;
+        self.log.debug('>> trytomakeapayment?');
+        var receiverEmail = 'kyle+testbusiness@indigenous.io';
+        var amount = '101.01';
+        var memo = 'trytomakeapayment';
+        var cancelUrl = 'http://kyletesting.indigenous.local:3000/nope';
+        var returnUrl = 'http://kyletesting.indigenous.local:3000/yep';
+        paymentsManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
+            self.log.debug('<< trytomakeapayment');
+            return self.sendResultOrError(resp, err, value, "Error calling paypal.");
+        });
     },
 
     getStripeAccount: function(req, resp) {

@@ -118,6 +118,11 @@ var page = $$.m.ModelBase.extend({
             latest:true,
 
             /**
+             * Status of the page.  Can be either DRAFT or PUBLISHED
+             */
+            status:'PUBLISHED',
+
+            /**
              * Created by data
              *
              * @property created
@@ -155,6 +160,62 @@ var page = $$.m.ModelBase.extend({
         }
 
         return (visibility.displayOn != null && visibility.displayOn < new Date().getTime());
+    },
+
+    hasSectionReferences: function() {
+        var refsList = _.filter(this.get('sections'), function(section){
+            return section.hasOwnProperty('_id') && !section.hasOwnProperty('type');
+        });
+        return refsList.length > 0;
+    },
+
+    hasSectionObjects: function() {
+        var objsList = _.filter(this.get('sections'), function(section){
+            return section.hasOwnProperty('type');
+        });
+        return objsList.length > 0;
+    },
+
+    transients: {
+        deepCopy: true,
+        frontend: [
+            function (json, options) {
+                if(json.created) {
+                    delete json.created;
+                }
+                if(json.modified) {
+                    delete json.modified;
+                }
+                /*
+                 _id: "b94904b1-d3b5-4aee-b756-47bdcf48d65a"
+                 accountId: 6
+                 handle: "Default-ctdsm"
+                 latest: true
+                 modified: Object
+                 sections: Array[1]
+                 secure: false
+                 seo: null
+                 templateId: "11032028"
+                 templateOverrides: Object
+                 title: null
+                 type: "page"
+                 version: 0
+                 visibility: Object
+                 websiteId: "4d45e818-b797-4758-b4d6-0af3378457f4"
+                 */
+                delete json._id;
+                delete json.accountId;
+                delete json.latest;
+                delete json.secure;
+                delete json.seo;
+                delete json.templateId;
+                delete json.templateOverrides;
+                delete json.type;
+                delete json.version;
+                delete json.visibility;
+                delete json.websiteId;
+            }
+        ]
     }
 
 }, {

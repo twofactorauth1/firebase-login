@@ -55,6 +55,20 @@ var product = $$.m.ModelBase.extend({
 
             variations: [],
 
+            fulfillment_email: false,
+
+            emailSettings: {
+              "emailId": "",
+              "offset": "", //in minutes
+              "fromEmail": "",
+              "fromName": '',
+              "replyTo": '',
+              "bcc": '',
+              "subject": '',
+              "vars": [],
+              "sendAt": {}
+            },
+
             /* Example:
                 {
                     "id": 609,
@@ -120,7 +134,8 @@ var product = $$.m.ModelBase.extend({
             _v: "0.1",
             is_image: false,
             starred: false,
-            tags: null
+            tags: null,
+            assets: []
         }
     },
 

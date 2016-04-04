@@ -245,7 +245,7 @@ module.exports = {
         );
     },
 
-    getOrCreateS3Template: function(accountId, pageName, resp) {
+    getOrCreateS3Template: function(accountId, pageName, update, resp) {
         var self = this;
         var environmentName = 'prod';
         if(appConfig.nonProduction === true) {
@@ -253,7 +253,7 @@ module.exports = {
         }
         var path = environmentName + '/acct_' + accountId + '/' + pageName;
         s3Client.get(path).on('response', function(res){
-            if(res.statusCode === 200) {
+            if(res.statusCode === 200 && update !==true) {
                 //pipe it
                 resp.setHeader('Content-Length', res.headers['content-length'])
                 resp.setHeader('Content-Type', res.headers['content-type'])
@@ -419,7 +419,7 @@ module.exports = {
         };
         if(typeof lookup[type] !== 'function') {
             console.log('ERROR: could not find matching directive for component.type =' + type);
-            lookup['text-only']();
+            return lookup['text-only']();
         }
         return lookup[type]();
     }

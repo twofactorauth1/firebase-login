@@ -26,6 +26,7 @@
         dashboardService.awayFromDashboard = false;
         dashboardService.polls = 0;
         dashboardService.numberPolling = 0;
+        dashboardService.doPolling = true;
 
         dashboardService.workstreamDisplayOrder = [
             'Build an Online Presence',
@@ -54,10 +55,10 @@
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
-            console.info('dashService | loading +1 : ' + dashboardService.loading.value);
+            // console.info('dashService | loading +1 : ' + dashboardService.loading.value);
             fn.finally(function() {
                 dashboardService.loading.value = dashboardService.loading.value - 1;
-                console.info('dashService | loading -1 : ' + dashboardService.loading.value);
+                // console.info('dashService | loading -1 : ' + dashboardService.loading.value);
             });
             return fn;
 		}
@@ -121,29 +122,30 @@
                  * TODO: should really be a server push w/ EventSource
                  * polyfill lib -> https://github.com/Yaffle/EventSource
                  */
-                if(dashboardService.numberPolling <=1) {
-                    dashboardService.numberPolling--;
-                    (function poll() {
+                if(dashboardService.doPolling) {
+                    if(dashboardService.numberPolling <=1) {
+                        dashboardService.numberPolling--;
+                        (function poll() {
 
-                        if (dashboardService.polls < 300 && dashboardService.loading.value === 0) {
-                            $timeout(dashboardService.getWorkstreams, 3000);
-                            dashboardService.numberPolling++;
-                            dashboardService.polls++;
-                            console.log('dashboardService.polls', dashboardService.polls);
-                        } else {
-                            $timeout(poll, 1000);
-                        }
+                            if (dashboardService.polls < 300 && dashboardService.loading.value === 0) {
+                                $timeout(dashboardService.getWorkstreams, 3000);
+                                dashboardService.numberPolling++;
+                                dashboardService.polls++;
+                                // console.log('dashboardService.polls', dashboardService.polls);
+                            } else {
+                                $timeout(poll, 1000);
+                            }
 
-                    })();
-                } else {
-                    dashboardService.numberPolling--;
-                    console.info('dashboardService skipping poll');
+                        })();
+                    } else {
+                        dashboardService.numberPolling--;
+                        // console.info('dashboardService skipping poll');
+                    }
                 }
-
             }
 
             function error(error) {
-                console.error('DashboardService getWorkstreams error: ' + error);
+                console.error('DashboardService getWorkstreams error: ', JSON.stringify(error));
             }
 
             return dashRequest($http.get(baseWorkstreamsAPIUrl).success(success).error(error));
@@ -156,7 +158,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService getWorkstream:', error);
+                console.error('DashboardService getWorkstream:', JSON.stringify(error));
             }
 
             return dashRequest($http.get(baseWorkstreamsAPIUrl + '/' + id).success(success).error(error));
@@ -175,7 +177,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService unlockWorkstream:', error);
+                console.error('DashboardService unlockWorkstream:', JSON.stringify(error));
             }
 
             return dashRequest($http.post(baseWorkstreamsAPIUrl + '/' + id + '/unlock').success(success).error(error));
@@ -185,12 +187,12 @@
         function getAnalytics() {
 
             function success(data) {
-                console.log('DashboardService getAnalytics: ', data);
+                console.log('DashboardService getAnalytics: ', JSON.stringify(data));
                 dashboardService.state.analytics = data;
             }
 
             function error(error) {
-                console.error('DashboardService getAnalytics error: ' + error);
+                console.error('DashboardService getAnalytics error: ', JSON.stringify(error));
             }
 
             return dashRequest($http.get(baseAnalyticsAPIUrl).success(success).error(error));
@@ -200,12 +202,15 @@
         function getAccount(account) {
 
             function success(data) {
-                console.info('DashboardService getAccount:', data);
+                console.info('DashboardService getAccount:', JSON.stringify(data));
                 dashboardService.state.account = data;
+                if(data.ui_preferences && data.ui_preferences.polling === false) {
+                    dashboardService.doPolling = false;
+                }
             }
 
             function error(error) {
-                console.error('DashboardService getAccount:', error);
+                console.error('DashboardService getAccount:', JSON.stringify(error));
             }
             return (
                 dashRequest($http.get(baseAccountAPIUrl).success(success).error(error))
@@ -219,7 +224,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService updateAccount:', error);
+                console.error('DashboardService updateAccount:', JSON.stringify(error));
             }
             return (
                 dashRequest($http.put(baseAccountAPIUrl + [account._id].join('/'), account).success(success).error(error))
@@ -231,9 +236,9 @@
 
             dashboardService.polls = 0;
             dashboardService.numberPolling++;
-            
+
             dashboardService.getAnalytics();
-            dashboardService.getWorkstreams();            
+            dashboardService.getWorkstreams();
             dashboardService.getAccount();
 
             if (away) {

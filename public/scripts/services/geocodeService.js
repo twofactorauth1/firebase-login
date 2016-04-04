@@ -38,7 +38,7 @@ mainApp.service('geocodeService', ['$http', function ($http) {
       var geocoder = new google.maps.Geocoder();
       var myLatLng = new google.maps.LatLng(location.lat, location.lon);
       var address = this.stringifyAddress(location);
-      if (!((location.city && location.state) || location.zip)) {
+      if (!(location.city || location.state || location.zip)) {
         fn(false, null);
       } else {
         geocoder.geocode({

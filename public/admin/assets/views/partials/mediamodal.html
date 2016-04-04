@@ -83,8 +83,9 @@
                                     <span ng-switch-when="pdf" class="fa fa-file-pdf-o" style="font-size: 96px;"></span>
                                     <span ng-switch-when="octet-stream" class="fa fa-file-text-o" style="font-size: 96px;"></span>
                                     <span ng-switch-when="audio" class="fa fa-file-audio-o" style="font-size: 96px;"></span>
-                                    <span ng-switch-when="video" class="fa fa-file-video-o" style="font-size: 96px;"></span>
-                                    <img img-lazy-load="{{ asset.url }}" ng-switch-default alt="">
+                                    <span ng-switch-when="video" class="fa fa-file-video-o" style="font-size: 96px;"></span>                                    
+                                    <img ng-switch-when="image" img-lazy-load="{{ asset.url }}" alt="">
+                                    <span ng-switch-default class="fa fa-file-o" style="font-size: 96px;"></span>
                                 </div>
                             </div>
                             <h5 class="fm-title">
@@ -156,7 +157,9 @@
                         </tbody>
                     </table>
                 </div>
+                    <div style="color: #FFA500;" ng-if="maxLengthExceed" class="center" >Only {{maximumUploadItems}} items can be uploaded at a time!</div>
             </div>
+
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer" ng-class="{upload: uploader.queue.length > 0}">

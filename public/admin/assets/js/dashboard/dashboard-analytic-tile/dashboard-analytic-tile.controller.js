@@ -33,11 +33,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Analytics';
                 ret.data = [
                     {
-                        analyticDataLabel: 'NEW VISITORS',
+                        analyticDataLabel: 'MTD NEW VISITORS',
                         analyticDataValue: DashboardService.state.analytics.visitors.total
                     },
                     {
-                        analyticDataLabel: 'PAGE VIEWS',
+                        analyticDataLabel: 'MTD PAGE VIEWS',
                         analyticDataValue: DashboardService.state.analytics.pageViews.total
                     }
                 ]
@@ -50,11 +50,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Contacts';
                 ret.data = [
                     {
-                        analyticDataLabel: 'CUSTOMERS',
+                        analyticDataLabel: 'MTD CUSTOMERS',
                         analyticDataValue: DashboardService.state.analytics.contacts.total
                     },
                     {
-                        analyticDataLabel: 'LEADS',
+                        analyticDataLabel: 'MTD LEADS',
                         analyticDataValue: DashboardService.state.analytics.contacts.leadTotal
                     }
                 ]
@@ -66,15 +66,15 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Campaigns';
                 ret.data = [
                     {
-                        analyticDataLabel: 'SENT',
+                        analyticDataLabel: 'MTD SENT',
                         analyticDataValue: DashboardService.state.analytics.campaigns.totalSent
                     },
                     {
-                        analyticDataLabel: 'OPENED',
+                        analyticDataLabel: 'MTD OPENED',
                         analyticDataValue: DashboardService.state.analytics.campaigns.totalOpened
                     },
                     {
-                        analyticDataLabel: 'CLICKED',
+                        analyticDataLabel: 'MTD CLICKED',
                         analyticDataValue: DashboardService.state.analytics.campaigns.totalClicked
                     }
                 ]
@@ -105,11 +105,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Revenue';
                 ret.data = [
                     {
-                        analyticDataLabel: 'YTD REVENUE',
+                        analyticDataLabel: 'YTD NEW REVENUE',
                         analyticDataValue: '$' + DashboardService.state.analytics.revenue.YTDTotalAmount
                     },
                     {
-                        analyticDataLabel: 'YTD ORDERS',
+                        analyticDataLabel: 'YTD NEW ORDERS',
                         analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalOrders
                     }
                 ]
@@ -134,7 +134,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             vm.uiDetails = vm.analyticMap();
         }
     })
-    
+
 
     function init(element) {
 

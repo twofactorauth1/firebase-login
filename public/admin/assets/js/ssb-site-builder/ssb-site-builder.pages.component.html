@@ -12,7 +12,7 @@
         <div class="col-md-4">
             <h3>You're currently using the <b><i>{{vm.state.website.theme.name || 'Default'}}</i></b> theme.</h3>
             <p class="margin-top-20 margin-bottom-20">Customize the look and feel of your website by changing your site's theme. You can further customize any theme styles and colors in the editor.</p>
-            <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected)" theme="bootstrap">
+            <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true);" theme="bootstrap">
                 <ui-select-match placeholder="Select a theme">
                     <small ng-bind-html="$select.selected.name"></small>
                 </ui-select-match>
@@ -106,7 +106,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle">Pages</h1>
-                <span ng-if="pages" class="mainDescription">There are currently {{pages.length}} pages.</span>
+                <span ng-if="pages" class="mainDescription">There are currently {{pages.length}} pages. ({{displayedPages.length || 0}} in filtered view)</span>
             </div>
         </div>
     </section>

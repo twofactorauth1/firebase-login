@@ -8,6 +8,9 @@ script(src="../js/libs/json3/lib/json3.min.js")
 script(src="https://maps.googleapis.com/maps/api/js?sensor=false")
 
 script(src="https://js.stripe.com/v2/?tmp")
+
+script(src="https://www.paypalobjects.com/js/external/dg.js")
+
 //- START AUTOINCLUDE SECTION
 script(src="../js/libs/jquery/dist/jquery.js")
 script(src="../js/libs/jquery-ui/jquery-ui.min.js")
@@ -48,16 +51,18 @@ script(src='../js/utils/namespaces.js')
 script(src="../js/scripts/utils.js")
 script(src="../js/libs/jqcloud2/dist/jqcloud.min.js")
 script(src="../js/libs/angular-jqcloud/angular-jqcloud.js")
-script(src="../js/libs/angular-social-links/angular-social-links.js")
+script(src="../js/libs/angularjs-socialshare/dist/angular-socialshare.js")
 script(src="../js/libs/slick-carousel/slick/slick.js")
 script(src="../js/libs/angular-slick/dist/slick.js")
-script(src="../js/libs//js-video-url-parser/dist/jsVideoUrlParser.min.js")
+script(src="../js/libs/js-video-url-parser/dist/jsVideoUrlParser.min.js")
 script(src="../js/libs/angular-truncate/src/truncate.js")
 script(src="../js/libs/ngmap/build/scripts/ng-map.min.js")
 script(src="../js/libs/angular-mask/dist/ngMask.min.js")
 script(src="../js/libs/angular-masonry/angular-masonry.js")
 script(src="../js/libs/masonry/dist/masonry.pkgd.min.js")
 script(src="../js/libs/imagesloaded/imagesloaded.pkgd.min.js")
+script(src='../js/libs/angular-slugify/angular-slugify.js')
+script(src='../js/libs/angular-local-storage/dist/angular-local-storage.min.js')
 
 
 
@@ -65,14 +70,18 @@ script(src="../js/libs/imagesloaded/imagesloaded.pkgd.min.js")
 script(src='../js/libs/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js')
 
 //- SSB
-script(src="admin/assets/js/ssb-site-builder/ssb-components/ssb-text/ssb-text.component.js")
-script(src="admin/assets/js/ssb-site-builder/ssb-components/ssb-text/ssb-text.controller.js")
-script(src="admin/assets/js/ssb-site-builder/ssb-components/ssb-image/ssb-image.component.js")
-script(src="admin/assets/js/ssb-site-builder/ssb-components/ssb-image/ssb-image.controller.js")
-script(src="admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.js")
-script(src="admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.controller.js")
-script(src="admin/assets/js/ssb-site-builder/ssb-component-loader/ssb-component-loader.component.js")
-script(src="admin/assets/js/ssb-site-builder/ssb-component-loader/ssb-component-loader.controller.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-text/ssb-text.component.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-text/ssb-text.controller.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-image/ssb-image.component.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-image/ssb-image.controller.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-form-builder/ssb-form-builder.component.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-form-builder/ssb-form-builder.controller.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.controller.js")
+//- script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/ssb-theme-btn.component.js")
+//- script(src="../admin/assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/ssb-theme-btn.controller.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-component-loader/ssb-component-loader.component.js")
+script(src="../admin/assets/js/ssb-site-builder/ssb-component-loader/ssb-component-loader.controller.js")
 
 
 //- END AUTOINCLUDE SECTION
@@ -86,6 +95,7 @@ script(src="scripts/directives/coursePreview.js")
 script(src="scripts/directives/skeuocard.js")
 script(src="scripts/directives/fileChange.js")
 script(src="scripts/directives/perfect-scrollbar.js")
+script(src="scripts/directives/testimonialSlider.js")
 
 // COMPONENTS
 script(src="scripts/directives/editor.js")
@@ -121,6 +131,7 @@ script(src="scripts/services/websiteService.js")
 script(src="scripts/services/themeService.js")
 script(src="scripts/services/campaignService.js")
 script(src="scripts/services/pagesService.js")
+script(src="scripts/services/embeddedSiteDataService.js")
 script(src="scripts/services/postsService.js")
 script(src="scripts/services/postService.js")
 script(src="scripts/services/paymentService.js")
@@ -132,6 +143,7 @@ script(src="scripts/services/pageService.js")
 script(src="scripts/services/orderService.js")
 script(src="scripts/services/geocodeService.js")
 script(src="scripts/services/common.js")
+script(src="scripts/services/cartService.js")
 script(src="scripts/filters/CreateUrlFilter.js")
 script(src="scripts/filters/generateURLforLinks.js")
 script(src="scripts/filters/trustHtml.js")
@@ -152,6 +164,11 @@ script(src="scripts/filters/productTags.js")
 script(src="../js/libs_misc/crypto/hmac-sha256.js")
 script(src="../js/libs_misc/crypto/enc-base64-min.js")
 
+script.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 if account._id == 6
     script.

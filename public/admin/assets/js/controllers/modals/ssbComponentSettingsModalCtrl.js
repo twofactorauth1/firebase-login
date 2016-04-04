@@ -2,22 +2,18 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'AccountService', 'SimpleSiteBuilderService', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, AccountService, SimpleSiteBuilderService) {
+app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert) {
 
   $scope.blog = {};
-  $scope.components = $scope.$parent.vm.state.page.components;
-  // $scope.openParentModal = openParentModal;
-  // $scope.clickedIndex = clickedIndex;
 
   $scope.$parent.$watchGroup(['vm.uiState.activeSectionIndex', 'vm.uiState.activeComponentIndex'], function() {
     var section = $scope.$parent.vm.state.page.sections[$scope.$parent.vm.uiState.activeSectionIndex];
     if (section && section.components && section.components[$scope.$parent.vm.uiState.activeComponentIndex]) {
-      $scope.componentEditing = section.components[$scope.$parent.vm.uiState.activeComponentIndex];
-      $scope.component = $scope.componentEditing;
+        $scope.components = section.components;
+        $scope.component = section.components[$scope.$parent.vm.uiState.activeComponentIndex];
     }
   }, true);
 
-  // $scope.contactMap = contactMap;
   $scope.website = $scope.$parent.vm.state.website;
   $scope.originalWebsite = angular.copy($scope.website);
   // $scope.blog.post = blog;
@@ -25,13 +21,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   // $scope.isSinglePost = isSinglePost;
   // $scope.showInsert = showInsert;
   // $scope.originalBlog = angular.copy($scope.blog.post);
-  $scope.place = {};
-  $scope.place.address = null;
-  $scope.errorMapData = false;
-  $scope.checkIfAddess = false;
-  // $scope.blogImage = blogImage;
-  // $scope.isEmail = isEmail;
-  // $scope.testimonialSlider = testimonialSlider;
   $scope.emailLoaded = false;
 
   $scope.availableProductTags = [];
@@ -91,7 +80,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    */
 
   $scope.revertComponent = function () {
-    if ($scope.componentEditing.type === 'navigation') {
+    if ($scope.component.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
     }
     if ($scope.blog.post && $scope.originalBlog) {
@@ -126,7 +115,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       appendTo: 'body',
       palette: [
         ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
-        ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+        ["#f47998", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
         ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
         ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
         ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
@@ -362,16 +351,16 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    */
 
   $scope.removeImage = function (remove) {
-    if ($scope.componentEditing && $scope.componentEditing.bg && $scope.componentEditing.bg.img) {
-      if (($scope.componentEditing.bg.img.show === false && remove === true) || remove === false) {
+    if ($scope.component && $scope.component.bg && $scope.component.bg.img) {
+      if (($scope.component.bg.img.show === false && remove === true) || remove === false) {
         if (remove === false) {
-          $scope.componentEditing.bg.img.url = null;
+          $scope.component.bg.img.url = null;
         }
-        $scope.componentEditing.bg.img.blur = false;
-        $scope.componentEditing.bg.img.parallax = false;
-        $scope.componentEditing.bg.img.overlay = false;
-        $scope.componentEditing.bg.img.undernav = false;
-        $scope.componentEditing.bg.img.fullscreen = false;
+        $scope.component.bg.img.blur = false;
+        $scope.component.bg.img.parallax = false;
+        $scope.component.bg.img.overlay = false;
+        $scope.component.bg.img.undernav = false;
+        $scope.component.bg.img.fullscreen = false;
       }
 
     }
@@ -380,13 +369,13 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.closeModal = function () {
     $timeout(function () {
       $scope.$apply(function () {
-        if ($scope.componentEditing.type === "contact-us") {
+        if ($scope.component.type === "contact-us") {
           $scope.validateGeoAddress(function () {
             if ($scope.errorMapData) {
-              $scope.componentEditing.location = $scope.originalComponent.location;
+              $scope.component.location = $scope.originalComponent.location;
             }
             if ($scope.contactHoursInvalid) {
-              $scope.componentEditing.hours = $scope.originalComponent.hours;
+              $scope.component.hours = $scope.originalComponent.hours;
             }
             $modalInstance.close();
             angular.element('.modal-backdrop').remove();
@@ -401,18 +390,46 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.$watch('newLink.linkPage', function (newValue) {
     if (newValue) {
-      $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+      $scope.currentPage = _.find($scope.filteredPages, function (page) {
         return page.handle === newValue;
       });
     }
   });
+
+  function getPageComponents(page) {
+    var components = [];
+    if (page.components && page.components.length && !page.sections.length) {
+        components = page.components;
+    }
+    else{
+        _.each(page.sections, function (section) {
+            if (section && section.components) {
+              _.each(section.components, function (component) {
+                if (component) {
+                  if(section.components.length > 1){
+                    component.sectionTitle = section.name;
+                  }
+                  else if(section.components.length === 1){
+                    if(section.name && component.type && section.name.toLowerCase() !== component.type.toLowerCase()){
+                      component.sectionTitle = section.name;
+                    }
+                  }
+                  components.push(component)
+                }
+              })
+            }
+        })
+    }
+    return components;
+  }
 
   $scope.initializeEditLinks = function (link, status) {
     if (link.page) {
       if (status) {
         link.data = null;
       }
-      $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+      $scope.linkPage = link.page;
+      $scope.currentPage = _.find($scope.filteredPages, function (page) {
         return page.handle === link.page;
       });
     }
@@ -448,14 +465,30 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    */
 
   $scope.setLinkTitle = function (value, index, newLink) {
-    var newArray = _.first(angular.copy($scope.components), [index + 1]);
+    var title = value.replace("-", " ");
+    var sectionTitle = $scope.currentPage.components[index].sectionTitle;
+    var newArray = _.first(angular.copy($scope.currentPage.components), [index + 1]);
     var hash = _.filter(newArray, function (obj) {
       return obj.type === value;
     });
-    if (hash.length > 1) {
-      return value.replace("-", " ") + "-" + (hash.length - 1);
+
+    if(sectionTitle){
+      title = sectionTitle + " - " + title;
     }
-    return value.replace("-", " ");
+    if (hash.length > 1) {
+      if(sectionTitle){
+        var headerSection = _.filter(hash, function (obj) {
+          return obj.sectionTitle === sectionTitle;
+        });
+        if(headerSection.length > 1){
+          title = sectionTitle + " - " + (hash.length - 1) + " - " + title;
+        }
+      }
+      else{
+        title = title + "-" + (hash.length - 1);
+      }
+    }
+    return title;
   };
 
   /*
@@ -492,34 +525,47 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     value: 20
   }];
 
-
-
   /*
    * @deleteLinkFromNav
    * -
    */
 
-  $scope.deleteLinkFromNav = function (index) {
-    if ($scope.componentEditing.customnav) {
-      $scope.componentEditing.linkLists.forEach(function (value) {
-        if (value.handle === "head-menu") {
-          value.links.splice(index, 1);
-          setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
-        }
-      });
-    } else {
-      $scope.website.linkLists.forEach(function (value) {
-        if (value.handle === "head-menu") {
-          value.links.splice(index, 1);
-          setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
-        }
-      });
+  $scope.deleteLinkFromNav = function (index, links) {
+    SweetAlert.swal({
+      title: "Are you sure?",
+      text: "Do you want to remove this link from main menu",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, remove this link!",
+      cancelButtonText: "No, do not remove this link!",
+      closeOnConfirm: true,
+      closeOnCancel: true
+    }, function (isConfirm) {
+      if (isConfirm) {
+        var link = links[index];
+        updateParentPageSettings(link.linkTo.type, link.linkTo.data, false);
+        links.splice(index, 1);
+      }
+    });
+
+  };
+
+  /*
+   * @updateParentPageSettings
+   * -
+   */
+
+   function updateParentPageSettings(linkType, linkUrl, status, oldUrl) {
+    if(linkType === 'page' && !$scope.customnav && linkUrl === $scope.$parent.vm.state.page.handle){
+      $scope.$parent.vm.state.page.mainmenu = status;
+    }
+    // case when current page is updated to another page.
+    if(linkType === 'page' && !$scope.customnav && oldUrl && oldUrl === $scope.$parent.vm.state.page.handle){
+       $scope.$parent.vm.state.page.mainmenu = false;
     }
   };
+
 
   /*
    * @addLinkToNav
@@ -529,16 +575,16 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.addLinkToNav = function () {
 
     if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
-      if ($scope.componentEditing.customnav) {
-        if (!$scope.componentEditing.linkLists) {
-          $scope.componentEditing.linkLists = [];
-          $scope.componentEditing.linkLists.push({
+      if ($scope.component.customnav) {
+        if (!$scope.component.linkLists || !$scope.component.linkLists.length) {
+          $scope.component.linkLists = [];
+          $scope.component.linkLists.push({
             name: "Head Menu",
             handle: "head-menu",
             links: []
           });
         }
-        $scope.componentEditing.linkLists.forEach(function (value, index) {
+        $scope.component.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             value.links.push({
               label: $scope.newLink.linkTitle,
@@ -550,6 +596,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               }
             });
             $scope.initializeLinks(false);
+
           }
         });
       } else {
@@ -564,133 +611,47 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
                 page: $scope.newLink.linkPage
               }
             });
+            updateParentPageSettings($scope.newLink.linkType, $scope.newLink.linkUrl, true);
             $scope.initializeLinks(false);
+
           }
         });
       }
 
     }
-    setTimeout(function () {
-      $scope.updateLinkList();
-    }, 1000);
   };
 
   /*
-   * @updateLinkList
-   * - when the navigation is reordered, update the linklist in the website object
+   * @setPageLinkTitle
+   * -
    */
+  $scope.setPageLinkTitle = function (url, update, link, oldUrl) {
+    if(!$scope.component.customnav){
+        var _label = null;
+        var _page = _.findWhere($scope.filteredPages, {
+            handle: url
+          });
+        if(_page){
+          _label =  _page.menuTitle || _page.title;
+        }
 
-  $scope.updateLinkList = function (index) {
-    var linkLabelsArr = [];
-    var editedLinksLists = angular.element('.head-menu-links');
-    _.each(editedLinksLists, function (link) {
-      var linkLabel = link.attributes['data-label'].value;
-      if (linkLabel) {
-        linkLabelsArr.push(linkLabel);
+        if(update){
+          link.label = _label;
+          updateParentPageSettings(link.linkTo.type, url, true, oldUrl);
+        }
+        else{
+          $scope.newLink.linkTitle = _label
+        }
+
       }
-    });
-    if (linkLabelsArr.length) {
-      if ($scope.componentEditing.customnav) {
-        $scope.componentEditing.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            var newLinkListOrder = [];
-            _.each(editedLinksLists, function (link, index) {
-              if (value) {
-                var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[index]
-                });
-                newLinkListOrder.push(matchedLinkList);
-              }
-            });
-            if (newLinkListOrder.length) {
-              $scope.componentEditing.linkLists[index].links = newLinkListOrder;
-            }
-          }
-        });
-      } else {
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            var newLinkListOrder = [];
-            _.each(editedLinksLists, function (link, index) {
-              if (value) {
-                var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[index]
-                });
-                newLinkListOrder.push(matchedLinkList);
-              }
-            });
-            if (newLinkListOrder.length) {
-              $scope.website.linkLists[index].links = newLinkListOrder;
-            }
-
-          }
-        });
-      }
-
-    } else {
-
-      if ($scope.componentEditing.customnav) {
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            $scope.componentEditing.linkLists[index].links = [];
-            //$scope.saveCustomComponent();
-          }
-        });
-      } else {
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            $scope.website.linkLists[index].links = [];
-            //$scope.updateWebsite($scope.website);
-          }
-        });
-      }
-
-    }
   };
+
 
   $scope.refreshSlider = function () {
     console.log('refresh slider');
     $timeout(function () {
       $rootScope.$broadcast('rzSliderForceRender');
     }, 0);
-  };
-
-  $scope.setLatLon = function (lat, lon) {
-    $scope.componentEditing.location.lat = lat;
-    $scope.componentEditing.location.lon = lon;
-  };
-
-  $scope.updateContactUsAddress = function () {
-    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-      $scope.locationAddress = null;
-       $scope.setLatLon();
-      $scope.validateGeoAddress();
-    }
-  };
-
-  $scope.validateGeoAddress = function (fn) {
-    GeocodeService.validateAddress($scope.componentEditing.location, $scope.locationAddress, function (data, results) {
-      if (data && results.length === 1) {
-        $timeout(function () {
-          $scope.$apply(function () {
-            $scope.setLatLon(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-            $scope.errorMapData = false;
-            angular.copy($scope.componentEditing.location, $scope.originalContactMap);
-            $scope.contactMap.refreshMap();
-          });
-        }, 0);
-      } else {
-        $timeout(function () {
-          $scope.$apply(function () {
-            $scope.errorMapData = true;
-            angular.copy($scope.componentEditing.location, $scope.originalContactMap);
-          });
-        }, 0);
-      }
-      if (fn) {
-        fn();
-      }
-    });
   };
 
   $scope.saveComponentVersion = function () {
@@ -712,7 +673,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.saveContactComponent = function (is_address) {
     if(is_address){
       $scope.contactMap.refreshMap();
-      $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
+      $scope.place.address = GeocodeService.stringifyAddress($scope.component.location);
     }
     else{
       $scope.contactMap.refreshHours();
@@ -786,62 +747,41 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.editComponent = function () {
 
-    if ($scope.componentEditing) {
+    if ($scope.component) {
 
       var componentType;
-      console.log('$scope.componentEditing.spacing', $scope.componentEditing.spacing);
-      if (!$scope.componentEditing.spacing) {
-        console.log('component editing doesnt have spacing');
-        var pt, pb = 50;
-        var mw = 1024;
-        if($scope.componentEditing.type === "contact-us" || $scope.componentEditing.type === "navigation"){
-          pt = pb = 0;
-          mw = "100%";
-        }
-        $scope.componentEditing.spacing = {
-          'pt': pt,
-          'pb': pb,
-          'pl': 0,
-          'pr': 0,
-          'mt': 0,
-          'mb': 0,
-          'mr': 'auto',
-          'ml': 'auto',
-          'mw': mw,
-          'usePage': false
-        };
-      }
 
-      if(!$scope.componentEditing.bg)
-        $scope.componentEditing.bg = {};
-      if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
-        $scope.componentEditing.bg.opacity = 1;
+      if(!$scope.component.bg)
+        $scope.component.bg = {};
+      if($scope.component.bg && !angular.isDefined($scope.component.bg.opacity))
+        $scope.component.bg.opacity = 1;
 
-      if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
-        $scope.componentEditing.bg.img.overlayopacity = 1;
+      if($scope.component.bg && $scope.component.bg.img && !angular.isDefined($scope.component.bg.img.overlayopacity))
+        $scope.component.bg.img.overlayopacity = 1;
 
 
-      if ($scope.componentEditing.type === 'navigation') {
+      if ($scope.component.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
-          type: $scope.componentEditing.type,
-          version: parseInt($scope.componentEditing.version, 10)
+          type: $scope.component.type,
+          version: parseInt($scope.component.version, 10)
         });
       } else {
         componentType = _.findWhere($scope.componentTypes, {
-          type: $scope.componentEditing.type
+          type: $scope.component.type
         });
       }
 
       if (componentType && componentType.icon) {
-        $scope.componentEditing.icon = componentType.icon;
+        $scope.component.icon = componentType.icon;
       }
       if (componentType && componentType.title) {
-        $scope.componentEditing.header_title = componentType.title;
+        $scope.component.header_title = componentType.title;
       }
 
-      if ($scope.componentEditing.type === "simple-form") {
-        if (!$scope.componentEditing.fields.length) {
-          $scope.componentEditing.fields.push({
+      if ($scope.component.type === "simple-form") {
+
+        if (!$scope.component.fields.length) {
+          $scope.component.fields.push({
             "display": "First Name",
             "value": false,
             "name": "first"
@@ -856,21 +796,38 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           });
         }
 
-        if (!$scope.componentEditing.redirectType) {
-          $scope.componentEditing.redirectType = 'page';
+        if (!$scope.component.redirectType) {
+          $scope.component.redirectType = 'page';
         }
+        $scope.fieldsCount = [];
+
+        var i = 0;
+        for (i; i <= $scope.component.fields.length; i++) {
+          $scope.fieldsCount.push(i + 1);
+        }
+
+
+
       }
 
-      if ($scope.componentEditing.type === "contact-us") {
+      $scope.alignmentOptions = [
+        'left', 'center', 'right'
+      ]
+
+        $scope.fontSizeOptions = [
+          8,9,10,11,12,14,18,24,30,36,48,60,72,96
+        ]
+
+      if ($scope.component.type === "contact-us") {
         $scope.hours = hoursConstant;
-        if(!angular.isDefined($scope.componentEditing.boxOpacity)){
-          $scope.componentEditing.boxOpacity = 1;
+        if(!angular.isDefined($scope.component.boxOpacity)){
+          $scope.component.boxOpacity = 1;
         }
 
-        $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
-        $scope.originalContactMap = angular.copy($scope.componentEditing.location);
-        if ($scope.componentEditing.hours) {
-          _.each($scope.componentEditing.hours, function (element, index) {
+        $scope.place.address = GeocodeService.stringifyAddress($scope.component.location);
+        $scope.originalContactMap = angular.copy($scope.component.location);
+        if ($scope.component.hours) {
+          _.each($scope.component.hours, function (element, index) {
             if (element.day === "Sat" || element.day === "Sun") {
               if (element.start === "") {
                 element.start = "9:00 am";
@@ -899,12 +856,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       });
     }
 
-    if ($scope.componentEditing) {
-      WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
-        $scope.componentEditingVersions = versions;
-        if ($scope.componentEditing && $scope.componentEditing.version) {
-          $scope.componentEditing.version = $scope.componentEditing.version.toString();
-          $scope.versionSelected = $scope.componentEditing.version;
+    if ($scope.component) {
+      WebsiteService.getComponentVersions($scope.component.type, function (versions) {
+        $scope.componentVersions = versions;
+        if ($scope.component && $scope.component.version) {
+          $scope.component.version = $scope.component.version.toString();
+          $scope.versionSelected = $scope.component.version;
         }
         $scope.originalCurrentPage = angular.copy($scope.currentPage);
       });
@@ -930,7 +887,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     // $modalInstance.opened.then(function(){
       $timeout(function () {
         $rootScope.$broadcast('rzSliderForceRender');
-        $scope.originalComponent = angular.copy($scope.componentEditing);
+        $scope.originalComponent = angular.copy($scope.component);
       }, 1000);
     // });
   };
@@ -944,12 +901,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     country: 'short_name'
   };
   $scope.setDefaultAddress = function () {
-    $scope.componentEditing.location.address = "";
-    $scope.componentEditing.location.address2 = "";
-    $scope.componentEditing.location.city = "";
-    $scope.componentEditing.location.state = "";
-    $scope.componentEditing.location.zip = "";
-    $scope.componentEditing.location.country = "";
+    $scope.component.location.address = "";
+    $scope.component.location.address2 = "";
+    $scope.component.location.city = "";
+    $scope.component.location.state = "";
+    $scope.component.location.zip = "";
+    $scope.component.location.country = "";
   };
   $scope.fillInAddress = function (place) {
     // Get each component of the address from the place details
@@ -962,22 +919,22 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       if (componentForm[addressType]) {
         val = place.address_components[i][componentForm[addressType]];
         if (addressType === 'street_number') {
-          $scope.componentEditing.location.address = val;
+          $scope.component.location.address = val;
         } else if (addressType === 'route') {
-          $scope.componentEditing.location.address2 = val;
+          $scope.component.location.address2 = val;
         } else if (addressType === 'locality') {
-          $scope.componentEditing.location.city = val;
+          $scope.component.location.city = val;
         } else if (addressType === 'administrative_area_level_1') {
-          $scope.componentEditing.location.state = val;
+          $scope.component.location.state = val;
         } else if (addressType === 'postal_code') {
-          $scope.componentEditing.location.zip = val;
+          $scope.component.location.zip = val;
         } else if (addressType === 'country') {
-          $scope.componentEditing.location.country = val;
+          $scope.component.location.country = val;
         }
       }
     }
-    $scope.componentEditing.location.lat = place.geometry.location.lat();
-    $scope.componentEditing.location.lon = place.geometry.location.lng();
+    $scope.component.location.lat = place.geometry.location.lat();
+    $scope.component.location.lon = place.geometry.location.lng();
   };
   $scope.$watch('place.address', function (newValue) {
     if (newValue) {
@@ -990,79 +947,10 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     }
   });
 
-  /*
-   * @validateHours
-   *
-   */
-
-  $scope.validateHours = function (hours, index) {
-    $scope.contactHours[index].valid = true;
-    if (!hours.closed) {
-      var startTime = hours.start;
-      var endTime = hours.end;
-      if (startTime && endTime) {
-        startTime = startTime.split(" ")[1] === 'pm' && startTime.split(":")[0] !== '12' ? parseInt(startTime.split(":")[0], 10) + 12 : parseInt(startTime.split(":")[0], 10);
-        endTime = endTime.split(" ")[1] === 'pm' && endTime.split(":")[0] !== '12' ? parseInt(endTime.split(":")[0], 10) + 12 : parseInt(endTime.split(":")[0], 10);
-        startTime = parseInt(hours.start.split(":")[1], 10) === 30 ? startTime + 0.5 : startTime;
-        endTime = parseInt(hours.end.split(":")[1], 10) === 30 ? endTime + 0.5 : endTime;
-      }
-      if (hours.split && $scope.componentEditing.splitHours) {
-        angular.element("#business_hours_start_" + index).removeClass('has-error');
-        angular.element("#business_hours_start2_" + index).removeClass('has-error');
-        angular.element("#business_hours_end_" + index).removeClass('has-error');
-        var startTime2 = hours.start2;
-        var endTime2 = hours.end2;
-        if (startTime2 && endTime2) {
-          startTime2 = startTime2.split(" ")[1] === 'pm' && startTime2.split(":")[0] !== '12' ? parseInt(startTime2.split(":")[0], 10) + 12 : parseInt(startTime2.split(":")[0], 10);
-          endTime2 = endTime2.split(" ")[1] === 'pm' && endTime2.split(":")[0] !== '12' ? parseInt(endTime2.split(":")[0], 10) + 12 : parseInt(endTime2.split(":")[0], 10);
-          startTime2 = parseInt(hours.start2.split(":")[1], 10) === 30 ? startTime2 + 0.5 : startTime2;
-          endTime2 = parseInt(hours.end2.split(":")[1], 10) === 30 ? endTime2 + 0.5 : endTime2;
-        }
-        if (startTime > endTime || startTime > startTime2 || startTime > endTime2) {
-          if (startTime > endTime) {
-            angular.element("#business_hours_start_" + index).addClass('has-error');
-          } else if (startTime > startTime2) {
-            angular.element("#business_hours_start_" + index).addClass('has-error');
-          } else if (startTime > endTime2) {
-            angular.element("#business_hours_start_" + index).addClass('has-error');
-          }
-          $scope.contactHours[index].valid = false;
-        }
-        if (endTime > startTime2 || endTime > endTime2) {
-          if (endTime > startTime2) {
-            angular.element("#business_hours_end_" + index).addClass('has-error');
-          } else if (endTime > endTime2) {
-            angular.element("#business_hours_end_" + index).addClass('has-error');
-          }
-          $scope.contactHours[index].valid = false;
-        }
-        if (startTime2 > endTime2) {
-          angular.element("#business_hours_start2_" + index).addClass('has-error');
-          $scope.contactHours[index].valid = false;
-        }
-      } else if (!hours.wholeday) {
-        angular.element("#business_hours_start_" + index).removeClass('has-error');
-        if (startTime > endTime) {
-          angular.element("#business_hours_start_" + index).addClass('has-error');
-          $scope.contactHours[index].valid = false;
-        }
-      }
-    }
-
-    var validate = _.where($scope.contactHours, {
-      valid: false
-    });
-    if (validate && validate.length) {
-      $scope.contactHoursInvalid = true;
-    } else {
-      $scope.contactHoursInvalid = false;
-    }
-
-  };
 
   $scope.slugifyAnchor = function (url) {
     if (url) {
-      $scope.componentEditing.anchor = $filter('slugify')(url);
+      $scope.component.anchor = $filter('slugify')(url);
     }
   };
 
@@ -1073,28 +961,28 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * -
        */
 
-      WebsiteService.getPages(function (pages) {
-        var parsed = angular.fromJson(pages);
-        var arr = [];
-        _.each(parsed, function (page) {
-          arr.push(page);
-        });
-        $scope.allPages = arr;
-
-        AccountService.getAccount(function(data) {
-          if (!data.showhide.blog) {
-            var _blogPage = _.findWhere($scope.allPages, {
+        SimpleSiteBuilderService.getPagesWithSections().then(function(pages){
+          var allPages = pages.data;
+          var account = SimpleSiteBuilderService.account;
+          if (!account.showhide.blog) {
+            var _blogPage = _.findWhere(allPages, {
               handle: 'blog'
             });
             if (_blogPage) {
-              var _index = _.indexOf($scope.allPages, _blogPage);
-              $scope.allPages.splice(_index, 1);
+              var _index = _.indexOf(allPages, _blogPage);
+              allPages.splice(_index, 1);
             }
           }
-          $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-        });
-
-      });
+          $scope.allPages = angular.copy(allPages);
+          $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
+          _.each($scope.filteredPages, function (page) {
+              page.components = getPageComponents(page);
+          })
+          if($scope.linkPage)
+            $scope.currentPage = _.find($scope.filteredPages, function (page) {
+              return page.handle === $scope.linkPage;
+            });
+        })
 
       WebsiteService.getEmails(true, function (emails) {
         $timeout(function () {
@@ -1105,13 +993,13 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         $scope.emails = emails;
 
         //select the default email for simple form as welcome-aboard
-        if ($scope.componentEditing && $scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
+        if ($scope.component && $scope.component.type === 'simple-form' && !$scope.component.emailId) {
           var _welcomeEmail = _.find(emails, function (_email) {
             return _email.handle === 'welcome-aboard';
           });
 
           if (_welcomeEmail) {
-            $scope.componentEditing.emailId = _welcomeEmail._id;
+            $scope.component.emailId = _welcomeEmail._id;
           }
         }
 

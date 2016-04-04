@@ -26,6 +26,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrder.bind(this));
         app.get(this.url('customer/:customerid'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersByCustomer.bind(this));
         app.post(this.url(''), this.setup.bind(this), this.createOrder.bind(this));
+        app.post(this.url('payment/paypal'), this.setup.bind(this), this.createPaypalOrder.bind(this));
         app.post(this.url(':id/update'), this.isAuthAndSubscribedApi.bind(this), this.updateOrder.bind(this));
         app.post(this.url(':id/complete'), this.isAuthAndSubscribedApi.bind(this), this.completeOrder.bind(this));
         app.post(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelOrder.bind(this));
@@ -33,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/hold'), this.isAuthAndSubscribedApi.bind(this), this.holdOrder.bind(this));
 
         app.post(this.url(':id/note'), this.isAuthAndSubscribedApi.bind(this), this.addOrderNote.bind(this));
+        app.post(this.url(':id/paid'), this.setup.bind(this), this.orderPaymentComplete.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -58,6 +60,54 @@ _.extend(api.prototype, baseApi.prototype, {
         });
         //var accessToken = self.getAccessToken(req);
 
+    },
+
+    /**
+     * *Note* If req.body.cancelUrl and req.body.returnUrl are not present on the req.body object, they will
+     * be inferred from the referrer header
+     * @param req.body is of type $$.m.Order (with optional params req.body.cancelUrl and req.body.returnUrl)
+     * @param resp
+     */
+    createPaypalOrder: function(req, resp) {
+        var self = this;
+        
+        var fullUrl = req.get('Referrer');
+        self.log.debug('>> createPaypalOrder');
+
+        var order = new $$.m.Order(req.body);
+        var hasSubscriptionProduct = false;
+        order.attributes.line_items.forEach(function(item, index) {
+            if (item.type == 'SUBSCRIPTION') {
+                hasSubscriptionProduct = true;
+            }
+        });
+        if (hasSubscriptionProduct) {
+            return resp.status(500).send('Unsupported Payment method');
+        }
+        order.set('status', 'pending_payment');
+        var userId = self.userId(req);
+        var accountId = self.currentAccountId(req);
+        order.set('account_id', accountId);
+        var cancelUrl = null;
+        var returnUrl = null;
+        if(order.get('cancelUrl')) {
+            cancelUrl = order.get('cancelUrl');
+        } else {
+            cancelUrl = fullUrl + '?state=6';
+        }
+        if(order.get('returnUrl')) {
+            returnUrl = order.get('returnUrl');
+        } else {
+            returnUrl = fullUrl + '?state=5';
+        }
+
+        orderManager.createPaypalOrder(order, userId, cancelUrl, returnUrl, function(err, order){
+            self.log.debug('<< createOrder', err);
+            self.sendResultOrError(resp, err, order, 'Error creating order', 500);
+            if(userId && order) {
+                self.createUserActivity(req, 'CREATE_PAYPAL_ORDER', null, {id: order.id()}, function(){});
+            }
+        });
 
     },
 
@@ -83,7 +133,7 @@ _.extend(api.prototype, baseApi.prototype, {
     updateOrder: function(req, res) {
         var self = this;
         self.log.debug('>> updateOrder');
-       
+
         console.dir(req.body);
         var order = new $$.m.Order(req.body.order);
         var orderId = req.params.id;
@@ -261,6 +311,29 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    orderPaymentComplete: function(req, res) {
+        var self = this;
+        self.log.debug('>> orderPaymentComplete');
+
+        console.dir(req.body);
+        var order = new $$.m.Order(req.body);
+        var orderId = req.params.id;
+        order.set('_id', orderId);
+        order.set('status', 'processing');
+        order.attributes.modified.date = new Date();
+        self.log.debug('>> Order', order);
+        var created_at = order.get('created_at');
+
+        if (created_at && _.isString(created_at)) {
+            created_at = moment(created_at).toDate();
+            order.set('created_at', created_at);
+        }
+        orderManager.updateOrderById(order, function(err, order){
+            self.log.debug('<< orderPaymentComplete');
+            self.sendResultOrError(res, err, order, 'Error updating order');
+        });
     }
 });
 

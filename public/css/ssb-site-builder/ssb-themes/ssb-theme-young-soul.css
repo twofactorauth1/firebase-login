@@ -1,17 +1,53 @@
+.ssb-theme-young-soul {
+  color: #000;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  background-color: #9acccb;
+}
 .ssb-theme-young-soul .ssb-section-layout {
-  background-color: #e8e7e7;
+  background-color: #9acccb;
+}
+.ssb-theme-young-soul .ssb-navigation a {
+  color: #000;
 }
 .ssb-theme-young-soul .ssb-page-section-layout-header {
   background-color: #9acccb;
-}
-.ssb-theme-young-soul h1,
-.ssb-theme-young-soul h2,
-.ssb-theme-young-soul h3,
-.ssb-theme-young-soul h4,
-.ssb-theme-young-soul h5,
-.ssb-theme-young-soul a,
-.ssb-theme-young-soul p,
-.ssb-theme-young-soul span,
-.ssb-theme-young-soul label {
   color: #000000;
+}
+.ssb-theme-young-soul .ssb-page-section-layout-hero {
+  background-color: #000000;
+  text-align: center;
+}
+.ssb-theme-young-soul .ssb-page-section-layout-hero [ssb-text-component] {
+  color: #FAC51C;
+}
+.ssb-theme-young-soul .ssb-theme-heading-text {
+  font-size: 16px;
+}
+.ssb-theme-young-soul .ssb-theme-paragraph-text {
+  font-size: 14px;
+}
+.ssb-theme-young-soul .ssb-theme-btn,
+.ssb-theme-young-soul .ssb-theme-btn:hover {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+.ssb-theme-young-soul .ssb-theme-btn:hover,
+.ssb-theme-young-soul .ssb-theme-btn:active,
+.ssb-theme-young-soul .ssb-theme-btn:focus {
+  background-color: #000!important;
+}
+@media screen and (min-width: 768px) {
+  .ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
+    font-size: 96px;
+  }
+  .ssb-theme-young-soul .ssb-page-section-layout-hero [ssb-text-component] {
+    font-size: 96px;
+  }
+  .ssb-theme-young-soul .ssb-theme-heading-text {
+    font-size: 16px;
+  }
+  .ssb-theme-young-soul .ssb-theme-paragraph-text {
+    font-size: 12px;
+  }
 }

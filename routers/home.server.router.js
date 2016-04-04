@@ -372,7 +372,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 resp.end(page, 'utf8');
                 req.session.cookie = null;
                 req.session.accountId = null;
-                req.logout();
+                this.logout(req, resp);
                 req.session.destroy();
                 req.session = null;
                 req.user = null;
@@ -445,9 +445,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
             accountId = appConfig.mainAccountID;
         }
         var pageName = req.params.page || 'index';
-        self.log.debug('>> getOrCreateTemplate ' + accountId + ', ' + pageName);
+        var update = req.query.cachebuster || false;
+        self.log.debug('>> getOrCreateTemplate ' + accountId + ', ' + pageName + ', ' + update);
         //return pageCacheManager.getOrCreateLocalTemplate(accountId, pageName, resp);
-        return pageCacheManager.getOrCreateS3Template(accountId, pageName, resp);
+        return pageCacheManager.getOrCreateS3Template(accountId, pageName, update, resp);
     }
 });
 

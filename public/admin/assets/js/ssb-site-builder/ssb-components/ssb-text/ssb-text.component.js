@@ -2,7 +2,7 @@
 
 app.directive('ssbTextComponent', ssbTextComponent);
 
-function ssbTextComponent($compile) {
+function ssbTextComponent() {
   return {
   	// transclude: true,
   	restrict: 'A',

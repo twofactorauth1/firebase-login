@@ -246,7 +246,7 @@ select[multiple="multiple"]:focus option {
 
 label {
     font-weight: normal;
-    color: #858585;
+    color: @form-label-main-text-color;
 }
 
 span.input-icon,
@@ -1205,16 +1205,43 @@ input[type="checkbox"] {
     background: @purple;
 }
 
-.switch {
-    background: #C91F37!important;
-    border-color: #C91F37!important;
+.main-content .switch {
+    width: 44px;
+    height: 20px;
+    background: @ui-switch-off-bg-color!important;
+    box-shadow: inset 0px 0px 0px 1px fade(@ui-switch-main-border-color, 80%)!important;
 }
 
-.switch.checked {
-  background: #64bd63!important;
-  border-color: #64bd63!important;
+.main-content .switch small {
+    top: -3px;
+    // box-shadow: inset 0px -2px 8px -1px rgba(0,0,0,0.25), 0px 1px 1px 0px rgba(0,0,0,.25);
+    box-shadow: 1px 1px 2px 1px fade(@ui-switch-circle-border-color, 25%), inset 0px -1px 0px 0px fade(@ui-switch-circle-border-color, 85%), inset 0px 1px 0px 0px fade(@ui-switch-circle-border-color, 25%)!important;
+    width: 25px;
+    height: 25px;
+    left: -1px;
+    background: #fdfdfd;
+    background: linear-gradient(to bottom,  #fdfdfd 25%, #e7e7e7 100%);
+}
+
+.main-content .switch.checked small {
+    left: 20px;
+    box-shadow: -1px 1px 2px 1px fade(@ui-switch-circle-border-color, 25%), inset 0px -1px 0px 0px fade(@ui-switch-circle-border-color, 85%), inset 0px 1px 0px 0px fade(@ui-switch-circle-border-color, 25%)!important;
+}
+
+.main-content .switch.checked {
+  background: @ui-switch-on-bg-color!important;
+  // border-color: @ui-switch-circle-border-color!important;
 }
 
 .ui-select-multiple input.ui-select-search {
   width: auto !important;
 }
+
+.form-group label .fa-info-circle {
+    font-size: 11px;
+    position: relative;
+    top: -2px;
+    left: 2px;
+    color: @form-label-main-text-color;
+}
+

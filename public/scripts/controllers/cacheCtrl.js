@@ -1,6 +1,6 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, pagesService, $window, $location, $document, $timeout) {
+mainApp.controller('CacheCtrl', ['$scope', 'embeddedSiteDataService', '$window', '$location', '$document', '$timeout', function ($scope, embeddedSiteDataService, $window, $location, $document, $timeout) {
     $scope.isEditing = false;
     $scope.blog_post = null;
     console.log('cache ctrl');
@@ -11,20 +11,41 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
         }
     }*/
     $scope.addUnderNavSetting = function (masthead_id, fn) {
-      var data = {
-        allowUndernav : false,
-        navComponent: null
-      }
-      $scope.components.forEach(function (value, index) {
-        if (value && value.type === 'masthead' && value._id == masthead_id) {
-          if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            data.allowUndernav = true; 
-            data.navComponent =  $scope.components[index - 1];         
-          } else
-            data.allowUndernav = false;
+        var data = {
+            allowUndernav : false,
+            navComponent: null
         }
-      })
-      fn(data);
+
+        if ($scope.components.length > 0) {
+            $scope.components.forEach(function (value, index) {
+                if (value && value.type === 'masthead' && value._id == masthead_id) {
+                    if (index != 0 && $scope.components[index - 1].type == "navigation") {
+                        data.allowUndernav = true;
+                        data.navComponent =  $scope.components[index - 1];
+                    } else {
+                        data.allowUndernav = false;
+                    }
+                }
+            });
+        } else if ($scope.sections.length > 0) {
+            $scope.sections.forEach(function (sectionValue, sectionIndex) {
+                sectionValue.components.forEach(function (value, index) {
+                    if (value && value.type === 'masthead' && value._id == masthead_id) {
+                        var navComponent = _.findWhere($scope.sections[sectionIndex - 1].components, { type: 'navigation' });
+                        if (
+                            sectionIndex != 0 &&
+                            navComponent !== undefined
+                        ) {
+                            data.allowUndernav = true;
+                            data.navComponent = navComponent;
+                        } else {
+                            data.allowUndernav = false;
+                        }
+                    }
+                });
+            });
+        }
+        fn(data);
     };
 
     $scope.defaultSpacings = {
@@ -40,9 +61,13 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
         'usePage': false
     };
 
+    $scope.$on('getCurrentPage', function (event, args) {
+        args.currentpage = $scope.page;
+    });
+
 
     $scope.components = [];
-    pagesService($scope.websiteId, function (err, data) {
+    embeddedSiteDataService.getPageData($scope.websiteId, function (err, data) {
         console.log('pagesService ', data);
         if (err) {
             console.warn('no page found', $location.$$path);
@@ -57,12 +82,14 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
             $scope.sections = data.sections;
 
             _.each(data.sections, function(section, index1){
-                if(section.ssb === false) {
-                    $scope.components = $scope.components.concat(section.components);
-                } else {
-                    //this is what the template should be:
-                    //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
-                    $scope['sections_' + index1] = section;
+                if (section) {
+                    if(section.ssb === false) {
+                        $scope.components = $scope.components.concat(section.components);
+                    } else {
+                        //this is what the template should be:
+                        //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
+                        $scope['sections_' + index1] = section;
+                    }
                 }
             });
             _.each($scope.components, function(cmp, index){
@@ -90,6 +117,46 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
                     }
                 }, 3000);
             })
+
+            /**
+             *   temp support SB global header style on blog pages
+             *   TODO: remove when blogs are converted
+             */
+            try {
+
+                if ($location.path().toLowerCase().indexOf('blog') !== -1) {
+
+                    _(indigenous.precache.siteData.pages).chain().each(function(value, key, object) {
+
+                      if (key === 'index' && value.ssb) {
+
+                        console.log('index found');
+                        console.log('index is ssb: ' + value.ssb);
+
+                        var globalHeader = _(value.sections).chain().findWhere({ 'global': true, 'version': 5, type: 'ssb-page-section', title: 'Header' }).value();
+
+                        if (globalHeader !== undefined) {
+                            var styles = '.ssb-main .navigation-v2 .navbar {' +
+                                    'min-height: 0!important;' +
+                                '}'+
+                                '.ssb-main .navigation-v2 .navbar .navbar-header {' +
+                                    'display: none!important;' +
+                                '}';
+
+                            $('head').append('<style type="text/css">' + styles + '</style>');
+                        }
+
+
+                      }
+
+                    }).value();
+
+                }
+
+            } catch(e) {
+                debugger;
+            }
+
         }
     });
 

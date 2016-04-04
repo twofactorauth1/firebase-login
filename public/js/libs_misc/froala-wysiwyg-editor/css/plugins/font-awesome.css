@@ -1,0 +1,53 @@
+/*!
+ * froala_editor v2.1.0 (https://www.froala.com/wysiwyg-editor)
+ * License https://froala.com/wysiwyg-editor/terms
+ * Copyright 2014-2016 Froala Labs
+ */
+
+.clearfix::after {
+  clear: both;
+  display: block;
+  content: "";
+}
+.fr-popup .fr-icon-set {
+  padding:10px;
+}
+.fr-popup .fr-icon-set > span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  z-index: 1;
+  margin: 3px;
+  color: #444;
+}
+
+.fr-popup .fr-icon-set > span.fa:before {
+  font-size: 16px;
+}
+.fr-popup .fr-icon-set > span.fr-selected-icon::after {
+  color: #ffffff;
+  content: "\f00c";
+  font-family: FontAwesome;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  text-align: center;
+  cursor: default;
+}
+.fr-popup .fr-icon-set > span:hover,
+.fr-popup .fr-icon-set > span.fr-selected-icon {
+  outline: 1px solid #222222;
+  z-index: 2;
+}
+.fr-icon-buttons{
+  white-space: inherit !important;
+}
+.fr-popup.fr-inline.icon-popup{  
+  width:75%;
+}

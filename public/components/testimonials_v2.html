@@ -22,13 +22,13 @@
     color : {{component.txtcolor}};
 }
 </style>
-<div ng-class="component.type+'-v'+component.version">
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div class="title col-xs-12">
         <div elem ng-model="component.title"></div>
     </div>
     <div class="clearfix"></div>
     <div class="testimonial-wrap {{isEditing ? 'editing' : ''}}" style="position: relative;">
-        <slick init-onload="false" data="dataLoaded" slides-to-show='1' touch-move="{{touchMove}}" draggable="{{draggable}}" speed="{{component.slider.speed}}" slides-to-scroll='1' autoplay="{{autoplay}}" autoplay-speed="{{component.slider.autoPlayInterval}}" class="carousel-caption" dots="true" arrows="false">
+        <div ng-if="dataLoaded" class="carousel-caption" testimonial-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  speed:{{component.slider.speed}}, slidesToScroll:1, autoplay:{{autoplay}}, autoplaySpeed:{{component.slider.autoPlayInterval}}}'>
             <div ng-repeat="testimonial in component.testimonials" active="testimonial.active" class="col-sm-12 testimonials single-testimonial">
                 <div class="img">
                     <div elem ng-model="testimonial.img"></div>
@@ -48,18 +48,18 @@
                 </div>
                 <div ng-if="isEditing">
                     <div class="delete-single-testimonial center">
-                        <button ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial">
+                        <button ng-click="deleteSlide($index)" class="ng-scope btn-delete-single-testimonial">
                             <i class='fa fa-trash'></i>
                         </button>
                     </div>
                     <div class="add-addtional center">
-                        <a href="" ng-click="addTestimonial($index)">
+                        <a href="" ng-click="addSlide($index, newTestimonial)">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
                 </div>
             </div>
-        </slick>
+        </div>
     </div>
-    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(0)" class="btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
+    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(0)" class="btn ssb-theme-btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
 </div>

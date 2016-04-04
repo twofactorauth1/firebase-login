@@ -18,8 +18,9 @@
                 <label for="form-field-select-1">
                     Type
                 </label>
-                <select ng-model="newProduct.type" class="form-control" ng-options="type.data as type.label for type in productTypeOptions">
+                <select ng-model="newProduct.type" class="form-control">
                     <option value="">-- choose type --</option>
+                    <option ng-repeat='type in productTypeOptions' value='{{type.data}}' ng-disabled='!stripeAccountExist && type.data =="SUBSCRIPTION"'>{{type.label}}</option>
                 </select>
             </div>
         </form>

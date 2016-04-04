@@ -1,6 +1,8 @@
-<div class="ssb-sidebar-inner" ng-class="vm.navigation.indexClass">
+<div class="ssb-sidebar-inner" ng-class="vm.uiState.navigation.indexClass">
 
-    <div class="ssb-sidebar-icons tabbable tabs-left margin-bottom-0 ng-isolate-scope">
+    <div
+        class="ssb-sidebar-icons tabbable margin-bottom-0 ng-isolate-scope"
+        ng-class="{ 'tabs-left': vm.uiState.sidebarOrientation === 'vertical' }">
         <ul class="nav nav-tabs">
 
             <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'add' }">
@@ -12,7 +14,7 @@
             </li>
 
             <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'content' }">
-                <div ng-click="vm.uiState.openSidebarPanel = 'content'"><div class="ti-layout display-ib"></div>Content</div>
+                <div ng-click="vm.uiState.openSidebarPanel = 'content'"><div class="ti-pencil-alt display-ib"></div>Content</div>
             </li>
 
             <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
@@ -28,7 +30,7 @@
             <section>
 
                 <h4 class="ssb-sidebar-sub-heading">
-                    Add Sections
+                    Add Section
                 </h4>
 
                 <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
@@ -62,58 +64,54 @@
                                 {{sectionFilter.capitalized}}
                             </tab-heading>
 
-                            <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ featured: true, enabled: true }" ng-if="sectionFilter.lowercase === 'featured'" class="margin-bottom-15">
-                                <div class="col-xs-6">
-                                    <div class="img-wrap">
-                                        <a ng-href="{{section.preview}}" title="" data-gallery="">
-                                            <span style="  background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-                                        </a>
+                            <!-- <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ featured: true, enabled: true }" ng-if="sectionFilter.lowercase === 'featured'" class="ssb-sidebar-add-section margin-bottom-15"> -->
+                            <div ng-sortable="vm.uiState.sortableListAddContentConfig" >
+                                <div sectionId = "{{section._id}}" ng-repeat="section in vm.uiState.filteredSections = (vm.sections | orderBy:'title' | filter:{ filter: sectionFilter.lowercase, enabled: true })" ng-if="sectionFilter.lowercase != 'all' && sectionFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';" >
+                                    <div class="ssb-sidebar-add-section-img">
+                                        <div class="img-wrap">
+                                            <a href>
+                                                <span
+                                                    style=" background: url('{{section.preview}}');background-size: cover;height: 190px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;cursor: move;cursor: -webkit-grabbing;">
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <i
+                                            class="fa fa-info"
+                                            tooltip-placement="left"
+                                            tooltip-html-unsafe="<h4 style='color: white'>{{section.name || section.title}}</h4><p>{{section.description}}</p>"
+                                            tooltip-append-to-body="true">
+                                        </i>
                                     </div>
+                                    <div class="ssb-sidebar-add-section-btn">
+                                        <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
+                                            <span>Add {{section.name || section.title}}</span>
+                                        </button>
+                                    </div>
+                                    <div class="clearfix"></div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <h4>{{section.title}}</h4>
-                                    <p>{{section.description}}</p>
-                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
-                                        <span>Add section</span>
-                                    </button>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
 
-                            <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ filter: sectionFilter.lowercase, enabled: true }" ng-if="sectionFilter.lowercase != 'all' && sectionFilter.lowercase != 'featured'" class="margin-bottom-15">
-                                <div class="col-xs-6">
-                                    <div class="img-wrap">
-                                        <a ng-href="{{section.preview}}" title="" data-gallery="">
-                                            <span style="  background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <h4>{{section.title}}</h4>
-                                    <p>{{section.description}}</p>
-                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
-                                        <span>Add section</span>
-                                    </button>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
 
-                            <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ enabled: true }" ng-if="sectionFilter.lowercase == 'all'" class="margin-bottom-15">
-                                <div class="col-xs-6">
-                                    <div class="img-wrap">
-                                        <a ng-href="{{section.preview}}" title="" data-gallery="">
-                                            <span style="  background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-                                        </a>
+                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.filteredSections = (vm.sections | orderBy:'title' | filter:{ enabled: true })" ng-if="sectionFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
+                                    <div class="ssb-sidebar-add-section-img">
+                                        <div class="img-wrap">
+                                            <a href>
+                                                <span style="  background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                                            </a>
+                                        </div>
+                                        <i
+                                            class="fa fa-info"
+                                            tooltip-placement="left"
+                                            tooltip-html-unsafe="<h4 style='color: white'>{{section.name || section.title}}</h4><p>{{section.description}}</p>"
+                                            tooltip-append-to-body="true">
+                                        </i>
                                     </div>
+                                    <div class="ssb-sidebar-add-section-btn">
+                                        <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
+                                            <span>Add {{section.name || section.title}}</span>
+                                        </button>
+                                    </div>
+                                    <div class="clearfix"></div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <h4>{{section.title}}</h4>
-                                    <p>{{section.description}}</p>
-                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
-                                        <span>Add section</span>
-                                    </button>
-                                </div>
-                                <div class="clearfix"></div>
                             </div>
                         </tab>
                     </tabset>
@@ -171,14 +169,14 @@
                 <ul class="list-unstyled ssb-settings-list">
                     <li>
                         <label>
-                            Title:
-                            <span editable-text="vm.state.page.title" onbeforesave="">{{vm.state.page.title}}</span>
+                            <h5>Title:</h5>
+                            <span editable-text="vm.state.page.title" onbeforesave="" e-required e-placeholder="Enter title">{{vm.state.page.title || 'Enter title'}}</span>
                         </label>
                     </li>
                     <li>
                         <label>
-                            URL:
-                            <span editable-text="vm.state.page.handle" onbeforesave="">{{vm.state.page.handle}}</span>
+                            <h5>URL:</h5>
+                            <span editable-text="vm.state.page.handle" onbeforesave="vm.validateDuplicatePage($data)" e-required e-placeholder="Enter url">{{vm.state.page.handle || 'Enter url'}}</span>
                         </label>
                     </li>
                     <!-- <li>
@@ -191,22 +189,49 @@
                 </ul>
 
                 <h4 class="ssb-sidebar-sub-heading">
-                    <span>All Pages ({{Object.keys(vm.state.pages).length || 0}})</span>
-                    <!-- <div ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Create New Page"></div> -->
+                    <span>All Pages ({{vm.state.pages.length}})</span>
                 </h4>
 
                 <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
 
-                <button ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="btn btn-primary">Add Page</button>
+                <button ng-click="vm.openModal('ssb-new-page-modal', null, null, null);" class="btn btn-primary">Add Page</button>
 
                 <ul class="list-unstyled">
-                    <li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">
+                    <li ng-repeat="page in vm.state.pages track by $index" ng-class="{ 'active-page': page._id === vm.state.page._id }" class="ssb-page-section-settings-item">
                         <div ng-click="vm.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
+                            ng-if="page._id === vm.state.page._id" ng-click="vm.deletePage()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Delete page">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false"
+                            ng-click="vm.hideFromMenu()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Hide this page from main menu">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false"
+                            ng-click="vm.showPageOnMenu()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Show this page on main menu">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-files"
+                            ng-if="page._id === vm.state.page._id"
+                            ng-click="vm.duplicatePage()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Create duplicate page">
+                        </div>
                         <div class="panel-group">
                             <div class="ssb-sidebar-sortable-item panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a href page-id="page._id" ng-click="vm.navigation.loadPage(page._id)">{{page.title}}</a>
+                                        <a ng-if="page._id !== vm.state.page._id" href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)">{{page.title}}</a>
+                                        <a ng-if="page._id === vm.state.page._id" href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)">{{vm.state.page.title}}</a>
                                     </h4>
                                 </div>
                             </div>
@@ -231,18 +256,41 @@
 
                 <button ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
 
-                <ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
-                    <li ng-repeat="section in vm.state.page.sections track by $index" ng-init="sectionIndex = $index" class="ssb-page-section-settings-item">
-                        <div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-                        <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-if="vm.uiState.accordion.sections[sectionIndex].isOpen" ng-click="vm.removeSectionFromPage(sectionIndex)" tooltip-placement="left" tooltip-html-unsafe="Remove section"></div>
-                        <!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
-                        <div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
+                <ul ng-if="vm.state.page.sections" class="ssb-sidebar-page-sections-list list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
+                    <li ng-repeat="section in vm.state.page.sections track by $index" class="ssb-page-section-settings-item ssb-sidebar-move-handle">
+                        <div class="ssb-sidebar-item-icon ti-move display-ib"></div>
+                        <div
+                            ng-hide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit"
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
+                            ng-if="vm.uiState.activeSectionIndex === $index" ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Remove section">
+                        </div>
+                        <div
+                            ng-hide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit"
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
+                            ng-if="vm.uiState.activeSectionIndex === $index"
+                            ng-click="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit = true; vm.editSectionName('editable_{{section._id}}')"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Rename section">
+                        </div>
+                        <div
+                            ng-hide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit"
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-eye"
+                            ng-if="vm.uiState.activeSectionIndex === $index"
+                            ng-click="vm.hideSectionFromPage(section, vm.uiState.activeSectionIndex)"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Show/hide section">
+                        </div>
 
                         <div class="accordion panel-group">
-                            <div class="ssb-sidebar-sortable-item panel panel-default" ng-click="vm.setActiveSection(sectionIndex)" ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[sectionIndex].isOpen }">
+                            <div class="ssb-sidebar-sortable-item panel panel-default" ng-click="vm.setActiveSection($index)" ng-class="{ 'ssb-sidebar-section-open': vm.uiState.activeSectionIndex === $index }">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a href="javascript:void(0)" class="accordion-toggle"><span>{{section.name}}</span></a>
+                                        <a href="javascript:void(0)" class="accordion-toggle">
+                                        <span ng-class="{ 'hidden-faded': !section.visibility }" ng-if="!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit">{{section.name}}</span>
+                                        <span onhide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit=false" id="editable_{{section._id}}" ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit" editable-text="section.name">{{section.name}}</span>
+                                        </a>
                                     </h4>
                                 </div>
                             </div>
@@ -250,6 +298,9 @@
 
                     </li>
                 </ul>
+
+                <!-- <button ng-click="vm.resetSiteTemplate()">Reset site</button> -->
+
             </section>
 
         </div>
@@ -258,181 +309,102 @@
     <div ng-if="vm.uiState.openSidebarPanel === 'design'" class="site-editor-group site-editor-group-design editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'design' }">
 
-            <section>
+            <section class="container-fluid">
                 <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
 
                 <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                    <div class="form-group">
 
-                <ul class="list-unstyled">
-                    <li class="ssb-page-section-settings-item">
-                        <div class="ssb-sidebar-item-icon ti-settings display-ib"></div>
-                        <accordion close-others="oneAtATime" class="accordion">
-                            <accordion-group heading="{{vm.state.website.theme.name || 'Default'}}"
-                                ng-class="{ 'ssb-sidebar-section-open': isOpen }"
-                                class="ssb-sidebar-sortable-item">
+                        <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true)" theme="bootstrap">
+                          <ui-select-match placeholder="Select a theme">
+                              <small ng-bind-html="$select.selected.name"></small>
+                          </ui-select-match>
+                          <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
+                              <small ng-bind-html="theme.name | highlight: $select.search"></small>
+                          </ui-select-choices>
+                        </ui-select>
 
-                                <div class="form-group">
-                                    <h5 class="ssb-sidebar-settings-heading">Theme - {{vm.state.website.theme.name}}</h5>
+                        <div class="row padding-10">
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.bodyBackgroundColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Body Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default body/page background color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
 
-                                    <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected)" theme="bootstrap">
-                                      <ui-select-match placeholder="Select a theme">
-                                          <small ng-bind-html="$select.selected.name"></small>
-                                      </ui-select-match>
-                                      <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
-                                          <small ng-bind-html="theme.name | highlight: $select.search"></small>
-                                      </ui-select-choices>
-                                    </ui-select>
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerBackgroundColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Header Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header background color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+                        </div>
 
-                                    <ul class="list-unstyled panel-body">
-                                        <li class="clearfix">
-                                            Header Background Color:
-                                        <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerBackgroundColor"></spectrum-colorpicker>
-                                        </li>
-                                        <li class="clearfix">
-                                            Body Background Color:
-                                        <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.bodyBackgroundColor"></spectrum-colorpicker>
-                                        </li>
-                                        <li class="clearfix">
-                                            Text Color (Primary):
-                                        <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryTextColor"></spectrum-colorpicker>
-                                        </li>
-                                        <li class="clearfix">
-                                            Text Color (Buttons):
-                                        <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnTextColor"></spectrum-colorpicker>
-                                        </li>
-                                        <li class="clearfix">
-                                            Button Background Color:
-                                        <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor"></spectrum-colorpicker>
-                                        </li>
-                                        <li class="clearfix">
-                                            Heading Size: <pre>{{vm.state.website.themeOverrides.styles.headingSize}}</pre>
-                                        </li>
-                                        <li class="clearfix">
-                                            Paragraph Size: <pre>{{vm.state.website.themeOverrides.styles.paragraphSize}}</pre>
-                                        </li>
-                                        <li class="clearfix">
-                                            Font Stack (Default): <pre>{{vm.state.website.themeOverrides.defaultFontStack}}</pre>
-                                        </li>
-                                        <li class="clearfix">
-                                            Font Stack (Heading): <pre>{{vm.state.website.themeOverrides.headingFontStack}}</pre>
-                                        </li>
-                                        <li class="clearfix">
-                                            Font Stack (Paragraph): <pre>{{vm.state.website.themeOverrides.paragraphFontStack}}</pre>
-                                        </li>
-                                    </ul>
+                        <div class="row padding-10">
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerTextColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Header Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header text color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
 
-                                </div>
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroTextColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Hero Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero text color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+                        </div>
 
-                            </accordion-group>
-                        </accordion>
-                    </li>
-                </ul>
+                        <div class="row padding-10">
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroBackgroundColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Hero Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero background color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Button Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default button background color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+                        </div>
+
+                        <div class="row padding-10">
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryTextColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Text Color (Primary) <span tooltip-placement="top" tooltip-html-unsafe="Override the default text color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+
+                            <div class="form-group ssb-spectrum-color-picker-large">
+                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnTextColor"></spectrum-colorpicker>
+                                <label for="colorpicker">Text Color (Buttons) <span tooltip-placement="top" tooltip-html-unsafe="Override the default button text color color for your website."><i class="fa fa-info-circle" /></span></label>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row padding-10">
+                            Heading Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.headingSize" min="12" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
+                        </div>
+                        <div class="row padding-10">
+                            Paragraph Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.paragraphSize" min="8" max="100" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
+                        </div>
+                        <div class="row padding-10">
+                            Font Stack (Default):
+                            <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
+                                {{vm.state.website.themeOverrides.defaultFontStack}}
+                            </div>
+                        </div>
+                        <div class="row padding-10">
+                            Font Stack (Heading):
+                            <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
+                                {{vm.state.website.themeOverrides.headingFontStack}}
+                            </div>
+                        </div>
+                        <div class="row padding-10">
+                            Font Stack (Paragraph):
+                            <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
+                                {{vm.state.website.themeOverrides.paragraphFontStack}}
+                            </div>
+                        </div> -->
+
+
+                    </div>
             </section>
 
         </div>
     </div>
 
-    <section
-        ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
-        class="ssb-sidebar-section-panel draggable"
-        ind-draggable>
+    <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-sidebar/templates/ssb-sidebar-section-panel.component.html' "></div>
 
-        <h4 class="ssb-sidebar-sub-heading">
-            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
-        </h4>
-
-        <div class="close-panel ti-close" ng-click="vm.uiState.showSectionPanel = false"></div>
-
-        <!-- TODO: component-based settings buttons social-link -->
-
-        <div class="clearfix overflow-auto" ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
-
-        <div class="form-group padding-top-10">
-            <h5 class="ssb-sidebar-settings-heading">Components ({{vm.state.page.sections[vm.uiState.activeSectionIndex].components.length}})</h5>
-            <ul class="list-unstyled ssb-sidebar-section-components-list">
-                <li ng-repeat="component in vm.state.page.sections[vm.uiState.activeSectionIndex].components track by $index" ng-init="componentIndex = $index">
-                    <accordion close-others="oneAtATime" class="accordion">
-                        <accordion-group
-                            is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
-                            ng-click="vm.togglePageSectionComponentAccordion(componentIndex)"
-                            class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-component">
-
-                            <accordion-heading>
-                                <div ng-class="{ 'ssb-sidebar-component-open': vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen }">
-                                    {{(componentIndex + 1)}} - {{component.header_title || component.type}}
-                                </div>
-                                <div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-                                <div
-                                    class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
-                                    ng-if="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
-                                    ng-click="vm.removeComponentFromSection(componentIndex)"
-                                    tooltip-placement="left"
-                                    tooltip-html-unsafe="Remove component">
-                                </div>
-                            </accordion-heading>
-
-                            <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div>
-
-                            <ul class="list-unstyled">
-                                <li>
-                                    <accordion close-others="oneAtATime" class="accordion">
-                                        <div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-components/' + component.type + '/sidebar.settings.html' "></div>
-                                        <ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
-                                    </accordion>
-                                </li>
-                            </ul>
-                        </accordion-group>
-                    </accordion>
-                </li>
-                <li ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].canAddComponents !== false" class="ssb-sidebar-component-list">
-                    <accordion close-others="oneAtATime" class="accordion" ng-click="vm.getPlatformComponents()">
-                        <accordion-group heading="Add + ">
-                            <ul class="list-unstyled">
-                                <li ng-repeat="component in vm.platformComponents track by $index" ng-click="vm.addComponentToSection(component, sectionIndex)" class="center">
-                                    <img src="{{component.preview}}" alt="{{component.type}}" />
-                                    {{component.header_title || component.title || component.type}}
-                                </li>
-                            </ul>
-                        </accordion-group>
-                    </accordion>
-                </li>
-            </ul>
-        </div>
-    </section>
-
-
-	    <!-- <section ng-repeat="linkList in vm.state.website.linkLists track by $index">
-	        <h4 class="ssb-sidebar-sub-heading">{{::linkList.name}}</h4>
-	        <ul class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="linkList.links">
-	        	<li ng-repeat="link in linkList.links track by $index" class="ssb-page-section-settings-item">
-	        		<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-	        		<div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" tooltip-placement="left" tooltip-html-unsafe="Remove from {{::linkList.name}}"></div>
-	        		<div class="panel-group">
-		        		<div class="ssb-sidebar-sortable-item panel panel-default">
-			        		<div class="panel-heading">
-				        		<h4 class="panel-title">
-				        			<a href page-id="page._id" ng-click="vm.navigation.loadPage(page._id)">{{link.label}}</a>
-				        		</h4>
-				        	</div>
-			        	</div>
-			        </div>
-	        	</li>
-	        </ul>
-	    </section> -->
-
-	<!-- </div>
-
-	<div class="page-editor-group editor-group"> -->
-
-		<!-- <div class="ssb-sidebar-heading">
-			<div class="ti-arrow-left" ng-click="vm.navigation.back()"></div>
-			<h4>{{vm.state.page.title}}</h4>
-		</div> -->
-
-
-
-
-
-	<!-- </div> -->
 
 </div>

@@ -2,7 +2,19 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "toaster", "SweetAlert", "productConstant", function ($scope, $modal, $timeout, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, toaster, SweetAlert, ProductConstant) {
+  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", 'editableOptions', "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "AccountService", "WebsiteService",  "toaster", "SweetAlert", "productConstant", function ($scope, $modal, $timeout, editableOptions, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, AccountService, WebsiteService, toaster, SweetAlert, ProductConstant) {
+
+
+    /*
+     * set editor theme
+     */
+    editableOptions.theme = 'bs3';
+    $scope.isProduct = true;
+    $scope.existingEmail = {};
+
+    $scope.isProductDirty = {
+      dirty : false
+    }
 
     /*
      * @openModal
@@ -37,6 +49,9 @@
           },
           insertMedia: function () {
             return $scope.insertMedia;
+          },
+          isSingleSelect: function () {
+              return false;
           }
         }
       });
@@ -75,100 +90,122 @@
     };
 
     $scope.initDatePicker = function(){
-      setTimeout(function() {
+      $timeout(function() {
         $scope.myform.$dirty = false;
-      }, 500);
+      }, 0);
     }
 
-    /*
+    $scope.selectedDate = {};
+    var startDate =  moment();
+    var endDate = moment().add(6, 'days');
+    $scope.selectedDate.range = {
+        startDate: new Date(startDate),
+        endDate: new Date(endDate)
+    };
+
+    var setProductEmailSettings = function(product){
+      product.emailSettings = {
+          "emailId": "",
+          "offset": "", //in minutes
+          "fromEmail": "",
+          "fromName": '',
+          "replyTo": '',
+          "bcc": '',
+          "subject": '',
+          "vars": [],
+          "sendAt": {}
+        }
+    }
+
+     /*
      * @getProduct
      * - get single product based on stateparams
      */
+    $scope.getProduct = function(){
+      var promise = ProductService.getSingleProduct($stateParams.productId, function (product) {
+        console.log(product);
+        var startDate = product.sale_date_from;
+        var endDate = product.sale_date_to;
+        if (!startDate && !endDate) {
+          startDate = moment();
+          endDate = moment().add(6, 'days');
+        }
+        $scope.selectedDate.range = {
+          startDate: new Date(startDate),
+          endDate: new Date(endDate)
+        };
+        product.regular_price = parseFloat(product.regular_price);
+        $scope.product = product;
+        console.log('product ', product);
+        var p_icon = $scope.product.icon;
+        if(p_icon && !p_icon.indexOf("fa-") == 0)
+          p_icon = "fa-cube";
+
+        angular.element('#convert').iconpicker({
+          iconset: 'fontawesome',
+          icon: p_icon,
+          rows: 5,
+          cols: 5,
+          placement: 'right'
+        });
+
+        $scope.getProductTags();
+
+        if (!$scope.product.attributes) {
+          $scope.product.attributes = [{
+            'name': '',
+            'values': []
+          }];
+        }
+
+        if ($scope.product.downloads.length <= 0) {
+          $scope.product.downloads = [{
+            'id': Math.uuid(8),
+            'name': '',
+            'file': ''
+          }];
+        }
+
+        var promises = [];
+        if ($scope.product.product_attributes.stripePlans) {
+          $scope.product.product_attributes.stripePlans.forEach(function (value, index) {
+            promises.push(PaymentService.getPlanPromise(value.id));
+            productPlanStatus[value.id] = value.active;
+            productPlanSignupFee[value.id] = value.signup_fee;
+          });
+          $q.all(promises)
+            .then(function (data) {
+              data.forEach(function (value, index) {
+                value.data.active = productPlanStatus[value.data.id];
+                value.data.signup_fee = productPlanSignupFee[value.data.id];
+                $scope.plans.push(value.data);
+              });
+            })
+            .catch(function (err) {
+              console.error(err);
+            });
+        }
+      });
+      return promise;
+    }
     $scope.product_tags = [];
     var productPlanStatus = {};
     var productPlanSignupFee = {};
-    $scope.selectedDate = {};
-
-    ProductService.getProduct($stateParams.productId, function (product) {
-      console.log(product);
-      var startDate = product.sale_date_from;
-      var endDate = product.sale_date_to;
-      if (!startDate && !endDate) {
-        startDate = moment();
-        endDate = moment().add(6, 'days');
-      }
-      $scope.selectedDate.range = {
-        startDate: new Date(startDate),
-        endDate: new Date(endDate)
-      };
-      product.regular_price = parseFloat(product.regular_price);
-      $scope.product = product;
-      console.log('product ', product);
-      var p_icon = $scope.product.icon;
-      if(p_icon && !p_icon.indexOf("fa-") == 0)
-        p_icon = "fa-cube";
-
-      angular.element('#convert').iconpicker({
-        iconset: 'fontawesome',
-        icon: p_icon,
-        rows: 5,
-        cols: 5,
-        placement: 'right'
-      });
-
-      $scope.getProductTags();
-
-      if (!$scope.product.attributes) {
-        $scope.product.attributes = [{
-          'name': '',
-          'values': []
-        }];
-      }
-
-      if ($scope.product.downloads.length <= 0) {
-        $scope.product.downloads = [{
-          'id': Math.uuid(8),
-          'name': '',
-          'file': ''
-        }];
-      }
-
-      var promises = [];
-      if ($scope.product.product_attributes.stripePlans) {
-        $scope.product.product_attributes.stripePlans.forEach(function (value, index) {
-          promises.push(PaymentService.getPlanPromise(value.id));
-          productPlanStatus[value.id] = value.active;
-          productPlanSignupFee[value.id] = value.signup_fee;
-        });
-        $q.all(promises)
-          .then(function (data) {
-            data.forEach(function (value, index) {
-              value.data.active = productPlanStatus[value.data.id];
-              value.data.signup_fee = productPlanSignupFee[value.data.id];
-              $scope.plans.push(value.data);
-            });
-          })
-          .catch(function (err) {
-            console.error(err);
-          });
-      }
-      $scope.originalProduct = angular.copy($scope.product);
-
-    });
 
     /*
      * @insertMedia
      * - insert media function
      */
 
-    $scope.insertMedia = function (asset) {
-
+    $scope.insertMedia = function (assets) {
+        var urls = _.pluck(assets, 'url');
       if ($scope.currentDownload) {
         console.log('download');
-        $scope.currentDownload.file = asset.url;
+        $scope.currentDownload.file = urls[0];
       } else {
         console.log('product image');
-        $scope.product.icon = asset.url;
+        $scope.product.icon = urls[0];
+        $scope.product.assets = urls;
       }
       $scope.setDownloadId();
     };
@@ -267,7 +304,7 @@
     $scope.validateProduct = function () {
       var _isValid = true;
       if (!$scope.product.name) {
-        _isValid = false;        
+        _isValid = false;
         $scope.productNameError = true;
       }
       if (!$scope.product.type) {
@@ -277,7 +314,21 @@
       return _isValid;
     };
 
-   
+     /*
+     * @setEmail
+     * - set email-related data
+     */
+    $scope.setEmail = function(newEmail) {
+      if (newEmail) {
+        var stepSettings = $scope.product.emailSettings;
+        stepSettings.emailId = newEmail._id;
+        stepSettings.fromEmail = newEmail.fromEmail;
+        stepSettings.fromName = newEmail.fromName;
+        stepSettings.replyTo = newEmail.replyTo;
+        stepSettings.bcc = newEmail.bcc;
+        stepSettings.subject = newEmail.subject;
+      }
+    };
 
     /*
      * @saveProductFn
@@ -287,21 +338,73 @@
     $scope.saveLoading = false;
 
     $scope.saveProductFn = function () {
-      
+
       console.log('$scope.selectedDate ', $scope.selectedDate);
       if ($scope.selectedDate.range) {
         $scope.product.sale_date_from = new Date($scope.selectedDate.range.startDate).toISOString();
         $scope.product.sale_date_to = new Date($scope.selectedDate.range.endDate).toISOString();
-      }    
+      }
       $scope.setProductTags();
       if ($scope.validateProduct()) {
         $scope.saveLoading = true;
+        if($scope.product.fulfillment_email){
+          if(!$scope.emailToSend.title){
+            toaster.pop('warning', 'Warning', "Email title can't not blank");
+            $scope.saveLoading = false;
+            return;
+          }
+          if($scope.emailTitleExists && $scope.selectedEmail.type === "new"){
+            toaster.pop('warning', 'Warning', "Email title already exists");
+            $scope.saveLoading = false;
+            return;
+          }
+
+          var stepSettings = $scope.product.emailSettings;
+          if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
+            $scope.emailToSend.productId = $scope.product._id;
+            WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
+              $scope.isNewEmailObj = true;
+              $scope.updateProductEmail(newEmail);
+            });
+          } else {
+            $scope.isNewEmailObj = false;
+            $scope.updateProductEmail($scope.emailToSend);
+          }
+        }
+        else{
+          $scope.saveProduct();
+        }
+      }
+    };
+
+    $scope.saveProduct = function(){
         ProductService.saveProduct($scope.product, function (product) {
           //format variation attributes
+          $scope.product = product;
           angular.copy($scope.product, $scope.originalProduct);
-          $scope.saveLoading = false;          
+          if($scope.product.fulfillment_email){
+            $scope.getEmails();
+          }
+          $scope.saveLoading = false;
           toaster.pop('success', 'Product Saved.');
         });
+    }
+
+
+    $scope.updateProductEmail = function (newEmail) {
+      //set/format email and send date
+      $scope.setEmail(newEmail);
+      $scope.updatedEmail = angular.copy(newEmail);
+
+      //update product email
+
+      if($scope.updatedEmail && $scope.existingEmail.replace || ($scope.product && $scope.emailToSend.productId && $scope.emailToSend.productId === $scope.product._id)){
+        WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
+          $scope.saveProduct();
+        });
+      }
+      else{
+        $scope.saveProduct();
       }
     };
 
@@ -309,7 +412,7 @@
       console.log('removeVariation');
     };
 
-   
+
     ProductService.productStatusTypes(function(types) {
         $scope.productStatusOptions = types;
     });
@@ -336,7 +439,7 @@
 
     $scope.addSubscriptionFn = function (newSubscription, showToaster) {
       console.log('newSubscription ', newSubscription);
-      if ($scope.user.stripeId === undefined || $scope.user.stripeId === null || $scope.user.stripeId === '') {
+      if (!$scope.stripeAccountExist) {
         toaster.pop('error', 'Need to add a stripe account first.');
         $state.go('account');
       }
@@ -415,6 +518,10 @@
             $scope.product.product_attributes.stripePlans.splice(index, 1);
           }
         });
+
+        if (!$scope.plans.length) {
+            $scope.product.status = 'inactive';
+        }
 
         if (fn) {
           fn();
@@ -497,7 +604,7 @@
     }
 
     $scope.checkIfDirty = function(){
-      var isDirty = false;      
+      var isDirty = false;
       if($scope.originalProduct && !angular.equals($scope.originalProduct, $scope.product))
         isDirty = true;
       return isDirty;
@@ -506,6 +613,520 @@
       $scope.originalProduct = null;
       $scope.product = null;
     }
+
+
+    // Email fulfillment related
+
+    /*
+     * @defaultNewEmail
+     * - default new email to show for initial design unless user selects template
+     */
+    $scope.emailToSend = {
+      "title": "",
+      "type": "email",
+      "subject": "Edit Subject",
+      "fromName": "",
+      "fromEmail": "",
+      "replyTo": "",
+      "bcc": "",
+      "components": [{
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-header",
+        "version": 1,
+        "txtcolor": "#888888",
+        "logo": "<h2>Logo Here</h2>",
+        // "title": "<h2 class='center'>New Email</h2>",
+        // "subtitle": "subtitle",
+        // "text": "This is your new email",
+
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-1-col",
+        "version": 1,
+        "txtcolor": "#888888",
+        // "logo": "<h2>Logo Here</h2>",
+        "title": '<h2 style="text-align:center;">One Column Layout Section</h2>',
+        // "subtitle": "subtitle",
+        "text": '<p style="text-align:center;">This is a single column content section.</p>',
+
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-2-col",
+        "version": 1,
+        "txtcolor": "#888888",
+        "title": '<h2 style="text-align:center;">Two Column Layout Section</h2>',
+        // "subtitle": "subtitle",
+        "text1": '<p style="text-align:center;">This is column 1.</p>',
+        "text2": '<p style="text-align:center;">This is column 2.</p>',
+
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-3-col",
+        "version": 1,
+        "txtcolor": "#888888",
+        "title": '<h2 style="text-align:center;">Three Column Layout Section</h2>',
+        // "subtitle": "subtitle",
+        "text1": '<p style="text-align:center;">This is column 1.</p>',
+        "text2": '<p style="text-align:center;">This is column 2.</p>',
+        "text3": '<p style="text-align:center;">This is column 3.</p>',
+
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-footer",
+        "version": 1,
+        "txtcolor": "#888888",
+        // "logo": "<h2>Logo Here</h2>",
+        // "title": "<h2 class='center'>New Email</h2>",
+        // "subtitle": "subtitle",
+        "text": "This is an email footer.",
+
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      }]
+    };
+
+    $scope.emailToSendCopy = angular.copy($scope.emailToSend);
+
+    /*
+     * @getAccount
+     * - get account and autofill new email details
+     */
+
+    $scope.getAccount = function() {
+      var promise = AccountService.getAccount(function (_account) {
+        $scope.account = _account;
+        $scope.stripeAccountExist = false;
+        $scope.paypalAccountExist = $scope.account.commerceSettings.paypal;
+        $scope.account.credentials.forEach(function(cred, index) {
+            if (cred.type == 'stripe') {
+                $scope.stripeAccountExist = true;
+            }
+        });
+        $scope.setBusinessDetails();
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+      });
+      return promise;
+    };
+
+
+    /*
+     * @setBusinessDetails
+     * - set any filled out info from business data
+     */
+    $scope.setBusinessDetails = function(update) {
+      var account = $scope.account;
+      var logo = account.business.logo || '<h2>Logo Here</h2>';
+      var businessName = account.business.name || 'Edit name';
+      var fromEmail = account.business.emails[0].email || 'Edit email';
+
+      if ($scope.emailToSend) {
+        if (logo.indexOf('http') != -1 && $scope.emailToSend.components[0].logo == '<h2>Logo Here</h2>') {
+          $scope.emailToSend.components[0].logo = '<img src="' + account.business.logo + '"/>';
+          $scope.emailToSendCopy.components[0].logo = '<img src="' + account.business.logo + '"/>';
+        }
+        if (businessName && ($scope.emailToSend.fromName == '' || update)) {
+          $scope.emailToSend.fromName = account.business.name;
+          $scope.emailToSendCopy.fromName = account.business.name;
+        }
+        if (fromEmail && ($scope.emailToSend.fromEmail == '' || update)) {
+          $scope.emailToSend.fromEmail = account.business.emails[0].email;
+          $scope.emailToSendCopy.fromEmail = account.business.emails[0].email;
+        }
+        if (fromEmail && ($scope.emailToSend.replyTo == '' || update)) {
+          $scope.emailToSend.replyTo = account.business.emails[0].email;
+          $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
+        }
+      }
+    };
+    $scope.emails = [];
+    $scope.selectedEmail = {
+      type: 'new'
+    };
+
+    /*
+     * @setEmailstoSendDetails
+     *
+     */
+    $scope.setEmailDefaults = function (_name) {
+      $scope.emailToSend.title = _name + ' Email';
+      $scope.emailToSend.subject = _name;
+      $scope.checkEmailTitle($scope.emailToSend.title);
+    };
+
+
+
+     /*
+     * @changeCurrentEmail
+     * - set selected email
+     */
+    $scope.changeCurrentEmail = function (selectedEmail) {
+      $scope.emailToSend = selectedEmail;
+      if((!$scope.emailToSend.productId || ($scope.product && $scope.emailToSend.productId !== $scope.product._id)))
+        $scope.emailToSend.bcc = ""
+      $scope.confirmOverrideExistingEmails();
+    };
+
+
+    $scope.getEmails = function() {
+      if(!$scope.product.emailSettings){
+        setProductEmailSettings($scope.product);
+      }
+      if($scope.product.fulfillment_email && $scope.product.emailSettings.emailId)
+        $scope.selectedEmail = {
+          type: 'template'
+        };
+
+      var promise = WebsiteService.getEmails(false, function (_emails) {
+        var emailId = $scope.product.emailSettings.emailId;
+        var matchedEmail = null;
+        var emailMatch = function(email) {
+          return email._id === emailId;
+        };
+
+        $scope.emails = angular.copy(_emails);
+        $scope.originalEmails = angular.copy(_emails);
+
+        $scope.setEmailDefaults($scope.product.name || '');
+
+        matchedEmail = $scope.emails.filter(emailMatch)[0];
+        if (emailId && matchedEmail) {
+          $scope.emailToSend = matchedEmail;
+          $scope.originalEmailToSend = angular.copy($scope.emailToSend);
+
+        } else {
+          console.log('email not found');
+        }
+        $scope.emailToSendPrevious = $scope.emails[0];
+      });
+      $scope.originalProduct = angular.copy($scope.product);
+      return promise;
+    };
+
+    /*
+     * @checkEmailTitle
+     * - check email title doesnt exist already
+     */
+    $scope.checkEmailTitle = function (_name) {
+      if ($scope.selectedEmail.type === 'new') {
+        $scope.checkingEmailTitle = true;
+        var exists = _.find($scope.originalEmails, function(email){
+          return email.title && email.title.toLowerCase() == _name.toLowerCase();
+        });
+        $scope.emailTitleExists = exists ? true : false;
+      } else {
+        $scope.emailTitleExists = false;
+      }
+
+      $scope.emailTitleChecked = true;
+      $scope.checkingEmailTitle = false;
+    };
+
+    /*
+     * @clearEmail
+     * - callback for toggle on radio input "New Email" vs. "Template"
+     */
+    $scope.clearEmail = function (newEmail) {
+      $scope.checkingEmailTitle = false;
+      if (newEmail) {
+        $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
+        $scope.setBusinessDetails(newEmail);
+        $scope.emailToSend = $scope.emailToSendCopy;
+        $scope.emailToSend.title = $scope.product.name + ' Email';
+        $scope.emailToSend.bcc = "";
+        $scope.emailToSend.subject = $scope.product.name;
+        $scope.checkEmailTitle($scope.emailToSend.title);
+        if($scope.product && $scope.product.emailSettings)
+          $scope.product.emailSettings.emailId = null;
+      } else {
+        $scope.setBusinessDetails();
+        $scope.emailToSend = $scope.emailToSendPrevious;
+        if($scope.product.emailSettings && !$scope.product.emailSettings.emailId && $scope.emailToSendPrevious)
+          $scope.product.emailSettings.emailId = $scope.emailToSendPrevious._id
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+      }
+    }
+
+
+    $scope.confirmOverrideExistingEmails = function(){
+      if((!$scope.emailToSend.productId || ($scope.product && $scope.emailToSend.productId !== $scope.product._id)) && $scope.selectedEmail.type != 'new'){
+          SweetAlert.swal({
+          title: "How would you like to use the selected email?",
+          text: "You are saving changes to an email used by more than one product OR campaign. Do you wish to update the existing email (altering all products OR campaigns) or create and update a copy specific to this product?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Save edits to existing email",
+          cancelButtonText: "Create a copy",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        }, function (isConfirm) {
+          if (isConfirm) {
+            $timeout(function() {
+              $scope.$apply(function () {
+                $scope.isProductDirty.dirty = true;
+                $scope.existingEmail.replace = true;
+              })
+            },0)
+
+            if($scope.product.emailSettings && !$scope.product.emailSettings.emailId && $scope.emailToSendPrevious){
+              $scope.product.emailSettings.emailId = $scope.emailToSendPrevious._id;
+              $scope.emailToSend.title = $scope.emailToSendPrevious.title;
+            }
+            $scope.checkEmailTitle($scope.emailToSend.title);
+          }
+          else {
+            $timeout(function() {
+              $scope.$apply(function () {
+                $scope.isProductDirty.dirty = true;
+                $scope.existingEmail.replace = false;
+              })
+            },0)
+            $scope.emailToSend.title = $scope.product.name + " " + moment().toDate().getTime();
+            $scope.emailToSend.productId = null;
+            $scope.selectedEmail.type = 'new';
+            $scope.checkEmailTitle($scope.emailToSend.title);
+          }
+        })
+      }
+    }
+
+    $scope.$watchGroup(['emailToSend.fromName', 'emailToSend.fromEmail', 'emailToSend.replyTo', 'emailToSend.bcc', 'emailToSend.subject'], function(newValue, oldValue){
+       if(newValue && $scope.actualEmailToSend && !angular.equals($scope.actualEmailToSend, $scope.emailToSend) && !$scope.existingEmail.replace && $scope.selectedEmail.type != 'new'){
+          $scope.confirmOverrideExistingEmails();
+       }
+    });
+
+    $scope.setProductDirty = function(){
+      if($scope.selectedEmail.type != 'new' && !$scope.existingEmail.replace){
+        if(!$scope.isProductDirty.dirty){
+          $timeout(function() {
+            $scope.$apply(function () {
+              $scope.isProductDirty.dirty = true;
+              $scope.confirmOverrideExistingEmails();
+            })
+          },0)
+        }
+      }
+    }
+
+    CKEDITOR.on("instanceReady", function (ev) {
+      ev.editor.on('key', function () {
+        if(!$scope.isProductDirty.dirty){
+          $scope.setProductDirty();
+        }
+      });
+      ev.editor.on('change', function () {
+        if(!$scope.isProductDirty.dirty){
+          $scope.setProductDirty();
+        }
+      });
+    })
+
+    $scope.fullscreen = false;
+
+    /*
+     * @toggleFullscreen
+     * -
+     */
+    $scope.toggleFullscreen = function () {
+      $scope.transitionDone = false;
+      if (!$scope.fullscreen) {
+        $scope.fullscreen = true;
+        $timeout(function () {
+          $scope.transitionDone = true;
+        }, 1000);
+      } else {
+        $scope.fullscreen = false;
+        $timeout(function () {
+          $scope.transitionDone = true;
+        }, 1000);
+      }
+    };
+
+    /*
+     * @analyzeSubject
+     * - email subject quality feedback
+     */
+    $scope.analyzeSubject = function (subject) {
+      var subjectWords = subject.split(' ');
+      var lowercaseSubjectWords = subject.toLowerCase().split(' ');
+      var wordsToUse = ["freebie", "urgent", "breaking", "important", "alert", "thank you", "sneak peek", "alert", "daily", "free delivery", "cash", "quote", "save", "jokes", "promotional", "congratulations", "revision", "forecast", "snapshot", "token", "voluntary", "monthly", "deduction", "upgrade", "just", "content", "go", "wonderful"];
+      var wordsNotToUse = ["free", "reminder", "canceled", "helping", "fundraising", "raffle", "fundraiser", "charity", "donate", "last chance", "breast cancer", "sign up", "help", "percent off", "newsletter", "report", "program", "half", "budget", "unlimited", "discount", "down", "sale", "suburbs", "decoder", "inland", "county", "wish", "forgotten", "thirds", "discussion", "romantic", "videos", "miss", "deals", "groovy", "conditions", "friday", "monday", "furry", "double", "volunteer", "learn"];
+
+      var capitalized = true;
+      var lessThan50Char = true;
+      var lessThan10Words = true;
+      var isAlphaNumeric = true;
+      var containsWordToUse = true;
+      var avoidsWordNotToUse = true;
+      var moreThan4Words = true;
+      var differentFromPreviousSubjects = true;
+
+      _.each(subjectWords, function (word) {
+        //All Words Capitalized
+        if (word && word[0] !== word[0].toUpperCase()) {
+          capitalized = false;
+        }
+
+        //does not include words to avoid
+        if (wordsNotToUse.indexOf(word.toLowerCase()) >= 0) {
+          avoidsWordNotToUse = false;
+        }
+      });
+
+      //includes words to use
+      if (_.intersection(lowercaseSubjectWords, wordsToUse).length <= 0) {
+        containsWordToUse = false;
+      }
+
+      //Less than 50 characters
+      if (subject.length > 49) {
+        lessThan50Char = false;
+      }
+
+      //less than 10 words
+      if (subjectWords.length > 9) {
+        lessThan10Words = false;
+      }
+
+      //more than 4 words
+      if (subjectWords.length < 4) {
+        moreThan4Words = false;
+      }
+
+      if ($scope.emails && $scope.emails.length > 0) {
+        //determine if previous subject emails are closely related by score
+        var bestMatch = {
+          value: '',
+          percent: 0
+        };
+
+        var lowercaseSubject = subject.replace(new RegExp('[^a-zA-Z ]'), "").toLowerCase();
+        _.each($scope.emails, function (email) {
+          if (email.subject) {
+            var lowercaseEmailSubject = email.subject.replace(new RegExp('[^a-zA-Z ]'), "").toLowerCase();
+            var percentMatch = lowercaseSubject.score(lowercaseEmailSubject);
+            if (bestMatch.percent < percentMatch) {
+              bestMatch.value = email.subject;
+              bestMatch.percent = percentMatch;
+            }
+          }
+        });
+
+        if (bestMatch.value && bestMatch.percent > 0.75) {
+          differentFromPreviousSubjects = false;
+          $scope.bestMatch = bestMatch;
+        }
+      }
+
+      //No special characters except for question mark
+      if (/^[a-zA-Z0-9- ]*$/.test(subject) === false) {
+        isAlphaNumeric = false;
+      }
+
+      //TODO: contains personalization
+
+      var percentRating = 100;
+      var sixth = 12.5;
+      var rulesBooleanArr = [capitalized, lessThan50Char, lessThan10Words, isAlphaNumeric, containsWordToUse, avoidsWordNotToUse, moreThan4Words, differentFromPreviousSubjects];
+      _.each(rulesBooleanArr, function (rule) {
+        if (rule === false) {
+          percentRating = percentRating - sixth;
+        }
+      });
+
+      $scope.subjectRules = {
+        "capitalized": capitalized,
+        "lessThan50Char": lessThan50Char,
+        "lessThan10Words": lessThan10Words,
+        "isAlphaNumeric": isAlphaNumeric,
+        "containsWordToUse": containsWordToUse,
+        "avoidsWordNotToUse": avoidsWordNotToUse,
+        "moreThan4Words": moreThan4Words,
+        "differentFromPreviousSubjects": differentFromPreviousSubjects
+      };
+
+      $scope.subjectScore = Math.round(percentRating);
+
+    };
+
+
+    $scope.$watch('emailToSend.subject', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.analyzeSubject(newValue);
+      }
+    });
+
+
+    $scope.init = (function(){
+      $scope.getProduct().then(function(data) {
+        return $scope.getEmails();
+      }).then(function(data) {
+        return $scope.getAccount();
+      })
+    })();
 
   }]);
 }(angular));

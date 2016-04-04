@@ -96,42 +96,41 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
-  CustomerService.getCustomerTags(function(tags){
-    $scope.customerTags = tags;
-  });
-  CustomerService.getCustomers(function(customers){
-    CustomerService.getAllCustomerTags(customers,function(tags){
+
+  $scope.getAllCustomerTags = function(){
+    CustomerService.getCustomerTags(function(tags){
       $scope.customerTags = tags;
+      $scope.setTags(tags);
     });
-  })
-
-    var setTags = function () {
-      console.log('setTags >>>');
-      var tempTags = [];
-      _.each($scope.componentEditing.tags, function (tag , index) {
-        var matchingTag = _.findWhere($scope.customerTags, {
-          data: tag
-        });
-        if(matchingTag)
-        {          
-          tempTags.push(matchingTag);
-        }  
+    CustomerService.getCustomers(function(customers){
+      CustomerService.getAllCustomerTags(customers,function(tags){
+        $scope.customerTags = tags;
+        $scope.setTags(tags);
       });
-      $scope.componentEditing.tags = tempTags;
-      console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
-    };
+    })
+  }
 
-    var unsetTags = function() {
-      var tempTags = [];
-        var _tags = angular.copy($scope.componentEditing.tags);
-        _.each(_tags, function (tag) {
-          tempTags.push(tag.data);
+  $scope.setTags = function (_customerTags) {
+    console.log('setTags >>>');
+    _.each($scope.componentEditing.tags, function (tag , index) {
+      var matchingTag = _.findWhere($scope.customerTags, {
+        data: tag
+      });
+      if(matchingTag)
+      {
+        _customerTags.push(matchingTag);
+      }
+      else {
+        _customerTags.push({
+            data : tag,
+            label : tag
         });
-        if (tempTags) {
-          $scope.componentEditing.tags = tempTags;
-        }
-    };
-  
+      }
+    });
+    $scope.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
+    console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
+  };
+
 
   $scope.testOptions = {
     min: 5,
@@ -205,7 +204,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       appendTo: 'body',
       palette: [
         ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
-        ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+        ["#f47998", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
         ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
         ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
         ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
@@ -471,10 +470,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
             angular.element('.modal-backdrop').remove();
           });
         } else {
-          if($scope.componentEditing.type === "simple-form")
-            {
-              unsetTags();
-            }
           $modalInstance.close();
           angular.element('.modal-backdrop').remove();
         }
@@ -955,7 +950,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
       if($scope.componentEditing.type === "simple-form")
       {
-        setTags();
+        $scope.getAllCustomerTags();
       }
 
       if ($scope.componentEditing.type === 'navigation') {
@@ -1217,5 +1212,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         $scope.updateLinkList();
       }
     };
+
+  $scope.tagToCustomer = function(value) {
+    return CustomerService.tagToCustomer(value);
+  }
 
 }]);

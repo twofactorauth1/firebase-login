@@ -1,12 +1,13 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'SweetAlert', function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, SweetAlert) {
+app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
-  
+  $scope.maximumUploadItems = 20;
+
   AssetsService.getAssetsByAccount(function (data) {
     if (data instanceof Array) {
       $scope.originalAssets = data.slice(0);
@@ -65,18 +66,25 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
             if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
               return true;
             } else {
-              ToasterService.show('error', 'Max Video file size 500MB. Unable to Upload.');
+              ToasterService.show('error', 'The maximum video file size 500MB. Unable to Upload.');
             }
             break;
           case "image":
           case "audio":
+            //size in bytes
+            if (50 * 1024 * 1024 > parseInt(item.size)) {
+              return true;
+            } else {
+              ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
+            }
+            break;
           case "document":
           default:
             //size in bytes
             if (10 * 1024 * 1024 > parseInt(item.size)) {
               return true;
             } else {
-              ToasterService.show('error', 'Max file size 10MB. Unable to Upload.');
+              ToasterService.show('error', 'The maximum file size 10MB. Unable to Upload.');
             }
         }
         return false;
@@ -87,7 +95,11 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   uploader.filters.push({
     name: 'customFilter',
     fn: function (item /*{File|FileLikeObject}*/ , options) {
-      return this.queue.length < 10;
+      if(this.queue.length < $scope.maximumUploadItems)
+        $scope.maxLengthExceed = false;
+      else
+        $scope.maxLengthExceed = true;
+      return this.queue.length < $scope.maximumUploadItems;
     }
   });
 
@@ -129,7 +141,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   });
 
   $scope.lastSelect = null;
-  $scope.isSingleSelect = true;
+  $scope.isSingleSelect = isSingleSelect;
   $scope.showType = "all";
   $scope.editingImage = false;
   $scope.selectModel = {
@@ -151,21 +163,25 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.checkMobile();
   //http://en.wikipedia.org/wiki/Internet_media_type
   $scope.typeMimes = {
-    image: ['image/png', 'image/jpeg', 'image/gif'],
-    video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv'],
-    audio: ['audio/mpeg'],
-    document: ['application/octet-stream', 'application/pdf']
+    image: ['image/png', 'image/jpeg', 'image/gif', 'image/*'],
+    video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv', 'video/*' ],
+    audio: ['audio/mpeg', 'audio/mp3', 'audio/*'],
+    document: ['application/octet-stream', 'application/pdf', 'text/plain']
   };
+
+
 
   $scope.getFileType = function(mime){
     if(mime.match('audio.*'))
       return "audio"
     else if(mime.match('video.*'))
       return "video"
+    else if(mime.match('image.*'))
+      return "image"
     else if(mime === 'application/pdf')
       return "pdf"
-    if(mime === 'application/octet-stream')
-      return "octet-stream"    
+    else if(mime === 'application/octet-stream' || mime === 'text/plain')
+      return "octet-stream"
   }
 
   $scope.m.selectTriggerFn = function (status) {
@@ -199,7 +215,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
           $scope.batch.push(value);
         }
       } else {
-        if ($scope.mimeList.indexOf(value.mimeType) > -1) {
+        if ($scope.mimeList.indexOf(value.mimeType) > -1 || $scope.getFileType(value.mimeType) === $scope.showType ) {
           $scope.assets.push(value);
           if (value.checked) {
             $scope.batch.push(value);
@@ -276,10 +292,10 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       closeOnCancel: true
     }, function (isConfirm) {
       if (isConfirm) {
-        if (asset) 
-          $scope.batch.push(asset);        
-        if($scope.batch && $scope.batch.length){   
-          $scope.batch = _.uniq($scope.batch);       
+        if (asset)
+          $scope.batch.push(asset);
+        if($scope.batch && $scope.batch.length){
+          $scope.batch = _.uniq($scope.batch);
           AssetsService.deleteAssets($scope.batch, function (resp, status) {
             if (status === 200) {
               $scope.originalAssets.forEach(function (v, i) {
@@ -317,7 +333,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       } else {
         angular.element('.modal.in').show();
       }
-    });    
+    });
   };
 
   $scope.m.editImage = function (asset) {
@@ -334,10 +350,18 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.m.onInsertMedia = function () {
     if ($scope.batch.length > 0) {
       if (insertMedia) {
-        insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+        if ($scope.isSingleSelect) {
+            insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+        } else {
+            insertMedia($scope.batch, $scope.type || $scope.insertMediaType);
+        }
         $scope.type = null;
       } else {
-        insertMedia($scope.batch[$scope.batch.length - 1]);
+        if ($scope.isSingleSelect) {
+            insertMedia($scope.batch[$scope.batch.length - 1]);
+        } else {
+            insertMedia($scope.batch);
+        }
       }
     }
     $scope.m.selectTriggerFn(false);

@@ -22,6 +22,8 @@ var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
 var async = require('async');
 
+var CREATE_DEFAULT_PAGES = true;
+
 module.exports = {
 
     createAccountAndUserFromTempAccount: function(accountToken, fingerprint, sendWelcomeEmail, fn) {
@@ -53,7 +55,7 @@ module.exports = {
                 var email = user.get('email');
 
                 user.createUserAccount(accountId, username, null, roleAry);
-                if(user.id().toString().substring(0, 4) ==='temp') {
+                if(user.id() && user.id().toString().substring(0, 4) ==='temp') {
                     //user does not exist.  set temp ID to null.
                     user.set('_id', null);
                 }
@@ -70,6 +72,9 @@ module.exports = {
                 socialConfigManager.createSocialConfigFromUser(account.id(), user, function(err, value){
                     if(err) {
                         log.error('Error creating social config for account:' + account.id());
+                        callback(err);
+                    } else {
+                        callback(null, account, user);
                     }
 
                 });
@@ -97,13 +102,19 @@ module.exports = {
                         callback(err);
                     } else {
                         log.debug('creating default pages');
-                        cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
-                            if (err) {
-                                log.error('Error creating default page for account: ' + err);
-                                callback(err);
-                            }
+                        if(CREATE_DEFAULT_PAGES === true) {
+                            cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
+                                if (err) {
+                                    log.error('Error creating default page for account: ' + err);
+                                    callback(err);
+                                }
+                                callback(null, account, user);
+                            });
+                        } else {
+                            log.debug('skipping default page creation');
                             callback(null, account, user);
-                        });
+                        }
+
                     }
                 });
             },
@@ -320,16 +331,20 @@ module.exports = {
         var user = null;
         async.waterfall([
             function stepOne(callback){
-                //encrypt the password
-                var userForEncryption = new $$.m.User({});
-                userForEncryption.encryptPasswordAsync(password, function(err, hash){
-                    if(err) {
-                        log.error('Error encrypting password: ' + err);
-                        callback(err);
-                    } else {
-                        callback(null, hash);
-                    }
-                });
+                //encrypt the password if it is present
+                if(password) {
+                    var userForEncryption = new $$.m.User({});
+                    userForEncryption.encryptPasswordAsync(password, function(err, hash){
+                        if(err) {
+                            log.error('Error encrypting password: ' + err);
+                            callback(err);
+                        } else {
+                            callback(null, hash);
+                        }
+                    });
+                } else {
+                    callback(null, null);
+                }
             },
             function stepTwo(hash, callback){
                 dao.getUserByUsername(username, function(err, value) {
@@ -341,6 +356,7 @@ module.exports = {
                             //return fn(true, "An account with this username already exists");
                             user = value;
                             user.set('fingerprint', fingerprint);
+                            hash = user.getCredentials($$.constants.user.credential_types.LOCAL).password;
                         } else {
                             user = new $$.m.User({
                                 username:username,
@@ -423,14 +439,20 @@ module.exports = {
             },
             function stepSeven(accountId, websiteId, user, callback){
                 log.debug('creating default page');
-                cmsManager.createDefaultPageForAccount(accountId, websiteId, function(err, value) {
-                    if (err) {
-                        log.error('Error creating default page for account: ' + err);
-                        fn(err, null);
-                    } else {
-                        callback(null, accountId, user);
-                    }
-                });
+                if(CREATE_DEFAULT_PAGES === true) {
+                    cmsManager.createDefaultPageForAccount(accountId, websiteId, function(err, value) {
+                        if (err) {
+                            log.error('Error creating default page for account: ' + err);
+                            fn(err, null);
+                        } else {
+                            callback(null, accountId, user);
+                        }
+                    });
+                } else {
+                    log.debug('Skipping default page creation');
+                    callback(null, accountId, user);
+                }
+
             },
             function stepEight(accountId, user, callback){
                 log.debug('Updating email notifications');

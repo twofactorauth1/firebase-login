@@ -2,9 +2,11 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
+  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", "productConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant, productConstant) {
 
     $scope.dataLoaded = false;
+    $scope.billing= {sameAsBilling:false};
+
     //TODO
     // - $q all api calls
     // 1. getCustomers
@@ -84,12 +86,13 @@
     $scope.getProducts = function () {
       ProductService.getProducts(function (products) {
         $scope.products = products;
+        $scope.activeProducts = products.filter(function(product) { return product.status === productConstant.product_status_types.ACTIVE });
         $scope.getOrder();
       });
     };
 
     $scope.eliminateUsedProducts = function () {
-      $scope.filterProducts = angular.copy($scope.products);
+      $scope.filterProducts = angular.copy($scope.activeProducts);
       _.each($scope.order.line_items, function (line_item) {
         var matchProduct = _.find($scope.filterProducts, function (product) {
           return product._id === line_item.product_id;
@@ -115,7 +118,7 @@
 
     $scope.compareAddress = function () {
       if ($scope.order.shipping_address && $scope.order.billing_address && $scope.order.billing_address.hasOwnProperty("address_1") && angular.equals($scope.order.shipping_address, $scope.order.billing_address)) {
-        $scope.sameAsBilling = true;
+        $scope.billing.sameAsBilling = true;
       }
     };
 
@@ -137,7 +140,7 @@
           $scope.selectedCustomer = _.find($scope.customers, function (customer) {
             return customer._id === $scope.order.customer_id;
           });
-          $scope.calculateTotals();
+          //$scope.calculateTotals(); - Don't (re)calculate when authoritative detail is in DB.
           $scope.compareAddress();
         } else {
           $scope.order = {
@@ -184,10 +187,12 @@
       var _discount = 0;
       var _tax = 0;
       var _taxrate= $scope.order.tax_rate || 0;
+      var _subtotalTaxable = 0;
 
       _.each($scope.order.line_items, function (line_item) {
+        var item_price = line_item.product.sale_price && line_item.product.on_sale ? line_item.product.sale_price : line_item.product.regular_price;
         if (line_item.quantity) {
-          line_item.total = line_item.regular_price * line_item.quantity;
+          line_item.total = item_price * line_item.quantity;
         }
         if (line_item.discount) {
           var _dc = parseFloat(line_item.discount);
@@ -195,18 +200,21 @@
           _discount += _dc;
           _total -= _dc;
         }
-        _subtotal += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
-        _total += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
+        _subtotal += parseFloat(item_price) * parseFloat(line_item.quantity);
+        _total += parseFloat(item_price) * parseFloat(line_item.quantity);
+        if (line_item.product.taxable) {
+            _subtotalTaxable += parseFloat(item_price) * parseFloat(line_item.quantity);
+        }
       });
 
       $scope.order.subtotal = _subtotal;
       $scope.order.total_discount = _discount;
       if (_discount) {
-        $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotal)).toFixed(2);
+        $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotalTaxable)).toFixed(2);
       } else {
         $scope.calculatedDiscountPercent = '';
       }
-      $scope.order.total_tax = (_subtotal - _discount) * _taxrate;
+      $scope.order.total_tax = (_subtotalTaxable - _discount) * _taxrate;
       $scope.order.total = (_subtotal - _discount) + $scope.order.total_tax;
     };
 
@@ -327,7 +335,9 @@
             return product._id === item.product_id;
           });
           item.product = matchProduct;
-          item.discount = 0.00;
+          if (!$stateParams.orderId) {
+              item.discount = 0.00;
+          }
         });
       }
 
@@ -397,7 +407,8 @@
         "sku": selected.sku,
         "total": selected.regular_price,
         "name": selected.name,
-        "product": selected
+        "product": selected,
+        "type": selected.type
       };
       $scope.order.line_items.push(_line_item);
       $scope.calculateTotals();
@@ -772,8 +783,8 @@
      * -
      */
 
-    $scope.saveOrder = function (flag, cust) {
-
+    $scope.saveOrder = function (flag, cust, invalid) {
+      $scope.formSubmitted = true;
       $scope.saveLoading = true;
       // Set order customer Id
       if ($scope.selectedCustomer) {
@@ -805,18 +816,27 @@
         $scope.saveLoading = false;
         return;
       }
+      if(!$scope.order.billing_address || invalid)
+      {
+        $scope.billingEdit = true;
+        toaster.pop('error', 'Billing details cannot be blank');
+        $scope.saveLoading = false;
+        return;
+      }
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           $scope.saveLoading = false;
           angular.copy($scope.order, $scope.originalOrder);
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
+          $location.path('/commerce/orders');
         });
       }
       else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           toaster.pop('success', 'Order created successfully.');
           angular.copy($scope.order, $scope.originalOrder);
+          $scope.saveLoading = false;
           if(flag==1)
           {
             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
@@ -830,9 +850,7 @@
           {
           	$location.path('/commerce/orders');
           }
-          $scope.saveLoading = false;
         });
-        $scope.saveLoading = false;
       }
     };
 

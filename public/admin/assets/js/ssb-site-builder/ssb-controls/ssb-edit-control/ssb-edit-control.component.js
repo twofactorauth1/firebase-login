@@ -9,7 +9,10 @@ function ssbEditControl() {
         scope: {
             state: '=',
             uiState: '=',
-            index: '='
+            sectionIndex: '=',
+            component: '=',
+            componentIndex: '=?',
+            compiledControlId: '@?'
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-controls/ssb-edit-control/ssb-edit-control.component.html',
         controller: 'SiteBuilderEditControlController',
