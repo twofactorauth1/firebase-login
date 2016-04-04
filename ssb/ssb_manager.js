@@ -1816,7 +1816,9 @@ module.exports = {
                 if (isString && isGoodKey) {
 
                     // $$$ = cheerio.load(value);
+
                     var $$$ = cheerio.load('<div id="temp_wrap"></div>');
+
                     $$$('#temp_wrap').append(value);
                     var $classSelection = $$$(classesToRemove.split(' ').map(function(c) { return '.' + c }).join(', '));
                     var $attrSelection = $$$(attributesToRemove.split(' ').map(function(a) { return '[' + a + ']'; }).join(', '));
