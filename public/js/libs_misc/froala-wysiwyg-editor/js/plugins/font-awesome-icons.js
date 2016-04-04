@@ -212,12 +212,12 @@
         }
 
         function f() {
-            for (var a = '<div style="text-align: center">', c = 0; c < b.opts.fontAwesomeIconsSet.length; c++) 0 !== c && c % b.opts.fontAwesomeIconsStep === 0 && (a += "<br>"), a += '<span class="fr-command fr-fontAwesomeIcon" data-cmd="insertFontAwesomeIcon" title="' + b.language.translate(b.opts.fontAwesomeIconsSet[c].desc) + '" data-param1="' + b.opts.fontAwesomeIconsSet[c].code + '">' + (b.opts.fontAwesomeIconsUseImage ? '<img src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/' + b.opts.fontAwesomeIconsSet[c].code + '.svg"/>' : "&#x" + b.opts.fontAwesomeIconsSet[c].code + ";") + "</span>";
+            for (var a = '<div style="text-align: center">', c = 0; c < b.opts.fontAwesomeIconsSet.length; c++) 0 !== c && c % b.opts.fontAwesomeIconsStep === 0 && (a += "<br>"), a += '<span class="fr-command fr-fontAwesomeIcon fr-emoticon" data-cmd="insertFontAwesomeIcon" title="' + b.language.translate(b.opts.fontAwesomeIconsSet[c].desc) + '" data-param1="' + b.opts.fontAwesomeIconsSet[c].code + '">' + (b.opts.fontAwesomeIconsUseImage ? '<img src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/' + b.opts.fontAwesomeIconsSet[c].code + '.svg"/>' : "&#x" + b.opts.fontAwesomeIconsSet[c].code + ";") + "</span>";
             return b.opts.fontAwesomeIconsUseImage && (a += '<p style="font-size: 12px; text-align: center; padding: 0 5px;">Emoji free by <a href="http://emojione.com/" target="_blank" rel="nofollow">Emoji One</a></p>'), a += "</div>"
         }
 
         function g(c, d) {
-            b.html.insert('<span class="fr-fontAwesomeIcon' + (d ? " fr-fontAwesomeIcon-img" : "") + '"' + (d ? ' style="background: url(' + d + ')"' : "") + ">" + (d ? "&nbsp;" : c) + "</span>" + a.FroalaEditor.MARKERS, !0)
+            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon' + (d ? " fr-fontAwesomeIcon-img fr-emoticon-img" : "") + '"' + (d ? ' style="background: url(' + d + ')"' : "") + ">" + (d ? "&nbsp;" : c) + "</span>" + a.FroalaEditor.MARKERS, !0)
         }
 
         function h() {
