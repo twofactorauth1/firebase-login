@@ -27,7 +27,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     /**
      * Events for compiled editor elememts
      */
-    $rootScope.$on('$ssbMenuOpen', function(event, componentId, editorId, elementId) {
+    $rootScope.$on('$ssbMenuPenVisible', function(event, componentId, editorId, elementId) {
         setPosition();
     });
 
