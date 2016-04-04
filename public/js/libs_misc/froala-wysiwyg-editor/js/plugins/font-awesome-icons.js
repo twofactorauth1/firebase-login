@@ -9,11 +9,11 @@
     } : a(jQuery)
 }(function(a) {
     "use strict";
-    a.extend(a.FE.POPUP_TEMPLATES, {
-        emoticons: "[_BUTTONS_][_EMOTICONS_]"
-    }), a.extend(a.FE.DEFAULTS, {
-        emoticonsStep: 8,
-        emoticonsSet: [{
+    a.extend(a.FroalaEditor.POPUP_TEMPLATES, {
+        fontAwesomeIcons: "[_BUTTONS_][_FONTAWESOMEICONS_]"
+    }), a.extend(a.FroalaEditor.DEFAULTS, {
+        fontAwesomeIconsStep: 8,
+        fontAwesomeIconsSet: [{
             code: "1f600",
             desc: "Grinning face"
         }, {
@@ -182,52 +182,52 @@
             code: "1f637",
             desc: "Face with medical mask"
         }],
-        emoticonsButtons: ["emoticonsBack", "|"],
-        emoticonsUseImage: !0
-    }), a.FE.PLUGINS.emoticons = function(b) {
+        fontAwesomeIconsButtons: ["fontAwesomeIconsBack", "|"],
+        fontAwesomeIconsUseImage: !0
+    }), a.FroalaEditor.PLUGINS.fontAwesomeIcons = function(b) {
         function c() {
-            var a = b.$tb.find('.fr-command[data-cmd="emoticons"]'),
-                c = b.popups.get("emoticons");
+            var a = b.$tb.find('.fr-command[data-cmd="fontAwesomeIcons"]'),
+                c = b.popups.get("fontAwesomeIcons");
             if (c || (c = e()), !c.hasClass("fr-active")) {
-                b.popups.refresh("emoticons"), b.popups.setContainer("emoticons", b.$tb);
+                b.popups.refresh("fontAwesomeIcons"), b.popups.setContainer("fontAwesomeIcons", b.$tb);
                 var d = a.offset().left + a.outerWidth() / 2,
                     f = a.offset().top + (b.opts.toolbarBottom ? 10 : a.outerHeight() - 10);
-                b.popups.show("emoticons", d, f, a.outerHeight())
+                b.popups.show("fontAwesomeIcons", d, f, a.outerHeight())
             }
         }
 
         function d() {
-            b.popups.hide("emoticons")
+            b.popups.hide("fontAwesomeIcons")
         }
 
         function e() {
             var a = "";
-            b.opts.toolbarInline && b.opts.emoticonsButtons.length > 0 && (a = '<div class="fr-buttons fr-emoticons-buttons">' + b.button.buildList(b.opts.emoticonsButtons) + "</div>");
+            b.opts.toolbarInline && b.opts.fontAwesomeIconsButtons.length > 0 && (a = '<div class="fr-buttons fr-fontAwesomeIcons-buttons">' + b.button.buildList(b.opts.fontAwesomeIconsButtons) + "</div>");
             var c = {
                     buttons: a,
-                    emoticons: f()
+                    fontAwesomeIcons: f()
                 },
-                d = b.popups.create("emoticons", c);
-            return b.tooltip.bind(d, ".fr-emoticon"), d
+                d = b.popups.create("fontAwesomeIcons", c);
+            return b.tooltip.bind(d, ".fr-fontAwesomeIcon"), d
         }
 
         function f() {
-            for (var a = '<div style="text-align: center">', c = 0; c < b.opts.emoticonsSet.length; c++) 0 !== c && c % b.opts.emoticonsStep === 0 && (a += "<br>"), a += '<span class="fr-command fr-emoticon" data-cmd="insertEmoticon" title="' + b.language.translate(b.opts.emoticonsSet[c].desc) + '" data-param1="' + b.opts.emoticonsSet[c].code + '">' + (b.opts.emoticonsUseImage ? '<img src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/' + b.opts.emoticonsSet[c].code + '.svg"/>' : "&#x" + b.opts.emoticonsSet[c].code + ";") + "</span>";
-            return b.opts.emoticonsUseImage && (a += '<p style="font-size: 12px; text-align: center; padding: 0 5px;">Emoji free by <a href="http://emojione.com/" target="_blank" rel="nofollow">Emoji One</a></p>'), a += "</div>"
+            for (var a = '<div style="text-align: center">', c = 0; c < b.opts.fontAwesomeIconsSet.length; c++) 0 !== c && c % b.opts.fontAwesomeIconsStep === 0 && (a += "<br>"), a += '<span class="fr-command fr-fontAwesomeIcon" data-cmd="insertFontAwesomeIcon" title="' + b.language.translate(b.opts.fontAwesomeIconsSet[c].desc) + '" data-param1="' + b.opts.fontAwesomeIconsSet[c].code + '">' + (b.opts.fontAwesomeIconsUseImage ? '<img src="https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/' + b.opts.fontAwesomeIconsSet[c].code + '.svg"/>' : "&#x" + b.opts.fontAwesomeIconsSet[c].code + ";") + "</span>";
+            return b.opts.fontAwesomeIconsUseImage && (a += '<p style="font-size: 12px; text-align: center; padding: 0 5px;">Emoji free by <a href="http://emojione.com/" target="_blank" rel="nofollow">Emoji One</a></p>'), a += "</div>"
         }
 
         function g(c, d) {
-            b.html.insert('<span class="fr-emoticon' + (d ? " fr-emoticon-img" : "") + '"' + (d ? ' style="background: url(' + d + ')"' : "") + ">" + (d ? "&nbsp;" : c) + "</span>" + a.FE.MARKERS, !0)
+            b.html.insert('<span class="fr-fontAwesomeIcon' + (d ? " fr-fontAwesomeIcon-img" : "") + '"' + (d ? ' style="background: url(' + d + ')"' : "") + ">" + (d ? "&nbsp;" : c) + "</span>" + a.FroalaEditor.MARKERS, !0)
         }
 
         function h() {
-            b.popups.hide("emoticons"), b.toolbar.showInline()
+            b.popups.hide("fontAwesomeIcons"), b.toolbar.showInline()
         }
 
         function i() {
             b.events.on("html.get", function(c) {
-                for (var d = 0; d < b.opts.emoticonsSet.length; d++) {
-                    var e = b.opts.emoticonsSet[d],
+                for (var d = 0; d < b.opts.fontAwesomeIconsSet.length; d++) {
+                    var e = b.opts.fontAwesomeIconsSet[d],
                         f = a("<div>").html(e.code).text();
                     c = c.split(f).join(e.code)
                 }
@@ -237,13 +237,13 @@
                 if (!b.selection.isCollapsed()) return !1;
                 var c = b.selection.element(),
                     d = b.selection.endElement();
-                if (a(c).hasClass("fr-emoticon")) return c;
-                if (a(d).hasClass("fr-emoticon")) return d;
+                if (a(c).hasClass("fr-fontAwesomeIcon")) return c;
+                if (a(d).hasClass("fr-fontAwesomeIcon")) return d;
                 var e = b.selection.ranges(0),
                     f = e.startContainer;
                 if (f.nodeType == Node.ELEMENT_NODE && f.childNodes.length > 0 && e.startOffset > 0) {
                     var g = f.childNodes[e.startOffset - 1];
-                    if (a(g).hasClass("fr-emoticon")) return g
+                    if (a(g).hasClass("fr-fontAwesomeIcon")) return g
                 }
                 return !1
             };
@@ -251,45 +251,45 @@
                 if (b.keys.isCharacter(d.which) && b.selection.inEditor()) {
                     var e = b.selection.ranges(0),
                         f = c();
-                    f && (0 === e.startOffset ? a(f).before(a.FE.MARKERS + a.FE.INVISIBLE_SPACE) : a(f).after(a.FE.INVISIBLE_SPACE + a.FE.MARKERS), b.selection.restore())
+                    f && (0 === e.startOffset ? a(f).before(a.FroalaEditor.MARKERS + a.FroalaEditor.INVISIBLE_SPACE) : a(f).after(a.FroalaEditor.INVISIBLE_SPACE + a.FroalaEditor.MARKERS), b.selection.restore())
                 }
             }), b.events.on("keyup", function() {
-                for (var c = b.$el.get(0).querySelectorAll(".fr-emoticon"), d = 0; d < c.length; d++) "undefined" != typeof c[d].textContent && 0 === c[d].textContent.replace(/\u200B/gi, "").length && a(c[d]).remove()
+                for (var c = b.$el.get(0).querySelectorAll(".fr-fontAwesomeIcon"), d = 0; d < c.length; d++) "undefined" != typeof c[d].textContent && 0 === c[d].textContent.replace(/\u200B/gi, "").length && a(c[d]).remove()
             })
         }
         return {
             _init: i,
             insert: g,
-            showEmoticonsPopup: c,
-            hideEmoticonsPopup: d,
+            showFontAwesomeIconsPopup: c,
+            hideFontAwesomeIconsPopup: d,
             back: h
         }
-    }, a.FE.DefineIcon("emoticons", {
-        NAME: "smile-o"
-    }), a.FE.RegisterCommand("emoticons", {
-        title: "Emoticons",
+    }, a.FroalaEditor.DefineIcon("fontAwesomeIcons", {
+        NAME: "flag-o"
+    }), a.FroalaEditor.RegisterCommand("fontAwesomeIcons", {
+        title: "Font Awesome Icons",
         undo: !1,
         focus: !0,
         refreshOnCallback: !1,
         popup: !0,
         callback: function() {
-            this.popups.isVisible("emoticons") ? (this.$el.find(".fr-marker") && (this.events.disableBlur(), this.selection.restore()), this.popups.hide("emoticons")) : this.emoticons.showEmoticonsPopup()
+            this.popups.isVisible("fontAwesomeIcons") ? (this.$el.find(".fr-marker") && (this.events.disableBlur(), this.selection.restore()), this.popups.hide("fontAwesomeIcons")) : this.fontAwesomeIcons.showFontAwesomeIconsPopup()
         },
-        plugin: "emoticons"
-    }), a.FE.RegisterCommand("insertEmoticon", {
+        plugin: "fontAwesomeIcons"
+    }), a.FroalaEditor.RegisterCommand("insertFontAwesomeIcon", {
         callback: function(a, b) {
-            this.emoticons.insert("&#x" + b + ";", this.opts.emoticonsUseImage ? "https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/" + b + ".svg" : null), this.emoticons.hideEmoticonsPopup()
+            this.fontAwesomeIcons.insert("&#x" + b + ";", this.opts.fontAwesomeIconsUseImage ? "https://cdnjs.cloudflare.com/ajax/libs/emojione/2.0.1/assets/svg/" + b + ".svg" : null), this.fontAwesomeIcons.hideFontAwesomeIconsPopup()
         }
-    }), a.FE.DefineIcon("emoticonsBack", {
+    }), a.FroalaEditor.DefineIcon("fontAwesomeIconsBack", {
         NAME: "arrow-left"
-    }), a.FE.RegisterCommand("emoticonsBack", {
+    }), a.FroalaEditor.RegisterCommand("fontAwesomeIconsBack", {
         title: "Back",
         undo: !1,
         focus: !1,
         back: !0,
         refreshAfterCallback: !1,
         callback: function() {
-            this.emoticons.back()
+            this.fontAwesomeIcons.back()
         }
     })
 });
