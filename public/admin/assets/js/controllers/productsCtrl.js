@@ -174,7 +174,7 @@
             if (account_cookie === undefined) {
                 var cookieValue = {
                     "socialAccount": socialAccount,
-                    "redirectTo": '/commerce/products',
+                    "redirectTo": '/commerce/products'
                 };
                 ipCookie("socialAccount", cookieValue, {
                     expires: expireTime,
@@ -187,15 +187,21 @@
                 });
                 var cookieValue = {
                     "socialAccount": socialAccount,
-                    "redirectTo": '/commerce/products',
+                    "redirectTo": '/commerce/products'
                 };
                 ipCookie("socialAccount", cookieValue, {
                     expires: expireTime,
                     path: "/"
                 });
             }
+            var _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/' + socialAccount.toLowerCase() + '/connect/';
+            if (socialAccount === 'Paypal') {
+                //$state.go('app.support.helptopics');
+                //return;
+                _redirectUrl = '/admin/#/support/help-topics?title=adding-paypal-as-an-payment-option'
+            }
 
-            window.location = '/redirect/?next=' + $scope.currentHost + '/' + socialAccount.toLowerCase() + '/connect/';
+            window.location = _redirectUrl;
         };
 
     }]);
