@@ -20,6 +20,20 @@
         border: 1px dashed #eda200 !important;
     }
 
+    .ssb-media-query-small-only({
+        .ssb-page-section-layout-header [navigation-component] {
+            .navbar-header {
+                .navbar-toggle {
+                    position: absolute;
+                    right: 0;
+                    z-index: 999;
+                    margin-top: 10px !important;
+                }
+            }
+        }
+    });
+
+
     .ssb-media-query-medium({
         .ssb-page-section-layout-header-v1 [navigation-component] {
             margin-right: calc(~"-50% + 20em");
@@ -219,8 +233,6 @@
                     float: none !important;
                     min-height: 150px;
                     .navbar-toggle {
-                        margin-top: 50px;
-
                         @media screen and (max-width: 767px) {
                             position: absolute;
                             right: 0;
@@ -276,22 +288,6 @@
                         display: block;
                     }
                 }
-                @media (max-width: 625px) {
-                    .navbar-brand img {
-                        max-width: 250px;
-                    }
-                }
-                @media (max-width: 796px) {
-                    .navbar-header {
-                        margin-left: 0px;
-                        margin-right: 0px;
-                    }
-                }
-            }
-            @media (min-width: 1600px) {
-                .container {
-                  width: 90%;
-                }
             }
         }
     }
@@ -308,6 +304,14 @@
             .navbar-header{
                 float: right;
             }
+            .ssb-media-query-small-only({
+                .navbar-collapse{
+                    float: none;
+                }
+                .navbar-header{
+                    float: none;
+                }
+            });
         }
     }
 
@@ -371,6 +375,14 @@
             float: left;
             width:50%;
         }
+        .ssb-media-query-small-only({
+            .ssb-component.ssb-navigation{
+                width:100%;
+            }
+            .ssb-component.ssb-social-link{
+                width:100%;
+            }
+        });
 
     }
 
@@ -399,6 +411,14 @@
             float: right;
             width:50%;
         }
+        .ssb-media-query-small-only({
+            .ssb-component.ssb-navigation{
+                width:100%;
+            }
+            .ssb-component.ssb-social-link{
+                width:100%;
+            }
+        });
     }
 
     /*
@@ -430,6 +450,14 @@
             float: right;
             width:50%;
         }
+        .ssb-media-query-small-only({
+            .ssb-component.ssb-navigation{
+                width:100%;
+            }
+            .ssb-component.ssb-social-link{
+                width:100%;
+            }
+        });
     }
 
     /*
@@ -499,6 +527,14 @@
             float: right;
             width:50% !important;
         }
+        .ssb-media-query-small-only({
+            .ssb-component.ssb-ssb-text{
+                width:100% !important;
+            }
+            .ssb-component.ssb-navigation{
+                width:100% !important;
+            }
+        });
     }
 
     /*
@@ -525,6 +561,14 @@
             float: left;
             width:50% !important;
         }
+        .ssb-media-query-small-only({
+            .ssb-component.ssb-ssb-text{
+                width:100% !important;
+            }
+            .ssb-component.ssb-navigation{
+                width:100% !important;
+            }
+        });
     }
 
     /*
@@ -594,6 +638,14 @@
             padding: 5px !important;
             padding-bottom: 0 !important;
         }
+        .ssb-media-query-small-only({
+           .ssb-component.ssb-ssb-text{
+                width:100%;
+            }
+            .ssb-component.ssb-navigation{
+                width:100%;
+            }
+        });
     }
 
     /*
@@ -620,5 +672,13 @@
             padding: 5px !important;
             padding-bottom: 0 !important;
         }
+        .ssb-media-query-small-only({
+           .ssb-component.ssb-ssb-text{
+                width:100%;
+            }
+            .ssb-component.ssb-navigation{
+                width:100%;
+            }
+        });
     }
 }
