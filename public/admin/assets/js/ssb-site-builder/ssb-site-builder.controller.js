@@ -599,7 +599,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * TODO: handle undo in Froala
      */
     function pageChanged(originalPage, currentPage) {
-        if (!angular.equals(originalPage, currentPage)) {
+        if (!angular.equals(originalPage, currentPage) && !vm.state.pendingPageChanges) {
             var originalPage = JSON.parse(angular.toJson(originalPage));
             var currentPage = JSON.parse(angular.toJson(currentPage));
             var jsondiff1 = DeepDiff.diff(originalPage, currentPage);
@@ -622,9 +622,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                 angular.isDefined(diff1) &&
                                 angular.isDefined(diff1.indexOf) &&
                                 diff1.indexOf('data-compiled') === -1 &&
+                                diff1.indexOf('ssb-theme-btn') !== -1 &&
                                 angular.isDefined(diff2) &&
                                 angular.isDefined(diff2.indexOf) &&
-                                diff2.indexOf('data-compiled') !== -1
+                                diff2.indexOf('data-compiled') !== -1 &&
+                                diff2.indexOf('ssb-theme-btn') !== -1
                     };
 
                     var dataCompiledRemoved = function() {
@@ -633,9 +635,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                 angular.isDefined(diff1) &&
                                 angular.isDefined(diff1.indexOf) &&
                                 diff1.indexOf('data-compiled') !== -1 &&
+                                diff1.indexOf('ssb-theme-btn') !== -1 &&
                                 angular.isDefined(diff2) &&
                                 angular.isDefined(diff2.indexOf) &&
-                                diff2.indexOf('data-compiled') === -1;
+                                diff2.indexOf('data-compiled') === -1 &&
+                                diff2.indexOf('ssb-theme-btn') !== -1
                     };
 
                     if (dataCompiledAdded() || dataCompiledRemoved()) {
