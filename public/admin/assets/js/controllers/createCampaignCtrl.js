@@ -1046,6 +1046,31 @@
       $scope.newCampaignObj.contactTags = $scope.getSelectedTags();
     };
 
+    $scope.updateTagsFn = function (recipients) {
+      if (!$scope.tagging.tags.length) {
+        return;
+      }
+      CustomerService.getCustomers(function (customers) {
+        $scope.customers = customers;
+        var tags = _.uniq(_.pluck($scope.tagging.tags, 'data'));
+        recipients.forEach(function(id, index) {
+          var c = _.findWhere($scope.customers, {_id: id});
+          if (c) {
+            if ($scope.tagging.operation == 'add') {
+              if (c.tags) {
+                c.tags = c.tags.concat(tags);
+              } else {
+                c.tags = tags;
+              }
+            } else if ($scope.tagging.operation == 'set') {
+              c.tags = tags;
+            }
+            CustomerService.saveCustomer(c, function() {});
+          }
+        });
+      });
+    };
+
     /*
      * @addContacts
      * -
@@ -1072,6 +1097,7 @@
       var contactsArr = recipientsIdArr;
 
       $scope.newCampaignObj.contacts = contactsArr;
+      $scope.updateTagsFn($scope.newCampaignObj.contacts);
     };
 
     /*
