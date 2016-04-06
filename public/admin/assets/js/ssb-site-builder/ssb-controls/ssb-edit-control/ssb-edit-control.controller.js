@@ -175,7 +175,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
 
         var previousActiveElement = vm.uiState.activeElementHistory[vm.uiState.activeElementHistory.length - 1];
 
-        if (angular.isDefined(vm.uiState.activeElement.type)) {
+        if (vm.uiState.activeElement && vm.uiState.activeElement.type) {
             vm.uiState.activeElementHistory.push(vm.uiState.activeElement);
         } else {
             vm.uiState.activeElement = previousActiveElement;
