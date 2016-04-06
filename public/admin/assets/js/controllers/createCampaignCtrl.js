@@ -7,6 +7,7 @@
      * set editor theme
      */
     editableOptions.theme = 'bs3';
+    $scope.tagging = {};
 
     $scope.existingEmail = {};
     $scope.isCampainDirty = {
@@ -54,6 +55,10 @@
     }];
 
     $scope.emails = [];
+
+    CustomerService.getCustomerTags(function(tags){
+      $scope.customerTags = tags;
+    });
 
     $scope.formatDate = function (date) {
 
@@ -171,7 +176,7 @@
         // "title": "<h2 class='center'>New Email</h2>",
         // "subtitle": "subtitle",
         // "text": "This is your new email",
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -194,7 +199,7 @@
         "title": '<h2 style="text-align:center;">One Column Layout Section</h2>',
         // "subtitle": "subtitle",
         "text": '<p style="text-align:center;">This is a single column content section.</p>',
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -217,7 +222,7 @@
         // "subtitle": "subtitle",
         "text1": '<p style="text-align:center;">This is column 1.</p>',
         "text2": '<p style="text-align:center;">This is column 2.</p>',
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -241,7 +246,7 @@
         "text1": '<p style="text-align:center;">This is column 1.</p>',
         "text2": '<p style="text-align:center;">This is column 2.</p>',
         "text3": '<p style="text-align:center;">This is column 3.</p>',
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -264,7 +269,7 @@
         // "title": "<h2 class='center'>New Email</h2>",
         // "subtitle": "subtitle",
         "text": "This is an email footer.",
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -633,7 +638,7 @@
      */
     $scope.clearEmail = function (newEmail) {
       $scope.checkingEmailTitle = false;
-      $scope.actualEmailToSend = null;    
+      $scope.actualEmailToSend = null;
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
         $scope.setBusinessDetails(newEmail);
@@ -649,7 +654,7 @@
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
-        
+
         $timeout(function() {
           $scope.actualEmailToSend = angular.copy($scope.emailToSend);
         }, 500);
@@ -816,7 +821,7 @@
           fullContacts.push(customer);
         }
       });
-      
+
       return fullContacts;
     };
 
@@ -939,7 +944,7 @@
       $scope.changesConfirmed = true;
       var actionFn = update ? 'updateCampaign' : 'createCampaign';
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
-      
+
       $scope.checkAndCreateCustomer(function (createdContactsArr) {
         $scope.addContacts(createdContactsArr);
         if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
@@ -1292,22 +1297,22 @@
      * - TODO: check name exists
      */
     $scope.createDuplicateCampaign = function (newCampaign) {
-        
+
               if ($scope.newCampaignObj._id) {
-                CampaignService.checkCampaignNameExists(newCampaign.name, function (exists) {          
+                CampaignService.checkCampaignNameExists(newCampaign.name, function (exists) {
                   $scope.campaignDuplicateNameChecked = true;
                   $scope.checkingDuplicateCampaignName = false;
                   $scope.campaignDuplicateNameExists = exists;
-                  if(!exists){                    
+                  if(!exists){
                     $scope.saveDuplicateCampaign(newCampaign);
                   }
                 });
               } else {
                 toaster.pop('error', 'Error', 'Please save this campaign before duplicating');
               }
-          
-        
-     
+
+
+
     };
 
     /*
@@ -1447,7 +1452,7 @@
       var promise = AccountService.getAccount(function (_account) {
         $scope.account = _account;
         $scope.setBusinessDetails();
-        
+
         $timeout(function() {
           $scope.actualEmailToSend = angular.copy($scope.emailToSend);
         }, 500);
@@ -1480,7 +1485,7 @@
           console.log('email not found');
         }
 
-        $scope.emailToSendPrevious = $scope.emails[0];        
+        $scope.emailToSendPrevious = $scope.emails[0];
       });
 
       return promise;
@@ -1676,7 +1681,7 @@
       }
     };
 
-   
+
     $scope.checkIfDirty = function(){
       var returnValue = false;
       returnValue = $scope.isEditable && $scope.pendingChanges();
@@ -1705,6 +1710,14 @@
         }
       }
     }
+
+    $scope.tagToCustomer = function(value) {
+     return CustomerService.tagToCustomer(value);
+    };
+
+    $scope.formatTagsFn = function () {
+      return _.uniq(_.pluck($scope.tagging.tags, 'label')).join(', ');
+    };
     /*
      * @init
      * - Set page context (if creating or loading existing campaign).
