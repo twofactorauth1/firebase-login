@@ -65,18 +65,21 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
         $scope.pvm = pvm;
 
-
-        var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(activeElement) {
-            if (activeElement) {
-                if (activeElement.id === vm.elementData.id) {
-                    if (!angular.equals(vm.elementDataOriginal, activeElement)) {
-                        console.log('changed activeElement.id:', activeElement.id)
-                        vm.elementData = activeElement;
-                        updateSettingsForModel();
+        if (pvm) {
+            var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(activeElement) {
+                if (activeElement) {
+                    if (activeElement.id === vm.elementData.id) {
+                        if (!angular.equals(vm.elementDataOriginal, activeElement)) {
+                            console.log('changed activeElement.id:', activeElement.id)
+                            vm.elementData = activeElement;
+                            updateSettingsForModel();
+                        }
                     }
                 }
-            }
-        }, true);
+            }, true);
+        }
+
+        return pvm;
 
     }
 
@@ -84,7 +87,11 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
         var data = {};
 
-        setupActiveElementWatch();
+        var editingEnabled = setupActiveElementWatch();
+
+        if (!editingEnabled) {
+            return false;
+        }
 
         if (vm.isNestedModelProp) {
 
