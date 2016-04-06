@@ -58,11 +58,15 @@ var dao = {
         async.eachSeries(sectionAry, function(section, cb){
             self.log.debug('Section:', section);
             if(section._id) {
-                self.findOne({"_id":section._id}, $$.m.ssb.Section, function(err, section){
+                self.findOne({"_id":section._id}, $$.m.ssb.Section, function(err, deReffed){
                     if(err) {
                         cb(err);
+                    } else if(deReffed){
+                        deReffedAry.push(deReffed);
+                        cb();
                     } else {
-                        deReffedAry.push(section);
+                        //brand new section
+                        deReffedAry.push(new $$.m.ssb.Section(section));
                         cb();
                     }
                 });
