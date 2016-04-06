@@ -1006,6 +1006,7 @@
         function getSpectrumColorOptions() {
             return {
                 showPalette: true,
+                showAlpha: true,
                 clickoutFiresChange: true,
                 showInput: true,
                 showButtons: true,
