@@ -55,7 +55,7 @@
         }
 
         function g(d) {
-            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span class='fa fa-" + d + "'>&#8203;</span>" + "</span>" + a.FroalaEditor.MARKERS, !0)
+            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span class='fa fa-" + d + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, !0)
         }
 
         function h() {
@@ -105,7 +105,7 @@
     }, a.FroalaEditor.DefineIcon("fontAwesomeIcons", {
         NAME: "flag"
     }), a.FroalaEditor.RegisterCommand("fontAwesomeIcons", {
-        title: "Font Awesome Icons",
+        title: "Insert Icon",
         undo: !1,
         focus: !0,
         refreshOnCallback: !1,

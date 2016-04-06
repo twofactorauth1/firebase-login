@@ -20,9 +20,9 @@ var toolbarbuttons = [
         'insertVideo',
         'insertFile',
         'insertTable',
+        'fontAwesomeIcons',
         'undo',
-        'redo',
-        'fontAwesomeIcons'
+        'redo'
         // 'clearFormatting',
         // 'selectAll'
     ];
