@@ -71,7 +71,7 @@
                 <div class="col-xs-12 col-sm-6 col-md-4 masonry-brick" ng-repeat="post in displayFeed | orderByArrayLength:orderByAttribute track by $index">
                     <facebook-post ng-if="post.type == 'fb'" post="post" action-like="showLikeModal(aPost)" action-comment="showCommentModal(aPost)"></facebook-post>
                     <twitter-feed ng-if="post.type == 'tw' && post.postType == 'tweet'" post="post" action-favorite="showFavModal(aPost)" action-reply="showTweetModal(aPost)" action-retweet="showRetweetModal(aPost)" action-direct-message="showTweetDMModal(aPost)" show-dm='isTwFollowerFn(post.from.sourceId)'></twitter-feed>
-                    <twitter-follower ng-if="post.type == 'tw' && post.postType == 'follower'" post="post" action-tweet-at="showTweetModal(aFollower)" action-follow-back="showFollowModal(aFollower)" action-direct-message="showTweetDMModal(aFollower)"></twitter-follower>
+                    <twitter-follower ng-if="post.type == 'tw' && post.postType == 'follower'" post="post" action-tweet-at="showTweetModal(aFollower)" action-follow-back="showFollowModal(aFollower)" action-direct-message="showTweetDMModal(aFollower)" show-dm='isTwFollowerFn(post.sourceId)'></twitter-follower>
                 </div>
             </div>
             <div ng-show="feed.length <= 0 && isLoaded">
