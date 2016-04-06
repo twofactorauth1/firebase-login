@@ -1,3 +1,4 @@
 <div>
-<div elem ng-model="vm.component.text" class-name="table-scroll"></div>
+    <div ng-if="vm.component.version == 1" elem ng-model="vm.component.text" class-name="table-scroll"></div>
+    <div ng-if="vm.component.version == 2" elem ng-model="vm.component.btn" class-name="table-scroll"></div>
 </div>
