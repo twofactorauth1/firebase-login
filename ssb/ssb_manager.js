@@ -937,7 +937,16 @@ module.exports = {
                 self.log.info('updateSections');
                 var otherPagesWithSectionReferences = [];
                 async.eachSeries(dereferencedSections, function(section, callback){
-                    var existingSection = _.find(existingSections, function(existingSection){self.log.debug('existing section?', existingSection);return section.id() === existingSection.id()});
+
+                    var existingSection = _.find(existingSections, function(existingSection) {
+                        self.log.debug('existing section?', existingSection);
+                        if (existingSection && existingSection.id) {
+                            return section.id() === existingSection.id()
+                        } else {
+                            return false
+                        }
+                    });
+
                     if(existingSection) {
                         if(!_.isEqual(existingSection, section)){
 
