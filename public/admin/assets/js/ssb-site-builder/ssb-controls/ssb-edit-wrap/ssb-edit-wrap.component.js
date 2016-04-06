@@ -2,9 +2,9 @@
 
 app.directive('ssbEditWrap', ssbEditWrap);
 
-ssbEditWrap.$inject = ['$rootScope', '$compile', '$timeout'];
+ssbEditWrap.$inject = ['$rootScope', '$compile', '$timeout', 'SimpleSiteBuilderService'];
 /* @ngInject */
-function ssbEditWrap($rootScope, $compile, $timeout) {
+function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
     return {
         restrict: 'C',
@@ -13,24 +13,25 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
             var isSection = element.hasClass('ssb-page-section');
             var isComponent = element.hasClass('component-wrap');
             var isElement = element.hasClass('ssb-element');
+            var compileInProcess = false;
 
             (function setupEvents() {
 
-                element.on('mouseover', handleSectionOrComponentMouseOver);
+                element.on('mouseover', handleMouseOver);
 
                 element.on('mouseleave', handleSectionOrComponentMouseLeave);
 
-                element.on('click', handleSectionOrComponentClick);
+                element.on('click', handleClick);
 
-                $(element).on('mouseover', '[data-edit]', handleComponentAreaMouseOver);
+                $(element).on('mouseover', '[data-edit]', handleComponentPartialAreaMouseOver);
 
-                $(element).on('mouseleave', '[data-edit]', handleComponentAreaMouseLeave);
+                $(element).on('mouseleave', '[data-edit]', handleComponentPartialAreaMouseLeave);
 
-                $(element).on('click', '[data-edit]', handleComponentAreaClick);
+                $(element).on('click', '[data-edit]', handleComponentPartialAreaClick);
 
             })();
 
-            function handleSectionOrComponentMouseOver(e) {
+            function handleMouseOver(e) {
 
                 //ignore if clicked on a control
                 if ($(e.target).hasClass('ssb-edit-control') ||
@@ -57,67 +58,82 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
                 } else if (isElement) {
 
-                    var el = angular.element(e.currentTarget);
-                    var hasActiveEditControl = el.hasClass('ssb-active-edit-control');
-                    if (!hasActiveEditControl) {
-                        e.stopPropagation();
-
-                        angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
-
-                        // console.log('hovered over part of a component yay!', e.currentTarget);
-                        var isList = el.is('ul') || el.is('ol');
-                        var componentScope = el.closest('.ssb-component').scope();
-                        var editableTitleText = componentScope.vm.component.type;
-                        var hasEditableCover = el.children('.editable-cover').length > 0;
-                        var hasEditControl = el.prev('ssb-edit-control').length > 0;
-
-                        el.addClass('ssb-on');
-
-                        if (!hasEditableCover) {
-                            el.append(
-                                '<span id="editable_cover_' + componentScope.vm.component._id + '" class="editable-cover"></span>' +
-                                '<span id="editable_title_' + componentScope.vm.component._id + '"class="editable-title">' + editableTitleText + '</span>'
-                            )
-                        }
-
-                        if (!hasEditControl) {
-                            var template = '<ssb-edit-control ' +
-                                                'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-element" ' +
-                                                'component="ssbElement" ' +
-                                                'state="vm.state" ' +
-                                                'ui-state="vm.uiState" ' +
-                                                'section-index="null" ' +
-                                                'component-index="null">' +
-                                            '</ssb-edit-control>';
-                            componentScope.ssbElement = { title: 'Text Element', type: 'Text Element' };
-                            $compile(template)(componentScope, function(clonedEditControl, scope) {
-                                compiledEditControl(el, clonedEditControl);
-                            });
-                        }
-                    }
+                    handleElementMouseOver(e);
 
                 }
 
             }
 
-            function handleComponentAreaMouseOver(e) {
 
-                // console.log('handleComponentAreaMouseOver', e.target);
-                // console.log('handleComponentAreaMouseOver', e.currentTarget);
+            function handleElementMouseOver(e) {
 
                 var el = angular.element(e.currentTarget);
                 var hasActiveEditControl = el.hasClass('ssb-active-edit-control');
+
                 if (!hasActiveEditControl) {
                     e.stopPropagation();
 
-                    angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+                    hideHoverControls();
+                    // angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
 
-                    // console.log('hovered over part of a component yay!', e.currentTarget);
                     var isList = el.is('ul') || el.is('ol');
                     var componentScope = el.closest('.ssb-component').scope();
+
+                    if (!componentScope) {
+                        return
+                    }
+
+                    var editableTitleText = componentScope.vm.component.type;
+
+                    el.addClass('ssb-on');
+
+                    var hasEditControl = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]').length > 0;
+
+                    if (!hasEditControl && !compileInProcess) {
+                        compileInProcess = true;
+                        var tempUUID = SimpleSiteBuilderService.getTempUUID();
+
+                        el.attr('data-edit-id', tempUUID);
+
+                        var template = '<ssb-edit-control ' +
+                                            'data-control-id="control_' + tempUUID + '" ' +
+                                            'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-element" ' +
+                                            'component="ssbElement" ' +
+                                            'state="vm.state" ' +
+                                            'ui-state="vm.uiState" ' +
+                                            'section-index="null" ' +
+                                            'component-index="null">' +
+                                        '</ssb-edit-control>';
+                        componentScope.ssbElement = { title: 'Text Element', type: 'Text Element' };
+                        $compile(template)(componentScope, function(clonedEditControl, scope) {
+                            compiledEditControl(el, clonedEditControl);
+                        });
+                    }
+                }
+
+            }
+
+
+            function handleComponentPartialAreaMouseOver(e) {
+
+                var el = angular.element(e.currentTarget);
+                var hasActiveEditControl = el.hasClass('ssb-active-edit-control');
+
+                if (!hasActiveEditControl) {
+                    e.stopPropagation();
+
+                    hideHoverControls();
+                    // angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+
+                    var isList = el.is('ul') || el.is('ol');
+                    var componentScope = el.closest('.ssb-component').scope();
+
+                    if (!componentScope) {
+                        return
+                    }
+
                     var editableTitleText = componentScope.vm.component.type;
                     var hasEditableCover = el.children('.editable-cover').length > 0;
-                    var hasEditControl = el.prev('ssb-edit-control').length > 0;
 
                     el.addClass('ssb-on');
 
@@ -135,8 +151,16 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
                         }
                     }
 
-                    if (!hasEditControl) {
+                    var hasEditControl = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]').length > 0;
+
+                    if (!hasEditControl && !compileInProcess) {
+                        compileInProcess = true;
+                        var tempUUID = SimpleSiteBuilderService.getTempUUID();
+
+                        el.attr('data-edit-id', tempUUID);
+
                         var template = '<ssb-edit-control ' +
+                                            'data-control-id="control_' + tempUUID + '" ' +
                                             'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-area" ' +
                                             'component="vm.component" ' +
                                             'state="vm.state" ' +
@@ -148,6 +172,7 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
                             compiledEditControl(el, clonedEditControl);
                         });
                     }
+
                 }
 
             }
@@ -160,7 +185,7 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
             }
 
-            function handleComponentAreaMouseLeave(e) {
+            function handleComponentPartialAreaMouseLeave(e) {
 
                 var el = angular.element(e.currentTarget);
                 el.removeClass('ssb-on');
@@ -169,7 +194,7 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
             }
 
-            function handleSectionOrComponentClick(e) {
+            function handleClick(e) {
 
                 //ignore if clicked on a control
                 if ($(e.target).hasClass('ssb-edit-control') ||
@@ -179,7 +204,6 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
                     return;
                 }
-
 
                 e.preventDefault();
 
@@ -195,15 +219,7 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
                         return;
                     }
 
-                    //hide editable-title
-                    angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
-
-                    //hide all edit-controls
-                    angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
-                    angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
-
-
-                    angular.element('.ssb-component').removeClass('ssb-active-component');
+                    hideAllControls();
 
                     //get related component data
                     var clickedComponentScope = clickedComponent.scope();
@@ -217,93 +233,26 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
                         clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
                         clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
+                        clickedComponentScope.vm.uiState.activeElement = {};
                     }
 
                     //show edit-control for this section|component|element
                     if (isSection) {
-                        el.scope().vm.uiState.hoveredSectionIndex = undefined;
-                        el.scope().vm.uiState.hoveredComponentIndex = undefined;
-                        el.scope().vm.uiState.hoveredComponentEl = undefined;
-                        el.addClass('ssb-active-edit-control');
 
-                        $timeout(function() {
-                            el.find('> ssb-edit-control').addClass('ssb-on');
-                        }, 500);
-
-                        //if contextual menu is already open, open directly from single click
-                        if (el.scope().vm.uiState.showSectionPanel) {
-                            el.find('> ssb-edit-control .ssb-settings-btn').click();
-                        }
-
+                        handleSectionClick(e, el);
 
                     } else if (isComponent) {
 
-                        e.stopPropagation();
-
-                        $timeout(function() {
-                            var editControlComponent = el.parent().prev('.ssb-edit-control-component');
-
-                            editControlComponent.addClass('ssb-active-edit-control');
-                            clickedComponent.addClass('ssb-active-component');
-
-                            /**
-                             * set hovered edit control on uiState
-                             */
-                            clickedComponentScope.vm.uiState.hoveredComponentEditControl = editControlComponent;
-
-                            /**
-                             find index of section based on component _id
-                             */
-
-
-                            clickedComponentScope.vm.uiState.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
-                                .pluck('components')
-                                .map(function(components){
-                                    return _.pluck(components, '_id')
-                                })
-                                .findIndex(function(component) {
-                                    return -1 !== _.indexOf(component, clickedComponentData._id)
-                                })
-                                .value()
-
-                            /**
-                             find index of component based on component _id
-                             */
-                            clickedComponentScope.vm.uiState.hoveredComponentIndex = _(clickedComponentScope.vm.state.page.sections[clickedComponentScope.vm.uiState.hoveredSectionIndex].components).chain()
-                                .findIndex(function(component) {
-                                    return component._id === clickedComponentData._id
-                                })
-                                .value()
-
-                            /**
-                             * set current el on uiState
-                             */
-                            clickedComponentScope.vm.uiState.hoveredComponentEl = el;
-
-                            //if contextual menu is already open, open directly from single click
-                            if (clickedComponentScope.vm.uiState.showSectionPanel) {
-                                editControlComponent.find('.ssb-settings-btn').click();
-                            } else {
-                                // editControlComponent.addClass('ssb-on');
-                            }
-
-                        }, 100);
-
-
-                        $rootScope.$broadcast('$ssbMenuPenVisible');
-
-                        //if contextual menu is already open, open directly from single click
-                        if (clickedComponentScope.vm.uiState.showSectionPanel) {
-                            editControlComponent.find('.ssb-settings-btn').click();
-                        } else {
-                            // editControlComponent.addClass('ssb-on');
-                        }
+                        handleComponentClick(e, el);
 
                     }
 
                 } else if (isElement) {
 
-                    showElementEditControl(el, clickedComponent, clickedComponentScope);
+                    if (el.find('.ssb-active-component').length === 0) {
+                        e.stopPropagation();
+                        handleElementClick(el, el.closest('.ssb-component'));
+                    }
 
                 } else {
 
@@ -314,7 +263,100 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
             }
 
-            function handleComponentAreaClick(e) {
+            function handleSectionClick(e, el) {
+
+                el.scope().vm.uiState.hoveredSectionIndex = undefined;
+                el.scope().vm.uiState.hoveredComponentIndex = undefined;
+                el.scope().vm.uiState.hoveredComponentEl = undefined;
+                el.addClass('ssb-active-edit-control');
+
+                $timeout(function() {
+                    el.find('> ssb-edit-control').addClass('ssb-on');
+                }, 500);
+
+                //if contextual menu is already open, open directly from single click
+                if (el.scope().vm.uiState.showSectionPanel) {
+                    $timeout(function() {
+                        el.find('> ssb-edit-control .ssb-settings-btn').click();
+                    });
+                }
+
+            }
+
+            function handleComponentClick(e, el) {
+                e.stopPropagation();
+
+                $timeout(function() {
+                    var editControlComponent = el.parent().prev('.ssb-edit-control-component:not[.ssb-edit-control-element]');
+                    var editControlId = editControlComponent.attr('data-control-id');
+                    var uiStateObj = {};
+
+                    editControlComponent.addClass('ssb-active-edit-control');
+                    clickedComponent.addClass('ssb-active-component');
+
+                    /**
+                     * set hovered edit control on uiState
+                     */
+                    uiStateObj.hoveredComponentEditControl = editControlComponent;
+
+                    /**
+                     find index of section based on component _id
+                     */
+                    uiStateObj.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
+                        .pluck('components')
+                        .map(function(components){
+                            return _.pluck(components, '_id')
+                        })
+                        .findIndex(function(component) {
+                            return -1 !== _.indexOf(component, clickedComponentData._id)
+                        })
+                        .value()
+
+                    /**
+                     find index of component based on component _id
+                     */
+                    uiStateObj.hoveredComponentIndex = _(clickedComponentScope.vm.state.page.sections[uiStateObj.hoveredSectionIndex].components).chain()
+                        .findIndex(function(component) {
+                            return component._id === clickedComponentData._id
+                        })
+                        .value()
+
+                    /**
+                     * set current el on uiState
+                     */
+                    uiStateObj.hoveredComponentEl = el;
+
+                    /**
+                     * update uiState
+                     */
+                    $rootScope.$broadcast('$ssbUpdateUiState', uiStateObj);
+
+                    /**
+                     * show menu pen
+                     */
+                    $rootScope.$broadcast('$ssbMenuPenVisibleForComponent', editControlId, 'component');
+
+                    /*
+                     * if contextual menu is already open, open directly from single click
+                     */
+                    if (clickedComponentScope.vm.uiState.showSectionPanel) {
+                        $timeout(function() {
+                            editControlComponent.find('.ssb-settings-btn').click();
+                        });
+                    }
+
+                }, 100);
+
+                //if contextual menu is already open, open directly from single click
+                if (clickedComponentScope.vm.uiState.showSectionPanel) {
+                    $timeout(function() {
+                        editControlComponent.find('.ssb-settings-btn').click();
+                    });
+                }
+
+            }
+
+            function handleComponentPartialAreaClick(e) {
 
                 e.preventDefault();
 
@@ -322,7 +364,8 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
                 var targetEl = angular.element(e.target);
 
                 if (el.hasClass('ssb-active-edit-control') ||
-                    targetEl.hasClass('ssb-active-edit-control')) {
+                    targetEl.hasClass('ssb-active-edit-control') ||
+                    el.hasClass('ssb-element')) {
 
                     e.stopPropagation();
                     return false;
@@ -337,34 +380,28 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
                     var clickedComponentScope = el.closest('.ssb-component').scope();
                     var clickedComponentData = clickedComponentScope.vm.component;
+                    var editControlComponent = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]');
+                    var editControlId = editControlComponent.attr('data-control-id');
+                    var uiStateObj = {}
 
-                    //hide editable-title
-                    angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
-
-                    //hide all edit-controls
-                    angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
-                    angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
-
-                    //remove component active border
-                    angular.element('.ssb-component').removeClass('ssb-active-component');
+                    hideAllControls();
 
                     //reset uiState
-                    // clickedComponentScope.vm.uiState.activeSectionIndex = undefined;
-                    // clickedComponentScope.vm.uiState.activeComponentIndex = undefined;
-                    clickedComponentScope.vm.uiState.hoveredSectionIndex = undefined;
-                    clickedComponentScope.vm.uiState.hoveredComponentIndex = undefined;
-                    clickedComponentScope.vm.uiState.hoveredComponentEl = undefined;
-                    clickedComponentScope.vm.uiState.hoveredComponentEditControl = undefined;
+                    uiStateObj.hoveredSectionIndex = undefined;
+                    uiStateObj.hoveredComponentIndex = undefined;
+                    uiStateObj.hoveredComponentEl = undefined;
+                    uiStateObj.hoveredComponentEditControl = undefined;
+                    uiStateObj.activeElement = {};
 
                     /**
                      * set hovered edit control on uiState
                      */
-                    clickedComponentScope.vm.uiState.hoveredComponentEditControl = el.prev('ssb-edit-control');
+                    uiStateObj.hoveredComponentEditControl = editControlComponent;
 
                     /**
                      * find index of section based on component _id
                      */
-                    clickedComponentScope.vm.uiState.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
+                    uiStateObj.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
                         .pluck('components')
                         .map(function(components){
                             return _.pluck(components, '_id')
@@ -377,29 +414,46 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
                     /**
                      * find index of component based on component _id
                      */
-                    clickedComponentScope.vm.uiState.hoveredComponentIndex = _(clickedComponentScope.vm.state.page.sections[clickedComponentScope.vm.uiState.hoveredSectionIndex].components).chain()
+                    uiStateObj.hoveredComponentIndex = _(clickedComponentScope.vm.state.page.sections[uiStateObj.hoveredSectionIndex].components).chain()
                         .findIndex(function(component) {
                             return component._id === clickedComponentData._id
                         })
                         .value()
 
                     /**
-                     * set current el on uiState
+                     * current hovered el on uiState
                      */
-                    clickedComponentScope.vm.uiState.hoveredComponentEl = el;
+                    uiStateObj.hoveredComponentEl = el;
 
-                    $rootScope.$broadcast('$ssbMenuPenVisible');
+                    /**
+                     * update uiState
+                     */
+                    $rootScope.$broadcast('$ssbUpdateUiState', uiStateObj);
 
-                    //highlight component area
+                    /**
+                     * show menu pen
+                     */
+                    $rootScope.$broadcast('$ssbMenuPenVisibleForComponentPartialArea', editControlId, 'component-partial-area');
+
+                    /**
+                     * highlight component area
+                     */
                     el.addClass('ssb-active-edit-control');
 
+                    /**
+                     * show pen
+                     */
                     $timeout(function() {
-                        el.prev('ssb-edit-control').addClass('ssb-on');
+                        editControlComponent.addClass('ssb-on');
                     }, 500);
 
-                    //if contextual menu is already open, open directly from single click
+                    /*
+                     * if contextual menu is already open, open directly from single click
+                     */
                     if (clickedComponentScope.vm.uiState.showSectionPanel) {
-                        el.prev('ssb-edit-control').find('.ssb-settings-btn').click();
+                        $timeout(function() {
+                            editControlComponent.find('.ssb-settings-btn').click();
+                        });
                     }
 
 
@@ -411,45 +465,83 @@ function ssbEditWrap($rootScope, $compile, $timeout) {
 
             function compiledEditControl(el, clonedEditControl) {
 
-                console.log('compiled edit control for component area');
-
-                var clickedComponentScope = el.closest('.ssb-component').scope();
-
                 $timeout(function() {
-                    el.before(clonedEditControl);
+
+                    if (el.hasClass('ssb-element')) {
+                        el.closest('.ssb-component').before(clonedEditControl);
+                    } else {
+                        el.before(clonedEditControl);
+                    }
+
+                    compileInProcess = false;
                 });
 
             }
 
-            function showElementEditControl(el, clickedComponent, clickedComponentScope) {
+            function handleElementClick(el, clickedComponent) {
 
                 console.log('isElement edit control');
 
-                e.stopPropagation();
+                var clickedComponentScope = clickedComponent.scope();
+                var clickedTextElement = el.find('.ssb-text-settings:first');
+
+                hideAllControls();
 
                 $timeout(function() {
-                    var editControlComponent = el.parent().prev('.ssb-edit-control-element');
+                    var editControlComponent = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]');
+                    var editControlId = editControlComponent.attr('data-control-id');
+                    var uiStateObj = {};
+
+                    uiStateObj.hoveredComponentEl = clickedTextElement;
+                    uiStateObj.hoveredComponentEditControl = editControlComponent;
+                    uiStateObj.activeElement = clickedTextElement.scope().vm.elementData;
 
                     /**
-                     * set current el on uiState
+                     * update uiState
                      */
-                    clickedComponentScope.vm.uiState.activeElement = el;
+                    $rootScope.$broadcast('$ssbUpdateUiState', uiStateObj);
 
+                    /**
+                     * show menu pen
+                     */
+                    $rootScope.$broadcast('$ssbMenuPenVisibleForElement', editControlId, 'element');
 
-                    editControlComponent.addClass('ssb-active-edit-control');
-                    clickedComponent.addClass('ssb-active-component');
+                    editControlComponent.addClass('ssb-active-edit-control ssb-on');
+                    clickedTextElement.addClass('ssb-active-component');
 
                     //if contextual menu is already open, open directly from single click
                     if (clickedComponentScope.vm.uiState.showSectionPanel) {
-                        editControlComponent.find('.ssb-settings-btn').click();
-                    } else {
-                        // editControlComponent.addClass('ssb-on');
+                        $timeout(function() {
+                            editControlComponent.find('.ssb-settings-btn').click();
+                        });
                     }
 
                 }, 100);
 
+            }
 
-                $rootScope.$broadcast('$ssbMenuPenVisible');
+            function hideHoverControls() {
+
+                //hide editable-title's and borders
+                angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+
+            }
+
+            function hideAllControls() {
+
+                //hide editable-title's and borders
+                angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+
+                //hide all edit-controls
+                angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
+                angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
+
+                //components
+                angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
+
+                //btns
+                angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
+                angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
 
             }
 

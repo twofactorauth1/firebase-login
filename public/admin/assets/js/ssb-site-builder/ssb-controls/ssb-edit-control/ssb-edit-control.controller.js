@@ -9,37 +9,55 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     var vm = this;
 
     vm.init = init;
+    vm.isElementControl = false;
+    vm.isComponentControl = false;
+    vm.isComponentPartialAreaControl = false;
     vm.setActive = setActive;
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
     vm.removeSectionFromPage = removeSectionFromPage;
     vm.scrollToActiveSection = scrollToActiveSection;
+    vm.uiState.activeElementHistory = [];
+
 
     /**
-     * Watch for hovered components and component areas
+     * Handle menu per content type ['component' | 'component-partial-area' | 'element']
      */
-    // if (vm.componentIndex !== undefined) {
-        // $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
-    // }
+    function handleMenuPenVisibleForComponent(event, id, type) {
 
-    // $interval(setPosition, 1000, false);
+        if (id === vm.element.attr('data-control-id') && type === 'component') {
+            return setPosition();
+        }
 
-    /**
-     * Events for compiled editor elememts
-     */
-    $rootScope.$on('$ssbMenuPenVisible', function(event, componentId, editorId, elementId) {
-        setPosition();
-    });
+    }
+
+    function handleMenuPenVisibleForComponentPartialArea(event, id, type) {
+
+        if (id === vm.element.attr('data-control-id') && type === 'component-partial-area') {
+            return setPosition();
+        }
+
+    }
+
+    function handleMenuPenVisibleForElement(event, id, type) {
+
+        if (id === vm.element.attr('data-control-id') && type === 'element') {
+            return setPosition();
+        }
+
+    }
+
 
 
     /*
-     * Turn on edit control for hovered element, set position near top left of element
-     * - adjust position to account for section's
-     *   margin/padding and edit-control placement @ top:0, left:0
+     * Position to account for section's margin/padding
+     * and edit-control placement @ top:0, left:0
      */
     function setPosition() {
 
-        if (vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex) {
+        var isActiveElement = angular.isDefined(vm.uiState.activeElement.type);
+
+        if (vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex || isActiveElement) {
 
                 var top = 0;
                 var left = 0;
@@ -61,7 +79,11 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                     left = editEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
                 }
 
-                if (left < 0 || editElLeft === sidebarWidth) {
+                if (left < 0) {
+                    left = 0;
+                }
+
+                if (editElLeft === sidebarWidth) {
                     left = 0;
                 }
 
@@ -92,7 +114,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
         SimpleSiteBuilderService.setActiveSection(undefined);
         SimpleSiteBuilderService.setActiveComponent(undefined);
 
-        if (compiled) {
+        if (compiled || (componentIndex === null && sectionIndex === null)) {
             setActiveElement();
         } else if (componentIndex !== undefined) {
             setActiveComponent(sectionIndex, componentIndex);
@@ -147,23 +169,25 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
 
     }
 
-    function setActiveComponentArea(sectionIndex, componentIndex, area) {
-        // TODO: implement
-        // TODO: setActiveComponentArea
-    }
-
     function setActiveElement() {
 
-        $timeout(function() {
-            var sectionPanelLoadConfig = {
-                name: vm.uiState.activeElement.name,
-                id: vm.uiState.activeElement.id
-            };
+        console.log('vm.uiState.activeElement', vm.uiState.activeElement);
 
-            vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
-            vm.uiState.showSectionPanel = true;
-        });
+        var previousActiveElement = vm.uiState.activeElementHistory[vm.uiState.activeElementHistory.length - 1];
 
+        if (angular.isDefined(vm.uiState.activeElement.type)) {
+            vm.uiState.activeElementHistory.push(vm.uiState.activeElement);
+        } else {
+            vm.uiState.activeElement = previousActiveElement;
+        }
+
+        var sectionPanelLoadConfig = {
+            name: vm.uiState.activeElement.name,
+            id: vm.uiState.activeElement.id
+        };
+
+        vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+        vm.uiState.showSectionPanel = true;
     }
 
     function moveSection(direction, section, index) {
@@ -206,22 +230,22 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     }
 
     function removeSectionFromPage(index) {
-      SweetAlert.swal({
-        title: "Are you sure?",
-        text: "Do you want to delete this section?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, do not delete it!",
-        closeOnConfirm: true,
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
-          SimpleSiteBuilderService.removeSectionFromPage(index)
-        }
-      });
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "Do you want to delete this section?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, do not delete it!",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                SimpleSiteBuilderService.removeSectionFromPage(index)
+            }
+        });
     }
 
     function scrollToActiveSection() {
@@ -235,7 +259,24 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     }
 
     function init(element) {
+
     	vm.element = element;
+
+        vm.isComponentControl = vm.element.hasClass('ssb-edit-control-component') && !vm.element.hasClass('ssb-edit-control-element')  && !vm.element.hasClass('ssb-edit-control-component-area');
+        vm.isComponentPartialAreaControl = vm.element.hasClass('ssb-edit-control-component-area');
+        vm.isElementControl = vm.element.hasClass('ssb-edit-control-element');
+
+        /**
+         * Handle events for component and element menu (section menu pen position handled via CSS only)
+         */
+        if (vm.isComponentControl) {
+            $rootScope.$on('$ssbMenuPenVisibleForComponent', handleMenuPenVisibleForComponent);
+        } else if (vm.isComponentPartialAreaControl) {
+            $rootScope.$on('$ssbMenuPenVisibleForComponentPartialArea', handleMenuPenVisibleForComponentPartialArea);
+        } else if (vm.isElementControl) {
+            $rootScope.$on('$ssbMenuPenVisibleForElement', handleMenuPenVisibleForElement);
+        }
+
     }
 
 }

@@ -7,13 +7,21 @@ ssbTextSettingsController.$inject = ['$rootScope', '$scope', '$attrs', '$filter'
 function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout, $compile) {
 
     var vm = this;
-    var elementId = '';
-    var parentComponent;
-    var parentEditor;
-    var parentEditorId;
-    var buildDataObjFromHTMLDone = false;
+    var pvm = null;
+    var limit = 10;
+    var pScope = $scope.$parent;
 
     vm.init = init;
+    vm.element = null;
+    vm.elementId = null;
+    vm.parentTextElement = null;
+    vm.parentTextElementModelAttribute = null;
+    vm.parentComponent = null;
+    vm.parentComponentId = null;
+    vm.elementModelName = null;
+    vm.elementModelIndex = null;
+    vm.parentNgRepeat = null;
+    vm.applyStylesToSiblingTextElements = false;
     vm.elementClass = elementClass;
     vm.elementStyle = elementStyle;
     vm.elementDataOriginal;
@@ -39,113 +47,157 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         'spacing': {}
     };
 
-    //get functions from parent text component
-    var limit = 10;
-    var pScope = $scope.$parent;
-    while ((!pScope.vm || pScope.vm && !pScope.vm.uiState) && limit > 0) {
-      pScope = pScope.$parent;
-      limit--;
+    function applyStyles() {
+        pvm = {};
+        pvm.component = vm.parentComponent.scope().vm.component;
+        vm.elementData = getStylesForModel();
     }
-    var pvm = pScope.vm;
-    $scope.pvm = pvm;
 
-    var watchElementData = $scope.$watch('vm.elementData', updateTextEditor, true);
+    function setupActiveElementWatch() {
 
-    var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
-        console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
-    });
-
-
-    function buildDataObjFromHTML() {
-        // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
-        var ssbStyle = vm.element.attr('data-ssb-style');
-        var ssbClass = vm.element.attr('data-ssb-class');
-        var data = {
-            id: 'text-element_' + elementId,
-            _id: 'text-element_' + elementId,
-            anchor: 'text-element_' + elementId,
-            'bg': {},
-            'spacing': {}
-        };
-
-        if (ssbStyle) {
-            var styleEl = $('<div style="' + ssbStyle + '"></div>');
-            var style = styleEl.get(0).style;
-            var bgcolor = style.backgroundColor;
-            var txtcolor = style.color;
-            var visibility = style.display !== 'none';
-            var spacingPT = style.paddingTop.replace('px', '');
-            var spacingPL = style.paddingLeft.replace('px', '');
-            var spacingPR = style.paddingRight.replace('px', '');
-            var spacingPB = style.paddingBottom.replace('px', '');
-            var spacingMT = style.marginTop.replace('px', '');
-            var spacingML = style.marginLeft.replace('px', '');
-            var spacingMR = style.marginRight.replace('px', '');
-            var spacingMB = style.marginBottom.replace('px', '');
-            var spacingMW = style.maxWidth.replace('px', '');
-
-            data.bg.color = bgcolor;
-            data.txtcolor = txtcolor;
-            data.visibility = visibility;
-            data.spacing.pt = spacingPT;
-            data.spacing.pl = spacingPL;
-            data.spacing.pr = spacingPR;
-            data.spacing.pb = spacingPB;
-            data.spacing.mt = spacingMT;
-            data.spacing.ml = spacingML;
-            data.spacing.mr = spacingMR;
-            data.spacing.mb = spacingMB;
-            data.spacing.mw = spacingMW;
+        //get functions from parent text component
+        while ((!pScope.vm || pScope.vm && !pScope.vm.uiState) && limit > 0) {
+          pScope = pScope.$parent;
+          limit--;
         }
 
-        if (ssbClass) {
-            try {
-                var classObj = JSON.parse(ssbClass);
-            } catch(e) {};
+        pvm = pScope.vm;
 
-            console.log('classObj', classObj);
+        $scope.pvm = pvm;
 
-            if (classObj) {
 
-                // data.version = _.each(classObj, function(value, key, obj) {
-                //     if (key.indexOf('ssb-theme-btn-style-') === 0) {
-                //         return key.replace('ssb-theme-btn-style-', '')
-                //     }
-                // });
+        var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(activeElement) {
+            if (activeElement) {
+                if (activeElement.id === vm.elementData.id) {
+                    if (!angular.equals(vm.elementDataOriginal, activeElement)) {
+                        console.log('changed activeElement.id:', activeElement.id)
+                        vm.elementData = activeElement;
+                        updateSettingsForModel();
+                    }
+                }
+            }
+        }, true);
+
+    }
+
+    function setupElementForEditing() {
+
+        var data = {};
+
+        setupActiveElementWatch();
+
+        if (vm.isNestedModelProp) {
+
+            vm.elementId = 'text-element_' + vm.parentSectionId + "-" + vm.parentComponentId + "-" + vm.elementModelName;
+
+            if (vm.parentNgRepeat.length) {
+
+                vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
 
             }
+
+            if (vm.elementModelIndex !== undefined && vm.elementModelIndex !== null) {
+
+                vm.elementId = vm.elementId + "-i" + vm.elementModelIndex;
+
+            }
+
         }
 
-        angular.extend(vm.elementData, data);
+        data = {
+            id: vm.elementId,
+            _id: vm.elementId,
+            anchor: vm.elementId
+        };
 
-        buildDataObjFromHTMLDone = true;
+        //extend with id values
+        vm.elementData = angular.extend(vm.elementData, data);
+
+        //extend with existing style values
+        vm.elementData = angular.extend(vm.elementData, getStylesForModel());
+
+        //save original state
+        vm.elementDataOriginal = angular.copy(vm.elementData);
+
+        return vm.elementData;
 
     }
 
-    function updateTextEditor(force) {
-        return true
-        // if (buildDataObjFromHTMLDone) {
+    function updateSettingsForModel() {
 
-        //     positionEditControl();
+        setStylesForModel();
 
-        //     vm.elementDataOriginal = vm.elementDataOriginal || angular.copy(vm.elementData);
+    }
 
-        //     if (!angular.equals(vm.elementDataOriginal, vm.elementData)) {
+    function getStylesForModel() {
 
-        //         pvm.state.pendingPageChanges = true;
+        var data = {};
 
-        //         if (parentEditor.froalaEditor) {
-        //             parentEditor.froalaEditor('events.trigger', 'contentChanged');
-        //         }
+        if (pvm.component.elementStyles && pvm.component.elementStyles[vm.elementModelName]) {
+            if (!vm.isNestedModelProp) {
 
-        //     }
+                data = pvm.component.elementStyles[vm.elementModelName];
 
-        //     if (force && parentEditor.froalaEditor) {
-        //         parentEditor.froalaEditor('events.trigger', 'contentChanged');
-        //     }
+            } else {
 
-        // }
+                if (vm.parentNgRepeat.length) {
 
+                    vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
+
+                }
+
+                if (vm.elementModelIndex) {
+
+                    data = pvm.component.elementStyles[vm.elementModelName][vm.elementModelIndex];
+
+                }
+
+            }
+
+        }
+
+        return data;
+
+    }
+
+    function setStylesForModel() {
+
+        pvm.component.elementStyles = pvm.component.elementStyles || {};
+
+        if (!vm.isNestedModelProp) {
+
+            pvm.component.elementStyles[vm.elementModelName] = vm.elementData;
+
+        } else { // i.e. "testimonial.title" array nested prop
+
+            pvm.component.elementStyles[vm.elementModelName] = pvm.component.elementStyles[vm.elementModelName] || {};
+
+            if (vm.parentNgRepeat.length) {
+                vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
+            }
+
+            if (vm.elementModelIndex) {
+
+                pvm.component.elementStyles[vm.elementModelName][vm.elementModelIndex] = vm.elementData;
+
+            } else {
+                return new Error('can\'t find parent ng-repeat');
+            }
+
+        }
+
+        return pvm.component.elementStyles;
+
+    }
+
+    function getParentNgRepeat() {
+        var parentNgRepeat = vm.element.parents('[data-ng-repeat]:first');
+
+        if (!parentNgRepeat.length) {
+            parentNgRepeat = vm.element.parents('[ng-repeat]:first');
+        }
+
+        return parentNgRepeat;
     }
 
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
@@ -156,11 +208,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
         classObj[vm.elementData.type] = true;
 
-        classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
-
-        if (vm.element) {
-            vm.element.attr('data-ssb-class', JSON.stringify(classObj));
-        }
+        // classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
 
         return classObj;
     }
@@ -234,123 +282,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
         }
 
-        if (vm.element) {
-            vm.element.attr('data-ssb-style', styleString);
-        }
-
         return styleString;
-    }
-
-    function setActiveElementId(reset) {
-
-        if (!reset) {
-            pvm.uiState.activeElement = vm.elementData;
-        } else {
-            pvm.uiState.activeElement = {}
-        }
-
-    }
-
-    function showEditControl(e) {
-
-        //prevent other handling
-        e.stopPropagation();
-
-        debugger;
-        var hasEditControl = el.prev('ssb-edit-control').length > 0;
-
-        //close section panel
-        // pvm.uiState.openSidebarSectionPanel = null;
-        pvm.uiState.showSectionPanel = false;
-        pvm.uiState.activeSectionIndex = null;
-        pvm.uiState.activeComponentIndex = null;
-
-        //get element
-        // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
-
-        // $timeout(function() {
-        //     // un-highlight other compiled elements in this component
-        //     parentComponent.find('[data-compiled]').removeClass('ssb-theme-btn-active-element');
-
-        //     // highlight clicked element
-        //     el.addClass('ssb-theme-btn-active-element');
-
-        //     // hide other element edit controls
-        //     $('.ssb-edit-control[data-compiled-control-id]').removeClass('on');
-        // });
-
-        // if edit control hasn't been created, create it and compile it
-        if (!hasEditControl) {
-            $scope.component = { title: 'Text_' + elementId, type: 'Text Element' }; //TODO: make generic/configurable
-            var template = '<ssb-edit-control ' +
-                                'ng-hide="pvm.uiState.showSectionPanel"' +
-                                'data-compiled-control-id="control_' + elementId + '" ' +
-                                'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-btn on" ' +
-                                'component="component" ' +
-                                'state="pvm.state" ' +
-                                'ui-state="pvm.uiState" ' +
-                                'section-index="null" ' +
-                                'component-index="null">' +
-                            '</ssb-edit-control>';
-            $compile(template)($scope, compiledEditControl);
-
-        // else set active element (for contextual menu) and position the edit control and make visible
-        } else {
-            $timeout(function() {
-                setActiveElementId();
-                positionEditControl();
-                $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]').addClass('on');
-            });
-        }
-
-    }
-
-    function hideEditControl(e) {
-        $timeout(function() {
-            $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]').removeClass('on');
-        });
-    }
-
-    function compiledEditControl(cloned, scope) {
-        var newEl;
-        $timeout(function() {
-            cloned.prependTo(parentComponent.parent());
-            newEl = $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]')
-            newEl.addClass('on');
-            SimpleSiteBuilderService.addCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId, newEl);
-            setActiveElementId();
-            positionEditControl();
-        });
-    }
-
-    function positionEditControl() {
-        var top = 0;
-        var left = 0;
-        var topbarHeight = 125;
-        var sidebarWidth = 140;
-        var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
-        var topOffset = 35;
-        var leftOffset = 35;
-        var compiledEl = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
-        var compiledEditControl = SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId);
-
-        if (compiledEl.length) {
-            top = compiledEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
-            left = compiledEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
-        }
-
-        if (compiledEditControl && compiledEditControl.length) {
-            compiledEditControl.css({ top: top, left: left });
-        }
-
-    }
-
-    function clearActiveElement(e) {
-        var isEditControl = $(e.target).parents('[data-compiled-control-id], [data-compiled]').length > 0;
-        if (!isEditControl) {
-            pvm.uiState.activeElement = {};
-            angular.element('[data-compiled-control-id], [data-compiled]').removeClass('on ssb-theme-btn-active-element');
-        }
     }
 
     function init(element) {
@@ -358,6 +290,35 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         console.info('ssb-text-settings directive init...');
 
         vm.element = element;
+
+        vm.parentTextElement = vm.element.parent();
+
+        vm.parentTextElementModelAttribute = vm.parentTextElement.attr('ng-model');
+
+        vm.elementModelName = vm.parentTextElementModelAttribute.replace('component.', '').replace('vm.', '').replace('.', '/');
+
+        vm.isNestedModelProp = vm.applyStylesToSiblingTextElements ? false : vm.elementModelName.indexOf('/') !== -1;
+
+        vm.parentComponent = vm.element.closest('.ssb-component');
+
+        vm.parentNgRepeat = getParentNgRepeat();
+
+        if ($attrs.isEdit) {
+
+            vm.parentComponentId = vm.parentComponent.attr('id');
+
+            vm.parentSection = vm.element.closest('.ssb-section-layout');
+
+            vm.parentSectionId = vm.parentSection.attr('id');
+
+            setupElementForEditing();
+
+        } else {
+
+            //just set the style props on the frontend
+            applyStyles();
+
+        }
 
     }
 

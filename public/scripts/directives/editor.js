@@ -9,28 +9,36 @@ angular.module('mainApp').directive("elem", function ($timeout) {
       ngModel: '=',
       className: '@className'
     },
-    template: '<div class="element-wrap fr-view" ng-class="className" ng-bind-html="ngModel | unsafe"></div>',
+    template: '<div class="element-wrap fr-view" ng-class="className">' +
+                '<div ' +
+                    'ng-class="{{vm.elementClass()}}" ' +
+                    'ng-attr-style="{{vm.elementStyle()}}" ' +
+                    'class="ssb-text-settings" ' +
+                    'ng-bind-html="ngModel | unsafe">' +
+                '</div>' +
+              '</div>',
     link: function(scope, element, attrs, modelCtrl) {
 
 
         /*
-         * Replace square bracket tokens with valid script tags
-         *
-         * Example string and result:
-         *
-         * String -> '[script]asdfasdfasdf[/script]<div class="something">some content</div>[script src="whatever.js"][/script]'
-         *                  .replace(/\[script /g, '<script ')
-         *                  .replace(/\]\[\/script\]/g, '></script>')
-         *                  .replace(/\[script\]/, '<script>')
-         *                  .replace(/\[\/script\]/, '</script>');
-         *
-         * Result -> "<script>asdfasdfasdf</script><div class="something">some content</div><script src="whatever.js"></script>"
-         */
-         if(scope.ngModel)
+        * Replace square bracket tokens with valid script tags
+        *
+        * Example string and result:
+        *
+        * String -> '[script]asdfasdfasdf[/script]<div class="something">some content</div>[script src="whatever.js"][/script]'
+        *                  .replace(/\[script /g, '<script ')
+        *                  .replace(/\]\[\/script\]/g, '></script>')
+        *                  .replace(/\[script\]/, '<script>')
+        *                  .replace(/\[\/script\]/, '</script>');
+        *
+        * Result -> "<script>asdfasdfasdf</script><div class="something">some content</div><script src="whatever.js"></script>"
+        */
+        if (scope.ngModel) {
             scope.ngModel = scope.ngModel.replace(/\[script /g, '<script ')
                 .replace(/\]\[\/script\]/g, '></script>')
                 .replace(/\[script\]/, '<script>')
                 .replace(/\[\/script\]/, '</script>');
+        }
 
 
     }

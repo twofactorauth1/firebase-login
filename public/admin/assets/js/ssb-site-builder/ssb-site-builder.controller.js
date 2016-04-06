@@ -166,6 +166,26 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     };
 
+
+
+    /**
+     * event listeners
+     */
+    $rootScope.$on('$stateChangeStart', function (event) {
+        $rootScope.app.layout.isMinimalAdminChrome =  false;
+        $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+    });
+
+    $rootScope.$on('$ssbUpdateUiState', function (event, uiStateObj) {
+        console.log('uiStateObj', uiStateObj);
+        angular.extend(vm.uiState, uiStateObj);
+    });
+
+
+
+    /**
+     * watchers
+     */
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.pendingWebsiteChanges = false;
         vm.state.website = website;
@@ -255,12 +275,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.userSections = sections;
     }, true);
 
-    $rootScope.$on('$stateChangeStart',
-        function (event) {
-            $rootScope.app.layout.isMinimalAdminChrome =  false;
-            $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
-        }
-    );
+
+
 
     function checkIfDirty() {
         return vm.state.pendingWebsiteChanges || vm.state.pendingPageChanges;
@@ -376,21 +392,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.accordion.sections[index] = { components: {} };
             vm.uiState.accordion.sections[index].isOpen = true;
-
-            //if there is only 1 component in a section, make it active
-            // if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
-            //     // updateActiveComponent(0);
-            // } else {
-            //     // SimpleSiteBuilderService.setActiveComponent(undefined);
-            // }
-
         } else {
             vm.uiState.activeSectionIndex = undefined;
             vm.uiState.activeComponentIndex = undefined;
         }
 
-        //reset section sidebar panel navigation
-        // vm.uiState.navigation.sectionPanel.reset();
     }
 
     function updateActiveComponent(index) {
@@ -531,15 +537,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function legacyComponentMedia(componentId, index, update) {
-        // $scope.imageChange = true;
-        // $scope.showInsert = true;
-        // $scope.updateImage = update;
-        // $scope.componentImageIndex = index;
-        // $scope.componentEditing = _.findWhere($scope.components, {
-        //     _id: componentId
-        // });
-        // $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
-
         var component = _(vm.state.page.sections)
             .chain()
             .pluck('components')
@@ -571,7 +568,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function pageSectionClick(e) {
-      vm.uiState.openSidebarPanel = '';
+        // vm.uiState.openSidebarPanel = '';
     }
 
     function pageResize(e) {
