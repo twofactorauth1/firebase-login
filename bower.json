@@ -152,7 +152,6 @@
     "masonry": "~3.3.0",
     "angular-bootstrap": "0.13.0",
     "outlayer": "1.3.x",
-    "slick-carousel": "~1.5.9",
-    "spectrum": "1.7.0"
+    "slick-carousel": "~1.5.9"
   }
 }
