@@ -10852,6 +10852,7 @@ ssb-topbar.dragging {
   max-height: calc(100% - 182px);
   width: 300px;
   border: 10px solid rgba(255, 255, 255, 0.75);
+  min-height: 160px;
 }
 @media (max-width: 767px) {
   .ssb-sidebar-section-panel {
@@ -10962,10 +10963,12 @@ ssb-topbar.dragging {
   border-radius: 0px 0px 5px 5px;
 }
 .ssb-sidebar-section-panel-loading-background {
-  height: 100px;
-  background: green;
+  position: absolute;
+  height: 90px;
+  width: 100%;
+  background: #1c2b36;
+  color: white;
   z-index: -1;
-  position: relative;
 }
 .ssb-sidebar-section-panel-component-panel {
   display: block;

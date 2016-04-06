@@ -486,6 +486,7 @@
     width: 300px;
     // width: 360px;
     border: 10px solid rgba(255,255,255,.75);
+    min-height: 160px;
 
     // right: 35px;
     // background: white;
@@ -628,10 +629,12 @@
 }
 
 .ssb-sidebar-section-panel-loading-background {
-    height: 100px;
-    background: green;
+    position: absolute;
+    height: 90px;
+    width: 100%;
+    background: @indigenous-gray-blue;
+    color: white;
     z-index: -1;
-    position: relative;
 }
 
 .ssb-sidebar-section-panel-component-panel {

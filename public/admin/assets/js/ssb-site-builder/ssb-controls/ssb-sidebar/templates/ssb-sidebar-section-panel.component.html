@@ -34,7 +34,9 @@
     <div class="close-panel fa fa-close" ng-click="vm.closeSectionPanel()"></div>
 
     <!-- Loading background -->
-    <div ng-hide="vm.uiState.openSidebarSectionPanel.id" class="ssb-sidebar-section-panel-loading-background"></div>
+    <div class="ssb-sidebar-section-panel-loading-background">
+        <div class="center"><br><span class="fa fa-spinner fa-spin"></span><br>Loading menu...</div>
+    </div>
 
     <!-- Scrollable menu container -->
     <div class="ssb-sidebar-section-panel-scrollable">
