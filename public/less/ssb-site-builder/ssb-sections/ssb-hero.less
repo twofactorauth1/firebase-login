@@ -98,7 +98,7 @@
     */
 
     .ssb-page-section-layout-hero-v6{
-        [ssb-text-component]{
+        .flex-container-absolute-column .text-title{
             background: rgba(0, 0, 0, .5);
             border: 1px #000 solid;
             border-radius: 4px;
@@ -110,27 +110,58 @@
     */
 
     .ssb-page-section-layout-hero-v7{
-        [ssb-text-component].ssb-component-index-2 {
-            width: 100%;
-            position: static;
-            transform: none;
-            margin: 0;
-
-            .ssb-media-query-small-only({
-                .element-wrap {
-                    width: 80%;
-                    margin: 0 auto;
+        .flex-container-absolute-column{
+            top:0;
+        }
+        [testimonials-component]{
+            div.title{
+                display: none;
+            }
+            .testimonial-row{
+                display: none;
+            }
+            .slick-slider{
+                width: 100% !important;
+            }
+            .edit-wrap{
+                margin: 0;
+            }
+            .carousel-caption{
+                padding: 0;
+            }
+            .slick-dots{
+                bottom: 50px !important;
+                margin: 0 !important;
+                li button:before{
+                    opacity: 0.6;
+                    color: #FFF;
+                    border: 4px solid #000;
+                    border-radius: 50%;
+                    font-size: 8px;
+                    line-height: 10px;
+                    width: 15px;
+                    height: 15px;
                 }
-            });
+                li.slick-active button:before{
+                    color: #00FFFF;
+                }
 
-            .ssb-media-query-medium({
-                position: absolute;
-                bottom: 125px;
-                top: inherit;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 75%;
-            });
+
+            }
+            .testimonials{
+                margin:0 !important;
+                padding:0 !important;
+            }
+            .testimonial-wrap {
+                .single-testimonial {
+                    border: 0 !important;
+                }
+                .single-testimonial:hover {
+                    .add-addtional {
+                        bottom: 0 !important;
+                        padding: 0px 10px 0px !important;
+                    }
+            }   }
         }
     }
 
