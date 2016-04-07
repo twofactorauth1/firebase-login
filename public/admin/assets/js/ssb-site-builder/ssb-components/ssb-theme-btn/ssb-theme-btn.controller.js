@@ -263,6 +263,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         }
 
+        if(component.border){
+            styleString += 'border-color: ' + component.border.color + ';';
+            styleString += 'border-width: ' + component.border.width + 'px;';
+            styleString += 'border-style: ' + component.border.style + ';';
+            styleString += 'border-radius: ' + component.border.radius + '%;';
+        }
+
         if (vm.element) {
             vm.element.attr('data-ssb-style', styleString);
         }
