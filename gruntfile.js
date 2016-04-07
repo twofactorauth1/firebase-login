@@ -445,6 +445,20 @@ module.exports = function(grunt) {
                     ]
                 }
             }
+        },
+
+        postcss: {
+            options: {
+                map: true,
+                processors: [
+                    // require('pixrem')(), // add fallbacks for rem units
+                    require('autoprefixer')({browsers: 'last 2 versions'}), // add vendor prefixes
+                    // require('cssnano')() // minify the result
+                ]
+            },
+            dist: {
+                src: ['public/admin/assets/css/*.css', 'public/css/*.css']
+            }
         }
 
 
@@ -541,6 +555,11 @@ module.exports = function(grunt) {
         accountActivity.cleanupContacts(done);
     });
 
+    // grunt.registerTask('serve', 'Start a custom web server.', function() {
+    //     grunt.log.writeln('Starting web server on port 80.');
+    //     require('./app.js');
+    // });
+
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
@@ -558,6 +577,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-csssplit');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-postcss');
+    // grunt.loadNpmTasks('grunt-serve');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
