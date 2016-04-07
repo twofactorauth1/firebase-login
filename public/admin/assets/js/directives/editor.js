@@ -18,11 +18,25 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     'ng-class="{{vm.elementClass()}}" ' +
                     'ng-attr-style="{{vm.elementStyle()}}" ' +
                     'class="editable element-wrap ssb-text-settings {{className}}" ' +
-                    'is-edit=true' +
+                    'is-edit="true" ' +
                     'ng-bind-html="ngModel | unsafe">' +
                 '</div>' +
               '</div>',
     link: function(scope, element, attrs, ngModel) {
+
+        // $timeout(function() {
+        //     angular.getTestability(element).whenStable(function() {
+        //       console.log('[rendered]');
+        //     });
+        // });
+
+        // scope.$on('$viewContentLoaded', function(event) {
+        //     $timeout(function() {
+        //         console.log('[rendered]');
+        //     },0);
+        // });
+
+
 
         scope.update = function(e) {
             $timeout(function() {

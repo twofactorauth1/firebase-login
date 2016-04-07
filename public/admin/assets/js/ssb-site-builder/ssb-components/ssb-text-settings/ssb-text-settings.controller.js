@@ -93,9 +93,21 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
             return false;
         }
 
-        if (vm.isNestedModelProp) {
+        //layout reflow hack
+        if (vm.parentSection.hasClass('ssb-page-section-layout-hero')) {
+            $timeout(function() {
+                // vm.element.get(0).style.webkitTransform = vm.element.get(0).style.webkitTransform;
+                var el = vm.element[0];
+                el.style.display='none';
+                el.offsetHeight;
+                el.style.display='';
+                console.log('did it')
+            }, 4000);
+        }
 
-            vm.elementId = 'text-element_' + vm.parentSectionId + "-" + vm.parentComponentId + "-" + vm.elementModelName;
+        vm.elementId = 'text-element_' + vm.parentSectionId + "-" + vm.parentComponentId + "-" + vm.elementModelName;
+
+        if (vm.isNestedModelProp) {
 
             if (vm.parentNgRepeat.length) {
 
