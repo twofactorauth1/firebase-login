@@ -244,7 +244,8 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 ssbManager.updateWebsite(accountId, websiteId, modified, modifiedWebsite, function(err, website){
                     self.log.debug('<< updateWebsite');
-                    return self.sendResultOrError(resp, err, website, "Error updating website");
+                    self.sendResultOrError(resp, err, website, "Error updating website");
+                    return self.createUserActivity(req, 'UPDATE_WEBSITE', null, {_id:websiteId}, function(){});
                 });
             }
         });
