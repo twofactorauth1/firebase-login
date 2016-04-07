@@ -166,6 +166,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'color: ' + section.txtcolor + ';';
         }
 
+        if(section && section.border){
+            styleString += 'border-color: ' + section.border.color + ';';
+            styleString += 'border-width: ' + section.border.width + 'px;';
+            styleString += 'border-style: ' + section.border.style + ';';
+            styleString += 'border-radius: ' + section.border.radius + '%;';
+        }
+
+
         return styleString;
     }
 
@@ -250,85 +258,92 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
     }
 
-  function componentStyle(component) {
-    var styleString = ' ';
+    function componentStyle(component) {
+        var styleString = ' ';
 
-    if (component.type.indexOf('ssb-') === 0) {
+        if (component.type.indexOf('ssb-') === 0) {
 
-        if (component.spacing) {
-            if (component.spacing.pt) {
-                styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+            if (component.spacing) {
+                if (component.spacing.pt) {
+                    styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+                }
+
+                if (component.spacing.pb) {
+                    styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+                }
+
+                if (component.spacing.pl) {
+                    styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+                }
+
+                if (component.spacing.pr) {
+                    styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+                }
+
+                if (component.spacing.mt) {
+                    styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+                }
+
+                if (component.spacing.mb) {
+                    styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+                }
+
+                if (component.spacing.ml) {
+                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
+                }
+
+                if (component.spacing.mr) {
+                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
+                }
+
+                if (component.spacing.mw) {
+                    styleString += (component.spacing.mw == '100%') ?
+                        'max-width: ' + component.spacing.mw + ';' :
+                        'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
+                }
+
+                if (component.spacing.lineHeight) {
+                    styleString += 'line-height: ' + component.spacing.lineHeight;
+                }
             }
 
-            if (component.spacing.pb) {
-                styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+            if (component.txtcolor) {
+                styleString += 'color: ' + component.txtcolor + ';';
             }
 
-            if (component.spacing.pl) {
-                styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+            if (component.visibility === false) {
+                styleString += 'display: none!important;';
             }
 
-            if (component.spacing.pr) {
-                styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+            if (component.bg) {
+              if (component.bg.color) {
+                styleString += 'background-color: ' + component.bg.color + ';';
+              }
+
+              if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
+                styleString += 'background-image: url("' + component.bg.img.url + '")';
+              }
             }
 
-            if (component.spacing.mt) {
-                styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+            if(component.border){
+                styleString += 'border-color: ' + component.border.color + ';';
+                styleString += 'border-width: ' + component.border.width + 'px;';
+                styleString += 'border-style: ' + component.border.style + ';';
+                styleString += 'border-radius: ' + component.border.radius + '%;';
             }
 
-            if (component.spacing.mb) {
-                styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-            }
+        }
 
-            if (component.spacing.ml) {
-                styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
-            }
-
-            if (component.spacing.mr) {
-                styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
-            }
-
-            if (component.spacing.mw) {
-                styleString += (component.spacing.mw == '100%') ?
-                    'max-width: ' + component.spacing.mw + ';' :
-                    'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
-            }
-
-            if (component.spacing.lineHeight) {
-                styleString += 'line-height: ' + component.spacing.lineHeight;
+        if (component.layoutModifiers) {
+            if (component.layoutModifiers.columns) {
+                if (component.layoutModifiers.columnsMaxHeight) {
+                    styleString += ' max-height: ' + component.layoutModifiers.columnsMaxHeight + 'px';
+                }
             }
         }
 
-        if (component.txtcolor) {
-            styleString += 'color: ' + component.txtcolor + ';';
-        }
-
-        if (component.visibility === false) {
-            styleString += 'display: none!important;';
-        }
-
-        if (component.bg) {
-          if (component.bg.color) {
-            styleString += 'background-color: ' + component.bg.color + ';';
-          }
-
-          if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-            styleString += 'background-image: url("' + component.bg.img.url + '")';
-          }
-        }
-
+        return styleString;
     }
-
-    if (component.layoutModifiers) {
-        if (component.layoutModifiers.columns) {
-            if (component.layoutModifiers.columnsMaxHeight) {
-                styleString += ' max-height: ' + component.layoutModifiers.columnsMaxHeight + 'px';
-            }
-        }
-    }
-
-    return styleString;
-  }
 
 
     function setFixedPosition(state) {
