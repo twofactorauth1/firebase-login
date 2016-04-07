@@ -165,7 +165,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
                 }
 
-                if (vm.elementModelIndex) {
+                if (vm.elementModelIndex !== undefined && vm.elementModelIndex !== null) {
 
                     data = pvm.component.elementStyles[vm.elementModelName][vm.elementModelIndex];
 
@@ -195,7 +195,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
                 vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
             }
 
-            if (vm.elementModelIndex) {
+            if (vm.elementModelIndex !== undefined && vm.elementModelIndex !== null) {
 
                 pvm.component.elementStyles[vm.elementModelName][vm.elementModelIndex] = vm.elementData;
 
@@ -221,87 +221,101 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
     function elementClass() {
-        var classObj = {};
+        if (vm.elementData && vm.elementData.type) {
+            var classObj = {};
 
-        classObj['ssb-element'] = true;
+            classObj['ssb-element'] = true;
 
-        classObj[vm.elementData.type] = true;
+            classObj[vm.elementData.type] = true;
 
-        // classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
+            // classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
 
-        return classObj;
+            return classObj;
+
+        } else {
+
+            return ''
+
+        }
+
     }
 
     function elementStyle() {
+        if (vm.elementData && vm.elementData.type) {
+            var styleString = ' ';
+            var component = vm.elementData;
 
-        var styleString = ' ';
-        var component = vm.elementData;
+            if (component.spacing) {
 
-        if (component.spacing) {
+                if (component.spacing.pt) {
+                    styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+                }
 
-            if (component.spacing.pt) {
-                styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+                if (component.spacing.pb) {
+                    styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+                }
+
+                if (component.spacing.pl) {
+                    styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+                }
+
+                if (component.spacing.pr) {
+                    styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+                }
+
+                if (component.spacing.mt) {
+                    styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+                }
+
+                if (component.spacing.mb) {
+                    styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+                }
+
+                if (component.spacing.ml) {
+                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
+                }
+
+                if (component.spacing.mr) {
+                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
+                }
+
+                if (component.spacing.mw) {
+                    styleString += (component.spacing.mw == '100%') ?
+                    'max-width: ' + component.spacing.mw + ';' :
+                    'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
+                }
+
+                if (component.spacing.lineHeight) {
+                styleString += 'line-height: ' + component.spacing.lineHeight;
+                }
             }
 
-            if (component.spacing.pb) {
-                styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+            if (component.txtcolor) {
+                styleString += 'color: ' + component.txtcolor + ';';
             }
 
-            if (component.spacing.pl) {
-                styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+            if (component.visibility === false) {
+                styleString += 'display: none!important;';
             }
 
-            if (component.spacing.pr) {
-                styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+            if (component.bg) {
+                if (component.bg.color) {
+                    styleString += 'background-color: ' + component.bg.color + ';';
+                }
+
+                if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
+                    styleString += 'background-image: url("' + component.bg.img.url + '")';
+                }
+
             }
 
-            if (component.spacing.mt) {
-                styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-            }
+            return styleString;
 
-            if (component.spacing.mb) {
-                styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-            }
+        } else {
 
-            if (component.spacing.ml) {
-                styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
-            }
+            return '';
 
-            if (component.spacing.mr) {
-                styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
-            }
-
-            if (component.spacing.mw) {
-                styleString += (component.spacing.mw == '100%') ?
-                'max-width: ' + component.spacing.mw + ';' :
-                'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
-            }
-
-            if (component.spacing.lineHeight) {
-            styleString += 'line-height: ' + component.spacing.lineHeight;
-            }
         }
-
-        if (component.txtcolor) {
-            styleString += 'color: ' + component.txtcolor + ';';
-        }
-
-        if (component.visibility === false) {
-            styleString += 'display: none!important;';
-        }
-
-        if (component.bg) {
-            if (component.bg.color) {
-                styleString += 'background-color: ' + component.bg.color + ';';
-            }
-
-            if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-                styleString += 'background-image: url("' + component.bg.img.url + '")';
-            }
-
-        }
-
-        return styleString;
     }
 
     function init(element) {
