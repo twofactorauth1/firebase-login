@@ -73,6 +73,35 @@
     }
 }
 
+.flex-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-container-absolute {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.flex-container-absolute-column {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+
+.flex-item {
+    width: auto;
+    align-self: center;
+}
 
 @import "ssb-sections/ssb-header.less";
 @import "ssb-sections/ssb-hero.less";

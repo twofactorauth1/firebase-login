@@ -7,6 +7,10 @@
         }
     }
 
+    /*
+     * Common for all versions
+    */
+
     .ssb-page-section-layout-hero {
 
         .ssb-media-query-small-only({
@@ -31,7 +35,7 @@
         line-height: initial;
     }
 
-    .ssb-page-section-layout-hero [ssb-text-component] {
+    .ssb-page-section-layout-hero > [ssb-text-component] {
         width: 100%;
         position: static;
         transform: none;
@@ -60,4 +64,74 @@
         });
 
     }
+
+    /*
+     * layout-hero-v5
+    */
+
+    .ssb-page-section-layout-hero-v5{
+        // [social-link-component] {
+        //     width: 100%;
+        //     position: static;
+        //     transform: none;
+        //     margin: 0;
+
+        //     .ssb-media-query-small-only({
+        //         .element-wrap {
+        //             width: 80%;
+        //             margin: 0 auto;
+        //         }
+        //     });
+
+        //     .ssb-media-query-medium({
+        //         position: absolute;
+        //         bottom: 125px;
+        //         left: 50%;
+        //         transform: translate(-50%, -50%);
+        //         width: 75%;
+        //     });
+        // }
+    }
+
+    /*
+     * layout-hero-v6
+    */
+
+    .ssb-page-section-layout-hero-v6{
+        [ssb-text-component]{
+            background: rgba(0, 0, 0, .5);
+            border: 1px #000 solid;
+            border-radius: 4px;
+        }
+    }
+
+    /*
+     * layout-hero-v7
+    */
+
+    .ssb-page-section-layout-hero-v7{
+        [ssb-text-component].ssb-component-index-2 {
+            width: 100%;
+            position: static;
+            transform: none;
+            margin: 0;
+
+            .ssb-media-query-small-only({
+                .element-wrap {
+                    width: 80%;
+                    margin: 0 auto;
+                }
+            });
+
+            .ssb-media-query-medium({
+                position: absolute;
+                bottom: 125px;
+                top: inherit;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 75%;
+            });
+        }
+    }
+
 }
