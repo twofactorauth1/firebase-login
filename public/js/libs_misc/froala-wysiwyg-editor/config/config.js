@@ -122,5 +122,6 @@ $.FroalaEditor.config = {
         'ssb-editor-style-line-height-5': 'Line Height 5',
     },
     imageUploadURL: "/api/1.0/assets/editor/upload",
-    linkMultipleStyles: false
+    linkMultipleStyles: false,
+    paragraphMultipleStyles: false
 }
