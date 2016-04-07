@@ -39,9 +39,9 @@
     <div ng-if="vm.section.bg.img.show && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
 
     <div
-        ng-if="vm.section.components.length && vm.section.layoutModifiers.custom"
+        ng-if="vm.section.layoutModifiers.custom"
         data-ng-include
-        data-src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v5.html' " >
+        data-src=" 'assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v5.html' " >
     </div>
 
     <ssb-component-loader
