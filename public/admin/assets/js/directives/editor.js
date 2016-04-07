@@ -24,20 +24,6 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
               '</div>',
     link: function(scope, element, attrs, ngModel) {
 
-        // $timeout(function() {
-        //     angular.getTestability(element).whenStable(function() {
-        //       console.log('[rendered]');
-        //     });
-        // });
-
-        // scope.$on('$viewContentLoaded', function(event) {
-        //     $timeout(function() {
-        //         console.log('[rendered]');
-        //     },0);
-        // });
-
-
-
         scope.update = function(e) {
             $timeout(function() {
                 scope.$apply(function() {

@@ -25,15 +25,13 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
      */
     function handleMenuPenVisibleForComponent(event, id, type) {
 
-        if (id === vm.element.attr('data-control-id') && type === 'component') {
-            return setPosition();
-        }
+        return setPosition();        }
 
     }
 
     function handleMenuPenVisibleForComponentPartialArea(event, id, type) {
 
-        if (id === vm.element.attr('data-control-id') && type === 'component-partial-area') {
+        if (id && id === vm.element.attr('data-control-id') && type === 'component-partial-area') {
             return setPosition();
         }
 
@@ -41,7 +39,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
 
     function handleMenuPenVisibleForElement(event, id, type) {
 
-        if (id === vm.element.attr('data-control-id') && type === 'element') {
+        if (id && id === vm.element.attr('data-control-id') && type === 'element') {
             return setPosition();
         }
 

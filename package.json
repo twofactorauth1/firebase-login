@@ -48,6 +48,7 @@
     "node-uuid": "1.4.1",
     "nodemailer": "0.6.0",
     "oauth": "~0.9.11",
+    "object-fit-images": "^2.3.0",
     "passport": "~0.2.0",
     "passport-facebook": "~1.0.2",
     "passport-google": "~0.3.0",
