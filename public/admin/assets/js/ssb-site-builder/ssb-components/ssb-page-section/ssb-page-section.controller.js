@@ -325,13 +325,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
               }
             }
 
-            if(component.border && component.border.color){
-                styleString += 'border-color: ' + component.border.color + ';';
-                styleString += 'border-width: ' + component.border.width + 'px;';
-                styleString += 'border-style: ' + component.border.style + ';';
-                styleString += 'border-radius: ' + component.border.radius + '%;';
-            }
-
         }
 
         if (component.layoutModifiers) {
@@ -341,6 +334,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
             }
         }
+
+        if(component.border && component.border.color){
+                styleString += 'border-color: ' + component.border.color + ';';
+                styleString += 'border-width: ' + component.border.width + 'px;';
+                styleString += 'border-style: ' + component.border.style + ';';
+                styleString += 'border-radius: ' + component.border.radius + '%;';
+            }
 
         return styleString;
     }
