@@ -55,6 +55,9 @@
                                     <div class="thumbnail">
                                         <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
                                     </div>
+                                    <div class='asset-slider' slick-slider objects='product.assets' config='slickConfig' ng-if='product.assets.length'>
+                                        <div ng-repeat='a in product.assets track by $index' class='asset-slide' ng-click='assetSlideClickFn($index)'><img ng-src='{{a}}' /></div>
+                                    </div>
                                 </div>
                                 <div class="row hidden">
                                     <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
@@ -115,7 +118,7 @@
                                                 </label>
                                                 <select ng-model="product.status" class="form-control">
                                                     <option value="">-- choose status --</option>
-                                                    <option value="{{status.data}}" ng-repeat="status in productStatusOptions" ng-disabled='status.data == "active" && product.type == "SUBSCRIPTION" && !plans.length'>{{status.label}}</option>
+                                                    <option value="{{status.data}}" ng-repeat="status in productStatusOptions" ng-disabled='status.data == "active" && product.type == "SUBSCRIPTION" && (!stripeAccountExist || !plans.length)'>{{status.label}}</option>
                                                 </select>
                                             </div>
                                             <div class="form-group" ng-class="{'has-error': productTypeError}">

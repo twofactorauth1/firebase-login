@@ -43,7 +43,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }
 
                 var hasSectionChildMouseOver = element.children().find('.ssb-edit-wrap.on').length > 0;
-                var hasComponentChildMouseOver = element.children().find('[data-edit]').length > 0;
+                var hasComponentChildMouseOver = false//element.children().find('[data-edit]').length > 0;
                 var hasActiveEditControl = element.hasClass('ssb-active-edit-control');
 
                 if (!hasActiveEditControl && (isSection && !hasSectionChildMouseOver || isComponent && !hasComponentChildMouseOver)) {
@@ -52,7 +52,6 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                     angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
                     element.addClass('ssb-on');
-
                     element.find('> .editable-title:first').addClass('ssb-on');
                     element.find('> .editable-cover:first').addClass('ssb-on');
 
@@ -208,10 +207,11 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 e.preventDefault();
 
                 var el = angular.element(e.currentTarget);
-                var hasComponentChildMouseOver = el.find('[data-edit]').length > 0;
+                var hasComponentChildMouseOver = false//el.find('[data-edit]').length > 0;
 
                 //let section handle clicks if the component has [data-edit] areas to surface menu
                 if ((isSection || isComponent) && !(isComponent && hasComponentChildMouseOver)) {
+                    var clickedSection = el.closest('.ssb-section-layout');
                     var clickedComponent = el.closest('.ssb-component');
 
                     if(isComponent && clickedComponent.prev().hasClass("ssb-on")){
@@ -222,9 +222,11 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     hideAllControls();
 
                     //get related component data
+                    var clickedSectionScope = clickedSection.scope();
                     var clickedComponentScope = clickedComponent.scope();
 
-                    if (clickedComponentScope) {
+                    if (clickedSectionScope && clickedComponentScope) {
+                        var clickedSectionData = clickedSectionScope.vm.section;
                         var clickedComponentData = clickedComponentScope.vm.component;
 
                         //reset uiState
@@ -243,7 +245,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                     } else if (isComponent) {
 
-                        handleComponentClick(e, el);
+                        handleComponentClick(e, el, clickedSectionData, clickedComponent, clickedSectionScope, clickedComponentScope, clickedComponentData);
 
                     }
 
@@ -283,11 +285,11 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
             }
 
-            function handleComponentClick(e, el) {
+            function handleComponentClick(e, el, clickedSectionData, clickedComponent, clickedSectionScope, clickedComponentScope, clickedComponentData) {
                 e.stopPropagation();
 
                 $timeout(function() {
-                    var editControlComponent = el.parent().prev('.ssb-edit-control-component:not[.ssb-edit-control-element]');
+                    var editControlComponent = el.parent().prevAll('.ssb-edit-control-component:not(.ssb-edit-control-element):first');
                     var editControlId = editControlComponent.attr('data-control-id');
                     var uiStateObj = {};
 
@@ -303,12 +305,8 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                      find index of section based on component _id
                      */
                     uiStateObj.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
-                        .pluck('components')
-                        .map(function(components){
-                            return _.pluck(components, '_id')
-                        })
-                        .findIndex(function(component) {
-                            return -1 !== _.indexOf(component, clickedComponentData._id)
+                        .findIndex(function(section) {
+                            return section._id === clickedSectionData._id;
                         })
                         .value()
 
@@ -347,13 +345,6 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                 }, 100);
 
-                //if contextual menu is already open, open directly from single click
-                if (clickedComponentScope.vm.uiState.showSectionPanel) {
-                    $timeout(function() {
-                        editControlComponent.find('.ssb-settings-btn').click();
-                    });
-                }
-
             }
 
             function handleComponentPartialAreaClick(e) {
@@ -378,6 +369,8 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 if (!(isComponent && hasComponentChildMouseOver)) {
                     e.stopPropagation();
 
+                    var clickedSectionScope = el.closest('.ssb-section-layout').scope();
+                    var clickedSectionData = clickedSectionScope.vm.section;
                     var clickedComponentScope = el.closest('.ssb-component').scope();
                     var clickedComponentData = clickedComponentScope.vm.component;
                     var editControlComponent = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]');
@@ -402,12 +395,8 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                      * find index of section based on component _id
                      */
                     uiStateObj.hoveredSectionIndex = _(clickedComponentScope.vm.state.page.sections).chain()
-                        .pluck('components')
-                        .map(function(components){
-                            return _.pluck(components, '_id')
-                        })
-                        .findIndex(function(component) {
-                            return -1 !== _.indexOf(component, clickedComponentData._id)
+                        .findIndex(function(section) {
+                            return section._id === clickedSectionData._id;
                         })
                         .value()
 

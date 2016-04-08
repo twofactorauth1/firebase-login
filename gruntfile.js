@@ -144,8 +144,8 @@ module.exports = function(grunt) {
 
         watch: {
             less: {
-                files: "../indigeweb/public/less/*",
-                tasks: ["less"]
+                files: "../indigeweb/public/less/**/*.less",
+                tasks: ["less", "postcss"]
             },
             html: {
                 files: "../indigeweb/public/templates/**/*.html"

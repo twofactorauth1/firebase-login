@@ -1,4 +1,17 @@
 <div class="button-group">
+    <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="History">
+        <div class="dropdown" dropdown on-toggle="historyDropdownFn(open)">
+            <button class="btn btn-primary btn-o dropdown-toggle" dropdown-toggle><span class="fa fa-history"></span> <span class="sr-only">History</span></button>
+            <ul class="dropdown-menu dropdown-dark">
+                <li ng-repeat='v in pageVersions | orderBy : "version" : true' ng-click='vm.revert(v.version)' ng-show='pageVersions.length'>
+                    <a>{{v.modified.date | date:'medium'}}</a>
+                </li>
+                <li ng-hide='pageVersions.length'>
+                    <a>Loading ...</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 	<div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Cancel">
         <button ng-disabled="!vm.state.pendingPageChanges && !vm.state.pendingWebsiteChanges" class="btn btn-primary btn-o" ng-click="vm.cancel()"><span class="fa fa-eraser"></span> <span class="sr-only">Cancel</span></button>
     </div>
@@ -9,10 +22,13 @@
          <span ng-if="vm.state.saveLoading"><i class="fa fa-spinner fa-spin"></i></span>
          </button>
     </div>
+    <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Publish">
+        <button class="btn btn-primary btn-o" ng-click="vm.cancel()"><span class="fa fa-globe"></span> <span class="sr-only">Publish</span></button>
+    </div>
     <div class="inline-block"  tooltip-placement="bottom" tooltip-html-unsafe="View">
         <a href="/{{vm.state.page.handle}}" target="_blank" style="color: inherit;">
             <button class="btn btn-primary btn-o">
-                <span class="fa fa-eye"></span> <span class="sr-only">View</span>
+                <span class="fa fa-desktop"></span> <span class="sr-only">View</span>
             </button>
         </a>
     </div>

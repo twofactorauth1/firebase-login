@@ -41,7 +41,7 @@
     <div
         ng-if="vm.section.components.length && vm.section.layoutModifiers.custom"
         data-ng-include
-        data-src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v5.html' " >
+        data-src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v' + vm.section.version + '.html' " >
     </div>
 
     <ssb-component-loader
