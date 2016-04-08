@@ -25,7 +25,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
      */
     function handleMenuPenVisibleForComponent(event, id, type) {
 
-        return setPosition();        }
+        return setPosition();
 
     }
 
