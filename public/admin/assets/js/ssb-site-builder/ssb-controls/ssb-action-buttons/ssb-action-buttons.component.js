@@ -9,7 +9,8 @@ function ssbActionButtons(SimpleSiteBuilderService) {
         scope: {
             state: '=',
             saveAction: '&',
-            cancelAction: '&'
+            cancelAction: '&',
+            revertAction: '&'
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-controls/ssb-action-buttons/ssb-action-buttons.component.html',
         controller: 'SiteBuilderActionButtonsController',
