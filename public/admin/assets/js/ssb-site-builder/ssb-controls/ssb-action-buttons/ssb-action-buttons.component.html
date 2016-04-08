@@ -3,8 +3,11 @@
         <div class="dropdown" dropdown on-toggle="historyDropdownFn(open)">
             <button class="btn btn-primary btn-o dropdown-toggle" dropdown-toggle><span class="fa fa-history"></span> <span class="sr-only">History</span></button>
             <ul class="dropdown-menu dropdown-dark">
-                <li ng-repeat='v in pageVersions' ng-click='vm.revert(v.version)'>
+                <li ng-repeat='v in pageVersions' ng-click='vm.revert(v.version)' ng-show='pageVersions.length'>
                     <a>{{v.modified.date | date:'medium'}}</a>
+                </li>
+                <li ng-hide='pageVersions.length'>
+                    <a>Loading ...</a>
                 </li>
             </ul>
         </div>

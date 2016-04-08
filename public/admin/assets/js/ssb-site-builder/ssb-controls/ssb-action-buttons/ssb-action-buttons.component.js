@@ -23,6 +23,8 @@ function ssbActionButtons(SimpleSiteBuilderService) {
                     SimpleSiteBuilderService.getPageVersions(scope.vm.state.page._id, function (data) {
                         scope.pageVersions = data;
                     });
+                } else {
+                    scope.pageVersions = [];
                 }
             };
             ctrl.init(element);
