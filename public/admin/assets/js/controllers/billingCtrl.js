@@ -203,11 +203,11 @@
      * - TODO: setup fee, coupon
      */
 
-    $scope.savePlanFn = function (planId) {
+    $scope.savePlanFn = function (planId, coupon) {
       console.log('savePlanFn >>');
 
       if ($scope.account.billing.stripeCustomerId) {
-        PaymentService.postSubscribeToIndigenous($scope.account.billing.stripeCustomerId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, $scope.Coupon, function (subscription) {
+        PaymentService.postSubscribeToIndigenous($scope.account.billing.stripeCustomerId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, coupon, function (subscription) {
           $scope.cancelOldSubscriptionsFn();
           $scope.selectedPlan = subscription;
           console.log('$scope.selectedPlan:');

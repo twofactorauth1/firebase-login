@@ -12,15 +12,16 @@ app.directive('socialLinkComponent', ["$modal", "$timeout", function ($modal, $t
 
       scope.isEditing = true;
       scope.sortableConfig = {
-        animation: 150, 
+        animation: 150,
         onSort: function (evt) {
-          
+
         },
         onStart: function (evt) {
-          console.log("Start")
+          if(scope.$parent.vm)
+            scope.$parent.vm.uiState.sortableListPageContentConfig.disabled = true;
         },
         onEnd: function (evt) {
-          
+
         }
       };
 

@@ -57,8 +57,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             group: 'section',
             scroll: true,
             animation: 150,
+            disabled: true,
             ghostClass: "sortable-ghost",  // Class name for the drop placeholder
-            chosenClass: "sortable-chosen",  // Class name for the chosen item
+            //chosenClass: "sortable-chosen",  // Class name for the chosen item
             onAdd: function (evt) {
                 if(vm.uiState.draggedSection)
                     SimpleSiteBuilderService.getSection(vm.uiState.draggedSection, vm.uiState.draggedSection.version || 1).then(function(response) {
@@ -69,7 +70,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             },
             onEnd: function (evt) {
                console.log("Dragging End");
-            },
+            }
         },
 
         sortableListAddContentConfig: {
@@ -82,14 +83,24 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             },
             animation: 150,
             ghostClass: "sortable-ghost",  // Class name for the drop placeholder
-            chosenClass: "sortable-chosen",  // Class name for the chosen item
+            chosenClass: "list-add-sortable-chosen",  // Class name for the chosen item
             scroll: true,
             onStart: function (evt) {
+                vm.uiState.sortableListPageContentConfig.disabled = false;
                 angular.element(".sortable-page-content").addClass("dragging");
+                var _top = angular.element("ssb-topbar").offset().top;
+                var _height = angular.element("ssb-topbar").height();
+                var _winHeight = angular.element(window).height();
+                var _heightDiff = _height + _top;
+                angular.element(".sortable-page-content").height(_winHeight - _heightDiff);
             },
             onEnd: function (evt) {
-               angular.element(".sortable-page-content").removeClass("dragging");
-               $timeout(function() { vm.uiState.openSidebarPanel = ''; });
+                angular.element(".sortable-page-content").removeClass("dragging");
+                angular.element(".sortable-page-content").css('height','auto');
+                $timeout(function() {
+                    vm.uiState.sortableListPageContentConfig.disabled = true;
+                    vm.uiState.openSidebarPanel = '';
+                });
             },
             onSort: function (evt) {
                 console.log("On Sort");
@@ -155,6 +166,26 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     };
 
+
+
+    /**
+     * event listeners
+     */
+    $rootScope.$on('$stateChangeStart', function (event) {
+        $rootScope.app.layout.isMinimalAdminChrome =  false;
+        $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+    });
+
+    $rootScope.$on('$ssbUpdateUiState', function (event, uiStateObj) {
+        console.log('uiStateObj', uiStateObj);
+        angular.extend(vm.uiState, uiStateObj);
+    });
+
+
+
+    /**
+     * watchers
+     */
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.pendingWebsiteChanges = false;
         vm.state.website = website;
@@ -203,6 +234,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }, true);
 
+    $scope.$watch('vm.state.website.linkLists', function(linkLists) {
+        if(linkLists){
+            sortPageList();
+        }
+    }, true);
+
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       // To track duplicate pages
       vm.state.originalPages = angular.copy(pages);
@@ -212,6 +249,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       if(pages){
         vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" || page.handle === "signup" });
       }
+      if(vm.state.website)
+        sortPageList();
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
@@ -236,12 +275,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.userSections = sections;
     }, true);
 
-    $rootScope.$on('$stateChangeStart',
-        function (event) {
-            $rootScope.app.layout.isMinimalAdminChrome =  false;
-            $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
-        }
-    );
+
+
 
     function checkIfDirty() {
         return vm.state.pendingWebsiteChanges || vm.state.pendingPageChanges;
@@ -357,21 +392,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.accordion.sections[index] = { components: {} };
             vm.uiState.accordion.sections[index].isOpen = true;
-
-            //if there is only 1 component in a section, make it active
-            // if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
-            //     // updateActiveComponent(0);
-            // } else {
-            //     // SimpleSiteBuilderService.setActiveComponent(undefined);
-            // }
-
         } else {
             vm.uiState.activeSectionIndex = undefined;
             vm.uiState.activeComponentIndex = undefined;
         }
 
-        //reset section sidebar panel navigation
-        // vm.uiState.navigation.sectionPanel.reset();
     }
 
     function updateActiveComponent(index) {
@@ -504,23 +529,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function setupBreakpoints() {
-        $timeout(function() {
-            console.log('setupBreakpoints');
-            $window.eqjs.refreshNodes();
-            $window.eqjs.query();
-        }, 3000);
+        // $timeout(function() {
+        //     console.log('setupBreakpoints');
+        //     $window.eqjs.refreshNodes();
+        //     $window.eqjs.query();
+        // }, 3000);
     };
 
     function legacyComponentMedia(componentId, index, update) {
-        // $scope.imageChange = true;
-        // $scope.showInsert = true;
-        // $scope.updateImage = update;
-        // $scope.componentImageIndex = index;
-        // $scope.componentEditing = _.findWhere($scope.components, {
-        //     _id: componentId
-        // });
-        // $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
-
         var component = _(vm.state.page.sections)
             .chain()
             .pluck('components')
@@ -552,7 +568,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function pageSectionClick(e) {
-      vm.uiState.openSidebarPanel = '';
+        // vm.uiState.openSidebarPanel = '';
     }
 
     function pageResize(e) {
@@ -580,7 +596,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * TODO: handle undo in Froala
      */
     function pageChanged(originalPage, currentPage) {
-        if (!angular.equals(originalPage, currentPage)) {
+        if (!angular.equals(originalPage, currentPage) && !vm.state.pendingPageChanges) {
             var originalPage = JSON.parse(angular.toJson(originalPage));
             var currentPage = JSON.parse(angular.toJson(currentPage));
             var jsondiff1 = DeepDiff.diff(originalPage, currentPage);
@@ -603,9 +619,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                 angular.isDefined(diff1) &&
                                 angular.isDefined(diff1.indexOf) &&
                                 diff1.indexOf('data-compiled') === -1 &&
+                                diff1.indexOf('ssb-theme-btn') !== -1 &&
                                 angular.isDefined(diff2) &&
                                 angular.isDefined(diff2.indexOf) &&
-                                diff2.indexOf('data-compiled') !== -1
+                                diff2.indexOf('data-compiled') !== -1 &&
+                                diff2.indexOf('ssb-theme-btn') !== -1
                     };
 
                     var dataCompiledRemoved = function() {
@@ -614,9 +632,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                 angular.isDefined(diff1) &&
                                 angular.isDefined(diff1.indexOf) &&
                                 diff1.indexOf('data-compiled') !== -1 &&
+                                diff1.indexOf('ssb-theme-btn') !== -1 &&
                                 angular.isDefined(diff2) &&
                                 angular.isDefined(diff2.indexOf) &&
-                                diff2.indexOf('data-compiled') === -1;
+                                diff2.indexOf('data-compiled') === -1 &&
+                                diff2.indexOf('ssb-theme-btn') !== -1
                     };
 
                     if (dataCompiledAdded() || dataCompiledRemoved()) {
@@ -659,6 +679,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function checkNavigation(e) {
         // debugger;
+    }
+
+    function sortPageList(){
+        _.each(vm.state.website.linkLists, function (value, index) {
+            if (value.handle === "head-menu") {
+                var handlesArr = _(value.links).chain().pluck("linkTo")
+                            .where({type: 'page'})
+                            .pluck("data")
+                            .value()
+                var _sortOrder = _.invert(_.object(_.pairs(handlesArr)));
+                vm.state.pages = _.sortBy(vm.state.pages, function(x) {
+                    return _sortOrder[x.handle]
+                });
+            }
+        });
     }
 
 

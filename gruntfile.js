@@ -144,8 +144,8 @@ module.exports = function(grunt) {
 
         watch: {
             less: {
-                files: "../indigeweb/public/less/*",
-                tasks: ["less"]
+                files: "../indigeweb/public/less/**/*.less",
+                tasks: ["less", "postcss"]
             },
             html: {
                 files: "../indigeweb/public/templates/**/*.html"
@@ -212,57 +212,6 @@ module.exports = function(grunt) {
          */
          concat: {
             js: {
-                /*
-                src: ['public/js/libs/jquery/dist/jquery.js',
-                    'public/js/libs/bootstrap/dist/js/bootstrap.js',
-                    'public/js/libs/angular/angular.js',
-                    'public/js/scripts/config.js',
-                    'public/js/libs/json3/lib/json3.js',
-                    'public/js/libs/underscore/underscore.js',
-                    'public/js/libs/angular-resource/angular-resource.js',
-                    'public/js/libs/angular-cookie/angular-cookie.js',
-                    'public/js/libs/angular-sanitize/angular-sanitize.js',
-                    'public/js/libs/angular-animate/angular-animate.js',
-                    'public/js/libs/angular-touch/angular-touch.js',
-                    'public/js/libs/angular-route/angular-route.js',
-                    'public/js/libs/angular-ui-router/release/angular-ui-router.js',
-                    'public/js/libs/angular-parallax/scripts/angular-parallax.js',
-                    'public/js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
-                    'public/js/libs/moment/moment.js',
-                    'public/js/libs/angular-moment/angular-moment.js',
-                    'public/js/libs/angular-scroll/angular-scroll.js',
-                    'public/js/libs/angular-wizard/dist/angular-wizard.js',
-                    'public/js/libs/isotope/jquery.isotope.js',
-                    'public/js/libs/angular-isotope/dist/angular-isotope.js',
-                    'public/js/libs/angular-timer/dist/angular-timer.js',
-                    'public/js/libs/jquery-ui/jquery-ui.min.js',
-                    'public/js/scripts/utils.js',
-                    'public/js/libs/ng-tags-input/ng-tags-input.js',
-                    'public/js/libs/videogular/videogular.js',
-                    'public/js/libs/videogular-controls/controls.js',
-                    'public/js/libs/videogular-overlay-play/overlay-play.js',
-                    'public/js/libs/videogular-buffering/buffering.js',
-                    'public/js/libs/videogular-poster/poster.js',
-                    'public/js/libs/angular-input-date/src/angular-input-date.js',
-                    'public/js/libs/skeuocard/lib/js/card.js',
-                    'public/js/libs/fingerprint/fingerprint.js',
-                    'public/js/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
-                    'public/js/libs/purl/purl.js',
-                    'public/js/libs/ua-parser-js/dist/ua-parser.min.js',
-                    'public/js/libs_misc/uuid.js',
-                    'public/js/libs_misc/angular-file-upload/angular-file-upload.js',
-                    'public/js/libs/jqcloud2/dist/jqcloud.min.js',
-                    'public/js/libs/angular-jqcloud/angular-jqcloud.js',
-                    'public/js/libs_misc/jstimezonedetect/jstz.min.js',
-                    'public/js/libs/angular-social-links/angular-social-links.js',
-                    'public/js/libs/slick-carousel/slick/slick.js',
-                    'public/js/libs/angular-slick/dist/slick.js',
-                    'public/js/libs/leaflet/dist/leaflet.js',
-                    'public/js/libs/angular-leaflet-directive/dist/angular-leaflet-directive.min.js'
-
-                ],
-                */
-
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/index_body_scripts.jade'),
                 dest: 'public/js/indigenous.js'
             },
@@ -312,18 +261,7 @@ module.exports = function(grunt) {
             }
         },
 
-        /*
-        jsdoc2md: {
 
-            separateOutputFilePerInput: {
-                files: [
-                    { src: "api/1.0/cms.api.js", dest: "../wiki-indigeweb/API-CMS.md" },
-                    { src: "api/1.0/product.api.js", dest: "../wiki-indigeweb/API-Product.md" }
-                ]
-            }
-
-        },
-        */
 
         //TESTING
         nodeunit: {
@@ -351,7 +289,8 @@ module.exports = function(grunt) {
             leads: ['test/pullLeadDynoData.js'],
             ssl: ['certificates/test/ssldotcom.dao_test.js'],
             ssl_manager: ['certificates/test/manager_test.js'],
-            stripe_cleanup: ['payments/tests/stripe_cleanup.js']
+            stripe_cleanup: ['payments/tests/stripe_cleanup.js'],
+            ssb: ['ssb/test/ssb_manager_test.js']
         },
 
         // Running Karma from Grunt, with documentation from here:
@@ -506,6 +445,20 @@ module.exports = function(grunt) {
                     ]
                 }
             }
+        },
+
+        postcss: {
+            options: {
+                map: true,
+                processors: [
+                    // require('pixrem')(), // add fallbacks for rem units
+                    require('autoprefixer')({browsers: 'last 2 versions'}), // add vendor prefixes
+                    // require('cssnano')() // minify the result
+                ]
+            },
+            dist: {
+                src: ['public/admin/assets/css/*.css', 'public/css/*.css']
+            }
         }
 
 
@@ -602,6 +555,11 @@ module.exports = function(grunt) {
         accountActivity.cleanupContacts(done);
     });
 
+    // grunt.registerTask('serve', 'Start a custom web server.', function() {
+    //     grunt.log.writeln('Starting web server on port 80.');
+    //     require('./app.js');
+    // });
+
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
@@ -619,12 +577,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-csssplit');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-postcss');
+    // grunt.loadNpmTasks('grunt-serve');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
 
-    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'cssmin', 'clean:postbuild']);
+    grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'cssmin', 'clean:postbuild']);
 
 
     /*
@@ -632,7 +592,7 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('tests', ['nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
-            'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup']);
+            'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup', 'nodeunit:ssb']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testUtils', ['nodeunit:utils']);
@@ -659,4 +619,5 @@ module.exports = function(grunt) {
     grunt.registerTask('ssl', ['nodeunit:ssl']);
     grunt.registerTask('ssl_manager', ['nodeunit:ssl_manager']);
     grunt.registerTask('stripe_cleanup', ['nodeunit:stripe_cleanup']);
+    grunt.registerTask('ssb', ['nodeunit:ssb']);
 };

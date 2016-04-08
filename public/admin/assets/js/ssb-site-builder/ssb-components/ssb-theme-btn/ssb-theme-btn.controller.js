@@ -72,9 +72,9 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //         updateTextEditor(true);
     //     }
     // });
-    var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
-        console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
-    });
+    // var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
+    //     // console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
+    // });
 
 
 
@@ -177,6 +177,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var versionIsNumber = typeof parseInt(vm.elementData.version) === "number";
         var versionIsNaN = isNaN(parseInt(vm.elementData.version));
 
+        classObj['ssb-element'] = true;
+
         classObj[vm.elementData.type] = true;
 
         classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
@@ -261,6 +263,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         }
 
+        if(component.border && component.border.color){
+            styleString += 'border-color: ' + component.border.color + ';';
+            styleString += 'border-width: ' + component.border.width + 'px;';
+            styleString += 'border-style: ' + component.border.style + ';';
+            styleString += 'border-radius: ' + component.border.radius + '%;';
+        }
+
         if (vm.element) {
             vm.element.attr('data-ssb-style', styleString);
         }
@@ -278,14 +287,34 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     }
 
+    function hideAllControls() {
+
+        //hide editable-title's and borders
+        angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+
+        //hide all edit-controls
+        angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
+        angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
+
+        //components
+        angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
+
+        //btns
+        angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
+        angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
+
+    }
+
     function showEditControl(e) {
 
         //prevent other handling
         e.stopPropagation();
 
+        hideAllControls();
+
         //close section panel
         // pvm.uiState.openSidebarSectionPanel = null;
-        pvm.uiState.showSectionPanel = false;
+        // pvm.uiState.showSectionPanel = false;
         pvm.uiState.activeSectionIndex = null;
         pvm.uiState.activeComponentIndex = null;
 
@@ -320,9 +349,19 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         // else set active element (for contextual menu) and position the edit control and make visible
         } else {
             $timeout(function() {
+
                 setActiveElementId();
                 positionEditControl();
-                $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]').addClass('on');
+
+                var editControlComponent = $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]')
+
+                editControlComponent.addClass('on');
+
+                //if contextual menu is already open, open directly from single click
+                if (pvm.uiState.showSectionPanel) {
+                    editControlComponent.find('.ssb-settings-btn').click();
+                }
+
             });
         }
 
@@ -343,6 +382,12 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             SimpleSiteBuilderService.addCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId, newEl);
             setActiveElementId();
             positionEditControl();
+
+            //if contextual menu is already open, open directly from single click
+            if (pvm.uiState.showSectionPanel) {
+                newEl.find('.ssb-settings-btn').click();
+            }
+
         });
     }
 
@@ -368,13 +413,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     }
 
-    function clearActiveElement(e) {
-        var isEditControl = $(e.target).parents('[data-compiled-control-id], [data-compiled]').length > 0;
-        if (!isEditControl) {
-            pvm.uiState.activeElement = {};
-            angular.element('[data-compiled-control-id], [data-compiled]').removeClass('on ssb-theme-btn-active-element');
-        }
-    }
+    // function clearActiveElement(e) {
+    //     var isEditControl = $(e.target).parents('[data-compiled-control-id], [data-compiled]').length > 0;
+    //     if (!isEditControl) {
+    //         pvm.uiState.activeElement = {};
+    //         angular.element('[data-compiled-control-id], [data-compiled]').removeClass('on ssb-theme-btn-active-element');
+    //     }
+    // }
 
     function init(element) {
 
@@ -399,7 +444,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
                 angular.element(parentComponent).on('click', '[data-compiled-control-id=control_' + elementId + ']', setActiveElementId);
 
-                angular.element('.ssb-page-section').on('click', clearActiveElement);
+                // angular.element('.ssb-page-section').on('click', clearActiveElement);
             });
 
         } else {

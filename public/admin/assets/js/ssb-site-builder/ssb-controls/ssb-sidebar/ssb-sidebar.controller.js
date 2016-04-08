@@ -56,6 +56,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.deletePage = deletePage;
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
+    vm.showPageOnMenu = showPageOnMenu;
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
     vm.validateDuplicatePage = validateDuplicatePage;
@@ -499,6 +500,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.insertMediaCallback = function(asset) {
             if (componentIndex !== undefined && componentIndex !== null) {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+            } else if (vm.uiState.activeElement) {
+                vm.uiState.activeElement.bg.img.url = asset.url;
             } else {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
             }
@@ -680,9 +683,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.saveWebsite().then(function(){
           return (
             SimpleSiteBuilderService.createPage(template._id).then(function(data) {
-                  vm.closeModal();
-                  vm.state.saveLoading = false;
-                  vm.uiState.navigation.loadPage(data.data._id);
+                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                    vm.closeModal();
+                    vm.state.saveLoading = false;
+                    vm.uiState.navigation.loadPage(data.data._id);
+                })
             })
           )
         })
@@ -818,12 +823,57 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       }, function (isConfirm) {
         if (isConfirm) {
             vm.state.page.mainmenu = false;
-        }
-        else{
-          vm.state.page.mainmenu = true;
+            updateLinkList(false);
         }
       });
     }
+
+
+    function showPageOnMenu(){
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to show this page on main menu",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, show page!",
+        cancelButtonText: "No, do not show page!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+            vm.state.page.mainmenu = true;
+            updateLinkList(true);
+        }
+      });
+    }
+
+
+    function updateLinkList(state){
+        _.each(vm.state.website.linkLists, function (value, index) {
+            if (value.handle === "head-menu") {
+                if(!state){
+                    var _list = _.reject(value.links, function(link){
+                        return link.linkTo.data === vm.state.page.handle &&
+                        (link.linkTo.type === "page" || link.linkTo.type === "home")
+                    });
+                    if(_list){
+                        value.links = _list;
+                    }
+                }
+                else{
+                    value.links.push({
+                        label: vm.state.page.menuTitle || vm.state.page.title,
+                        type: "link",
+                        linkTo: {
+                            data: vm.state.page.handle,
+                            type: 'page'
+                        }
+                    });
+                }
+            }
+        });
+    };
 
     function deletePage() {
       var _deleteText = "Do you want to delete this page";
@@ -848,18 +898,18 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
           vm.state.pendingWebsiteChanges = false;
           SimpleSiteBuilderService.deletePage(vm.state.page).then(function(response){
             SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
-              SimpleSiteBuilderService.getPages().then(function(pages) {
                 vm.state.saveLoading = false;
                 console.log('page deleted');
                 toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
                   $timeout(function () {
-                    if(pages["index"])
-                        vm.uiState.navigation.loadPage(pages["index"]._id);
+                    var pages = _.reject(vm.state.pages, function(page){ return page.handle === vm.state.page.handle});
+                    if(pages.length)
+                        vm.uiState.navigation.loadPage(pages[0]._id);
                       else
-                        $location.path('/website/site-builder/pages/');
+                        SimpleSiteBuilderService.getPages().then(function(pages) {
+                            $location.path('/website/site-builder/pages/');
+                        })
                 }, 0);
-
-              });
             });
           })
         }
@@ -891,9 +941,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function validateDuplicatePage(pageHandle) {
-        var _page = _.find(vm.state.originalPages, function (page) {
-            return page.handle === pageHandle;
-        });
+
+        var _page = vm.state.pages.filter(function(page){return page.handle.toLowerCase() === pageHandle.toLowerCase()})[0]
+
         if (_page && _page._id !== vm.state.page._id) {
             return "Page handles must be unique.";
         } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {

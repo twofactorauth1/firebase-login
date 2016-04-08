@@ -18,12 +18,6 @@ var awsConfig = require('../configs/aws.config');
 var log = $$.g.getLogger("cms_manager");
 var Blog = require('./model/components/blog');
 
-var deferred = require("jquery-deferred");
-if (typeof $ == 'undefined') {
-    $ = {};
-}
-_.extend($, deferred);
-
 module.exports = {
 
     /*
@@ -2312,7 +2306,7 @@ module.exports = {
         log.debug('>> updatePageScreenshot');
 
         cmsDao.getPageById(pageId, function(err, page){
-            if(err) {
+            if(err || !page) {
                 log.error('Error getting page: ' + err);
                 return fn(err, null);
             }

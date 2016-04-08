@@ -194,6 +194,14 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
             }
         }
 
+        angular.element($window).bind('resize', function () {
+            if(scope.map){
+                $timeout(function () {
+                    google.maps.event.trigger(scope.map, 'resize');
+                }, 500);
+            }
+        });
+
     }
 
   };

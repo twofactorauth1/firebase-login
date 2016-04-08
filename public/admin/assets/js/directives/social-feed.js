@@ -27,7 +27,8 @@ app.directive('twitterFeed', function () {
             actionReply: '&',
             actionFavorite: '&',
             actionRetweet: '&',
-            actionDirectMessage: '&'
+            actionDirectMessage: '&',
+            showDm: '='
         }
     };
 });
@@ -43,7 +44,8 @@ app.directive('twitterFollower', function () {
             post: '=',
             actionTweetAt: '&',
             actionFollowBack: '&',
-            actionDirectMessage: '&'
+            actionDirectMessage: '&',
+            showDm: '='
         }
     };
 });

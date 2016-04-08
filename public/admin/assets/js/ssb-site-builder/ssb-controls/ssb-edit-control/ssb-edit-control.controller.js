@@ -2,61 +2,98 @@
 
 app.controller('SiteBuilderEditControlController', ssbSiteBuilderEditControlController);
 
-ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
+ssbSiteBuilderEditControlController.$inject = ['$scope', '$rootScope', '$interval', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
+function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
 
     var vm = this;
 
     vm.init = init;
+    vm.isElementControl = false;
+    vm.isComponentControl = false;
+    vm.isComponentPartialAreaControl = false;
     vm.setActive = setActive;
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
     vm.removeSectionFromPage = removeSectionFromPage;
     vm.scrollToActiveSection = scrollToActiveSection;
+    vm.uiState.activeElementHistory = [];
+
 
     /**
-     * Watch for hovered components
+     * Handle menu per content type ['component' | 'component-partial-area' | 'element']
      */
-    if (vm.componentIndex !== undefined) {
-        $scope.$watchGroup(['vm.uiState.hoveredSectionIndex', 'vm.uiState.hoveredComponentIndex'], setPosition);
+    function handleMenuPenVisibleForComponent(event, id, type) {
+
+        return setPosition();
+
+    }
+
+    function handleMenuPenVisibleForComponentPartialArea(event, id, type) {
+
+        if (id && id === vm.element.attr('data-control-id') && type === 'component-partial-area') {
+            return setPosition();
+        }
+
+    }
+
+    function handleMenuPenVisibleForElement(event, id, type) {
+
+        if (id && id === vm.element.attr('data-control-id') && type === 'element') {
+            return setPosition();
+        }
+
     }
 
 
+
     /*
-     * Turn on edit control for hovered element, set position near top left of element
-     * - adjust position to account for section's
-     *   margin/padding and edit-control placement @ top:0, left:0
+     * Position to account for section's margin/padding
+     * and edit-control placement @ top:0, left:0
      */
     function setPosition() {
 
-        if (vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex) {
+        var isActiveElement = angular.isDefined(vm.uiState.activeElement.type);
 
-            var section = vm.element.parent('section');
-            var sectionTop = parseInt(section.css('marginTop')) + parseInt(section.css('paddingTop'));
-            var sectionLeft = parseInt(section.css('marginLeft')) + parseInt(section.css('paddingLeft'));
+        if (vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex || isActiveElement) {
 
-            var top = vm.uiState.hoveredComponentPosition.top;
-            var left = vm.uiState.hoveredComponentPosition.left;
+                var top = 0;
+                var left = 0;
+                var editElTop = 0;
+                var editElLeft = 0;
+                var topbarHeight = 125;
+                var sidebarWidth = 140;
+                var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
+                var topOffset = 35;
+                var leftOffset = 35;
 
-            if (parseInt(top) === 0 || parseInt(top) - sectionTop === 0) {
-                top = 35;
-            }
+                var editEl = vm.uiState.hoveredComponentEl;
+                var editControl = vm.uiState.hoveredComponentEditControl;
 
-            if (parseInt(left) === 0 || parseInt(left) - sectionLeft === 0) {
-                left = 5;
-            }
+                if (editEl.length) {
+                    editElTop = editEl[0].getBoundingClientRect().top;
+                    editElLeft = editEl[0].getBoundingClientRect().left;
+                    top = editEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
+                    left = editEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
+                }
 
-            vm.element.css({
-                'top': top,
-                'left': left
-            });
+                if (left < 0) {
+                    left = 0;
+                }
 
-            $timeout(function() {
+                if (editElLeft === sidebarWidth) {
+                    left = 0;
+                }
 
-                vm.element.addClass('on');
+                if (editElTop - topbarHeight < 30) {
+                    top = editElTop - topbarHeight;
+                    left = left + 36;
+                }
 
-            })
+                if (editControl && editControl.length) {
+                    editControl.css({ top: top, left: left });
+                    editControl.addClass('ssb-on');
+                }
 
         } else {
 
@@ -70,27 +107,12 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
     function setActive(sectionIndex, componentIndex, compiled) {
 
-        //if panel already open, a click on edit control should toggle it off
-        if (vm.uiState.showSectionPanel === true) {
-            var isActiveSection = vm.uiState.activeSectionIndex === sectionIndex;
-            var isActiveComponent = vm.uiState.activeComponentIndex === componentIndex;
-
-            if ((isActiveSection && componentIndex === undefined && vm.uiState.activeComponentIndex === undefined) ||
-                (isActiveSection && isActiveComponent)) {
-
-                vm.uiState.showSectionPanel = false;
-                return
-
-            }
-
-        }
-
         vm.uiState.showSectionPanel = false;
         vm.uiState.navigation.sectionPanel.reset();
         SimpleSiteBuilderService.setActiveSection(undefined);
         SimpleSiteBuilderService.setActiveComponent(undefined);
 
-        if (compiled) {
+        if (compiled || (componentIndex === null && sectionIndex === null)) {
             setActiveElement();
         } else if (componentIndex !== undefined) {
             setActiveComponent(sectionIndex, componentIndex);
@@ -103,7 +125,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     function setActiveSection(index) {
 
         var section = vm.state.page.sections[index];
-        var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-');
+        var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-') + ' Section';
 
         $timeout(function() {
             SimpleSiteBuilderService.setActiveSection(index);
@@ -147,16 +169,23 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
     function setActiveElement() {
 
-        $timeout(function() {
-            var sectionPanelLoadConfig = {
-                name: vm.uiState.activeElement.name,
-                id: vm.uiState.activeElement.id
-            };
+        console.log('vm.uiState.activeElement', vm.uiState.activeElement);
 
-            vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
-            vm.uiState.showSectionPanel = true;
-        });
+        var previousActiveElement = vm.uiState.activeElementHistory[vm.uiState.activeElementHistory.length - 1];
 
+        if (vm.uiState.activeElement && vm.uiState.activeElement.type) {
+            vm.uiState.activeElementHistory.push(vm.uiState.activeElement);
+        } else {
+            vm.uiState.activeElement = previousActiveElement;
+        }
+
+        var sectionPanelLoadConfig = {
+            name: vm.uiState.activeElement.name,
+            id: vm.uiState.activeElement.id
+        };
+
+        vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+        vm.uiState.showSectionPanel = true;
     }
 
     function moveSection(direction, section, index) {
@@ -199,22 +228,22 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     }
 
     function removeSectionFromPage(index) {
-      SweetAlert.swal({
-        title: "Are you sure?",
-        text: "Do you want to delete this section?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, do not delete it!",
-        closeOnConfirm: true,
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
-          SimpleSiteBuilderService.removeSectionFromPage(index)
-        }
-      });
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "Do you want to delete this section?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, do not delete it!",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                SimpleSiteBuilderService.removeSectionFromPage(index)
+            }
+        });
     }
 
     function scrollToActiveSection() {
@@ -228,7 +257,24 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     }
 
     function init(element) {
+
     	vm.element = element;
+
+        vm.isComponentControl = vm.element.hasClass('ssb-edit-control-component') && !vm.element.hasClass('ssb-edit-control-element')  && !vm.element.hasClass('ssb-edit-control-component-area');
+        vm.isComponentPartialAreaControl = vm.element.hasClass('ssb-edit-control-component-area');
+        vm.isElementControl = vm.element.hasClass('ssb-edit-control-element');
+
+        /**
+         * Handle events for component and element menu (section menu pen position handled via CSS only)
+         */
+        if (vm.isComponentControl) {
+            $rootScope.$on('$ssbMenuPenVisibleForComponent', handleMenuPenVisibleForComponent);
+        } else if (vm.isComponentPartialAreaControl) {
+            $rootScope.$on('$ssbMenuPenVisibleForComponentPartialArea', handleMenuPenVisibleForComponentPartialArea);
+        } else if (vm.isElementControl) {
+            $rootScope.$on('$ssbMenuPenVisibleForElement', handleMenuPenVisibleForElement);
+        }
+
     }
 
 }

@@ -246,6 +246,7 @@ module.exports = {
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
                 var taxAdded = 0;
+                var discount = 0;
 
                 /*
                  * loop through line items
@@ -282,11 +283,18 @@ module.exports = {
                     totalLineItemsQuantity += parseFloat(item.quantity);
                 });
                 log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
-                /*
-                 * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
-                 * side to avoid shenanigans.
-                 */
-                totalAmount = subTotal + taxAdded;
+
+                 if(order.get('cart_discount')) {
+                     discount += parseFloat(order.get('cart_discount'));
+                     log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                 }
+
+                 if(order.get('total_discount')) {
+                     discount += parseFloat(order.get('total_discount'));
+                     log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                 }
+
+                 totalAmount = (subTotal - discount) + taxAdded;
 
 
                 order.set('tax_rate', taxPercent);
@@ -641,7 +649,7 @@ module.exports = {
             // check and get fulfillment email products
             function(account, order, callback) {
                 log.debug('Order is', order);
-                if(order.get('payment_details') && order.get('payment_details').card_token && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
+                if(order.get('payment_details') && order.get('payment_details').charge && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
                     var productAry = [];
                     async.each(order.get('line_items'), function iterator(item, cb){
                         productManager.getProduct(item.product_id, function(err, product){
@@ -1343,162 +1351,269 @@ module.exports = {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
             } else {
-                var totalAmount = 0;
-                var subTotal = 0;
-                var totalLineItemsQuantity = 0;
-                var taxPercent = 0.08;
-                //accountDao.getAccountByID(order.get('account_id'), function(acc) {
-                //
-                //    var bizAddr = acc.business.addresses[0];
-                //
-                //    log.debug('updateOrderById: business address');
-                //    log.debug(bizAddr);
-                //
-                //    productManager.getTax(bizAddr.zip, function(err, taxPercent) {
-                //        log.debug('updateOrderById: taxPercent=' + taxPercent);
+                var accountId = parseInt(order.get('account_id'));
 
-                    _.each(order.get('line_items'), function(line_item){
-                        totalAmount += parseFloat(line_item.total);
-                        subTotal += parseFloat(line_item.total);
-                        totalLineItemsQuantity += parseFloat(line_item.quantity);
-                    });
-                    log.debug('subtotal: ' + totalAmount);
-                    if(order.get('cart_discount')) {
-                        totalAmount -= parseFloat(order.get('cart_discount'));
-                        log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
-                    }
-                    if(order.get('total_discount')) {
-                        totalAmount -= parseFloat(order.get('total_discount'));
-                        log.debug('subtracting total_discount of ' + order.get('total_discount'));
-                    }
-                    if(order.get('total_tax') && order.get('total_tax') > 0) {
-                        totalAmount += parseFloat(order.get('total_tax'));
-                        log.debug('adding tax of ' + order.get('total_tax'));
-                    }
-                    // else
-                    // {
-                    //     totalAmount += parseFloat(totalAmount * taxPercent);
-                    //     log.debug('adding tax of ' + order.get('total_tax'));
-                    // }
-                    if(order.get('total_shipping')) {
-                        totalAmount += parseFloat(order.get('total_shipping'));
-                        log.debug('adding shipping of ' + order.get('total_shipping'));
-                    }
+                async.waterfall([
+                    //get the account
+                    function(callback) {
+                        log.debug('fetching account ' + order.get('account_id'));
+                        accountDao.getAccountByID(accountId, function(err, account){
+                            callback(err, account);
+                        });
+                    },
+                    //get the products
+                    function(account, callback) {
+                        log.debug('fetching products');
+                        var productAry = [];
+                        async.each(order.get('line_items'), function iterator(item, cb){
+                            productManager.getProduct(item.product_id, function(err, product){
+                                if(err) {
+                                    cb(err);
+                                } else {
+                                    productAry.push(product);
+                                    item.sku = product.get('sku');
+                                    item.name = product.get('name');
+                                    log.debug('Product is', product);
+                                    cb();
+                                }
+                            });
+                        }, function done(err){
+                            callback(err, account, productAry);
+                        });
+                    },
+                    //determine tax rate
+                    function(account, productAry, callback) {
+                        log.debug('commerceSettings');
+                        var _taxRate = 0;
+                        var commerceSettings = account.get('commerceSettings');
 
-                    order.set('subtotal', subTotal.toFixed(2));
-                    // order.set('total', totalAmount.toFixed(2));
-                    log.debug('total is now: ' + order.get('total'));
-                    order.set('total_line_items_quantity', totalLineItemsQuantity);
-                    dao.saveOrUpdate(order, function(err, updatedOrder){
-                    if(err) {
-                        log.error('Error updating order: ' + err);
-                        return fn(err, null);
-                    }
-                    log.debug('Sending update order email');
-                    contactDao.getById(order.get('customer_id'), $$.m.Contact, function(err, contact) {
+                        if(commerceSettings && commerceSettings.taxes === true) {
+                            //figure out the rate
+                            var zip = 0;
+                            if(commerceSettings.taxbased === 'customer_shipping') {
+                                zip = order.get('shipping_address').postcode;
+                            } else if(commerceSettings.taxbased === 'customer_billing') {
+                                zip = order.get('billing_address').postcode;
+                            } else if(commerceSettings.taxbased === 'business_location') {
+                                zip = account.get('business').addresses && account.get('business').addresses[0] ? account.get('business').addresses[0].zip : 0;
+                            } else {
+                                log.warn('Unable to determine tax rate based on ', commerceSettings);
+                            }
+                            if(zip !== 0) {
+                                productManager.getTax(zip, function(err, rate){
+                                    log.debug('Tax Service Response: ', rate);
+                                    if(rate && rate.results && rate.results.length > 0) {
+                                        _taxRate = rate.results[0].taxSales.toFixed(4); // nexus location or business_location
+                                        log.debug('Initial Tax Rate: ', _taxRate);
+
+                                        if(commerceSettings.taxbased !== 'business_location'
+                                            && commerceSettings.taxnexus && commerceSettings.taxnexus.length > 0) {
+
+                                            log.debug('Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
+                                            if (_.pluck(commerceSettings.taxnexus, "text").indexOf(rate.results[0].geoState) < 0) {
+                                                _taxRate = 0; // Force rate to zero. Non-nexus location
+                                            }
+                                        }
+                                    } else {
+                                        log.debug('Tax Service (productManager.getTax) Response ERR: ', err);
+                                        _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
+                                    }
+                                    log.debug('Applicable Tax Rate (first): ', _taxRate);
+                                    callback(err, account, productAry, _taxRate);
+                                });
+                            } else {
+                                log.debug('Applicable Tax Rate (second): ', _taxRate);
+                                callback(null, account, productAry, _taxRate);
+                            }
+                        } else {
+                            log.debug('Applicable Tax Rate (third): ', _taxRate);
+                            callback(null, account, productAry, _taxRate);
+                        }
+                    },
+                    //validate
+                    function(account, productAry, taxPercent, callback){
+                        log.debug('validating order on account ' + order.get('account_id'));
+                        log.debug('using a tax rate of ', taxPercent);
+                        //calculate total amount and number line items
+                        var totalAmount = 0;
+                        var subTotal = 0;
+                        var totalLineItemsQuantity = 0;
+                        var taxAdded = 0;
+                        var discount = 0;
+
+                        /*
+                         * loop through line items
+                         *   based on quantity and id, get lineItemSubtotal
+                         *   if item is taxable, get tax rate and add to lineItemTax
+                         *   sum
+                         *
+                         *
+                         */
+                        _.each(order.get('line_items'), function iterator(item, index){
+                            var product = _.find(productAry, function(currentProduct){
+                                if(currentProduct.id() === item.product_id) {
+                                    return true;
+                                }
+                            });
+                            log.debug('found product ', product);
+                            var lineItemSubtotal = item.quantity * product.get('regular_price');
+                            if(product.get('on_sale') === true) {
+                                var startDate = product.get('sale_date_from', 'day');
+                                var endDate = product.get('sale_date_to', 'day');
+                                var rightNow = new Date();
+                                if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                                    lineItemSubtotal = item.quantity * product.get('sale_price');
+                                    item.sale_price = product.get('sale_price').toFixed(2);
+                                    //TODO: Should not need this line.  Receipt template currently needs it.
+                                    item.regular_price = product.get('sale_price').toFixed(2);
+                                    item.total = lineItemSubtotal.toFixed(2);
+                                }
+                            }
+                            if(product.get('taxable') === true) {
+                                taxAdded += (lineItemSubtotal * taxPercent);
+                            }
+                            subTotal += lineItemSubtotal;
+                            totalLineItemsQuantity += parseFloat(item.quantity);
+                        });
+                        log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+
+                        if(order.get('cart_discount')) {
+                            discount += parseFloat(order.get('cart_discount'));
+                            log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                        }
+
+                        if(order.get('total_discount')) {
+                            discount += parseFloat(order.get('total_discount'));
+                            log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                        }
+
+                        totalAmount = (subTotal - discount) + taxAdded;
+
+
+                        order.set('tax_rate', taxPercent);
+                        order.set('subtotal', subTotal.toFixed(2));
+                        order.set('total', totalAmount.toFixed(2));
+                        log.debug('total is now: ' + order.get('total'));
+                        order.set('total_line_items_quantity', totalLineItemsQuantity);
+                        callback(null, account, order);
+
+                    },
+                    //update
+                    function(account, validatedOrder, callback) {
+                        dao.saveOrUpdate(validatedOrder, function (err, updatedOrder) {
+                            callback(err, account);
+                        });
+                    },
+                    //get contact
+                    function (account, callback) {
+                        contactDao.getById(order.get('customer_id'), $$.m.Contact, function(err, contact) {
+                            callback(err, contact, account);
+                        });
+                    },
+                    //get email template
+                    function (contact, account, callback) {
+                        cmsManager.getEmailPage(accountId, 'new-order', function(err, template) {
+                            callback(err, template, contact, account);
+                        });
+                    },
+                    //send update email
+                    function (template, contact, account, callback) {
                         var toAddress = "";
                         if(contact.getEmails()[0])
                             toAddress = contact.getEmails()[0].email;
                         var toName = contact.get('first') + ' ' + contact.get('last');
-                        var accountId = updatedOrder.get('account_id');
-                        var orderId = updatedOrder.id();
+                        var accountId = order.get('account_id');
+                        var orderId = order.id();
                         var vars = [];
 
                         log.debug('toAddress ', toAddress);
                         log.debug('toName ', toName);
                         log.debug('toAddress ', toAddress);
 
-                        accountDao.getAccountByID(accountId, function(err, account){
-                            if(err) {
-                                callback(err);
-                                log.error('Error getting account:', err);
-                            } else {
-                                var business = account.get('business');
-                                var emailPreferences = account.get('email_preferences');
-                                if(!business || !business.emails || !business.emails[0].email) {
-                                    log.warn('No account email.  No NEW_ORDER email sent');
-                                }
-                                var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
-                                var fromAddress = business.emails[0].email;
-                                var fromName = business.name;
+                        var business = account.get('business');
+                        var emailPreferences = account.get('email_preferences');
+                        if(!business || !business.emails || !business.emails[0].email) {
+                            log.warn('No account email.  No NEW_ORDER email sent');
+                        }
+                        var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
+                        var fromAddress = business.emails[0].email;
+                        var fromName = business.name;
 
-                                cmsManager.getEmailPage(accountId, 'new-order', function(err, email){
-                                    if(err || !email) {
-                                        log.warn('No NEW_ORDER email receipt sent: ' + err);
-                                        if(emailPreferences.new_orders === true) {
-                                            //Send additional details
-                                            subject = "New order created!";
-                                            var component = {};
-                                            component.order = updatedOrder.attributes;
-                                            component.text = "The following order was created:";
-                                            component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                            app.render('emails/base_email_order_admin_notification', component, function(err, html){
-                                                juice.juiceResources(html, {}, function(err, _html) {
-                                                    if (err) {
-                                                        log.error('A juice error occurred. Failed to set styles inline:', err);
-                                                    } else {
-                                                        log.debug('juiced - one ' + _html);
-                                                        html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                                    }
-                                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
-                                                        log.debug('Admin Notification Sent');
-                                                    });
-                                                });
-                                            });
+                        if(!template) {
+                            log.warn('No NEW_ORDER email receipt sent');
+                            if(emailPreferences.new_orders === true) {
+                                //Send additional details
+                                subject = "New order created!";
+                                var component = {};
+                                component.order = order.attributes;
+                                component.text = "The following order was created:";
+                                component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + order.attributes._id;
+                                app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                    juice.juiceResources(html, {}, function(err, _html) {
+                                        if (err) {
+                                            log.error('A juice error occurred. Failed to set styles inline:', err);
+                                        } else {
+                                            log.debug('juiced - one ' + _html);
+                                            html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         }
-                                    } else {
-                                        var component = email.get('components')[0];
-                                        component.order = updatedOrder.attributes;
-                                        log.debug('Using this for data', component);
-                                        app.render('emails/base_email_order', component, function(err, html) {
-                                            juice.juiceResources(html, {}, function(err, _html) {
-                                                if (err) {
-                                                    log.error('A juice error occurred. Failed to set styles inline:', err);
-                                                } else {
-                                                    log.debug('juiced - two' + _html);
-                                                    html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                                }
-
-                                                mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
-                                                });
-                                            });
-
-
-                                            if(emailPreferences.new_orders === true) {
-                                                //Send additional details
-                                                subject = "New order created!";
-                                                component.text = "The following order was created:";
-                                                component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                                app.render('emails/base_email_order_admin_notification', component, function(err, html){
-                                                    juice.juiceResources(html, {}, function(err, _html) {
-                                                        if (err) {
-                                                            log.error('A juice error occurred. Failed to set styles inline:', err);
-                                                        } else {
-                                                            log.debug('juiced - three' + _html);
-                                                            html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                                        }
-
-                                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
-                                                            log.debug('Admin Notification Sent');
-                                                        });
-                                                    });
-                                                });
-                                            }
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                            log.debug('Admin Notification Sent');
                                         });
-
+                                    });
+                                });
+                            }
+                        } else {
+                            var component = template.get('components')[0];
+                            component.order = order.attributes;
+                            log.debug('Using this for data', component);
+                            app.render('emails/base_email_order', component, function(err, html) {
+                                juice.juiceResources(html, {}, function(err, _html) {
+                                    if (err) {
+                                        log.error('A juice error occurred. Failed to set styles inline:', err);
+                                    } else {
+                                        log.debug('juiced - two' + _html);
+                                        html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                     }
+
+                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, template._id, function(){
+                                    });
                                 });
 
-                            }
-                        });
-                    });
-                    log.debug('<< updateOrderById');
-                    return fn(null, updatedOrder);
+
+                                if(emailPreferences.new_orders === true) {
+                                    //Send additional details
+                                    subject = "New order created!";
+                                    component.text = "The following order was created:";
+                                    component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + order.attributes._id;
+                                    app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                        juice.juiceResources(html, {}, function(err, _html) {
+                                            if (err) {
+                                                log.error('A juice error occurred. Failed to set styles inline:', err);
+                                            } else {
+                                                log.debug('juiced - three' + _html);
+                                                html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            }
+
+                                            mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, template._id, function(){
+                                                log.debug('Admin Notification Sent');
+                                            });
+                                        });
+                                    });
+                                }
+                            });
+
+                        }
+                        callback(null, null);
+                    }
+                ], function (err, result) {
+                    if (err) {
+                        log.error('Error updating order: ' + err);
+                        return fn(err.message, null);
+                    } else {
+                        log.debug('<< updateOrderById');
+                        return fn(null, order);
+                    }
                 });
-
-        //    });
-        //});
-
             }
         });
     },

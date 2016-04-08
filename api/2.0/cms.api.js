@@ -71,8 +71,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('pages/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
         //app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
 
-        app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page versions
-        app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//revert page to version
+        app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.getPageVersions.bind(this));//get page versions
+        app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.revertPage.bind(this));//revert page to version
 
 
         // COMPONENTS
@@ -334,7 +334,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var homePage = _page.homePage;
         delete _page.homePage;
         var updatedPage = new $$.m.ssb.Page(_page);
-        
+
         updatedPage.set('_id', pageId);//make sure we don't change the ID
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
@@ -342,7 +342,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var modified = {date: new Date(), by:self.userId(req)};
-                ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, function(err, page){
+                ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(resp, err, page, "Error fetching page");
                     pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
@@ -511,11 +511,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< setSiteTemplate');
             return self.sendResultOrError(resp, err, value, "Error setting Site Template");
         });
+    },
+
+    getPageVersions: function (req, resp) {
+        var self = this;
+        self.log.debug('>> getPageVersions');
+        var pageId = req.params.id;
+        cmsManager.getPageVersions(pageId, 'all', function (err, versions) {
+            self.log.debug('<< getPageVersions');
+            return self.sendResultOrError(resp, err, versions, "Error getting versions of a page");
+        });
+    },
+
+    revertPage: function (req, resp) {
+        var self = this;
+        self.log.debug('>> revertPage');
+        var pageId = req.params.id;
+        var versionId = parseInt(req.params.versionId);
+        cmsManager.revertPage(pageId, versionId, function (err, revertedPage) {
+            self.log.debug('<< getPageVersions');
+            return self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
+        });
     }
-
-
 
 });
 
 module.exports = new api({version:'2.0'});
-

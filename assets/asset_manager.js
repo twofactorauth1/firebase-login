@@ -48,7 +48,7 @@ module.exports = {
 		    if (value.url.substring(0, 5) == 'http:') {
 		      asset.set('url', value.url.substring(5, value.url.length));
 		    } else {
-		      asset.set('url', value.url);  
+		      asset.set('url', value.url);
 		    }
 		    console.log(asset);
                     uploadPromise.resolve(value);

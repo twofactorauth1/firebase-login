@@ -77,6 +77,29 @@ var section = $$.m.ModelBase.extend({
 
     toReference: function() {
         return {_id: this.id()};
+    },
+
+    getVersion: function() {
+        var version = 0;
+        try {
+            var lastIndex = this.id().lastIndexOf('_');
+            if(lastIndex != -1) {
+                version = parseInt(this.id().slice(lastIndex+1));
+            }
+        } catch(Exception) {
+            //whatever
+        }
+
+        return version;
+    },
+
+    setVersion: function(newver) {
+        var lastIndex = this.id().lastIndexOf('_');
+        if(lastIndex != -1) {
+            this.id(this.id().slice(0,lastIndex) + '_' + newver)
+        } else {
+            this.id(this.id() + '_' + newver);
+        }
     }
 
 

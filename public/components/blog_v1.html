@@ -1,4 +1,4 @@
-<div ng-class="component.type+'-v'+component.version">
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div data-class="blog" data-id="{{component._id}}">
         <div id="content-area">
             <div class="container clearfix row-fluid">
@@ -20,7 +20,7 @@
 
                                     <div class="post_title" data-class="post_title"
                                             data-ng-if="blogpost.post_title" ng-bind-html="blogpost.post_title | unsafe">
-                                    </div>                                 
+                                    </div>
                                     </a>
                                     <a ng-if="isEditing" class="btn ssb-theme-btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deleteBlogPost(blogpost._id, blogpost)" style="margin-right:10px">
                                         <span class="fa fa-times"></span>

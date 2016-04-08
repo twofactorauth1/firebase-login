@@ -22,9 +22,14 @@
         border-color: @ui-color-picker-preview-border-color;
     }
 
+    .sp-preview {
+        margin-right: 1px;
+    }
+
     .fa-eyedropper {
         position: relative;
         left: -.5em;
+        display: none; //will show when/if implemented
     }
 
     .sp-dd {
@@ -92,5 +97,15 @@
         height: 50px;
     }
 
+}
+
+.ssb-ui-select-dark .form-control.ui-select-toggle {
+    background: @ssb-chrome-dark-blue-gray-bg-color;
+    color: white;
+    border-color: black;
+
+    .caret {
+        border-top-color: white;
+    }
 }
 
