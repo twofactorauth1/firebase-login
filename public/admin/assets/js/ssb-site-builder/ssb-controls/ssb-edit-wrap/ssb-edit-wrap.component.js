@@ -48,7 +48,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                 if (!hasActiveEditControl && (isSection && !hasSectionChildMouseOver || isComponent && !hasComponentChildMouseOver)) {
 
-                    // e.stopPropagation();
+                    e.stopPropagation();
 
                     angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
                     element.addClass('ssb-on');
@@ -370,7 +370,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     e.stopPropagation();
 
                     var clickedSectionScope = el.closest('.ssb-section-layout').scope();
-                    var clickedSectionData = clickedSectionScope.vm.component;
+                    var clickedSectionData = clickedSectionScope.vm.section;
                     var clickedComponentScope = el.closest('.ssb-component').scope();
                     var clickedComponentData = clickedComponentScope.vm.component;
                     var editControlComponent = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]');
