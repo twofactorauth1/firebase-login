@@ -2,7 +2,7 @@
 
 app.directive('ssbActionButtons', ssbActionButtons);
 
-function ssbActionButtons() {
+function ssbActionButtons(SimpleSiteBuilderService) {
 
     return {
         restrict: 'E',
@@ -16,6 +16,14 @@ function ssbActionButtons() {
         controllerAs: 'vm',
         bindToController: true,
         link: function(scope, element, attrs, ctrl) {
+            scope.pageVersions = [];
+            scope.historyDropdownFn = function (open) {
+                if (open) {
+                    SimpleSiteBuilderService.getPageVersions(scope.vm.state.page._id, function (data) {
+                        scope.pageVersions = data;
+                    });
+                }
+            };
             ctrl.init(element);
         }
     };

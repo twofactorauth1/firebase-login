@@ -1,6 +1,13 @@
 <div class="button-group">
     <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="History">
-        <button class="btn btn-primary btn-o" ng-click="vm.cancel()"><span class="fa fa-history"></span> <span class="sr-only">History</span></button>
+        <div class="dropdown" dropdown on-toggle="historyDropdownFn(open)">
+            <button class="btn btn-primary btn-o dropdown-toggle" dropdown-toggle><span class="fa fa-history"></span> <span class="sr-only">History</span></button>
+            <ul class="dropdown-menu dropdown-dark">
+                <li ng-repeat='v in pageVersions'>
+                    <a>{{v.modified.date | date:'medium'}}</a>
+                </li>
+            </ul>
+        </div>
     </div>
 	<div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Cancel">
         <button ng-disabled="!vm.state.pendingPageChanges && !vm.state.pendingWebsiteChanges" class="btn btn-primary btn-o" ng-click="vm.cancel()"><span class="fa fa-eraser"></span> <span class="sr-only">Cancel</span></button>
