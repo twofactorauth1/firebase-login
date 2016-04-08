@@ -60,12 +60,12 @@ $.FroalaEditor.config = {
      linkStyles:{
         'ssb-theme-btn': 'SB Button',
         'btn': 'Button',
-        'btn-default': 'Default Button',
-        'btn-primary': 'Primary Button',
-        'btn-success': 'Success Button',
-        'btn-info': 'Info Button',
-        'btn-warning': 'Warning Button',
-        'btn-danger': 'Danger Button',
+        // 'btn-default': 'Default Button',
+        // 'btn-primary': 'Primary Button',
+        // 'btn-success': 'Success Button',
+        // 'btn-info': 'Info Button',
+        // 'btn-warning': 'Warning Button',
+        // 'btn-danger': 'Danger Button',
         'btn-link': 'Link Button',
      },
      linkText: true,
@@ -122,5 +122,6 @@ $.FroalaEditor.config = {
         'ssb-editor-style-line-height-5': 'Line Height 5',
     },
     imageUploadURL: "/api/1.0/assets/editor/upload",
-    linkMultipleStyles: false
+    linkMultipleStyles: false,
+    paragraphMultipleStyles: false
 }

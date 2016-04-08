@@ -816,6 +816,7 @@
     };
 
     $scope.isTwFollowerFn = function (sourceId) {
+      console.log(sourceId);
         if (_.findWhere($scope.followers, {sourceId: String(sourceId)})) {
             return true;
         } else {

@@ -886,12 +886,12 @@ module.exports = {
 
                 async.eachSeries(sections, function(section, callback){
                     //if we are not working with an object for some reason, fix it.
-                    if(!section || section.hasOwnProperty('_id')) {
+                    if(!section ||  typeof section.id === 'undefined') {
                         section = new $$.m.ssb.Section(section);
                     }
                     self.log.debug(section.get('name') + ' :: ' + section.get('title'));
 
-                    if (section.get('accountId') === 0) {
+                    if (section.get('accountId') === 0 || section.get('accountId')=== null) {
                         var id = $$.u.idutils.generateUUID();
                         section.set('_id', id);
                         section.set('anchor', id);
@@ -937,7 +937,16 @@ module.exports = {
                 self.log.info('updateSections');
                 var otherPagesWithSectionReferences = [];
                 async.eachSeries(dereferencedSections, function(section, callback){
-                    var existingSection = _.find(existingSections, function(existingSection){self.log.debug('existing section?', existingSection);return section.id() === existingSection.id()});
+
+                    var existingSection = _.find(existingSections, function(existingSection) {
+                        self.log.debug('existing section?', existingSection);
+                        if (existingSection && existingSection.id) {
+                            return section.id() === existingSection.id()
+                        } else {
+                            return false
+                        }
+                    });
+
                     if(existingSection) {
                         if(!_.isEqual(existingSection, section)){
 
@@ -1816,7 +1825,7 @@ module.exports = {
                 if (isString && isGoodKey) {
 
                     // $$$ = cheerio.load(value);
-                    $$$ = cheerio.load('<div id="temp_wrap"></div>');
+                    var $$$ = cheerio.load('<div id="temp_wrap"></div>');
                     $$$('#temp_wrap').append(value);
                     var $classSelection = $$$(classesToRemove.split(' ').map(function(c) { return '.' + c }).join(', '));
                     var $attrSelection = $$$(attributesToRemove.split(' ').map(function(a) { return '[' + a + ']'; }).join(', '));

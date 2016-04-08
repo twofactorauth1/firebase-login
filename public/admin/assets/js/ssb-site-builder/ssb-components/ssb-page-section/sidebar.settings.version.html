@@ -1,10 +1,10 @@
 <div class="row padding-10">
 
-    <ul class="ssb-section-content-list list-unstyled">
+    <ul class="ssb-section-content-list ssb-sidebar-layout-versions list-unstyled">
 
         <li
             ng-repeat="section in ::vm.filteredSections() track by $index"
-            class="ssb-sidebar-add-section ssb-section-content-list-item"
+            class="ssb-sidebar-add-section ssb-section-content-list-item ssb-sidebar-layout-version"
             ng-class="{ 'ssb-section-content-list-item-on': vm.isSelectedLayout(section) }"
             ng-click="vm.addSectionToPage(section, section.version, vm.uiState.activeSectionIndex);">
 
@@ -12,7 +12,7 @@
                 <div class="img-wrap">
                     <a href>
                         <span
-                            style="background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;">
+                            style="background-image: url('{{section.preview}}')">
                         </span>
                     </a>
                 </div>

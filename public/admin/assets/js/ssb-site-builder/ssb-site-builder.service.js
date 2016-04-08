@@ -71,6 +71,9 @@
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
 
+        ssbService.getPageVersions = getPageVersions;
+        ssbService.revertPage = revertPage;
+
         ssbService.permissions = {};
         ssbService.compiledElements = {};
         ssbService.compiledElementEditControls = {};
@@ -1006,6 +1009,7 @@
         function getSpectrumColorOptions() {
             return {
                 showPalette: true,
+                showAlpha: true,
                 clickoutFiresChange: true,
                 showInput: true,
                 showButtons: true,
@@ -1356,6 +1360,51 @@
             fn(data);
         }
 
+        /**
+         * Get list of page versions
+         *
+         */
+        function getPageVersions(pageId, fn) {
+
+          function success(data) {
+            console.log('SimpleSiteBuilderService getPageVersions: ' + data);
+            fn(data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService getPageVersions error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: basePageAPIUrlv2 + [pageId, 'versions'].join('/'),
+              method: 'GET',
+            }).success(success).error(error))
+          )
+        }
+
+        /**
+         *Revert page
+         *
+         */
+        function revertPage(pageId, versionId, fn) {
+
+          function success(data) {
+            console.log('SimpleSiteBuilderService revertPage: ' + data);
+            fn(data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService revertPage error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: basePageAPIUrlv2 + [pageId, 'version', versionId].join('/'),
+              method: 'POST',
+            }).success(success).error(error))
+          )
+        }
 
 		(function init() {
 

@@ -38,8 +38,14 @@
 
     <div ng-if="vm.section.bg.img.show && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
 
+    <div
+        ng-if="vm.section.components.length && vm.section.layoutModifiers.custom"
+        data-ng-include
+        data-src=" '/admin/assets/js/ssb-site-builder/ssb-components/ssb-' + vm.section.layout + '/ssb-' + vm.section.layout + '.layout.v' + vm.section.version + '.html' " >
+    </div>
+
     <ssb-component-loader
-        ng-if="vm.section.components.length"
+        ng-if="vm.section.components.length && !vm.section.layoutModifiers.custom"
         ng-repeat="component in vm.section.components track by $index"
         component-class="vm.componentClass(component, $index)"
         component-style="vm.componentStyle(component, $index)"
