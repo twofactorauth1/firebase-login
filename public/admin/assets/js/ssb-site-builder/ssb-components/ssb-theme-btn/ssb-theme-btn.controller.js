@@ -263,7 +263,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         }
 
-        if(component.border){
+        if(component.border && component.border.color){
             styleString += 'border-color: ' + component.border.color + ';';
             styleString += 'border-width: ' + component.border.width + 'px;';
             styleString += 'border-style: ' + component.border.style + ';';

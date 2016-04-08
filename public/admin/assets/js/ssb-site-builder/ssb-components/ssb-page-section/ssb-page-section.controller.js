@@ -166,7 +166,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'color: ' + section.txtcolor + ';';
         }
 
-        if(section && section.border){
+        if(section && section.border && section.border.color){
             styleString += 'border-color: ' + section.border.color + ';';
             styleString += 'border-width: ' + section.border.width + 'px;';
             styleString += 'border-style: ' + section.border.style + ';';
@@ -325,7 +325,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
               }
             }
 
-            if(component.border){
+            if(component.border && component.border.color){
                 styleString += 'border-color: ' + component.border.color + ';';
                 styleString += 'border-width: ' + component.border.width + 'px;';
                 styleString += 'border-style: ' + component.border.style + ';';
