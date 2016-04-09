@@ -51,7 +51,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             'bg':{
                 'color': ''
             }
-        }
+        },
+        'border':{}
     };
 
     //get functions from parent text component
@@ -110,6 +111,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             'pressed':{
                 'bg':{}
             },
+            'border':{},
             'spacing': {}
         };
 
@@ -129,6 +131,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             var spacingMB = style.marginBottom.replace('px', '');
             var spacingMW = style.maxWidth.replace('px', '');
 
+            // Border related
+
+            var borderColor = style.borderColor;
+            var borderWidth = style.borderWidth.replace('px', '');
+            var borderRadius = style.borderRadius.replace('%', '');
+            var borderStyle = style.borderStyle;
+
             data.bg.color = bgcolor;
             data.txtcolor = txtcolor;
             data.visibility = visibility;
@@ -141,6 +150,11 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             data.spacing.mr = spacingMR;
             data.spacing.mb = spacingMB;
             data.spacing.mw = spacingMW;
+
+            data.border.color = borderColor;
+            data.border.width = borderWidth;
+            data.border.style = borderStyle;
+            data.border.radius = borderRadius;
         }
 
         if (ssbHoverStyle) {
