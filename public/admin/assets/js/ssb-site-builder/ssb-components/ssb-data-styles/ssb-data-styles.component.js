@@ -9,88 +9,88 @@ function ssbDataStyles($timeout) {
     restrict: 'A',
     link: function (scope, element, attrs, ctrl) {
 
-        // enabledynamicStyles(element);
+        enabledynamicStyles(element);
 
         function enabledynamicStyles(ssbContainer) {
 
             angular.element(document).ready(function() {
 
-                $timeout(function() {
+                var unbindWatcher = scope.$watch(function() {
+                    return angular.element('.ssb-theme-btn').length;
+                }, function(newValue, oldValue) {
+                    if (newValue) {
+                        unbindWatcher();
+                        $timeout(function() {
+                            var elements = angular.element('.ssb-theme-btn');
+                            elements.each(function() {
+                                var element = $(this);
 
-                    var elements = angular.element('.ssb-theme-btn');
+                                var data = {
+                                    hover: {
+                                        bg: {
+                                            color: null
+                                        }
+                                    },
+                                    pressed: {
+                                        bg: {
+                                            color: null
+                                        }
+                                    }
+                                };
 
-                    elements.each(function() {
-                        var element = $(this);
+                                var originalData = {
+                                    bg: {
+                                        color: element.css('background-color')
+                                    },
+                                    txtcolor: element.css('color')
+                                };
 
-                        var data = {
-                            hover: {
-                                bg: {
-                                    color: null
+                                var ssbHoverStyle = element.attr('data-ssb-hover-style');
+                                var ssbActiveStyle = element.attr('data-ssb-active-style');
+
+
+
+                                if (ssbHoverStyle) {
+                                    var hoverStyleEl = $('<div style="' + ssbHoverStyle + '"></div>');
+                                    var hoverStyle = hoverStyleEl.get(0).style;
+                                    var hoverbgcolor = hoverStyle.backgroundColor;
+                                    var hovertxtcolor = hoverStyle.color;
+
+                                    data.hover.bg.color = hoverbgcolor;
+                                    data.hover.txtcolor = hovertxtcolor;
                                 }
-                            },
-                            pressed: {
-                                bg: null
-                            },
-                        };
 
-                        var originalData = {
-                            bg: {
-                                color: element.css('background-color')
-                            },
-                            txtcolor: element.css('color')
-                        };
+                                if (ssbActiveStyle) {
+                                    var activeStyleEl = $('<div style="' + ssbActiveStyle + '"></div>');
+                                    var activeStyle = activeStyleEl.get(0).style;
+                                    var activebgcolor = activeStyle.backgroundColor;
+                                    var activetxtcolor = activeStyle.color;
 
-                        var ssbHoverStyle = element.attr('data-ssb-hover-style');
-                        var ssbActiveStyle = element.attr('data-ssb-active-style');
+                                    data.pressed.bg.color = activebgcolor;
+                                    data.pressed.txtcolor = activetxtcolor;
+                                }
 
+                                // bind hover and active events to button
+                                element.hover(function(){
+                                    this.style.setProperty( 'background-color', data.hover.bg.color, 'important' );
+                                    this.style.setProperty( 'color', data.hover.txtcolor, 'important' );
 
+                                }, function(){
+                                    this.style.setProperty( 'background-color', originalData.bg.color );
+                                    this.style.setProperty( 'color', originalData.txtcolor );
+                                });
 
-                        if (ssbHoverStyle) {
-                            var hoverStyleEl = $('<div style="' + ssbHoverStyle + '"></div>');
-                            var hoverStyle = hoverStyleEl.get(0).style;
-                            var hoverbgcolor = hoverStyle.backgroundColor;
-                            var hovertxtcolor = hoverStyle.color;
+                                element.on("mousedown touchstart", function(){
+                                    this.style.setProperty( 'background-color', data.pressed.bg.color, 'important' );
+                                    this.style.setProperty( 'color', data.pressed.txtcolor, 'important' );
+                                })
 
-                            data.hover.bg.color = hoverbgcolor;
-                            data.hover.txtcolor = hovertxtcolor;
-                        }
+                            });
 
-                        if (ssbActiveStyle) {
-                            var activeStyleEl = $('<div style="' + ssbActiveStyle + '"></div>');
-                            var activeStyle = activeStyleEl.get(0).style;
-                            var activebgcolor = activeStyle.backgroundColor;
-                            var activetxtcolor = activeStyle.color;
-
-                            data.pressed.bg.color = activebgcolor;
-                            data.pressed.txtcolor = activetxtcolor;
-                        }
-
-                        // bind hover and active events to button
-                        element.hover(function(){
-                            element.css({
-                                'background-color': data.hover.bg.color,
-                                'color': data.hover.txtcolor
-                            })
-                        }, function(){
-                            element.css({
-                                'background-color': originalData.bg.color,
-                                'color': originalData.txtcolor
-                            })
-                        });
-
-                        element.on("mousedown touchstart", function(){
-                            element.css({
-                                'background-color': data.hover.bg.color,
-                                'color': data.hover.txtcolor
-                            })
-                        })
-
-                    });
-
-                }, 1000);
-
+                        }, 0);
+                    }
+                });
             });
-
         }
 
     }
