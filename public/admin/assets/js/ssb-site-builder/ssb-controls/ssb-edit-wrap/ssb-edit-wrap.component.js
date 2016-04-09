@@ -199,6 +199,8 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 if ($(e.target).hasClass('ssb-edit-control') ||
                     $(e.target).hasClass('ssb-theme-btn') ||
                     $(e.target).hasClass('ssb-settings-btn') ||
+                    $(e.target).hasClass('no-edit') ||
+
                     $(e.target).parent().hasClass('ssb-settings-btn')) {
 
                     return;
