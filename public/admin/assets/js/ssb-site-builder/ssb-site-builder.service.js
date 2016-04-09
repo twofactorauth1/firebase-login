@@ -81,25 +81,75 @@
         /**
          * This represents the category sorting for the add content panel
          */
+
         ssbService.contentSectionDisplayOrder = [
-            'welcome & landing',
-            'images',
+            'navigation',
+            'welcome hero',
+            'products & services',
+            'forms',
+            'gallery',
             'text',
             'video',
             'mixed content',
-            'about us',
-            'products & services',
-            'clients',
             'team',
             'testimonials',
-            'contact us',
-            'blog',
-            'features',
-            'navigation',
-            'forms',
+            'contact',
             'social',
+            'footer',
+            'blog',
             'misc'
         ];
+
+        ssbService.contentSectionIcons = {
+            'navigation':{
+                'icon': 'fa-reorder'
+            },
+            'welcome hero':{
+                'icon': 'fa-bullhorn'
+            },
+            'products & services':{
+                'icon': 'fa-shopping-cart'
+            },
+            'forms':{
+                'icon': 'fa-at'
+            },
+            'gallery':{
+                'icon': 'fa-file-image-o'
+            },
+            'text':{
+                'icon': 'fa-text-width'
+            },
+            'video':{
+                'icon': 'fa-video-camera'
+            },
+            'mixed content':{
+                'icon': 'fa-object-ungroup'
+            },
+            'team':{
+                'icon': 'fa-users'
+            },
+            'testimonials':{
+                'icon': 'fa-commenting'
+            },
+            'contact':{
+                'icon': 'fa-map-marker'
+            },
+            'social':{
+                'icon': 'fa-thumbs-o-up'
+            },
+            'footer':{
+                'icon': 'fa-copyright'
+            },
+            'blog':{
+                'icon': 'fa-rss '
+            },
+            'misc':{
+                'icon': 'fa-puzzle-piece'
+            },
+            'all':{
+                'icon': 'fa-sort-amount-asc'
+            }
+        }
 
         /**
          * Events for compiled editor elememts
