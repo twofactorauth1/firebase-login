@@ -141,7 +141,7 @@
                 'icon': 'fa-copyright'
             },
             'blog':{
-                'icon': 'fa-rss '
+                'icon': 'fa-rss'
             },
             'misc':{
                 'icon': 'fa-puzzle-piece'
