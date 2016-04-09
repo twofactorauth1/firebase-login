@@ -952,11 +952,16 @@ module.exports = {
 
                             var oldID = section.id();
                             var newVersion = section.getVersion() + 1;
-                            var newID = section.id() + '_' + newVersion;
-                            section.set('_id', newID);
                             section.setVersion(newVersion);
-                            section.set('modified', {date: new Date(), by:userId});
-                            otherPagesWithSectionReferences.push({pageId:existingPage.id(), oldId:oldID, newId:newID});
+                            section.set('modified', {
+                                date: new Date(),
+                                by: userId
+                            });
+                            otherPagesWithSectionReferences.push({
+                                pageId: existingPage.id(),
+                                oldId: oldID,
+                                newId: section.getVersion()
+                            });
                             sectionDao.saveOrUpdate(section, function(err, value){
                                 if(err) {
                                     self.log.error('Error updating section:', err);
