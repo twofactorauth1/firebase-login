@@ -297,14 +297,15 @@
 
         @media (min-width: 768px) {
             float: left;
-            width: ~"calc(100% - 70px)"; //70px for ssb-sidebar-icons width
+            // width: ~"calc(100% - 70px)"; //70px for ssb-sidebar-icons width
+            width: 580px;
             max-width: 800px;
             height: ~"calc(100vh - 125px)";
             overflow: auto;
             position: relative;
             top: auto;
             box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
-            min-width: 510px;
+            // min-width: 510px;
         }
 
         .ssb-sidebar-sub-heading {
@@ -337,6 +338,16 @@
 
     .site-editor-group {
         //transition: all 500ms cubic-bezier(0.550, 0.085, 0.680, 0.530); /* easeInQuad */
+    }
+
+    .site-editor-group-add {
+        .nav-tabs {
+            margin-left: -5px;
+        }
+        .fa {
+            width: 20px;
+            text-align: center;
+        }
     }
 
     .site-editor-group-add .ssb-sidebar-sub-heading {
