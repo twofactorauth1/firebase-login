@@ -1,3 +1,6 @@
+@ssb-froala-topbar-min-width: 1185px;
+@ssb-froala-topbar-min-width-large: 1680px;
+
 #ssb-froala-scrollable-container {
     //bottom positioning
 }
@@ -8,14 +11,21 @@ ssb-topbar #ssb-froala-scrollable-container {
     width: 100%;
 
     //topbar positioning
-    @media (min-width: 1280px) {
-        width: calc(~"100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-        left: calc(~"16.66666667% + 85px + 15px + 15px + 3px");
+    @media (min-width: @ssb-froala-topbar-min-width) {
+        // width: calc(~"100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+        width: calc(~"100% - 422px");
+        // left: calc(~"16.66666667% + 85px + 15px + 15px + 3px");
+        left: 196px;
         right: calc(~"16.66666667% + 15px + 15px + 1px");
         white-space: nowrap;
         height: 60px;
         border-top: 0;
         border-bottom: 0;
+    }
+
+    @media (min-width: @ssb-froala-topbar-min-width-large) {
+        width: calc(~"100% - 196px");
+        left: 196px;
     }
 
     // @media (min-width: 1330px) {
@@ -31,7 +41,7 @@ ssb-topbar #ssb-froala-scrollable-container {
     max-width: 330px;
 
     //topbar positioning
-    @media (min-width: 1280px) {
+    @media (min-width: @ssb-froala-topbar-min-width) {
         pointer-events: none;
         border: 0 none!important;
         box-shadow: none!important;
@@ -62,7 +72,7 @@ ssb-topbar #ssb-froala-scrollable-container {
 
 .fr-popup.fr-desktop.fr-inline {
     //topbar positioning
-    @media (min-width: 1280px) {
+    @media (min-width: @ssb-froala-topbar-min-width) {
 
         // position: absolute!important;
         // width: 100%;
@@ -126,7 +136,7 @@ ssb-topbar #ssb-froala-scrollable-container {
  */
 .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
     //topbar positioning
-    @media (min-width: 1280px) {
+    @media (min-width: @ssb-froala-topbar-min-width) {
         // display: inline-block!important;
 
         button {
@@ -140,18 +150,24 @@ ssb-topbar #ssb-froala-scrollable-container {
  */
 .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
 
-    //topbar positioning
-    @media (min-width: 1280px) {
-        position: absolute!important;
+    pointer-events: auto!important;
+
+    @media (min-width: @ssb-froala-topbar-min-width) {
+        display: inline-block!important;
         z-index: 5;
-        pointer-events: auto!important;
-        display: block!important;
-        left: 50%!important;
-        transform: translateX(-50%);
 
         button {
             opacity: 1;
         }
+
+    }
+
+    //topbar positioning
+    @media (min-width: @ssb-froala-topbar-min-width-large) {
+        position: absolute!important;
+        display: block!important;
+        left: 50%!important;
+        transform: translateX(-50%);
     }
 
     //topbar positioning for wider screens
@@ -164,7 +180,7 @@ ssb-topbar #ssb-froala-scrollable-container {
 
 .fr-popup.fr-inline.fr-desktop.fr-active {
     //topbar positioning for wider screens
-    @media (min-width: 1280px) {
+    @media (min-width: @ssb-froala-topbar-min-width) {
         // position: absolute!important;
         z-index: 5;
         pointer-events: auto!important;
@@ -183,7 +199,7 @@ ssb-topbar #ssb-froala-scrollable-container {
 }
 
 //various tweaks to layout within topbar
-@media (min-width: 1280px) {
+@media (min-width: @ssb-froala-topbar-min-width) {
     .fr-popup .fr-arrow,
     .fr-toolbar .fr-arrow {
         opacity: 0!important;
@@ -451,7 +467,7 @@ body[ng-controller] .fr-toolbar .fr-command.fr-btn i,
 body[ng-controller] .fr-popup .fr-command.fr-btn i {
   font-size: 15px;
   width: 15px;
-  margin: 11px 11.5px;
+  margin: 6px 6.5px;
 }
 body[ng-controller] .fr-toolbar .fr-command.fr-btn span,
 body[ng-controller] .fr-popup .fr-command.fr-btn span {
@@ -504,7 +520,7 @@ body[ng-controller] .fr-popup .fr-command.fr-btn.fr-dropdown::after {
   border-right: 4px solid transparent;
   border-top: 4px solid #ffffff;
   right: 3.75px;
-  top: 16.5px;
+  top: 11.5px;
 }
 body[ng-controller] .fr-toolbar .fr-command.fr-btn.fr-disabled,
 body[ng-controller] .fr-popup .fr-command.fr-btn.fr-disabled {
