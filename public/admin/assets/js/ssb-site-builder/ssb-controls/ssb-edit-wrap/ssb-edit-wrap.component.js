@@ -200,8 +200,8 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     $(e.target).hasClass('ssb-theme-btn') ||
                     $(e.target).hasClass('ssb-settings-btn') ||
                     $(e.target).hasClass('no-edit') ||
-
-                    $(e.target).parent().hasClass('ssb-settings-btn')) {
+                    $(e.target).parent().hasClass('ssb-settings-btn') ||
+                    $(e.target).parent().hasClass('ssb-edit-control-active-title')) {
 
                     return;
                 }
