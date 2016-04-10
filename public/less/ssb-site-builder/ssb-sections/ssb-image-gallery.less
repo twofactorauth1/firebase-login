@@ -1,10 +1,111 @@
-.ssb-image-gallery {
-    min-height: 150px;
+[class*="ssb-theme-"] {
+    /*
+     * layout-gallery-v2
+     */
+    .ssb-page-section-layout-gallery-v2 {
+        [image-gallery-component]
+        {
+            padding: 50px 0 !important;
+            .image-gallery-title, .image-title{
+                display:none;
+            }
+
+            .editing.image-wrap {
+                &:hover {
+                    .image-gallery{
+                        min-height: 246px!important;
+                    }
+                }
+            }
+            .image-gallery{
+                min-height: 250px!important;
+            }
+        }
+    }
+
+    /*
+     * layout-gallery-v3
+     */
+    .ssb-page-section-layout-gallery-v3 {
+        [image-gallery-component]
+        {
+            padding: 50px 0 !important;
+            .image-gallery-title{
+                display:none;
+            }
+
+            .editing.image-wrap {
+                &:hover {
+                    .image-gallery{
+                        min-height: 246px!important;
+                    }
+                }
+            }
+            .image-gallery{
+                min-height: 250px!important;
+            }
+        }
+    }
+
+    /*
+     * layout-gallery-v4
+     */
+    .ssb-page-section-layout-gallery-v4 {
+        [image-gallery-component]
+        {
+            padding: 50px 0 !important;
+            .image-gallery-title, .image-title{
+                display:none;
+            }
+            .single-image{
+                border: 0 !important;
+            }
+            div.image-gallery{
+                border-radius: 50%!important;
+                min-height: 350px;
+                width: 350px !important;
+                height: 350px;
+                float: none !important;
+            }
+            .editing.image-wrap {
+                &:hover {
+                    .image-gallery{
+                        min-height: 346px!important;
+                        width: 350px !important;
+                        height: 346px;
+                    }
+                }
+            }
+        }
+    }
 
 
-    ssb-text-component {
-        text-align: center;
-        width: 90%;
-        margin: 0 auto;
+    /*
+     * layout-gallery-v5
+     */
+    .ssb-page-section-layout-gallery-v5 {
+        [image-gallery-component]
+        {
+            padding: 50px 0 !important;
+            .image-gallery-title, .image-title{
+                display:none;
+            }
+            div.image-gallery{
+                min-height: 280px!important;
+            }
+            .editing.image-wrap {
+                &:hover {
+                    .image-gallery{
+                        min-height: 276px!important;
+                    }
+                }
+            }
+            .image-desc{
+                margin: 10px 0 20px 0;
+                .ssb-element p {
+                    padding:20px;
+                }
+            }
+        }
     }
 }
