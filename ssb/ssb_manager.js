@@ -960,7 +960,7 @@ module.exports = {
                             otherPagesWithSectionReferences.push({
                                 pageId: existingPage.id(),
                                 oldId: oldID,
-                                newId: section.getVersion()
+                                newId: section.id()
                             });
                             sectionDao.saveOrUpdate(section, function(err, value){
                                 if(err) {
