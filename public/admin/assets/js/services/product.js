@@ -14,6 +14,19 @@
                 });
         };
 
+        this.getProductsWithSort = function(sort, fn) {
+            var apiUrl = baseUrl + ['products'].join('/');
+            $http({
+                url: apiUrl,
+                params: {
+                    sortFields: _.keys(sort),
+                    sortDirections: _.values(sort)
+                }
+            }).success(function(data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
         this.postProduct = function(product, fn) {
             var apiUrl = baseUrl + ['products'].join('/');
             $http({
@@ -66,7 +79,7 @@
                     method: "POST",
                     data: angular.toJson(product)
                 })
-                .success(function(data, status, headers, config) {                    
+                .success(function(data, status, headers, config) {
                     fn(data);
                 });
         };
@@ -88,7 +101,7 @@
         };
 
 
-        this.getActiveProducts = function (fn) {            
+        this.getActiveProducts = function (fn) {
             var apiUrl = baseUrl + ['products', 'active'].join('/');
             console.log(apiUrl);
             $http.get(apiUrl)
@@ -97,7 +110,7 @@
             });
         };
 
-        
+
         this.productStatusTypes = function (fn) {
           var productStatusTypes = productConstant.product_status_types.dp;
           fn(productStatusTypes);

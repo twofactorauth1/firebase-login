@@ -110,11 +110,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortFields = req.query['sortFields'];
         var sortDirections = req.query['sortDirections'];
 
+        if (sortFields && ! _.isArray(sortFields)) {
+            sortFields = [sortFields];
+            sortDirections = [sortDirections];
+        }
         var sortValue = {};
 
         if (sortFields) {
             sortFields.forEach(function(field, index) {
-                sortValue[field] = sortDirections[index];
+                sortValue[field] = parseInt(sortDirections[index]);
             });
         }
 
