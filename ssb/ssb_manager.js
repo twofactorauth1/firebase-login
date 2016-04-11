@@ -13,6 +13,8 @@ var async = require('async');
 var slug = require('slug');
 var constants = require('./constants');
 var cheerio = require('cheerio');
+//TODO: update pageCacheManager for life in an SB-only world
+var pageCacheManager = require('../cms/pagecache_manager');
 
 var PLATFORM_ID = 0;
 
@@ -1329,38 +1331,109 @@ module.exports = {
                                         self.log.debug('exists: ' , exists);
                                         if(!exists.length){// if the global section does NOT already appear on the page
                                             var globalSection = {_id: gsection.get("_id")};
+                                            var globalSectionID = gsection.id();
                                             var sectionIds = sections.map(function(sec) { return sec._id});
-                                            var query = {
-                                                accountId:accountId,
-                                                _id: { $in: sectionIds},
-                                                name: 'Footer'
-                                            };
-                                            sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
-                                                if(err) {
-                                                    self.log.error('Error finding global footer:', err);
-                                                    cb(err);
-                                                } else {
-                                                    if(footerSection) {
-                                                        var filteredFooter = _.findWhere(sections, {
-                                                            _id: footerSection.get("_id")
-                                                        });
-
-                                                        if(filteredFooter) {
-                                                            var footerIndex = _.indexOf(sections, filteredFooter);
-                                                            self.log.debug('footerIndex: ' , footerIndex);
-                                                            self.log.debug('globalSection: ' , globalSection);
-                                                            sections.splice(footerIndex, 0, globalSection);
+                                            /*
+                                             * If the global section name === "Header" put it at the top.
+                                             * If the global section name === "Footer" put it at the bottom.
+                                             * Otherwise... stick it above the footer?
+                                             */
+                                            if(gsection.get('name') === 'Header') {
+                                                //replace existing header if it exists
+                                                var query = {
+                                                    accountId:accountId,
+                                                    _id:{$in:sectionIds},
+                                                    name:'Header'
+                                                }
+                                                sectionDao.findOne(query, $$.m.ssb.Section, function(err, existingHeaderSection){
+                                                    if(err) {
+                                                        self.log.error('Error finding global header:', err);
+                                                        g_callback(err);
+                                                    } else {
+                                                        if(existingHeaderSection) {
+                                                            var headerIDtoRemove = _.findWhere(sections, {_id:existingHeaderSection.id()});
+                                                            if(headerIDtoRemove) {
+                                                                var headerIndex = _.indexOf(sections, headerIDtoRemove);
+                                                                sections.splice(headerIndex, 1, globalSection);
+                                                            } else {
+                                                                self.log.warn('The DB says we have a header but we could not find it on the page');
+                                                                sections.splice(0,0, globalSection);
+                                                            }
                                                         } else {
+                                                            sections.splice(0,0, globalSection);
+                                                        }
+                                                        _page.set("sections", sections);
+                                                        g_callback();
+                                                    }
+                                                });
+                                            } else if(gsection.get('name') === 'Footer') {
+                                                //replace existing footer if it exists
+                                                var query = {
+                                                    accountId:accountId,
+                                                    _id: { $in: sectionIds},
+                                                    name: 'Footer'
+                                                };
+                                                sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
+                                                    if(err) {
+                                                        self.log.error('Error finding global footer:', err);
+                                                        g_callback(err);
+                                                    } else {
+                                                        if(footerSection) {
+                                                            var filteredFooter = _.findWhere(sections, {
+                                                                _id: footerSection.get("_id")
+                                                            });
+
+                                                            if(filteredFooter) {
+                                                                var footerIndex = _.indexOf(sections, filteredFooter);
+                                                                self.log.debug('footerIndex: ' , footerIndex);
+                                                                self.log.debug('globalSection: ' , globalSection);
+                                                                //TODO: this may need to be (footerIndex,1,globalSection) to overwrite
+                                                                sections.splice(footerIndex, 0, globalSection);
+                                                            } else {
+                                                                sections.push(globalSection);
+                                                            }
+
+                                                        } else{
                                                             sections.push(globalSection);
                                                         }
-
-                                                    } else {
-                                                        sections.push(globalSection);
+                                                        _page.set("sections", sections);
+                                                        g_callback();
                                                     }
-                                                    _page.set("sections", sections);
-                                                    g_callback();
-                                                }
-                                            });
+                                                });
+                                            } else {
+                                                //put it above the footer
+                                                var query = {
+                                                    accountId:accountId,
+                                                    _id: { $in: sectionIds},
+                                                    name: 'Footer'
+                                                };
+                                                sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection) {
+                                                    if (err) {
+                                                        self.log.error('Error finding global footer:', err);
+                                                        g_callback(err);
+                                                    } else {
+                                                        if(footerSection) {
+                                                            var filteredFooter = _.findWhere(sections, {
+                                                                _id: footerSection.get("_id")
+                                                            });
+
+                                                            if(filteredFooter) {
+                                                                var footerIndex = _.indexOf(sections, filteredFooter);
+                                                                self.log.debug('footerIndex: ' , footerIndex);
+                                                                self.log.debug('globalSection: ' , globalSection);
+                                                                sections.splice(footerIndex, 0, globalSection);
+                                                            } else {
+                                                                sections.push(globalSection);
+                                                            }
+
+                                                        } else{
+                                                            sections.push(globalSection);
+                                                        }
+                                                        _page.set("sections", sections);
+                                                        g_callback();
+                                                    }
+                                                });
+                                            }
                                         } else {
                                             _page.set("sections", sections);
                                             g_callback();
@@ -1398,6 +1471,15 @@ module.exports = {
                                         self.log.error('Error updating page: ' + err);
                                         cb(err);
                                     } else {
+
+                                        _.each(pages, function(page){
+                                            pageCacheManager.updateS3Template(accountId, null, page.id(), function(err, value){
+                                                if(err) {
+                                                    self.log.error('Error updating template for page [' + page.id() + ']:', err);
+                                                }
+                                            });
+                                        });
+
                                         cb(null, updatedPage, updatedSections);
                                     }
                                 });
@@ -1423,7 +1505,9 @@ module.exports = {
 
             }
             self.log.debug('<< updatePage');
-            return fn(err, updatedPage);
+            fn(err, updatedPage);
+            //update the page cache after return.  We don't need the user to wait for this.
+            pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
         });
     },
 

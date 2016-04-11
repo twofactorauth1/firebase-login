@@ -346,7 +346,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(resp, err, page, "Error fetching page");
-                    pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
                 });
             }
         });
