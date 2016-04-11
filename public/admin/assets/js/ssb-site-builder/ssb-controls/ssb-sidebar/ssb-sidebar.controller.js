@@ -939,8 +939,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
           vm.state.saveLoading = true;
           saveWebsite().then(function(){
             SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
-              vm.state.saveLoading = false;
-              vm.uiState.navigation.loadPage(page.data._id);
+               SimpleSiteBuilderService.getSite(vm.state.website._id).then(function() {
+                  vm.state.saveLoading = false;
+                  vm.uiState.navigation.loadPage(page.data._id);
+               });
             })
           })
         }
