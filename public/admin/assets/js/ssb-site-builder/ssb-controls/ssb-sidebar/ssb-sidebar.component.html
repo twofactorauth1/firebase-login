@@ -61,6 +61,7 @@
                     <tabset class="tabbable tabs-left margin-bottom-0" ng-class="{'email-sections' : isEmail}">
                         <tab ng-repeat="sectionFilter in vm.sectionFilters">
                             <tab-heading>
+                            <i class="fa {{sectionFilter.icon}}">&nbsp;</i>
                                 {{sectionFilter.capitalized}}
                             </tab-heading>
 

@@ -529,11 +529,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function setupBreakpoints() {
-        // $timeout(function() {
-        //     console.log('setupBreakpoints');
-        //     $window.eqjs.refreshNodes();
-        //     $window.eqjs.query();
-        // }, 3000);
+        $timeout(function() {
+            console.log('setupBreakpoints');
+            $window.eqjs.refreshNodes();
+            $window.eqjs.query();
+        }, 3000);
     };
 
     function legacyComponentMedia(componentId, index, update) {

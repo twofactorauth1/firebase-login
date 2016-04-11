@@ -20,7 +20,8 @@ var section = $$.m.ModelBase.extend({
             accountId:null,
             layout: '',
             layoutModifiers: {
-                fixed: false
+                fixed: false,
+                custom: false
             },
             components: [],//array of components, similar to what's on pages now
             name:'',
@@ -83,7 +84,7 @@ var section = $$.m.ModelBase.extend({
         var version = 0;
         try {
             var lastIndex = this.id().lastIndexOf('_');
-            if(lastIndex != -1) {
+            if(lastIndex !== -1) {
                 version = parseInt(this.id().slice(lastIndex+1));
             }
         } catch(Exception) {
@@ -95,11 +96,20 @@ var section = $$.m.ModelBase.extend({
 
     setVersion: function(newver) {
         var lastIndex = this.id().lastIndexOf('_');
-        if(lastIndex != -1) {
-            this.id(this.id().slice(0,lastIndex) + '_' + newver)
+        var originalId = this.id().toString();
+        var tempId;
+        var updatedId;
+
+        if(lastIndex !== -1) {
+            tempId = originalId.slice(0, lastIndex);
+            console.debug('tempId: ', tempId);
+            updatedId = tempId + '_' + newver;
         } else {
-            this.id(this.id() + '_' + newver);
+            updatedId = originalId + '_' + newver;
         }
+
+        this.id(updatedId);
+
     }
 
 

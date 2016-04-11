@@ -18,15 +18,21 @@ function ssbActionButtons(SimpleSiteBuilderService) {
         bindToController: true,
         link: function(scope, element, attrs, ctrl) {
             scope.pageVersions = [];
+            scope.hideHistoryTT = false;
+
             scope.historyDropdownFn = function (open) {
+                scope.hideHistoryTT = open;
                 if (open) {
+                    $('.tooltip').hide();
                     SimpleSiteBuilderService.getPageVersions(scope.vm.state.page._id, function (data) {
                         scope.pageVersions = data;
                     });
                 } else {
                     scope.pageVersions = [];
+                    $('.tooltip').show();
                 }
             };
+
             ctrl.init(element);
         }
     };

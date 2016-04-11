@@ -16,8 +16,6 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     vm.init = init;
     vm.elementClass = elementClass;
     vm.elementStyle = elementStyle;
-    vm.hoverElementStyle = hoverElementStyle;
-    vm.activeElementStyle = activeElementStyle;
 
     vm.elementDataOriginal;
     vm.elementData = {
@@ -51,7 +49,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             'bg':{
                 'color': ''
             }
-        }
+        },
+        'border':{}
     };
 
     //get functions from parent text component
@@ -110,6 +109,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             'pressed':{
                 'bg':{}
             },
+            'border':{},
             'spacing': {}
         };
 
@@ -129,6 +129,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             var spacingMB = style.marginBottom.replace('px', '');
             var spacingMW = style.maxWidth.replace('px', '');
 
+            // Border related
+
+            var borderColor = style.borderColor;
+            var borderWidth = style.borderWidth.replace('px', '');
+            var borderRadius = style.borderRadius.replace('%', '');
+            var borderStyle = style.borderStyle;
+
             data.bg.color = bgcolor;
             data.txtcolor = txtcolor;
             data.visibility = visibility;
@@ -141,6 +148,11 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             data.spacing.mr = spacingMR;
             data.spacing.mb = spacingMB;
             data.spacing.mw = spacingMW;
+
+            data.border.color = borderColor;
+            data.border.width = borderWidth;
+            data.border.style = borderStyle;
+            data.border.radius = borderRadius;
         }
 
         if (ssbHoverStyle) {
@@ -182,13 +194,27 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         // bind hover and active events to button
 
         vm.element.hover(function(){
-            vm.hoverElementStyle(vm.element);
+            var component = vm.elementData;
+            if(component.hover.txtcolor){
+                this.style.setProperty( 'color', data.hover.txtcolor, 'important' );
+            }
+
+            if (component.hover.bg) {
+                this.style.setProperty( 'background-color', component.hover.bg.color, 'important' );
+            }
         }, function(){
             vm.elementStyle(vm.element);
         });
 
         vm.element.on("mousedown touchstart", function(){
-            vm.activeElementStyle(vm.element);
+            var component = vm.elementData;
+            if(component.pressed.txtcolor){
+                this.style.setProperty( 'color', data.pressed.txtcolor, 'important' );
+            }
+
+            if (component.pressed.bg) {
+                this.style.setProperty( 'background-color', component.pressed.bg.color, 'important' );
+            }
         })
 
         angular.extend(vm.elementData, data);
@@ -348,166 +374,6 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         }
 
         return styleString;
-    }
-
-    function hoverElementStyle(el) {
-        var styleString = ' ';
-        var component = vm.elementData;
-
-        if (component.spacing) {
-
-            if (component.spacing.pt) {
-                styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-            }
-
-            if (component.spacing.pb) {
-                styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-            }
-
-            if (component.spacing.pl) {
-                styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-            }
-
-            if (component.spacing.pr) {
-                styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-            }
-
-            if (component.spacing.mt) {
-                styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-            }
-
-            if (component.spacing.mb) {
-                styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-            }
-
-            if (component.spacing.ml) {
-                styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
-            }
-
-            if (component.spacing.mr) {
-                styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
-            }
-
-            if (component.spacing.mw) {
-                styleString += (component.spacing.mw == '100%') ?
-                'max-width: ' + component.spacing.mw + ';' :
-                'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
-            }
-
-            if (component.spacing.lineHeight) {
-                styleString += 'line-height: ' + component.spacing.lineHeight;
-            }
-        }
-
-        if (component.visibility === false) {
-            styleString += 'display: none!important;';
-        }
-
-        if(component.border && component.border.color){
-            styleString += 'border-color: ' + component.border.color + ';';
-            styleString += 'border-width: ' + component.border.width + 'px;';
-            styleString += 'border-style: ' + component.border.style + ';';
-            styleString += 'border-radius: ' + component.border.radius + '%;';
-        }
-
-
-        if(component.hover.txtcolor){
-            styleString += 'color: ' + component.hover.txtcolor + ';';
-        }
-        else
-        {
-            //styleString += 'color: ' + component.txtcolor + ';';
-        }
-
-        if (component.hover.bg) {
-            styleString += 'background-color: ' + component.hover.bg.color + '!important;';
-        }
-        else{
-           //styleString += 'background-color: ' + component.bg.color + ';';
-        }
-
-        if (el) {
-            el.attr('style', styleString);
-        }
-    }
-
-    function activeElementStyle(el) {
-        var styleString = ' ';
-        var component = vm.elementData;
-
-        if (component.spacing) {
-
-            if (component.spacing.pt) {
-                styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-            }
-
-            if (component.spacing.pb) {
-                styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-            }
-
-            if (component.spacing.pl) {
-                styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-            }
-
-            if (component.spacing.pr) {
-                styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-            }
-
-            if (component.spacing.mt) {
-                styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-            }
-
-            if (component.spacing.mb) {
-                styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-            }
-
-            if (component.spacing.ml) {
-                styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
-            }
-
-            if (component.spacing.mr) {
-                styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
-            }
-
-            if (component.spacing.mw) {
-                styleString += (component.spacing.mw == '100%') ?
-                'max-width: ' + component.spacing.mw + ';' :
-                'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
-            }
-
-            if (component.spacing.lineHeight) {
-                styleString += 'line-height: ' + component.spacing.lineHeight;
-            }
-        }
-
-        if (component.visibility === false) {
-            styleString += 'display: none!important;';
-        }
-
-
-        if(component.pressed.txtcolor){
-            styleString += 'color: ' + component.pressed.txtcolor + ';';
-        }
-        else{
-            styleString += 'color: ' + component.txtcolor + ';';
-        }
-        if (component.pressed.bg) {
-            styleString += 'background-color: ' + component.pressed.bg.color + '!important;';
-        }
-        else{
-            styleString += 'background-color: ' + component.bg.color + ';';
-        }
-
-
-        if(component.border && component.border.color){
-            styleString += 'border-color: ' + component.border.color + ';';
-            styleString += 'border-width: ' + component.border.width + 'px;';
-            styleString += 'border-style: ' + component.border.style + ';';
-            styleString += 'border-radius: ' + component.border.radius + '%;';
-        }
-        if (el) {
-            el.attr('style', styleString);
-        }
     }
 
     function setActiveElementId(reset) {

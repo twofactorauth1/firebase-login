@@ -5459,6 +5459,7 @@ input[type="checkbox"] {
   height: 20px;
   background: #dddddd !important;
   box-shadow: inset 0px 0px 0px 1px rgba(182, 182, 182, 0.8) !important;
+  top: 4px;
 }
 .main-content .switch small {
   top: -3px;
@@ -5478,6 +5479,9 @@ input[type="checkbox"] {
 }
 .ui-select-multiple input.ui-select-search {
   width: auto !important;
+}
+.form-group label {
+  margin-top: 8px;
 }
 .form-group label .fa-info-circle {
   font-size: 11px;
@@ -14240,9 +14244,4 @@ indi-login-modal .modal-title {
 .is-indi-modal .copyright,
 .is-indi-modal a[href="/forgotpassword"] {
   display: none;
-}
-
-.asset-slide img {
-    height: 64px;
-    width: 128px
 }
