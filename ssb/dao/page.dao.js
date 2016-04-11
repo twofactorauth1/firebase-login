@@ -32,6 +32,17 @@ var dao = {
         self.addToCollection(page, 'published_pages', fn);
     },
 
+    findPublishedPages: function(query, fn) {
+        var self = this;
+        var dummyObj = {
+            db:{
+                storage:'mongo',
+                table:'published_pages'
+            }
+        };
+        self.findMany(query, dummyObj, fn);
+    },
+
     options: {
         name: "ssb.page.dao",
         defaultModel: $$.m.ssb.Page
