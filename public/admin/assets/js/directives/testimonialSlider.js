@@ -4,12 +4,12 @@ app.directive('testimonialSlider',function($timeout){
    link: function(scope,element,attrs) {
      $timeout(function() {
          $(element).slick(scope.$eval(attrs.testimonialSlider));
-     }); 
+     });
 
  	function addRemoveSlides(index, newSlide){
  		$(element).slick("unslick");
         var testimonials = angular.copy(scope.component.testimonials);
-        if(newSlide){                
+        if(newSlide){
             testimonials.splice(index + 1, 0, angular.copy(scope.newTestimonial));
         } else {
             testimonials.splice(index, 1);
@@ -29,7 +29,7 @@ app.directive('testimonialSlider',function($timeout){
     scope.addSlide = function (index, newSlide) {
         console.log(index);
         addRemoveSlides(index, newSlide);
-    };    
+    };
    }
  }
 });

@@ -1336,6 +1336,7 @@
                     btn.removeClass('ssb-theme-btn-active-element');
                     btn.attr('ng-class', 'vm.elementClass()');
                     btn.attr('ng-attr-style', '{{vm.elementStyle()}}');
+                    // btn.attr('ng-click', '$event.stopImmediatePropagation()');
                     btnHTML = btn.get(0).outerHTML.replace('ng-scope', '');
                     $compile(btnHTML)(scope, function(cloned, scope) {
                         var tempId = ssbService.getTempUUID();
@@ -1390,22 +1391,24 @@
                 navComponent: null
             }
 
-            ssbService.page.sections.forEach(function (sectionValue, sectionIndex) {
-                sectionValue.components.forEach(function (value, index) {
-                    if (value && value.type === 'masthead' && value._id == masthead_id) {
-                        var navComponent = _.findWhere(ssbService.page.sections[sectionIndex - 1].components, { type: 'navigation' });
-                        if (
-                            sectionIndex != 0 &&
-                            navComponent !== undefined
-                        ) {
-                            data.allowUndernav = true;
-                            data.navComponent = navComponent;
-                        } else {
-                            data.allowUndernav = false;
+            if (ssbService.page && ssbService.page.sections) {
+                ssbService.page.sections.forEach(function (sectionValue, sectionIndex) {
+                    sectionValue.components.forEach(function (value, index) {
+                        if (value && value.type === 'masthead' && value._id == masthead_id) {
+                            var navComponent = _.findWhere(ssbService.page.sections[sectionIndex - 1].components, { type: 'navigation' });
+                            if (
+                                sectionIndex != 0 &&
+                                navComponent !== undefined
+                            ) {
+                                data.allowUndernav = true;
+                                data.navComponent = navComponent;
+                            } else {
+                                data.allowUndernav = false;
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            }
 
             fn(data);
         }

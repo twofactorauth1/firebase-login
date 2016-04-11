@@ -21,7 +21,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                 element.on('mouseleave', handleSectionOrComponentMouseLeave);
 
-                element.on('click', handleClick);
+                $(element).on('click', handleClick);
 
                 $(element).on('mouseover', '[data-edit]', handleComponentPartialAreaMouseOver);
 
@@ -476,16 +476,29 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 var clickedComponentScope = clickedComponent.scope();
                 var clickedTextElement = el.find('.ssb-text-settings:first');
 
+                if (clickedTextElement.length === 0) {
+                    clickedTextElement = el.closest('.ssb-text-settings');
+                }
+
                 hideAllControls();
 
                 $timeout(function() {
-                    var editControlComponent = angular.element('[data-control-id="control_' + el.attr('data-edit-id') + '"]');
+
+                    var dataEditId = el.attr('data-edit-id');
+
+                    if (!dataEditId) {
+                        dataEditId = el.closest('[data-edit-id]').attr('data-edit-id');
+                    }
+
+                    var editControlComponent = angular.element('[data-control-id="control_' + dataEditId + '"]');
                     var editControlId = editControlComponent.attr('data-control-id');
                     var uiStateObj = {};
 
-                    uiStateObj.hoveredComponentEl = clickedTextElement;
-                    uiStateObj.hoveredComponentEditControl = editControlComponent;
-                    uiStateObj.activeElement = clickedTextElement.scope().vm.elementData;
+                    if (clickedTextElement && clickedTextElement.scope() && clickedTextElement.scope().vm) {
+                        uiStateObj.hoveredComponentEl = clickedTextElement;
+                        uiStateObj.hoveredComponentEditControl = editControlComponent;
+                        uiStateObj.activeElement = clickedTextElement.scope().vm.elementData;
+                    }
 
                     /**
                      * update uiState
