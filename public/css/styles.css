@@ -12300,7 +12300,7 @@ ssb-topbar .ui-select-match-text > small {
 [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v9 [image-gallery-component][data-eq-state$="large"] .img-container .img-row:nth-child(8n) .image-wrap:hover .image-gallery,
 [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v9 [image-gallery-component][data-eq-state$="medium"] .img-container .img-row:first-child .image-wrap:hover .image-gallery,
 [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v9 [image-gallery-component][data-eq-state$="large"] .img-container .img-row:first-child .image-wrap:hover .image-gallery {
-  min-height: 226px!important;
+  min-height: 326px!important;
 }
 @media screen and (min-width: 768px) {
   [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v9 [image-gallery-component]:not([class*="ssb-edit-mode"]) {
@@ -12329,7 +12329,7 @@ ssb-topbar .ui-select-match-text > small {
   }
   [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v9 [image-gallery-component]:not([class*="ssb-edit-mode"]) .img-container .img-row:nth-child(8n) .image-wrap:hover .image-gallery,
   [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v9 [image-gallery-component]:not([class*="ssb-edit-mode"]) .img-container .img-row:first-child .image-wrap:hover .image-gallery {
-    min-height: 226px!important;
+    min-height: 326px!important;
   }
 }
 #componentloader {
