@@ -26,6 +26,44 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         return this;
     },
 
+    addToCollection: function(model, collection, fn) {
+        if ((model.id() === null || model.id() === 0 || model.id() == "")) {
+            var strategy = this.getIdStrategy(model);
+            switch (strategy) {
+                case "uuid":
+                    model.id($$.u.idutils.generateUUID());
+                    break;
+                default: //increment
+                    break;
+            }
+        }
+
+        var useCache = this.useCache(model);
+        var key;
+        if (useCache) {
+            key = this.getTable(model) + "_" + model.id();
+            $$.g.cache.remove(key);
+        }
+
+        if (this.getStorage(model) === "mongo") {
+            this._addToCollectionMongo(model, collection, function(err, value) {
+                if (useCache && !err && value != null) {
+                    $$.g.cache.set(key, value);
+                }
+
+                fn(err, value);
+                fn = model = null;
+            });
+        } else {
+            if (fn != null) {
+                fn("No storage medium available for this model");
+            }
+
+            fn = model = null;
+        }
+
+    },
+
 
     saveOrUpdate: function (model, fn) {
         if ((model.id() === null || model.id() === 0 || model.id() == "")) {
