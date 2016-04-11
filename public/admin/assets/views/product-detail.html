@@ -52,7 +52,7 @@
                             </div>
                             <div ng-if="product.is_image">
                                 <div class="image">
-                                    <div class="thumbnail">
+                                    <div class="thumbnail" ng-if='!product.assets.length'>
                                         <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
                                     </div>
                                     <div class='asset-slider' slick-slider objects='product.assets' config='slickConfig' ng-if='product.assets.length'>
