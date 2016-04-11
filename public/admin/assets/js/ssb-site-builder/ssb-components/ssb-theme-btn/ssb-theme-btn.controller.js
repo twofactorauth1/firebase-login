@@ -536,9 +536,9 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             buildDataObjFromHTML();
 
             $timeout(function() {
-                angular.element(parentComponent).on('click', '[data-compiled=' + elementId + ']', showEditControl);
+                $('[data-compiled=' + elementId + ']').on('click', showEditControl);
 
-                angular.element(parentComponent).on('click', '[data-compiled-control-id=control_' + elementId + ']', setActiveElementId);
+                $('[data-compiled-control-id=control_' + elementId + ']').on('click', setActiveElementId);
 
                 // angular.element('.ssb-page-section').on('click', clearActiveElement);
             });

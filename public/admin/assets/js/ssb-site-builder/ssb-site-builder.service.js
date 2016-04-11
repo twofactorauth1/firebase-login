@@ -1336,6 +1336,7 @@
                     btn.removeClass('ssb-theme-btn-active-element');
                     btn.attr('ng-class', 'vm.elementClass()');
                     btn.attr('ng-attr-style', '{{vm.elementStyle()}}');
+                    // btn.attr('ng-click', '$event.stopImmediatePropagation()');
                     btnHTML = btn.get(0).outerHTML.replace('ng-scope', '');
                     $compile(btnHTML)(scope, function(cloned, scope) {
                         var tempId = ssbService.getTempUUID();
