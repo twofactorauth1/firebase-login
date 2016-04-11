@@ -31,7 +31,7 @@
 
         $scope.checkPaymentAccountExistsFn(function (value) {
             if (value) {
-                ProductService.getProducts(function (products) {
+                ProductService.getProductsWithSort({name: 1}, function (products) {
                     $scope.products = products;
                     $scope.showProducts = true;
                     $scope.noPaymentAccount = false;
