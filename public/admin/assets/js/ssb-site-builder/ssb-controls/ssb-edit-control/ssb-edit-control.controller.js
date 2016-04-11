@@ -55,7 +55,10 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
 
         var isActiveElement = angular.isDefined(vm.uiState.activeElement.type);
 
-        if (vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex || isActiveElement) {
+        if (vm.uiState.hoveredSectionIndex === vm.sectionIndex &&
+            vm.uiState.hoveredComponentIndex === vm.componentIndex ||
+            isActiveElement &&
+            !SimpleSiteBuilderService.isIENotEdge) {
 
                 var top = 0;
                 var left = 0;
@@ -92,7 +95,9 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
 
                 if (editControl && editControl.length) {
                     editControl.css({ top: top, left: left });
-                    editControl.addClass('ssb-on');
+                    $timeout(function() {
+                        editControl.addClass('ssb-on');
+                    }, 500);
                 }
 
         } else {

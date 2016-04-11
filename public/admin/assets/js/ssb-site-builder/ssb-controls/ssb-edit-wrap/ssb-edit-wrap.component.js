@@ -279,7 +279,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }, 500);
 
                 //if contextual menu is already open, open directly from single click
-                if (el.scope().vm.uiState.showSectionPanel) {
+                if (el.scope().vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
                     $timeout(function() {
                         el.find('> ssb-edit-control .ssb-settings-btn').click();
                     });
@@ -339,7 +339,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     /*
                      * if contextual menu is already open, open directly from single click
                      */
-                    if (clickedComponentScope.vm.uiState.showSectionPanel) {
+                    if (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
                         $timeout(function() {
                             editControlComponent.find('.ssb-settings-btn').click();
                         });
@@ -441,7 +441,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     /*
                      * if contextual menu is already open, open directly from single click
                      */
-                    if (clickedComponentScope.vm.uiState.showSectionPanel) {
+                    if (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
                         $timeout(function() {
                             editControlComponent.find('.ssb-settings-btn').click();
                         });
@@ -513,8 +513,10 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     editControlComponent.addClass('ssb-active-edit-control ssb-on');
                     clickedTextElement.addClass('ssb-active-component');
 
-                    //if contextual menu is already open, open directly from single click
-                    if (clickedComponentScope.vm.uiState.showSectionPanel) {
+                    /*
+                     * if contextual menu is already open, open directly from single click
+                     */
+                    if (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
                         $timeout(function() {
                             editControlComponent.find('.ssb-settings-btn').click();
                         });

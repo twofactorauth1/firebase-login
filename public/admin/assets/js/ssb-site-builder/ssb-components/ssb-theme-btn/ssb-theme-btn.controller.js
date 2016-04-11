@@ -459,6 +459,15 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
                     editControlComponent.find('.ssb-settings-btn').click();
                 }
 
+                /*
+                 * if contextual menu is already open, open directly from single click
+                 */
+                if (pvm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
+                    $timeout(function() {
+                        editControlComponent.find('.ssb-settings-btn').click();
+                    });
+                }
+
             });
         }
     }
