@@ -804,6 +804,112 @@ module.exports = {
         //TODO: this
     },
 
+    publishPage: function(accountId, pageId, userId, fn) {
+        var self = this;
+        self.log.debug('>> publishPage');
+        async.waterfall([
+            function getExistingPage(cb) {
+                pageDao.getPageById(accountId, pageId, function(err, page){
+                    if(err) {
+                        self.log.error('Error getting page:', err);
+                        cb(err);
+                    } else {
+                        cb(null, page);
+                    }
+                });
+            },
+            function dereferenceSections(page, cb) {
+                sectionDao.dereferenceSections(page.get('sections'), function(err, sections){
+                    if(err) {
+                        self.log.error('Error dereferencing sections');
+                        cb(err);
+                    } else {
+                        var sectionJSON = [];
+                        _.each(sections, function(section){
+                            sectionJSON.push(section.toJSON());
+                        });
+                        page.set('sections', sectionJSON);
+                        cb(null, page);
+                    }
+                });
+            },
+            function savePublishedPage(page, cb) {
+                page.set('published', {date:new Date(), by: userId});
+                pageDao.savePublishedPage(page, function(err, publishedPage){
+                    if(err) {
+                        self.log.error('Error publishing page:', err);
+                        cb(err);
+                    } else {
+                        pageCacheManager.updateS3Template(accountId, null, pageId, function(){});
+                        cb(err, publishedPage);
+                    }
+                });
+            },
+            function findOtherPagesToUpdate(page, cb) {
+                /*
+                 * If any of the sections on the published page exist in earlier versions on other pages, we need to
+                 *      update their content.
+                 */
+                var pagesToUpdate = {};
+                async.eachSeries(page.get('sections'), function(sectionJSON, callback){
+                    var idNoVersion = sectionJSON._id.replace(/_.*/g, "");
+                    self.log.debug('idNoVersion:', idNoVersion);
+                    var query = {
+                        accountId:accountId,
+                        'section._id': new RegExp(idNoVersion + '.*')
+                    }
+                    pageDao.findPublishedPages(query, function(err, pages){
+                        if(err) {
+                            self.log.error('Error finding other published pages:', err);
+                            callback(err);
+                        } else {
+                            _.each(pages, function(page){
+                                pagesToUpdate[page.id()] = page;
+                            });
+                            callback(null);
+                        }
+                    });
+                }, function(err){
+                    cb(err, page, pagesToUpdate);
+                });
+            },
+            function updateOtherPages(page, pagesToUpdate, cb) {
+                var pagesToUpdateAry = _.values(pagesToUpdate);
+                var pageSections = page.get('sections');
+                async.eachSeries(pagesToUpdateAry, function(pageToUpdate, callback){
+                    var newPageSections = [];
+                    _.each(pageToUpdate.get('sections'), function(section){
+                        var sectionID = section._id.replace(/_.*/g, "");
+                        var updatedSection = _.find(pageSections, function(pageSection){
+                            var pageSectionID = pageSection._id.replace(/_.*/g, "");
+                            return sectionID === pageSectionID;
+                        });
+                        if(updatedSection) {
+                            newPageSections.push(updatedSection);
+                        } else {
+                            newPageSections.push(section);
+                        }
+                    });
+                    pageToUpdate.set('sections', newPageSections);
+                    pageDao.savePublishedPage(pageToUpdate, callback);
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error updating other pages:', err);
+                    }
+                    cb(err, page);
+                });
+            }
+        ], function done(err, publishedPage){
+            if(err) {
+                self.log.error('Error in publishPage:', err);
+                fn(err);
+            } else {
+                self.log.debug('<< publishPage');
+                fn(null, publishedPage);
+            }
+        });
+    },
+
     updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
         var self = this;
         self.log.debug('>> updatePage (' + pageId + ')');
