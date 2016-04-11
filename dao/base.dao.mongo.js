@@ -480,6 +480,26 @@ var mongodao = {
         });
     },
 
+    _addToCollectionMongo: function(model, collection, fn) {
+        var self = this;
+        if (process.env.NODE_ENV == "testing") {
+            collection = collection + "_testing";
+        }
+        this.mongo(collection).save(model.toJSON("db"), function(err, result){
+            if(err) {
+                self.log.error("An error occurred: #addToCollectionMongo/save()", err);
+                if(fn) {
+                    fn(err, result);
+                }
+            } else {
+                if(fn) {
+                    fn(err, model);
+                }
+            }
+        });
+
+    },
+
 
     _saveOrUpdateMongo: function (model, fn) {
         var self = this;

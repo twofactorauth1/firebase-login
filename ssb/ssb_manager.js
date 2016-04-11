@@ -804,6 +804,52 @@ module.exports = {
         //TODO: this
     },
 
+    publishPage: function(accountId, pageId, userId, fn) {
+        var self = this;
+        self.log.debug('>> publishPage');
+        async.waterfall([
+            function getExistingPage(cb) {
+                pageDao.getPageById(accountId, pageId, function(err, page){
+                    if(err) {
+                        self.log.error('Error getting page:', err);
+                        cb(err);
+                    } else {
+                        cb(null, page);
+                    }
+                });
+            },
+            function dereferenceSections(page, cb) {
+                sectionDao.dereferenceSections(page.get('sections'), function(err, sections){
+                    if(err) {
+                        self.log.error('Error dereferencing sections');
+                        cb(err);
+                    } else {
+                        var sectionJSON = [];
+                        _.each(sections, function(section){
+                            sectionJSON.push(section.toJSON());
+                        });
+                        page.set('sections', sectionJSON);
+                        cb(null, page);
+                    }
+                });
+            },
+            function savePublishedPage(page, cb) {
+                page.set('published', {date:new Date(), by: userId});
+                pageDao.savePublishedPage(page, function(err, publishedPage){
+                    cb(err, publishedPage);
+                });
+            }
+        ], function done(err, publishedPage){
+            if(err) {
+                self.log.error('Error in publishPage:', err);
+                fn(err);
+            } else {
+                self.log.debug('<< publishPage');
+                fn(null, publishedPage);
+            }
+        });
+    },
+
     updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
         var self = this;
         self.log.debug('>> updatePage (' + pageId + ')');
