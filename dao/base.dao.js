@@ -230,6 +230,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findAllWithFieldsSortAndLimit: function(query, skip, limit, sort, fields, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._findAllWithFieldsSortAndLimitMongo(query, skip, limit, sort, fields, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
     findWithFieldsLimitAndTotal:function(query, skip, limit, sort, fields, type, fn) {
         if(this.getStorage(type) === 'mongo') {
             this._findWithFieldsLimitAndTotalMongo(query, skip, limit, sort, fields, type, fn);

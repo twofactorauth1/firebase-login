@@ -114,11 +114,11 @@ _.extend(api.prototype, baseApi.prototype, {
             sortFields = [sortFields];
             sortDirections = [sortDirections];
         }
-        var sortValue = {};
+        var sortValue = [];
 
         if (sortFields) {
             sortFields.forEach(function(field, index) {
-                sortValue[field] = parseInt(sortDirections[index]);
+                sortValue.push([field, sortDirections[index]]);
             });
         }
 
