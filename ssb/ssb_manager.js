@@ -683,6 +683,21 @@ module.exports = {
         });
     },
 
+    listPublishedPages: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> listPagesWithSections');
+        var query = {accountId:accountId, websiteId:websiteId, latest:true};
+        pageDao.findPublishedPages(query, function(err, pages){
+            if(err) {
+                self.log.error('Error getting published pages:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listPagesWithSections');
+                return fn(err, pages);
+            }
+        });
+    },
+
     listPagesWithSections: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug('>> listPagesWithSections');

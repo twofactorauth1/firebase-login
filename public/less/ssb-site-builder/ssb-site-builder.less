@@ -593,6 +593,34 @@ div[class^="spacing-"] {
     border-color: #204d74 !important;
 }
 
+.ssb-sidebar-btn-group{
+    .btn{
+        background:none !important;
+        span.line{
+            display: inline-block;
+            margin: 2px auto;
+            width: 40px;
+            &.solid {
+                border: 2px solid;
+            }
+            &.dotted {
+                border: 2px dotted;
+            }
+            &.dashed {
+                border: 2px dashed;
+            }
+        }
+
+    }
+    .btn.active{
+        border-color: #46b8da !important;
+        color: #46b8da;
+        background: none;
+        border-radius: 6px !important;
+        border-width: 2px !important;
+    }
+}
+
 .ssb-edit-control-component-btn {
     display: none;
     position: fixed!important;

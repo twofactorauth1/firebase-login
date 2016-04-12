@@ -49,8 +49,11 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
     function applyStyles() {
         pvm = {};
-        pvm.component = vm.parentComponent.scope().vm.component;
-        vm.elementData = getStylesForModel();
+
+        if (vm.parentComponent && vm.parentComponent.scope()) {
+            pvm.component = vm.parentComponent.scope().vm.component;
+            vm.elementData = getStylesForModel();
+        }
     }
 
     function setupActiveElementWatch() {
@@ -309,7 +312,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
             }
 
-            if(component.border){
+            if(component.border && component.border.show && component.border.color){
                 styleString += 'border-color: ' + component.border.color + ';';
                 styleString += 'border-width: ' + component.border.width + 'px;';
                 styleString += 'border-style: ' + component.border.style + ';';

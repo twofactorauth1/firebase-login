@@ -59,4 +59,65 @@
 
     }
 
+    #componentloader .feature,
+    #componentloader .image-wrap.editing,
+    #componentloader .editing.team-member-wrap .team-member,
+    #componentloader .editing.team-member-wrap .social-link,
+    #componentloader .editing .testimonial-wrap .single-testimonial {
+        border: 1px solid transparent;
+    }
+
+    #componentloader .feature:hover,
+    #componentloader .image-wrap.editing:hover,
+    #componentloader .editing.team-member-wrap .team-member:hover,
+    #componentloader .editing.team-member-wrap .social-link:hover,
+    #componentloader .editing .testimonial-wrap .single-testimonial:hover {
+        border: 1px dashed @indigenous-orange!important;
+    }
+
+    #componentloader .editing:hover .add-addtional,
+    #componentloader .editing.image-wrap:hover .delete-single-image .btn-delete-single-image,
+    #componentloader .editing .features-wrap .feature:hover .delete-feature,
+    #componentloader .editing .features-wrap .feature:hover .add-addtional,
+    #componentloader .editing.team-member-wrap .team-member:hover .add-addtional,
+    #componentloader .social-link.edit-mode:hover .add-addtional-team,
+    #componentloader .editing.team-member-wrap .team-member:hover .delete-team-member,
+    #componentloader .editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .delete-single-testimonial .btn-delete-single-testimonial,
+    #componentloader .editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .add-addtional {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: auto;
+        width: 45px;
+        height: 48px;
+        margin: 0;
+        padding: 10px;
+        font-size: 20px;
+        background: rgba(44, 62, 80, 0.8);
+        text-align: center;
+        color: white;
+
+        a {
+            color: white;
+        }
+    }
+
+    #componentloader .feature:hover .add-addtional,
+    #componentloader .editing:hover .add-addtional,
+    #componentloader .editing.team-member-wrap .team-member:hover .add-addtional,
+    #componentloader .editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .add-addtional {
+        left: auto;
+        bottom: auto;
+        right: 46px!important;
+    }
+
+    #componentloader .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
+        left: auto;
+        right: 0;
+    }
+
+    #componentloader .social-link.edit-mode:hover .add-addtional-team {
+
+    }
+
 }

@@ -1092,17 +1092,29 @@
          */
         function getFontFamilyOptions() {
             return {
-              "Helvetica Neue, Helvetica, Arial, sans-serif": "Helvetica Neue",
-              "Arial,Helvetica,sans-serif":"Arial",
-              "Georgia,serif":"Georgia",
-              "Impact,Charcoal,sans-serif":"Impact",
-              "Tahoma,Geneva,sans-serif":"Tahoma",
-              "'Times New Roman',Times,serif":"Times New Roman",
-              "Verdana,Geneva,sans-serif":"Verdana",
-              "Roboto,sans-serif": 'Roboto',
-              "Oswald,sans-serif": 'Oswald',
-              "Montserrat,sans-serif": 'Montserrat',
-              "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
+                "'Helvetica Neue', Helvetica, Arial, sans-serif": "Helvetica Neue",
+                "'Arial',Helvetica,sans-serif":"Arial",
+                "'Georgia',serif":"Georgia",
+                "'Impact',Charcoal,sans-serif":"Impact",
+                "'Tahoma',Geneva,sans-serif":"Tahoma",
+                "'Times New Roman',Times,serif":"Times New Roman",
+                "'Verdana',Geneva,sans-serif":"Verdana",
+                "'Roboto',sans-serif": 'Roboto',
+                "'Roboto Condensed',sans-serif": 'Roboto Condensed',
+                "'Roboto Slab',serif": 'Roboto Slab',
+                "'Oswald',sans-serif": 'Oswald',
+                "'Droid Serif',serif": 'Droid Serif',
+                "'Open Sans',sans-serif": 'Open Sans',
+                "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
+                "'Lato',sans-serif": 'Lato',
+                "'Raleway',sans-serif": 'Raleway',
+                "'Quicksand',sans-serif": 'Quicksand',
+                "'Ubuntu',sans-serif": 'Ubuntu',
+                "'Montserrat',sans-serif": 'Montserrat',
+                "'Merriweather',serif": 'Merriweather',
+                "'Quattrocento',serif": 'Quattrocento',
+                "'Lora',serif": 'Lora',
+                "'Playfair Display',serif": 'Playfair Display'
             }
         }
 

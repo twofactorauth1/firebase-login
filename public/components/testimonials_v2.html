@@ -48,11 +48,11 @@
                 </div>
                 <div ng-if="isEditing">
                     <div class="delete-single-testimonial center">
-                        <button ng-click="deleteSlide($index)" class="ng-scope btn-delete-single-testimonial">
+                        <button ng-click="deleteSlide($index)" class="ng-scope btn-delete-single-testimonial" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this testimonial.">
                             <i class='fa fa-trash'></i>
                         </button>
                     </div>
-                    <div class="add-addtional center">
+                    <div class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another testimonial.">
                         <a href="" ng-click="addSlide($index, newTestimonial)">
                             <i class="fa fa-plus"></i>
                         </a>

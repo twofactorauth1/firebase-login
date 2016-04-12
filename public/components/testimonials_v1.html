@@ -24,11 +24,11 @@
                     </div>
                 </div>
                 <div ng-if="isEditing" class="delete-single-testimonial center">
-                    <button ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial">
+                    <button ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this testimonial.">
                         <i class='fa fa-trash'></i>
                     </button>
                 </div>
-                <div ng-if="isEditing" class="add-addtional center">
+                <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another testimonial.">
                     <a href="" ng-click="addTestimonial($index)">
                         <i class="fa fa-plus"></i>
                     </a>
