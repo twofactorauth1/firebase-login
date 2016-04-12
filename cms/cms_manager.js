@@ -1795,7 +1795,10 @@ module.exports = {
                 self.log.error('Error finding version of page: ' + err);
                 return fn(err, null);
             }
-            self.updatePage(pageId, pageAry[0], function(err, newPage){
+            var targetObj = pageAry[0];
+            targetObj.set('created', {by: targetObj.created.by, date: new Date()});
+            targetObj.set('modified', {by: targetObj.created.by, date: new Date()});
+            self.updatePage(pageId, targetObj, function(err, newPage){
                 if(err) {
                     self.log.error('Error updating page: ' + err);
                     return fn(err, null);

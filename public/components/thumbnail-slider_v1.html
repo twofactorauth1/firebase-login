@@ -1,4 +1,4 @@
-<div data-edit ng-class="component.type+'-v'+component.version">
+<div ng-class="component.type+'-v'+component.version">
     <div class="col-md-12"><br>
         <div class="title center">
             <div elem ng-model="component.title"></div>
@@ -19,9 +19,9 @@
                                     </a>
                                     </div>
                                     <div ng-if="isEditing" class="delete-single-image center">
-                                        <button ng-click="deleteImageFromThumbnail($index, $parent.$parent.$index)" class="btn-delete-single-image"><i class='fa fa-trash'></i></button>
+                                        <button ng-click="deleteImageFromThumbnail($index, $parent.$parent.$index)" class="btn-delete-single-image"><i class='fa fa-trash' tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this slide."></i></button>
                                     </div>
-                                    <div ng-if="isEditing" class="add-addtional center">
+                                    <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another slide.">
                                         <a href="">
                                             <i class="fa fa-plus" ng-click="addImageFromMedia(component._id, $index, false, $parent.$parent.$index)"></i>
                                         </a>
@@ -38,8 +38,8 @@
                                     </a>
                     </div>
                 </div>
-                <div ng-show="displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}" style="background: none;" data-slide="prev"></div>
-                <div ng-show="displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></div>
+                <div ng-show="displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left no-edit" href="#myCarousel-{{component.anchor}}" style="background: none;" data-slide="prev"></div>
+                <div ng-show="displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right no-edit" href="#myCarousel-{{component.anchor}}" data-slide="next"></div>
             </div>
         </div>
     </div>

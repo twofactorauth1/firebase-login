@@ -16,23 +16,27 @@
 
         </span>
 
-
-        <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.name === ''">
-
-            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
-
-        </span>
-
         <div>
             <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 1" class="fa fa-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
-
-            {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
-
+            <!-- Heading for Component and text elements -->
+            <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.id">
+                {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
+            </span>
+            <!-- Heading for Sections -->
+            <span ng-if="!vm.state.editSection && !vm.uiState.openSidebarSectionPanel.id">
+                {{vm.state.page.sections[vm.uiState.activeSectionIndex].name | cleanType}}
+            </span>
         </div>
     </h4>
 
     <div class="close-panel fa fa-close" ng-click="vm.closeSectionPanel()"></div>
 
+    <!-- Loading background -->
+    <div class="ssb-sidebar-section-panel-loading-background">
+        <div class="center"><br><span class="fa fa-spinner fa-spin"></span><br>Loading menu...</div>
+    </div>
+
+    <!-- Scrollable menu container -->
     <div class="ssb-sidebar-section-panel-scrollable">
 
         <!-- Section Settings Home -->
@@ -229,7 +233,7 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel"
-            ng-if="vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement._id"
+            ng-if="vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
             settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.html"
             component="vm.uiState.activeElement"
             state="vm.state"
@@ -239,8 +243,8 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'design' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
-            settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.design.html"
+            ng-if="'design' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.design.html"
             component="vm.uiState.activeElement"
             state="vm.state"
             ui-state="vm.uiState">
@@ -248,7 +252,7 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'button-version' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
+            ng-if="'button-version' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
             settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.version.html"
             component="vm.uiState.activeElement"
             state="vm.state"
@@ -257,7 +261,7 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'layout' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
+            ng-if="'layout' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
             component="vm.uiState.activeElement"
             state="vm.state"
@@ -267,7 +271,37 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'settings' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
+            ng-if="'settings' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel"
+            ng-if="vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('text-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-text-settings/sidebar.settings.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'design' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('text-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.design.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'settings' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('text-element_') == 0"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html"
             component="vm.uiState.activeElement"
             state="vm.state"
@@ -275,5 +309,4 @@
         </ssb-sidebar-settings-panel>
 
     </div>
-
 </section>

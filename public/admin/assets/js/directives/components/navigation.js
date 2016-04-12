@@ -12,19 +12,20 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$time
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.isEditing = true;      
-      if(!scope.ssbEditor){
-        if(!angular.isDefined(scope.component.shownavbox))
-          scope.component.shownavbox = true;
-        scope.control.refreshWebsiteLinks = function (lnklist) {
-          scope.website.linkLists = lnklist;
-        };
-      }
-      scope.$watch('component.logo', function (newValue, oldValue) {        
-          $timeout(function () {
-            $(window).trigger('resize');
-          }, 0);
-      })
+        scope.isEditing = true;
+        if(!scope.ssbEditor){
+            if(!angular.isDefined(scope.component.shownavbox))
+                scope.component.shownavbox = true;
+            scope.control.refreshWebsiteLinks = function (lnklist) {
+                scope.website.linkLists = lnklist;
+            };
+        }
+        scope.$watch('component.logo', function (newValue, oldValue) {
+            $timeout(function () {
+                $(window).trigger('resize');
+            }, 0);
+        });
+
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
       $scope.isSinglePost = $scope.$parent.isSinglePost;

@@ -14,6 +14,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.loadPage = loadPage;
+    vm.revertPage = revertPage;
 
     function loadPage(page) {
         if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
@@ -139,6 +140,24 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             })
         )
     }
+
+    function revertPage(versionId) {
+        vm.state.saveLoading = true;
+        SimpleSiteBuilderService.revertPage(vm.state.page._id, versionId, function (data) {
+            SimpleSiteBuilderService.getPage(data._id)
+            .then(function (page) {
+                vm.uiState.openSidebarPanel = '';
+                vm.uiState.showSectionPanel = false;
+                vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+                vm.state.pendingPageChanges = false;
+                vm.state.pendingWebsiteChanges = false;
+                SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
+                vm.state.originalPage = page.data;
+                SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
+                vm.state.saveLoading = false;
+            });
+        });
+    };
 
     function init(element) {
     	vm.element = element;

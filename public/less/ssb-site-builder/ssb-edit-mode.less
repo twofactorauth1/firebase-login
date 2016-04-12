@@ -1,3 +1,8 @@
+@ssb-edit-mode-bumper-long-size: 85%;
+@ssb-edit-mode-bumper-short-size: 20px;
+@ssb-edit-mode-bumper-long-size-offset: 7.5%;
+@ssb-edit-mode-bumper-base-z-index: 4;
+
 .ssb-edit-mode {
 
     [data-edit] {
@@ -6,6 +11,113 @@
 
     .ssb-page-section-layout-header .navigation-logo img {
         max-width: calc(~"100% - 4px");
+    }
+
+    .ssb-page-section {
+
+        &:before, &:after {
+            display: block;
+            content: '';
+            position: absolute;
+            top:0;
+            left: @ssb-edit-mode-bumper-long-size-offset;
+            z-index: @ssb-edit-mode-bumper-base-z-index;
+            height: @ssb-edit-mode-bumper-short-size;
+            width: @ssb-edit-mode-bumper-long-size;
+            // background: rgba(0,0,0,.25);
+        }
+
+        &:after {
+            bottom: 0;
+            top: auto;
+        }
+    }
+
+    .ssb-page-section-layout-hero-v7 {
+        [testimonials-component] .component-wrap {
+            &:before, &:after {
+                display: block;
+                content: '';
+                position: absolute;
+                top: @ssb-edit-mode-bumper-long-size-offset;
+                left: 0;
+                z-index: @ssb-edit-mode-bumper-base-z-index + 5;
+                height: @ssb-edit-mode-bumper-long-size;
+                width: @ssb-edit-mode-bumper-short-size;
+                opacity: 1;
+                background: transparent;
+                // background: rgba(0,0,255,.25);
+            }
+
+            &:after {
+                left: auto;
+                right: 0;
+            }
+        }
+
+
+
+    }
+
+    #componentloader .feature,
+    #componentloader .image-wrap.editing,
+    #componentloader .editing.team-member-wrap .team-member,
+    #componentloader .editing.team-member-wrap .social-link,
+    #componentloader .editing .testimonial-wrap .single-testimonial {
+        border: 1px solid transparent;
+    }
+
+    #componentloader .feature:hover,
+    #componentloader .image-wrap.editing:hover,
+    #componentloader .editing.team-member-wrap .team-member:hover,
+    #componentloader .editing.team-member-wrap .social-link:hover,
+    #componentloader .editing .testimonial-wrap .single-testimonial:hover {
+        border: 1px dashed @indigenous-orange!important;
+    }
+
+    #componentloader .editing:hover .add-addtional,
+    #componentloader .editing.image-wrap:hover .delete-single-image .btn-delete-single-image,
+    #componentloader .editing .features-wrap .feature:hover .delete-feature,
+    #componentloader .editing .features-wrap .feature:hover .add-addtional,
+    #componentloader .editing.team-member-wrap .team-member:hover .add-addtional,
+    #componentloader .social-link.edit-mode:hover .add-addtional-team,
+    #componentloader .editing.team-member-wrap .team-member:hover .delete-team-member,
+    #componentloader .editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .delete-single-testimonial .btn-delete-single-testimonial,
+    #componentloader .editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .add-addtional {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: auto;
+        width: 45px;
+        height: 48px;
+        margin: 0;
+        padding: 10px;
+        font-size: 20px;
+        background: rgba(44, 62, 80, 0.8);
+        text-align: center;
+        color: white;
+
+        a {
+            color: white;
+        }
+    }
+
+    #componentloader .feature:hover .add-addtional,
+    #componentloader .editing:hover .add-addtional,
+    #componentloader .editing.team-member-wrap .team-member:hover .add-addtional,
+    #componentloader .editing .testimonials-v2 .testimonial-wrap .single-testimonial:hover .add-addtional {
+        left: auto;
+        bottom: auto;
+        right: 46px!important;
+    }
+
+    #componentloader .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
+        left: auto;
+        right: 0;
+    }
+
+    #componentloader .social-link.edit-mode:hover .add-addtional-team {
+
     }
 
 }

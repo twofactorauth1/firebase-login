@@ -20,11 +20,11 @@ var toolbarbuttons = [
         'insertVideo',
         'insertFile',
         'insertTable',
+        'fontAwesomeIcons',
+        'clearFormatting',
+        'selectAll',
         'undo',
-        'redo'//,
-        //'insertIcon'
-        // 'clearFormatting',
-        // 'selectAll'
+        'redo'
     ];
 var spectrumColors = [
               ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
@@ -40,46 +40,60 @@ var spectrumColors = [
             ];
 
 $.FroalaEditor.config = {
-     enter: $.FroalaEditor.ENTER_BR,
-     // enter: $.FroalaEditor.ENTER_DIV,
-     toolbarBottom: false,
-     toolbarInline: true,
-     toolbarVisibleWithoutSelection: true,
-     scrollableContainer: '#ssb-froala-scrollable-container',
-     // allowedEmptyTags: ['a'],
-     toolbarButtons: toolbarbuttons,
-     toolbarButtonsMD: toolbarbuttons,
-     toolbarButtonsSM: toolbarbuttons,
-     toolbarButtonsXS: toolbarbuttons,
-     imageStyles: {
+    key: 'qENARBFSTb1G1QJg1RA==',
+    enter: $.FroalaEditor.ENTER_BR,
+    // enter: $.FroalaEditor.ENTER_DIV,
+    toolbarBottom: false,
+    toolbarInline: true,
+    toolbarVisibleWithoutSelection: true,
+    scrollableContainer: '#ssb-froala-scrollable-container',
+    // allowedEmptyTags: ['a'],
+    toolbarButtons: toolbarbuttons,
+    toolbarButtonsMD: toolbarbuttons,
+    toolbarButtonsSM: toolbarbuttons,
+    toolbarButtonsXS: toolbarbuttons,
+    imageStyles: {
         'img-rounded': 'Rounded Square',
         'img-thumbnail': 'Square with Border',
         'img-circle': 'Circle'
-     },
-     imageDefaultWidth: 'auto',
-     linkStyles:{
+    },
+    imageDefaultWidth: 'auto',
+    linkStyles:{
         'ssb-theme-btn': 'SB Button',
         'btn': 'Button',
-        'btn-default': 'Default Button',
-        'btn-primary': 'Primary Button',
-        'btn-success': 'Success Button',
-        'btn-info': 'Info Button',
-        'btn-warning': 'Warning Button',
-        'btn-danger': 'Danger Button',
+        // 'btn-default': 'Default Button',
+        // 'btn-primary': 'Primary Button',
+        // 'btn-success': 'Success Button',
+        // 'btn-info': 'Info Button',
+        // 'btn-warning': 'Warning Button',
+        // 'btn-danger': 'Danger Button',
         'btn-link': 'Link Button',
-     },
-     linkText: true,
-     fontFamily: {
-        "Helvetica Neue, Helvetica, Arial, sans-serif": "Helvetica Neue",
-        "Arial,Helvetica,sans-serif":"Arial","Georgia,serif":"Georgia",
-        "Impact,Charcoal,sans-serif":"Impact",
-        "Tahoma,Geneva,sans-serif":"Tahoma",
+    },
+    linkText: true,
+    fontFamily: {
+        "'Helvetica Neue', Helvetica, Arial, sans-serif": "Helvetica Neue",
+        "'Arial',Helvetica,sans-serif":"Arial",
+        "'Georgia',serif":"Georgia",
+        "'Impact',Charcoal,sans-serif":"Impact",
+        "'Tahoma',Geneva,sans-serif":"Tahoma",
         "'Times New Roman',Times,serif":"Times New Roman",
-        "Verdana,Geneva,sans-serif":"Verdana",
-        "Roboto,sans-serif": 'Roboto',
-        "Oswald,sans-serif": 'Oswald',
-        "Montserrat,sans-serif": 'Montserrat',
-        "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
+        "'Verdana',Geneva,sans-serif":"Verdana",
+        "'Roboto',sans-serif": 'Roboto',
+        "'Roboto Condensed',sans-serif": 'Roboto Condensed',
+        "'Roboto Slab',serif": 'Roboto Slab',
+        "'Oswald',sans-serif": 'Oswald',
+        "'Droid Serif',serif": 'Droid Serif',
+        "'Open Sans',sans-serif": 'Open Sans',
+        "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
+        "'Lato',sans-serif": 'Lato',
+        "'Raleway',sans-serif": 'Raleway',
+        "'Quicksand',sans-serif": 'Quicksand',
+        "'Ubuntu',sans-serif": 'Ubuntu',
+        "'Montserrat',sans-serif": 'Montserrat',
+        "'Merriweather',serif": 'Merriweather',
+        "'Quattrocento',serif": 'Quattrocento',
+        "'Lora',serif": 'Lora',
+        "'Playfair Display',serif": 'Playfair Display'
     },
     //imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
     linkEditButtons: ['linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
@@ -122,5 +136,6 @@ $.FroalaEditor.config = {
         'ssb-editor-style-line-height-5': 'Line Height 5',
     },
     imageUploadURL: "/api/1.0/assets/editor/upload",
-    linkMultipleStyles: false
+    linkMultipleStyles: false,
+    paragraphMultipleStyles: false
 }

@@ -128,9 +128,17 @@
                             </a>
                         </li>
                         <li ng-click="form.goTo(5)">
-                            <a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}" tooltip-placement="bottom" tooltip-html-unsafe="Review, Test, and Launch">
+                            <a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}" tooltip-placement="bottom" tooltip-html-unsafe="Update tags">
                                 <div class="stepNumber">
                                     5
+                                </div>
+                                <span class="stepDesc text-small"> Update Tags </span>
+                            </a>
+                        </li>
+                        <li ng-click="form.goTo(6)">
+                            <a href ng-class="{'selected' : currentStep >= 6, 'done' : currentStep > 6}" tooltip-placement="bottom" tooltip-html-unsafe="Review, Test, and Launch">
+                                <div class="stepNumber">
+                                    6
                                 </div>
                                 <span class="stepDesc text-small"> Review </span>
                             </a>
@@ -533,6 +541,47 @@
                             <!-- end: WIZARD STEP 4 -->
                             <!-- start: WIZARD STEP 5 -->
                             <div id="step-5" ng-show="currentStep == 5" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
+                                <div class="row">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="well bg-primary margin-top-30">
+                                            <div class="padding-15 center">
+                                                <h2 class="StepTitle text-white text-bold"><i class="fa fa-users fa-2x fa-inverse block margin-bottom-10"></i> Update Tags</h2>
+                                                <p class="text-large margin-bottom-0">
+                                                    Update tags for customers selected in step 3 selected in Step 3
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div ng-hide="!isEditable">
+                                            <div class="panel panel-white">
+                                                <form role="form" class="ng-pristine ng-valid">
+                                                    <div class="form-group">
+                                                        <label>
+                                                            Tags
+                                                        </label>
+                                                        <ui-select multiple tagging="tagToCustomer" tagging-match-to-key="label" ng-model="tagging.tags" theme="bootstrap">
+                                                            <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                                                            <ui-select-choices repeat="tag in customerTags | orderBy:'label' | filter:$select.search">
+                                                                {{tag.label}}
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Number of recipients: {{recipients.length}}</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="radio-inline"><input type="radio" name="optradio" value="set" ng-model="tagging.operation">Set tags</label>
+                                                        <label class="radio-inline"><input type="radio" name="optradio" value="add" ng-model="tagging.operation">Add tags</label>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end: WIZARD STEP 5 -->
+                            <!-- start: WIZARD STEP 6 -->
+                            <div id="step-6" ng-show="currentStep == 6" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
                                 <div class="row margin-top-30">
                                     <div class="col-sm-8 col-sm-offset-2">
                                         <div class="well bg-primary">
@@ -576,6 +625,12 @@
                                                 </p>
                                                 <p ng-if="newCampaignObj.type == 'autoresponder'" class="list-group-item-text">
                                                     Automatically sent based on trigger.
+                                                </p>
+                                            </a>
+                                            <a class="list-group-item" href="#">
+                                                <h5 class="list-group-item-heading">Tags</h5>
+                                                <p class="list-group-item-text">
+                                                    Tags <span class="text-bold">{{formatTagsFn()}}</span>. Operation: <span class="text-bold">{{tagging.operation}}</span>.
                                                 </p>
                                             </a>
                                         </div>
@@ -636,7 +691,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- end: WIZARD STEP 5 -->
+                            <!-- end: WIZARD STEP 6 -->
+
                         </div>
                     </div>
                     <div class="col-md-12 bg-light-grey padding-30 margin-bottom-20">
@@ -646,12 +702,12 @@
                                     <i class="fa fa-chevron-left"></i> Back
                                 </button>
                             </div>
-                            <div ng-if="currentStep < 5">
+                            <div ng-if="currentStep < 6">
                                 <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)" ng-disabled="checkingCampaignName">
                                     <span> Next </span> <i class="fa fa-chevron-right"></i>
                                 </button>
                             </div>
-                            <div ng-if="currentStep == 5">
+                            <div ng-if="currentStep == 6">
                                 <button ng-disabled="saveLoading || !isEditable" class="btn btn-success btn-wide pull-right" ng-click="activateCampaign()">
                                     <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
                                 </button>

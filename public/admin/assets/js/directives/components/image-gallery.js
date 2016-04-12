@@ -33,6 +33,10 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
       scope.deleteImageFromGallery = function (componentId, index) {
         scope.component.images.splice(index, 1);
       };
+
+      scope.touchMove = false;
+      scope.draggable = false;
+      scope.autoplay = false;
     }
   };
 }]);

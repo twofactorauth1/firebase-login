@@ -65,6 +65,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
         app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPage.bind(this));//get page
         app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));//update page
+        app.post(this.url('pages/:id/publish'), this.isAuthAndSubscribedApi.bind(this), this.publishPage.bind(this));//publish page
         app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));//delete page
         app.post(this.url('websites/:websiteId/duplicate/page'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePage.bind(this));//create duplicate page
 
@@ -244,7 +245,8 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 ssbManager.updateWebsite(accountId, websiteId, modified, modifiedWebsite, function(err, website){
                     self.log.debug('<< updateWebsite');
-                    return self.sendResultOrError(resp, err, website, "Error updating website");
+                    self.sendResultOrError(resp, err, website, "Error updating website");
+                    return self.createUserActivity(req, 'UPDATE_WEBSITE', null, {_id:websiteId}, function(){});
                 });
             }
         });
@@ -344,14 +346,29 @@ _.extend(api.prototype, baseApi.prototype, {
                 var modified = {date: new Date(), by:self.userId(req)};
                 ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
                     self.log.debug('<< updatePage');
-                    self.sendResultOrError(resp, err, page, "Error fetching page");
-                    pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
+                    self.sendResultOrError(resp, err, page, "Error updating page");
                 });
             }
         });
     },
 
+    publishPage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> publishPage');
+        var accountId = parseInt(self.accountId(req));
+        var pageId = req.params.id;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.publishPage(accountId, pageId, self.userId(req), function(err, page){
+                    self.log.debug('<< publishPage');
+                    self.sendResultOrError(resp, err, page, "Error publishing page");
+                });
+            }
+        });
 
+    },
 
     listAccountSections: function(req, resp) {
         var self = this;

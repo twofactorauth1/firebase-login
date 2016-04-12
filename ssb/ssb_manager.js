@@ -13,6 +13,8 @@ var async = require('async');
 var slug = require('slug');
 var constants = require('./constants');
 var cheerio = require('cheerio');
+//TODO: update pageCacheManager for life in an SB-only world
+var pageCacheManager = require('../cms/pagecache_manager');
 
 var PLATFORM_ID = 0;
 
@@ -681,6 +683,21 @@ module.exports = {
         });
     },
 
+    listPublishedPages: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> listPagesWithSections');
+        var query = {accountId:accountId, websiteId:websiteId, latest:true};
+        pageDao.findPublishedPages(query, function(err, pages){
+            if(err) {
+                self.log.error('Error getting published pages:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listPagesWithSections');
+                return fn(err, pages);
+            }
+        });
+    },
+
     listPagesWithSections: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug('>> listPagesWithSections');
@@ -800,6 +817,112 @@ module.exports = {
 
     getPageVersions: function() {
         //TODO: this
+    },
+
+    publishPage: function(accountId, pageId, userId, fn) {
+        var self = this;
+        self.log.debug('>> publishPage');
+        async.waterfall([
+            function getExistingPage(cb) {
+                pageDao.getPageById(accountId, pageId, function(err, page){
+                    if(err) {
+                        self.log.error('Error getting page:', err);
+                        cb(err);
+                    } else {
+                        cb(null, page);
+                    }
+                });
+            },
+            function dereferenceSections(page, cb) {
+                sectionDao.dereferenceSections(page.get('sections'), function(err, sections){
+                    if(err) {
+                        self.log.error('Error dereferencing sections');
+                        cb(err);
+                    } else {
+                        var sectionJSON = [];
+                        _.each(sections, function(section){
+                            sectionJSON.push(section.toJSON());
+                        });
+                        page.set('sections', sectionJSON);
+                        cb(null, page);
+                    }
+                });
+            },
+            function savePublishedPage(page, cb) {
+                page.set('published', {date:new Date(), by: userId});
+                pageDao.savePublishedPage(page, function(err, publishedPage){
+                    if(err) {
+                        self.log.error('Error publishing page:', err);
+                        cb(err);
+                    } else {
+                        pageCacheManager.updateS3Template(accountId, null, pageId, function(){});
+                        cb(err, publishedPage);
+                    }
+                });
+            },
+            function findOtherPagesToUpdate(page, cb) {
+                /*
+                 * If any of the sections on the published page exist in earlier versions on other pages, we need to
+                 *      update their content.
+                 */
+                var pagesToUpdate = {};
+                async.eachSeries(page.get('sections'), function(sectionJSON, callback){
+                    var idNoVersion = sectionJSON._id.replace(/_.*/g, "");
+                    self.log.debug('idNoVersion:', idNoVersion);
+                    var query = {
+                        accountId:accountId,
+                        'section._id': new RegExp(idNoVersion + '.*')
+                    }
+                    pageDao.findPublishedPages(query, function(err, pages){
+                        if(err) {
+                            self.log.error('Error finding other published pages:', err);
+                            callback(err);
+                        } else {
+                            _.each(pages, function(page){
+                                pagesToUpdate[page.id()] = page;
+                            });
+                            callback(null);
+                        }
+                    });
+                }, function(err){
+                    cb(err, page, pagesToUpdate);
+                });
+            },
+            function updateOtherPages(page, pagesToUpdate, cb) {
+                var pagesToUpdateAry = _.values(pagesToUpdate);
+                var pageSections = page.get('sections');
+                async.eachSeries(pagesToUpdateAry, function(pageToUpdate, callback){
+                    var newPageSections = [];
+                    _.each(pageToUpdate.get('sections'), function(section){
+                        var sectionID = section._id.replace(/_.*/g, "");
+                        var updatedSection = _.find(pageSections, function(pageSection){
+                            var pageSectionID = pageSection._id.replace(/_.*/g, "");
+                            return sectionID === pageSectionID;
+                        });
+                        if(updatedSection) {
+                            newPageSections.push(updatedSection);
+                        } else {
+                            newPageSections.push(section);
+                        }
+                    });
+                    pageToUpdate.set('sections', newPageSections);
+                    pageDao.savePublishedPage(pageToUpdate, callback);
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error updating other pages:', err);
+                    }
+                    cb(err, page);
+                });
+            }
+        ], function done(err, publishedPage){
+            if(err) {
+                self.log.error('Error in publishPage:', err);
+                fn(err);
+            } else {
+                self.log.debug('<< publishPage');
+                fn(null, publishedPage);
+            }
+        });
     },
 
     updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
@@ -937,17 +1060,31 @@ module.exports = {
                 self.log.info('updateSections');
                 var otherPagesWithSectionReferences = [];
                 async.eachSeries(dereferencedSections, function(section, callback){
-                    var existingSection = _.find(existingSections, function(existingSection){self.log.debug('existing section?', existingSection);return section.id() === existingSection.id()});
+
+                    var existingSection = _.find(existingSections, function(existingSection) {
+                        self.log.debug('existing section?', existingSection);
+                        if (existingSection && existingSection.id) {
+                            return section.id() === existingSection.id()
+                        } else {
+                            return false
+                        }
+                    });
+
                     if(existingSection) {
                         if(!_.isEqual(existingSection, section)){
 
                             var oldID = section.id();
                             var newVersion = section.getVersion() + 1;
-                            var newID = section.id() + '_' + newVersion;
-                            section.set('_id', newID);
                             section.setVersion(newVersion);
-                            section.set('modified', {date: new Date(), by:userId});
-                            otherPagesWithSectionReferences.push({pageId:existingPage.id(), oldId:oldID, newId:newID});
+                            section.set('modified', {
+                                date: new Date(),
+                                by: userId
+                            });
+                            otherPagesWithSectionReferences.push({
+                                pageId: existingPage.id(),
+                                oldId: oldID,
+                                newId: section.id()
+                            });
                             sectionDao.saveOrUpdate(section, function(err, value){
                                 if(err) {
                                     self.log.error('Error updating section:', err);
@@ -1315,38 +1452,109 @@ module.exports = {
                                         self.log.debug('exists: ' , exists);
                                         if(!exists.length){// if the global section does NOT already appear on the page
                                             var globalSection = {_id: gsection.get("_id")};
+                                            var globalSectionID = gsection.id();
                                             var sectionIds = sections.map(function(sec) { return sec._id});
-                                            var query = {
-                                                accountId:accountId,
-                                                _id: { $in: sectionIds},
-                                                name: 'Footer'
-                                            };
-                                            sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
-                                                if(err) {
-                                                    self.log.error('Error finding global footer:', err);
-                                                    cb(err);
-                                                } else {
-                                                    if(footerSection) {
-                                                        var filteredFooter = _.findWhere(sections, {
-                                                            _id: footerSection.get("_id")
-                                                        });
-
-                                                        if(filteredFooter) {
-                                                            var footerIndex = _.indexOf(sections, filteredFooter);
-                                                            self.log.debug('footerIndex: ' , footerIndex);
-                                                            self.log.debug('globalSection: ' , globalSection);
-                                                            sections.splice(footerIndex, 0, globalSection);
+                                            /*
+                                             * If the global section name === "Header" put it at the top.
+                                             * If the global section name === "Footer" put it at the bottom.
+                                             * Otherwise... stick it above the footer?
+                                             */
+                                            if(gsection.get('name') === 'Header') {
+                                                //replace existing header if it exists
+                                                var query = {
+                                                    accountId:accountId,
+                                                    _id:{$in:sectionIds},
+                                                    name:'Header'
+                                                }
+                                                sectionDao.findOne(query, $$.m.ssb.Section, function(err, existingHeaderSection){
+                                                    if(err) {
+                                                        self.log.error('Error finding global header:', err);
+                                                        g_callback(err);
+                                                    } else {
+                                                        if(existingHeaderSection) {
+                                                            var headerIDtoRemove = _.findWhere(sections, {_id:existingHeaderSection.id()});
+                                                            if(headerIDtoRemove) {
+                                                                var headerIndex = _.indexOf(sections, headerIDtoRemove);
+                                                                sections.splice(headerIndex, 1, globalSection);
+                                                            } else {
+                                                                self.log.warn('The DB says we have a header but we could not find it on the page');
+                                                                sections.splice(0,0, globalSection);
+                                                            }
                                                         } else {
+                                                            sections.splice(0,0, globalSection);
+                                                        }
+                                                        _page.set("sections", sections);
+                                                        g_callback();
+                                                    }
+                                                });
+                                            } else if(gsection.get('name') === 'Footer') {
+                                                //replace existing footer if it exists
+                                                var query = {
+                                                    accountId:accountId,
+                                                    _id: { $in: sectionIds},
+                                                    name: 'Footer'
+                                                };
+                                                sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
+                                                    if(err) {
+                                                        self.log.error('Error finding global footer:', err);
+                                                        g_callback(err);
+                                                    } else {
+                                                        if(footerSection) {
+                                                            var filteredFooter = _.findWhere(sections, {
+                                                                _id: footerSection.get("_id")
+                                                            });
+
+                                                            if(filteredFooter) {
+                                                                var footerIndex = _.indexOf(sections, filteredFooter);
+                                                                self.log.debug('footerIndex: ' , footerIndex);
+                                                                self.log.debug('globalSection: ' , globalSection);
+                                                                //TODO: this may need to be (footerIndex,1,globalSection) to overwrite
+                                                                sections.splice(footerIndex, 0, globalSection);
+                                                            } else {
+                                                                sections.push(globalSection);
+                                                            }
+
+                                                        } else{
                                                             sections.push(globalSection);
                                                         }
-
-                                                    } else {
-                                                        sections.push(globalSection);
+                                                        _page.set("sections", sections);
+                                                        g_callback();
                                                     }
-                                                    _page.set("sections", sections);
-                                                    g_callback();
-                                                }
-                                            });
+                                                });
+                                            } else {
+                                                //put it above the footer
+                                                var query = {
+                                                    accountId:accountId,
+                                                    _id: { $in: sectionIds},
+                                                    name: 'Footer'
+                                                };
+                                                sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection) {
+                                                    if (err) {
+                                                        self.log.error('Error finding global footer:', err);
+                                                        g_callback(err);
+                                                    } else {
+                                                        if(footerSection) {
+                                                            var filteredFooter = _.findWhere(sections, {
+                                                                _id: footerSection.get("_id")
+                                                            });
+
+                                                            if(filteredFooter) {
+                                                                var footerIndex = _.indexOf(sections, filteredFooter);
+                                                                self.log.debug('footerIndex: ' , footerIndex);
+                                                                self.log.debug('globalSection: ' , globalSection);
+                                                                sections.splice(footerIndex, 0, globalSection);
+                                                            } else {
+                                                                sections.push(globalSection);
+                                                            }
+
+                                                        } else{
+                                                            sections.push(globalSection);
+                                                        }
+                                                        _page.set("sections", sections);
+                                                        g_callback();
+                                                    }
+                                                });
+                                            }
                                         } else {
                                             _page.set("sections", sections);
                                             g_callback();
@@ -1384,6 +1592,15 @@ module.exports = {
                                         self.log.error('Error updating page: ' + err);
                                         cb(err);
                                     } else {
+
+                                        _.each(pages, function(page){
+                                            pageCacheManager.updateS3Template(accountId, null, page.id(), function(err, value){
+                                                if(err) {
+                                                    self.log.error('Error updating template for page [' + page.id() + ']:', err);
+                                                }
+                                            });
+                                        });
+
                                         cb(null, updatedPage, updatedSections);
                                     }
                                 });
@@ -1409,7 +1626,9 @@ module.exports = {
 
             }
             self.log.debug('<< updatePage');
-            return fn(err, updatedPage);
+            fn(err, updatedPage);
+            //update the page cache after return.  We don't need the user to wait for this.
+            pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
         });
     },
 

@@ -46,14 +46,17 @@
     </div>
 
     <div ng-if="vm.isHero">
-        <div class="form-group" disabled ng-hide="isEmail">
+        <div class="form-group" ng-init="switch=true" disabled ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <switch disabled class="pull-right"></switch>
+            <div class="disabled" style="display:inline;">
+                <switch  ng-model="switch" class="pull-right"></switch>
+            </div>
+
         </div>
         <div class="form-group add-image" ng-if="!component.components[0].src">
             <div class="btn-wrap">
@@ -209,195 +212,90 @@
     </div>
 </div>
 
-<h4 class="ssb-sidebar-sub-heading-separator">Effects</h4>
+<div ng-if="(component.bg.img.show && component.bg.img.url) || (component.bg.video.show && component.bg.video.url)">
 
-<div class="row padding-10">
-    <div>
-        <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
-            <label for="bg_blur">
-                Blur background
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove blur effect to background image.">
-                    <i class="fa fa-info-circle" />
-                </span>
-            </label>
-            <switch ng-model="component.bg.img.blur" class="pull-right"></switch>
-        </div>
-        <div class="form-group" ng-show="component.bg.img.show && !component.bg.video.show">
-            <label for="bg_parallax" ng-if="component.type != 'navigation'">
-                Parallax
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image.">
-                    <i class="fa fa-info-circle" />
-                </span>
-            </label>
-            <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
-        </div>
-        <!-- <div class="form-group">
-            <label for="bg_overlay">
-                Under nav
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Make Masthead go underneath nav.">
-                    <i class="fa fa-info-circle" />
-                </span>
-            </label>
-            <switch ng-model="component.bg.img.undernav" class="pull-right"></switch>
-        </div>
-        <div class="form-group">
-            <label for="bg_fullscreen">
-                Full Screen
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Switch Masthead background to fullscreen.">
-                    <i class="fa fa-info-circle" />
-                </span>
-            </label>
-            <switch ng-model="component.bg.img.fullscreen" class="pull-right"></switch>
-        </div> -->
-        <div class="form-group">
-            <label for="bg_overlay">
-                Add overlay
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to background image.">
-                    <i class="fa fa-info-circle" />
-                </span>
-            </label>
-            <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
-        </div>
+    <h4 class="ssb-sidebar-sub-heading-separator">Effects</h4>
 
-        <div class="form-group ssb-spectrum-color-picker-small">
-            <div class="ssb-spectrum-color-picker-background-container">
-                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
-                <i class="fa fa-eyedropper" />
+    <div class="row padding-10">
+        <div>
+            <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
+                <label for="bg_blur">
+                    Blur background
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove blur effect to background image.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.bg.img.blur" class="pull-right"></switch>
             </div>
-            <label for="colorpicker">
-                Overlay color
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect.">
-                    <i class="fa fa-info-circle" />
-                </span>
-            </label>
-        </div>
-
-        <div class="form-group">
-            <div>
-                <label for="bg_overlay_opacity">Overlay opacity</label>
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity.">
-                    <i class="fa fa-info-circle" />
-                </span>
+            <div class="form-group" ng-show="component.bg.img.show && !component.bg.video.show">
+                <label for="bg_parallax" ng-if="component.type != 'navigation'">
+                    Parallax
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
             </div>
-            <div>
-                <rzslider
-                    class="slider-opacity"
-                    rz-slider-step="10"
-                    name="bg-opacity"
-                    rz-slider-model="component.bg.img.overlayopacity"
-                    rz-slider-floor="0"
-                    rz-slider-ceil="100">
-                </rzslider>
+            <!-- <div class="form-group">
+                <label for="bg_overlay">
+                    Under nav
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Make Masthead go underneath nav.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.bg.img.undernav" class="pull-right"></switch>
+            </div>
+            <div class="form-group">
+                <label for="bg_fullscreen">
+                    Full Screen
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Switch Masthead background to fullscreen.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.bg.img.fullscreen" class="pull-right"></switch>
+            </div> -->
+            <div class="form-group">
+                <label for="bg_overlay">
+                    Add overlay
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to background image.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
+            </div>
+
+            <div ng-if="component.bg.img.overlay" class="form-group ssb-spectrum-color-picker-small">
+                <div class="ssb-spectrum-color-picker-background-container">
+                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+                    <i class="fa fa-eyedropper" />
+                </div>
+                <label for="colorpicker">
+                    Overlay color
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+            </div>
+
+            <div class="form-group" ng-if="component.bg.img.overlay">
+                <div>
+                    <label for="bg_overlay_opacity">Overlay opacity</label>
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </div>
+                <div>
+                    <rzslider
+                        class="slider-opacity"
+                        rz-slider-step="10"
+                        name="bg-opacity"
+                        rz-slider-model="component.bg.img.overlayopacity"
+                        rz-slider-floor="0"
+                        rz-slider-ceil="100">
+                    </rzslider>
+                </div>
             </div>
         </div>
     </div>
-    <!-- <form class="container-fluid form-horizontal" ng-show="!component.bg.img.show" ng-hide="isEmail">
-        <div class="row">
-            <div class="col-sm-12">
-                <label for="bg_color_opacity">Add BG Opacity</label>
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
-            </div>
-            <div class="col-sm-12">
-                <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="component.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
-            </div>
-        </div>
-    </form> -->
 </div>
-
-<h4 class="ssb-sidebar-sub-heading-separator">Border</h4>
-
-<div class="row padding-10">
-    <div>
-
-        <div class="form-group ssb-spectrum-color-picker-small">
-            <div class="ssb-spectrum-color-picker-background-container">
-                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.border.color"></spectrum-colorpicker>
-                <i class="fa fa-eyedropper" />
-            </div>
-            <label for="colorpicker">
-                Color
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Choose a color for the border around this section.">
-                    <i class="fa fa-info-circle" />
-                </span>
-            </label>
-        </div>
-
-        <div class="form-group">
-            <div>
-                <label>
-                    Width
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the thickness of the border.">
-                        <i class="fa fa-info-circle" />
-                    </span>
-                </label>
-            </div>
-            <div>
-                <rzslider
-                    class="slider-opacity"
-                    rz-slider-step="10"
-                    name="border-width"
-                    rz-slider-model="component.border.width"
-                    rz-slider-floor="0"
-                    rz-slider-ceil="100">
-                </rzslider>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                <label>
-                    Style
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the style of the border.">
-                        <i class="fa fa-info-circle" />
-                    </span>
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="none" name="inline" value="" ng-model="component.border.style">
-                <label for="none">
-                    None
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="solid" name="inline" value="solid" ng-model="component.border.style">
-                <label for="solid">
-                    Solid
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="dotted" name="inline" value="dotted" ng-model="component.border.style">
-                <label for="dotted">
-                    Dotted
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="dashed" name="inline" value="dashed" ng-model="component.border.style">
-                <label for="dashed">
-                    Dashed
-                </label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div>
-                <label>
-                    Roundness
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the roundness of the border to create a curved corner effect. Also known as border radius.">
-                        <i class="fa fa-info-circle" />
-                    </span>
-                </label>
-            </div>
-            <div>
-                <rzslider
-                    class="slider-opacity"
-                    rz-slider-step="10"
-                    name="border-radius"
-                    rz-slider-model="component.border.radius"
-                    rz-slider-floor="0"
-                    rz-slider-ceil="100">
-                </rzslider>
-            </div>
-        </div>
-
-    </div>
-</div>
+<div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/border.settings.html' "></div>

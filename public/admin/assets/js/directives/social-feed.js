@@ -44,7 +44,8 @@ app.directive('twitterFollower', function () {
             post: '=',
             actionTweetAt: '&',
             actionFollowBack: '&',
-            actionDirectMessage: '&'
+            actionDirectMessage: '&',
+            showDm: '='
         }
     };
 });

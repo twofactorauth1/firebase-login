@@ -1,14 +1,8 @@
-<div class="row padding-10 hidden">
-<!-- <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/video.html' "></div> -->
-    <button
-        ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'simple-form', id: 'simple-form' + component._id, componentId: component._id });"
-        class="ssb-sidebar-section-panel-btn btn btn-primary">
-        <i class="ti-settings display-ib"></i> Edit Simple Form
-    </button>
-
-</div>
-
 <div class="row padding-10">
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'simple-form', id: 'simple-form' + component._id, componentId: component._id });" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="fa fa-align-justify display-ib"></i> Manage Simple Form
+    </button>
 
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="fa fa-paint-brush display-ib"></i> Style
@@ -16,10 +10,6 @@
 
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Size &amp; Padding', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="fa fa-arrows-alt display-ib"></i> Size &amp; Padding
-    </button>
-
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Form Settings', id: 'simple-form' + component._id, componentId: component._id });" class="ssb-sidebar-section-panel-btn btn btn-link">
-        <i class="ti-pencil-alt display-ib"></i> Form Settings
     </button>
 
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Settings', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">

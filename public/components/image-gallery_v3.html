@@ -1,0 +1,33 @@
+<!--
+* COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+*
+* All use or reproduction of any or all of this content must be approved.
+* Please contact info@indigenous.io for approval or questions.
+*
+-->
+
+<div ng-class="component.type+'-v'+component.version">
+
+    <div class="clearfix mb20"></div>
+
+    <div>
+        <div data-edit ng-cloak class="img-container">
+            <div class="img-row" ng-repeat="image in component.images track by $index">
+                <div class="col-sm-3 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
+                    <div class="thumbnail img-height single-image">
+                        <a href="{{image.url}}" title="{{image.label}}" data-gallery>
+                            <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" style="background-image:url('{{image.url}}');"></div>
+                        </a>
+                    </div>
+                    <div ng-if="isEditing" class="delete-single-image center">
+                        <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
+                    </div>
+                    <div ng-if="isEditing" class="center">
+                        <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button ng-if="isEditing && component.images.length === 0" ng-click="addImageFromMedia(component._id,0)" class="btn ssb-theme-btn btn-primary btn-lg pull-right btn-add-image" >Add new Image</button>
+</div>

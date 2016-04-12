@@ -500,6 +500,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.insertMediaCallback = function(asset) {
             if (componentIndex !== undefined && componentIndex !== null) {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+            } else if (vm.uiState.activeElement  && vm.uiState.activeElement.hasOwnProperty("bg")) {
+                vm.uiState.activeElement.bg.img.url = asset.url;
             } else {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
             }
@@ -760,11 +762,16 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 // Iterates through the array of filters and replaces each one with an object containing an
                 // upper and lowercase version
                 // Note: not sure why this was done, could be handled in CSS? - Jack
+
+                // List the section icons
+                var sectionIcons = SimpleSiteBuilderService.contentSectionIcons;
+
                 _.each(vm.sectionFilters, function (element, index) {
                     sectionLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
                     vm.sectionFilters[index] = {
                       'capitalized': sectionLabel,
-                      'lowercase': element
+                      'lowercase': element,
+                      'icon': sectionIcons[element] ? sectionIcons[element].icon : 'fa-adjust'
                     };
                     sectionLabel = null;
                 });
@@ -772,13 +779,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 // Manually add the Misc section back on to the end of the list
                 vm.sectionFilters.push({
                   'capitalized': 'Misc',
-                  'lowercase': 'misc'
+                  'lowercase': 'misc',
+                  'icon': sectionIcons['misc'].icon
                 });
 
                 // Manually add the All option to the end of the list
                 vm.sectionFilters.push({
                     'capitalized': 'All',
-                    'lowercase': 'all'
+                    'lowercase': 'all',
+                    'icon': sectionIcons['all'].icon
                 });
 
                 vm.setFilterType = function (label) {
@@ -930,8 +939,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
           vm.state.saveLoading = true;
           saveWebsite().then(function(){
             SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
-              vm.state.saveLoading = false;
-              vm.uiState.navigation.loadPage(page.data._id);
+               SimpleSiteBuilderService.getSite(vm.state.website._id).then(function() {
+                  vm.state.saveLoading = false;
+                  vm.uiState.navigation.loadPage(page.data._id);
+               });
             })
           })
         }
