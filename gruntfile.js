@@ -519,6 +519,12 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.registerTask('prepPublish', 'Prepare for publish functionality', function(){
+        var done = this.async();
+        var accountId = null;
+        dbcopyutil.publishExistingPages(accountId, done);
+    });
+
     grunt.registerTask('convertAccountToSiteTemplate', ['prompt:convertAccountToSiteTemplate', 'doConvertAccountToSiteTemplate']);
 
     grunt.registerTask('generateJS', 'Generate JS', function(){
