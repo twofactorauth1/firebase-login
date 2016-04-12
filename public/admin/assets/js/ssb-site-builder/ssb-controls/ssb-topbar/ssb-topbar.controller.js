@@ -15,6 +15,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.loadPage = loadPage;
     vm.revertPage = revertPage;
+    vm.publishPage = publishPage;
 
     function loadPage(page) {
         if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
@@ -48,6 +49,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
         vm.state.saveLoading = true;
         var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
+        var promise = null;
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
 
@@ -75,7 +77,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     //reset section panel
                     vm.uiState.navigation.sectionPanel.reset();
 
-                    saveWebsite().then(function(){
+                    promise = saveWebsite().then(function(){
                         return (
                             SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                                 SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
@@ -104,7 +106,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             //reset section panel
             vm.uiState.navigation.sectionPanel.reset();
 
-            saveWebsite().then(function(){
+            promise = saveWebsite().then(function(){
                 return (
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                         SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
@@ -119,6 +121,9 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 )
             })
         }
+
+
+        return promise;
 
     }
 
@@ -158,6 +163,28 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             });
         });
     };
+
+    function publishPage() {
+        vm.state.saveLoading = true;
+        vm.state.publishLoading = true;
+        var save = vm.savePage();
+
+        if (save.then) {
+            save.then(function(response) {
+                SimpleSiteBuilderService.publishPage(vm.state.page._id).then(function (data) {
+                    vm.state.publishLoading = false;
+                    toaster.pop('success', 'Page Published', 'The page was published successfully.');
+                }).catch(function(err) {
+                    vm.state.publishLoading = false;
+                    toaster.pop('error', 'Error', 'The page was not published. Please try again.');
+                    console.error(JSON.stringify(err));
+                });
+            });
+        }
+
+    };
+
+
 
     function init(element) {
     	vm.element = element;
