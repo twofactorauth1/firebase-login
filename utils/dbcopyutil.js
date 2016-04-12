@@ -8,6 +8,7 @@ var STRIPE_PLAN_ID = 'jtospfftdw';
 var STRIPE_ACCESS_TOKEN = 'sk_test_osAnWDulUbCkgw0D2kkwo1Ju';
 var STRIPE_REFRESH_TOKEN = 'rt_5NU1M6ubOAkICDJs0TpIa8iCRHDUwbSaC7VJgPXQ75MCfFGZ';
 var utils = require('./commonutils');
+require('../configs/log4js.config').configure();
 
 var defaultSubscriptionPrivs = [
     'integrations/payments',
@@ -29,6 +30,8 @@ var defaultSubscriptionPrivs = [
 ];
 
 var copyutil = {
+
+    log: $$.g.getLogger("copyutil"),
 
     copyAccountFromTestToProd : function(accountId, cb) {
         var self = this;
@@ -935,9 +938,110 @@ var copyutil = {
             console.log('Note: you probably should clear the templates cached in S3 for this account!');
             fn(err);
         });
+    },
+
+    publishExistingPages: function(accountId, fn) {
+        var self = this;
+        var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var pagesCollection = srcMongo.collection('pages');
+        var sectionCollection = srcMongo.collection('sections');
+        var publishedPagesCollection = srcMongo.collection('published_pages');
+
+        async.waterfall([
+            function getPagesByAccount(cb) {
+                self.log.debug('Getting pages');
+                var query = {
+                    latest:true
+                };
+                if(accountId) {
+                    query.accountId = accountId;
+                } else {
+                    query.accountId = {$exists:true};
+                }
+                pagesCollection.find(query).toArray(function(err, _pages){
+                    if(err) {
+                        cb(err);
+                    } else {
+                        self.log.debug('Fetched ' + _pages.length + ' pages');
+                        cb(null, _pages);
+                    }
+                });
+            },
+            function derefSectionsIntoPages(pages, cb) {
+                self.log.debug('dereferencing sections');
+                async.eachSeries(pages, function(page, callback){
+                    if(page.sections) {
+                        self._dereferenceSections(page.sections, sectionCollection, function(err, sections){
+                            if(err) {
+                                self.log.error('Error dereferencing sections');
+                                callback(err);
+                            } else {
+                                page.sections =  sections;
+                                callback(null);
+                            }
+                        });
+                    } else {
+                        callback();
+                    }
+
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error dereferencing sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, pages);
+                    }
+                });
+
+            },
+            function saveIntoPublishedCollection(pages, cb) {
+                self.log.debug('saving published pages');
+                async.eachSeries(pages, function(page, callback){
+                    publishedPagesCollection.save(page, function(err, savedPage){
+                        callback(err);
+                    });
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error saving published pages:', err);
+                        cb(err);
+                    } else {
+                        cb(null);
+                    }
+                });
+            }
+        ], function done(err){
+            self.log.debug('Done.');
+            fn();
+        });
+    },
+
+    _dereferenceSections: function(sectionAry, sectionCollection, fn) {
+        var self = this;
+        var deReffedAry = [];
+        async.eachSeries(sectionAry, function(section, cb){
+            self.log.debug('Section:', section);
+            if(section._id) {
+                sectionCollection.find({"_id":section._id}).toArray( function(err, deReffed){
+                    if(err) {
+                        cb(err);
+                    } else if(deReffed && deReffed[0]){
+                        deReffedAry.push(deReffed[0]);
+                        cb();
+                    } else {
+                        //brand new section
+                        deReffedAry.push(section);
+                        cb();
+                    }
+                });
+            } else {
+                self.log.warn('The sectionAry contains a section that cannot be dereferenced:', sectionAry);
+                cb();
+            }
+        }, function done(err){
+            fn(err, deReffedAry);
+        });
     }
-
-
 };
 
 module.exports = copyutil;

@@ -161,7 +161,12 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function getAllPages(webpageData, cb) {
+                /*
                 ssbManager.listPagesWithSections(accountId, webpageData.website._id, function(err, pages){
+                    cb(err, webpageData, pages);
+                });
+                */
+                ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, pages){
                     cb(err, webpageData, pages);
                 });
             },

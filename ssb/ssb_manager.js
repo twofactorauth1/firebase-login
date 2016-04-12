@@ -685,14 +685,14 @@ module.exports = {
 
     listPublishedPages: function(accountId, websiteId, fn) {
         var self = this;
-        self.log.debug('>> listPagesWithSections');
+        self.log.debug('>> listPublishedPages');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
         pageDao.findPublishedPages(query, function(err, pages){
             if(err) {
                 self.log.error('Error getting published pages:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listPagesWithSections');
+                self.log.debug('<< listPublishedPages');
                 return fn(err, pages);
             }
         });
@@ -872,7 +872,7 @@ module.exports = {
                     var query = {
                         accountId:accountId,
                         'section._id': new RegExp(idNoVersion + '.*')
-                    }
+                    };
                     pageDao.findPublishedPages(query, function(err, pages){
                         if(err) {
                             self.log.error('Error finding other published pages:', err);
