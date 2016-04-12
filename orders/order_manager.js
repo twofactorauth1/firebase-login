@@ -707,6 +707,7 @@ module.exports = {
                             var vars = settings.vars || [];
                             var fromName = settings.fromName;
                             var emailId = settings.emailId;
+                            var bcc = settings.bcc;
 
                             emailDao.getEmailById(emailId, function(err, email){
                                 if(err || !email) {
@@ -746,7 +747,7 @@ module.exports = {
                                         log.warn('email will not be sent.');
                                         cb();
                                     } else {
-                                        mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
+                                        mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, bcc, function(){
                                             if(err) {
                                                 log.warn('Error sending email');
                                                 order.get("notes").push({
