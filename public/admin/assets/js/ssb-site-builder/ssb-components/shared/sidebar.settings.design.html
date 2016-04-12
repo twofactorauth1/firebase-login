@@ -367,7 +367,7 @@
     </div>
 
 
-    <div class="form-group ssb-spectrum-color-picker-small">
+    <div ng-if="component.bg.img.overlay" class="form-group ssb-spectrum-color-picker-small">
         <div class="ssb-spectrum-color-picker-background-container">
             <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
             <i class="fa fa-eyedropper" />
@@ -380,7 +380,7 @@
         </label>
     </div>
 
-    <div class="form-group">
+    <div ng-if="component.bg.img.overlay" class="form-group">
         <div>
             <label>
                 Overlay opacity

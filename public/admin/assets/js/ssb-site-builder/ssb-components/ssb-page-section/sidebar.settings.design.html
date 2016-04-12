@@ -262,7 +262,7 @@
             <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
         </div>
 
-        <div class="form-group ssb-spectrum-color-picker-small">
+        <div ng-if="component.bg.img.overlay" class="form-group ssb-spectrum-color-picker-small">
             <div class="ssb-spectrum-color-picker-background-container">
                 <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
                 <i class="fa fa-eyedropper" />
@@ -275,7 +275,7 @@
             </label>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" ng-if="component.bg.img.overlay">
             <div>
                 <label for="bg_overlay_opacity">Overlay opacity</label>
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity.">
@@ -294,17 +294,6 @@
             </div>
         </div>
     </div>
-    <!-- <form class="container-fluid form-horizontal" ng-show="!component.bg.img.show" ng-hide="isEmail">
-        <div class="row">
-            <div class="col-sm-12">
-                <label for="bg_color_opacity">Add BG Opacity</label>
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
-            </div>
-            <div class="col-sm-12">
-                <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="component.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
-            </div>
-        </div>
-    </form> -->
 </div>
 
 <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/border.settings.html' "></div>
