@@ -17,16 +17,11 @@
         </span>
 
 
-        <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.name === ''">
-
-            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
-
-        </span>
-
         <div>
             <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 1" class="fa fa-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
-
-            {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
+            <span ng-if="!vm.state.editSection">
+                {{vm.state.page.sections[vm.uiState.activeSectionIndex].name | cleanType}}
+            </span>
 
         </div>
     </h4>
