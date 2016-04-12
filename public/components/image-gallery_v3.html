@@ -20,10 +20,10 @@
                         </a>
                     </div>
                     <div ng-if="isEditing" class="delete-single-image center">
-                        <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
+                        <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
                     </div>
                     <div ng-if="isEditing" class="center">
-                        <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional"><i class='fa fa-plus'></i></a>
+                        <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
                     </div>
                 </div>
             </div>
