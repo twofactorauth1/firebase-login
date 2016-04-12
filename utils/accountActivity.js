@@ -229,7 +229,7 @@ var accountActivity = {
                 cb(null, account);
             },
             function getProducts(account, cb){
-                productManager.listProducts(accountId, 0,0, function(err, products){
+                productManager.listProducts(accountId, 0,0,[], function(err, products){
                     if(err) {
                         self.log.error('Error fetching products', err);
                         cb(err);
