@@ -10472,6 +10472,20 @@ div[class^="spacing-"] input {
 .ssb-sidebar-btn-group .btn {
   background: none !important;
 }
+.ssb-sidebar-btn-group .btn span.line {
+  display: inline-block;
+  margin: 2px auto;
+  width: 40px;
+}
+.ssb-sidebar-btn-group .btn span.line.solid {
+  border: 2px solid;
+}
+.ssb-sidebar-btn-group .btn span.line.dotted {
+  border: 2px dotted;
+}
+.ssb-sidebar-btn-group .btn span.line.dashed {
+  border: 2px dashed;
+}
 .ssb-sidebar-btn-group .btn.active {
   border-color: #46b8da !important;
   color: #46b8da;

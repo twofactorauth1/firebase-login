@@ -1,9 +1,9 @@
 <h4 class="ssb-sidebar-sub-heading-separator">Links</h4>
 <div class="row padding-left-10 padding-right-10">
     <div ng-init="menuActive = 'normal'" class="btn-group ssb-sidebar-btn-group">
-        <button type="button" ng-click="menuActive = 'normal'" class="btn" ng-class="{'btn-info': menuActive === 'normal' }">Normal</button>
-        <button type="button" ng-click="menuActive = 'roll-over'" class="btn" ng-class="{'btn-info': menuActive === 'roll-over' }">Roll-over</button>
-        <button type="button" ng-click="menuActive = 'pressed'" class="btn" ng-class="{'btn-info': menuActive === 'pressed' }">Pressed</button>
+        <button type="button" ng-click="menuActive = 'normal'" class="btn" ng-class="{'active': menuActive === 'normal' }">Normal</button>
+        <button type="button" ng-click="menuActive = 'roll-over'" class="btn" ng-class="{'active': menuActive === 'roll-over' }">Roll-over</button>
+        <button type="button" ng-click="menuActive = 'pressed'" class="btn" ng-class="{'active': menuActive === 'pressed' }">Pressed</button>
     </div>
     <div ng-if="menuActive === 'normal'">
         <div class="form-group ssb-spectrum-color-picker-small">

@@ -596,6 +596,21 @@ div[class^="spacing-"] {
 .ssb-sidebar-btn-group{
     .btn{
         background:none !important;
+        span.line{
+            display: inline-block;
+            margin: 2px auto;
+            width: 40px;
+            &.solid {
+                border: 2px solid;
+            }
+            &.dotted {
+                border: 2px dotted;
+            }
+            &.dashed {
+                border: 2px dashed;
+            }
+        }
+
     }
     .btn.active{
         border-color: #46b8da !important;
