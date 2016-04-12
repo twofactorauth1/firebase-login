@@ -49,8 +49,11 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
     function applyStyles() {
         pvm = {};
-        pvm.component = vm.parentComponent.scope().vm.component;
-        vm.elementData = getStylesForModel();
+
+        if (vm.parentComponent && q.parentComponent.scope()) {
+            pvm.component = vm.parentComponent.scope().vm.component;
+            vm.elementData = getStylesForModel();
+        }
     }
 
     function setupActiveElementWatch() {
