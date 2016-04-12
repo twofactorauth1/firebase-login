@@ -50,7 +50,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
     function applyStyles() {
         pvm = {};
 
-        if (vm.parentComponent && q.parentComponent.scope()) {
+        if (vm.parentComponent && vm.parentComponent.scope()) {
             pvm.component = vm.parentComponent.scope().vm.component;
             vm.elementData = getStylesForModel();
         }
