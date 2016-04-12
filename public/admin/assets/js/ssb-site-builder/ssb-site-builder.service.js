@@ -1475,11 +1475,10 @@
          * Publish page
          *
          */
-        function publishPage(pageId, fn) {
+        function publishPage(pageId) {
 
           function success(data) {
             console.log('SimpleSiteBuilderService publishPage: ' + data);
-            fn(data);
           }
 
           function error(error) {

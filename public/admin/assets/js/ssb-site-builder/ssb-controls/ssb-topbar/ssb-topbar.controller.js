@@ -82,7 +82,9 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                             SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                                 SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                                     console.log('page saved');
-                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    if (!vm.state.publishLoading) {
+                                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    }
                                     vm.state.saveLoading = false;
                                 })
                             }).catch(function(err) {
@@ -111,7 +113,9 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                         SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                             console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            if (!vm.state.publishLoading) {
+                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            }
                             vm.state.saveLoading = false;
                         })
                     }).catch(function(err) {
