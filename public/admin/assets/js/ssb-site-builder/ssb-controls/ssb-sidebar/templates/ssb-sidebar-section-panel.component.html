@@ -16,13 +16,12 @@
 
         </span>
 
-        <!-- Heading for Component and text elements -->
-        <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.id">
-            {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
-        </span>
-
         <div>
             <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 1" class="fa fa-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
+            <!-- Heading for Component and text elements -->
+            <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.id">
+                {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
+            </span>
             <!-- Heading for Sections -->
             <span ng-if="!vm.state.editSection && !vm.uiState.openSidebarSectionPanel.id">
                 {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
