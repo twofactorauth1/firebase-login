@@ -36,7 +36,7 @@
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-0">
-                <button type="button" ng-repeat="option in alignmentOptions" ng-click="component.formSettings.align = option" ng-model="component.formSettings.align" class="btn text-capitalize" ng-class="{'btn-info': option == component.formSettings.align }">{{option}}</button>
+                <button type="button" ng-repeat="option in alignmentOptions" ng-click="component.formSettings.align = option" ng-model="component.formSettings.align" class="btn text-capitalize" ng-class="{'active': option == component.formSettings.align }">{{option}}</button>
             </div>
         </div>
 
@@ -46,7 +46,7 @@
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-0">
-                <button type="button" ng-repeat="option in alignmentOptions" ng-click="component.btn.align = option" ng-model="component.btn.align" class="btn text-capitalize" ng-class="{'btn-info': option == component.btn.align }">{{option}}</button>
+                <button type="button" ng-repeat="option in alignmentOptions" ng-click="component.btn.align = option" ng-model="component.btn.align" class="btn text-capitalize" ng-class="{'active': option == component.btn.align }">{{option}}</button>
             </div>
         </div>
     </div>

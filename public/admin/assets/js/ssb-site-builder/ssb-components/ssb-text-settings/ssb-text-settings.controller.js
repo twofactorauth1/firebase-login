@@ -312,7 +312,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
             }
 
-            if(component.border){
+            if(component.border && component.border.show && component.border.color){
                 styleString += 'border-color: ' + component.border.color + ';';
                 styleString += 'border-width: ' + component.border.width + 'px;';
                 styleString += 'border-style: ' + component.border.style + ';';
