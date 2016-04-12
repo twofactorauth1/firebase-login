@@ -107,8 +107,23 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var skip = req.query['skip'];
         var limit = req.query['limit'];
+        var sortFields = req.query['sortFields'];
+        var sortDirections = req.query['sortDirections'];
+
+        if (sortFields && ! _.isArray(sortFields)) {
+            sortFields = [sortFields];
+            sortDirections = [sortDirections];
+        }
+        var sortValue = [];
+
+        if (sortFields) {
+            sortFields.forEach(function(field, index) {
+                sortValue.push([field, sortDirections[index]]);
+            });
+        }
+
         var accountId = parseInt(self.currentAccountId(req));
-        productManager.listProducts(accountId, limit, skip, function(err, list){
+        productManager.listProducts(accountId, limit, skip, sortValue, function(err, list){
             self.log.debug('<< listProducts');
             self.sendResultOrError(res, err, list, 'Error listing products');
         });

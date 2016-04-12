@@ -43,9 +43,12 @@
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
-                            <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="product.type != 'external' && itemClicked(product) != true && !product.hasVariations">
-                                <div data-class="btn-text">
+                            <button ng-disabled='product.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="product.type != 'external' && itemClicked(product) != true && !product.hasVariations">
+                                <div data-class="btn-text" ng-hide='product.type == "SUBSCRIPTION" && !stripeInfo'>
                                     <span class="fa fa-shopping-cart"></span> Add to Cart
+                                </div>
+                                <div data-class="btn-text" ng-show='product.type == "SUBSCRIPTION" && !stripeInfo'>
+                                    <span class="fa fa-shopping-cart"></span> Stripe account needed
                                 </div>
                             </button>
                             <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="product.type != 'external' && itemClicked(product) == true && !product.hasVariations">
@@ -457,9 +460,12 @@
                                     </div>
                                 </div>
                                 <div class="actions">
-                                    <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && itemClicked(selectedProduct) != true && matchedVariation">
-                                        <div data-class="btn-text">
+                                    <button ng-disabled='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && itemClicked(selectedProduct) != true && matchedVariation">
+                                        <div data-class="btn-text" ng-hide='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
                                             <span class="fa fa-shopping-cart"></span> Add to Cart
+                                        </div>
+                                        <div data-class="btn-text" ng-show='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
+                                            <span class="fa fa-shopping-cart"></span> Stripe account needed
                                         </div>
                                     </button>
                                     <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external' && itemClicked(selectedProduct) == true && !selectedProduct.hasVariations">

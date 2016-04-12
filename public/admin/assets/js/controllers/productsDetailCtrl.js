@@ -16,6 +16,17 @@
       dirty : false
     }
 
+    $scope.slickConfig = {
+        infinite: false,
+        dots: false,
+        slidesToShow: 3,
+        slidesToScroll: 1,
+        focusOnSelect: true
+    };
+
+    $scope.slickSlideIndex = 0;
+    $scope.isMediaSingleSelect = false;
+
     /*
      * @openModal
      * -
@@ -51,7 +62,7 @@
             return $scope.insertMedia;
           },
           isSingleSelect: function () {
-              return false;
+              return $scope.isMediaSingleSelect;
           }
         }
       });
@@ -136,6 +147,9 @@
         };
         product.regular_price = parseFloat(product.regular_price);
         $scope.product = product;
+        if (product.assets && product.assets.length) {
+            $scope.isMediaSingleSelect = true;
+        }
         console.log('product ', product);
         var p_icon = $scope.product.icon;
         if(p_icon && !p_icon.indexOf("fa-") == 0)
@@ -198,14 +212,25 @@
      */
 
     $scope.insertMedia = function (assets) {
-        var urls = _.pluck(assets, 'url');
+        if ($scope.isMediaSingleSelect == false) {
+            var urls = _.pluck(assets, 'url');
+        }
       if ($scope.currentDownload) {
         console.log('download');
-        $scope.currentDownload.file = urls[0];
+        if ($scope.isMediaSingleSelect == false) {
+            $scope.currentDownload.file = urls[0];
+        } else {
+            $scope.currentDownload.file = assets.url;
+        }
       } else {
         console.log('product image');
-        $scope.product.icon = urls[0];
-        $scope.product.assets = urls;
+        if ($scope.isMediaSingleSelect == false) {
+            $scope.product.icon = urls[0];
+            $scope.product.assets = urls;
+        } else {
+            $scope.product.icon = assets.url;
+            $scope.product.assets[$scope.slickSlideIndex] = assets.url;
+        }
       }
       $scope.setDownloadId();
     };
@@ -1128,5 +1153,10 @@
       })
     })();
 
+    $scope.assetSlideClickFn = function ($index) {
+        $scope.slickSlideIndex = $index;
+        $scope.isMediaSingleSelect = true;
+        $scope.product.icon = $scope.product.assets[$index];
+    };
   }]);
 }(angular));

@@ -46,14 +46,17 @@
     </div>
 
     <div ng-if="vm.isHero">
-        <div class="form-group" disabled ng-hide="isEmail">
+        <div class="form-group" ng-init="switch=true" disabled ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <switch disabled class="pull-right"></switch>
+            <div class="disabled" style="display:inline;">
+                <switch  ng-model="switch" class="pull-right"></switch>
+            </div>
+
         </div>
         <div class="form-group add-image" ng-if="!component.components[0].src">
             <div class="btn-wrap">
@@ -334,7 +337,7 @@
             <div>
                 <rzslider
                     class="slider-opacity"
-                    rz-slider-step="10"
+                    rz-slider-step="1"
                     name="border-width"
                     rz-slider-model="component.border.width"
                     rz-slider-floor="0"
@@ -390,11 +393,11 @@
             <div>
                 <rzslider
                     class="slider-opacity"
-                    rz-slider-step="10"
+                    rz-slider-step="1"
                     name="border-radius"
                     rz-slider-model="component.border.radius"
                     rz-slider-floor="0"
-                    rz-slider-ceil="100">
+                    rz-slider-ceil="50">
                 </rzslider>
             </div>
         </div>

@@ -67,36 +67,88 @@
         ssbService.getCompiledElementEditControl = getCompiledElementEditControl;
         ssbService.compileEditorElements = compileEditorElements;
         ssbService.addUnderNavSetting = addUnderNavSetting; //legacy re-impl
-
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
-
+        ssbService.getPageVersions = getPageVersions;
+        ssbService.revertPage = revertPage;
         ssbService.permissions = {};
         ssbService.compiledElements = {};
         ssbService.compiledElementEditControls = {};
+        ssbService.detectIENotEdge = detectIENotEdge;
+        ssbService.isIENotEdge = ssbService.detectIENotEdge();
 
         /**
          * This represents the category sorting for the add content panel
          */
+
         ssbService.contentSectionDisplayOrder = [
-            'welcome & landing',
-            'images',
+            'navigation',
+            'welcome hero',
+            'products & services',
+            'forms',
+            'gallery',
             'text',
             'video',
             'mixed content',
-            'about us',
-            'products & services',
-            'clients',
             'team',
             'testimonials',
-            'contact us',
-            'blog',
-            'features',
-            'navigation',
-            'forms',
+            'contact',
             'social',
+            'footer',
+            'blog',
             'misc'
         ];
+
+        ssbService.contentSectionIcons = {
+            'navigation':{
+                'icon': 'fa-reorder'
+            },
+            'welcome hero':{
+                'icon': 'fa-bullhorn'
+            },
+            'products & services':{
+                'icon': 'fa-shopping-cart'
+            },
+            'forms':{
+                'icon': 'fa-at'
+            },
+            'gallery':{
+                'icon': 'fa-file-image-o'
+            },
+            'text':{
+                'icon': 'fa-text-width'
+            },
+            'video':{
+                'icon': 'fa-video-camera'
+            },
+            'mixed content':{
+                'icon': 'fa-object-ungroup'
+            },
+            'team':{
+                'icon': 'fa-users'
+            },
+            'testimonials':{
+                'icon': 'fa-commenting'
+            },
+            'contact':{
+                'icon': 'fa-map-marker'
+            },
+            'social':{
+                'icon': 'fa-thumbs-o-up'
+            },
+            'footer':{
+                'icon': 'fa-copyright'
+            },
+            'blog':{
+                'icon': 'fa-rss'
+            },
+            'misc':{
+                'icon': 'fa-puzzle-piece'
+            },
+            'all':{
+                'icon': 'fa-sort-amount-asc'
+            }
+        }
 
         /**
          * Events for compiled editor elememts
@@ -1006,6 +1058,7 @@
         function getSpectrumColorOptions() {
             return {
                 showPalette: true,
+                showAlpha: true,
                 clickoutFiresChange: true,
                 showInput: true,
                 showButtons: true,
@@ -1282,6 +1335,7 @@
                     btn.removeClass('ssb-theme-btn-active-element');
                     btn.attr('ng-class', 'vm.elementClass()');
                     btn.attr('ng-attr-style', '{{vm.elementStyle()}}');
+                    // btn.attr('ng-click', '$event.stopImmediatePropagation()');
                     btnHTML = btn.get(0).outerHTML.replace('ng-scope', '');
                     $compile(btnHTML)(scope, function(cloned, scope) {
                         var tempId = ssbService.getTempUUID();
@@ -1336,24 +1390,122 @@
                 navComponent: null
             }
 
-            ssbService.page.sections.forEach(function (sectionValue, sectionIndex) {
-                sectionValue.components.forEach(function (value, index) {
-                    if (value && value.type === 'masthead' && value._id == masthead_id) {
-                        var navComponent = _.findWhere(ssbService.page.sections[sectionIndex - 1].components, { type: 'navigation' });
-                        if (
-                            sectionIndex != 0 &&
-                            navComponent !== undefined
-                        ) {
-                            data.allowUndernav = true;
-                            data.navComponent = navComponent;
-                        } else {
-                            data.allowUndernav = false;
+            if (ssbService.page && ssbService.page.sections) {
+                ssbService.page.sections.forEach(function (sectionValue, sectionIndex) {
+                    sectionValue.components.forEach(function (value, index) {
+                        if (value && value.type === 'masthead' && value._id == masthead_id) {
+                            var navComponent = _.findWhere(ssbService.page.sections[sectionIndex - 1].components, { type: 'navigation' });
+                            if (
+                                sectionIndex != 0 &&
+                                navComponent !== undefined
+                            ) {
+                                data.allowUndernav = true;
+                                data.navComponent = navComponent;
+                            } else {
+                                data.allowUndernav = false;
+                            }
                         }
-                    }
+                    });
                 });
-            });
+            }
 
             fn(data);
+        }
+
+        /**
+         * Get list of page versions
+         *
+         */
+        function getPageVersions(pageId, fn) {
+
+          function success(data) {
+            console.log('SimpleSiteBuilderService getPageVersions: ' + data);
+            fn(data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService getPageVersions error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: basePageAPIUrlv2 + [pageId, 'versions'].join('/'),
+              method: 'GET',
+            }).success(success).error(error))
+          )
+        }
+
+        /**
+         *Revert page
+         *
+         */
+        function revertPage(pageId, versionId, fn) {
+
+          function success(data) {
+            console.log('SimpleSiteBuilderService revertPage: ' + data);
+            fn(data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService revertPage error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: basePageAPIUrlv2 + [pageId, 'version', versionId].join('/'),
+              method: 'POST',
+            }).success(success).error(error))
+          )
+        }
+
+        /**
+         * detect IE
+         * returns version of IE or false, if browser is not Internet Explorer
+         *
+         * Note: remove me
+         *  - found here: http://codepen.io/gapcode/pen/vEJNZN
+         */
+        function detectIENotEdge() {
+            var ua = window.navigator.userAgent;
+
+            // Test values; Uncomment to check result …
+
+            // IE 10
+            // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+
+            // IE 11
+            // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+
+            // IE 12 / Spartan
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+
+            // Edge (IE 12+)
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+
+            var msie = ua.indexOf('MSIE ');
+            if (msie > 0) {
+                // IE 10 or older => return version number
+                // return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+                return true;
+            }
+
+            var trident = ua.indexOf('Trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                // return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+                return true;
+            }
+
+            var edge = ua.indexOf('Edge/');
+            if (edge > 0) {
+                // Edge (IE 12+) => return version number
+                // return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+                return false;
+            }
+
+            // other browser
+            return false;
         }
 
 

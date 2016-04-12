@@ -5,7 +5,7 @@ app.controller('SiteBuilderActionButtonsController', ssbSiteBuilderActionButtons
 ssbSiteBuilderActionButtonsController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
 /* @ngInject */
 function ssbSiteBuilderActionButtonsController($scope, $attrs, $filter, SimpleSiteBuilderService) {
-	
+
     console.info('site-build sidebar directive init...')
 
     var vm = this;
@@ -14,6 +14,7 @@ function ssbSiteBuilderActionButtonsController($scope, $attrs, $filter, SimpleSi
     vm.init = init;
     vm.save = save;
     vm.cancel = cancel;
+    vm.revert = revert;
 
     function save() {
     	vm.saveAction();
@@ -25,6 +26,10 @@ function ssbSiteBuilderActionButtonsController($scope, $attrs, $filter, SimpleSi
 
     function init(element) {
     	vm.element = element;
+    }
+
+    function revert(versionId) {
+        vm.revertAction({versionId: versionId});
     }
 
 }

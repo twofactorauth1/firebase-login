@@ -16,6 +16,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     vm.init = init;
     vm.elementClass = elementClass;
     vm.elementStyle = elementStyle;
+
     vm.elementDataOriginal;
     vm.elementData = {
         'name': 'Button',
@@ -36,7 +37,20 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         },
         'txtcolor': '',
         'visibility': true,
-        'spacing': {}
+        'spacing': {},
+        'hover':{
+            'txtcolor': '',
+            'bg':{
+                'color': ''
+            }
+        },
+        'pressed':{
+            'txtcolor': '',
+            'bg':{
+                'color': ''
+            }
+        },
+        'border':{}
     };
 
     //get functions from parent text component
@@ -72,21 +86,30 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //         updateTextEditor(true);
     //     }
     // });
-    var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
-        // console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
-    });
+    // var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
+    //     // console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
+    // });
 
 
 
     function buildDataObjFromHTML() {
         // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
         var ssbStyle = vm.element.attr('data-ssb-style');
+        var ssbHoverStyle = vm.element.attr('data-ssb-hover-style');
+        var ssbActiveStyle = vm.element.attr('data-ssb-active-style');
         var ssbClass = vm.element.attr('data-ssb-class');
         var data = {
             id: 'button-element_' + elementId,
             _id: 'button-element_' + elementId,
             anchor: 'button-element_' + elementId,
             'bg': {},
+            'hover':{
+                'bg':{}
+            },
+            'pressed':{
+                'bg':{}
+            },
+            'border':{},
             'spacing': {}
         };
 
@@ -106,6 +129,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             var spacingMB = style.marginBottom.replace('px', '');
             var spacingMW = style.maxWidth.replace('px', '');
 
+            // Border related
+
+            var borderColor = style.borderColor;
+            var borderWidth = style.borderWidth.replace('px', '');
+            var borderRadius = style.borderRadius.replace('%', '');
+            var borderStyle = style.borderStyle;
+
             data.bg.color = bgcolor;
             data.txtcolor = txtcolor;
             data.visibility = visibility;
@@ -118,6 +148,31 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             data.spacing.mr = spacingMR;
             data.spacing.mb = spacingMB;
             data.spacing.mw = spacingMW;
+
+            data.border.color = borderColor;
+            data.border.width = borderWidth;
+            data.border.style = borderStyle;
+            data.border.radius = borderRadius;
+        }
+
+        if (ssbHoverStyle) {
+            var hoverStyleEl = $('<div style="' + ssbHoverStyle + '"></div>');
+            var hoverStyle = hoverStyleEl.get(0).style;
+            var hoverbgcolor = hoverStyle.backgroundColor;
+            var hovertxtcolor = hoverStyle.color;
+
+            data.hover.bg.color = hoverbgcolor;
+            data.hover.txtcolor = hovertxtcolor;
+        }
+
+        if (ssbActiveStyle) {
+            var activeStyleEl = $('<div style="' + ssbActiveStyle + '"></div>');
+            var activeStyle = activeStyleEl.get(0).style;
+            var activebgcolor = activeStyle.backgroundColor;
+            var activetxtcolor = activeStyle.color;
+
+            data.pressed.bg.color = activebgcolor;
+            data.pressed.txtcolor = activetxtcolor;
         }
 
         if (ssbClass) {
@@ -128,15 +183,39 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             console.log('classObj', classObj);
 
             if (classObj) {
-
                 data.version = _.each(classObj, function(value, key, obj) {
                     if (key.indexOf('ssb-theme-btn-style-') === 0) {
                         return key.replace('ssb-theme-btn-style-', '')
                     }
                 });
-
             }
         }
+
+        // bind hover and active events to button
+
+        vm.element.hover(function(){
+            var component = vm.elementData;
+            if(component.hover.txtcolor){
+                this.style.setProperty( 'color', data.hover.txtcolor, 'important' );
+            }
+
+            if (component.hover.bg) {
+                this.style.setProperty( 'background-color', component.hover.bg.color, 'important' );
+            }
+        }, function(){
+            vm.elementStyle(vm.element);
+        });
+
+        vm.element.on("mousedown touchstart", function(){
+            var component = vm.elementData;
+            if(component.pressed.txtcolor){
+                this.style.setProperty( 'color', data.pressed.txtcolor, 'important' );
+            }
+
+            if (component.pressed.bg) {
+                this.style.setProperty( 'background-color', component.pressed.bg.color, 'important' );
+            }
+        })
 
         angular.extend(vm.elementData, data);
 
@@ -194,9 +273,11 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         return classObj;
     }
 
-    function elementStyle() {
+    function elementStyle(el) {
 
         var styleString = ' ';
+        var hoverStyleString = ' ';
+        var activeStyleString = ' ';
         var component = vm.elementData;
 
         if (component.spacing) {
@@ -240,7 +321,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             }
 
             if (component.spacing.lineHeight) {
-            styleString += 'line-height: ' + component.spacing.lineHeight;
+                styleString += 'line-height: ' + component.spacing.lineHeight;
             }
         }
 
@@ -256,15 +337,40 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             if (component.bg.color) {
                 styleString += 'background-color: ' + component.bg.color + ';';
             }
+        }
 
-            if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-                styleString += 'background-image: url("' + component.bg.img.url + '")';
+        if (component.hover) {
+            if(component.hover.txtcolor){
+                hoverStyleString += 'color: ' + component.hover.txtcolor + ';';
             }
+            if (component.hover.bg) {
+                hoverStyleString += 'background-color: ' + component.hover.bg.color + ';';
+            }
+        }
 
+        if (component.pressed) {
+            if(component.pressed.txtcolor){
+                activeStyleString += 'color: ' + component.pressed.txtcolor + ';';
+            }
+            if (component.pressed.bg) {
+                activeStyleString += 'background-color: ' + component.pressed.bg.color + ';';
+            }
+        }
+
+        if(component.border && component.border.color){
+            styleString += 'border-color: ' + component.border.color + ';';
+            styleString += 'border-width: ' + component.border.width + 'px;';
+            styleString += 'border-style: ' + component.border.style + ';';
+            styleString += 'border-radius: ' + component.border.radius + '%;';
         }
 
         if (vm.element) {
             vm.element.attr('data-ssb-style', styleString);
+            vm.element.attr('data-ssb-hover-style', hoverStyleString);
+            vm.element.attr('data-ssb-active-style', activeStyleString);
+        }
+        if (el) {
+            el.attr('style', styleString);
         }
 
         return styleString;
@@ -277,7 +383,23 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         } else {
             pvm.uiState.activeElement = {}
         }
+    }
 
+    function hideAllControls() {
+
+        //hide editable-title's and borders
+        angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+
+        //hide all edit-controls
+        angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
+        angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
+
+        //components
+        angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
+
+        //btns
+        angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
+        angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
     }
 
     function showEditControl(e) {
@@ -285,9 +407,11 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         //prevent other handling
         e.stopPropagation();
 
+        hideAllControls();
+
         //close section panel
         // pvm.uiState.openSidebarSectionPanel = null;
-        pvm.uiState.showSectionPanel = false;
+        // pvm.uiState.showSectionPanel = false;
         pvm.uiState.activeSectionIndex = null;
         pvm.uiState.activeComponentIndex = null;
 
@@ -309,7 +433,6 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         if (!SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId)) {
             $scope.component = { title: 'Button_'+elementId, type: 'Button' }; //TODO: make generic/configurable
             var template = '<ssb-edit-control ' +
-                                'ng-hide="pvm.uiState.showSectionPanel"' +
                                 'data-compiled-control-id="control_' + elementId + '" ' +
                                 'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-btn on" ' +
                                 'component="component" ' +
@@ -323,12 +446,30 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         // else set active element (for contextual menu) and position the edit control and make visible
         } else {
             $timeout(function() {
+
                 setActiveElementId();
                 positionEditControl();
-                $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]').addClass('on');
+
+                var editControlComponent = $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]')
+
+                editControlComponent.addClass('on');
+
+                //if contextual menu is already open, open directly from single click
+                if (pvm.uiState.showSectionPanel) {
+                    editControlComponent.find('.ssb-settings-btn').click();
+                }
+
+                /*
+                 * if contextual menu is already open, open directly from single click
+                 */
+                if (pvm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
+                    $timeout(function() {
+                        editControlComponent.find('.ssb-settings-btn').click();
+                    });
+                }
+
             });
         }
-
     }
 
     function hideEditControl(e) {
@@ -346,6 +487,12 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             SimpleSiteBuilderService.addCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId, newEl);
             setActiveElementId();
             positionEditControl();
+
+            //if contextual menu is already open, open directly from single click
+            if (pvm.uiState.showSectionPanel) {
+                newEl.find('.ssb-settings-btn').click();
+            }
+
         });
     }
 
@@ -371,13 +518,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     }
 
-    function clearActiveElement(e) {
-        var isEditControl = $(e.target).parents('[data-compiled-control-id], [data-compiled]').length > 0;
-        if (!isEditControl) {
-            pvm.uiState.activeElement = {};
-            angular.element('[data-compiled-control-id], [data-compiled]').removeClass('on ssb-theme-btn-active-element');
-        }
-    }
+    // function clearActiveElement(e) {
+    //     var isEditControl = $(e.target).parents('[data-compiled-control-id], [data-compiled]').length > 0;
+    //     if (!isEditControl) {
+    //         pvm.uiState.activeElement = {};
+    //         angular.element('[data-compiled-control-id], [data-compiled]').removeClass('on ssb-theme-btn-active-element');
+    //     }
+    // }
 
     function init(element) {
 
@@ -398,11 +545,11 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             buildDataObjFromHTML();
 
             $timeout(function() {
-                angular.element(parentComponent).on('click', '[data-compiled=' + elementId + ']', showEditControl);
+                $('[data-compiled=' + elementId + ']').on('click', showEditControl);
 
-                angular.element(parentComponent).on('click', '[data-compiled-control-id=control_' + elementId + ']', setActiveElementId);
+                $('[data-compiled-control-id=control_' + elementId + ']').on('click', setActiveElementId);
 
-                angular.element('.ssb-page-section').on('click', clearActiveElement);
+                // angular.element('.ssb-page-section').on('click', clearActiveElement);
             });
 
         } else {

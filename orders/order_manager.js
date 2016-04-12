@@ -246,6 +246,7 @@ module.exports = {
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
                 var taxAdded = 0;
+                var discount = 0;
 
                 /*
                  * loop through line items
@@ -282,11 +283,18 @@ module.exports = {
                     totalLineItemsQuantity += parseFloat(item.quantity);
                 });
                 log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
-                /*
-                 * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
-                 * side to avoid shenanigans.
-                 */
-                totalAmount = subTotal + taxAdded;
+
+                 if(order.get('cart_discount')) {
+                     discount += parseFloat(order.get('cart_discount'));
+                     log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                 }
+
+                 if(order.get('total_discount')) {
+                     discount += parseFloat(order.get('total_discount'));
+                     log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                 }
+
+                 totalAmount = (subTotal - discount) + taxAdded;
 
 
                 order.set('tax_rate', taxPercent);

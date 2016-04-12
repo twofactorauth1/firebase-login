@@ -5,7 +5,7 @@
     * Please contact info@indigenous.io for approval or questions.
 extends snippets/index_layout
 block content
-    div(id="body", class="content", back-animation, style="height: {{contentHeight}}px;")
+    div(id="body", class="content", ssb-data-styles, back-animation, style="height: {{contentHeight}}px;")
         if templateIncludes
             each tmpl in templateIncludes
                 script(type="text/ng-template" id="#{tmpl.id}")

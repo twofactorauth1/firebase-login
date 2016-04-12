@@ -46,6 +46,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.showNotTaxed = CartDetailsService.showNotTaxed;
                 scope.numItems = CartDetailsService.items.length;
                 scope.cartDetails = CartDetailsService.items;
+                scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
             }, true);
 
 

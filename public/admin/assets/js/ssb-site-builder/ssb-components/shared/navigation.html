@@ -1,10 +1,9 @@
 <div ng-controller="SSBComponentSettingsModalCtrl">
   <div class="loadingNavigation" ng-if="!filteredPages">
-      <div class="col-xs-12">
-          <h4 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
-           Please wait, we're loading your menu links...
-          </h1>
-      </div>
+        <!-- Loading background -->
+        <div class="ssb-sidebar-section-panel-loading-background">
+            <div class="center"><br><span class="fa fa-spinner fa-spin"></span><br>Loading menu...</div>
+        </div>
   </div>
     <div ng-if="filteredPages" class="padding-top-10">
         <div class="row padding-10">

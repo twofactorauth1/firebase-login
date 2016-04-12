@@ -1,3 +1,7 @@
+<!-- Navigation Link Style -->
+<div ng-if="component.type === 'navigation'" data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/navigation/navigation-menu-settings.html' "></div>
+
+
 <h4 class="ssb-sidebar-sub-heading-separator">Background</h4>
 
 <div class="row padding-10">
@@ -284,9 +288,41 @@
     <div class="clearfix"></div>
 </div>
 
-<h4 class="ssb-sidebar-sub-heading-separator">Effects</h4>
+<h4 ng-if="component.type === 'navigation'" class="ssb-sidebar-sub-heading-separator">Text</h4>
+<div ng-if="component.type === 'navigation'" class="row padding-10">
+    <div class="form-group">
+        <div>
+            <label>
+                Text Size
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Text size of menu.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+            <input type="text" ng-model="component.nav.font.size" min="10" max="96" touchspin>
+        </div>
+    </div>
+    <div class="form-group">
+            <div>
+                <label>
+                    Font
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Font Family of menu.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+            </div>
+            <div>
+                <select ng-model="component.nav.font.family" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.formFontFamily}}">{{key}}</option>
+                </select>
+            </div>
+    </div>
+</div>
 
-<div class="row padding-10">
+
+<h4 ng-if="component.type !== 'ssb-element-text'" class="ssb-sidebar-sub-heading-separator">Effects</h4>
+
+<div ng-if="component.type !== 'ssb-element-text'" class="row padding-10">
 
     <div class="form-group" ng-show="component.bg.img.show" ng-if="component.type != 'navigation'">
         <label for="bg_blur">
@@ -419,7 +455,7 @@
             <div>
                 <rzslider
                     class="slider-opacity"
-                    rz-slider-step="10"
+                    rz-slider-step="1"
                     name="border-width"
                     rz-slider-model="component.border.width"
                     rz-slider-floor="0"
@@ -475,11 +511,11 @@
             <div>
                 <rzslider
                     class="slider-opacity"
-                    rz-slider-step="10"
+                    rz-slider-step="1"
                     name="border-radius"
                     rz-slider-model="component.border.radius"
                     rz-slider-floor="0"
-                    rz-slider-ceil="100">
+                    rz-slider-ceil="50">
                 </rzslider>
             </div>
         </div>

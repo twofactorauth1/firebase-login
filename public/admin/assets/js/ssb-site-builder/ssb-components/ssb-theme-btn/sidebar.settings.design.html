@@ -1,0 +1,186 @@
+<div ng-init="menuActive = 'normal'" class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top">
+    <button type="button" ng-click="menuActive = 'normal'" class="btn" ng-class="{'btn-info': menuActive === 'normal' }">Normal</button>
+    <button type="button" ng-click="menuActive = 'roll-over'" class="btn" ng-class="{'btn-info': menuActive === 'roll-over' }">Roll-over</button>
+    <button type="button" ng-click="menuActive = 'pressed'" class="btn" ng-class="{'btn-info': menuActive === 'pressed' }">Pressed</button>
+</div>
+<div ng-if="menuActive === 'normal'">
+    <div class="row padding-10">
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label>
+                Fill color
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Background color of button.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.txtcolor"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label>
+                Text color
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Text color of button.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+    </div>
+</div>
+<div ng-if="menuActive === 'roll-over'">
+    <div class="row padding-10">
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.hover.bg.color"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label>
+                Fill color
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Background color of component on hover">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.hover.txtcolor"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label>
+                Text color
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Text color of button on hover.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+    </div>
+</div>
+<div ng-if="menuActive === 'pressed'">
+    <div class="row padding-10">
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.pressed.bg.color"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label>
+                Fill color
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Background color of button pressed">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.pressed.txtcolor"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label>
+                Text color
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Text color of button pressed.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+    </div>
+</div>
+<h4 class="ssb-sidebar-sub-heading-separator">Border</h4>
+
+<div class="row padding-10">
+    <div>
+
+        <div class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.border.color"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label for="colorpicker">
+                Color
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Choose a color for the border around this section.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label>
+                    Width
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set the thickness of the border.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+            </div>
+            <div>
+                <rzslider
+                    class="slider-opacity"
+                    rz-slider-step="1"
+                    name="border-width"
+                    rz-slider-model="component.border.width"
+                    rz-slider-floor="0"
+                    rz-slider-ceil="100">
+                </rzslider>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label>
+                    Style
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set the style of the border.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="none" name="inline" value="" ng-model="component.border.style">
+                <label for="none">
+                    None
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="solid" name="inline" value="solid" ng-model="component.border.style">
+                <label for="solid">
+                    Solid
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="dotted" name="inline" value="dotted" ng-model="component.border.style">
+                <label for="dotted">
+                    Dotted
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="dashed" name="inline" value="dashed" ng-model="component.border.style">
+                <label for="dashed">
+                    Dashed
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <label>
+                    Roundness
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set the roundness of the border to create a curved corner effect. Also known as border radius.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+            </div>
+            <div>
+                <rzslider
+                    class="slider-opacity"
+                    rz-slider-step="1"
+                    name="border-radius"
+                    rz-slider-model="component.border.radius"
+                    rz-slider-floor="0"
+                    rz-slider-ceil="50">
+                </rzslider>
+            </div>
+        </div>
+
+    </div>
+</div>
