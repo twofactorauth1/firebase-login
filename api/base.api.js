@@ -300,12 +300,11 @@ _.extend(apiBase.prototype, {
                 }
             });
             result = _arr;
-            arr = null;
+            _arr = null;
         } else if (typeof result.toJSON != 'undefined') {
             result = result.toJSON("public");
         }
         return resp.send(result);
-        result = null;
     },
 
     send200: function(res) {

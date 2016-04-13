@@ -133,7 +133,7 @@ module.exports = {
     getProductsByType: function(accountId, productType, fn) {
         var self = this;
         log.debug('>> getProductsByType');
-        productDao.findMany({'accountId': accountId, 'product_type':productType}, $$.m.Product, function(err, list){
+        productDao.findMany({'accountId': accountId, 'type':productType}, $$.m.Product, function(err, list){
             if(err) {
                 log.error('Exception listing products: ' + err);
                 fn(err, null);
