@@ -85,6 +85,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('duplicates/merge'), this.isAuthAndSubscribedApi.bind(this), this.mergeDuplicates.bind(this));
 
         app.post(this.url('importcsv'), this.isAuthApi.bind(this), this.importCsvContacts.bind(this));
+        app.get(this.url('export/csv'), this.isAuthApi.bind(this), this.exportCsvContacts.bind(this));
     },
 
     getMyIp: function(req, resp) {
@@ -215,6 +216,34 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    exportCsvContacts: function(req, resp) {
+        var self = this;
+        self.log.debug('>> exportCsvContacts');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+                if (isAllowed !== true) {
+                    return self.send403(resp);
+                } else {
+                    contactDao.findMany({accountId:accountId}, $$.m.Contact, function(err, contacts){
+                        var csv = "first,middle,last,email,created,type,tags\n";
+                        _.each(contacts, function(contact){
+                            csv += contact.get('first') + ',';
+                            csv += contact.get('middle') + ',';
+                            csv += contact.get('last') + ',';
+                            csv += contact.getPrimaryEmail() + ',';
+                            csv += contact.get('created').date + ',';
+                            csv += contact.get('type') + ',';
+                            csv += contact.get('tags') + '\n';
+                        });
+                        self.log.debug('<< exportCsvContacts');
+                        resp.set('Content-Type', 'text/csv');
+                        self.sendResult(resp, csv);
+                    });
+                }
+        });
     },
 
 
