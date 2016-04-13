@@ -66,6 +66,14 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
         console.debug(color);
     });
 
+    $scope.$watch('component.bg.img.overlaycolor', function (newValue, oldValue) {
+        if (newValue) {
+            $scope.component.bg.img.overlayopacity = 100;
+        } else {
+            $scope.component.bg.img.overlayopacity = 0;
+        }
+    });
+
     /*
      * isSelectedLayout
      *
