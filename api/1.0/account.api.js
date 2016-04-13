@@ -12,6 +12,7 @@ var Account = require('../../models/account');
 var userDao = require('../../dao/user.dao');
 var appConfig = require('../../configs/app.config');
 var paymentManager = require('../../payments/payments_manager');
+var productManager = require('../../products/product_manager');
 var moment = require('moment');
 
 var api = function() {
@@ -295,6 +296,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> updateAccount');
         var account = new $$.m.Account(req.body);
+        var hasStripe = _.findWhere(account.credentials, {type: 'stripe'}) ? true : false;
 
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -304,8 +306,16 @@ _.extend(api.prototype, baseApi.prototype, {
                 accountDao.updateAccount(account, self.userId(req), function(err, value){
                     if(!err &&value != null){
                         self.log.debug('<< updateAccount');
-                        resp.send(value.toJSON("public"));
                         self.createUserActivity(req, 'MODIFY_ACCOUNT', null, null, function(){});
+                        if (!hasStripe) {
+                            productManager.getProductsByType(parseInt(self.currentAccountId(req)), 'SUBSCRIPTION', function(err, prods) {
+                                prods.forEach(function(prod, index) {
+                                    prod.set('status', 'inactive');
+                                    productManager.updateProduct(prod, function(){});
+                                });
+                            });
+                        }
+                        resp.send(value.toJSON("public"));
                     } else {
                         self.log.error('Error updating account: ' + err);
                         self.wrapError(resp, 500, null, err, value);
