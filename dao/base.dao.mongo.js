@@ -297,13 +297,13 @@ var mongodao = {
 
         if (fields) {
             if (sort) {
-                mongoColl.find(query, fields, {sort: sort}).skip(skip).limit(limit).toArray(fxn);
+                mongoColl.find(query, fields).sort(sort).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
             }
         } else {
             if (sort) {
-                mongoColl.find(query, {sort: sort}).skip(skip).limit(limit).toArray(fxn);
+                mongoColl.find(query).sort(sort).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
             }
