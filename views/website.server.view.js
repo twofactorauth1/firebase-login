@@ -302,6 +302,17 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(err, webpageData, pages);
                 });
             },
+            function checkFor404(webpageData, pages, cb) {
+                var pageHandle = handle || 'index';
+                var foundPage = _.find(pages, function(page){
+                    return page.get('handle') === pageHandle;
+                });
+                if(foundPage) {
+                   cb(null, webpageData, pages);
+                } else {
+                    cb('Page [' + pageHandle + '] Not Found');
+                }
+            },
             function readComponents(webpageData, pages, cb) {
                 data.templates = '';
                 if(pages) {
@@ -456,8 +467,11 @@ _.extend(view.prototype, BaseView.prototype, {
         ], function done(err){
             if(err) {
                 self.log.error('Error during rendering:', err);
-                app.render('404', {}, function(err, html){
-                    self.resp.send(html);
+                app.render('404.html', {}, function(err, html){
+                    if(err) {
+                        self.log.error('Error during render:', err);
+                    }
+                    self.resp.status(404).send(html);
                 });
             }
         });

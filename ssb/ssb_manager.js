@@ -555,6 +555,7 @@ module.exports = {
                                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                                         fn(err, null);
                                     } else {
+                                        pageDao.removePublishedPage(accountId, pageId, function(err){});
                                         self.log.debug('<< deletePage');
                                         fn(null, value);
                                     }
@@ -567,13 +568,14 @@ module.exports = {
                 var query = {};
                 query._id = new RegExp('' + pageId + '(_.*)*');
                 pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
-                   if (err) {
+                    if (err) {
                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                         fn(err, null);
                     } else {
+                        pageDao.removePublishedPage(accountId, pageId, function(err){});
                         self.log.debug('<< deletePage');
                         fn(null, value);
-                    }
+                   }
                 });
             }
         })
@@ -692,6 +694,17 @@ module.exports = {
                 self.log.error('Error getting published pages:', err);
                 return fn(err);
             } else {
+                //handle legacy pages without sections
+                _.each(pages, function(page){
+                    if(page.get('sections') === null || page.get('sections').length===0) {
+                        var section = {};
+                        var sections = [];
+                        section.components = page.get('components');
+                        section.ssb = false;
+                        sections.push(section);
+                        page.set('sections', sections);
+                    }
+                });
                 self.log.debug('<< listPublishedPages');
                 return fn(err, pages);
             }
