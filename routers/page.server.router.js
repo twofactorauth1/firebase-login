@@ -18,7 +18,6 @@ var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
-var sectionModel = require('/Users/jack/Projects/indigeweb/ssb/model/section.js');
 
 
 var router = function() {
