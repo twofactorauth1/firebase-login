@@ -555,6 +555,7 @@ module.exports = {
                                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                                         fn(err, null);
                                     } else {
+                                        pageDao.removePublishedPage(accountId, pageId, function(err){});
                                         self.log.debug('<< deletePage');
                                         fn(null, value);
                                     }
@@ -567,13 +568,14 @@ module.exports = {
                 var query = {};
                 query._id = new RegExp('' + pageId + '(_.*)*');
                 pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
-                   if (err) {
+                    if (err) {
                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                         fn(err, null);
                     } else {
+                        pageDao.removePublishedPage(accountId, pageId, function(err){});
                         self.log.debug('<< deletePage');
                         fn(null, value);
-                    }
+                   }
                 });
             }
         })
