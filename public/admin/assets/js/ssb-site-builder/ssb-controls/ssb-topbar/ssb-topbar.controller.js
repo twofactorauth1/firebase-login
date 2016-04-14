@@ -16,6 +16,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     vm.loadPage = loadPage;
     vm.revertPage = revertPage;
     vm.publishPage = publishPage;
+    vm.hideActiveToolTips = hideActiveToolTips;
 
     function loadPage(page) {
         if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
@@ -139,6 +140,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
         vm.state.pendingWebsiteChanges = false;
         SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
         SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
+        vm.hideActiveToolTips();
     }
 
     function saveWebsite() {
@@ -146,15 +148,16 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
         return (
             SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
                 console.log('website saved');
-            })
+            }).finally(function() {
+                vm.hideActiveToolTips();
+            });
         )
     }
 
     function revertPage(versionId) {
         vm.state.saveLoading = true;
         SimpleSiteBuilderService.revertPage(vm.state.page._id, versionId, function (data) {
-            SimpleSiteBuilderService.getPage(data._id)
-            .then(function (page) {
+            SimpleSiteBuilderService.getPage(data._id).then(function (page) {
                 vm.uiState.openSidebarPanel = '';
                 vm.uiState.showSectionPanel = false;
                 vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
@@ -164,6 +167,8 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 vm.state.originalPage = page.data;
                 SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
                 vm.state.saveLoading = false;
+            }).finally(function() {
+                vm.hideActiveToolTips();
             });
         });
     };
@@ -182,12 +187,17 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     vm.state.publishLoading = false;
                     toaster.pop('error', 'Error', 'The page was not published. Please try again.');
                     console.error(JSON.stringify(err));
+                }).finally(function() {
+                    vm.hideActiveToolTips();
                 });
             });
         }
 
     };
 
+    function hideActiveToolTips() {
+        angular.element('.tooltip').remove();
+    }
 
 
     function init(element) {
