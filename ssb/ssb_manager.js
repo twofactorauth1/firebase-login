@@ -907,10 +907,10 @@ module.exports = {
                 var pagesToUpdate = {};
                 async.eachSeries(page.get('sections'), function(sectionJSON, callback){
                     var idNoVersion = sectionJSON._id.replace(/_.*/g, "");
-                    self.log.debug('idNoVersion:', idNoVersion);
+                    //'section._id': new RegExp(idNoVersion + '.*')
                     var query = {
                         accountId:accountId,
-                        'section._id': new RegExp(idNoVersion + '.*')
+                        'sections._id': {$regex: '' +idNoVersion + '.*'}
                     };
                     pageDao.findPublishedPages(query, function(err, pages){
                         if(err) {
@@ -945,7 +945,9 @@ module.exports = {
                         }
                     });
                     pageToUpdate.set('sections', newPageSections);
-                    pageDao.savePublishedPage(pageToUpdate, callback);
+                    pageDao.savePublishedPage(pageToUpdate, function(err, updatedPage){
+                        pageCacheManager.updateS3Template(accountId, null, updatedPage.id(), callback);
+                    });
                 }, function(err){
                     if(err) {
                         self.log.error('Error updating other pages:', err);
