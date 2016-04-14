@@ -7,7 +7,7 @@ app.directive('testimonialSlider',function($timeout){
      });
 
  	function addRemoveSlides(index, newSlide){
- 		$(element).slick("unslick");
+ 		scope.$broadcast('$refreshSlickSlider');
         var testimonials = angular.copy(scope.component.testimonials);
         if(newSlide){
             testimonials.splice(index + 1, 0, angular.copy(scope.newTestimonial));
@@ -15,11 +15,7 @@ app.directive('testimonialSlider',function($timeout){
             testimonials.splice(index, 1);
         }
         scope.component.testimonials = testimonials;
-        $timeout(function () {
-            scope.$apply(function () {
-                $(element).slick(scope.$eval(attrs.testimonialSlider));
-            })
-        });
+
     };
 
     scope.deleteSlide = function (index) {
@@ -30,6 +26,25 @@ app.directive('testimonialSlider',function($timeout){
         console.log(index);
         addRemoveSlides(index, newSlide);
     };
+
+    scope.deleteImageSlide = function (index) {
+        removeImage(index);
+    };
+
+    function removeImage(index){
+        scope.$broadcast('$refreshSlickSlider');
+        scope.component.images.splice(index, 1);
+    }
+
+    scope.$on('$refreshSlickSlider', function (event) {
+        $(element).slick("unslick");
+        $timeout(function () {
+            scope.$apply(function () {
+                $(element).slick(scope.$eval(attrs.testimonialSlider));
+            })
+        }, 100);
+    });
+
    }
  }
 });

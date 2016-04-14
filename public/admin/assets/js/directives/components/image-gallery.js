@@ -5,38 +5,43 @@
 app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
-      component: '=',
-      media: '&',
-      ssbEditor: '='
+        component: '=',
+        media: '&',
+        ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-      scope.isEditing = true;
-      /*
-       * @addImageFromMedia
-       * -
-       */
-
-      scope.addImageFromMedia = function (componentId, index, update) {
-        scope.media({
-          componentId: componentId,
-          index: index,
-          update: update
+        scope.isEditing = true;
+        scope.$parent.$watch('vm.uiState.loaded', function (newValue, oldValue) {
+            if (newValue) {
+                scope.dataLoaded = true;
+            }
         });
-      };
+        /*
+        * @addImageFromMedia
+        * -
+        */
 
-      /*
-       * @deleteImageFromGallery
-       * -
-       */
+        scope.addImageFromMedia = function (componentId, index, update) {
+            scope.media({
+                componentId: componentId,
+                index: index,
+                update: update
+            });
+        };
 
-      scope.deleteImageFromGallery = function (componentId, index) {
-        scope.component.images.splice(index, 1);
-      };
+        /*
+        * @deleteImageFromGallery
+        * -
+        */
 
-      scope.touchMove = false;
-      scope.draggable = false;
-      scope.autoplay = false;
+        scope.deleteImageFromGallery = function (componentId, index) {
+            scope.component.images.splice(index, 1);
+        };
+
+        scope.touchMove = false;
+        scope.draggable = false;
+        scope.autoplay = false;
     }
   };
 }]);
