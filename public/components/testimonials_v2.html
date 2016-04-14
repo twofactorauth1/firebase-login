@@ -29,7 +29,7 @@
     <div class="clearfix"></div>
     <div class="testimonial-wrap {{isEditing ? 'editing' : ''}}" style="position: relative;">
         <div ng-if="dataLoaded" class="carousel-caption" testimonial-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  speed:{{component.slider.speed}}, slidesToScroll:1, autoplay:{{autoplay}}, autoplaySpeed:{{component.slider.autoPlayInterval}}}'>
-            <div ng-repeat="testimonial in component.testimonials" active="testimonial.active" class="col-sm-12 testimonials single-testimonial">
+            <div ng-repeat="testimonial in component.testimonials" class="col-sm-12 testimonials single-testimonial">
                 <div class="img">
                     <div elem ng-model="testimonial.img"></div>
                 </div>
@@ -48,11 +48,11 @@
                 </div>
                 <div ng-if="isEditing">
                     <div class="delete-single-testimonial center">
-                        <button ng-click="deleteSlide($index)" class="ng-scope btn-delete-single-testimonial" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this testimonial.">
+                        <button ng-click="deleteSlide($index)" class="ng-scope btn-delete-single-testimonial">
                             <i class='fa fa-trash'></i>
                         </button>
                     </div>
-                    <div class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another testimonial.">
+                    <div class="add-addtional center">
                         <a href="" ng-click="addSlide($index, newTestimonial)">
                             <i class="fa fa-plus"></i>
                         </a>
