@@ -150,7 +150,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 console.log('website saved');
             }).finally(function() {
                 vm.hideActiveToolTips();
-            });
+            })
         )
     }
 
@@ -169,7 +169,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 vm.state.saveLoading = false;
             }).finally(function() {
                 vm.hideActiveToolTips();
-            });
+            })
         });
     };
 
@@ -189,8 +189,8 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     console.error(JSON.stringify(err));
                 }).finally(function() {
                     vm.hideActiveToolTips();
-                });
-            });
+                })
+            })
         }
 
     };

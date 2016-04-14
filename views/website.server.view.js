@@ -144,7 +144,7 @@ _.extend(view.prototype, BaseView.prototype, {
         //self.resp.send(value);
     },
 
-    renderPreviewPage: function(accountId, pageId, pageVersion) {
+    renderPreviewPage: function(accountId, pageId) {
         var self = this;
         var data = {};
         var handle = '';
@@ -161,7 +161,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
             function getPage(webpageData, cb) {
-                ssbManager.getPageByVersion(accountId, pageId, pageVersion, function(err, page){
+                ssbManager.getPageByVersion(accountId, pageId, function(err, page){
                     if(err || !page) {
                         self.log.error('Error getting page by version:', err);
                         cb(err);

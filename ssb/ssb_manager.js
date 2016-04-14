@@ -763,13 +763,15 @@ module.exports = {
         });
     },
 
-    getPageByVersion: function(accountId, pageId, version, fn) {
+    /**
+     * This just needs to get by _id because version is encoded in _id
+     */
+    getPageByVersion: function(accountId, pageId, fn) {
         var self = this;
         self.log.debug('>> getPageByVersion');
         var query = {
             _id: pageId,
-            accountId:accountId,
-            version:parseInt(version)
+            accountId:accountId
         };
         pageDao.findOne(query, $$.m.ssb.Page, function(err, page){
             if(err || !page) {

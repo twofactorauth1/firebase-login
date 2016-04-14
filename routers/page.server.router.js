@@ -18,6 +18,7 @@ var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
+var sectionModel = require('/Users/jack/Projects/indigeweb/ssb/model/section.js');
 
 
 var router = function() {
@@ -70,9 +71,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
             accountId = appConfig.mainAccountID;
         }
         var pageId = req.params.pageId || 'index';
-        var version = req.params.version || 1;
 
-        new WebsiteView(req, resp).renderPreviewPage(accountId, pageId, version);
+        new WebsiteView(req, resp).renderPreviewPage(accountId, pageId);
     },
 
     indexTempPage: function(req,resp) {
