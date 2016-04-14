@@ -29,6 +29,8 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 
     vm.nthRow = 'nth-row';
 
+    vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
+
 
 	function fieldClass(field){
 		var classString = 'col-sm-12';
