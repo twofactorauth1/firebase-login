@@ -3365,7 +3365,6 @@
 }
 #componentloader .footer-container {
   color: white;
-  height: 53px;
 }
 @media only screen and (min-width: 700px) {
   #componentloader .footer-after {

@@ -3369,7 +3369,6 @@ div[data-type="feature-block"] .component-inner {
 }
 .footer-container {
   color: white;
-  height: 53px;
 }
 @media only screen and (min-width: 700px) {
   .footer-after {
