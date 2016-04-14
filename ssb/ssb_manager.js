@@ -746,7 +746,7 @@ module.exports = {
     getPage: function(accountId, pageId, fn) {
         var self = this;
         self.log.debug('>> getPage');
-        //TODO: add status
+
         pageDao.getPageById(accountId, pageId, function(err, page){
             if(err || !page) {
                 self.log.error('Error getting page:', err);
@@ -756,6 +756,30 @@ module.exports = {
                 sectionDao.dereferenceSections(sections, function(err, sectionAry){
                     page.set('sections', _.compact(sectionAry));
                     self.log.debug('<< getPage');
+                    return fn(null, page);
+                });
+
+            }
+        });
+    },
+
+    getPageByVersion: function(accountId, pageId, version, fn) {
+        var self = this;
+        self.log.debug('>> getPageByVersion');
+        var query = {
+            _id: pageId,
+            accountId:accountId,
+            version:parseInt(version)
+        };
+        pageDao.findOne(query, $$.m.ssb.Page, function(err, page){
+            if(err || !page) {
+                self.log.error('Error getting page:', err);
+                return fn(err, null);
+            } else {
+                var sections = page.get('sections') || [];
+                sectionDao.dereferenceSections(sections, function(err, sectionAry){
+                    page.set('sections', _.compact(sectionAry));
+                    self.log.debug('<< getPageByVersion');
                     return fn(null, page);
                 });
 

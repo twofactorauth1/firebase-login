@@ -30,6 +30,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
         app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
         return this;
     },
 
@@ -59,6 +60,19 @@ _.extend(router.prototype, BaseRouter.prototype, {
         new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
 
         self.log.debug('<< optimizedIndex');
+    },
+
+    previewIndex: function(req, resp) {
+        var self = this;
+        self.log.debug('>> previewIndex');
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
+        var pageId = req.params.pageId || 'index';
+        var version = req.params.version || 1;
+
+        new WebsiteView(req, resp).renderPreviewPage(accountId, pageId, version);
     },
 
     indexTempPage: function(req,resp) {

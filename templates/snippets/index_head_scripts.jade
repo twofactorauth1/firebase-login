@@ -36,7 +36,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
     script(type="text/javascript").
         WebFont.load({
             google: {
-                families: ['Roboto', 'Roboto Condensed', 'Roboto Slab, 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display' ]
+                families: ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display' ]
             }
         });
         window.WebFontConfig = {
@@ -128,6 +128,7 @@ if pages
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         window.indigenous.precache.siteData.pages = !{JSON.stringify(pages)};
+        console.log(window.indigenous.precache.siteData.pages);
 
 if account._id == 890
     script(src="//load.sumome.com/" data-sumo-site-id="ebfbe1c031968e0d81f4ca79b2fdc7a86b9132054a40985e435727147fd894f3")

@@ -144,10 +144,142 @@ _.extend(view.prototype, BaseView.prototype, {
         //self.resp.send(value);
     },
 
+    renderPreviewPage: function(accountId, pageId, pageVersion) {
+        var self = this;
+        var data = {};
+        var handle = '';
+        self.log.debug('>> renderPreviewPage');
+        async.waterfall([
+            function getWebpageData(cb) {
+                cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
+                    if(err) {
+                        self.log.error('Error getting data for website:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function getPage(webpageData, cb) {
+                ssbManager.getPageByVersion(accountId, pageId, pageVersion, function(err, page){
+                    if(err || !page) {
+                        self.log.error('Error getting page by version:', err);
+                        cb(err);
+                    } else {
+                        handle = page.get('handle');
+                        cb(null, webpageData, [page]);
+                    }
+                });
+            },
+            function(value, pages, cb) {
+                var pageHolder = {};
+                _.each(pages, function(page){
+                    pageHolder[page.get('handle')] = page.toJSON('frontend');
+                    pageHolder['/preview/' + pageId ] = page.toJSON('frontend');
+                });
+
+                data.pages = pageHolder;
+                self.log.debug('pageHolder:', pageHolder);
+                data.account = value;
+                data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
+                data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+                value.website = value.website || {};
+                if(pageHolder[handle]) {
+                    data.title = pageHolder[handle].title || value.website.title;
+                } else {
+                    data.title = value.website.title;
+                }
+
+                data.author = 'Indigenous';//TODO: wut?
+                data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+                data.website = value.website || {};
+                if(pageHolder[handle] && pageHolder[handle].seo) {
+                    data.seo = {
+                        description: pageHolder[handle].seo.description || value.website.seo.description,
+                        keywords: ''
+                    };
+                } else {
+                    data.seo = {
+                        description: value.website.seo.description,
+                        keywords: ''
+                    };
+                }
+
+
+                if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
+                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
+                } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
+                    data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
+                }
+
+
+                data.og = {
+                    type: 'website',
+                    title: (pageHolder[handle] || {}).title || value.website.title,
+                    image: value.website.settings.favicon
+                };
+                if (data.og.image && data.og.image.indexOf('//') === 0) {
+                    data.og.image = 'http:' + data.og.image;
+                }
+                data.includeEditor = false;
+
+                if (!data.account.website.settings) {
+                    self.log.warn('Website Settings is null for account ' + accountId);
+                    data.account.website.settings = {};
+                }
+
+                var blogUrlParts = [];
+                if (self.req.params.length) {
+                    blogUrlParts = self.req.params[0].split('/');
+                }
+                if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
+                    cmsDao.getBlogPostForWebsite(accountId, blogUrlParts[1], function (err, post) {
+                        if (post) {
+                            data.og.type = 'article';
+                            data.og.title = post.attributes.post_title;
+                            data.og.image = post.attributes.featured_image;
+                            if (data.og.image && data.og.image.indexOf("//") === 0) {
+                                data.og.image = "http:" + data.og.image;
+                            }
+                        }
+                        app.render('index', data, function (err, html) {
+                            if (err) {
+                                self.log.error('Error during render: ' + err);
+                            }
+
+                            self.resp.send(html);
+                            self.cleanUp();
+                            self = data = value = null;
+                        });
+                    });
+                } else {
+                    app.render('index', data, function (err, html) {
+                        if (err) {
+                            self.log.error('Error during render: ' + err);
+                        }
+
+                        self.resp.send(html);
+                        self.cleanUp();
+                        self.log.debug('<< renderPreviewPage');
+                        self = data = value = null;
+                    });
+                }
+            }
+        ], function(err){
+            if(err) {
+                self.log.error('Error during rendering:', err);
+                app.render('404', {}, function(err, html){
+                    self.resp.send(html);
+                });
+            }
+        });
+
+    },
+
     renderCachedPage: function (accountId, handle) {
         var data = {},
             self = this;
-        self.log.debug('>> renderNewIndex');
+        self.log.debug('>> renderCachedPage');
 
         async.waterfall([
             function getWebpageData(cb) {
@@ -315,6 +447,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
                         self.resp.send(html);
                         self.cleanUp();
+                        self.log.debug('<< renderCachedPage');
                         self = data = value = null;
                     });
                 }
