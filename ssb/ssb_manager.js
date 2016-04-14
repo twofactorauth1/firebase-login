@@ -694,6 +694,17 @@ module.exports = {
                 self.log.error('Error getting published pages:', err);
                 return fn(err);
             } else {
+                //handle legacy pages without sections
+                _.each(pages, function(page){
+                    if(page.get('sections') === null || page.get('sections').length===0) {
+                        var section = {};
+                        var sections = [];
+                        section.components = page.get('components');
+                        section.ssb = false;
+                        sections.push(section);
+                        page.set('sections', sections);
+                    }
+                });
                 self.log.debug('<< listPublishedPages');
                 return fn(err, pages);
             }
