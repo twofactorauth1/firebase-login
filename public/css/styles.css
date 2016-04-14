@@ -3372,7 +3372,7 @@ div[data-type="feature-block"] .component-inner {
 }
 @media only screen and (min-width: 700px) {
   .footer-after {
-    padding: 19px 0 0 0;
+    padding: 20px 0 0 0;
     font-size: 12px;
     display: block;
   }
