@@ -568,6 +568,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
                     self._updatePageCache(pageUrl, accountId, page.get('handle'), null);
                     self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
+
                 });
             }
         });
@@ -703,7 +704,9 @@ _.extend(api.prototype, baseApi.prototype, {
                         var pageUrl = self._buildPageUrl(req, value.get('handle'));
                         self._updatePageCache(pageUrl, accountId, null, pageId);
                     }
-
+                    pageObj.set('_id', pageId);
+                    pageObj.set('published', {date:new Date(), by:self.userId(req)});
+                    cmsDao.addToCollection(pageObj, 'published_pages', function(){});
                     self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
@@ -2227,6 +2230,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pageCacheManager.updateS3Template(accountId, pageName, pageId, function(err, value){
 
         });
+        //Store to published_pages
 
     }
 
