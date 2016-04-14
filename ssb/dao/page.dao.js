@@ -10,6 +10,13 @@ var page = require('../model/page.js');
 
 var dao = {
 
+    publishedPageObj: {
+        db:{
+            storage:'mongo',
+            table:'published_pages'
+        }
+    },
+
     getPageById: function(accountId, pageId, fn) {
         var self = this;
         var query = {_id: pageId, accountId:accountId, latest:true};
@@ -34,13 +41,14 @@ var dao = {
 
     findPublishedPages: function(query, fn) {
         var self = this;
-        var dummyObj = {
-            db:{
-                storage:'mongo',
-                table:'published_pages'
-            }
-        };
-        self.findMany(query, dummyObj, fn);
+
+        self.findMany(query, self.publishedPageObj, fn);
+    },
+
+    removePublishedPage: function(accountId, pageId, fn){
+        var self = this;
+        var query = {accountId:accountId, _id:pageId};
+        self.removeByQuery(query, self.publishedPageObj, fn);
     },
 
     options: {

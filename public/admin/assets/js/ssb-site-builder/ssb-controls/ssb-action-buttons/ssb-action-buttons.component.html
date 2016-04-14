@@ -23,10 +23,10 @@
          </button>
     </div>
     <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Publish">
-        <button ng-disabled="true" class="btn btn-primary btn-o" ng-click="vm.cancel()"><span class="fa fa-globe"></span> <span class="sr-only">Publish</span></button>
+        <button class="btn btn-primary btn-o" ng-click="vm.publish()"><span class="fa fa-globe"></span> <span class="sr-only">Publish</span></button>
     </div>
     <div class="inline-block"  tooltip-placement="bottom" tooltip-html-unsafe="View">
-        <a href="/{{vm.state.page.handle}}" target="_blank" style="color: inherit;">
+        <a href="/preview/{{vm.state.page._id}}" target="_blank" style="color: inherit;">
             <button class="btn btn-primary btn-o">
                 <span class="fa fa-desktop"></span> <span class="sr-only">View</span>
             </button>

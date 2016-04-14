@@ -10,7 +10,8 @@ function ssbActionButtons(SimpleSiteBuilderService) {
             state: '=',
             saveAction: '&',
             cancelAction: '&',
-            revertAction: '&'
+            revertAction: '&',
+            publishAction: '&'
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-controls/ssb-action-buttons/ssb-action-buttons.component.html',
         controller: 'SiteBuilderActionButtonsController',

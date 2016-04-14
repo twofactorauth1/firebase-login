@@ -555,6 +555,7 @@ module.exports = {
                                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                                         fn(err, null);
                                     } else {
+                                        pageDao.removePublishedPage(accountId, pageId, function(err){});
                                         self.log.debug('<< deletePage');
                                         fn(null, value);
                                     }
@@ -567,13 +568,14 @@ module.exports = {
                 var query = {};
                 query._id = new RegExp('' + pageId + '(_.*)*');
                 pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
-                   if (err) {
+                    if (err) {
                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                         fn(err, null);
                     } else {
+                        pageDao.removePublishedPage(accountId, pageId, function(err){});
                         self.log.debug('<< deletePage');
                         fn(null, value);
-                    }
+                   }
                 });
             }
         })
@@ -685,14 +687,25 @@ module.exports = {
 
     listPublishedPages: function(accountId, websiteId, fn) {
         var self = this;
-        self.log.debug('>> listPagesWithSections');
+        self.log.debug('>> listPublishedPages');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
         pageDao.findPublishedPages(query, function(err, pages){
             if(err) {
                 self.log.error('Error getting published pages:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listPagesWithSections');
+                //handle legacy pages without sections
+                _.each(pages, function(page){
+                    if(page.get('sections') === null || page.get('sections').length===0) {
+                        var section = {};
+                        var sections = [];
+                        section.components = page.get('components');
+                        section.ssb = false;
+                        sections.push(section);
+                        page.set('sections', sections);
+                    }
+                });
+                self.log.debug('<< listPublishedPages');
                 return fn(err, pages);
             }
         });
@@ -746,7 +759,7 @@ module.exports = {
     getPage: function(accountId, pageId, fn) {
         var self = this;
         self.log.debug('>> getPage');
-        //TODO: add status
+
         pageDao.getPageById(accountId, pageId, function(err, page){
             if(err || !page) {
                 self.log.error('Error getting page:', err);
@@ -756,6 +769,32 @@ module.exports = {
                 sectionDao.dereferenceSections(sections, function(err, sectionAry){
                     page.set('sections', _.compact(sectionAry));
                     self.log.debug('<< getPage');
+                    return fn(null, page);
+                });
+
+            }
+        });
+    },
+
+    /**
+     * This just needs to get by _id because version is encoded in _id
+     */
+    getPageByVersion: function(accountId, pageId, fn) {
+        var self = this;
+        self.log.debug('>> getPageByVersion');
+        var query = {
+            _id: pageId,
+            accountId:accountId
+        };
+        pageDao.findOne(query, $$.m.ssb.Page, function(err, page){
+            if(err || !page) {
+                self.log.error('Error getting page:', err);
+                return fn(err, null);
+            } else {
+                var sections = page.get('sections') || [];
+                sectionDao.dereferenceSections(sections, function(err, sectionAry){
+                    page.set('sections', _.compact(sectionAry));
+                    self.log.debug('<< getPageByVersion');
                     return fn(null, page);
                 });
 
@@ -868,11 +907,11 @@ module.exports = {
                 var pagesToUpdate = {};
                 async.eachSeries(page.get('sections'), function(sectionJSON, callback){
                     var idNoVersion = sectionJSON._id.replace(/_.*/g, "");
-                    self.log.debug('idNoVersion:', idNoVersion);
+                    //'section._id': new RegExp(idNoVersion + '.*')
                     var query = {
                         accountId:accountId,
-                        'section._id': new RegExp(idNoVersion + '.*')
-                    }
+                        'sections._id': {$regex: '' +idNoVersion + '.*'}
+                    };
                     pageDao.findPublishedPages(query, function(err, pages){
                         if(err) {
                             self.log.error('Error finding other published pages:', err);
@@ -906,7 +945,9 @@ module.exports = {
                         }
                     });
                     pageToUpdate.set('sections', newPageSections);
-                    pageDao.savePublishedPage(pageToUpdate, callback);
+                    pageDao.savePublishedPage(pageToUpdate, function(err, updatedPage){
+                        pageCacheManager.updateS3Template(accountId, null, updatedPage.id(), callback);
+                    });
                 }, function(err){
                     if(err) {
                         self.log.error('Error updating other pages:', err);

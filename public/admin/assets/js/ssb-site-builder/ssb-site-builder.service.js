@@ -70,6 +70,7 @@
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
         ssbService.getPageVersions = getPageVersions;
+        ssbService.publishPage = publishPage;
         ssbService.revertPage = revertPage;
         ssbService.permissions = {};
         ssbService.compiledElements = {};
@@ -1212,11 +1213,10 @@
                     component.images[index].url = asset.url;
 
                 } else {
-
-                    component.images.splice(index + 1, 0, {
-                        url: asset.url
-                    });
-
+                        $rootScope.$broadcast('$refreshSlickSlider');
+                        component.images.splice(index + 1, 0, {
+                            url: asset.url
+                        });
                 }
 
             } else if (type === 'thumbnail-slider') {
@@ -1465,6 +1465,28 @@
           return (
             ssbRequest($http({
               url: basePageAPIUrlv2 + [pageId, 'version', versionId].join('/'),
+              method: 'POST',
+            }).success(success).error(error))
+          )
+        }
+
+        /**
+         * Publish page
+         *
+         */
+        function publishPage(pageId) {
+
+          function success(data) {
+            console.log('SimpleSiteBuilderService publishPage: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService publishPage error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: basePageAPIUrlv2 + [pageId, 'publish'].join('/'),
               method: 'POST',
             }).success(success).error(error))
           )

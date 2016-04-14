@@ -57,4 +57,18 @@ mainApp.service('orderService', function ($http) {
         fn(err);
     });
   };
+
+  this.deleteOrder = function (orderId, fn) {
+    var apiUrl = baseUrl + ['orders', orderId].join('/');
+    $http({
+      url: apiUrl,
+      method: "DELETE"
+    }).success(function (data, status, headers, config) {
+      fn(data);
+    }).error(function (err) {
+      console.log('END:Got Order with ERROR');
+        fn(err);
+    });
+  };
+
 });

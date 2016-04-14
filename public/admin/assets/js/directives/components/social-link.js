@@ -17,11 +17,10 @@ app.directive('socialLinkComponent', ["$modal", "$timeout", function ($modal, $t
 
         },
         onStart: function (evt) {
-          if(scope.$parent.vm)
-            scope.$parent.vm.uiState.sortableListPageContentConfig.disabled = true;
+            console.log('onStart')
         },
         onEnd: function (evt) {
-
+            console.log('end')
         }
       };
 

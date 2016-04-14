@@ -9,6 +9,7 @@
         $scope.newProduct = {
             status: 'inactive'
         };
+        $scope.sortFields = {'modified.date': -1};
 
         console.log('ProductConstant.product_types.dp ', ProductConstant.product_types.dp);
         $scope.productTypeOptions = ProductConstant.product_types.dp;
@@ -31,7 +32,7 @@
 
         $scope.checkPaymentAccountExistsFn(function (value) {
             if (value) {
-                ProductService.getProductsWithSort({name: 1}, function (products) {
+                ProductService.getProductsWithSort($scope.sortFields, function (products) {
                     $scope.products = products;
                     $scope.showProducts = true;
                     $scope.noPaymentAccount = false;
@@ -204,5 +205,20 @@
             window.location = _redirectUrl;
         };
 
+        $scope.sortFn = function (field) {
+            if ($scope.sortFields[field]) {
+                if ($scope.sortFields[field] == 1) {
+                    $scope.sortFields[field] = -1;
+                } else {
+                    $scope.sortFields[field] = 1;
+                }
+            } else {
+                $scope.sortFields = {};
+                $scope.sortFields[field] = 1;
+            }
+            ProductService.getProductsWithSort($scope.sortFields, function (products) {
+                $scope.products = products;
+            });
+        };
     }]);
 }(angular));

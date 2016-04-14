@@ -8,29 +8,25 @@
 
 <div ng-class="component.type+'-v'+component.version">
     <div class="img-container">
-        <div data-edit ng-cloak class="slider-main" testimonial-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  slidesToScroll:1, autoplay:{{autoplay}},  asNavFor: ".slider-nav-thumbnails"}'>
-            <div class="img-row" ng-repeat="image in component.images track by $index">
-                <div class="col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
-                    <div class="thumbnail img-height single-image">
-                        <a href="{{image.url}}" title="{{image.label}}" data-gallery>
-                            <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" style="background-image:url('{{image.url}}');"></div>
-                        </a>
-                    </div>
+        <div ng-if="dataLoaded" class="slider-main-{{component._id}}" testimonial-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  slidesToScroll:1, autoplay:{{autoplay}},  asNavFor: ".slider-nav-thumbnails-{{component._id}}"}'>
+            <div class="img-row col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}" ng-repeat="image in component.images track by $index">
+
+                    <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" style="background-image:url('{{image.url}}');"></div>
+
                     <div ng-if="isEditing" class="delete-single-image center">
-                        <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
+                        <button ng-click="deleteImageSlide($index)" class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
                     </div>
                     <div ng-if="isEditing" class="center">
                         <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
                     </div>
-                </div>
             </div>
         </div>
-
-        <div class="slider-nav-thumbnails hidden-xs" testimonial-slider='{slidesToShow:6, touchMove:{{touchMove}}, draggable:true, dots:false, arrows:false,  slidesToScroll:1, autoplay:false, asNavFor: ".slider-main", focusOnSelect: true}'>
+        <div ng-if="dataLoaded" class="slider-nav-thumbnails slider-nav-thumbnails-{{component._id}} hidden-xs" testimonial-slider='{slidesToShow:6, touchMove:{{touchMove}}, draggable:true, dots:false, arrows:false,  slidesToScroll:1, autoplay:false, asNavFor: ".slider-main-{{component._id}}", focusOnSelect: true}'>
             <div  ng-repeat="image in component.images track by $index">
                 <img ng-src="{{image.url}}" class="img-thumbnail" style="height:150px" />
             </div>
         </div>
+
     </div>
     <button ng-if="isEditing && component.images.length === 0" ng-click="addImageFromMedia(component._id,0)" class="btn ssb-theme-btn btn-primary btn-lg pull-right btn-add-image" >Add new Image</button>
 </div>

@@ -10,11 +10,11 @@ function ssbSiteBuilderActionButtonsController($scope, $attrs, $filter, SimpleSi
 
     var vm = this;
 
-    vm.somethingActionButtons = 'something action buttons';
     vm.init = init;
     vm.save = save;
     vm.cancel = cancel;
     vm.revert = revert;
+    vm.publish = publish;
 
     function save() {
     	vm.saveAction();
@@ -24,12 +24,16 @@ function ssbSiteBuilderActionButtonsController($scope, $attrs, $filter, SimpleSi
     	vm.cancelAction();
     }
 
-    function init(element) {
-    	vm.element = element;
-    }
-
     function revert(versionId) {
         vm.revertAction({versionId: versionId});
+    }
+
+    function publish() {
+        vm.publishAction();
+    }
+
+    function init(element) {
+    	vm.element = element;
     }
 
 }

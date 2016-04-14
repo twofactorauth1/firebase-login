@@ -195,7 +195,30 @@
     }
 
     .ssb-page-section-layout-header-v5 .navigation-v2 .navbar .navbar-header {
-        display: none;
+
+        .ssb-media-query-medium({
+            display: none;
+        })
+
+    }
+
+    .ssb-page-section-layout-header-v5 .navigation-v2 .navbar ul.navbar-nav li {
+
+        .ssb-media-query-small-only({
+            float: left;
+            clear: both;
+            text-align: center;
+            width: 100%;
+        })
+
+    }
+
+    .ssb-page-section-layout-header-v5 .navigation-v2 .navbar .navbar-header {
+
+        .ssb-media-query-small-only({
+            min-height: 50px;
+        })
+
     }
 
     .ssb-page-section-layout-header-v5 .navigation-v2 .navbar .nav > li > a {

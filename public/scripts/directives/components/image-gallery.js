@@ -8,6 +8,7 @@ app.directive('imageGalleryComponent', function () {
         scope.touchMove = true;
         scope.draggable = true;
         scope.autoplay = true;
+        scope.dataLoaded = true;
     }
   }
 });

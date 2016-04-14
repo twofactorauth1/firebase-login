@@ -34,7 +34,7 @@ var mainApp = angular
         "truncate",
         'angular-jqcloud',
         '720kb.socialshare',
-        'slick',        
+        'slick',
         'wu.masonry',
         'slugifier',
         'LocalStorageModule',
@@ -94,6 +94,10 @@ var mainApp = angular
             .when('/cached/:page', {
                 controller: 'CacheCtrl as cacheCtrl',
                 templateUrl: '../views/cache.html'
+            })
+            .when('/preview/:pageId', {
+                controller: 'PreviewCtrl as previewCtrl',
+                templateUrl: '../views/main.html'
             })
             .otherwise({
                 templateUrl: '../views/main.html',

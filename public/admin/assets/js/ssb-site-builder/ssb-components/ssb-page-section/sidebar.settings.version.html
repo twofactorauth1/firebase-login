@@ -3,7 +3,7 @@
     <ul class="ssb-section-content-list ssb-sidebar-layout-versions list-unstyled">
 
         <li
-            ng-repeat="section in ::vm.filteredSections() track by $index"
+            ng-repeat="section in ::vm.filteredSections() | orderBy: 'version' track by $index"
             class="ssb-sidebar-add-section ssb-section-content-list-item ssb-sidebar-layout-version"
             ng-class="{ 'ssb-section-content-list-item-on': vm.isSelectedLayout(section) }"
             ng-click="vm.addSectionToPage(section, section.version, vm.uiState.activeSectionIndex);">
