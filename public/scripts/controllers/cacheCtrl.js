@@ -74,7 +74,7 @@ mainApp.controller('CacheCtrl', ['$scope', 'embeddedSiteDataService', '$window',
             if ($location.$$path === '/login') {
                 $window.location.href = '/login';
             } else {
-                $window.location.href = '/404';
+                $window.location.reload();
             }
 
         } else {
