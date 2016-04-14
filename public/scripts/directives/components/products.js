@@ -1221,6 +1221,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 OrderService.deleteOrder(order._id, function (data) {
                     if (data.deleted) {
                         $('#cart-checkout-modal').modal('hide');
+                        scope.checkoutModalState = 1;
                     }
                 });
             };

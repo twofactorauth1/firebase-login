@@ -67,7 +67,7 @@
 
                             <!-- <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ featured: true, enabled: true }" ng-if="sectionFilter.lowercase === 'featured'" class="ssb-sidebar-add-section margin-bottom-15"> -->
                             <div ng-sortable="vm.uiState.sortableListAddContentConfig" >
-                                <div sectionId = "{{section._id}}" ng-repeat="section in vm.uiState.filteredSections = (vm.sections | orderBy:'title' | filter:{ filter: sectionFilter.lowercase, enabled: true })" ng-if="sectionFilter.lowercase != 'all' && sectionFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15 ssb-sidebar-layout-version" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';" >
+                                <div sectionId = "{{section._id}}" ng-repeat="section in vm.uiState.filteredSections = (vm.sections | orderBy:['title', 'version'] | filter:{ filter: sectionFilter.lowercase, enabled: true })" ng-if="sectionFilter.lowercase != 'all' && sectionFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15 ssb-sidebar-layout-version" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';" >
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">
                                             <a href>
@@ -92,7 +92,7 @@
                                 </div>
 
 
-                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.filteredSections = (vm.sections | orderBy:'title' | filter:{ enabled: true })" ng-if="sectionFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
+                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.filteredSections = (vm.sections | orderBy:['title', 'version'] | filter:{ enabled: true })" ng-if="sectionFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">
                                             <a href>

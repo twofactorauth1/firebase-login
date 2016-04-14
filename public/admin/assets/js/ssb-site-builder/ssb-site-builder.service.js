@@ -1213,11 +1213,10 @@
                     component.images[index].url = asset.url;
 
                 } else {
-
-                    component.images.splice(index + 1, 0, {
-                        url: asset.url
-                    });
-
+                        $rootScope.$broadcast('$refreshSlickSlider');
+                        component.images.splice(index + 1, 0, {
+                            url: asset.url
+                        });
                 }
 
             } else if (type === 'thumbnail-slider') {
