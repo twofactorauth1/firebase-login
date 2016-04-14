@@ -8,6 +8,8 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
     if(window.indigenous && window.indigenous.precache && window.indigenous.precache.pages) {
         var page = window.indigenous.precache.pages;
         pages[page.handle] = page;
+        pages['preview/' + page._id] = page;
+        pagecache.put('preview/' + page._id, page);
         delete window.indigenous.precache.pages;
 
     }
@@ -49,8 +51,16 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
             var _matchingPage = _.find(_pages, function (_page) {
                 return _page.handle === _path;
             });
+
             if (_matchingPage) {
                 return callback(null, _matchingPage);
+            } else {
+                var pageIdPage = _.find(_pages, function(_page){
+                    return 'preview/' + _page.id === _path;
+                });
+                if(pageIdPage) {
+                    return callback(null, pageIdPage);
+                }
             }
         }
 
