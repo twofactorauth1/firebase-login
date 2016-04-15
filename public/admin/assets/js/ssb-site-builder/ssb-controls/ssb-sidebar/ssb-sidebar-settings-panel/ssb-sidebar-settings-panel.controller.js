@@ -68,11 +68,9 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     $scope.$watch('component.bg.img.overlaycolor', function (newValue, oldValue) {
         if (newValue) {
-            if ($scope.component.bg.img.overlayopacity == 0) {
+            if (!angular.isDefined($scope.component.bg.img.overlayopacity)) {
                 $scope.component.bg.img.overlayopacity = 100;
             }
-        } else {
-            $scope.component.bg.img.overlayopacity = 0;
         }
     });
 
