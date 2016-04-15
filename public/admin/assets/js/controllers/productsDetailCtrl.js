@@ -147,6 +147,7 @@
         };
         product.regular_price = parseFloat(product.regular_price);
         $scope.product = product;
+        $scope.originalIcon = product.icon;
         if (product.assets && product.assets.length) {
             $scope.isMediaSingleSelect = true;
         }
@@ -625,9 +626,7 @@
 
     $scope.setDefault = function(){
       if ($scope.product.is_image) {
-        if ($scope.product.assets.length) {
-          $scope.product.icon = $scope.product.assets[0];
-        }
+        $scope.product.icon = $scope.originalIcon ? $scope.originalIcon : $scope.product.assets[0];
       } else {
         $scope.product.icon = 'fa-cube';
         angular.element('#convert').iconpicker('setIcon', 'fa-cube');
@@ -1150,6 +1149,12 @@
       }
     });
 
+    $scope.assetSlideClickFn = function ($index) {
+      $scope.slickSlideIndex = $index;
+      $scope.isMediaSingleSelect = true;
+      $scope.product.icon = $scope.product.assets[$index];
+      $scope.originalIcon = $scope.product.icon;
+    };
 
     $scope.init = (function(){
       $scope.getProduct().then(function(data) {
@@ -1159,10 +1164,5 @@
       })
     })();
 
-    $scope.assetSlideClickFn = function ($index) {
-        $scope.slickSlideIndex = $index;
-        $scope.isMediaSingleSelect = true;
-        $scope.product.icon = $scope.product.assets[$index];
-    };
   }]);
 }(angular));
