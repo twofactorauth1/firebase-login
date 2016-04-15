@@ -1,7 +1,7 @@
 <div class="button-group">
     <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="History" tooltip-enable='!hideHistoryTT'>
         <div class="dropdown" dropdown on-toggle="historyDropdownFn(open)">
-            <button class="btn btn-primary btn-o dropdown-toggle" dropdown-toggle><span class="fa fa-history"></span> <span class="sr-only">History</span></button>
+            <button class="btn btn-primary btn-o dropdown-toggle" dropdown-toggle><span class="fa fa-clock-o"></span> <span class="sr-only">History</span></button>
             <ul class="dropdown-menu dropdown-dark" style='background: #1c2b36'>
                 <li ng-repeat='v in pageVersions | orderBy : "version" : true' ng-click='vm.revert(v.version)' ng-show='pageVersions.length'>
                     <a>{{v.modified.date | date:'medium'}}</a>
