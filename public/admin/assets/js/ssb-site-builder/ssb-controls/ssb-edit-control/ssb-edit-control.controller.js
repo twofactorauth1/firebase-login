@@ -88,9 +88,9 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                     left = 0;
                 }
 
-                if (editElTop > 0 && editElTop - topbarHeight < 30) {
-                    //top = editElTop - topbarHeight;
-                    //left = left + 36;
+                if (editElTop - topbarHeight < 30 && top < 0) {
+                    top = 0;
+                    left = left + 36;
                 }
 
                 if (editControl && editControl.length) {
