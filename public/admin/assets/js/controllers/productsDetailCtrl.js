@@ -624,8 +624,14 @@
     };
 
     $scope.setDefault = function(){
-      $scope.product.icon = 'fa-cube';
-      angular.element('#convert').iconpicker('setIcon', 'fa-cube');
+      if ($scope.product.is_image) {
+        if ($scope.product.assets.length) {
+          $scope.product.icon = $scope.product.assets[0];
+        }
+      } else {
+        $scope.product.icon = 'fa-cube';
+        angular.element('#convert').iconpicker('setIcon', 'fa-cube');
+      }
     }
 
     $scope.checkIfDirty = function(){
