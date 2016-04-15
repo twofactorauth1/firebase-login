@@ -142,7 +142,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: false
                 },
-                color : "#FFFFFF"
+                color : ""
             },
 
              /**
