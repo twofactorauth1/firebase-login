@@ -36,12 +36,16 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
             "text": "This is the testimonial."
         };
 
-        function addRemoveTestimonials(index, add){            
-            if(add){                
-                scope.component.testimonials.splice(index + 1, 0, angular.copy(scope.newTestimonial));
+        function addRemoveTestimonials(index, add){
+            scope.$broadcast('$refreshSlickSlider');
+            var testimonials = angular.copy(scope.component.testimonials);
+            if(add){
+                testimonials.splice(index + 1, 0, angular.copy(scope.newTestimonial));
             } else {
-                scope.component.testimonials.splice(index, 1);
-            }            
+                testimonials.splice(index, 1);
+            }
+            scope.component.testimonials = testimonials;
+
         };
 
         scope.deleteTestimonial = function (index) {
