@@ -19,6 +19,12 @@ app.directive('footerComponent', ['WebsiteService', function (WebsiteService) {
       WebsiteService.getWebsite(function (website) {
         scope.website = website;
       });
+      // Check for legacy pages
+      if(!element.parents(".ssb-section-layout").length){
+        element.addClass("legacy-footer");
+      }
+
+
     }
   };
 }]);

@@ -12599,6 +12599,9 @@ ssb-topbar .ui-select-match-text > small {
 [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v14 [image-gallery-component] .image-wrap:hover .image-gallery {
   min-height: 396px !important;
 }
+.ssb-section-type-footer {
+  background: #292929 !important;
+}
 #componentloader {
   overflow: visible;
   min-height: auto;
