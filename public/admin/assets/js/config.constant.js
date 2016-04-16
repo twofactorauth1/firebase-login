@@ -800,12 +800,10 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
-      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/image.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/image-manager.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/inline_style.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/line_breaker.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/link.min.js",
-
-
       "../js/libs/froala-wysiwyg-editor/js/plugins/lists.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/paragraph_format.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/paragraph_style.min.js",
@@ -833,7 +831,6 @@ app.constant('JS_REQUIRES', {
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font-awesome.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/button.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font-awesome-icons.js",
-      "../js/libs/froala-wysiwyg-editor/js/plugins/image_manager.min.js",
       "../js/libs_misc/froala-wysiwyg-editor/css/plugins/font-awesome.css",
       '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
   },

@@ -95,7 +95,7 @@ $.FroalaEditor.config = {
         "'Lora',serif": 'Lora',
         "'Playfair Display',serif": 'Playfair Display'
     },
-    imageInsertButtons: ['imageBack', 'imageUpload', 'imageByURL', 'mediaManager'],
+    //imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
     linkEditButtons: ['linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
     imageEditButtons: ["imageReplace", "imageAlign", "imageRemove", "|", "imageLink", "linkOpen", "linkEdit", "linkRemove", "imageDisplay", "imageStyle", "imageAlt", "imageSize"],
     colorsText: [].concat.apply([], spectrumColors),
