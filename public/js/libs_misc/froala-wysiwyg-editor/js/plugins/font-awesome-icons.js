@@ -120,7 +120,7 @@
                 for (var c = b.$el.get(0).querySelectorAll(".fr-fontAwesomeIcon"), d = 0; d < c.length; d++) "undefined" != typeof c[d].textContent && 0 === c[d].textContent.replace(/\u200B/gi, "").length && a(c[d]).remove()
             }), b.events.on('commands.before', function(cmd, param1, param2) {
                 if (cmd == 'fontSize') {
-                    selectedFontSize = parseInt(param1 / 2);
+                    selectedFontSize = parseInt(param1 / 6);
                 }
 
                 if (cmd == 'textColor') {
@@ -129,7 +129,7 @@
 
                 var isAwesomeIcon = $(getSelectionParentElement()).parent().hasClass('fr-fontAwesomeIcon');
                 console.log('awesome icon plugin>>', isAwesomeIcon, selectedColor, selectedFontSize);
-                
+
                 if (isAwesomeIcon) {
                     if (selectedFontSize && selectedColor) {
                         $(getSelectionParentElement()).parent().detach();
