@@ -229,6 +229,7 @@
     };
 
     $scope.profileSaveFn = function () {
+      $scope.pageSaving = true;
       console.log('profileSaveFn >>>');
       angular.copy($scope.account, $scope.actualAccount);
       $scope.validateBeforeSave();
@@ -250,6 +251,7 @@
         $scope.minRequirements = true;
         $scope.setDefaults();
         angular.copy($scope.account, $scope.actualAccount);
+        $scope.pageSaving = false;
       });
     };
 

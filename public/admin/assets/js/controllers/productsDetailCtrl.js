@@ -364,7 +364,7 @@
     $scope.saveLoading = false;
 
     $scope.saveProductFn = function () {
-
+      $scope.pageSaving = true;
       console.log('$scope.selectedDate ', $scope.selectedDate);
       if ($scope.selectedDate.range) {
         $scope.product.sale_date_from = new Date($scope.selectedDate.range.startDate).toISOString();
@@ -413,6 +413,7 @@
           }
           $scope.saveLoading = false;
           toaster.pop('success', 'Product Saved.');
+          $scope.pageSaving = false;
         });
     }
 

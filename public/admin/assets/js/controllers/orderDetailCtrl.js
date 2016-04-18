@@ -784,6 +784,7 @@
      */
 
     $scope.saveOrder = function (flag, cust, invalid) {
+      $scope.pageSaving = true;
       $scope.formSubmitted = true;
       $scope.saveLoading = true;
       // Set order customer Id
@@ -829,6 +830,7 @@
           angular.copy($scope.order, $scope.originalOrder);
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
+          $scope.pageSaving = false;
           $location.path('/commerce/orders');
         });
       }
@@ -837,6 +839,7 @@
           toaster.pop('success', 'Order created successfully.');
           angular.copy($scope.order, $scope.originalOrder);
           $scope.saveLoading = false;
+          $scope.pageSaving = false;
           if(flag==1)
           {
             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
