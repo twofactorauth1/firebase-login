@@ -872,6 +872,17 @@ module.exports = {
                     }
                 });
             },
+            function updatePagePublishedTimestamp(page, cb) {
+              page.set('published', {date:new Date(), by: userId});
+              pageDao.saveOrUpdate(page, function(err, updatedPage) {
+                if (err) {
+                  self.log.error('Error page published timestamp update');
+                  cb(err);
+                } else {
+                  cb(null, updatedPage);
+                }
+              });
+            },
             function dereferenceSections(page, cb) {
                 sectionDao.dereferenceSections(page.get('sections'), function(err, sections){
                     if(err) {
