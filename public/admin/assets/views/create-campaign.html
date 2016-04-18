@@ -552,14 +552,14 @@
                                             </div>
                                         </div>
                                         <div class="clearfix"></div>
-                                        <div ng-hide="!isEditable">
+                                        <div>
                                             <div class="panel panel-white">
                                                 <form role="form" class="ng-pristine ng-valid">
                                                     <div class="form-group">
                                                         <label>
                                                             Tags
                                                         </label>
-                                                        <ui-select multiple tagging="tagToCustomer" tagging-match-to-key="label" ng-model="tagging.tags" theme="bootstrap">
+                                                        <ui-select multiple tagging="tagToCustomer" tagging-match-to-key="label" ng-model="newCampaignObj.searchTags.tags" theme="bootstrap">
                                                             <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
                                                             <ui-select-choices repeat="tag in customerTags | orderBy:'label' | filter:$select.search">
                                                                 {{tag.label}}
@@ -570,8 +570,8 @@
                                                         <label>Number of recipients: {{recipients.length}}</label>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="radio-inline"><input type="radio" name="optradio" value="set" ng-model="tagging.operation">Set tags</label>
-                                                        <label class="radio-inline"><input type="radio" name="optradio" value="add" ng-model="tagging.operation">Add tags</label>
+                                                        <label class="radio-inline"><input type="radio" name="optradio" value="set" ng-model="newCampaignObj.searchTags.operation">Set tags</label>
+                                                        <label class="radio-inline"><input type="radio" name="optradio" value="add" ng-model="newCampaignObj.searchTags.operation">Add tags</label>
                                                     </div>
                                                 </form>
                                             </div>
@@ -630,7 +630,7 @@
                                             <a class="list-group-item" href="#">
                                                 <h5 class="list-group-item-heading">Tags</h5>
                                                 <p class="list-group-item-text">
-                                                    Tags <span class="text-bold">{{formatTagsFn()}}</span>. Operation: <span class="text-bold">{{tagging.operation}}</span>.
+                                                    Tags <span class="text-bold">{{formatTagsFn()}}</span>. Operation: <span class="text-bold">{{newCampaignObj.searchTags.operation}}</span>.
                                                 </p>
                                             </a>
                                         </div>
