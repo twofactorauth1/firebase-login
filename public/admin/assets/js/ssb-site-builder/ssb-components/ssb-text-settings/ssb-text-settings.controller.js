@@ -307,7 +307,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
                 }
 
                 if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-                    styleString += 'background-image: url("' + component.bg.img.url + '")';
+                    styleString += 'background-image: url("' + component.bg.img.url + '");';
                 }
 
             }
