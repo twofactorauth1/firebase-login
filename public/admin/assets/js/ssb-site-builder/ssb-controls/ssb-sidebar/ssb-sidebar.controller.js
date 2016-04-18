@@ -501,7 +501,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.insertMediaCallback = function(asset) {
             if (componentIndex !== undefined && componentIndex !== null) {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-            } else if (vm.uiState.activeElement  && vm.uiState.activeElement.hasOwnProperty("bg")) {
+            } else if (!sectionIndex && vm.uiState.activeElement  && vm.uiState.activeElement.hasOwnProperty("bg")) {
                 vm.uiState.activeElement.bg.img.url = asset.url;
             } else {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
