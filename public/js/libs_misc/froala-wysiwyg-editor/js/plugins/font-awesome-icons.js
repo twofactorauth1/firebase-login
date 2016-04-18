@@ -128,17 +128,17 @@
                 }
 
                 var isAwesomeIcon = $(getSelectionParentElement()).parent().hasClass('fr-fontAwesomeIcon');
-                console.log('awesome icon plugin>>', isAwesomeIcon, selectedColor, selectedFontSize);
+                console.log('awesome icon plugin : command.before>>', isAwesomeIcon, selectedColor, selectedFontSize);
 
                 if (isAwesomeIcon) {
                     if (selectedFontSize && selectedColor) {
-                        $(getSelectionParentElement()).parent().detach();
+                        $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
                         b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "; font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedFontSize) {
-                        $(getSelectionParentElement()).parent().detach();
+                        $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
                         b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedColor) {
-                        $(getSelectionParentElement()).parent().detach();
+                        $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
                         b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     }
                 }
