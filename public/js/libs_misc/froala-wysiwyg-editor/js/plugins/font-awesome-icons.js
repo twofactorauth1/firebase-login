@@ -120,7 +120,7 @@
                 for (var c = b.$el.get(0).querySelectorAll(".fr-fontAwesomeIcon"), d = 0; d < c.length; d++) "undefined" != typeof c[d].textContent && 0 === c[d].textContent.replace(/\u200B/gi, "").length && a(c[d]).remove()
             }), b.events.on('commands.before', function(cmd, param1, param2) {
                 if (cmd == 'fontSize') {
-                    selectedFontSize = parseInt(param1 / 6);
+                    selectedFontSize = param1;
                 }
 
                 if (cmd == 'textColor') {
@@ -133,10 +133,10 @@
                 if (isAwesomeIcon) {
                     if (selectedFontSize && selectedColor) {
                         $(getSelectionParentElement()).parent().detach();
-                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "' class='fa fa-" + selectedIcon + " fa-" + selectedFontSize + "x'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "; font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedFontSize) {
                         $(getSelectionParentElement()).parent().detach();
-                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span class='fa fa-" + selectedIcon + " fa-" + selectedFontSize + "x'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedColor) {
                         $(getSelectionParentElement()).parent().detach();
                         b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
