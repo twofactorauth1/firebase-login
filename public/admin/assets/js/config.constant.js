@@ -693,7 +693,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-truncate/src/truncate.js']
   }, {
     name: 'oitozero.ngSweetAlert',
-    files: ['../js/libs/angular-sweetalert-promised/SweetAlert.min.js', '../js/libs/sweetalert/lib/sweet-alert.min.js', '../js/libs/sweetalert/lib/sweet-alert.css']
+    files: ['../js/libs/angular-sweetalert-promised/SweetAlert.min.js', '../js/libs_misc/sweetalert/lib/sweet-alert.js', '../js/libs/sweetalert/lib/sweet-alert.css']
   }, {
     name: 'monospaced.elastic',
     files: ['../js/libs/angular-elastic/elastic.js']

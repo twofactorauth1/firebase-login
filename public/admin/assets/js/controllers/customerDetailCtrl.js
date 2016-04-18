@@ -418,7 +418,7 @@
     }
 
     $scope.customerSaveFn = function (hideToaster, showAlert, newUrl) {
-
+      $scope.pageSaving = true;
       $scope.saveLoading = true;
 
       if ($scope.checkContactValidity()) {
@@ -513,6 +513,7 @@
               toaster.pop('success', 'Contact Saved.');
             }
           }
+          $scope.pageSaving = false;
           if(showAlert){
             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
             window.location = newUrl;

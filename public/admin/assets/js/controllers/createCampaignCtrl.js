@@ -977,12 +977,16 @@
 
       if($scope.updatedEmail && $scope.existingEmail.replace){
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
-          CampaignService.createCampaign($scope.newCampaignObj, $scope.savedSuccess);
+          CampaignService.createCampaign($scope.newCampaignObj, $scope.savedSuccess, function(){
+            $scope.pageSaving = false;
+          })
         });
       }
       else
       {
-        CampaignService.createCampaign($scope.newCampaignObj, $scope.savedSuccess);
+        CampaignService.createCampaign($scope.newCampaignObj, $scope.savedSuccess, function(){
+            $scope.pageSaving = false;
+          })
       }
 
     };
@@ -1005,11 +1009,15 @@
 
       if($scope.updatedEmail && $scope.existingEmail.replace && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
-         CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
+         CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess, function(){
+            $scope.pageSaving = false;
+          })
         });
       }
       else{
-        CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
+        CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess, function(){
+            $scope.pageSaving = false;
+        })
       }
     };
 
@@ -1353,6 +1361,7 @@
      * - validate/check and call saveOrUpdateCampaign
      */
     $scope.saveCampaign = function (_url) {
+      $scope.pageSaving = true;
       $scope.changesConfirmed = true;
       if ($scope.pendingChanges()) {
         var save = function() {

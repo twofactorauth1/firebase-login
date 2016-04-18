@@ -23,29 +23,34 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
               confirmButtonColor: "#DD6B55",
               confirmButtonText: "Yes",
               cancelButtonText: "No",
+              showNoActionButton: true,
+              noActionButtonText: 'Cancel',
               closeOnConfirm: true,
               closeOnCancel: true,
-              }, function (isConfirm) {                
-                if (isConfirm) {                  
+              }, function (isConfirm) {
+                if (isConfirm) {
                   if(scope.savePage)
                   {
                     scope.savePage();
                     scope.$watch(function() { return scope.savePageCheck }, function(newValue) {
                       if (newValue) {
                          $state.go(toState, toParams, {notify: false})
-                        .then(function() {                      
+                        .then(function() {
                             $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
-                         }) 
+                         })
                       }
-                    }, true);  
+                    }, true);
                   }
-                  $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);                  
+                  $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
+                }
+                else if(!angular.isDefined(isConfirm)){
+                    $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
                 }
                 else{
                   scope.resetDirty && scope.resetDirty();
                   SweetAlert.swal("Not Saved!", "Unsaved data was discarded.", "success");
                     $state.go(toState, toParams, {notify: false})
-                    .then(function() {                      
+                    .then(function() {
                         $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
                      })
                 }
