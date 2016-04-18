@@ -7,7 +7,6 @@
      * set editor theme
      */
     editableOptions.theme = 'bs3';
-    $scope.tagging = {};
 
     $scope.existingEmail = {};
     $scope.isCampainDirty = {
@@ -330,7 +329,11 @@
           "vars": [],
           "sendAt": {},
         }
-      }]
+      }],
+      "searchTags": {
+        operation: "set",
+        tags: []
+      }
     };
 
     /*
@@ -1048,23 +1051,24 @@
 
     $scope.updateTagsFn = function (recipients) {
 
-        if (angular.isDefined($scope.tagging.tags) && $scope.tagging.tags.length) {
+        if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
 
             CustomerService.getCustomers(function (customers) {
                 $scope.customers = customers;
-                var tags = _.uniq(_.pluck($scope.tagging.tags, 'data'));
+                var tags = _.uniq(_.pluck($scope.newCampaignObj.searchTags.tags, 'data'));
                 recipients.forEach(function(id, index) {
                     var c = _.findWhere($scope.customers, {_id: id});
                     if (c) {
-                        if ($scope.tagging.operation == 'add') {
+                        if ($scope.newCampaignObj.searchTags.operation == 'add') {
                             if (c.tags) {
                                 c.tags = c.tags.concat(tags);
                             } else {
                                 c.tags = tags;
                             }
-                        } else if ($scope.tagging.operation == 'set') {
+                        } else if ($scope.newCampaignObj.searchTags.operation == 'set') {
                             c.tags = tags;
                         }
+                        c.tags = _.uniq(c.tags);
                         CustomerService.saveCustomer(c, function() {});
                     }
                 });
@@ -1743,7 +1747,11 @@
     };
 
     $scope.formatTagsFn = function () {
-      return _.uniq(_.pluck($scope.tagging.tags, 'label')).join(', ');
+      if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
+        return _.uniq(_.pluck($scope.newCampaignObj.searchTags.tags, 'label')).join(', ');
+      } else {
+        return '';
+      }
     };
     /*
      * @init
