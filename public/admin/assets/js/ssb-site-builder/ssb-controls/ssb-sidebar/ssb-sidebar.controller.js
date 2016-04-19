@@ -63,6 +63,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.loadPage = loadPage;
     vm.constructVideoUrl = constructVideoUrl;
     vm.closeSectionPanel = closeSectionPanel;
+    vm.initializeMapSlider = initializeMapSlider;
 
     editableOptions.theme = 'bs3';
 
@@ -1059,6 +1060,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.uiState.activeElement = {};
         vm.uiState.showSectionPanel = false;
         vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+    }
+
+    function initializeMapSlider(){
+        $timeout(function () {
+            $(window).trigger('resize');
+        }, 0);
     }
 
     function init(element) {
