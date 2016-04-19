@@ -344,6 +344,14 @@ module.exports = {
                            return true;
                        }
                    });
+                   if(gsections){
+                        gsections = _.filter(gsections, function(section){
+                            if(section.get('name') !== 'Header') {
+                               return true;
+                            }
+                        });
+                    }
+
                 }
 
 
@@ -355,6 +363,14 @@ module.exports = {
                             return true;
                         }
                     });
+
+                    if(gsections){
+                        gsections = _.filter(gsections, function(section){
+                            if(section.get('name') !== 'Footer') {
+                               return true;
+                            }
+                        });
+                    }
                 }
                 _.each(sections, function(section){
                     jsonSections.push(section.toReference());
