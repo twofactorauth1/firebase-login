@@ -15,14 +15,14 @@
 	<div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Cancel">
         <button ng-disabled="!vm.state.pendingPageChanges && !vm.state.pendingWebsiteChanges" class="btn btn-primary btn-o" ng-click="vm.cancel()"><span class="fa fa-eraser"></span> <span class="sr-only">Cancel</span></button>
     </div>
-    <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Save">
+    <div class="inline-block" tooltip-placement="bottom" tooltip="{{(!vm.state.pendingPageChanges && !vm.state.pendingWebsiteChanges) ? 'Save' : 'Save draft'}}">
         <button ng-disabled="!vm.state.pendingPageChanges && !vm.state.pendingWebsiteChanges" class="btn btn-primary btn-o" ng-click="vm.save()">
          <span ng-if="!vm.state.saveLoading || vm.state.publishLoading" class="fa fa-save"></span>
          <span class="sr-only">Save</span>
          <span ng-if="vm.state.saveLoading && !vm.state.publishLoading"><i class="fa fa-spinner fa-spin"></i></span>
          </button>
     </div>
-    <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Publish">
+    <div class="inline-block" tooltip-placement="bottom" tooltip="{{(vm.state.page.published.date > vm.state.page.modified.date) ? 'Publish' : 'Publish changes'}}">
         <button class="btn btn-primary btn-o" ng-disabled='vm.state.page.published.date > vm.state.page.modified.date' ng-click="vm.publish()">
           <span  ng-if="!vm.state.publishLoading" ng-class='{"fa-spin": vm.state.page.published.date < vm.state.page.modified.date}' class="fa fa-globe" ng-style="(vm.state.page.published.date < vm.state.page.modified.date) && {'color': '#48b1cc'}"></span>
           <span class="sr-only">Publish</span>
