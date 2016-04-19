@@ -1756,7 +1756,7 @@
     };
 
     $scope.formatTagsFn = function () {
-      if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
+      if ($scope.newCampaignObj && angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
         return _.uniq(_.pluck($scope.newCampaignObj.searchTags.tags, 'label')).join(', ');
       } else {
         return '';
