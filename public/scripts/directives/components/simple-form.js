@@ -1,6 +1,6 @@
 'use strict';
 /*global app, window, Fingerprint, CryptoJS*/
-app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', 'formValidations', function (ipCookie, $window, $timeout, userService, formValidations) {
+app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', 'formValidations', 'campaignService', function (ipCookie, $window, $timeout, userService, formValidations, campaignService) {
   return {
     scope: {
       component: '='
@@ -8,6 +8,15 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
       console.log('scope.component ', scope.component);
+
+      var _campaignObj = null;
+
+      if (scope.component.campaignId) {
+        campaignService.getCampaign(scope.component.campaignId, function(data) {
+          _campaignObj = data;
+        });
+      }
+
       scope.nthRow = 'nth-row';
       if(!angular.isDefined(scope.component.tags)){
         scope.component.tags = [];
@@ -119,6 +128,11 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           _campaignId = scope.component.campaignId;
         }
 
+        var _campaignTags = [];
+        if (_campaignObj && angular.isDefined(_campaignObj.searchTags) && _campaignObj.searchTags.tags.length) {
+          _campaignTags = _.uniq(_.pluck(_campaignObj.searchTags.tags, 'data'));
+        }
+
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
@@ -129,6 +143,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             phones: []
           }],
           campaignId: _campaignId,
+          campaignTags: _campaignTags,
           emailId: scope.component.emailId,
           sendEmail: scope.component.sendEmail,
           skipWelcomeEmail: skipWelcomeEmail,

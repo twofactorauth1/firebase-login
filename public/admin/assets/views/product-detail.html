@@ -1,5 +1,5 @@
 <div ng-controller="ProductsDetailCtrl" class="product-detail">
-<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="saveProductFn()" save-page-check="!pageSaving"></indig-navprompt>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -52,7 +52,7 @@
                             </div>
                             <div ng-if="product.is_image">
                                 <div class="image">
-                                    <div class="thumbnail" ng-if='!product.assets.length'>
+                                    <div class="thumbnail" ng-if='product.icon && product.is_image'>
                                         <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
                                     </div>
                                     <div class='asset-slider' slick-slider objects='product.assets' config='slickConfig' ng-if='product.assets.length'>
@@ -75,7 +75,7 @@
                                         </label>
                                     </div>
                                     <div class="radio clip-radio radio-primary radio-inline">
-                                        <input type="radio" id="product_image_image" name="inline" ng-value="true" ng-model="product.is_image">
+                                        <input type="radio" id="product_image_image" name="inline" ng-change="setDefault()" ng-value="true" ng-model="product.is_image">
                                         <label for="product_image_image">
                                             Image
                                         </label>

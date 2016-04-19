@@ -60,8 +60,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
     vm.validateDuplicatePage = validateDuplicatePage;
+    vm.loadPage = loadPage;
     vm.constructVideoUrl = constructVideoUrl;
     vm.closeSectionPanel = closeSectionPanel;
+    vm.initializeMapSlider = initializeMapSlider;
 
     editableOptions.theme = 'bs3';
 
@@ -500,7 +502,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.insertMediaCallback = function(asset) {
             if (componentIndex !== undefined && componentIndex !== null) {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-            } else if (vm.uiState.activeElement  && vm.uiState.activeElement.hasOwnProperty("bg")) {
+            } else if (!sectionIndex && vm.uiState.activeElement  && vm.uiState.activeElement.hasOwnProperty("bg")) {
                 vm.uiState.activeElement.bg.img.url = asset.url;
             } else {
                 vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
@@ -960,6 +962,33 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }
     }
 
+    function loadPage(page) {
+        if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
+            vm.state.saveLoading = true;
+            vm.state.pendingWebsiteChanges = false;
+            vm.state.pendingPageChanges = false;
+            saveWebsite().then(function(){
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            console.log('page saved');
+                            // toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                            vm.uiState.navigation.loadPage(page._id);
+                            SimpleSiteBuilderService.getPages();
+                        })
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
+                    })
+                )
+            })
+        } else {
+            vm.uiState.navigation.loadPage(page._id);
+            SimpleSiteBuilderService.getPages();
+        }
+    };
+
     $scope.$watch('vm.state.page.handle', function(handle, oldHandle){
         if(handle && !angular.equals(oldHandle, handle)){
             vm.state.page.handle = $filter('slugify')(handle);
@@ -1031,6 +1060,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.uiState.activeElement = {};
         vm.uiState.showSectionPanel = false;
         vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+    }
+
+    function initializeMapSlider(){
+        console.log('refresh slider');
+        $timeout(function () {
+          $scope.$broadcast('rzSliderForceRender');
+        }, 0);
     }
 
     function init(element) {

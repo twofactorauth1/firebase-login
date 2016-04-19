@@ -67,7 +67,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
               //set initial text
               if (ngModel.$viewValue) {
-                editor.html.set(ngModel.$viewValue);
+                var html = ngModel.$viewValue.replace("<span>", "<span style=''>");
+                editor.html.set(html);
               }
 
               //compile special elements

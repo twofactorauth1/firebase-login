@@ -18,6 +18,7 @@ mainApp.controller('PreviewCtrl', ['$scope', 'previewPagesService', '$window', '
                 allowUndernav: false,
                 navComponent: null
             };
+            $scope.components = $scope.page.components;
             $scope.components.forEach(function (value, index) {
                 if (value && value.type === 'masthead' && value._id == masthead_id) {
                     if (index != 0 && $scope.components[index - 1].type == "navigation") {

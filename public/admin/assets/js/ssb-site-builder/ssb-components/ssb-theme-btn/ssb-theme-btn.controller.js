@@ -98,6 +98,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var ssbHoverStyle = vm.element.attr('data-ssb-hover-style');
         var ssbActiveStyle = vm.element.attr('data-ssb-active-style');
         var ssbClass = vm.element.attr('data-ssb-class');
+        var ssbShowBorder = vm.element.attr('data-show-border');
         var data = {
             id: 'button-element_' + elementId,
             _id: 'button-element_' + elementId,
@@ -130,7 +131,6 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             var spacingMW = style.maxWidth.replace('px', '');
 
             // Border related
-
             var borderColor = style.borderColor;
             var borderWidth = style.borderWidth.replace('px', '');
             var borderRadius = style.borderRadius.replace('%', '');
@@ -154,7 +154,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             data.border.style = borderStyle;
             data.border.radius = borderRadius;
         }
-
+        data.border.show = ssbShowBorder;
         if (ssbHoverStyle) {
             var hoverStyleEl = $('<div style="' + ssbHoverStyle + '"></div>');
             var hoverStyle = hoverStyleEl.get(0).style;
@@ -365,6 +365,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         }
 
         if (vm.element) {
+            vm.element.attr('data-show-border', component.border.show);
             vm.element.attr('data-ssb-style', styleString);
             vm.element.attr('data-ssb-hover-style', hoverStyleString);
             vm.element.attr('data-ssb-active-style', activeStyleString);
