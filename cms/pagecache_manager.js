@@ -143,6 +143,7 @@ module.exports = {
     updateS3Template: function(accountId, pageName, pageId, fn) {
         var self = this;
         var html = '';
+        var pageName = pageName;
         async.waterfall([
             function getPublishedPage(cb) {
                 if(pageName) {
@@ -166,6 +167,8 @@ module.exports = {
                         if(pages && pages.length >0) {
                             cb(null, null, pages[0]);
                         } else {
+                            self.log.debug('query: ', query);
+                            self.log.debug('pages: ', pages);
                             cb('page not found');
                         }
                     });
@@ -175,6 +178,7 @@ module.exports = {
             },
             function readComponents(webpageData, page, cb) {
                 if(page) {
+                    pageName = page.get('handle');
                     if(page.get('sections') != null && page.get('sections').length > 0) {
                         //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
                         _.each(page.get('sections'), function(section, index){
@@ -194,6 +198,8 @@ module.exports = {
             },
             function writeTemplate(cb) {
                 self.log.debug('Storing to s3');
+                self.log.debug('pageId', pageId);
+                self.log.debug('pageName', pageName);
                 var environmentName = 'prod';
                 if(appConfig.nonProduction === true) {
                     environmentName = 'test';
