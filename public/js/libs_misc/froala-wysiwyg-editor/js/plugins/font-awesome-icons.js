@@ -69,6 +69,24 @@
             b.popups.hide("fontAwesomeIcons"), b.toolbar.showInline()
         }
 
+        function getSelectionParentElement() {
+            //return window.getSelection().anchorNode.parentElement TODO: checking in XOS if not working enable this
+            var parentEl = null,
+                sel;
+            if (window.getSelection) {
+                sel = window.getSelection();
+                if (sel.rangeCount) {
+                    parentEl = sel.getRangeAt(0).commonAncestorContainer;
+                    if (parentEl.nodeType != 1) {
+                        parentEl = parentEl.parentNode;
+                    }
+                }
+            } else if ((sel = document.selection) && sel.type != "Control") {
+                parentEl = sel.createRange().parentElement();
+            }
+            return parentEl;
+        }
+
         function i() {
             b.events.on("html.get", function(c) {
                 for (var d = 0; d < b.opts.fontAwesomeIconsSet.length; d++) {
@@ -100,22 +118,30 @@
                 }
             }), b.events.on("keyup", function() {
                 for (var c = b.$el.get(0).querySelectorAll(".fr-fontAwesomeIcon"), d = 0; d < c.length; d++) "undefined" != typeof c[d].textContent && 0 === c[d].textContent.replace(/\u200B/gi, "").length && a(c[d]).remove()
-            }), b.events.on('commands.after', function (cmd, param1, param2) {
+            }), b.events.on('commands.before', function(cmd, param1, param2) {
                 if (cmd == 'fontSize') {
-                    selectedFontSize = parseInt(param1 / 2);
+                    selectedFontSize = param1;
                 }
 
                 if (cmd == 'textColor') {
                     selectedColor = param1;
                 }
 
-                // if (selectedFontSize && selectedColor) {
-                //     b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:"+ selectedColor +"' class='fa fa-" + selectedIcon + " fa-" + selectedFontSize + "x'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
-                // } else if (selectedFontSize) {
-                //     b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span class='fa fa-" + selectedIcon + " fa-" + selectedFontSize + "x'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
-                // } else if (selectedColor) {
-                //     b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:"+ selectedColor +"' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
-                // }
+                var isAwesomeIcon = $(getSelectionParentElement()).parent().hasClass('fr-fontAwesomeIcon');
+                console.log('awesome icon plugin : command.before>>', isAwesomeIcon, selectedColor, selectedFontSize);
+
+                if (isAwesomeIcon) {
+                    if (selectedFontSize && selectedColor) {
+                        $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "; font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                    } else if (selectedFontSize) {
+                        $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                    } else if (selectedColor) {
+                        $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "' class='fa fa-" + selectedIcon + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                    }
+                }
             })
         }
         return {

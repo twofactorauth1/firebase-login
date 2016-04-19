@@ -21,4 +21,19 @@ mainApp.service('campaignService', function ($http) {
             console.log('END:addContactToCampaign with ERROR ', err);
         });
     };
+
+    this.getCampaign = function (campaignId, fn) {
+        //TODO this is frontend code that WILL fail.
+        var apiUrl = baseUrl + ['campaigns', campaignId].join('/');
+        $http({
+            url: apiUrl,
+            method: "GET"
+        })
+        .success(function (data, status, headers, config) {
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:getCampaign with ERROR ', err);
+        });
+    };
 });

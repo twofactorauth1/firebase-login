@@ -45,6 +45,10 @@ var campaign = $$.m.ModelBase.extend({
              * }
              */
             steps: [],
+            searchTags: {
+              operation: 'set',
+              tags: []
+            },
 
             statistics: {
                 emailsSent: 0,

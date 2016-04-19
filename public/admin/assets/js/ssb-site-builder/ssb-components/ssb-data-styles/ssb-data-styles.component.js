@@ -76,8 +76,8 @@ function ssbDataStyles($timeout) {
                                     this.style.setProperty( 'color', data.hover.txtcolor, 'important' );
 
                                 }, function(){
-                                    this.style.setProperty( 'background-color', originalData.bg.color );
-                                    this.style.setProperty( 'color', originalData.txtcolor );
+                                    this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                    this.style.setProperty( 'color', originalData.txtcolor, 'important' );
                                 });
 
                                 element.on("mousedown touchstart", function(){
@@ -87,7 +87,7 @@ function ssbDataStyles($timeout) {
 
                             });
 
-                        }, 0);
+                        }, 1500);
                     }
                 });
             });

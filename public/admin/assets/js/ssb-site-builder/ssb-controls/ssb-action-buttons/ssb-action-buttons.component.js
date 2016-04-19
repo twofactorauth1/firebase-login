@@ -2,7 +2,7 @@
 
 app.directive('ssbActionButtons', ssbActionButtons);
 
-function ssbActionButtons(SimpleSiteBuilderService) {
+function ssbActionButtons(SimpleSiteBuilderService, $timeout) {
 
     return {
         restrict: 'E',
@@ -20,6 +20,20 @@ function ssbActionButtons(SimpleSiteBuilderService) {
         link: function(scope, element, attrs, ctrl) {
             scope.pageVersions = [];
             scope.hideHistoryTT = false;
+            scope.spinTimeoutPromise = null;
+
+            scope.$watch(ctrl.state, function(newValue, oldValue) {
+                if (angular.isDefined(ctrl.state.page.published)) {
+                    if (ctrl.state.page.published.date < ctrl.state.page.modified.date) {
+                        if (scope.spinTimeoutPromise) {
+                            $timeout.cancel(scope.spinTimeoutPromise);
+                        }
+                        scope.spinTimeoutPromise = $timeout(function () {
+                            $('.fa.fa-globe.fa-spin').removeClass('fa-spin');
+                        }, 10000);
+                    }
+                }
+            }, true);
 
             scope.historyDropdownFn = function (open) {
                 scope.hideHistoryTT = open;

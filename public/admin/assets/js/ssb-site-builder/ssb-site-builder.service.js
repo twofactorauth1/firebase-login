@@ -1093,29 +1093,29 @@
          */
         function getFontFamilyOptions() {
             return {
-                "'Helvetica Neue', Helvetica, Arial, sans-serif": "Helvetica Neue",
                 "'Arial',Helvetica,sans-serif":"Arial",
+                "'Droid Serif',serif": 'Droid Serif',
                 "'Georgia',serif":"Georgia",
+                "'Helvetica Neue', Helvetica, Arial, sans-serif": "Helvetica Neue",
                 "'Impact',Charcoal,sans-serif":"Impact",
-                "'Tahoma',Geneva,sans-serif":"Tahoma",
-                "'Times New Roman',Times,serif":"Times New Roman",
-                "'Verdana',Geneva,sans-serif":"Verdana",
-                "'Roboto',sans-serif": 'Roboto',
+                "'Lato',sans-serif": 'Lato',
+                "'Lora',serif": 'Lora',
+                "'Merriweather',serif": 'Merriweather',
+                "'Montserrat',sans-serif": 'Montserrat',
+                "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
+                "'Open Sans',sans-serif": 'Open Sans',
+                "'Oswald',sans-serif": 'Oswald',
+                "'Playfair Display',serif": 'Playfair Display',
+                "'Quattrocento',serif": 'Quattrocento',
+                "'Quicksand',sans-serif": 'Quicksand',
+                "'Raleway',sans-serif": 'Raleway',
                 "'Roboto Condensed',sans-serif": 'Roboto Condensed',
                 "'Roboto Slab',serif": 'Roboto Slab',
-                "'Oswald',sans-serif": 'Oswald',
-                "'Droid Serif',serif": 'Droid Serif',
-                "'Open Sans',sans-serif": 'Open Sans',
-                "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
-                "'Lato',sans-serif": 'Lato',
-                "'Raleway',sans-serif": 'Raleway',
-                "'Quicksand',sans-serif": 'Quicksand',
+                "'Roboto',sans-serif": 'Roboto',
+                "'Tahoma',Geneva,sans-serif":"Tahoma",
+                "'Times New Roman',Times,serif":"Times New Roman",
                 "'Ubuntu',sans-serif": 'Ubuntu',
-                "'Montserrat',sans-serif": 'Montserrat',
-                "'Merriweather',serif": 'Merriweather',
-                "'Quattrocento',serif": 'Quattrocento',
-                "'Lora',serif": 'Lora',
-                "'Playfair Display',serif": 'Playfair Display'
+                "'Verdana',Geneva,sans-serif":"Verdana"
             }
         }
 

@@ -1,5 +1,5 @@
 <div ng-controller="OrderDetailCtrl" class="order-detail">
-<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="saveOrder(0,null,myform.$invalid)" save-page-check="!pageSaving"></indig-navprompt>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">

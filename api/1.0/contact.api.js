@@ -577,6 +577,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;
+                var tagSet = campaignId ? req.body.campaignTags : [];
                 var emailId = req.body.emailId;
                 var sendEmail = req.body.sendEmail;
                 var fromContactName = req.body.fromName;
@@ -605,11 +606,12 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('contact_type ', contact_type);
                     if (!contact_type || !contact_type.length) {
                         contact.set('type', 'ld');
-                        contact.set('tags', ['ld']);
+                        tagSet.push('ld');
                     } else {
                         contact.set('type', 'ld');
-                        contact.set('tags', contact_type);
+                        tagSet = tagSet.concat(contact_type);
                     }
+                    contact.set('tags', _.uniq(tagSet));
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
                     }

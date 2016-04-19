@@ -17,6 +17,10 @@ app.directive('footerComponent', ['websiteService', function (WebsiteService) {
           scope.copyrightYear = new Date().getFullYear();
         }
       });
+      // Check for legacy pages
+      if(!element.parents(".ssb-section-layout").length){
+        element.addClass("legacy-footer");
+      }
     }
   }
 }]);

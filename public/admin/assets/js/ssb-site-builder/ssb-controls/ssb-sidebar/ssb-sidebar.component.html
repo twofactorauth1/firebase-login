@@ -231,7 +231,7 @@
                             <div class="ssb-sidebar-sortable-item panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a ng-if="page._id !== vm.state.page._id" href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)">{{page.title}}</a>
+                                        <a ng-if="page._id !== vm.state.page._id" href page-id="page._id" ng-click="vm.loadPage(page)">{{page.title}}</a>
                                         <a ng-if="page._id === vm.state.page._id" href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)">{{vm.state.page.title}}</a>
                                     </h4>
                                 </div>

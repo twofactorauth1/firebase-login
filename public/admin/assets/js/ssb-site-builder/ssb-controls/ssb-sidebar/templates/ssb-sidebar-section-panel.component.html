@@ -298,6 +298,15 @@
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
 
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'layout' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('text-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"

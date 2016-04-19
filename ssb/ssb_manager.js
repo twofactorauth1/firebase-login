@@ -344,6 +344,14 @@ module.exports = {
                            return true;
                        }
                    });
+                   if(gsections){
+                        gsections = _.filter(gsections, function(section){
+                            if(section.get('name') !== 'Header') {
+                               return true;
+                            }
+                        });
+                    }
+
                 }
 
 
@@ -355,6 +363,14 @@ module.exports = {
                             return true;
                         }
                     });
+
+                    if(gsections){
+                        gsections = _.filter(gsections, function(section){
+                            if(section.get('name') !== 'Footer') {
+                               return true;
+                            }
+                        });
+                    }
                 }
                 _.each(sections, function(section){
                     jsonSections.push(section.toReference());
@@ -872,6 +888,17 @@ module.exports = {
                     }
                 });
             },
+            function updatePagePublishedTimestamp(page, cb) {
+              page.set('published', {date:new Date(), by: userId});
+              pageDao.saveOrUpdate(page, function(err, updatedPage) {
+                if (err) {
+                  self.log.error('Error page published timestamp update');
+                  cb(err);
+                } else {
+                  cb(null, updatedPage);
+                }
+              });
+            },
             function dereferenceSections(page, cb) {
                 sectionDao.dereferenceSections(page.get('sections'), function(err, sections){
                     if(err) {
@@ -894,7 +921,12 @@ module.exports = {
                         self.log.error('Error publishing page:', err);
                         cb(err);
                     } else {
-                        pageCacheManager.updateS3Template(accountId, null, pageId, function(){});
+                        pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){
+                            if (err) {
+                                console.debug('Error on S3 template update in updatePage/savePublishedPage');
+                                console.error(err);
+                            }
+                        });
                         cb(err, publishedPage);
                     }
                 });
@@ -1633,15 +1665,6 @@ module.exports = {
                                         self.log.error('Error updating page: ' + err);
                                         cb(err);
                                     } else {
-
-                                        _.each(pages, function(page){
-                                            pageCacheManager.updateS3Template(accountId, null, page.id(), function(err, value){
-                                                if(err) {
-                                                    self.log.error('Error updating template for page [' + page.id() + ']:', err);
-                                                }
-                                            });
-                                        });
-
                                         cb(null, updatedPage, updatedSections);
                                     }
                                 });
@@ -1668,8 +1691,6 @@ module.exports = {
             }
             self.log.debug('<< updatePage');
             fn(err, updatedPage);
-            //update the page cache after return.  We don't need the user to wait for this.
-            pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
         });
     },
 

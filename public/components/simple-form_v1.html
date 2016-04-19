@@ -53,9 +53,9 @@
                             <button ng-if="!isEditing" type="submit" style="{{buttonStyle(component.btn)}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn ssb-theme-btn btn-default btn-block btn-simple-form" ng-disabled="simpleForm.$invalid" ng-class="{'custom-orange': component.customBtn}">
                                 <span elem ng-model="component.submitBtn"></span>
                             </button>
-                            <div ng-if="isEditing" style="{{buttonStyle(component.btn)}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn ssb-theme-btn btn-default btn-block btn-simple-form" ng-class="{'custom-orange': component.customBtn}">
+                            <div ng-if="isEditing" style="{{buttonStyle(component.btn)}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn ssb-theme-btn btn-default btn-block btn-simple-form inline-block" ng-class="{'custom-orange': component.customBtn}">
                                 <span elem ng-model="component.submitBtn"></span>
-                            </button>
+                            </div>
                         </div>
                         <div class="clearfix mb15"></div>
                         <div ng-show="formSuccess">
