@@ -1116,7 +1116,7 @@
     margin-left: 0;
     clear: none;
     width: auto;
-    overflow: initial;
+    overflow: inherit;
   }
 }
 #componentloader .top-bar-v1 .left-block {

@@ -1102,7 +1102,7 @@ div[data-type="feature-list"] .inner-page {
     margin-left: 0;
     clear: none;
     width: auto;
-    overflow: initial;
+    overflow: inherit;
   }
 }
 .top-bar-v1 .left-block {
