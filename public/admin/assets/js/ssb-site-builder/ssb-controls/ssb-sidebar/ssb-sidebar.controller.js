@@ -1063,8 +1063,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function initializeMapSlider(){
+        console.log('refresh slider');
         $timeout(function () {
-            $(window).trigger('resize');
+          $scope.$broadcast('rzSliderForceRender');
         }, 0);
     }
 
