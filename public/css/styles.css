@@ -10561,6 +10561,10 @@ ssb-topbar.dragging {
   font-size: 13px;
   margin-bottom: 32px;
 }
+.ssb-sidebar .head-menu-links a.nav-link-label {
+  word-break: break-word;
+  padding-right: 30% !important;
+}
 .ssb-sidebar .head-menu-links .container-fluid > div > div {
   padding: 0 1em 0;
 }
