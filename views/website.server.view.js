@@ -302,7 +302,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, pages){
                     cb(err, webpageData, pages);
                 });
-                
+
             },
             function checkFor404(webpageData, pages, cb) {
                 var pageHandle = handle || 'index';
@@ -381,6 +381,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 data.pages = pageHolder;
                 data.account = value;
+                data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
                 value.website = value.website || {};
