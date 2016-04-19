@@ -9296,9 +9296,6 @@ ssb-topbar .ui-select-match-text > small {
 /*
  * OVERRIDES FOR LEGACY COMPONENT STYLES
  */
-.ssb-main .social-link-v1 .social-link > .btn.social-links {
-  display: none;
-}
 .ssb-main .video-block .videogular-container {
   max-width: 100%!important;
   width: 100%!important;
