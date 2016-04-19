@@ -13030,6 +13030,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 .post_content_div {
   min-height: 500px;
 }
+.nav.navbar-nav .edit-wrap .fr-element.fr-view {
+  min-width: 80px;
+}
 .edit-wrap {
   margin: -1px;
   position: relative;

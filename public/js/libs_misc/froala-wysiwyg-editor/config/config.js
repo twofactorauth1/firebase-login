@@ -137,5 +137,6 @@ $.FroalaEditor.config = {
     },
     imageUploadURL: "/api/1.0/assets/editor/upload",
     linkMultipleStyles: false,
-    paragraphMultipleStyles: false
+    paragraphMultipleStyles: false,
+    placeholderText: 'Type here'
 }
