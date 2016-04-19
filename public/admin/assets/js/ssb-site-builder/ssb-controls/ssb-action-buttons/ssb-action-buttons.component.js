@@ -23,14 +23,16 @@ function ssbActionButtons(SimpleSiteBuilderService, $timeout) {
             scope.spinTimeoutPromise = null;
 
             scope.$watch(ctrl.state, function(newValue, oldValue) {
-              if (ctrl.state.page.published.date < ctrl.state.page.modified.date) {
-                if (scope.spinTimeoutPromise) {
-                  $timeout.cancel(scope.spinTimeoutPromise);
+                if (angular.isDefined(ctrl.state.page.published)) {
+                    if (ctrl.state.page.published.date < ctrl.state.page.modified.date) {
+                        if (scope.spinTimeoutPromise) {
+                            $timeout.cancel(scope.spinTimeoutPromise);
+                        }
+                        scope.spinTimeoutPromise = $timeout(function () {
+                            $('.fa.fa-globe.fa-spin').removeClass('fa-spin');
+                        }, 10000);
+                    }
                 }
-                scope.spinTimeoutPromise = $timeout(function () {
-                  $('.fa.fa-globe.fa-spin').removeClass('fa-spin');
-                }, 10000);
-              }
             }, true);
 
             scope.historyDropdownFn = function (open) {
