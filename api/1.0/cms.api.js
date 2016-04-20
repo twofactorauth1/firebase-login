@@ -10,7 +10,8 @@ var baseApi = require('../base.api.js');
 //TODO: there shouldn't be DAO references here
 
 var cmsDao = require('../../cms/dao/cms.dao.js');
-var mandrillHelper = require('../../utils/mandrillhelper');
+
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var Page = require('../../cms/model/page');
 var Topic = require('../../cms/model/topic');
 require('../../cms/model/email');
@@ -398,7 +399,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.warn('email will not be sent.');
             } else {
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
-                mandrillHelper.sendTestEmail(
+                emailMessageManager.sendTestEmail(
                     emailDataObj.content.fromEmail,
                     emailDataObj.content.fromName,
                     emailDataObj.address.email,

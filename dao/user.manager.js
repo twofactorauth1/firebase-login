@@ -17,7 +17,7 @@ var analyticsManager = require('../analytics/analytics_manager');
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var workstreamManager = require('../workstream/workstream_manager');
 
-var mandrillHelper = require('../utils/mandrillhelper');
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
 var async = require('async');
@@ -171,7 +171,7 @@ module.exports = {
                             "content": user.get('username')
                         }
                     ];
-                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                    emailMessageManager.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                         notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
                         htmlContent, accountId, user.id(), vars, null, contactId, function (err, result) {
                         });

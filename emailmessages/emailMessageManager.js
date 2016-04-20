@@ -603,6 +603,7 @@ var emailMessageManager = {
 
     getMessageInfo: function(messageId, fn) {
         //TODO: this
+        fn();
     },
 
     _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {

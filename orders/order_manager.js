@@ -12,7 +12,8 @@ var stripeDao = require('../payments/dao/stripe.dao');
 var paymentManager = require('../payments/payments_manager');
 var contactDao = require('../dao/contact.dao');
 require('./model/order');
-var mandrillHelper = require('../utils/mandrillhelper');
+
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 var accountDao = require('../dao/account.dao');
 var cmsManager = require('../cms/cms_manager');
 var productManager = require('../products/product_manager');
@@ -586,7 +587,7 @@ module.exports = {
                                                 log.debug('juiced - one ' + _html);
                                                 html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             }
-                                            mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
                                                 log.debug('Admin Notification Sent');
                                             });
                                         });
@@ -608,7 +609,7 @@ module.exports = {
                                             html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         }
 
-                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
+                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
                                             callback(null, account, updatedOrder);
                                         });
                                     });
@@ -630,7 +631,7 @@ module.exports = {
                                                     html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                 }
 
-                                                mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
                                                     log.debug('Admin Notification Sent');
                                                 });
                                             });
@@ -747,7 +748,7 @@ module.exports = {
                                         log.warn('email will not be sent.');
                                         cb();
                                     } else {
-                                        mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, bcc, function(){
+                                        emailMessageManager.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, bcc, function(){
                                             if(err) {
                                                 log.warn('Error sending email');
                                                 order.get("notes").push({
@@ -1557,7 +1558,7 @@ module.exports = {
                                             log.debug('juiced - one ' + _html);
                                             html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         }
-                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
                                             log.debug('Admin Notification Sent');
                                         });
                                     });
@@ -1576,7 +1577,7 @@ module.exports = {
                                         html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                     }
 
-                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, template._id, function(){
+                                    emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, template._id, function(){
                                     });
                                 });
 
@@ -1595,7 +1596,7 @@ module.exports = {
                                                 html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             }
 
-                                            mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, template._id, function(){
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, template._id, function(){
                                                 log.debug('Admin Notification Sent');
                                             });
                                         });
