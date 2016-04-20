@@ -18,9 +18,10 @@ var appConfig = require('../configs/app.config');
 var sendgridConfig = require('../configs/sendgrid.config');
 var sendgrid  = require('sendgrid')(sendgridConfig.API_KEY);
 var dao = require('./dao/emailmessage.dao');
+var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
+var serialize = require('node-serialize');
 
-
-module.exports = {
+var emailMessageManager = {
 
     log:log,
 
@@ -33,15 +34,13 @@ module.exports = {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-                //TODO: replace *|SITEURL|* and *|USERNAME|*
-                self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
-                    vars.push({
-                        "name": "SENDDATE",
-                        "content": moment().format('MMM Do, YYYY')
-                    });
-                    _.each(vars, function(eachvar){
-                        //TODO: replace each name with content in vars
-                    });
+                vars.push({
+                    "name": "SENDDATE",
+                    "content": moment().format('MMM Do, YYYY')
+                });
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+
+
                     var params = {
                         smtpapi:  new sendgrid.smtpapi(),
                         to:       [toAddress],
@@ -66,7 +65,6 @@ module.exports = {
                     }
 
 
-                    //TODO: do we need SENDDATE?
                     self._safeStoreEmail(params, accountId, userId, function(err, emailmessage){
                         //we should not have an err here
                         if(err) {
@@ -106,13 +104,12 @@ module.exports = {
             if (isUnsubscribed == true) {
                 fn(null, 'skipping email for user on unsubscribed list');
             } else {
-                self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
                     //inline styles
                     juice.juiceResources(mergedHtml, {}, function(err, html){
-                        //TODO: do we need to handle SENDDATE?
-
+                        //smtpapi:  new sendgrid.smtpapi(),
                         var params = {
-                            smtpapi:  new sendgrid.smtpapi(),
+
                             to:       [toAddress],
                             from:     fromAddress,
                             fromname: '',
@@ -138,6 +135,13 @@ module.exports = {
                                 return fn(err);
                             } else {
                                 var email = new sendgrid.Email(params);
+                                var uniqueArgs = {
+                                    emailmessageId: emailmessage.id(),
+                                    accountId:accountId,
+                                    emailId: emailId,
+                                    campaignId: campaignId,
+                                    contactId: contactId
+                                };
                                 email.setUniqueArgs({
                                     emailmessageId: emailmessage.id(),
                                     accountId:accountId,
@@ -159,12 +163,13 @@ module.exports = {
                                     self.log.debug('send details >>> ', stepSettings.sendAt);
                                     // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
                                     // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
-                                    stepSettings.sendAt.month = stepSettings.sendAt.month-1;
+                                    stepSettings.sendAt.month = stepSettings.sendAt.month;
+                                    self.log.debug('moment thinks sendAt is ' + moment(stepSettings.sendAt).toDate());
                                     send_at = moment.utc(stepSettings.sendAt).unix();
                                     now_at = moment.utc();
                                     self.log.debug('send_at formatted >>> ', send_at);
-                                    self.log.debug('now_at formatted >>> ', now_at);
-                                    if(moment(send_at).isBefore(now_at)) {
+                                    self.log.debug('now_at formatted >>> ', now_at.unix());
+                                    if(moment.utc(stepSettings.sendAt).isBefore(now_at)) {
                                         self.log.debug('Sending email now because ' + send_at + ' is in the past.');
                                         send_at = moment().utc().unix();
                                     }
@@ -174,17 +179,47 @@ module.exports = {
                                     send_at = moment().utc().unix();
                                 }
                                 //TODO: if this is more than 72 hours in the future, it will (may) fail
-                                email.setSendAt(send_at);
+                                //FIXME: Here
 
-                                sendgrid.send(email, function(err, json) {
-                                    if (err) {
-                                        self.log.error('Error sending email:', err);
-                                        return fn(err);
-                                    } else {
+                                var maxSendTime = moment().add(72, 'hours');
+                                email.setSendAt(send_at);
+                                if(maxSendTime.isBefore(moment.utc(stepSettings.sendAt))) {
+                                    //schedule the email
+                                    self.log.debug('Scheduling email');
+                                    var code = '';
+                                    code+= 'var emailJSON = ' + serialize.serialize(params) + ';';
+                                    code+= 'var uniqueArgs = ' + serialize.serialize(uniqueArgs) + ';';
+                                    code+= 'var send_at = ' + send_at + ';';
+                                    code+= '$$.u.emailMessageManager._sendEmailJSON(emailJSON, uniqueArgs, send_at, function(){});';
+
+                                    var scheduledJob = new $$.m.ScheduledJob({
+                                        accountId: accountId,
+                                        scheduledAt: moment.utc(stepSettings.sendAt).toDate(),
+                                        runAt: null,
+                                        job:code
+                                    });
+
+
+                                    scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
                                         self.log.debug('<< sendAccountWelcomeEmail');
-                                        return fn(null, json);
-                                    }
-                                });
+                                        return fn(err, value);
+                                    });
+
+                                } else {
+                                    //send the email
+                                    sendgrid.send(email, function(err, json) {
+                                        if (err) {
+                                            self.log.error('Error sending email:', err);
+                                            return fn(err);
+                                        } else {
+                                            self.log.debug('<< sendAccountWelcomeEmail');
+                                            return fn(null, json);
+                                        }
+                                    });
+                                }
+
+
+
                             }
                         });
                     });
@@ -210,7 +245,7 @@ module.exports = {
                         "content": orderId
                     }
                 );
-                //TODO: Handle SENDDATE and ORDERID
+                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
 
                 var params = {
                     smtpapi:  new sendgrid.smtpapi(),
@@ -275,7 +310,7 @@ module.exports = {
                         "content": orderId
                     }
                 );
-                //TODO: Handle SENDDATE and ORDERID
+                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
                 juice.juiceResources(htmlContent, {}, function(err, html) {
                     if (err) {
                         self.log.error('A juice error occurred. Failed to set styles inline.');
@@ -340,11 +375,12 @@ module.exports = {
                     "name": "SENDDATE",
                     "content": moment().format('MMM Do, YYYY')
                 });
-                //TODO: do we need to handle SENDDATE
+
                 fs.readFile('templates/emails/new_customer.html', 'utf-8', function(err, htmlContent){
                     if (err) {
                         self.log.error('Error getting new customer email file.  Welcome email not sent for accountId ' + accountId, err);
                     } else {
+                        htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
                         var subject = 'You have a new customer!';
                         var fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
                         var fromName = notificationConfig.WELCOME_FROM_NAME;
@@ -402,13 +438,14 @@ module.exports = {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
+                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
                 juice.juiceResources(htmlContent, {}, function(err, html) {
                     if (err) {
                         self.log.error('A juice error occurred. Failed to set styles inline.');
                         self.log.error(err);
                         return fn(err, null);
                     }
-                    //TODO: Do we need to handle SENDDATE
+
                     var params = {
                         smtpapi:  new sendgrid.smtpapi(),
                         to:       [toAddress],
@@ -463,14 +500,14 @@ module.exports = {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-                self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
                     juice.juiceResources(mergedHtml, {}, function(err, html) {
                         if (err) {
                             self.log.error('A juice error occurred. Failed to set styles inline.');
                             self.log.error(err);
                             return fn(err, null);
                         }
-                        //TODO: Do we need to handle SENDDATE
+
                         var params = {
                             smtpapi:  new sendgrid.smtpapi(),
                             to:       [toAddress],
@@ -521,7 +558,7 @@ module.exports = {
     sendMailReplacement : function(from, to, cc, subject, htmlText, text, fn) {
         var self = this;
         self.log.debug('>> sendMailReplacement');
-        //TODO: handle SENDDATE?
+
         var params = {
             smtpapi:  new sendgrid.smtpapi(),
             to:       [to],
@@ -601,7 +638,7 @@ module.exports = {
         });
     },
 
-    _findReplaceMergeTags : function(accountId, contactId, htmlContent, fn) {
+    _findReplaceMergeTags : function(accountId, contactId, htmlContent, vars, fn) {
         var self = this;
 
         var _account = null;
@@ -775,6 +812,16 @@ module.exports = {
 
                     }
                 });
+                var siteUrl = null;
+                var userName = null;
+                if(_account) {
+                    siteUrl = _account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                }
+                if(_user) {
+                    userName = _user.get('username');
+                }
+                //do the vars
+                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
 
                 if (fn) {
                     fn(htmlContent);
@@ -788,6 +835,16 @@ module.exports = {
                 return;
             }
         });
+    },
+
+    _replaceMandrillStyleVars: function(vars, htmlContent) {
+        _.each(vars, function(_var){
+            if(htmlContent.indexOf(_var.name) > -1) {
+                var regexp = new RegExp('\\*\\|' + _var.name + '\\|\\*', 'g');
+                htmlContent = htmlContent.replace(regexp, _var.content);
+            }
+        });
+        return htmlContent;
     },
 
     _safeStoreEmail: function(sendgridParam, accountId, userId, fn) {
@@ -813,7 +870,44 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+    _sendEmailJSON: function(json, uniqueArgs, send_at, fn) {
+        var self = this;
+        self.log.debug('>> _sendEmailJSON');
+        self.log.debug('json:', json);
+        self.log.debug('uniqueArgs:', uniqueArgs);
+        self.log.debug('send_at:', send_at);
+        var params = serialize.unserialize(json);
+        //need to fix the to addresses... should be an array
+        var arr =[];
+        for( var i in params.to ) {
+            if (params.to.hasOwnProperty(i)){
+                if(typeof i != 'number') {
+                    arr.push(params.to[i]);
+                } else {
+                    arr[i] = params.to[i];
+                }
+            }
+        }
+        params.to = arr;
+
+        var emailObj = new sendgrid.Email(params);
+        emailObj.setUniqueArgs(serialize.unserialize(uniqueArgs));
+        emailObj.setSendAt(send_at);
+        sendgrid.send(emailObj, function(err, json) {
+            if (err) {
+                self.log.error('Error sending email:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< _sendEmailJSON');
+                return fn(null, json);
+            }
+        });
     }
+};
 
+$$.u = $$.u || {};
+$$.u.emailMessageManager = emailMessageManager;
 
-}
+module.exports = emailMessageManager;

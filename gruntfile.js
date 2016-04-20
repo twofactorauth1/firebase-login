@@ -16,12 +16,12 @@ var PAYPAL_CONFIG = require('./configs/paypal.config');
 
 var hostfileGenerator = require('./utils/hostfile.generator');
 var dbcopyutil = require('./utils/dbcopyutil');
-var wordpressConverter = require('./utils/wordpressconverter');
+//var wordpressConverter = require('./utils/wordpressconverter');
 var jsincludeGenerator = require('./utils/jsincludegenerator');
 var srcfiles = [];
 
 var bowerLockdown = require('./utils/bowerlockdown');
-var accountActivity = require('./utils/accountActivity');
+
 var _ = require('underscore');
 
 module.exports = function(grunt) {
@@ -290,7 +290,8 @@ module.exports = function(grunt) {
             ssl: ['certificates/test/ssldotcom.dao_test.js'],
             ssl_manager: ['certificates/test/manager_test.js'],
             stripe_cleanup: ['payments/tests/stripe_cleanup.js'],
-            ssb: ['ssb/test/ssb_manager_test.js']
+            ssb: ['ssb/test/ssb_manager_test.js'],
+            scheduler: ['scheduledjobs/tests/manager_test.js']
         },
 
         // Running Karma from Grunt, with documentation from here:
@@ -548,16 +549,19 @@ module.exports = function(grunt) {
 
     grunt.registerTask('activity-report', 'Account Activity Report', function(){
         var done = this.async();
+        var accountActivity = require('./utils/accountActivity');
         accountActivity.runReport(done);
     });
 
     grunt.registerTask('cleanupAccounts', 'Cleanup Accounts', function(){
         var done = this.async();
+        var accountActivity = require('./utils/accountActivity');
         accountActivity.cleanupAccounts(done);
     });
 
     grunt.registerTask('cleanupContacts', 'Cleanup Contacts', function(){
         var done = this.async();
+        var accountActivity = require('./utils/accountActivity');
         accountActivity.cleanupContacts(done);
     });
 
@@ -626,4 +630,5 @@ module.exports = function(grunt) {
     grunt.registerTask('ssl_manager', ['nodeunit:ssl_manager']);
     grunt.registerTask('stripe_cleanup', ['nodeunit:stripe_cleanup']);
     grunt.registerTask('ssb', ['nodeunit:ssb']);
+    grunt.registerTask('scheduler', ['nodeunit:scheduler']);
 };
