@@ -222,12 +222,22 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> exportCsvContacts');
         var accountId = parseInt(self.accountId(req));
+        var query = {accountId: accountId};
+
+        if (req.query.ids) {
+          if (_.isArray(req.query.ids)) {
+            query['_id'] = {'$in': _.map(req.query.ids, function (x) {return parseInt(x);})};
+          } else {
+            query['_id'] = parseInt(req.query.ids);
+          }
+        }
+        self.log.debug('export query >>', query);
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
                 if (isAllowed !== true) {
                     return self.send403(resp);
                 } else {
-                    contactDao.findMany({accountId:accountId}, $$.m.Contact, function(err, contacts){
+                    contactDao.findMany(query, $$.m.Contact, function(err, contacts){
                         var csv = "first,middle,last,email,created,type,tags\n";
                         _.each(contacts, function(contact){
                             csv += contact.get('first') + ',';
