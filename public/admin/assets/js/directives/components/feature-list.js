@@ -24,7 +24,7 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
         resetHeight();
         $timeout(function () {
           scope.resizeFeatureTiles();
-        }, 1000)
+        }, 0)
       };
 
       scope.deleteFeatureList = function (index) {
