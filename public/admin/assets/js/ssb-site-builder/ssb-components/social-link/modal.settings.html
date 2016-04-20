@@ -34,8 +34,8 @@
         <div class="clearfix"></div>
     </div>
     <div class="modal-footer">
-        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'update')">Update {{vm.social.tooltip}}</button>
-        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'delete')" data-dismiss="modal">Delete {{vm.social.tooltip}}</button>
-        <button ng-if="!vm.social.selectedLink && vm.social.name" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'add')">Add {{vm.social.tooltip}}</button>
+        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary no-transtion-btn" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'update')">Update {{vm.social.tooltip}}</button>
+        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary no-transtion-btn" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'delete')" data-dismiss="modal">Delete {{vm.social.tooltip}}</button>
+        <button ng-if="!vm.social.selectedLink && vm.social.name" type="button" class="btn btn-primary no-transtion-btn" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'add')">Add {{vm.social.tooltip}}</button>
     </div>
 </script>
