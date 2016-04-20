@@ -14,15 +14,11 @@
       dashboard: [],
       emails: [],
       faqs: [],
-      'getting-started': [],
       integrations: [],
       orders: [],
-      pages: [],
       posts: [],
       products: [],
       profile: [],
-      'site-analytics': [],
-      'social-feed': [],
       websites: [],
     };
 
