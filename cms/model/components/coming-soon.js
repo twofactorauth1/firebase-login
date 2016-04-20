@@ -42,11 +42,6 @@ var component = $$.m.ModelBase.extend({
              */
             version: 1,
 
-            /**
-             *
-             *
-             */
-            txtcolor: "#ffffff",
 
             /**
              *
@@ -64,7 +59,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor : "#ffffff",
+            txtcolor : "",
 
             /**
              *

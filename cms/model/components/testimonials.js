@@ -32,7 +32,7 @@ var component = $$.m.ModelBase.extend({
 
             title:"<span style='font-size:36px'>Testimonials</span>",
 
-            txtcolor: "#444",
+            txtcolor: "",
 
 
             /**
@@ -40,14 +40,14 @@ var component = $$.m.ModelBase.extend({
              */
             type: "testimonials",
 
-            testimonials : [ 
+            testimonials : [
                 {
                     "img" : "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
                     "name" : "First Last",
                     "site" : "www.examplesite.com",
                     "text" : "This is the testimonial.",
                     "active" : true
-                }, 
+                },
                 {
                     "img" : "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
                     "name" : "First Last",
@@ -59,7 +59,7 @@ var component = $$.m.ModelBase.extend({
 
             slider : {
                 speed: 300,
-                autoPlay: true, 
+                autoPlay: true,
                 autoPlayInterval: 5000
             },
 
