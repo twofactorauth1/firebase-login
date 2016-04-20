@@ -117,6 +117,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.wrapError(resp, 500, err, "Error deleting page");
                     } else {
                         self.send200(resp);
+                        self.createUserActivity(req, 'DELETE_PAGE', null, {pageId: pageId}, function(){});
                     }
                 });
             }
@@ -279,7 +280,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 var created = {date: new Date(), by:self.userId(req)};
                 ssbManager.createPage(accountId, websiteId, templateId, created, function(err, page){
                     self.log.debug('<< createPage');
-                    return self.sendResultOrError(resp, err, page, "Error creating page");
+                    self.sendResultOrError(resp, err, page, "Error creating page");
+                    self.createUserActivity(req, 'CREATE_PAGE', null, {pageId: page._id}, function(){});
                 });
             }
         });
@@ -302,7 +304,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 var created = {date: new Date(), by:self.userId(req)};
                 ssbManager.createDuplicatePage(accountId, duplicatePage, created, function(err, page){
                     self.log.debug('<< createDuplicatePage');
-                    return self.sendResultOrError(resp, err, page, "Error creating page");
+                    self.sendResultOrError(resp, err, page, "Error creating page");
+                    self.createUserActivity(req, 'CREATE_DUPLICATE_PAGE', null, {pageId: page._id}, function(){});
                 });
             }
         });
@@ -347,6 +350,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(resp, err, page, "Error updating page");
+                    self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
         });
@@ -364,6 +368,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 ssbManager.publishPage(accountId, pageId, self.userId(req), function(err, page){
                     self.log.debug('<< publishPage');
                     self.sendResultOrError(resp, err, page, "Error publishing page");
+                    self.createUserActivity(req, 'PUBLISH_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
         });
@@ -548,6 +553,7 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsManager.revertPage(pageId, versionId, function (err, revertedPage) {
             self.log.debug('<< getPageVersions');
             return self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
+            self.createUserActivity(req, 'REVERT_PAGE', null, {pageId: pageId}, function(){});
         });
     }
 

@@ -264,6 +264,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.addWebsiteLinklists(websiteId, linkLists, function (err, value) {
                     self.log.debug('<< addWebsiteLinklists');
                     self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self.createUserActivity(req, 'ADD_WEBSITE_LINK_LISTS', null, {_id:websiteId}, function(){});
                     self = value = null;
                 });
             }
@@ -288,6 +289,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updateWebsiteLinklists(websiteId, handle, linkLists, function (err, value) {
                     self.log.debug('<< updateWebsiteLinklists');
                     self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self.createUserActivity(req, 'UPDATE_WEBSITE_LINK_LISTS', null, {_id:websiteId}, function(){});
                     self = value = null;
                 });
             }
@@ -311,6 +313,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteWebsiteLinklists(websiteId, handle, function (err, value) {
                     self.log.debug('<< deleteWebsiteLinklists');
                     self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self.createUserActivity(req, 'DELETE_WEBSITE_LINK_LISTS', null, {_id:websiteId}, function(){});
                     self = value = null;
                 });
             }
@@ -567,7 +570,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
                     self._updatePageCache(pageUrl, accountId, page.get('handle'), null);
-                    self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
+                    self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
 
                 });
             }
@@ -613,7 +616,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl, accountId, pageObj.handle, temp);
-                        self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
+                        self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
                     });
                 } else {
                     self.log.error('Cannot create null page.');
