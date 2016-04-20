@@ -153,8 +153,8 @@ var component = $$.m.ModelBase.extend({
             submitBtn: "I'm Interested",
 
             btn:{
-                color: "#333",
-                bgcolor: "#ccc"
+                color: "",
+                bgcolor: ""
             },
 
             uniqueEmail: false

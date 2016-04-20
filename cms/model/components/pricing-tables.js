@@ -38,9 +38,9 @@ var component = $$.m.ModelBase.extend({
              * The label for the component
              * (optional)
              */
-            title:"<h1>Pricing Table</h1>",            
+            title:"<h1>Pricing Table</h1>",
 
-            txtcolor: "#444",
+            txtcolor: "",
             tblbgcolor: null,
             tables : [
                 {

@@ -5546,6 +5546,9 @@ input[type="checkbox"] {
   outline: none !important;
   position: relative;
 }
+.btn.no-transtion-btn {
+  transition: none !important;
+}
 .btn:after {
   content: "";
   position: absolute;

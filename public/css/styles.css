@@ -6451,6 +6451,9 @@ a.text-light:hover {
   outline: none !important;
   position: relative;
 }
+.btn.no-transtion-btn {
+  transition: none !important;
+}
 .btn:after {
   content: "";
   position: absolute;
@@ -11316,7 +11319,7 @@ ssb-topbar .ui-select-match-text > small {
   background-repeat: no-repeat;
 }
 .ssb-section-layout .bg-video {
-  width: 100vw;
+  width: 100%;
   height: 56.25vw;
   margin: 0 auto;
   pointer-events: none;
