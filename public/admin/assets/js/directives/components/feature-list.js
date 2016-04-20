@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('featureListComponent',["$window", function ($window) {
+app.directive('featureListComponent',["$window", "$timeout", function ($window, $timeout) {
   return {
     scope: {
       component: '=',
@@ -21,12 +21,18 @@ app.directive('featureListComponent',["$window", function ($window) {
         };
 
         scope.component.features.splice(index + 1, 0, newFeature);
-        scope.resizeFeatureTiles();
+        resetHeight();
+        $timeout(function () {
+          scope.resizeFeatureTiles();
+        }, 1000)
       };
 
       scope.deleteFeatureList = function (index) {
         scope.component.features.splice(index, 1);
-        scope.resizeFeatureTiles();
+        resetHeight();
+        $timeout(function () {
+          scope.resizeFeatureTiles();
+        }, 2000)
       };
 
       scope.resizeFeatureTiles = function (argument) {
@@ -39,13 +45,20 @@ app.directive('featureListComponent',["$window", function ($window) {
           element.css("min-height", maxFeatureHeight);
         }
       };
+
+      function resetHeight(){
+        var parent_id = scope.component.anchor || scope.component._id;
+        var element = angular.element("#"+parent_id + " div.feature-height");
+        element.css("min-height", 0);
+      }
+
       angular.element($window).bind('resize', function () {
         scope.resizeFeatureTiles();
       });
       angular.element(document).ready(function () {
-        setTimeout(function () {
+        $timeout(function () {
           scope.resizeFeatureTiles();
-        }, 1000)
+        }, 1000);
       });
     }
   };
