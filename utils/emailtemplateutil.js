@@ -7,8 +7,7 @@
 
 var appConfig = require('../configs/app.config');
 var accountDao = require('../dao/account.dao');
-var mandrillHelper = require('./mandrillhelper');
-
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 
 //region CLASS - TOKENIZABLE
 var Tokenizable = function(str) {
@@ -133,22 +132,13 @@ var emailTemplateUtil = {
                 }
 
                 var emailStr = tokenizable.value();
-                mandrillHelper.sendBasicEmail(appConfig.support_email, 'Indigenous Support', to, null, subject, emailStr, 0, [], null, function(err, value){
+                emailMessageManager.sendBasicEmail(appConfig.support_email, 'Indigenous Support', to, null, subject, emailStr, 0, [], null, function(err, value){
                     if (!err) {
                         fn(null, "ok");
                     } else {
                         fn(err, value);
                     }
                 });
-                /*
-                $$.g.mailer.sendMail(null, to, null, subject, emailStr, function(err, value) {
-                    if (!err) {
-                        fn(null, "ok");
-                    } else {
-                        fn(err, value);
-                    }
-                });
-                */
             } else {
                 fn(err, value);
             }

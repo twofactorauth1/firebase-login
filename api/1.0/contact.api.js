@@ -18,7 +18,7 @@ var Contact = require('../../models/contact');
 var request = require('request');
 var fullContactConfig = require('../../configs/fullcontact.config');
 
-var mandrillHelper = require('../../utils/mandrillhelper');
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var notificationConfig = require('../../configs/notification.config');
 var fs = require('fs');
 var geoIPUtil = require('../../utils/geoiputil');
@@ -558,7 +558,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                     var toAddress = value.get('business').emails[0].email;
                     var toName = '';
-                    mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
+                    emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
                         self.log.debug('email sent');
                     });
 
@@ -696,10 +696,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                      * 3. Get the HTML from the email component
                                      * 4. Set it as data.content
                                      * 5. Call app.render('email/base_email', data...
-                                     * 6. Pass it to mandrillHelper
+                                     * 6. Pass it to emailMessageManager
                                      * 7. RETURN
                                      * 8. Get the default welcome html if no page exists
-                                     * 9. Call mandrillHelper
+                                     * 9. Call emailMessageManager
                                      */
 
                                     accountDao.getAccountByID(query.accountId, function(err, account){
@@ -726,7 +726,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             //skipping welcome email for now
                                                             self.log.warn("No email content.  Skipping");
                                                             /*
-                                                            mandrillHelper.sendAccountWelcomeEmail(fromEmail,
+                                                             emailMessageManager.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                                                 htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
                                                                 */
@@ -796,7 +796,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
                                                             try{
-                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, null, vars, emailPage.get('_id'), savedContact.id(), function(err, result){
+                                                                emailMessageManager.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, null, vars, emailPage.get('_id'), savedContact.id(), function(err, result){
                                                                     self.log.debug('result: ', result);
                                                                 });
                                                             } catch(exception) {
@@ -1223,7 +1223,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var vars = [];
 
 
-                mandrillHelper.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
+                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

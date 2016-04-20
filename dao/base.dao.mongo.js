@@ -676,6 +676,31 @@ var mongodao = {
         );
     },
 
+    _findAndModifyMongo: function(collection, query, sort, remove, update, isNew, fields, upsert,
+                                  bypassDocumentValidation, writeConcern, fn) {
+        var self = this;
+        self.log.debug('>> _findAndModifyMongo');
+
+        var options = {
+            remove:remove,
+            'new':isNew,
+            fields:fields,
+            upsert:upsert,
+            bypassDocumentValidation:bypassDocumentValidation,
+            writeConcern:writeConcern
+        };
+        //findAndModify (query, sort, doc, options, callback)
+        self.mongo(collection).findAndModify(query, sort, update, options, function(err, value){
+            if(err) {
+                self.log.error('Error in _findAndModifyMongo:', err);
+                fn(err);
+            } else {
+                self.log.debug('<< _findAndModifyMongo');
+                fn(null, value);
+            }
+        });
+    },
+
 
     _getNextSequence: function (collection, fn) {
         var self = this;
