@@ -150,9 +150,13 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                   }
                   else{
                     if(vm.page._id === vm.parentVm.state.page._id){
+
                       SimpleSiteBuilderService.page = data.data;
                       $timeout(function() {
                         vm.parentVm.state.pendingPageChanges = false;
+                        if (vm.parentVm.uiState && vm.parentVm.uiState.selectedPage) {
+                            vm.parentVm.uiState.selectedPage = vm.parentVm.state.page;
+                        }
                       }, 0);
                     }
                     vm.parentVm.closeModal();
