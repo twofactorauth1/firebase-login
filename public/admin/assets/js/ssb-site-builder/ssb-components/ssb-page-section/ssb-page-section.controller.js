@@ -30,7 +30,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (_id && vm.section.bg.video.show) {
             $timeout(function() {
                 vm.setupVideoBackground();
-            });
+            }, 1000);
         }
     });
 
