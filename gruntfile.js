@@ -297,8 +297,17 @@ module.exports = function(grunt) {
         // Running Karma from Grunt, with documentation from here:
         // https://github.com/karma-runner/grunt-karma
         karma: {
-            unit: {
+            options: {
                 configFile: 'karma.conf.js',
+                singleRun: false
+            },
+            unit: {
+                singleRun: true,
+                client: {
+                    captureConsole: false
+                }
+            },
+            dev: {
                 singleRun: true
             }
         },
