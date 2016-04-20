@@ -552,7 +552,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var versionId = parseInt(req.params.versionId);
         cmsManager.revertPage(pageId, versionId, function (err, revertedPage) {
             self.log.debug('<< getPageVersions');
-            return self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
+            self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
             self.createUserActivity(req, 'REVERT_PAGE', null, {pageId: pageId}, function(){});
         });
     }
