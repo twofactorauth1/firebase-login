@@ -16,7 +16,7 @@
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
 
-    $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
+    $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}, {data: 'export', label: 'Export'}];
 
     $scope.filterCustomerPhotos = function (customers) {
       _.each(customers, function (customer) {
@@ -567,6 +567,14 @@
         if ($scope.bulkActionChoice.action.data == 'tags') {
             $scope.bulkActionChoice = {};
             $scope.openSimpleModal('tags-bulk-action-modal');
+        }
+
+        if ($scope.bulkActionChoice.action.data == 'export') {
+          CustomerService.exportCsvContacts(_.pluck($scope.selectedCustomersFn(), '_id'));
+          $scope.bulkActionChoice = null;
+          $scope.bulkActionChoice = {};
+          $scope.clearSelectionFn();
+          toaster.pop('success', 'Customer export started.');
         }
     };
 
