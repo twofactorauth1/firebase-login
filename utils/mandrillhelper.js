@@ -1221,7 +1221,6 @@ var mandrillHelper =  {
 $$.u = $$.u || {};
 $$.u.mandrillHelper = mandrillHelper;
 
-$$.g.mailer = $$.g.mailer || {};
-$$.g.mailer.sendMail = mandrillHelper.sendMailReplacement;
+
 
 module.exports = mandrillHelper;

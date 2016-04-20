@@ -12,6 +12,7 @@ var notificationConfig = require('../configs/notification.config.js');
 var contactActivytManager = require('../contactactivities/contactactivity_manager');
 var log = $$.g.getLogger("stripe.event.handler");
 var async = require('async');
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 var eventQ = async.queue(function(event, fn){
     $$.u.EventHandler._handleEvent(event, fn);
 }, 2);//TODO: Make this configurable?
@@ -188,7 +189,8 @@ var eventHandler =  {
     sendEmailToOperationFn: function(iEvent, fn) {
         var context = {name: 'Operation Manager', event: iEvent.get('type'), response: JSON.stringify(iEvent.get('body'))};
         var emailBody = jade.renderFile('templates/emails/stripe/common.jade', context);
-        $$.g.mailer.sendMail(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function (err, value) {
+
+        emailMessageManager.sendMailReplacement(notificationConfig.FROM_EMAIL, notificationConfig.TO_EMAIL, null, iEvent.get('type') + ' Event', emailBody, null, function (err, value) {
             if(err) {
                 log.error('Error sending notification');
             }

@@ -557,6 +557,7 @@ var emailMessageManager = {
 
     sendMailReplacement : function(from, to, cc, subject, htmlText, text, fn) {
         var self = this;
+
         self.log.debug('>> sendMailReplacement');
 
         var params = {
@@ -910,5 +911,8 @@ var emailMessageManager = {
 
 $$.u = $$.u || {};
 $$.u.emailMessageManager = emailMessageManager;
+
+$$.g.mailer = $$.g.mailer || {};
+$$.g.mailer.sendMail = emailMessageManager.sendMailReplacement;
 
 module.exports = emailMessageManager;
