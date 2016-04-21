@@ -183,7 +183,7 @@ var emailMessageManager = {
 
                                 var maxSendTime = moment().add(72, 'hours');
                                 email.setSendAt(send_at);
-                                if(maxSendTime.isBefore(moment.utc(stepSettings.sendAt))) {
+                                if(maxSendTime.isBefore(moment(stepSettings.sendAt))) {
                                     //schedule the email
                                     self.log.debug('Scheduling email');
                                     var code = '';
@@ -194,7 +194,7 @@ var emailMessageManager = {
 
                                     var scheduledJob = new $$.m.ScheduledJob({
                                         accountId: accountId,
-                                        scheduledAt: moment.utc(stepSettings.sendAt).toDate(),
+                                        scheduledAt: moment(stepSettings.sendAt).utc().toDate(),
                                         runAt: null,
                                         job:code
                                     });
