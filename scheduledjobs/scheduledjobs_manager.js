@@ -44,7 +44,7 @@ var scheduledJobManager = {
             },
             function(jobs, cb) {
                 async.eachSeries(jobs, function(job, callback){
-                    if(moment(job.get('runAt')).isAfter(moment())) {
+                    if(moment(job.get('scheduledAt')).isAfter(moment())) {
                         self._scheduleJob(job, callback);
                     } else {
                         /*
