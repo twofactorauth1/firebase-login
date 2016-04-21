@@ -8,13 +8,11 @@
 var baseApi = require('../base.api.js');
 
 
-var cmsManager = require('../../cms/cms_manager');
-var cmsDao = require('../../cms/dao/cms.dao');
-var preRenderConfig = require('../../configs/prerender.config');
-var request = require('request');
 
+var request = require('request');
 var ssbManager = require('../../ssb/ssb_manager');
-var pageCacheManager = require('../../cms/pagecache_manager');
+var pageDao = require('../../ssb/dao/page.dao');
+
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -26,7 +24,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     version: "2.0",
 
-    dao: cmsDao,
+    dao: pageDao,
 
     initialize: function () {
 
@@ -539,7 +537,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getPageVersions');
         var pageId = req.params.id;
-        cmsManager.getPageVersions(pageId, 'all', function (err, versions) {
+        ssbManager.getPageVersions(pageId, 'all', function (err, versions) {
             self.log.debug('<< getPageVersions');
             return self.sendResultOrError(resp, err, versions, "Error getting versions of a page");
         });
@@ -550,7 +548,10 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> revertPage');
         var pageId = req.params.id;
         var versionId = parseInt(req.params.versionId);
-        cmsManager.revertPage(pageId, versionId, function (err, revertedPage) {
+        //accountId, pageId, version, userId
+        var accountId = parseInt(self.accountId(req));
+        var userId= self.userId(req);
+        ssbManager.revertPage(accountId, pageId, versionId, userId, function (err, revertedPage) {
             self.log.debug('<< getPageVersions');
             self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
             self.createUserActivity(req, 'REVERT_PAGE', null, {pageId: pageId}, function(){});

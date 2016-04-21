@@ -542,6 +542,7 @@ module.exports = {
             }
         });
     },
+
     deletePage: function(pageId, accountId, fn) {
         var self = this;
 
@@ -651,6 +652,7 @@ module.exports = {
         self.log.debug('>> updatedLinkList is' + list );
         fn(null, list);
     },
+
     getWebsiteLinklistsByHandle: function(accountId, websiteId, handle, fn) {
         var self = this;
         self.log.debug('>> getWebsiteLinklistsByHandle(' + websiteId + ',' + handle + ')');
@@ -675,6 +677,7 @@ module.exports = {
             }
         });
     },
+
     listPages: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug('>> listPages');
@@ -870,8 +873,88 @@ module.exports = {
         //TODO: this
     },
 
-    getPageVersions: function() {
-        //TODO: this
+    getPageVersions: function(pageId, version, fn) {
+        var self = this;
+        self.log.debug('>> getPageVersions');
+
+        var query = {};
+        if(version === 'all') {
+            query._id = new RegExp('' + pageId + '.*');
+        } else if(version === 'latest'){
+            query._id = pageId;
+        } else {
+            query = {$or: [{_id: pageId + '_' + version},{_id: pageId}]};
+        }
+
+        pageDao.findMany(query, $$.m.ssb.Page, function(err, list){
+            if(err) {
+                self.log.error('Error getting pages by version: ' + err);
+                return fn(err, null);
+            } else {
+                if(version !== 'all' && version !== 'latest') {
+                    var filteredList = [];
+                    _.each(list, function(page){
+                        if(page.get('version') === version) {
+                            filteredList.push(page);
+                        }
+                    });
+                    list = filteredList;
+                }
+                self.log.debug('<< getPageVersions');
+                return fn(null, list);
+            }
+        });
+
+    },
+
+    revertPage: function(accountId, pageId, version, userId, fn) {
+        var self = this;
+        self.log.debug('>> revertPage [' + pageId + ']');
+
+        self.getPageVersions(pageId, version, function(err, pageAry){
+            if(err || pageAry === null) {
+                self.log.error('Error finding version of page: ' + err);
+                return fn(err, null);
+            }
+            var targetObj = pageAry[0];
+            var modified = {date: new Date(), by: userId};
+            targetObj.set('created', modified);
+            targetObj.set('modified', modified);
+            var pageId = targetObj.id().replace(/\_.*/g, '');
+            targetObj.set('_id', pageId);
+            self.getPageVersions(pageId, 'latest', function(err, latestPageAry){
+                if(err || pageAry === null) {
+                    self.log.error('Error finding version of page: ' + err);
+                    return fn(err, null);
+                }
+                var latestPage = latestPageAry[0];
+                var latestVersion = latestPage.get('version');
+                var newVersion = latestVersion + 1;
+                targetObj.set('version', newVersion);
+                targetObj.set('latest', true);
+
+
+                pageDao.saveOrUpdate(targetObj, function(err, savedPage){
+                    if(err) {
+                        self.log.error('Error saving new version:', err);
+                        return fn(err);
+                    } else {
+                        latestPage.set('_id', pageId + '_' + latestVersion);
+                        latestPage.set('latest', false);
+                        pageDao.saveOrUpdate(latestPage, function(err, latestPageSaved){
+                            if(err) {
+                                self.log.error('Error saving prior vrsion:', err);
+                                return fn(err, savedPage);
+                            } else {
+                                self.log.debug('<< revertPage');
+                                return fn(null, savedPage);
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
     },
 
     publishPage: function(accountId, pageId, userId, fn) {
@@ -1234,6 +1317,7 @@ module.exports = {
             },
             function incrementPageVersion(existingPage, updatedSections, cb) {
                 self.log.info('incrementPageVersion');
+                //TODO: this is a problem if we are not updating the latest.
                 var currentVersion = existingPage.get('version') || 0;
                 var newVersion = currentVersion + 1;
                 existingPage.set('latest', false);
@@ -1269,6 +1353,8 @@ module.exports = {
                     }
                 });
             },
+            /*
+             * We need to keep around unreferenced sections for reverts.
             function deleteRemovedSections(existingPage, updatedPage, updatedSections, cb){
                 self.log.info('deleteRemovedSections');
                 var updatedSectionIDs =_.map(updatedSections, function(section){
@@ -1276,10 +1362,10 @@ module.exports = {
                 });
                 self.log.debug('updatedSectionIDs:', updatedSectionIDs);
                 var sectionsToBeDeleted = [];
-                /*
-                 * If the updatedPage does not have a section with the same
-                 * ID as the existing page's section, it must be deleted
-                 */
+
+                 // If the updatedPage does not have a section with the same
+                 // ID as the existing page's section, it must be deleted
+
                 _.each(existingPage.get('sections'), function(section){
                     if(!_.contains(updatedSectionIDs, section._id)) {
                         sectionsToBeDeleted.push(section);
@@ -1297,6 +1383,7 @@ module.exports = {
                     cb(null, existingPage, updatedPage, updatedSections);
                 });
             },
+            */
             function setAsHomePage(existingPage, updatedPage, updatedSections, cb){
                 self.log.info('setAsHomePage');
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
