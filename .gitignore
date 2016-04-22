@@ -20,6 +20,11 @@ Logs/
 
 public/css/style.default.css
 
+public/admin/assets/css/frontend-admin.css
+public/admin/assets/css/styles.css
+public/admin/assets/css/theme.css
+public/css/styles.css
+
 
 public/js/libs
 dump/

@@ -19,11 +19,15 @@ var subscriberDao = require('../dao/subscriber.dao');
 var userDao = require('../dao/user.dao');
 var appConfig = require('../configs/app.config');
 
+/*
+ * These three mandrill artifacts are deprecated.
+ */
 var mandrillConfig = require('../configs/mandrill.config');
-
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
-var mandrillHelper = require('../utils/mandrillhelper');
+
+
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 
 var hostSuffix = appConfig.subdomain_suffix;
 var async = require('async');
@@ -490,7 +494,7 @@ module.exports = {
                                     } else {
                                         var campaignId = campaignFlow.get('campaignId');
                                         var contactId = campaignFlow.get('contactId');
-                                        mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
+                                        emailMessageManager.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
                                             if(err) {
                                                 self.log.error('Error sending email: ', err);
                                                 return fn(err, null);
@@ -1962,7 +1966,7 @@ module.exports = {
     getCampaignEmailData: function(emailId, fn) {
         var self = this;
         self.log.debug('>> getCampaignEmailData');
-        mandrillHelper.getMessageInfo(emailId, fn);
+        emailMessageManager.getMessageInfo(emailId, fn);
     }
 
 }

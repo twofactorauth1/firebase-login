@@ -24,9 +24,9 @@
     </div>
     <div class="inline-block" tooltip-placement="bottom" tooltip="{{(vm.state.page.published.date > vm.state.page.modified.date) ? 'Publish' : 'Publish changes'}}">
         <button class="btn btn-primary btn-o" ng-disabled='vm.state.page.published.date > vm.state.page.modified.date' ng-click="vm.publish()">
-          <span  ng-if="!vm.state.publishLoading" ng-class='{"fa-spin": vm.state.page.published.date < vm.state.page.modified.date}' class="fa fa-globe" ng-style="(vm.state.page.published.date < vm.state.page.modified.date) && {'color': '#47B8D9'}"></span>
+          <span  ng-hide="vm.state.publishLoading" ng-class='{"fa-spin": vm.state.page.published.date < vm.state.page.modified.date}' class="fa fa-globe" ng-style="(vm.state.page.published.date < vm.state.page.modified.date) && {'color': '#47B8D9'}"></span>
           <span class="sr-only">Publish</span>
-          <span ng-if="vm.state.publishLoading"><i class="fa fa-spinner fa-spin"></i></span>
+          <span ng-show="vm.state.publishLoading"><i class="fa fa-spinner fa-spin"></i></span>
         </button>
     </div>
     <div class="inline-block"  tooltip-placement="bottom" tooltip-html-unsafe="View">

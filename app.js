@@ -305,6 +305,7 @@ require('./routers/page.server.router');
 //-----------------------------------------------------
 if (process.env.NODE_ENV != "testing") {
     var drone = require('schedule-drone');
+    var scheduledjobs_manager = require('./scheduledjobs/scheduledjobs_manager');
     drone.setConfig(
         {
             persistence:{
@@ -319,10 +320,15 @@ if (process.env.NODE_ENV != "testing") {
     $$.u = $$.u || {};
     $$.u.scheduler = scheduler;
     log.debug('Started scheduler');
-    //scheduler.scheduleAndStore( '*/5 * * * * *', 'my-cron-event', {param1:'value1'}, function(){log.debug('callback')});
-    //scheduler.on('my-cron-event', function(params){
-    //    log.debug('got these params:', params);
-    //});
+    scheduledjobs_manager.setScheduler(scheduler);
+    //scheduler.scheduleAndStore( '*/5 * * * * *', 'scheduledJob', {id:'jobId'}, function(){log.debug('callback')});
+    /*
+    scheduler.on('scheduledJob', function(params){
+        log.debug('got these params:', params);
+        scheduledjobs_manager.handleJob(params.id, function(){});
+    });
+    */
+    scheduledjobs_manager.startup(function(){log.debug('scheduledjobs_manager initialized')});
 }
 
 //-----------------------------------------------------

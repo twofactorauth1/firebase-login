@@ -86,6 +86,7 @@
             'navigation',
             'welcome hero',
             'products & services',
+            // 'donations',
             'forms',
             'gallery',
             'text',
@@ -109,6 +110,9 @@
             },
             'products & services':{
                 'icon': 'fa-shopping-cart'
+            },
+            'donations':{
+                'icon': 'fa-heart-o'
             },
             'forms':{
                 'icon': 'fa-at'
