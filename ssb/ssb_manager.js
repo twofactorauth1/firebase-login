@@ -1604,6 +1604,7 @@ module.exports = {
                                         g_update = true;
                                         var sections = _page.get("sections");
                                         //look through the sections on this page to any whose _id matches the global section
+                                        //TODO: match irrespective of version
                                         var exists = _.filter(sections, function(section){
                                             if(section._id === gsection.get("_id")) {
                                                 return true;
@@ -1694,6 +1695,7 @@ module.exports = {
                                                         g_callback(err);
                                                     } else {
                                                         if(footerSection) {
+                                                            //TODO: fix this so sectionIDs match regardless of version
                                                             var filteredFooter = _.findWhere(sections, {
                                                                 _id: footerSection.get("_id")
                                                             });
