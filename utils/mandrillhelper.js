@@ -109,7 +109,7 @@ var mandrillHelper =  {
                     var send_at = moment.utc().format('YYYY-MM-DD HH:mm:ss');
                     //console.dir(message);
                     mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
-                        console.log(result);
+                        log.debug(result);
                         /*
                          [{
                          "email": "recipient.email@example.com",
@@ -118,13 +118,11 @@ var mandrillHelper =  {
                          "_id": "abc123abc123abc123abc123abc123"
                          }]
                          */
-                        emailMessageManager.sendAccountWelcomeEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io',
-                            'Send Grid Test', subject, htmlContent, accountId, userId, vars, emailId, contactId,
-                            function(err, response){console.log('sendgrid response:', response)});
+
                         fn(null, result);
                     }, function(e) {
                         // Mandrill returns the error as an object with name and message keys
-                        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                        log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                         // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
                         fn(e, null);
                     });
@@ -265,9 +263,7 @@ var mandrillHelper =  {
                         message.html = html;
                         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                             self.log.debug('result >>> ', result);
-                            emailMessageManager.sendCampaignEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io',
-                                'Send Grid Test', subject, htmlContent, accountId, campaignId, contactId, vars,
-                                stepSettings, emailId, function(err, value){console.log('Sendgrid response:', value)});
+
                             fn(null, result);
                         }, function(e) {
                             // Mandrill returns the error as an object with name and message keys
@@ -370,9 +366,7 @@ var mandrillHelper =  {
 
                 mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                     self.log.debug('result >>> ', result);
-                    emailMessageManager.sendOrderEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', 'Send Grid',
-                        subject, htmlContent, accountId, orderId, vars, emailId, function(err, value){
-                            console.log('Sendgrid result:', value)});
+
                     fn(null, result);
                 }, function(e) {
                     // Mandrill returns the error as an object with name and message keys
@@ -483,9 +477,7 @@ var mandrillHelper =  {
 
                     mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                         self.log.debug('result >>> ', result);
-                        emailMessageManager.sendFulfillmentEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', null,
-                            subject, htmlContent, accountId, orderId, vars, emailId, function(err, value){
-                                console.log('sendgrid result:', value)});
+
                         fn(null, result);
                     }, function(e) {
                         // Mandrill returns the error as an object with name and message keys
@@ -590,8 +582,7 @@ var mandrillHelper =  {
 
                         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                             self.log.debug('result >>> ', result);
-                            emailMessageManager.sendNewCustomerEmail('sendgrid@indigenous.io', 'Send Grid', accountId,
-                                vars, function(err, value){console.log('sendgrid result:', value)});
+
                             fn(null, result);
                         }, function(e) {
                             // Mandrill returns the error as an object with name and message keys
@@ -702,9 +693,7 @@ var mandrillHelper =  {
 
                     mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                         self.log.debug('result >>> ', result);
-                        emailMessageManager.sendBasicEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', 'Send Grid',
-                            subject, htmlContent, accountId, vars, emailId, function(err, value){
-                                console.log('sendgrid result:', value)});
+
                         fn(null, result);
                     }, function(e) {
                         // Mandrill returns the error as an object with name and message keys
@@ -815,9 +804,7 @@ var mandrillHelper =  {
 
                         mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
                             self.log.debug('result >>> ', result);
-                            emailMessageManager.sendTestEmail('sendgrid+sender@indigenous.io', fromName, 'sendgrid@indigenous.io', '',
-                                subject, htmlContent, accountId, vars, emailId, function(err, value){
-                                    console.log('sendgrid result:', value)});
+
                             fn(null, result);
                         }, function(e) {
                             // Mandrill returns the error as an object with name and message keys
