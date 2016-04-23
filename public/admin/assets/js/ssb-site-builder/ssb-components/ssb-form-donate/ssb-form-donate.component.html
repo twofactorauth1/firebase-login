@@ -97,8 +97,8 @@
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" ng-disabled="formBuilder.$invalid">Thanks</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{{vm.component.modalSettings.closeBtnText}}</button>
+                                <button type="button" class="btn btn-primary" ng-disabled="formBuilder.$invalid">{{vm.component.modalSettings.submitBtnText}}</button>
                             </div>
                         </div>
                     </div>
