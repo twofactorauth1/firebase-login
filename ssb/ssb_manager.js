@@ -1605,10 +1605,7 @@ module.exports = {
                                         var sections = _page.get("sections");
                                         //look through the sections on this page to any whose _id matches the global section
                                         //TODO: match irrespective of version
-                                        var exists = _.filter(sections, function(section){
-                                          var regex = new RegExp('' + gsection.get("_id") + '_.*');
-                                          return regex.test(section._id);
-                                        });
+                                        var exists = _.filter(sections, function(section) { return gsection.get("_id").indexOf(section._id) !== -1; });
                                         self.log.debug('exists: ' , exists);
                                         if(!exists.length){// if the global section does NOT already appear on the page
                                             var globalSection = {_id: gsection.get("_id")};
@@ -1695,10 +1692,7 @@ module.exports = {
                                                     } else {
                                                         if(footerSection) {
                                                             //TODO: fix this so sectionIDs match regardless of version
-                                                            var filteredFooter = _.filter(sections, function(section){
-                                                              var regex = new RegExp('' + footerSection.get("_id") + '_.*');
-                                                              return regex.test(section._id);
-                                                            });
+                                                            var filteredFooter = _.filter(sections, function(section) { return footerSection.get("_id").indexOf(section._id) !== -1; });
 
                                                             filteredFooter = filteredFooter.length ? filteredFooter[0] : null;
 
