@@ -2249,6 +2249,7 @@ module.exports = {
         sections.forEach(function(section) {
             var sectionIdWithoutVersion = section.id();
             var lastIndex = section.id().lastIndexOf('_');
+            var version = '';
             if (lastIndex !== -1) {
                 version = parseInt(section.id().slice(lastIndex+1));
                 sectionIdWithoutVersion = section.id().replace('_' + version, '');
@@ -2267,7 +2268,11 @@ module.exports = {
             });
             arr.shift();
             arr.forEach(function(version){
-                oldVersionsOnPages.push(sectionId + '_' + version);
+                if (version === '') {
+                    oldVersionsOnPages.push(sectionId);
+                } else {
+                    oldVersionsOnPages.push(sectionId + '_' + version);
+                }
             });
         });
 
