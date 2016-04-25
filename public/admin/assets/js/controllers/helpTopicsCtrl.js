@@ -21,6 +21,7 @@
       profile: [],
       'site-analytics': [],
       'social-feed': [],
+      website: [],
       websites: [],
     };
 
