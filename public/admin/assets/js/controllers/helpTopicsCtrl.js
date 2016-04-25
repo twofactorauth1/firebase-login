@@ -19,6 +19,8 @@
       posts: [],
       products: [],
       profile: [],
+      'site-analytics': [],
+      'social-feed': [],
       websites: [],
     };
 
@@ -52,6 +54,7 @@
       $scope.topics = topics;
       _.each($scope.topics, function (topic) {
         if (topic.isPublic) {
+          console.log('topic> ', topic);
           $scope.panesByCat[topic.category.toLowerCase().replace(' ', '-')].push(topic);
         }
       });
