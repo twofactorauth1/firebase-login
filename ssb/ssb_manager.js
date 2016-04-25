@@ -1606,9 +1606,8 @@ module.exports = {
                                         //look through the sections on this page to any whose _id matches the global section
                                         //TODO: match irrespective of version
                                         var exists = _.filter(sections, function(section){
-                                            if(section._id === gsection.get("_id")) {
-                                                return true;
-                                            }
+                                          var regex = new RegExp('' + gsection.get("_id") + '_.*');
+                                          return regex.test(section._id);
                                         });
                                         self.log.debug('exists: ' , exists);
                                         if(!exists.length){// if the global section does NOT already appear on the page
@@ -1696,9 +1695,12 @@ module.exports = {
                                                     } else {
                                                         if(footerSection) {
                                                             //TODO: fix this so sectionIDs match regardless of version
-                                                            var filteredFooter = _.findWhere(sections, {
-                                                                _id: footerSection.get("_id")
+                                                            var filteredFooter = _.filter(sections, function(section){
+                                                              var regex = new RegExp('' + footerSection.get("_id") + '_.*');
+                                                              return regex.test(section._id);
                                                             });
+
+                                                            filteredFooter = filteredFooter.length ? filteredFooter[0] : null;
 
                                                             if(filteredFooter) {
                                                                 var footerIndex = _.indexOf(sections, filteredFooter);
