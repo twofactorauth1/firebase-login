@@ -20,6 +20,7 @@
       products: [],
       profile: [],
       'site-analytics': [],
+      'social-feed': [],
       websites: [],
     };
 
