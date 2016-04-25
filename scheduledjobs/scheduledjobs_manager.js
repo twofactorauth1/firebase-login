@@ -75,7 +75,7 @@ var scheduledJobManager = {
                 self.log.debug('<< init');
             }
             self.scheduler.on(self.JOB_KEY, function(params){
-                self.handleJob(params.id, function(){});
+                self.handleJob(params.jobId, function(){});
             });
             if(fn) {
                 fn();
@@ -149,6 +149,7 @@ var scheduledJobManager = {
         var self = this;
         self.log.debug('>> _scheduleJob');
         self.scheduler.schedule(job.get('scheduledAt'), self.JOB_KEY, {jobId:job.id()});
+        self.log.debug('Scheduling: [' + job.id() + '] at ' + job.get('scheduledAt'));
         self.log.debug('<< _scheduleJob');
         fn();
     },
