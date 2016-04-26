@@ -20,7 +20,7 @@ var sendgrid  = require('sendgrid')(sendgridConfig.API_KEY);
 var dao = require('./dao/emailmessage.dao');
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var serialize = require('node-serialize');
-var mandrillHelper = require('../utils/mandrillhelper');
+
 
 var emailMessageManager = {
 
@@ -31,65 +31,180 @@ var emailMessageManager = {
                                       vars, emailId, contactId, fn) {
         var self = this;
         self.log.debug('>> sendAccountWelcomeEmail');
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err || !account) {
-                self.log.debug('Cound not find account... using mandrill');
-                mandrillHelper.sendAccountWelcomeEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
-                    vars, emailId, contactId, fn);
-            } else if(!account.get('_settings') || account.get('_settings').email !== 'sendgrid'){
-                self.log.debug('Account settings indicate mandrill');
-                mandrillHelper.sendAccountWelcomeEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
-                    vars, emailId, contactId, fn);
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
             } else {
-                self.log.debug('Sending with sendgrid');
-                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-                    if (isUnsubscribed == true) {
-                        fn('skipping email for user on unsubscribed list');
-                    } else {
-                        vars.push({
-                            "name": "SENDDATE",
-                            "content": moment().format('MMM Do, YYYY')
-                        });
-                        self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+                vars.push({
+                    "name": "SENDDATE",
+                    "content": moment().format('MMM Do, YYYY')
+                });
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
 
 
-                            var params = {
-                                smtpapi:  new sendgrid.smtpapi(),
-                                to:       [toAddress],
-                                //toname:   [],
-                                from:     fromAddress,
-                                fromname: '',
-                                subject:  subject,
-                                //text:     '',
-                                html:     mergedHtml,
-                                //bcc:      [],
-                                //cc:       [],
-                                //replyto:  '',
-                                date:     moment().toISOString(),
-                                //headers:    {}
-                                category: 'welcome'
-                            };
-                            if(fromName && fromName.length > 0) {
-                                params.fromname = fromName;
-                            }
-                            if(toName && toName.length > 0) {
-                                params.toname = toName;
-                            }
+                    var params = {
+                        smtpapi:  new sendgrid.smtpapi(),
+                        to:       [toAddress],
+                        //toname:   [],
+                        from:     fromAddress,
+                        fromname: '',
+                        subject:  subject,
+                        //text:     '',
+                        html:     mergedHtml,
+                        //bcc:      [],
+                        //cc:       [],
+                        //replyto:  '',
+                        date:     moment().toISOString(),
+                        //headers:    {}
+                        category: 'welcome'
+                    };
+                    if(fromName && fromName.length > 0) {
+                        params.fromname = fromName;
+                    }
+                    if(toName && toName.length > 0) {
+                        params.toname = toName;
+                    }
 
 
-                            self._safeStoreEmail(params, accountId, userId, function(err, emailmessage){
-                                //we should not have an err here
-                                if(err) {
-                                    self.log.error('Error storing email (this should not happen):', err);
+                    self._safeStoreEmail(params, accountId, userId, function(err, emailmessage){
+                        //we should not have an err here
+                        if(err) {
+                            self.log.error('Error storing email (this should not happen):', err);
+                            return fn(err);
+                        } else {
+                            var email = new sendgrid.Email(params);
+                            email.setUniqueArgs({
+                                emailmessageId: emailmessage.id(),
+                                accountId:accountId
+                            });
+
+
+                            sendgrid.send(email, function(err, json) {
+                                if (err) {
+                                    self.log.error('Error sending email:', err);
                                     return fn(err);
                                 } else {
-                                    var email = new sendgrid.Email(params);
-                                    email.setUniqueArgs({
-                                        emailmessageId: emailmessage.id(),
-                                        accountId:accountId
+                                    self.log.debug('<< sendAccountWelcomeEmail');
+                                    return fn(null, json);
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        });
+
+    },
+
+    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId,
+                                contactId, vars, stepSettings, emailId, fn) {
+        var self = this;
+        self.log.debug('>> sendCampaignEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn(null, 'skipping email for user on unsubscribed list');
+            } else {
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+                    //inline styles
+                    juice.juiceResources(mergedHtml, {}, function(err, html){
+                        //smtpapi:  new sendgrid.smtpapi(),
+                        var params = {
+
+                            to:       [toAddress],
+                            from:     fromAddress,
+                            fromname: '',
+                            subject:  subject,
+                            html:     html,
+                            date:     moment().toISOString(),
+                            category: 'campaign'
+                        };
+                        if(fromName && fromName.length > 0) {
+                            params.fromname = fromName;
+                        }
+                        if(toName && toName.length > 0) {
+                            params.toname = toName;
+                        }
+                        if(stepSettings.bcc) {
+                            params.bcc = stepSettings.bcc;
+                        }
+
+                        self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                            //we should not have an err here
+                            if(err) {
+                                self.log.error('Error storing email (this should not happen):', err);
+                                return fn(err);
+                            } else {
+                                var email = new sendgrid.Email(params);
+                                var uniqueArgs = {
+                                    emailmessageId: emailmessage.id(),
+                                    accountId:accountId,
+                                    emailId: emailId,
+                                    campaignId: campaignId,
+                                    contactId: contactId
+                                };
+                                email.setUniqueArgs({
+                                    emailmessageId: emailmessage.id(),
+                                    accountId:accountId,
+                                    emailId: emailId,
+                                    campaignId: campaignId,
+                                    contactId: contactId
+                                });
+                                //Figure out when to send it
+                                var send_at = null;
+                                var now_at = null;
+                                if(stepSettings.offset) {
+                                    //the offset is the number of mintues from now to send it at.
+                                    send_at = moment().utc().add('minutes', stepSettings.offset).unix();
+                                    self.log.debug('send_at ' + send_at);
+                                } else if(stepSettings.scheduled) {
+                                    send_at = self._getSecheduledUTCUnix(stepSettings.scheduled.day,
+                                        stepSettings.scheduled.hour, stepSettings.scheduled.minute, stepSettings.offset||0);
+                                } else if(stepSettings.sendAt) {
+                                    self.log.debug('send details >>> ', stepSettings.sendAt);
+                                    // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+                                    // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
+                                    stepSettings.sendAt.month = stepSettings.sendAt.month - 1;
+                                    self.log.debug('moment thinks sendAt is ' + moment(stepSettings.sendAt).toDate());
+                                    send_at = moment.utc(stepSettings.sendAt).unix();
+                                    now_at = moment.utc();
+                                    self.log.debug('send_at formatted >>> ', send_at);
+                                    self.log.debug('now_at formatted >>> ', now_at.unix());
+                                    if(moment.utc(stepSettings.sendAt).isBefore(now_at)) {
+                                        self.log.debug('Sending email now because ' + send_at + ' is in the past.');
+                                        send_at = moment().utc().unix();
+                                    }
+                                } else {
+                                    //send it now?
+                                    self.log.debug('No scheduled or sendAt specified.');
+                                    send_at = moment().utc().unix();
+                                }
+
+                                var maxSendTime = moment().add(72, 'hours');
+                                email.setSendAt(send_at);
+                                if(maxSendTime.isBefore(moment(stepSettings.sendAt))) {
+                                    //schedule the email
+                                    self.log.debug('Scheduling email');
+                                    var code = '';
+                                    code+= 'var emailJSON = ' + serialize.serialize(params) + ';';
+                                    code+= 'var uniqueArgs = ' + serialize.serialize(uniqueArgs) + ';';
+                                    code+= 'var send_at = ' + send_at + ';';
+                                    code+= '$$.u.emailMessageManager._sendEmailJSON(emailJSON, uniqueArgs, send_at, function(){});';
+
+                                    var scheduledJob = new $$.m.ScheduledJob({
+                                        accountId: accountId,
+                                        scheduledAt: moment(stepSettings.sendAt).utc().toDate(),
+                                        runAt: null,
+                                        job:code
                                     });
 
 
+                                    scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
+                                        self.log.debug('<< sendAccountWelcomeEmail');
+                                        return fn(err, value);
+                                    });
+
+                                } else {
+                                    //send the email
                                     sendgrid.send(email, function(err, json) {
                                         if (err) {
                                             self.log.error('Error sending email:', err);
@@ -100,152 +215,9 @@ var emailMessageManager = {
                                         }
                                     });
                                 }
-                            });
+                            }
                         });
-                    }
-                });
-            }
-        });
-
-
-
-    },
-
-    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId,
-                                contactId, vars, stepSettings, emailId, fn) {
-        var self = this;
-        self.log.debug('>> sendCampaignEmail');
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err || !account) {
-                self.log.debug('Cound not find account... using mandrill');
-                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId,
-                    contactId, vars, stepSettings, emailId, fn);
-            } else if(!account.get('_settings') || account.get('_settings').email !== 'sendgrid'){
-                self.log.debug('Account settings indicate mandrill');
-                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId,
-                    contactId, vars, stepSettings, emailId, fn);
-            } else {
-                self.log.debug('Sending with sendgrid');
-                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-                    if (isUnsubscribed == true) {
-                        fn(null, 'skipping email for user on unsubscribed list');
-                    } else {
-                        self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
-                            //inline styles
-                            juice.juiceResources(mergedHtml, {}, function(err, html){
-                                //smtpapi:  new sendgrid.smtpapi(),
-                                var params = {
-
-                                    to:       [toAddress],
-                                    from:     fromAddress,
-                                    fromname: '',
-                                    subject:  subject,
-                                    html:     html,
-                                    date:     moment().toISOString(),
-                                    category: 'campaign'
-                                };
-                                if(fromName && fromName.length > 0) {
-                                    params.fromname = fromName;
-                                }
-                                if(toName && toName.length > 0) {
-                                    params.toname = toName;
-                                }
-                                if(stepSettings.bcc) {
-                                    params.bcc = stepSettings.bcc;
-                                }
-
-                                self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
-                                    //we should not have an err here
-                                    if(err) {
-                                        self.log.error('Error storing email (this should not happen):', err);
-                                        return fn(err);
-                                    } else {
-                                        var email = new sendgrid.Email(params);
-                                        var uniqueArgs = {
-                                            emailmessageId: emailmessage.id(),
-                                            accountId:accountId,
-                                            emailId: emailId,
-                                            campaignId: campaignId,
-                                            contactId: contactId
-                                        };
-                                        email.setUniqueArgs({
-                                            emailmessageId: emailmessage.id(),
-                                            accountId:accountId,
-                                            emailId: emailId,
-                                            campaignId: campaignId,
-                                            contactId: contactId
-                                        });
-                                        //Figure out when to send it
-                                        var send_at = null;
-                                        var now_at = null;
-                                        if(stepSettings.offset) {
-                                            //the offset is the number of mintues from now to send it at.
-                                            send_at = moment().utc().add('minutes', stepSettings.offset).unix();
-                                            self.log.debug('send_at ' + send_at);
-                                        } else if(stepSettings.scheduled) {
-                                            send_at = self._getSecheduledUTCUnix(stepSettings.scheduled.day,
-                                                stepSettings.scheduled.hour, stepSettings.scheduled.minute, stepSettings.offset||0);
-                                        } else if(stepSettings.sendAt) {
-                                            self.log.debug('send details >>> ', stepSettings.sendAt);
-                                            // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
-                                            // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
-                                            stepSettings.sendAt.month = stepSettings.sendAt.month - 1;
-                                            self.log.debug('moment thinks sendAt is ' + moment(stepSettings.sendAt).toDate());
-                                            send_at = moment.utc(stepSettings.sendAt).unix();
-                                            now_at = moment.utc();
-                                            self.log.debug('send_at formatted >>> ', send_at);
-                                            self.log.debug('now_at formatted >>> ', now_at.unix());
-                                            if(moment.utc(stepSettings.sendAt).isBefore(now_at)) {
-                                                self.log.debug('Sending email now because ' + send_at + ' is in the past.');
-                                                send_at = moment().utc().unix();
-                                            }
-                                        } else {
-                                            //send it now?
-                                            self.log.debug('No scheduled or sendAt specified.');
-                                            send_at = moment().utc().unix();
-                                        }
-
-                                        var maxSendTime = moment().add(72, 'hours');
-                                        email.setSendAt(send_at);
-                                        if(maxSendTime.isBefore(moment(stepSettings.sendAt))) {
-                                            //schedule the email
-                                            self.log.debug('Scheduling email');
-                                            var code = '';
-                                            code+= 'var emailJSON = ' + serialize.serialize(params) + ';';
-                                            code+= 'var uniqueArgs = ' + serialize.serialize(uniqueArgs) + ';';
-                                            code+= 'var send_at = ' + send_at + ';';
-                                            code+= '$$.u.emailMessageManager._sendEmailJSON(emailJSON, uniqueArgs, send_at, function(){});';
-
-                                            var scheduledJob = new $$.m.ScheduledJob({
-                                                accountId: accountId,
-                                                scheduledAt: moment(stepSettings.sendAt).utc().toDate(),
-                                                runAt: null,
-                                                job:code
-                                            });
-
-
-                                            scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
-                                                self.log.debug('<< sendAccountWelcomeEmail');
-                                                return fn(err, value);
-                                            });
-
-                                        } else {
-                                            //send the email
-                                            sendgrid.send(email, function(err, json) {
-                                                if (err) {
-                                                    self.log.error('Error sending email:', err);
-                                                    return fn(err);
-                                                } else {
-                                                    self.log.debug('<< sendAccountWelcomeEmail');
-                                                    return fn(null, json);
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            });
-                        });
-                    }
+                    });
                 });
             }
         });
@@ -256,31 +228,160 @@ var emailMessageManager = {
                              emailId, fn) {
         var self = this;
         self.log.debug('>> sendOrderEmail');
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err || !account) {
-                self.log.debug('Cound not find account... using mandrill');
-                mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
-                    orderId, vars, emailId, fn);
-            } else if(!account.get('_settings') || account.get('_settings').email !== 'sendgrid'){
-                self.log.debug('Account settings indicate mandrill');
-                mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
-                    orderId, vars, emailId, fn);
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
             } else {
-                self.log.debug('Sending with sendgrid');
-                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-                    if (isUnsubscribed == true) {
-                        fn('skipping email for user on unsubscribed list');
+                vars.push({
+                        "name": "SENDDATE",
+                        "content": moment().format('MMM Do, YYYY')
+                    },
+                    {
+                        "name": 'ORDERID',
+                        "content": orderId
+                    }
+                );
+                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+
+                var params = {
+                    smtpapi:  new sendgrid.smtpapi(),
+                    to:       [toAddress],
+                    from:     fromAddress,
+                    fromname: '',
+                    subject:  subject,
+                    html:     htmlContent,
+                    date:     moment().toISOString(),
+                    category: 'order'
+                };
+                if(fromName && fromName.length > 0) {
+                    params.fromname = fromName;
+                }
+                if(toName && toName.length > 0) {
+                    params.toname = toName;
+                }
+
+                self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                    //we should not have an err here
+                    if(err) {
+                        self.log.error('Error storing email (this should not happen):', err);
+                        return fn(err);
                     } else {
-                        vars.push({
-                                "name": "SENDDATE",
-                                "content": moment().format('MMM Do, YYYY')
-                            },
-                            {
-                                "name": 'ORDERID',
-                                "content": orderId
+                        var email = new sendgrid.Email(params);
+                        email.setUniqueArgs({
+                            emailmessageId: emailmessage.id(),
+                            accountId:accountId,
+                            orderId:orderId
+                        });
+
+                        sendgrid.send(email, function(err, json) {
+                            if (err) {
+                                self.log.error('Error sending email:', err);
+                                return fn(err);
+                            } else {
+                                self.log.debug('<< sendAccountWelcomeEmail');
+                                return fn(null, json);
                             }
-                        );
+                        });
+                    }
+                });
+
+            }
+        });
+
+    },
+
+    sendFulfillmentEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId,
+                                   vars, emailId, fn) {
+        var self = this;
+        self.log.debug('>> sendFulfillmentEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                vars.push({
+                        "name": "SENDDATE",
+                        "content": moment().format('MMM Do, YYYY')
+                    },
+                    {
+                        "name": 'ORDERID',
+                        "content": orderId
+                    }
+                );
+                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+                juice.juiceResources(htmlContent, {}, function(err, html) {
+                    if (err) {
+                        self.log.error('A juice error occurred. Failed to set styles inline.');
+                        self.log.error(err);
+                        return fn(err, null);
+                    }
+                    var params = {
+                        smtpapi:  new sendgrid.smtpapi(),
+                        to:       [toAddress],
+                        from:     fromAddress,
+                        fromname: '',
+                        subject:  subject,
+                        html:     html,
+                        date:     moment().toISOString(),
+                        category: 'fulfillment'
+                    };
+                    if(fromName && fromName.length > 0) {
+                        params.fromname = fromName;
+                    }
+                    if(toName && toName.length > 0) {
+                        params.toname = toName;
+                    }
+
+                    self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                        //we should not have an err here
+                        if(err) {
+                            self.log.error('Error storing email (this should not happen):', err);
+                            return fn(err);
+                        } else {
+                            var email = new sendgrid.Email(params);
+                            email.setUniqueArgs({
+                                emailmessageId: emailmessage.id(),
+                                accountId:accountId,
+                                orderId:orderId
+                            });
+
+                            sendgrid.send(email, function(err, json) {
+                                if (err) {
+                                    self.log.error('Error sending email:', err);
+                                    return fn(err);
+                                } else {
+                                    self.log.debug('<< sendAccountWelcomeEmail');
+                                    return fn(null, json);
+                                }
+                            });
+                        }
+                    });
+
+                });
+            }
+        });
+
+    },
+
+    sendNewCustomerEmail: function(toAddress, toName, accountId, vars, fn) {
+        var self = this;
+        self.log.debug('>> sendNewCustomerEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                vars.push({
+                    "name": "SENDDATE",
+                    "content": moment().format('MMM Do, YYYY')
+                });
+
+                fs.readFile('templates/emails/new_customer.html', 'utf-8', function(err, htmlContent){
+                    if (err) {
+                        self.log.error('Error getting new customer email file.  Welcome email not sent for accountId ' + accountId, err);
+                    } else {
                         htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+                        var subject = 'You have a new customer!';
+                        var fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
+                        var fromName = notificationConfig.WELCOME_FROM_NAME;
 
                         var params = {
                             smtpapi:  new sendgrid.smtpapi(),
@@ -290,7 +391,132 @@ var emailMessageManager = {
                             subject:  subject,
                             html:     htmlContent,
                             date:     moment().toISOString(),
-                            category: 'order'
+                            category: 'new_customer'
+                        };
+                        if(fromName && fromName.length > 0) {
+                            params.fromname = fromName;
+                        }
+                        if(toName && toName.length > 0) {
+                            params.toname = toName;
+                        }
+
+                        self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                            //we should not have an err here
+                            if(err) {
+                                self.log.error('Error storing email (this should not happen):', err);
+                                return fn(err);
+                            } else {
+                                var email = new sendgrid.Email(params);
+                                email.setUniqueArgs({
+                                    emailmessageId: emailmessage.id(),
+                                    accountId:accountId
+                                });
+
+                                sendgrid.send(email, function(err, json) {
+                                    if (err) {
+                                        self.log.error('Error sending email:', err);
+                                        return fn(err);
+                                    } else {
+                                        self.log.debug('<< sendAccountWelcomeEmail');
+                                        return fn(null, json);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+    },
+
+    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
+        var self = this;
+        self.log.debug('>> sendBasicEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
+                juice.juiceResources(htmlContent, {}, function(err, html) {
+                    if (err) {
+                        self.log.error('A juice error occurred. Failed to set styles inline.');
+                        self.log.error(err);
+                        return fn(err, null);
+                    }
+
+                    var params = {
+                        smtpapi:  new sendgrid.smtpapi(),
+                        to:       [toAddress],
+                        from:     fromAddress,
+                        fromname: '',
+                        subject:  subject,
+                        html:     html,
+                        date:     moment().toISOString(),
+                        category: 'basic'
+                    };
+                    if(fromName && fromName.length > 0) {
+                        params.fromname = fromName;
+                    }
+                    if(toName && toName.length > 0) {
+                        params.toname = toName;
+                    }
+
+                    self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                        //we should not have an err here
+                        if(err) {
+                            self.log.error('Error storing email (this should not happen):', err);
+                            return fn(err);
+                        } else {
+                            var email = new sendgrid.Email(params);
+                            email.setUniqueArgs({
+                                emailmessageId: emailmessage.id(),
+                                accountId:accountId,
+                                emailId:emailId
+                            });
+
+                            sendgrid.send(email, function(err, json) {
+                                if (err) {
+                                    self.log.error('Error sending email:', err);
+                                    return fn(err);
+                                } else {
+                                    self.log.debug('<< sendAccountWelcomeEmail');
+                                    return fn(null, json);
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        });
+
+    },
+
+    sendTestEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
+        var self = this;
+        var contactId = null;
+        self.log.debug('>> sendTestEmail');
+        self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+            if (isUnsubscribed == true) {
+                fn('skipping email for user on unsubscribed list');
+            } else {
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+                    juice.juiceResources(mergedHtml, {}, function(err, html) {
+                        if (err) {
+                            self.log.error('A juice error occurred. Failed to set styles inline.');
+                            self.log.error(err);
+                            return fn(err, null);
+                        }
+
+                        var params = {
+                            smtpapi:  new sendgrid.smtpapi(),
+                            to:       [toAddress],
+                            from:     fromAddress,
+                            fromname: '',
+                            subject:  subject,
+                            html:     html,
+                            date:     moment().toISOString(),
+                            category: 'test'
                         };
                         if(fromName && fromName.length > 0) {
                             params.fromname = fromName;
@@ -309,7 +535,7 @@ var emailMessageManager = {
                                 email.setUniqueArgs({
                                     emailmessageId: emailmessage.id(),
                                     accountId:accountId,
-                                    orderId:orderId
+                                    emailId:emailId
                                 });
 
                                 sendgrid.send(email, function(err, json) {
@@ -323,324 +549,7 @@ var emailMessageManager = {
                                 });
                             }
                         });
-
-                    }
-                });
-            }
-        });
-
-    },
-
-    sendFulfillmentEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId,
-                                   vars, emailId, fn) {
-        var self = this;
-        self.log.debug('>> sendFulfillmentEmail');
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err || !account) {
-                self.log.debug('Cound not find account... using mandrill');
-                mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
-                    accountId, orderId, vars, emailId, fn);
-            } else if(!account.get('_settings') || account.get('_settings').email !== 'sendgrid'){
-                self.log.debug('Account settings indicate mandrill');
-                mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
-                    accountId, orderId, vars, emailId, fn);
-            } else {
-                self.log.debug('Sending with sendgrid');
-                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-                    if (isUnsubscribed == true) {
-                        fn('skipping email for user on unsubscribed list');
-                    } else {
-                        vars.push({
-                                "name": "SENDDATE",
-                                "content": moment().format('MMM Do, YYYY')
-                            },
-                            {
-                                "name": 'ORDERID',
-                                "content": orderId
-                            }
-                        );
-                        htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-                        juice.juiceResources(htmlContent, {}, function(err, html) {
-                            if (err) {
-                                self.log.error('A juice error occurred. Failed to set styles inline.');
-                                self.log.error(err);
-                                return fn(err, null);
-                            }
-                            var params = {
-                                smtpapi:  new sendgrid.smtpapi(),
-                                to:       [toAddress],
-                                from:     fromAddress,
-                                fromname: '',
-                                subject:  subject,
-                                html:     html,
-                                date:     moment().toISOString(),
-                                category: 'fulfillment'
-                            };
-                            if(fromName && fromName.length > 0) {
-                                params.fromname = fromName;
-                            }
-                            if(toName && toName.length > 0) {
-                                params.toname = toName;
-                            }
-
-                            self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
-                                //we should not have an err here
-                                if(err) {
-                                    self.log.error('Error storing email (this should not happen):', err);
-                                    return fn(err);
-                                } else {
-                                    var email = new sendgrid.Email(params);
-                                    email.setUniqueArgs({
-                                        emailmessageId: emailmessage.id(),
-                                        accountId:accountId,
-                                        orderId:orderId
-                                    });
-
-                                    sendgrid.send(email, function(err, json) {
-                                        if (err) {
-                                            self.log.error('Error sending email:', err);
-                                            return fn(err);
-                                        } else {
-                                            self.log.debug('<< sendAccountWelcomeEmail');
-                                            return fn(null, json);
-                                        }
-                                    });
-                                }
-                            });
-
-                        });
-                    }
-                });
-            }
-        });
-
-    },
-
-    sendNewCustomerEmail: function(toAddress, toName, accountId, vars, fn) {
-        var self = this;
-        self.log.debug('>> sendNewCustomerEmail');
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err || !account) {
-                self.log.debug('Cound not find account... using mandrill');
-                mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, fn);
-            } else if(!account.get('_settings') || account.get('_settings').email !== 'sendgrid'){
-                self.log.debug('Account settings indicate mandrill');
-                mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, fn);
-            } else {
-                self.log.debug('Sending with sendgrid');
-                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-                    if (isUnsubscribed == true) {
-                        fn('skipping email for user on unsubscribed list');
-                    } else {
-                        vars.push({
-                            "name": "SENDDATE",
-                            "content": moment().format('MMM Do, YYYY')
-                        });
-
-                        fs.readFile('templates/emails/new_customer.html', 'utf-8', function(err, htmlContent){
-                            if (err) {
-                                self.log.error('Error getting new customer email file.  Welcome email not sent for accountId ' + accountId, err);
-                            } else {
-                                htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-                                var subject = 'You have a new customer!';
-                                var fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
-                                var fromName = notificationConfig.WELCOME_FROM_NAME;
-
-                                var params = {
-                                    smtpapi:  new sendgrid.smtpapi(),
-                                    to:       [toAddress],
-                                    from:     fromAddress,
-                                    fromname: '',
-                                    subject:  subject,
-                                    html:     htmlContent,
-                                    date:     moment().toISOString(),
-                                    category: 'new_customer'
-                                };
-                                if(fromName && fromName.length > 0) {
-                                    params.fromname = fromName;
-                                }
-                                if(toName && toName.length > 0) {
-                                    params.toname = toName;
-                                }
-
-                                self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
-                                    //we should not have an err here
-                                    if(err) {
-                                        self.log.error('Error storing email (this should not happen):', err);
-                                        return fn(err);
-                                    } else {
-                                        var email = new sendgrid.Email(params);
-                                        email.setUniqueArgs({
-                                            emailmessageId: emailmessage.id(),
-                                            accountId:accountId
-                                        });
-
-                                        sendgrid.send(email, function(err, json) {
-                                            if (err) {
-                                                self.log.error('Error sending email:', err);
-                                                return fn(err);
-                                            } else {
-                                                self.log.debug('<< sendAccountWelcomeEmail');
-                                                return fn(null, json);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-
-    },
-
-    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
-        var self = this;
-        self.log.debug('>> sendBasicEmail');
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err || !account) {
-                self.log.debug('Cound not find account... using mandrill');
-                mandrillHelper.sendBasicEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
-                    vars, emailId, fn);
-            } else if(!account.get('_settings') || account.get('_settings').email !== 'sendgrid'){
-                self.log.debug('Account settings indicate mandrill');
-                mandrillHelper.sendBasicEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
-                    vars, emailId, fn);
-            } else {
-                self.log.debug('Sending with sendgrid');
-                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-                    if (isUnsubscribed == true) {
-                        fn('skipping email for user on unsubscribed list');
-                    } else {
-                        htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-                        juice.juiceResources(htmlContent, {}, function(err, html) {
-                            if (err) {
-                                self.log.error('A juice error occurred. Failed to set styles inline.');
-                                self.log.error(err);
-                                return fn(err, null);
-                            }
-
-                            var params = {
-                                smtpapi:  new sendgrid.smtpapi(),
-                                to:       [toAddress],
-                                from:     fromAddress,
-                                fromname: '',
-                                subject:  subject,
-                                html:     html,
-                                date:     moment().toISOString(),
-                                category: 'basic'
-                            };
-                            if(fromName && fromName.length > 0) {
-                                params.fromname = fromName;
-                            }
-                            if(toName && toName.length > 0) {
-                                params.toname = toName;
-                            }
-
-                            self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
-                                //we should not have an err here
-                                if(err) {
-                                    self.log.error('Error storing email (this should not happen):', err);
-                                    return fn(err);
-                                } else {
-                                    var email = new sendgrid.Email(params);
-                                    email.setUniqueArgs({
-                                        emailmessageId: emailmessage.id(),
-                                        accountId:accountId,
-                                        emailId:emailId
-                                    });
-
-                                    sendgrid.send(email, function(err, json) {
-                                        if (err) {
-                                            self.log.error('Error sending email:', err);
-                                            return fn(err);
-                                        } else {
-                                            self.log.debug('<< sendAccountWelcomeEmail');
-                                            return fn(null, json);
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                    }
-                });
-            }
-        });
-
-    },
-
-    sendTestEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
-        var self = this;
-        var contactId = null;
-        self.log.debug('>> sendTestEmail');
-        accountDao.getAccountByID(accountId, function(err, account){
-            if(err || !account) {
-                self.log.debug('Cound not find account... using mandrill');
-                mandrillHelper.sendTestEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
-                    vars, emailId, fn);
-            } else if(!account.get('_settings') || account.get('_settings').email !== 'sendgrid'){
-                self.log.debug('Account settings indicate mandrill');
-                mandrillHelper.sendTestEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId,
-                    vars, emailId, fn);
-            } else {
-                self.log.debug('Sending with sendgrid');
-                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
-                    if (isUnsubscribed == true) {
-                        fn('skipping email for user on unsubscribed list');
-                    } else {
-                        self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
-                            juice.juiceResources(mergedHtml, {}, function(err, html) {
-                                if (err) {
-                                    self.log.error('A juice error occurred. Failed to set styles inline.');
-                                    self.log.error(err);
-                                    return fn(err, null);
-                                }
-
-                                var params = {
-                                    smtpapi:  new sendgrid.smtpapi(),
-                                    to:       [toAddress],
-                                    from:     fromAddress,
-                                    fromname: '',
-                                    subject:  subject,
-                                    html:     html,
-                                    date:     moment().toISOString(),
-                                    category: 'test'
-                                };
-                                if(fromName && fromName.length > 0) {
-                                    params.fromname = fromName;
-                                }
-                                if(toName && toName.length > 0) {
-                                    params.toname = toName;
-                                }
-
-                                self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
-                                    //we should not have an err here
-                                    if(err) {
-                                        self.log.error('Error storing email (this should not happen):', err);
-                                        return fn(err);
-                                    } else {
-                                        var email = new sendgrid.Email(params);
-                                        email.setUniqueArgs({
-                                            emailmessageId: emailmessage.id(),
-                                            accountId:accountId,
-                                            emailId:emailId
-                                        });
-
-                                        sendgrid.send(email, function(err, json) {
-                                            if (err) {
-                                                self.log.error('Error sending email:', err);
-                                                return fn(err);
-                                            } else {
-                                                self.log.debug('<< sendAccountWelcomeEmail');
-                                                return fn(null, json);
-                                            }
-                                        });
-                                    }
-                                });
-                            });
-                        });
-                    }
+                    });
                 });
             }
         });
