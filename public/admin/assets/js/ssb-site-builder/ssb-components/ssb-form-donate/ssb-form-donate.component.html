@@ -15,7 +15,7 @@
                 <div class="form-donate-layout">
                     <div class="form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                         <div class="clearfix mb15 visible-xs"></div>
-                        <div class="col-sm-12">
+                        <div class="center col-sm-12">
                             <button ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" data-toggle="modal" data-target="#form-donate-modal-{{vm.component._id}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
                                 class="btn btn-form btn-default pull-right btn-block">
                                 <span elem ng-model="vm.component.submitBtn"></span>
