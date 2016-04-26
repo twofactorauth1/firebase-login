@@ -613,33 +613,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
 
-                    var dataCompiledAdded = function() {
-                        return diff1 &&
-                                diff2 &&
-                                angular.isDefined(diff1) &&
-                                angular.isDefined(diff1.indexOf) &&
-                                diff1.indexOf('data-compiled') === -1 &&
-                                diff1.indexOf('ssb-theme-btn') !== -1 &&
-                                angular.isDefined(diff2) &&
-                                angular.isDefined(diff2.indexOf) &&
-                                diff2.indexOf('data-compiled') !== -1 &&
-                                diff2.indexOf('ssb-theme-btn') !== -1
-                    };
-
-                    var dataCompiledRemoved = function() {
-                        return diff1 &&
-                                diff2 &&
-                                angular.isDefined(diff1) &&
-                                angular.isDefined(diff1.indexOf) &&
-                                diff1.indexOf('data-compiled') !== -1 &&
-                                diff1.indexOf('ssb-theme-btn') !== -1 &&
-                                angular.isDefined(diff2) &&
-                                angular.isDefined(diff2.indexOf) &&
-                                diff2.indexOf('data-compiled') === -1 &&
-                                diff2.indexOf('ssb-theme-btn') !== -1
-                    };
-
-                    if (dataCompiledAdded() || dataCompiledRemoved()) {
+                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2)) {
 
                         console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -676,6 +650,58 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
 
     }
+
+    /**
+     * Detect changes to page data, determine if they should be ignored
+     * - handles temp IDs for buttons inside Froala editor (button was added)
+     */
+    function dataIsCompiledAdded(diff1, diff2) {
+        return  diff1 &&
+                diff2 &&
+                angular.isDefined(diff1) &&
+                angular.isDefined(diff1.indexOf) &&
+                diff1.indexOf('data-compiled') === -1 &&
+                diff1.indexOf('ssb-theme-btn') !== -1 &&
+                angular.isDefined(diff2) &&
+                angular.isDefined(diff2.indexOf) &&
+                diff2.indexOf('data-compiled') !== -1 &&
+                diff2.indexOf('ssb-theme-btn') !== -1
+    };
+
+    /**
+     * Detect changes to page data, determine if they should be ignored
+     * - handles temp IDs for buttons inside Froala editor (button was removed)
+     */
+    function dataIsCompiledRemoved(diff1, diff2) {
+        return  diff1 &&
+                diff2 &&
+                angular.isDefined(diff1) &&
+                angular.isDefined(diff1.indexOf) &&
+                diff1.indexOf('data-compiled') !== -1 &&
+                diff1.indexOf('ssb-theme-btn') !== -1 &&
+                angular.isDefined(diff2) &&
+                angular.isDefined(diff2.indexOf) &&
+                diff2.indexOf('data-compiled') === -1 &&
+                diff2.indexOf('ssb-theme-btn') !== -1
+    };
+
+    /**
+     * Detect changes to page data, determine if they should be ignored
+     * - handles page's published date updating after a successful publish action
+     */
+    function dataIsPublishedDate(diff1, diff2) {
+        var ret = false;
+
+        if (diff1) {
+            if (diff1.length < 30 && diff1.indexOf(':') !== -1 && diff1.indexOf('-') !== -1) {
+                if (moment(diff1).isValid()) {
+                    ret = true;
+                }
+            }
+        }
+
+        return ret;
+    };
 
     function checkNavigation(e) {
         // debugger;
