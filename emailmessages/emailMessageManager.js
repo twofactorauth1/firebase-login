@@ -155,10 +155,11 @@ var emailMessageManager = {
                                 if(stepSettings.offset) {
                                     //the offset is the number of mintues from now to send it at.
                                     send_at = moment().utc().add('minutes', stepSettings.offset).unix();
-                                    self.log.debug('send_at ' + send_at);
+                                    self.log.debug('send_at (offset) ' + send_at);
                                 } else if(stepSettings.scheduled) {
                                     send_at = self._getSecheduledUTCUnix(stepSettings.scheduled.day,
                                         stepSettings.scheduled.hour, stepSettings.scheduled.minute, stepSettings.offset||0);
+                                    self.log.debug('send_at (scheduled): ' + send_at);
                                 } else if(stepSettings.sendAt) {
                                     self.log.debug('send details >>> ', stepSettings.sendAt);
                                     // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
@@ -181,7 +182,7 @@ var emailMessageManager = {
 
                                 var maxSendTime = moment().add(72, 'hours');
                                 email.setSendAt(send_at);
-                                if(maxSendTime.isBefore(moment(stepSettings.sendAt))) {
+                                if(maxSendTime.isBefore(moment.unix(send_at))) {
                                     //schedule the email
                                     self.log.debug('Scheduling email');
                                     var code = '';
@@ -199,7 +200,7 @@ var emailMessageManager = {
 
 
                                     scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
-                                        self.log.debug('<< sendAccountWelcomeEmail');
+                                        self.log.debug('<< sendCampaignEmail');
                                         return fn(err, value);
                                     });
 
@@ -210,7 +211,7 @@ var emailMessageManager = {
                                             self.log.error('Error sending email:', err);
                                             return fn(err);
                                         } else {
-                                            self.log.debug('<< sendAccountWelcomeEmail');
+                                            self.log.debug('<< sendCampaignEmail');
                                             return fn(null, json);
                                         }
                                     });
