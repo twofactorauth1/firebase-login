@@ -232,7 +232,7 @@ module.exports = {
                     if (section._id && Object.keys(section).length === 1) {
 
                         //then we'll get the reference and set the section data, changing out id's and keeping a ref
-                        self.log.debug('createPage->createSections: use ref instead of creating new');
+                        self.log._debug(accountId, userId, 'createPage->createSections: use ref instead of creating new');
 
                         sectionDao.getById(section._id, $$.m.ssb.Section, function(err, referencedSection){
                             if(err) {
@@ -249,7 +249,7 @@ module.exports = {
                                     s._id = id;
                                     s.anchor = id;
                                     s.accountId = accountId;
-                                    self.log.debug('new dereferenced', s);
+                                    self.log._debug(accountId, userId, 'new dereferenced', s);
                                 }
                                 else{
                                     section._id = id;
@@ -803,20 +803,20 @@ module.exports = {
      */
     getPageByVersion: function(accountId, pageId, fn) {
         var self = this;
-        self.log.debug('>> getPageByVersion');
+        self.log._debug(accountId, null,'>> getPageByVersion');
         var query = {
             _id: pageId,
             accountId:accountId
         };
         pageDao.findOne(query, $$.m.ssb.Page, function(err, page){
             if(err || !page) {
-                self.log.error('Error getting page:', err);
+                self.log._error(accountId, null,'Error getting page:', err);
                 return fn(err, null);
             } else {
                 var sections = page.get('sections') || [];
                 sectionDao.dereferenceSections(sections, function(err, sectionAry){
                     page.set('sections', _.compact(sectionAry));
-                    self.log.debug('<< getPageByVersion');
+                    self.log._debug(accountId, null,'<< getPageByVersion');
                     return fn(null, page);
                 });
 
@@ -833,11 +833,11 @@ module.exports = {
      */
     getPageByHandle: function(accountId, handle, websiteId, fn) {
         var self = this;
-        self.log.debug('>> getPageByHandle (' + accountId + ',' + handle + ',' + websiteId + ')');
-        //TODO: Add status
+        self.log._debug(accountId, null,'>> getPageByHandle (' + accountId + ',' + handle + ',' + websiteId + ')');
+
         pageDao.getLatestPageForWebsite(websiteId, handle, accountId, function(err, page){
             if(err || !page) {
-                self.log.error('Error getting page:', err);
+                self.log._error(accountId, null,'Error getting page:', err);
                 return fn(err, null);
             } else {
                 var sections = page.get('sections') || [];
@@ -854,7 +854,7 @@ module.exports = {
                     } else {
                         page.set('sections', sectionAry);
                     }
-                    self.log.debug('<< getPage');
+                    self.log._debug(accountId, null,'<< getPage');
                     return fn(null, page);
                 });
 
@@ -912,11 +912,11 @@ module.exports = {
 
     revertPage: function(accountId, pageId, version, userId, fn) {
         var self = this;
-        self.log.debug('>> revertPage [' + pageId + ']');
+        self.log._debug(accountId, userId,'>> revertPage [' + pageId + ']');
 
         self.getPageVersions(pageId, version, function(err, pageAry){
             if(err || pageAry === null) {
-                self.log.error('Error finding version of page: ' + err);
+                self.log._error(accountId, userId,'Error finding version of page: ' + err);
                 return fn(err, null);
             }
             var targetObj = pageAry[0];
@@ -927,7 +927,7 @@ module.exports = {
             targetObj.set('_id', pageId);
             self.getPageVersions(pageId, 'latest', function(err, latestPageAry){
                 if(err || pageAry === null) {
-                    self.log.error('Error finding version of page: ' + err);
+                    self.log._error(accountId, userId,'Error finding version of page: ' + err);
                     return fn(err, null);
                 }
                 var latestPage = latestPageAry[0];
@@ -939,17 +939,17 @@ module.exports = {
 
                 pageDao.saveOrUpdate(targetObj, function(err, savedPage){
                     if(err) {
-                        self.log.error('Error saving new version:', err);
+                        self.log._error(accountId, userId,'Error saving new version:', err);
                         return fn(err);
                     } else {
                         latestPage.set('_id', pageId + '_' + latestVersion);
                         latestPage.set('latest', false);
                         pageDao.saveOrUpdate(latestPage, function(err, latestPageSaved){
                             if(err) {
-                                self.log.error('Error saving prior vrsion:', err);
+                                self.log._error(accountId, userId,'Error saving prior vrsion:', err);
                                 return fn(err, savedPage);
                             } else {
-                                self.log.debug('<< revertPage');
+                                self.log._debug(accountId, userId,'<< revertPage');
                                 return fn(null, savedPage);
                             }
                         });
@@ -962,12 +962,12 @@ module.exports = {
 
     publishPage: function(accountId, pageId, userId, fn) {
         var self = this;
-        self.log.debug('>> publishPage');
+        self.log._debug(accountId, userId,'>> publishPage');
         async.waterfall([
             function getExistingPage(cb) {
                 pageDao.getPageById(accountId, pageId, function(err, page){
                     if(err) {
-                        self.log.error('Error getting page:', err);
+                        self.log._error(accountId, userId,'Error getting page:', err);
                         cb(err);
                     } else {
                         cb(null, page);
@@ -978,7 +978,7 @@ module.exports = {
               page.set('published', {date:new Date(), by: userId});
               pageDao.saveOrUpdate(page, function(err, updatedPage) {
                 if (err) {
-                  self.log.error('Error page published timestamp update');
+                  self.log._error(accountId, userId,'Error page published timestamp update');
                   cb(err);
                 } else {
                   cb(null, updatedPage);
@@ -988,7 +988,7 @@ module.exports = {
             function dereferenceSections(page, cb) {
                 sectionDao.dereferenceSections(page.get('sections'), function(err, sections){
                     if(err) {
-                        self.log.error('Error dereferencing sections');
+                        self.log._error(accountId, userId,'Error dereferencing sections');
                         cb(err);
                     } else {
                         var sectionJSON = [];
@@ -1004,13 +1004,12 @@ module.exports = {
                 page.set('published', {date:new Date(), by: userId});
                 pageDao.savePublishedPage(page, function(err, publishedPage){
                     if(err) {
-                        self.log.error('Error publishing page:', err);
+                        self.log._error(accountId, userId,'Error publishing page:', err);
                         cb(err);
                     } else {
                         pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){
                             if (err) {
-                                console.debug('Error on S3 template update in updatePage/savePublishedPage');
-                                console.error(err);
+                                self.log._error(accountId, userId,'Error on s3 template update in savePage:', err);
                             }
                         });
                         cb(err, publishedPage);
@@ -1032,7 +1031,7 @@ module.exports = {
                     };
                     pageDao.findPublishedPages(query, function(err, pages){
                         if(err) {
-                            self.log.error('Error finding other published pages:', err);
+                            self.log._error(accountId, userId,'Error finding other published pages:', err);
                             callback(err);
                         } else {
                             _.each(pages, function(page){
@@ -1068,17 +1067,17 @@ module.exports = {
                     });
                 }, function(err){
                     if(err) {
-                        self.log.error('Error updating other pages:', err);
+                        self.log._error(accountId, userId,'Error updating other pages:', err);
                     }
                     cb(err, page);
                 });
             }
         ], function done(err, publishedPage){
             if(err) {
-                self.log.error('Error in publishPage:', err);
+                self.log._error(accountId, userId,'Error in publishPage:', err);
                 fn(err);
             } else {
-                self.log.debug('<< publishPage');
+                self.log._debug(accountId, userId,'<< publishPage');
                 fn(null, publishedPage);
             }
         });
@@ -1086,7 +1085,7 @@ module.exports = {
 
     updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
         var self = this;
-        self.log.debug('>> updatePage (' + pageId + ')');
+        self.log._debug(accountId, userId,'>> updatePage (' + pageId + ')');
 
         page = self.cleanEditorHTML(page);
 
@@ -1094,7 +1093,7 @@ module.exports = {
             function getExistingPage(cb){
                 pageDao.getPageById(accountId, pageId, function(err, existingPage){
                     if(err) {
-                        self.log.error('Error getting page:', err);
+                        self.log._error(accountId, userId,'Error getting page:', err);
                         cb(err);
                     } else {
                         cb(null, existingPage);
@@ -1108,7 +1107,7 @@ module.exports = {
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
-                        self.log.error('Error finding global header:', err);
+                        self.log._error(accountId, userId,'Error finding global header:', err);
                         cb(err);
                     } else {
                         cb(null, existingPage, section);
@@ -1123,7 +1122,7 @@ module.exports = {
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
-                        self.log.error('Error finding global footer:', err);
+                        self.log._error(accountId, userId,'Error finding global footer:', err);
                         cb(err);
                     } else {
                         cb(null, existingPage, globalHeader, section);
@@ -1135,7 +1134,7 @@ module.exports = {
                 if(existingPage.hasSectionReferences()) {
                     sectionDao.dereferenceSections(existingPage.get('sections'), function(err, existingSectionAry){
                         if(err) {
-                            self.log.error('Error dereferencing existing sections:', err);
+                            self.log._error(accountId, userId,'Error dereferencing existing sections:', err);
                             cb(err);
                         } else {
                             cb(null, existingPage, globalHeader, globalFooter, existingSectionAry);
@@ -1150,7 +1149,7 @@ module.exports = {
                 if(page.hasSectionReferences()) {
                     sectionDao.dereferenceSections(page.get('sections'), function(err, pageSectionAry){
                         if(err) {
-                            self.log.error('Error dereferencing page sections:', err);
+                            self.log._error(accountId, userId,'Error dereferencing page sections:', err);
                             cb(err);
                         } else {
                             page.set('sections', pageSectionAry);
@@ -1171,7 +1170,7 @@ module.exports = {
                     if(!section ||  typeof section.id === 'undefined') {
                         section = new $$.m.ssb.Section(section);
                     }
-                    self.log.debug(section.get('name') + ' :: ' + section.get('title'));
+                    self.log._debug(accountId, userId,section.get('name') + ' :: ' + section.get('title'));
 
                     if (section.get('accountId') === 0 || section.get('accountId')=== null) {
                         var id = $$.u.idutils.generateUUID();
@@ -1181,13 +1180,13 @@ module.exports = {
 
                     // section is globalHeader reference and user already has globalHeader in their account's section collection
                     if (section.get('globalHeader') && globalHeader) {
-                        self.log.debug('page has globalHeader ref, account has globalHeader');
+                        self.log._debug(accountId, userId,'page has globalHeader ref, account has globalHeader');
                         section.set('_id', globalHeader.id());
                         section.set('refId', section.id());
                     }
 
                     if (section.get('globalFooter') && globalFooter) {
-                        self.log.debug('page has globalFooter ref, account has globalFooter');
+                        self.log._debug(accountId, userId,'page has globalFooter ref, account has globalFooter');
                         section.set('_id', globalFooter.id());
                         section.set('refId', section.id());
                     }
@@ -1201,7 +1200,7 @@ module.exports = {
                 }, function(err){
 
                     if(err) {
-                        self.log.error("Error getting template's referenced sections:", err);
+                        self.log._error(accountId, userId,"Error getting template's referenced sections:", err);
                         cb(err);
                     } else {
                         //Callback here so we can do the actual compare/update next:
@@ -1221,7 +1220,7 @@ module.exports = {
                 async.eachSeries(dereferencedSections, function(section, callback){
 
                     var existingSection = _.find(existingSections, function(existingSection) {
-                        self.log.debug('existing section?', existingSection);
+                        self.log._debug(accountId, userId,'existing section?', existingSection);
                         if (existingSection && existingSection.id) {
                             return section.id() === existingSection.id()
                         } else {
@@ -1246,7 +1245,7 @@ module.exports = {
                             });
                             sectionDao.saveOrUpdate(section, function(err, value){
                                 if(err) {
-                                    self.log.error('Error updating section:', err);
+                                    self.log._error(accountId, userId,'Error updating section:', err);
                                     callback(err);
                                 } else {
                                     callback();
@@ -1261,7 +1260,7 @@ module.exports = {
                         //this is a new section...
                         sectionDao.saveOrUpdate(section, function(err, value){
                             if(err) {
-                                self.log.error('Error updating section:', err);
+                                self.log._error(accountId, userId,'Error updating section:', err);
                                 callback(err);
                             } else {
                                 callback();
@@ -1270,7 +1269,7 @@ module.exports = {
                     }
                 }, function done(err){
                     if(err) {
-                        self.log.error('Error updating sections:', err);
+                        self.log._error(accountId, userId,'Error updating sections:', err);
                         cb(err);
                     } else {
                         cb(null, existingPage, dereferencedSections, otherPagesWithSectionReferences);
@@ -1287,7 +1286,7 @@ module.exports = {
                     var query = {pageId:{$ne:pageId}, 'sections._id':oldId};
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
                         if(err) {
-                            self.log.error('Error finding pages with section reference:', err);
+                            self.log._error(accountId, userId,'Error finding pages with section reference:', err);
                             callback(err);
                         } else {
                             async.eachSeries(pages, function(page, _callback){
@@ -1301,7 +1300,7 @@ module.exports = {
                                 });
                             }, function(err){
                                 if(err) {
-                                    self.log.error('Error updating page:', err);
+                                    self.log._error(accountId, userId,'Error updating page:', err);
                                     callback(err);
                                 } else {
                                     callback();
@@ -1311,7 +1310,7 @@ module.exports = {
                     });
                 }, function(err){
                     if(err) {
-                        self.log.error('Error updating other pages:', err);
+                        self.log._error(accountId, userId,'Error updating other pages:', err);
                         cb(err);
                     } else {
                         cb(null, existingPage, updatedSections);
@@ -1327,7 +1326,7 @@ module.exports = {
                 existingPage.set('_id', existingPage.id() + '_' + currentVersion);
                 pageDao.saveOrUpdate(existingPage, function(err, value){
                     if(err) {
-                        self.log.error('Error saving existing page with new id:', err);
+                        self.log._error(accountId, userId,'Error saving existing page with new id:', err);
                         cb(err);
                     } else {
                         cb(null, value, updatedSections, newVersion);
@@ -1349,7 +1348,7 @@ module.exports = {
                 page.set('version', newVersion);
                 pageDao.saveOrUpdate(page, function(err, updatedPage){
                     if(err) {
-                        self.log.error('Error updating page:', err);
+                        self.log._error(accountId, userId,'Error updating page:', err);
                         cb(err);
                     } else {
                         cb(null, existingPage, updatedPage, updatedSections);
@@ -1392,10 +1391,10 @@ module.exports = {
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
                     self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
                         if (err) {
-                            self.log.error('Error getting index page: ' + err);
+                            self.log._error(accountId, userId,'Error getting index page: ' + err);
                             cb(err);
                         } else {
-                            self.log.debug('<< check for index page');
+                            self.log._debug(accountId, userId,'<< check for index page');
                             if(page){
                                 page.set("handle", "index-old-" + new Date().getTime() );
                                 var visibility = page.get("visibility");
@@ -1403,12 +1402,12 @@ module.exports = {
                                 page.set("visibility", visibility );
                                 pageDao.saveOrUpdate(page, function(err, value){
                                     if (err) {
-                                        self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
+                                        self.log._error(accountId, userId,'Error updating page with id [' + page.get("_id") + ']: ' + err);
                                         cb(err);
                                     } else {
                                             self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'), "head-menu", function(err, list) {
                                             if (err) {
-                                                self.log.error('Error getting website linklists by handle: ' + err);
+                                                self.log._error(accountId, userId,'Error getting website linklists by handle: ' + err);
                                                 cb(err);
                                             } else {
                                                     list.links = _(list.links).chain()
@@ -1424,13 +1423,13 @@ module.exports = {
                                                     .value();
                                                     self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
                                                         if (err) {
-                                                            self.log.error('Error updating website linklists by handle: ' + err);
+                                                            self.log._error(accountId, userId,'Error updating website linklists by handle: ' + err);
                                                             cb(err);
                                                         } else {
                                                             updatedPage.set("handle", 'index');
                                                             pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
                                                                 if(err) {
-                                                                    self.log.error('Error updating page:', err);
+                                                                    self.log._error(accountId, userId,'Error updating page:', err);
                                                                     cb(err);
                                                                 } else {
                                                                     cb(null, existingPage, updatedPage, updatedSections);
@@ -1443,11 +1442,11 @@ module.exports = {
                                     }
                                 });
                             } else {
-                                self.log.debug('<< no index page found');
+                                self.log._debug(accountId, userId,'<< no index page found');
                                 updatedPage.set("handle", 'index');
                                 pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
                                     if(err) {
-                                        self.log.error('Error updating page:', err);
+                                        self.log._error(accountId, userId,'Error updating page:', err);
                                         cb(err);
                                     } else {
                                         cb(null, existingPage, updatedPage, updatedSections);
@@ -1465,7 +1464,7 @@ module.exports = {
                 self.log.info('listPages');
                 self.listPages(accountId, updatedPage.get('websiteId'), function(err, pages){
                     if (err) {
-                        self.log.error('Error getting index page: ' + err);
+                        self.log._error(accountId, userId,'Error getting index page: ' + err);
                         cb(err);
                     }
                     else{
@@ -1478,7 +1477,7 @@ module.exports = {
                 if (updatedPage.get('mainmenu') === false) {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
-                            self.log.error('Error getting website linklists by handle: ' + err);
+                            self.log._error(accountId, userId,'Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else {
                             if(list && list.links){
@@ -1488,7 +1487,7 @@ module.exports = {
                             }
                             self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
                                 if (err) {
-                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    self.log._error(accountId, userId,'Error updating website linklists by handle: ' + err);
                                     cb(err);
                                 } else {
                                    cb(null, updatedPage, updatedSections, pages);
@@ -1499,10 +1498,10 @@ module.exports = {
                 } else {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
-                            self.log.error('Error getting website linklists by handle: ' + err);
+                            self.log._error(accountId, userId,'Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else if(!list){
-                            self.log.debug('No link lists for this handle.');
+                            self.log._debug(accountId, userId,'No link lists for this handle.');
                             cb(null, updatedPage, updatedSections, pages);
                         } else {
 
@@ -1563,7 +1562,7 @@ module.exports = {
 
                             self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
                                 if (err) {
-                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    self.log._error(accountId, userId,'Error updating website linklists by handle: ' + err);
                                     cb(err);
                                 } else {
                                     cb(null, updatedPage, updatedSections, pages);
@@ -1609,7 +1608,7 @@ module.exports = {
                                         //look through the sections on this page to any whose _id matches the global section
                                         //TODO: match irrespective of version
                                         var exists = _.filter(sections, function(section) { return gsection.get("_id").indexOf(section._id) !== -1; });
-                                        self.log.debug('exists: ' , exists);
+                                        self.log._debug(accountId, userId,'exists: ' , exists);
                                         if(!exists.length){// if the global section does NOT already appear on the page
                                             var globalSection = {_id: gsection.get("_id")};
                                             var globalSectionID = gsection.id();
@@ -1628,7 +1627,7 @@ module.exports = {
                                                 }
                                                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, existingHeaderSection){
                                                     if(err) {
-                                                        self.log.error('Error finding global header:', err);
+                                                        self.log._error(accountId, userId,'Error finding global header:', err);
                                                         g_callback(err);
                                                     } else {
                                                         if(existingHeaderSection) {
@@ -1656,7 +1655,7 @@ module.exports = {
                                                 };
                                                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
                                                     if(err) {
-                                                        self.log.error('Error finding global footer:', err);
+                                                        self.log._error(accountId, userId,'Error finding global footer:', err);
                                                         g_callback(err);
                                                     } else {
                                                         if(footerSection) {
@@ -1666,8 +1665,8 @@ module.exports = {
 
                                                             if(filteredFooter) {
                                                                 var footerIndex = _.indexOf(sections, filteredFooter);
-                                                                self.log.debug('footerIndex: ' , footerIndex);
-                                                                self.log.debug('globalSection: ' , globalSection);
+                                                                self.log._debug(accountId, userId,'footerIndex: ' , footerIndex);
+                                                                self.log._debug(accountId, userId,'globalSection: ' , globalSection);
                                                                 //TODO: this may need to be (footerIndex,1,globalSection) to overwrite
                                                                 sections.splice(footerIndex, 0, globalSection);
                                                             } else {
@@ -1690,7 +1689,7 @@ module.exports = {
                                                 };
                                                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection) {
                                                     if (err) {
-                                                        self.log.error('Error finding global footer:', err);
+                                                        self.log._error(accountId, userId,'Error finding global footer:', err);
                                                         g_callback(err);
                                                     } else {
                                                         if(footerSection) {
@@ -1701,8 +1700,8 @@ module.exports = {
 
                                                             if(filteredFooter) {
                                                                 var footerIndex = _.indexOf(sections, filteredFooter);
-                                                                self.log.debug('footerIndex: ' , footerIndex);
-                                                                self.log.debug('globalSection: ' , globalSection);
+                                                                self.log._debug(accountId, userId, 'footerIndex: ' , footerIndex);
+                                                                self.log._debug(accountId, userId, 'globalSection: ' , globalSection);
                                                                 sections.splice(footerIndex, 0, globalSection);
                                                             } else {
                                                                 sections.push(globalSection);
@@ -1733,7 +1732,7 @@ module.exports = {
                             }, function(err){
 
                                 if(err) {
-                                    self.log.error("Error getting template's referenced sections:", err);
+                                    self.log._error(accountId, userId,"Error getting template's referenced sections:", err);
                                     p_callback(err);
                                 } else {
                                     p_callback();
@@ -1744,13 +1743,13 @@ module.exports = {
                         }
                     }, function(err){
                         if(err) {
-                            self.log.error("Error getting template's referenced sections:", err);
+                            self.log._error(accountId, userId,"Error getting template's referenced sections:", err);
                             cb(err);
                         } else {
                             if(_update){
                                 pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, value){
                                     if (err) {
-                                        self.log.error('Error updating page: ' + err);
+                                        self.log._error(accountId, userId,'Error updating page: ' + err);
                                         cb(err);
                                     } else {
                                         cb(null, updatedPage, updatedSections);
@@ -1777,7 +1776,7 @@ module.exports = {
                 updatedPage.set('sections', sectionArray);
 
             }
-            self.log.debug('<< updatePage');
+            self.log._debug(accountId, userId,'<< updatePage');
             fn(err, updatedPage);
         });
     },
@@ -1790,7 +1789,7 @@ module.exports = {
 
     listAccountSectionSummaries: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> listAccountSectionSummaries');
+        self.log._debug(accountId, null, '>> listAccountSectionSummaries');
 
         var query = {accountId:accountId, reusable:true};
         //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
@@ -1806,10 +1805,10 @@ module.exports = {
 
         sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
             if(err) {
-                self.log.error('Error listing sections:', err);
+                self.log._error(accountId, null, 'Error listing sections:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listAccountSectionSummaries');
+                self.log._debug(accountId, null, '<< listAccountSectionSummaries');
                 return fn(null, list);
             }
         });
@@ -1817,7 +1816,7 @@ module.exports = {
 
     listAllSectionSummaries: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> listAllSectionSummaries');
+        self.log._debug(accountId, null, '>> listAllSectionSummaries');
 
         var query = {$or: [{accountId:accountId},{accountId:PLATFORM_ID}]};
         //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
@@ -1833,10 +1832,10 @@ module.exports = {
 
         sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
             if(err) {
-                self.log.error('Error listing sections:', err);
+                self.log._error(accountId, null, 'Error listing sections:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listAllSectionSummaries');
+                self.log._debug(accountId, null, '<< listAllSectionSummaries');
                 return fn(null, list);
             }
         });
@@ -1844,7 +1843,7 @@ module.exports = {
 
     listPlatformSectionSummaries: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> listPlatformSectionSummaries');
+        self.log._debug(accountId, null, '>> listPlatformSectionSummaries');
 
         var query = {accountId:PLATFORM_ID};
         //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
@@ -1862,10 +1861,10 @@ module.exports = {
 
         sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
             if(err) {
-                self.log.error('Error listing sections:', err);
+                self.log._error(accountId, null, 'Error listing sections:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listPlatformSectionSummaries');
+                self.log._debug(accountId, null, '<< listPlatformSectionSummaries');
                 return fn(null, list);
             }
         });
@@ -1873,16 +1872,15 @@ module.exports = {
 
     getSection: function(accountId, sectionId, fn) {
         var self = this;
-        self.log.debug('>> getSection');
+        self.log._debug(accountId, null, '>> getSection');
         var query = {_id: sectionId, accountId: {$in: [accountId, PLATFORM_ID]}};
-        self.log.debug('query: ', query);
+        self.log._debug(accountId, null, 'query: ', query);
         sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
             if(err || !section) {
-                self.log.error('Error getting section:', err);
-                self.log.error('Error getting section:', sectionId);
+                self.log._error(accountId, null, 'Error getting section [' + sectionId + ']:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< getSection');
+                self.log._debug(accountId, null, '<< getSection');
                 return fn(null, section);
             }
         });
@@ -1890,14 +1888,14 @@ module.exports = {
 
     listComponents: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> listComponents');
+        self.log._debug(accountId, null, '>> listComponents');
 
         componentDao.findMany({_id: {$ne:'__counter__'}}, $$.m.ssb.Component, function(err, components){
             if(err) {
-                self.log.error('Error listing components:', err);
+                self.log._error(accountId, null, 'Error listing components:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listComponents');
+                self.log._debug(accountId, null, '<< listComponents');
                 return fn(null, components);
             }
         });
@@ -1930,14 +1928,14 @@ module.exports = {
 
     listSiteTemplates: function(accountId, fn){
         var self = this;
-        self.log.debug('>> listSiteTemplates');
+        self.log._debug(accountId, null, '>> listSiteTemplates');
 
         siteTemplateDao.findMany({_id: {$ne:'__counter__'}}, $$.m.ssb.SiteTemplate, function(err, siteTemplates){
             if(err) {
-                self.log.error('Error listing site templates:', err);
+                self.log._error(accountId, null, 'Error listing site templates:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listSiteTemplates');
+                self.log._debug(accountId, null, '<< listSiteTemplates');
                 return fn(null, siteTemplates);
             }
         });
@@ -1945,13 +1943,13 @@ module.exports = {
 
     getSiteTemplate: function(accountId, siteTemplateId, fn) {
         var self = this;
-        self.log.debug('>> getSiteTemplate');
+        self.log._debug(accountId, null, '>> getSiteTemplate');
         siteTemplateDao.getById(siteTemplateId, $$.m.ssb.SiteTemplate, function(err, siteTemplate){
             if(err) {
-                self.log.error('Error getting site template:', err);
+                self.log._error(accountId, null, 'Error getting site template:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< getSiteTemplate');
+                self.log._debug(accountId, null, '<< getSiteTemplate');
                 return fn(null, siteTemplate);
             }
         });
@@ -1959,7 +1957,8 @@ module.exports = {
 
     setSiteTemplate: function(accountId, siteTemplateId, siteThemeId, websiteId, created, fn) {
         var self = this;
-        self.log.debug('>> setSiteTemplate', siteTemplateId);
+        var userId = created.by;
+        self.log._debug(accountId, userId, '>> setSiteTemplate', siteTemplateId);
 
         /*
          * 1. Get the website
@@ -1971,7 +1970,7 @@ module.exports = {
             function getWebsite(cb){
                 websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
                     if(err) {
-                        self.log.error('Error getting website:', err);
+                        self.log._error(accountId, userId, 'Error getting website:', err);
                         cb(err);
                     } else {
                         cb(null, website);
@@ -1987,19 +1986,19 @@ module.exports = {
                 website.set('modified', created);
                 websiteDao.saveOrUpdate(website, function(err, updatedWebsite){
                     if(err) {
-                        self.log.error('Error updating website:', err);
+                        self.log._error(accountId, userId, 'Error updating website:', err);
                     }
-                    self.log.debug('setSiteTemplate', updatedWebsite.get('siteTemplateId'));
+                    self.log._debug(accountId, userId, 'setSiteTemplate', updatedWebsite.get('siteTemplateId'));
                     cb(err, updatedWebsite, createPages);
                 });
             },
             function createDefaultPages(website, createPages, cb){
                 if(createPages === true) {
-                    self.log.debug('createDefaultPages', website.get('siteTemplateId'));
+                    self.log._debug(accountId, userId, 'createDefaultPages', website.get('siteTemplateId'));
                     self.getSiteTemplate(accountId, website.get('siteTemplateId'), function(err, siteTemplate) {
 
                         if (err) {
-                            self.log.error('Error getting siteTemplate for website:', err);
+                            self.log._error(accountId, userId, 'Error getting siteTemplate for website:', err);
                             return cb(err);
                         }
 
@@ -2016,7 +2015,7 @@ module.exports = {
                         }
 
                         async.eachSeries(pagesToCreate, function(pageData, callback){
-                            self.log.debug('pagesToCreate', pagesToCreate);
+                            self.log._debug(accountId, userId, 'pagesToCreate', pagesToCreate);
 
                             //push page to website's linkList
                             linkLists[0].links.push({
@@ -2035,12 +2034,12 @@ module.exports = {
                                     callback(err)
                                 } else {
                                     var pageId = updatedPage.id();
-                                    self.log.debug('Created a page with id:', pageId);
+                                    self.log._debug(accountId, userId, 'Created a page with id:', pageId);
 
                                     //if pageData has a template reference from the selected site template's defaultPageTemplates prop then use that
                                     if (pageData.type === 'template') {
 
-                                        self.log.debug("using the siteTemplate's defaultPageTemplates to update a default page");
+                                        self.log._debug(accountId, userId, "using the siteTemplate's defaultPageTemplates to update a default page");
                                         self.getTemplate(accountId, null, pageData.pageTemplateId, function(err, template) {
 
                                             if (err) {
@@ -2070,7 +2069,7 @@ module.exports = {
                                                         }
 
                                                         self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
-                                                            self.log.debug('updated page using siteTemplate data');
+                                                            self.log._debug(accountId, userId, 'updated page using siteTemplate data');
                                                             callback(err);
                                                         });
                                                     }
@@ -2084,7 +2083,7 @@ module.exports = {
                                 }
                             });
                         }, function(err){
-                            self.log.debug('finished updating pages');
+                            self.log._debug(accountId, userId, 'finished updating pages');
 
                             //update website's linkLists to match the default pages created
                             website.set('linkLists', linkLists);
@@ -2093,7 +2092,7 @@ module.exports = {
                                 if (err) {
                                     cb(err);
                                 } else {
-                                    self.log.debug('finished updating website linkList', website.get('linkLists'));
+                                    self.log._debug(accountId, userId, 'finished updating website linkList', website.get('linkLists'));
                                     //finally done...
                                     cb(err, indexPageId);
                                 }
@@ -2103,14 +2102,14 @@ module.exports = {
 
                     });
                 } else {
-                    self.log.debug('Skipping page creation');
+                    self.log._debug(accountId, userId, 'Skipping page creation');
                     cb(null);
                 }
 
             }
         ], function done(err, indexPageId){
             //Note: [Jack] I added id of index page so we know where to send user when we get the response
-            self.log.debug('<< setSiteTemplate');
+            self.log._debug(accountId, userId, '<< setSiteTemplate');
 
             var responseObj = {
                 ok: true
