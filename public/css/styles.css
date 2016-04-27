@@ -10988,6 +10988,13 @@ ssb-topbar.dragging {
   max-height: calc(100vh - 250px);
   border-radius: 0px 0px 5px 5px;
 }
+.ssb-sidebar-section-panel-scrollable .ui-select-match-text > small {
+  width: 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
 .ssb-sidebar-section-panel-loading-background {
   position: absolute;
   height: 90px;
@@ -12987,8 +12994,7 @@ ssb-topbar .ui-select-match-text > small {
   display: block;
 }
 .form-builder-layout .form-layout-1 button {
-  float: right;
-  min-width: 50% !important;
+  width: auto;
 }
 .form-builder-layout .form-layout-1:hover {
   cursor: pointer;
@@ -13002,9 +13008,8 @@ ssb-topbar .ui-select-match-text > small {
   margin: auto;
 }
 .form-builder-layout .form-layout-2 button {
-  float: right;
   margin-right: 15px;
-  min-width: 50% !important;
+  width: auto;
 }
 .form-builder-layout .form-layout-2:hover {
   cursor: pointer;
@@ -13016,8 +13021,8 @@ ssb-topbar .ui-select-match-text > small {
   position: relative;
 }
 .form-builder-layout .form-layout-3 button {
-  float: right;
   margin-right: 15px;
+  width: auto;
 }
 .form-builder-layout .form-layout-3:hover {
   cursor: pointer;
@@ -13031,8 +13036,7 @@ ssb-topbar .ui-select-match-text > small {
   margin: auto;
 }
 .form-builder-layout .form-layout-4 button {
-  float: right;
-  min-width: 50% !important;
+  width: auto;
 }
 .form-builder-layout .form-layout-4:hover {
   cursor: pointer;
@@ -13043,9 +13047,6 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .form-layout-custom {
   position: relative;
   margin: auto;
-}
-.form-builder-layout .form-layout-custom button {
-  float: right;
 }
 .form-builder-layout .form-layout-custom:hover {
   cursor: pointer;
@@ -13084,6 +13085,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .editable-btn-form {
   opacity: 0.65;
+  display: table;
 }
 .ssb-theme-btn:hover:before {
   background: rgba(255, 255, 255, 0.1);
