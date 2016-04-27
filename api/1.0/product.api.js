@@ -155,7 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listIndigenousProducts');
 
         var accountId = appConfig.mainAccountID;
-        self.log._debug(accountId, null, '>> listIndigenousProducts');
+        self.log.debug(accountId, null, '>> listIndigenousProducts');
         var skip,limit;
         if(req.query.skip) {
             skip = parseInt(req.query.skip);
