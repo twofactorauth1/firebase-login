@@ -46,6 +46,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
         app.post(this.url('mandrill/event/unsub'), this.handleUnsubscribe.bind(this));
 
+        app.post(this.url('sendgrid/event'), this.filterSendgridEvents.bind(this), this.handleSendgridEvent.bind(this));
+
         app.post(this.url('stripe/event'), this.sendStripeEventToKeen.bind(this));
 
         app.post(this.url('intercom/event'), this.handleIntercomEvent.bind(this));
@@ -173,6 +175,17 @@ _.extend(api.prototype, baseApi.prototype, {
     verifyEvent: function(req, res, next) {
         //TODO: verify event comes from segment
         next();
+    },
+
+    filterSendgridEvents: function(req, resp, next) {
+        next();
+    },
+
+    handleSendgridEvent: function(req, resp) {
+        var self = this;
+        var events = req.body;
+        self.log.debug('>> handleSendgridEvent:', events);
+        self.send200(resp);
     },
 
     filterMandrillEvents: function(req, res, next) {
