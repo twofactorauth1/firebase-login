@@ -12988,7 +12988,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .form-builder-layout .form-layout-1 button {
   float: right;
-  min-width: 50% !important;
+  width: auto;
 }
 .form-builder-layout .form-layout-1:hover {
   cursor: pointer;
@@ -13004,7 +13004,7 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .form-layout-2 button {
   float: right;
   margin-right: 15px;
-  min-width: 50% !important;
+  width: auto;
 }
 .form-builder-layout .form-layout-2:hover {
   cursor: pointer;
@@ -13018,6 +13018,7 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .form-layout-3 button {
   float: right;
   margin-right: 15px;
+  width: auto;
 }
 .form-builder-layout .form-layout-3:hover {
   cursor: pointer;
@@ -13032,7 +13033,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .form-builder-layout .form-layout-4 button {
   float: right;
-  min-width: 50% !important;
+  width: auto;
 }
 .form-builder-layout .form-layout-4:hover {
   cursor: pointer;
