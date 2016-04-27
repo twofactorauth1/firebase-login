@@ -76,6 +76,33 @@ module.exports = {
             }
             var log = log4js.getLogger(name);
             log.setLevel(props.logLevel);
+            log._debug = function(accountId, userId, msg) {
+                var prefix = '';
+                if(userId) {
+                    prefix = '[user_' + userId  + '] ' + prefix;
+                }
+                if(accountId) {
+                    prefix = '[account_' + accountId + '] ' + prefix;
+                }
+                if(prefix.length > 0) {
+                    msg = '\x1B[1m\x1B[31m' + prefix + '\x1B[39m\x1B[22m - ' + msg;
+                }
+                this.debug(msg);
+            };
+
+            log._error = function(accountId, userId, msg) {
+                var prefix = '';
+                if(userId) {
+                    prefix = '[user_' + userId  + '] ' + prefix;
+                }
+                if(accountId) {
+                    prefix = '[account_' + accountId + '] ' + prefix;
+                }
+                if(prefix.length > 0) {
+                    msg = '\x1B[1m\x1B[31m' + prefix + '\x1B[39m\x1B[22m - ' + msg;
+                }
+                this.error(msg);
+            };
             return log;
         };
     }

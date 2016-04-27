@@ -101,7 +101,9 @@ _.extend(api.prototype, baseApi.prototype, {
     deletePage: function(req, resp) {
 
         var self = this;
-        self.log.debug('>> deletePage');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> deletePage');
         var accountId = parseInt(self.accountId(req));
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
@@ -114,6 +116,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(err) {
                         self.wrapError(resp, 500, err, "Error deleting page");
                     } else {
+                        self.log._debug(accountId, userId, '<< deletePage');
                         self.send200(resp);
                         self.createUserActivity(req, 'DELETE_PAGE', null, {pageId: pageId}, function(){});
                     }
@@ -124,15 +127,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listTemplates: function(req, resp) {
         var self = this;
-        self.log.debug('>> listTemplates');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listTemplates');
+
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.listTemplates(accountId, function(err, list){
-                    self.log.debug('<< listTemplates');
+                    self.log.debug(accountId, userId, '<< listTemplates');
                     return self.sendResultOrError(resp, err, list, "Error listing templates");
                 });
             }
@@ -142,15 +147,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getTemplate: function(req, resp) {
         var self = this;
-        self.log.debug('>> getTemplate');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getTemplate');
+
         var templateId = req.params.id;
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                ssbManager.getTemplate(templateId, function(err, template){
-                    self.log.debug('<< getTemplate');
+                ssbManager.getTemplate(accountId, userId, templateId, function(err, template){
+                    self.log._debug(accountId, userId, '<< getTemplate');
                     return self.sendResultOrError(resp, err, template, "Error getting template");
                 });
             }
@@ -159,14 +166,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listThemes: function(req, resp) {
         var self = this;
-        self.log.debug('>> listThemes');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listThemes');
+
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.listThemes(accountId, function(err, themes){
-                    self.log.debug('<< listThemes');
+                    self.log._debug(accountId, userId, '<< listThemes');
                     return self.sendResultOrError(resp, err, themes, "Error listing themes");
                 });
             }
@@ -175,16 +184,18 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getTheme: function(req, resp) {
         var self = this;
-        self.log.debug('>> getTheme');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getTheme');
+
         var themeId = req.params.id;
         self.log.debug('themeId:', themeId);
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                ssbManager.getTheme(themeId, function(err, theme){
-                    self.log.debug('<< getTheme');
+                ssbManager.getTheme(accountId, userId, themeId, function(err, theme){
+                    self.log._debug(accountId, userId, '<< getTheme');
                     return self.sendResultOrError(resp, err, theme, "Error getting theme");
                 });
             }
@@ -197,15 +208,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listWebsites: function(req, resp) {
         var self = this;
-        self.log.debug('>> listWebsites');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listWebsites');
+
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.listWebsites(accountId, function(err, websites){
-                    self.log.debug('<< listWebsites');
+                    self.log._debug(accountId, userId, '<< listWebsites');
                     return self.sendResultOrError(resp, err, websites, "Error getting websites");
                 });
             }
@@ -214,8 +227,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getWebsite: function(req, resp) {
         var self = this;
-        self.log.debug('>> getWebsite');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getWebsite');
+
         var websiteId = req.params.id;
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
@@ -223,7 +238,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 ssbManager.getWebsite(accountId, websiteId, function(err, website){
-                    self.log.debug('<< getWebsite');
+                    self.log._debug(accountId, userId, '<< getWebsite');
                     return self.sendResultOrError(resp, err, website, "Error getting websites");
                 });
             }
@@ -232,18 +247,20 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateWebsite: function(req, resp) {
         var self = this;
-        self.log.debug('>> updateWebsite');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> updateWebsite');
+
         var websiteId = req.params.id;
         var modifiedWebsite = new $$.m.ssb.Website(req.body);
-        var modified = {date: new Date(), by: self.userId(req)};
+        var modified = {date: new Date(), by: userId};
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.updateWebsite(accountId, websiteId, modified, modifiedWebsite, function(err, website){
-                    self.log.debug('<< updateWebsite');
+                    self.log._debug(accountId, userId, '<< updateWebsite');
                     self.sendResultOrError(resp, err, website, "Error updating website");
                     return self.createUserActivity(req, 'UPDATE_WEBSITE', null, {_id:websiteId}, function(){});
                 });
@@ -253,31 +270,35 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listPages: function(req, resp) {
         var self = this;
-        self.log.debug('>> listPages');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listPages');
+
         var websiteId = req.params.id;
 
         ssbManager.listPages(accountId, websiteId, function(err, pages){
-            self.log.debug('<< listPages');
+            self.log._debug(accountId, userId, '<< listPages');
             return self.sendResultOrError(resp, err, pages, "Error listing pages");
         });
     },
 
     createPage: function(req, resp) {
         var self = this;
-        self.log.debug('>> createPage');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> createPage');
 
         var templateId = req.body.templateId;
         var websiteId = req.params.id;
-        var accountId = parseInt(self.accountId(req));
+
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                var created = {date: new Date(), by:self.userId(req)};
+                var created = {date: new Date(), by:userId};
                 ssbManager.createPage(accountId, websiteId, templateId, created, function(err, page){
-                    self.log.debug('<< createPage');
+                    self.log._debug(accountId, userId, '<< createPage');
                     self.sendResultOrError(resp, err, page, "Error creating page");
                     self.createUserActivity(req, 'CREATE_PAGE', null, {pageId: page._id}, function(){});
                 });
@@ -288,12 +309,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     createDuplicatePage: function(req, resp) {
         var self = this;
-        self.log.debug('>> createDuplicatePage');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> createDuplicatePage');
         var _page = req.body;
         // Delete _id of the existing page;
         delete _page._id;
         var duplicatePage = new $$.m.ssb.Page(req.body);
-        var accountId = parseInt(self.accountId(req));
+
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
@@ -301,7 +324,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var created = {date: new Date(), by:self.userId(req)};
                 ssbManager.createDuplicatePage(accountId, duplicatePage, created, function(err, page){
-                    self.log.debug('<< createDuplicatePage');
+                    self.log._debug(accountId, userId, '<< createDuplicatePage');
                     self.sendResultOrError(resp, err, page, "Error creating page");
                     self.createUserActivity(req, 'CREATE_DUPLICATE_PAGE', null, {pageId: page._id}, function(){});
                 });
@@ -312,8 +335,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getPage: function(req, resp) {
         var self = this;
-        self.log.debug('>> getPage');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getPage');
+
         var pageId = req.params.id;
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
@@ -321,7 +346,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 ssbManager.getPage(accountId, pageId, function(err, page){
-                    self.log.debug('<< getPage');
+                    self.log._debug(accountId, userId, '<< getPage');
                     return self.sendResultOrError(resp, err, page, "Error fetching page");
                 });
             }
@@ -330,8 +355,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updatePage: function(req, resp) {
         var self = this;
-        self.log.debug('>> updatePage');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> updatePage');
+
         var pageId = req.params.id;
         var _page = req.body;
         var homePage = _page.homePage;
@@ -346,7 +373,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var modified = {date: new Date(), by:self.userId(req)};
                 ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
-                    self.log.debug('<< updatePage');
+                    self.log._debug(accountId, userId, '<< updatePage');
                     self.sendResultOrError(resp, err, page, "Error updating page");
                     self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
@@ -356,15 +383,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     publishPage: function(req, resp) {
         var self = this;
-        self.log.debug('>> publishPage');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> publishPage');
+
         var pageId = req.params.id;
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.publishPage(accountId, pageId, self.userId(req), function(err, page){
-                    self.log.debug('<< publishPage');
+                    self.log._debug(accountId, userId, '<< publishPage');
                     self.sendResultOrError(resp, err, page, "Error publishing page");
                     self.createUserActivity(req, 'PUBLISH_PAGE', null, {pageId: pageId}, function(){});
                 });
@@ -375,15 +404,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listAccountSections: function(req, resp) {
         var self = this;
-        self.log.debug('>> listSections');
-
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listSections');
+
+
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.listAccountSectionSummaries(accountId, function(err, sections){
-                    self.log.debug('<< listSections');
+                    self.log._debug(accountId, userId, '<< listSections');
                     return self.sendResultOrError(resp, err, sections, "Error listing sections");
                 });
             }
@@ -392,16 +423,18 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getSection: function(req, resp) {
         var self = this;
-        self.log.debug('>> getSection');
-
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getSection');
+
+
         var sectionId = req.params.id;
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.getSection(accountId, sectionId, function(err, sections){
-                    self.log.debug('<< getSection');
+                    self.log._debug(accountId, userId, '<< getSection');
                     return self.sendResultOrError(resp, err, sections, "Error getting section");
                 });
             }
@@ -410,15 +443,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listAllSections: function(req, resp) {
         var self = this;
-        self.log.debug('>> listAllSections');
-
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listAllSections');
+
+
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.listAllSectionSummaries(accountId, function(err, sections){
-                    self.log.debug('<< listAllSections');
+                    self.log._debug(accountId, userId, '<< listAllSections');
                     return self.sendResultOrError(resp, err, sections, "Error listing sections");
                 });
             }
@@ -427,15 +462,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listPlatformSections: function(req, resp) {
         var self = this;
-        self.log.debug('>> listPlatformSections');
-
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listPlatformSections');
+
+
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.listPlatformSectionSummaries(accountId, function(err, sections){
-                    self.log.debug('<< listPlatformSections');
+                    self.log._debug(accountId, userId, '<< listPlatformSections');
                     return self.sendResultOrError(resp, err, sections, "Error listing sections");
                 });
             }
@@ -444,15 +481,17 @@ _.extend(api.prototype, baseApi.prototype, {
 
     listComponents: function(req, resp) {
         var self = this;
-        self.log.debug('>> listComponents');
-
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listComponents');
+
+
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 ssbManager.listComponents(accountId, function(err, components){
-                    self.log.debug('<< listComponents');
+                    self.log._debug(accountId, userId, '<< listComponents');
                     return self.sendResultOrError(resp, err, components, "Error listing components");
                 });
             }
@@ -461,98 +500,104 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getPageByHandle: function(req, resp) {
         var self = this;
-        self.log.debug('>> getPageByHandle');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getPageByHandle');
         var websiteId = req.params.id;
         var pageHandle = req.params.handle;
-        var accountId = parseInt(self.currentAccountId(req));
 
         ssbManager.getPageByHandle(accountId, pageHandle, websiteId, function(err, value){
             if (!value) {
                 err = $$.u.errors._404_PAGE_NOT_FOUND;
             }
 
-            self.log.debug('<< getPageByHandle');
+            self.log._debug(accountId, userId, '<< getPageByHandle');
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website", err);
-            self = null;
         });
 
     },
 
     listPagesWithSections: function(req, resp) {
         var self = this;
-        self.log.debug('>> listPagesWithSections');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listPagesWithSections');
         var websiteId = req.params.id;
 
         ssbManager.listPagesWithSections(accountId, websiteId, function(err, pages){
-            self.log.debug('<< listPagesWithSections');
+            self.log._debug(accountId, userId, '<< listPagesWithSections');
             return self.sendResultOrError(resp, err, pages, "Error listing pages");
         });
     },
 
     listSiteTemplates: function(req, resp) {
         var self = this;
-        self.log.debug('>> listSiteTemplates');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> listSiteTemplates');
 
         ssbManager.listSiteTemplates(accountId, function(err, templates){
-            self.log.debug('<< listSiteTemplates');
+            self.log._debug(accountId, userId, '<< listSiteTemplates');
             return self.sendResultOrError(resp, err, templates, "Error listing Site Templates");
         });
     },
 
     getSiteTemplate: function(req, resp) {
         var self = this;
-        self.log.debug('>> getSiteTemplate');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getSiteTemplate');
         var siteTemplateId = req.params.id;
 
         ssbManager.getSiteTemplate(accountId, siteTemplateId, function(err, template){
-            self.log.debug('<< getSiteTemplate');
+            self.log._debug(accountId, userId, '<< getSiteTemplate');
             return self.sendResultOrError(resp, err, template, "Error getting Site Template");
         });
     },
 
     setSiteTemplate: function(req, resp) {
         var self = this;
-        self.log.debug('>> setSiteTemplate');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> setSiteTemplate');
         var websiteId = req.params.id;
         var siteTemplateId = req.params.siteTemplateId;
         var siteThemeId = req.body.siteThemeId;
         var created = {
             date: new Date(),
-            by: self.userId(req)
+            by: userId
         };
 
         self.log.debug('siteThemeId', siteThemeId)
 
         ssbManager.setSiteTemplate(accountId, siteTemplateId, siteThemeId, websiteId, created, function(err, value){
-            self.log.debug('<< setSiteTemplate');
+            self.log._debug(accountId, userId, '<< setSiteTemplate');
             return self.sendResultOrError(resp, err, value, "Error setting Site Template");
         });
     },
 
     getPageVersions: function (req, resp) {
         var self = this;
-        self.log.debug('>> getPageVersions');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> getPageVersions');
         var pageId = req.params.id;
         ssbManager.getPageVersions(pageId, 'all', function (err, versions) {
-            self.log.debug('<< getPageVersions');
+            self.log._debug(accountId, userId, '<< getPageVersions');
             return self.sendResultOrError(resp, err, versions, "Error getting versions of a page");
         });
     },
 
     revertPage: function (req, resp) {
         var self = this;
-        self.log.debug('>> revertPage');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log._debug(accountId, userId, '>> revertPage');
         var pageId = req.params.id;
         var versionId = parseInt(req.params.versionId);
         //accountId, pageId, version, userId
-        var accountId = parseInt(self.accountId(req));
-        var userId= self.userId(req);
         ssbManager.revertPage(accountId, pageId, versionId, userId, function (err, revertedPage) {
-            self.log.debug('<< getPageVersions');
+            self.log._debug(accountId, userId, '<< getPageVersions');
             self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
             self.createUserActivity(req, 'REVERT_PAGE', null, {pageId: pageId}, function(){});
         });

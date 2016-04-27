@@ -23,31 +23,31 @@ module.exports = {
 
     listTemplates: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> listTemplates');
+        self.log._debug(accountId, null, '>> listTemplates');
         var query = {
             $or : [{'accountId': accountId}, {'public': true}],
             ssb:true
         };
         templateDao.findMany(query, $$.m.ssb.Template, function(err, list){
             if(err) {
-                self.log.error('Error listing templates:', err);
+                self.log._error(accountId, null, 'Error listing templates:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< listTemplates');
+                self.log._debug(accountId, '<< listTemplates');
                 return fn(null, list);
             }
         });
     },
 
-    getTemplate: function(templateId, fn) {
+    getTemplate: function(accountId, userId, templateId, fn) {
         var self = this;
-        self.log.debug('>> getTemplate');
+        self.log._debug(accountId, userId, '>> getTemplate');
         templateDao.getById(templateId, $$.m.ssb.Template, function(err, template){
             if(err) {
-                self.log.error('Error getting template:', err);
+                self.log._error(accountId, userId, 'Error getting template:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< getTemplate', template);
+                self.log._debug(accountId, userId, '<< getTemplate', template);
                 return fn(null, template);
             }
         });
@@ -55,30 +55,30 @@ module.exports = {
 
     listThemes: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> listThemes');
+        self.log._debug(accountId, null, '>> listThemes');
         var query = {'ssb':true};
         themeDao.findMany(query, $$.m.ssb.Theme, function(err, list){
             if(err) {
-                self.log.error('Error listing templates:', err);
+                self.log._error(accountId, null, 'Error listing templates:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< listThemes');
+                self.log._debug(accountId, null, '<< listThemes');
                 return fn(null, list);
             }
         });
 
     },
 
-    getTheme: function(themeId, fn) {
+    getTheme: function(accountId, userId, themeId, fn) {
         var self = this;
-        self.log.debug('>> getTheme', themeId);
+        self.log._debug(accountId, userId, '>> getTheme', themeId);
         var query = {_id:themeId};
         themeDao.findOne(query, $$.m.ssb.Theme, function(err, theme){
             if(err) {
-                self.log.error('Error getting theme:', err);
+                self.log._error(accountId, userId, 'Error getting theme:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< getTheme', theme);
+                self.log._debug(accountId, userId, '<< getTheme', theme);
                 return fn(null, theme);
             }
         });
@@ -87,13 +87,13 @@ module.exports = {
     listWebsites: function(accountId, fn) {
         var self = this;
         //TODO: materialize Theme
-        self.log.debug('>> listWebsites');
+        self.log._debug(accountId, null, '>> listWebsites');
         websiteDao.getWebsitesForAccount(accountId, function(err, list){
             if(err) {
-                self.log.error('Error getting websites:', err);
+                self.log._error(accountId, null, 'Error getting websites:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< listWebsites');
+                self.log._debug(accountId, userId, '<< listWebsites');
                 return fn(null, list);
             }
         });
@@ -102,25 +102,25 @@ module.exports = {
     getWebsite: function(accountId, websiteId, fn) {
         var self = this;
 
-        self.log.debug('>> getWebsite');
+        self.log._debug(accountId, null, '>> getWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err) {
-                self.log.error('Error getting website:', err);
+                self.log._error(accountId, null, 'Error getting website:', err);
                 return fn(err, null);
             } else {
                 if(website.get('themeId')){
                     themeDao.getThemeById(website.get('themeId'), function(err, theme){
                         if(err) {
-                            self.log.error('Error getting theme:', err);
+                            self.log._error(accountId, null, 'Error getting theme:', err);
                             return fn(err, null);
                         } else {
                             website.set('theme', theme);
-                            self.log.debug('<< getWebsite');
+                            self.log._debug(accountId, null, '<< getWebsite');
                             return fn(null, website);
                         }
                     });
                 } else {
-                    self.log.debug('<< getWebsite');
+                    self.log._debug(accountId, null, '<< getWebsite');
                     return fn(null, website);
                 }
 
@@ -130,11 +130,11 @@ module.exports = {
 
     updateWebsite: function(accountId, websiteId, modified, modifiedWebsite, fn) {
         var self = this;
-
-        self.log.debug('>> updateWebsite');
+        var userId = modified.by;
+        self.log._debug(accountId, userId, '>> updateWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err || !website) {
-                self.log.error('Error finding website:', err);
+                self.log._error(accountId, userId, 'Error finding website:', err);
                 return fn(err, null);
             } else {
                 modifiedWebsite.set('modified', modified);
@@ -144,22 +144,22 @@ module.exports = {
 
                 websiteDao.saveOrUpdate(modifiedWebsite, function(err, updatedWebsite){
                     if(err) {
-                        self.log.error('Error updating website:', err);
+                        self.log._error(accountId, userId, 'Error updating website:', err);
                         return fn(err, null);
                     } else {
                         if(updatedWebsite.get('themeId')) {
                             themeDao.getThemeById(updatedWebsite.get('themeId'), function (err, theme) {
                                 if (err) {
-                                    self.log.error('Error getting theme:', err);
+                                    self.log._error(accountId, userId, 'Error getting theme:', err);
                                     return fn(err, null);
                                 } else {
                                     updatedWebsite.set('theme', theme);
-                                    self.log.debug('<< getWebsite');
+                                    self.log._debug(accountId, userId, '<< getWebsite');
                                     return fn(null, updatedWebsite);
                                 }
                             });
                         } else {
-                            self.log.debug('<< updateWebsite');
+                            self.log._debug(accountId, userId, '<< updateWebsite');
                             return fn(null, updatedWebsite);
                         }
 
@@ -171,7 +171,8 @@ module.exports = {
 
     createPage: function(accountId, websiteId, templateId, created, fn) {
         var self = this;
-        self.log.debug('>> createPage');
+        var userId = created.by;
+        self.log._debug(accountId, userId, '>> createPage');
 
         /*
          * 1. Get the website
@@ -184,7 +185,7 @@ module.exports = {
             function getWebsite(cb){
                 websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
                     if(err) {
-                        self.log.error('Error finding website:', err);
+                        self.log._error(accountId, userId, 'Error finding website:', err);
                         cb(err);
                     } else {
                         cb(null, website);
@@ -196,7 +197,7 @@ module.exports = {
                     var themeId = website.get('themeId');
                     themeDao.getById(themeId, function(err, theme){
                         if(err) {
-                            self.log.error('Error finding theme:', err);
+                            self.log._error(accountId, userId, 'Error finding theme:', err);
                             cb(err);
                         } else {
                             cb(null, website, theme);
@@ -210,7 +211,7 @@ module.exports = {
             function getTemplate(website, theme, cb){
                 templateDao.getById(templateId, function(err, template){
                     if(err) {
-                        self.log.error('Error getting template:', err);
+                        self.log._error(accountId, userId, 'Error getting template:', err);
                         cb(err);
                     } else {
                         cb(null, website, theme, template);
@@ -237,7 +238,7 @@ module.exports = {
                             if(err) {
                                 callback(err);
                             } else {
-                                self.log.debug('referencedSection', referencedSection);
+                                self.log._debug(accountId, userId, 'referencedSection', referencedSection);
                                 var id = $$.u.idutils.generateUUID();
                                 if(referencedSection)
                                 {
@@ -272,13 +273,13 @@ module.exports = {
                 }, function(err){
 
                     if(err) {
-                        self.log.error("Error getting template's referenced sections:", err);
+                        self.log._error(accountId, userId, "Error getting template's referenced sections:", err);
                         cb(err);
                     }
 
                     sectionDao.saveSections(dereferencedSections, function(err, sectionAry){
                         if(err) {
-                            self.log.error('Error saving default sections:', err);
+                            self.log._error(accountId, userId, 'Error saving default sections:', err);
                             cb(err);
                         } else {
                             cb(null, website, theme, template, sectionAry);
@@ -294,7 +295,7 @@ module.exports = {
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
-                        self.log.error('Error finding global header:', err);
+                        self.log._error(accountId, userId, 'Error finding global header:', err);
                         cb(err);
                     } else {
                         cb(null, website, theme, template, sections, section);
@@ -308,7 +309,7 @@ module.exports = {
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
-                        self.log.error('Error finding global footer:', err);
+                        self.log._error(accountId, userId, 'Error finding global footer:', err);
                         cb(err);
                     } else {
                         cb(null, website, theme, template, sections, header, section);
@@ -322,7 +323,7 @@ module.exports = {
                 };
                 sectionDao.findMany(query, $$.m.ssb.Section, function(err, gsections){
                     if(err) {
-                        self.log.error('Error finding global sections:', err);
+                        self.log._error(accountId, userId, 'Error finding global sections:', err);
                         cb(err);
                     } else {
                         var latestSections = self.getLatestSections(gsections);
@@ -407,7 +408,7 @@ module.exports = {
                 });
                 pageDao.saveOrUpdate(page, function(err, value){
                     if(err) {
-                        self.log.error('Error creating page:', err);
+                        self.log._error(accountId, userId, 'Error creating page:', err);
                         cb(err);
                     } else {
                         cb(null, value, sections);
@@ -417,7 +418,7 @@ module.exports = {
             function addLinkToNav(page, sections, cb){
                 self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
                     if(err) {
-                        self.log.error('Error getting website linklists by handle: ' + err);
+                        self.log._error(accountId, userId, 'Error getting website linklists by handle: ' + err);
                         cb(err);
                     } else {
                         var link={
@@ -431,10 +432,10 @@ module.exports = {
                         list.links.push(link);
                         self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
                             if(err) {
-                                self.log.error('Error updating website linklists by handle: ' + err);
+                                self.log._error(accountId, userId, 'Error updating website linklists by handle: ' + err);
                                 cb(err);
                             } else {
-                                self.log.debug('<< createPage');
+                                self.log._debug(accountId, userId, '<< createPage');
                                 cb(null, page, sections);
                             }
                         });
@@ -448,7 +449,7 @@ module.exports = {
 
                 page.set('sections', sections);
 
-                self.log.debug('<< createPage');
+                self.log._debug(accountId, userId, '<< createPage');
                 fn(null, page);
             }
         });
@@ -457,7 +458,8 @@ module.exports = {
 
     createDuplicatePage: function(accountId, page, created, fn) {
         var self = this;
-        self.log.debug('>> createDuplicatePage');
+        var userId = created.by;
+        self.log._debug(accountId, userId, '>> createDuplicatePage');
 
         var pageHandle = slug(page.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
         var sections = page.get('sections');
@@ -483,7 +485,7 @@ module.exports = {
             function createSections(cb){
                 sectionDao.saveSections(sections, function(err, sectionAry){
                     if(err) {
-                        self.log.error('Error saving duplicate page sections:', err);
+                        self.log._error(accountId, userId, 'Error saving duplicate page sections:', err);
                         cb(err);
                     } else {
                         var jsonSections = [];
@@ -500,7 +502,7 @@ module.exports = {
             function createPage(page, cb){
                 pageDao.saveOrUpdate(page, function(err, value){
                     if(err) {
-                        self.log.error('Error creating page:', err);
+                        self.log._error(accountId, userId, 'Error creating page:', err);
                         cb(err);
                     } else {
                         cb(null, value);
@@ -510,7 +512,7 @@ module.exports = {
             function addLinkToNav(page, cb){
                 self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
                     if(err) {
-                        self.log.error('Error getting website linklists by handle: ' + err);
+                        self.log._error(accountId, userId, 'Error getting website linklists by handle: ' + err);
                         cb(err);
                     } else {
                         var link={
@@ -524,10 +526,10 @@ module.exports = {
                         list.links.push(link);
                         self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
                             if(err) {
-                                self.log.error('Error updating website linklists by handle: ' + err);
+                                self.log._error(accountId, userId, 'Error updating website linklists by handle: ' + err);
                                 cb(err);
                             } else {
-                                self.log.debug('<< createPage');
+                                self.log._debug(accountId, userId, '<< createPage');
                                 cb(null, page);
                             }
                         });
@@ -538,7 +540,7 @@ module.exports = {
             if(err) {
                 fn(err, null);
             } else {
-                self.log.debug('<< createDuplicatePage');
+                self.log._debug(accountId, userId, '<< createDuplicatePage');
                 fn(null, page);
             }
         });
@@ -546,14 +548,14 @@ module.exports = {
 
     deletePage: function(pageId, accountId, fn) {
         var self = this;
-
-        self.log.debug('>> deletePage');
+        var userId = null;//this could be added later
+        self.log._debug(accountId, userId, '>> deletePage');
 
         pageDao.getPageById(accountId, pageId, function(err, page) {
             if (page) {
                 self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'), "head-menu", function(err, list) {
                     if (err) {
-                        self.log.error('Error getting website linklists by handle: ' + err);
+                        self.log._error(accountId, userId, 'Error getting website linklists by handle: ' + err);
                         fn(err, value);
                     } else {
                         if(list && list.links){
@@ -563,18 +565,18 @@ module.exports = {
                         }
                         self.updateWebsiteLinklists(accountId, page.get('websiteId'), "head-menu", list, function(err, linkLists) {
                             if (err) {
-                                self.log.error('Error updating website linklists by handle: ' + err);
+                                self.log._error(accountId, userId, 'Error updating website linklists by handle: ' + err);
                                 fn(err, page);
                             } else {
                                 var query = {};
                                 query._id = new RegExp('' + pageId + '(_.*)*');
                                 pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
                                     if (err) {
-                                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                                        self.log._error(accountId, userId, 'Error deleting page with id [' + pageId + ']: ' + err);
                                         fn(err, null);
                                     } else {
                                         pageDao.removePublishedPage(accountId, pageId, function(err){});
-                                        self.log.debug('<< deletePage');
+                                        self.log._debug(accountId, userId, '<< deletePage');
                                         fn(null, value);
                                     }
                                 });
@@ -587,11 +589,11 @@ module.exports = {
                 query._id = new RegExp('' + pageId + '(_.*)*');
                 pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
                     if (err) {
-                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                        self.log._error(accountId, userId, 'Error deleting page with id [' + pageId + ']: ' + err);
                         fn(err, null);
                     } else {
                         pageDao.removePublishedPage(accountId, pageId, function(err){});
-                        self.log.debug('<< deletePage');
+                        self.log._debug(accountId, userId, '<< deletePage');
                         fn(null, value);
                    }
                 });
@@ -601,11 +603,11 @@ module.exports = {
 
     updateWebsiteLinklists: function(accountId, websiteId, handle, linklist, fn) {
         var self = this;
-        self.log.debug('>> updateWebsiteLinklists');
+        self.log._debug(accountId, null,'>> updateWebsiteLinklists');
 
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err) {
-                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                self.log._error(accountId, null,'Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
                 fn(err, null);
             } else {
 
@@ -621,15 +623,15 @@ module.exports = {
                     linkListAry.splice(targetListIndex, 1, linklist);
                     websiteDao.saveOrUpdate(website, function(err, value){
                         if(err) {
-                            self.log.error('Error updating website: ' + err);
+                            self.log._error(accountId, null,'Error updating website: ' + err);
                             fn(err, null);
                         } else {
-                            self.log.debug('<< updateWebsiteLinklists');
+                            self.log._debug(accountId, null,'<< updateWebsiteLinklists');
                             fn(null, value.get('linkLists'));
                         }
                     });
                 } else {
-                    self.log.error('linklist with handle [' + handle + '] was not found');
+                    self.log._error(accountId, null,'linklist with handle [' + handle + '] was not found');
                     fn('linklist with handle [' + handle + '] was not found', null);
                 }
             }
@@ -656,15 +658,15 @@ module.exports = {
 
     getWebsiteLinklistsByHandle: function(accountId, websiteId, handle, fn) {
         var self = this;
-        self.log.debug('>> getWebsiteLinklistsByHandle(' + websiteId + ',' + handle + ')');
+        self.log._debug(accountId, null,'>> getWebsiteLinklistsByHandle(' + websiteId + ',' + handle + ')');
 
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err) {
-                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                self.log._error(accountId, null,'Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
                 fn(err, null);
             } else {
-                self.log.debug('got the website:');
-                console.dir(website);
+                self.log._debug(accountId, null,'got the website:', website);
+
                 var linkListAry = website.get('linkLists');
                 var targetList = null;
                 for(var i=0; i<linkListAry.length; i++) {
@@ -673,7 +675,7 @@ module.exports = {
                         break;
                     }
                 }
-                self.log.debug('<< getWebsiteLinklistsByHandle');
+                self.log._debug(accountId, null,'<< getWebsiteLinklistsByHandle');
                 fn(null, targetList);
             }
         });
@@ -681,14 +683,14 @@ module.exports = {
 
     listPages: function(accountId, websiteId, fn) {
         var self = this;
-        self.log.debug('>> listPages');
+        self.log._debug(accountId, null,'>> listPages');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
         pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
             if(err) {
-                self.log.error('error getting pages:', err);
+                self.log._error(accountId, null,'error getting pages:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listPages');
+                self.log._debug(accountId, null,'<< listPages');
 
                 pages.sort(function (a, b) {
                     var p1 = a.attributes.handle.toLowerCase();
@@ -707,11 +709,11 @@ module.exports = {
 
     listPublishedPages: function(accountId, websiteId, fn) {
         var self = this;
-        self.log.debug('>> listPublishedPages');
+        self.log._debug(accountId, null,'>> listPublishedPages');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
         pageDao.findPublishedPages(query, function(err, pages){
             if(err) {
-                self.log.error('Error getting published pages:', err);
+                self.log._error(accountId, null,'Error getting published pages:', err);
                 return fn(err);
             } else {
                 //handle legacy pages without sections
@@ -725,7 +727,7 @@ module.exports = {
                         page.set('sections', sections);
                     }
                 });
-                self.log.debug('<< listPublishedPages');
+                self.log._debug(accountId, null,'<< listPublishedPages');
                 return fn(err, pages);
             }
         });
@@ -733,11 +735,11 @@ module.exports = {
 
     listPagesWithSections: function(accountId, websiteId, fn) {
         var self = this;
-        self.log.debug('>> listPagesWithSections');
+        self.log._debug(accountId, null,'>> listPagesWithSections');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
         pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
             if(err) {
-                self.log.error('error getting pages:', err);
+                self.log._error(accountId, null,'error getting pages:', err);
                 return fn(err);
             } else {
                 async.each(pages, function(page, cb){
@@ -762,7 +764,7 @@ module.exports = {
                         }
                     });
                 }, function done(err){
-                    self.log.debug('<< listPagesWithSections');
+                    self.log._debug(accountId, null,'<< listPagesWithSections');
                     return fn(err, pages);
                 });
 
@@ -778,17 +780,17 @@ module.exports = {
      */
     getPage: function(accountId, pageId, fn) {
         var self = this;
-        self.log.debug('>> getPage');
+        self.log._debug(accountId, null,'>> getPage');
 
         pageDao.getPageById(accountId, pageId, function(err, page){
             if(err || !page) {
-                self.log.error('Error getting page:', err);
+                self.log._error(accountId, null,'Error getting page:', err);
                 return fn(err, null);
             } else {
                 var sections = page.get('sections') || [];
                 sectionDao.dereferenceSections(sections, function(err, sectionAry){
                     page.set('sections', _.compact(sectionAry));
-                    self.log.debug('<< getPage');
+                    self.log._debug(accountId, null,'<< getPage');
                     return fn(null, page);
                 });
 
@@ -2039,7 +2041,7 @@ module.exports = {
                                     if (pageData.type === 'template') {
 
                                         self.log.debug("using the siteTemplate's defaultPageTemplates to update a default page");
-                                        self.getTemplate(pageData.pageTemplateId, function(err, template) {
+                                        self.getTemplate(accountId, null, pageData.pageTemplateId, function(err, template) {
 
                                             if (err) {
                                                 callback(err);
