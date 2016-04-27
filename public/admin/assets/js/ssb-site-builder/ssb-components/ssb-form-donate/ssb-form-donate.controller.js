@@ -2,9 +2,9 @@
 
     app.controller('SiteBuilderFormDonateComponentController', ssbFormDonateComponentController);
 
-    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout'];
+    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', 'ENV'];
     /* @ngInject */
-    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout) {
+    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, ENV) {
 
         console.info('ssb-form-donate directive init...')
 
@@ -16,7 +16,11 @@
 
         vm.formBuilder = {};
         vm.checkoutModalState = 1;
-				vm.showPaypalErrorMsg = false;
+        vm.showPaypalErrorMsg = false;
+        vm.showPaypalLoading = false;
+				vm.paypalLoginClickFn =paypalLoginClickFn;
+				vm.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
+				console.log('url:', vm.paypalURL);
 
         vm.fieldClass = fieldClass;
 
@@ -29,6 +33,7 @@
         vm.addPattern = addPattern;
         vm.formValidations = formValidations;
         vm.setCheckoutState = setCheckoutState;
+        vm.paypalPayment = paypalPayment;
 
         vm.nthRow = 'nth-row';
 
@@ -282,6 +287,181 @@
             vm.checkoutModalState = state;
         }
 
+        function paypalPayment() {
+            vm.showPaypalLoading = true;
+
+            if ($injector.has("ipCookie")) {
+                ipCookie = $injector.get("ipCookie");
+            }
+
+            var fingerprint = new Fingerprint().get();
+            var sessionId = ipCookie("session_cookie").id;
+
+            var skipWelcomeEmail;
+
+            if (vm.component.skipWelcomeEmail) {
+                skipWelcomeEmail = true;
+            }
+
+            var _campaignId;
+            if (!vm.component.campaignId) {
+                vm.component.campaignId = '';
+            } else {
+                _campaignId = vm.component.campaignId;
+            }
+
+            var first_name = "";
+            var last_name = "";
+
+            if (vm.formBuilder.name) {
+                var name_arr = vm.formBuilder.name.split(/ (.+)?/);
+                first_name = name_arr[0];
+                if (name_arr.length > 1) {
+                    last_name = name_arr[1];
+                }
+            }
+
+            var formatted = {
+                fingerprint: fingerprint,
+                sessionId: sessionId,
+                first: first_name,
+                last: last_name,
+                details: [{
+                    emails: [],
+                    phones: [],
+                    addresses: []
+                }],
+                campaignId: _campaignId,
+                emailId: vm.component.emailId,
+                sendEmail: vm.component.sendEmail,
+                skipWelcomeEmail: skipWelcomeEmail,
+                fromEmail: vm.component.fromEmail,
+                fromName: vm.component.fromName,
+                contact_type: vm.component.tags,
+                uniqueEmail: vm.component.uniqueEmail || false,
+                activity: {
+                    activityType: 'DONATE_FORM',
+                    note: vm.formBuilder.Message || "Donate form data.",
+                    sessionId: ipCookie("session_cookie").id,
+                    contact: vm.formBuilder
+                }
+            };
+            if (vm.formBuilder.email)
+                formatted.details[0].emails.push({
+                    email: vm.formBuilder.email
+                });
+            if (vm.formBuilder.phone) {
+                formatted.details[0].phones.push({
+                    number: vm.formBuilder.phone,
+                    type: 'm'
+                });
+            }
+
+            if (vm.formBuilder.address || vm.formBuilder.city || vm.formBuilder.state || vm.formBuilder.zip || vm.formBuilder.country) {
+                formatted.details[0].addresses.push({
+                    address: vm.formBuilder.address,
+                    city: vm.formBuilder.city,
+                    state: vm.formBuilder.state,
+                    country: vm.formBuilder.country,
+                    zip: vm.formBuilder.zip
+                });
+            }
+
+            var order = {
+                //"customer_id": customer._id,
+                "customer": formatted,
+                "session_id": null,
+                "status": "completed",
+                "cart_discount": 0,
+                "total_discount": 0,
+                "total_shipping": 0,
+                "total_tax": 0,
+                "shipping_tax": 0,
+                "cart_tax": 0,
+                "currency": "usd",
+                "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+                "total_line_items_quantity": 1,
+                "payment_details": {
+                    "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+                    "method_id": 'cc', //check, cc
+                    "card_token": null, //Stripe card token if applicable
+                    "charge_description": null, //description of charge if applicable
+                    "statement_description": null, //22char string for cc statement if applicable
+                    "paid": true
+                },
+                "shipping_methods": "",
+                "shipping_address": {
+									"first_name": formatted.first,
+									"last_name": formatted.last,
+									"phone": vm.formBuilder.Phone || '',
+									"city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+									"country": "US",
+									"address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+									"company": "",
+									"postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+									"email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+									"address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+									"state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                },
+                "billing_address": {
+                    "first_name": formatted.first,
+                    "last_name": formatted.last,
+                    "phone": vm.formBuilder.Phone || '',
+										"city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+										"country": "US",
+										"address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+										"company": "",
+										"postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+										"email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+										"address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+										"state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                },
+                "notes": []
+            };
+
+            var totalAmount = parseFloat(vm.formBuilder.amount);
+            var _item = {
+                "product_id": vm.product._id,
+                "quantity": 1,
+                "regular_price": totalAmount,
+                "variation_id": '',
+                "tax_class": null,
+                "sku": "",
+                "total": totalAmount,
+                "name": vm.product.name,
+                "total_tax": "0.00",
+                "type": vm.product.type
+            };
+            order.line_items.push(_item);
+
+						if ($injector.has('orderService')) {
+							var orderService = $injector.get('orderService');
+							orderService.createPaypalOrder(order, function(data) {
+								vm.order = data;
+								vm.showPaypalLoading = false;
+								if (data && !data._id) {
+									var failedOrderMessage = "Error in order processing";
+									console.log(failedOrderMessage);
+									if (data.message)
+									failedOrderMessage = data.message;
+									vm.checkoutModalState = 5;
+									vm.failedOrderMessage = failedOrderMessage;
+									return;
+								}
+								console.log('order, ', order);
+								vm.checkoutModalState = 3;
+								vm.paypalKey = data.payment_details.payKey;
+								vm.formBuilder = {};
+							});
+						}
+        }
+
+				function paypalLoginClickFn() {
+						var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
+						dgFlow.startFlow($location.absUrl());
+						$('#form-donate-modal-' + vm.component._id).modal('hide');
+				}
+
         function init(element) {
             vm.element = element;
             if ($injector.has("productService")) {
@@ -304,7 +484,7 @@
                         }
                     });
 
-										vm.paypalInfo = account.commerceSettings.paypal;
+                    vm.paypalInfo = account.commerceSettings.paypal;
                 });
             }
         }
