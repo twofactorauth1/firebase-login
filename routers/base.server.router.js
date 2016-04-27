@@ -53,7 +53,7 @@ _.extend(baseRouter.prototype, {
                     logger.debug("host: " + req.get("host") + " -> accountId:0");
                     req.session.accountId = 0;
                 } else {
-                    logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                    logger.trace("host: " + req.get("host") + " -> accountId:" + value.id());
                     req.session.unAuthAccountId = value.id();
                     req.session.unAuthSubdomain = value.get('subdomain');
                     req.session.unAuthDomain = value.get('domain');
@@ -79,7 +79,7 @@ _.extend(baseRouter.prototype, {
                     logger.debug("host: " + req.get("host") + " -> accountId:0");
                     req.session.accountId = 0;
                 } else {
-                    logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                    logger.trace("host: " + req.get("host") + " -> accountId:" + value.id());
                     req.session.unAuthAccountId = value.id();
                     req.session.unAuthSubdomain = value.get('subdomain');
                     req.session.unAuthDomain = value.get('domain');
@@ -108,7 +108,7 @@ _.extend(baseRouter.prototype, {
                         logger.debug("host: " + req.get("host") + " -> accountId:0");
                         req.session.accountId = 0;
                     } else {
-                        logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                        logger.trace("host: " + req.get("host") + " -> accountId:" + value.id());
                         req.session.unAuthAccountId = 'new';
                         req.session.unAuthSubdomain = 'new';
                         req.session.unAuthDomain = value.get('domain');
@@ -120,7 +120,7 @@ _.extend(baseRouter.prototype, {
                 return next();
             });
         } else {
-            logger.debug('setting session account and subdomain to new');
+            logger.trace('setting session account and subdomain to new');
             //req.session.accountId = 'new';
             //req.session.subdomain = 'new';
             req.session.unAuthAccountId = 'new';
@@ -150,17 +150,17 @@ _.extend(baseRouter.prototype, {
         var sSub = req.session.subdomain;
         var sDom = req.session.domain;
         if(sSub=== null && sDom===null) {//nothing to match
-            logger.debug('matchHostToSession - nothing to match.  false');
+            logger.trace('matchHostToSession - nothing to match.  false');
             return false;
         }
 
         if(subObj.isMainApp === true) {
             var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app' || sSub ==='');
-            logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
+            logger.trace('matchHostToSession - mainAppTest: ' + mainAppTest);
             return mainAppTest;
         }
         var matchHostToSessionTest = (sSub === subObj.subdomain || sDom === subObj.domain);
-        logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
+        logger.trace('matchHostToSession test: ' + matchHostToSessionTest);
         return matchHostToSessionTest;
     },
 
@@ -279,17 +279,17 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
-        logger.debug('>> isAuth (' + req.originalUrl + ')');
-        logger.debug('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
+        logger.trace('>> isAuth (' + req.originalUrl + ')');
+        logger.trace('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
         var path = req.url;
-        logger.debug('path:', path);
+        logger.trace('path:', path);
         var redirectParam = req.query.redirectTo;
         //logger.debug('req.session.locked: ' + req.session.locked);
         // if(req.session.locked === 'true' || req.session.locked === true) {
         //     return resp.redirect('/interim.html');
         // }
         if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1) && req.session.midSignup !== true) {
-            logger.debug('isAuthenticated');
+            logger.trace('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
 
@@ -303,7 +303,7 @@ _.extend(baseRouter.prototype, {
                             return;
                         } else {
                             value.replace(/\?authtoken.*/g, "");
-                            logger.debug('redirecting to ' + value);
+                            logger.trace('redirecting to ' + value);
                             accountDao.getAccountByID(req.session.accountId, function(err, account){
                                 if(err || !account) {
                                     logger.error('Error getting account by session value: ' +err);
@@ -312,7 +312,7 @@ _.extend(baseRouter.prototype, {
                                     self = null;
                                     return;
                                 } else {
-                                    logger.debug('Setting subdomain to: ' + account.get('subdomain'));
+                                    logger.trace('Setting subdomain to: ' + account.get('subdomain'));
                                     req.session.subdomain = account.get('subdomain');
                                     req.session.domain = account.get('domain');
                                     resp.redirect(value);
@@ -326,7 +326,7 @@ _.extend(baseRouter.prototype, {
                 );
             } else {
                 if(req.originalUrl.indexOf('authtoken') === -1) {
-                    logger.debug('<< isAuth');
+                    logger.trace('<< isAuth');
                     if(req.session.accountId === -1) {
                         logger.debug('redirecting to /home');
                         return resp.redirect('/home');
@@ -335,7 +335,7 @@ _.extend(baseRouter.prototype, {
                 } else {
 
                     var redirectUrl = req.originalUrl.replace(/\?authtoken.*/g, "");
-                    logger.debug('redirecting to ' + redirectUrl);
+                    logger.trace('redirecting to ' + redirectUrl);
                     return resp.redirect(redirectUrl);
                 }
 
@@ -346,7 +346,7 @@ _.extend(baseRouter.prototype, {
             //cookies.setRedirectUrl(req, resp, path);
             resp.redirect('/login?redirectTo=' + path.replace('/#', ''));
         } else {
-            logger.debug('Not authenticated');
+            logger.trace('Not authenticated');
             var checkAuthToken = function(req, fn) {
                 if (req.query.authtoken != null) {
                     var accountId = 0;
@@ -371,7 +371,7 @@ _.extend(baseRouter.prototype, {
             };
 
             if (req["session"] != null && req.session["accountId"] == null) {//TODO: do we need to check matchHostToken here?
-                logger.debug('No accountId in session');
+                logger.trace('No accountId in session');
 
                 accountDao.getAccountByHost(req.get("host"), function(err, value) {
                     if (!err && value != null) {
@@ -386,7 +386,7 @@ _.extend(baseRouter.prototype, {
                         if (!err) {
                             //need to remove the auth token here.
                             var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                            logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                            logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl);
                             return resp.redirect(redirectUrl);
                         } else {
                             logger.error('Error in checkAuthToken(3): ' + err);
@@ -401,7 +401,7 @@ _.extend(baseRouter.prototype, {
                     if (!err) {
                         //need to remove the auth token here.
                         var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                        logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                        logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl);
                         return resp.redirect(redirectUrl);
                     } else {
                         logger.error('Error in checkAuthToken(4): ' + err);

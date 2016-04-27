@@ -123,13 +123,13 @@ var securityManager = {
 
     getPrivilegesByUserAndAccount: function(userId, accountId, cb) {
         var self = this;
-        log.debug('>> getPrivilegesByUserAndAccount(' + userId + ',' + accountId + ')');
+        log.trace('>> getPrivilegesByUserAndAccount(' + userId + ',' + accountId + ')');
         dao.findOne({'userId': userId, accountId: accountId}, $$.m.Privilege, function(err, privilege){
             if(err) {
                 log.error('Exception while finding privilege by userId[' + userId + '] and account[' + accountId + ']: ' + err );
                 cb(err, null);
             } else {
-                log.debug('<< getPrivilegesByUserAndAccount');
+                log.trace('<< getPrivilegesByUserAndAccount');
                 cb(null, privilege);
             }
         });
@@ -137,7 +137,7 @@ var securityManager = {
 
     hasPermission: function(userId, accountId, priv, cb) {
         var self = this;
-        log.debug('>> hasPermission');
+        log.trace('>> hasPermission');
         if(disabled === true) {
             log.debug('<< hasPermission (disabled)');
             return cb(null, true);
@@ -148,12 +148,11 @@ var securityManager = {
                 cb(null, false);
             } else {
                 if(privilege != null && _.contains(privilege.get('privs'), priv)) {
-                    log.debug('<< hasPermission(true)');
+                    log.trace('<< hasPermission(true)');
                     cb(null, true);
                 } else {
                     log.debug('<< hasPermission(false)');
-                    log.debug('... looking for [' + priv + '] and the privilege object is:');
-                    console.dir(privilege);
+                    log.debug('... looking for [' + priv + '] and the privilege object is:', privilege);
                     cb(null, false);
                 }
             }
@@ -175,7 +174,7 @@ var securityManager = {
      */
     verifySubscription: function(req, cb) {
         var self = this;
-        log.debug('>> verifySubscription');
+        log.trace('>> verifySubscription');
         if(disabled === true) {
             req.session.subprivs = defaultSubscriptionPrivs;
             log.debug('<< verifySubscription (disabled)');
@@ -184,7 +183,7 @@ var securityManager = {
 
         //check if session has property(subName) --> return if present
         if(req.session.subName !== undefined && req.session.subprivs) {
-            log.debug('<< verifySubscription(true[' + req.session.subName + '])');
+            log.trace('<< verifySubscription(true[' + req.session.subName + '])');
             return cb(null, true);
         }
 
@@ -201,7 +200,7 @@ var securityManager = {
             var billing = account.get('billing');
             if(self._isWithinTrial(billing)) {
                 req.session.subprivs = defaultSubscriptionPrivs;
-                log.debug('<< verifySubscription(freetrial: ' + req.session.accountId + ')');
+                log.trace('<< verifySubscription(freetrial: ' + req.session.accountId + ')');
                 return cb(null, true);
             }
             if(!billing.subscriptionId) {
@@ -229,7 +228,7 @@ var securityManager = {
                             }
                             req.session.subName = planName;
                             req.session.subprivs = subPrivs.get('activePrivs');
-                            log.debug('<< verifySubscription(true)');
+                            log.trace('<< verifySubscription(true)');
                             return cb(null, true);
                         });
                     } else {
@@ -256,7 +255,7 @@ var securityManager = {
                             }
                             req.session.subName = planName;
                             req.session.subprivs = subPrivs.get('activePrivs');
-                            log.debug('<< verifySubscription');
+                            log.trace('<< verifySubscription');
                             return cb(null, true);
                         });
                     } else {
