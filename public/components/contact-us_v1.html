@@ -10,11 +10,11 @@
             <div ng-class="{'no-info' : !contactAddress && !component.contact.phone && !component.showHours}" class="panel-default widget-weather col-xs-12 col-sm-4 col-md-3 col-lg-3  col-sm-offset-9" style="{{component.splitHours ? 'width:30%' : ''}}">
                 <div class="panel-body">
                     <div class="row" >
-                        <div class="col-xs-12 temp settings" data-edit ng-style="{'max-width': calcMaxWidth('contact-panel-{{component._id}}'),
+                        <div class="col-xs-12 temp settings no-offset-top" data-edit ng-style="{'max-width': calcMaxWidth('contact-panel-{{component._id}}'),
                         'width': component.boxProperties.width ? component.boxProperties.width : '',
                         'height': component.boxProperties.height ? component.boxProperties.height : '', 'background' : boxColor
                         }" tab-active="address" data-id="{{component._id}}" resizable r-directions="['bottom', 'right']">
-                            <div>
+                            <div >
                             <span class="blocked" ng-bind-html="contactAddress | unsafe"></span>
                             <a class="contact-tel" href="tel:{{component.contact.phone}}"><span class="blocked" ng-bind-html="component.contact.phone"></span></a>
                             <!-- <span ng-if="!component.hours.length">Enter Business hours here</span> -->

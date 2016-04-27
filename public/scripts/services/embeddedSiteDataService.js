@@ -87,10 +87,6 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
 
             callback(null, service.siteData.pages[service.path]);
 
-        } else if (typeof service.siteData.pages['coming-soon'] !== 'undefined') {
-
-            callback(null, service.siteData.pages['coming-soon']);
-
         } else {
 
             callback("page not found", null);

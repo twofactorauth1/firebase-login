@@ -22,7 +22,7 @@
     }
 
     .bg-video {
-        width: 100vw;
+        width: 100%;
         height: 56.25vw;
         // max-height: 100vh;
         // max-width: 177.78vh;
@@ -30,11 +30,11 @@
         pointer-events: none;
     }
 
+    .bg-overlay {
+        z-index: 1;
+    }
+
     .blur-image {
-        -webkit-filter: blur(5px);
-        -moz-filter: blur(5px);
-        -o-filter: blur(5px);
-        -ms-filter: blur(5px);
         filter: blur(5px);
     }
 
@@ -44,6 +44,16 @@
 
     .ssb-component {
         z-index: 1;
+    }
+
+    .ssb-element {
+        span {
+            // display: inline-block;
+        }
+    }
+
+    .fr-view img {
+        max-width: 100%;
     }
 
 }
@@ -129,3 +139,4 @@
 @import "ssb-sections/ssb-header.less";
 @import "ssb-sections/ssb-hero.less";
 @import "ssb-sections/ssb-image-gallery.less";
+@import "ssb-sections/ssb-footer.less";

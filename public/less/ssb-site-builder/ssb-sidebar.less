@@ -37,6 +37,10 @@
     }
 
     .head-menu-links {
+        a.nav-link-label{
+            word-break: break-word;
+            padding-right: 30% !important;
+        }
         .container-fluid {
           & > div > div {
             padding: 0 1em 0;
@@ -636,6 +640,14 @@
     overflow-x: hidden;
     max-height: calc(~"100vh - 250px");
     border-radius: 0px 0px 5px 5px;
+    .ui-select-match-text > small {
+        width: 150px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
 }
 
 .ssb-sidebar-section-panel-loading-background {

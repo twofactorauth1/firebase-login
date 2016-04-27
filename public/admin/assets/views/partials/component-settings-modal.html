@@ -129,7 +129,7 @@
                                     <span tooltip-placement="top" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
                                 </div>
                                 <div class="col-sm-12">
-                                    <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="componentEditing.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
+                                    <rzslider name="bg_color_opacity" class="slider-opacity" name="bg-opacity" rz-slider-model="componentEditing.bg.opacity" rz-slider-options="{floor: 0, ceil: 1, precision: 2, step: 0.1}"></rzslider>
                                 </div>
                             </div>
                         </form>
@@ -179,7 +179,7 @@
                                 <label class="pull-left">Box Opacity</label>
                             </div>
                             <div class="col-sm-12">
-                            <rzslider class="slider-opacity" name="box-opacity" rz-slider-precision="2" rz-slider-step="0.1" rz-slider-model="componentEditing.boxOpacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
+                            <rzslider class="slider-opacity" name="box-opacity" rz-slider-model="componentEditing.boxOpacity" rz-slider-options="{floor: 0, ceil: 1, precision: 2, step: 0.1}"></rzslider>
                             </div>
                         </div>
                         <hr/>
@@ -284,7 +284,7 @@
                                             <span tooltip-placement="top" tooltip-html-unsafe="Set Overlay opacity."><i class="fa fa-info-circle" /></span>
                                         </div>
                                         <div class="col-xs-12">
-                                         <rzslider class="slider-opacity" rz-slider-step="10"  name="bg-opacity" rz-slider-model="componentEditing.bg.img.overlayopacity" rz-slider-floor="0" rz-slider-ceil="100"></rzslider>
+                                         <rzslider class="slider-opacity" name="bg-opacity" rz-slider-model="componentEditing.bg.img.overlayopacity" rz-slider-options="{floor: 0, ceil: 100, step: 10}"></rzslider>
                                         </div>
                                     </div>
                                 </div>
@@ -807,7 +807,7 @@
                     </tab-heading>
                     <div class="form-group">
                         <label for="mapZoom">Map Zoom:</label>
-                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-floor="1" rz-slider-ceil="19"></rzslider>
+                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-options="{floor: 1, ceil: 19, step: 1}"></rzslider>
                         <div class="help-block">Zoom level on map 1 (World) - 19 (Street) </div>
                     </div>
                 </tab>

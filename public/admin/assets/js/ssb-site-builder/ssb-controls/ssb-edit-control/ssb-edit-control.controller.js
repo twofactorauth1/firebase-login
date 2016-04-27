@@ -53,7 +53,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
      */
     function setPosition() {
 
-        var isActiveElement = angular.isDefined(vm.uiState.activeElement.type);
+        var isActiveElement = vm.uiState.activeElement && angular.isDefined(vm.uiState.activeElement.type);
 
         if (vm.uiState.hoveredSectionIndex === vm.sectionIndex &&
             vm.uiState.hoveredComponentIndex === vm.componentIndex ||
@@ -74,6 +74,10 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                 var editControl = vm.uiState.hoveredComponentEditControl;
 
                 if (editEl.length) {
+                    if(editEl.hasClass("no-offset-top")){
+                        topOffset = 0;
+                        leftOffset = 0;
+                    }
                     editElTop = editEl[0].getBoundingClientRect().top;
                     editElLeft = editEl[0].getBoundingClientRect().left;
                     top = editEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
@@ -88,8 +92,8 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                     left = 0;
                 }
 
-                if (editElTop - topbarHeight < 30) {
-                    top = editElTop - topbarHeight;
+                if (editElTop - topbarHeight < 30 && top < 0) {
+                    top = 20;
                     left = left + 36;
                 }
 

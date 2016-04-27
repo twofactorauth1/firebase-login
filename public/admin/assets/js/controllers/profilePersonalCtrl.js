@@ -123,6 +123,7 @@
     $scope.profileSaveFn = function () {
       //$scope.currentUser = $scope.profileUser;
      // simpleForm.$setPristine(true);
+      $scope.pageSaving = true;
       angular.copy($scope.profileUser, $scope.originalprofileUser);
       if (!$scope.profileUser.email) {
         toaster.pop("error", "Email is required.");
@@ -134,6 +135,7 @@
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');
         angular.copy($scope.profileUser, $scope.originalprofileUser);
+        $scope.pageSaving = false;
       });
 
       // check if password needs to be changed

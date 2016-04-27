@@ -15,6 +15,8 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.loadPage = loadPage;
     vm.revertPage = revertPage;
+    vm.publishPage = publishPage;
+    vm.hideActiveToolTips = hideActiveToolTips;
 
     function loadPage(page) {
         if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
@@ -48,6 +50,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
         vm.state.saveLoading = true;
         var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
+        var promise = null;
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
 
@@ -75,12 +78,14 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     //reset section panel
                     vm.uiState.navigation.sectionPanel.reset();
 
-                    saveWebsite().then(function(){
+                    promise = saveWebsite().then(function(){
                         return (
                             SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                                 SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                                     console.log('page saved');
-                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    if (!vm.state.publishLoading) {
+                                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    }
                                     vm.state.saveLoading = false;
                                 })
                             }).catch(function(err) {
@@ -104,12 +109,14 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             //reset section panel
             vm.uiState.navigation.sectionPanel.reset();
 
-            saveWebsite().then(function(){
+            promise = saveWebsite().then(function(){
                 return (
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                         SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                             console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            if (!vm.state.publishLoading) {
+                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            }
                             vm.state.saveLoading = false;
                         })
                     }).catch(function(err) {
@@ -119,6 +126,9 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 )
             })
         }
+
+
+        return promise;
 
     }
 
@@ -130,6 +140,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
         vm.state.pendingWebsiteChanges = false;
         SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
         SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
+        vm.hideActiveToolTips();
     }
 
     function saveWebsite() {
@@ -137,6 +148,8 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
         return (
             SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
                 console.log('website saved');
+            }).finally(function() {
+                vm.hideActiveToolTips();
             })
         )
     }
@@ -144,8 +157,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     function revertPage(versionId) {
         vm.state.saveLoading = true;
         SimpleSiteBuilderService.revertPage(vm.state.page._id, versionId, function (data) {
-            SimpleSiteBuilderService.getPage(data._id)
-            .then(function (page) {
+            SimpleSiteBuilderService.getPage(data._id).then(function (page) {
                 vm.uiState.openSidebarPanel = '';
                 vm.uiState.showSectionPanel = false;
                 vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
@@ -155,9 +167,42 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 vm.state.originalPage = page.data;
                 SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
                 vm.state.saveLoading = false;
-            });
+            }).finally(function() {
+                vm.hideActiveToolTips();
+            })
         });
     };
+
+    function publishPage() {
+        vm.state.saveLoading = true;
+        vm.state.publishLoading = true;
+        var save = vm.savePage();
+
+        if (save.then) {
+            save.then(function(response) {
+                SimpleSiteBuilderService.publishPage(vm.state.page._id).then(function (data) {
+                    vm.state.publishLoading = false;
+                    vm.state.page.modified = angular.copy(data.data.modified);
+                    vm.state.page.published = angular.copy(data.data.published);
+                    vm.state.pendingPageChanges = false;
+                    vm.state.pendingWebsiteChanges = false;
+                    toaster.pop('success', 'Page Published', 'The page was published successfully.');
+                }).catch(function(err) {
+                    vm.state.publishLoading = false;
+                    toaster.pop('error', 'Error', 'The page was not published. Please try again.');
+                    console.error(JSON.stringify(err));
+                }).finally(function() {
+                    vm.hideActiveToolTips();
+                })
+            })
+        }
+
+    };
+
+    function hideActiveToolTips() {
+        angular.element('.tooltip').remove();
+    }
+
 
     function init(element) {
     	vm.element = element;

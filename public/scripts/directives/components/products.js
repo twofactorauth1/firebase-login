@@ -10,6 +10,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         link: function(scope) {
             scope.showPaypalLoading = false;
             scope.showPaypalErrorMsg = false;
+            scope.order = null;
             //cookie data fetch
 
             var cookieKey = 'cart_cookie';
@@ -716,6 +717,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 });
 
                 OrderService.createPaypalOrder(order, function(data) {
+                    scope.order = data;
                     scope.showPaypalLoading = false;
                     if (data && !data._id) {
                         var failedOrderMessage = "Error in order processing";
@@ -1213,6 +1215,15 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
                 dgFlow.startFlow($location.absUrl());
                 $('#cart-checkout-modal').modal('hide');
+            };
+
+            scope.deleteOrderFn = function (order) {
+                OrderService.deleteOrder(order._id, function (data) {
+                    if (data.deleted) {
+                        $('#cart-checkout-modal').modal('hide');
+                        scope.checkoutModalState = 1;
+                    }
+                });
             };
 
         },

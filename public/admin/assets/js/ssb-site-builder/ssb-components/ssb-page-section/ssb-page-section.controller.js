@@ -30,7 +30,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (_id && vm.section.bg.video.show) {
             $timeout(function() {
                 vm.setupVideoBackground();
-            });
+            }, 1000);
         }
     });
 
@@ -86,6 +86,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 if (!angular.equals(vm.playerObject, {})) {
                     classString += ' ssb-page-section-layout-video-bg';
                 }
+            }
+
+            if (section.bg && section.bg.img && section.bg.img.blur) {
+                classString += ' ssb-page-section-layout-blur-image';
             }
 
         }
@@ -335,12 +339,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
         }
 
-        if(component.border && component.border.show && component.border.color){
-                styleString += 'border-color: ' + component.border.color + ';';
-                styleString += 'border-width: ' + component.border.width + 'px;';
-                styleString += 'border-style: ' + component.border.style + ';';
-                styleString += 'border-radius: ' + component.border.radius + '%;';
-            }
+        if (component.border && component.border.show && component.border.color) {
+            styleString += 'border-color: ' + component.border.color + ';';
+            styleString += 'border-width: ' + component.border.width + 'px;';
+            styleString += 'border-style: ' + component.border.style + ';';
+            styleString += 'border-radius: ' + component.border.radius + '%;';
+        }
 
         return styleString;
     }

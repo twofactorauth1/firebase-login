@@ -18,7 +18,7 @@ var Contact = require('../../models/contact');
 var request = require('request');
 var fullContactConfig = require('../../configs/fullcontact.config');
 
-var mandrillHelper = require('../../utils/mandrillhelper');
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var notificationConfig = require('../../configs/notification.config');
 var fs = require('fs');
 var geoIPUtil = require('../../utils/geoiputil');
@@ -85,6 +85,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('duplicates/merge'), this.isAuthAndSubscribedApi.bind(this), this.mergeDuplicates.bind(this));
 
         app.post(this.url('importcsv'), this.isAuthApi.bind(this), this.importCsvContacts.bind(this));
+        app.get(this.url('export/csv'), this.isAuthApi.bind(this), this.exportCsvContacts.bind(this));
     },
 
     getMyIp: function(req, resp) {
@@ -215,6 +216,44 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    exportCsvContacts: function(req, resp) {
+        var self = this;
+        self.log.debug('>> exportCsvContacts');
+        var accountId = parseInt(self.accountId(req));
+        var query = {accountId: accountId};
+
+        if (req.query.ids) {
+          if (_.isArray(req.query.ids)) {
+            query['_id'] = {'$in': _.map(req.query.ids, function (x) {return parseInt(x);})};
+          } else {
+            query['_id'] = parseInt(req.query.ids);
+          }
+        }
+        self.log.debug('export query >>', query);
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
+                if (isAllowed !== true) {
+                    return self.send403(resp);
+                } else {
+                    contactDao.findMany(query, $$.m.Contact, function(err, contacts){
+                        var csv = "first,middle,last,email,created,type,tags\n";
+                        _.each(contacts, function(contact){
+                            csv += contact.get('first') + ',';
+                            csv += contact.get('middle') + ',';
+                            csv += contact.get('last') + ',';
+                            csv += contact.getPrimaryEmail() + ',';
+                            csv += contact.get('created').date + ',';
+                            csv += contact.get('type') + ',';
+                            csv += contact.get('tags') + '\n';
+                        });
+                        self.log.debug('<< exportCsvContacts');
+                        resp.set('Content-Type', 'text/csv');
+                        self.sendResult(resp, csv);
+                    });
+                }
+        });
     },
 
 
@@ -519,7 +558,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                     var toAddress = value.get('business').emails[0].email;
                     var toName = '';
-                    mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
+                    emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
                         self.log.debug('email sent');
                     });
 
@@ -548,6 +587,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;
+                var tagSet = campaignId ? req.body.campaignTags : [];
                 var emailId = req.body.emailId;
                 var sendEmail = req.body.sendEmail;
                 var fromContactName = req.body.fromName;
@@ -576,11 +616,12 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('contact_type ', contact_type);
                     if (!contact_type || !contact_type.length) {
                         contact.set('type', 'ld');
-                        contact.set('tags', ['ld']);
+                        tagSet.push('ld');
                     } else {
                         contact.set('type', 'ld');
-                        contact.set('tags', contact_type);
+                        tagSet = tagSet.concat(contact_type);
                     }
+                    contact.set('tags', _.uniq(tagSet));
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
                     }
@@ -655,10 +696,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                      * 3. Get the HTML from the email component
                                      * 4. Set it as data.content
                                      * 5. Call app.render('email/base_email', data...
-                                     * 6. Pass it to mandrillHelper
+                                     * 6. Pass it to emailMessageManager
                                      * 7. RETURN
                                      * 8. Get the default welcome html if no page exists
-                                     * 9. Call mandrillHelper
+                                     * 9. Call emailMessageManager
                                      */
 
                                     accountDao.getAccountByID(query.accountId, function(err, account){
@@ -685,7 +726,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             //skipping welcome email for now
                                                             self.log.warn("No email content.  Skipping");
                                                             /*
-                                                            mandrillHelper.sendAccountWelcomeEmail(fromEmail,
+                                                             emailMessageManager.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                                                 htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
                                                                 */
@@ -755,7 +796,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
                                                             try{
-                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, null, vars, emailPage.get('_id'), savedContact.id(), function(err, result){
+                                                                emailMessageManager.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, null, vars, emailPage.get('_id'), savedContact.id(), function(err, result){
                                                                     self.log.debug('result: ', result);
                                                                 });
                                                             } catch(exception) {
@@ -1182,7 +1223,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var vars = [];
 
 
-                mandrillHelper.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
+                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

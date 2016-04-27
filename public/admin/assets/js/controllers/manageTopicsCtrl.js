@@ -8,7 +8,8 @@
       $scope.topics = topics;
     });
 
-    $scope.topicCategories = ['Account', 'Billing', 'Contacts', 'Campaigns', 'Dashboard', 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Pages', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed'];
+    $scope.topicCategories = [
+        , 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed', 'Websites'];
 
     $scope.openModal = function (url) {
       $scope.modalInstance = $modal.open({

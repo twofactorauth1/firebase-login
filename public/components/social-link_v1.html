@@ -1,6 +1,6 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div class="social-link" ng-if="loadSocialLinks">
-        <ul ng-sortable="sortableConfig" data-edit>
+    <div class="social-link" ng-if="loadSocialLinks" data-edit>
+        <ul ng-sortable="sortableConfig">
             <li ng-repeat="network in component.networks track by $index">
                     <a ng-if="!isEditing" href="{{getUrl(network.url)}}" class="btn btn-social-icon btn-lg btn-{{network.name}}" target="_blank"><i class="fa fa-{{network.icon}}"></i></a>
                     <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index)" style="z-index:1033;" class="btn clickable-link social-links btn-social-icon btn-lg btn-{{network.name}}">
@@ -8,7 +8,7 @@
                     </a>
             </li>
         </ul>
-        <button ng-if="isEditing" ng-click="openModal('social-links-modal')" class="social-links center btn ssb-theme-btn btn-primary btn-lg btn-wide btn-o pull-right"> <i class="fa fa-plus"></i> Add Social Link</button>
+        <button ng-if="isEditing && !component.networks.length" ng-click="openModal('social-links-modal')" class="social-links center btn ssb-theme-btn btn-primary btn-lg btn-wide btn-o pull-right"> <i class="fa fa-plus"></i> Add Social Link</button>
     </div>
 </div>
 

@@ -35,6 +35,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url(':id/note'), this.isAuthAndSubscribedApi.bind(this), this.addOrderNote.bind(this));
         app.post(this.url(':id/paid'), this.setup.bind(this), this.orderPaymentComplete.bind(this));
+
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteOrder.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -70,7 +72,7 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     createPaypalOrder: function(req, resp) {
         var self = this;
-        
+
         var fullUrl = req.get('Referrer');
         self.log.debug('>> createPaypalOrder');
 
@@ -333,6 +335,29 @@ _.extend(api.prototype, baseApi.prototype, {
         orderManager.updateOrderById(order, function(err, order){
             self.log.debug('<< orderPaymentComplete');
             self.sendResultOrError(res, err, order, 'Error updating order');
+        });
+    },
+
+    deleteOrder: function(req, res) {
+        var self = this;
+        self.log.debug('>> deleteOrder');
+        var orderId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function (err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.deleteOrder(orderId, function(err, value){
+                    self.log.debug('<< deleteOrder');
+                    if (!err && value != null) {
+                        self.sendResult(res, {deleted:true});
+                        self.createUserActivity(req, 'DELETE_ORDER', null, {id: orderId}, function(){});
+                    } else {
+                        self.wrapError(res, 401, null, err, value);
+                    }
+                });
+            }
         });
     }
 });

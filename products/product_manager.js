@@ -118,7 +118,7 @@ module.exports = {
 
     listActivePublicProducts: function(accountId, limit, skip, fn) {
         var self = this;
-        log.debug('>> listActivePublicProducts');
+        log.debug(accountId, null, '>> listActivePublicProducts');
         productDao.findAllWithFieldsAndLimit({'accountId':accountId, status:'active', public:true}, skip, limit, null, null, $$.m.Product, function(err, list){
             if(err) {
                 log.error('Exception listing products: ' + err);
@@ -133,7 +133,7 @@ module.exports = {
     getProductsByType: function(accountId, productType, fn) {
         var self = this;
         log.debug('>> getProductsByType');
-        productDao.findMany({'accountId': accountId, 'product_type':productType}, $$.m.Product, function(err, list){
+        productDao.findMany({'accountId': accountId, 'type':productType}, $$.m.Product, function(err, list){
             if(err) {
                 log.error('Exception listing products: ' + err);
                 fn(err, null);

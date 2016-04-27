@@ -14,15 +14,15 @@
       dashboard: [],
       emails: [],
       faqs: [],
-      'getting-started': [],
       integrations: [],
       orders: [],
-      pages: [],
       posts: [],
       products: [],
       profile: [],
       'site-analytics': [],
-      'social-feed': []
+      'social-feed': [],
+      website: [],
+      websites: [],
     };
 
     $rootScope.$on('$locationChangeSuccess', function (event, newUrl, oldUrl) {
@@ -55,6 +55,7 @@
       $scope.topics = topics;
       _.each($scope.topics, function (topic) {
         if (topic.isPublic) {
+          console.log('topic> ', topic);
           $scope.panesByCat[topic.category.toLowerCase().replace(' ', '-')].push(topic);
         }
       });

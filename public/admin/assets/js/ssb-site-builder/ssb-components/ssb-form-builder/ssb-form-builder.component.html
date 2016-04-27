@@ -25,9 +25,12 @@
                                 </div>
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">
-                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
+                                    <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block editable-btn-form">
+                                        <span elem ng-model="vm.component.submitBtn"></span>
+                                    </div>
                                 </div>
 
 
@@ -43,9 +46,12 @@
 
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">
-                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
+                                    <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block editable-btn-form">
+                                        <span elem ng-model="vm.component.submitBtn"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div ng-switch-when="3" class="form-layout-3 col-sm-12 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
@@ -63,9 +69,12 @@
 
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">
-                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
+                                    <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block editable-btn-form">
+                                        <span elem ng-model="vm.component.submitBtn"></span>
+                                    </div>
                                 </div>
 
                             </div>
@@ -77,9 +86,12 @@
 
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">
-                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
+                                    <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block editable-btn-form">
+                                        <span elem ng-model="vm.component.submitBtn"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div ng-switch-default class="form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
@@ -90,9 +102,12 @@
 
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">
-                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>
+                                    <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default btn-block editable-btn-form">
+                                        <span elem ng-model="vm.component.submitBtn"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

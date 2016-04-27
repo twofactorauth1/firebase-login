@@ -29,6 +29,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
     vm.customerTags = pVm.customerTags;
     vm.constructVideoUrl = pVm.constructVideoUrl;
+    vm.donationProductTags = pVm.donationProductTags;
 
     vm.addSectionToPage = addSectionToPage;
     vm.tagToCustomer = tagToCustomer;
@@ -64,6 +65,14 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
         return vm.component && vm.component.bg ? vm.component.bg.color : '';
     }, function(color) {
         console.debug(color);
+    });
+
+    $scope.$watch('component.bg.img.overlaycolor', function (newValue, oldValue) {
+        if (newValue) {
+            if (!angular.isDefined($scope.component.bg.img.overlayopacity)) {
+                $scope.component.bg.img.overlayopacity = 100;
+            }
+        }
     });
 
     /*

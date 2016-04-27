@@ -43,13 +43,14 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
       angular.element(document).ready(function () {
 
         var unbindWatcher = scope.$watch(function() {
-                return angular.element(".carousel-control.right").length
+                return angular.element("#myCarousel-"+scope.component._id).length
             }, function(newValue, oldValue) {
             if (newValue && newValue > 0) {
                 $timeout(function() {
-                    $('.carousel-control.right').trigger('click');
-                    $(window).trigger('resize');
-                }, 500)
+                    var elem = angular.element("#myCarousel-"+scope.component._id);
+                    if(elem.carousel)
+                        elem.carousel();
+                }, 0)
                 unbindWatcher();
             }
         });

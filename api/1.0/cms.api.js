@@ -10,7 +10,8 @@ var baseApi = require('../base.api.js');
 //TODO: there shouldn't be DAO references here
 
 var cmsDao = require('../../cms/dao/cms.dao.js');
-var mandrillHelper = require('../../utils/mandrillhelper');
+
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var Page = require('../../cms/model/page');
 var Topic = require('../../cms/model/topic');
 require('../../cms/model/email');
@@ -264,6 +265,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.addWebsiteLinklists(websiteId, linkLists, function (err, value) {
                     self.log.debug('<< addWebsiteLinklists');
                     self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self.createUserActivity(req, 'ADD_WEBSITE_LINK_LISTS', null, {_id:websiteId}, function(){});
                     self = value = null;
                 });
             }
@@ -288,6 +290,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updateWebsiteLinklists(websiteId, handle, linkLists, function (err, value) {
                     self.log.debug('<< updateWebsiteLinklists');
                     self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self.createUserActivity(req, 'UPDATE_WEBSITE_LINK_LISTS', null, {_id:websiteId}, function(){});
                     self = value = null;
                 });
             }
@@ -311,6 +314,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteWebsiteLinklists(websiteId, handle, function (err, value) {
                     self.log.debug('<< deleteWebsiteLinklists');
                     self.sendResultOrError(res, err, value, "Error adding website Linklists");
+                    self.createUserActivity(req, 'DELETE_WEBSITE_LINK_LISTS', null, {_id:websiteId}, function(){});
                     self = value = null;
                 });
             }
@@ -395,7 +399,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.warn('email will not be sent.');
             } else {
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
-                mandrillHelper.sendTestEmail(
+                emailMessageManager.sendTestEmail(
                     emailDataObj.content.fromEmail,
                     emailDataObj.content.fromName,
                     emailDataObj.address.email,
@@ -567,7 +571,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
                     self._updatePageCache(pageUrl, accountId, page.get('handle'), null);
-                    self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
+                    self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
+
                 });
             }
         });
@@ -612,7 +617,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl, accountId, pageObj.handle, temp);
-                        self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
+                        self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
                     });
                 } else {
                     self.log.error('Cannot create null page.');
@@ -703,7 +708,9 @@ _.extend(api.prototype, baseApi.prototype, {
                         var pageUrl = self._buildPageUrl(req, value.get('handle'));
                         self._updatePageCache(pageUrl, accountId, null, pageId);
                     }
-
+                    pageObj.set('_id', pageId);
+                    pageObj.set('published', {date:new Date(), by:self.userId(req)});
+                    cmsDao.addToCollection(pageObj, 'published_pages', function(){});
                     self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
@@ -2227,6 +2234,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pageCacheManager.updateS3Template(accountId, pageName, pageId, function(err, value){
 
         });
+        //Store to published_pages
 
     }
 

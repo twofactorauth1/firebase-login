@@ -42,11 +42,6 @@ var component = $$.m.ModelBase.extend({
              */
             version: 1,
 
-            /**
-             *
-             *
-             */
-            txtcolor: "#ffffff",
 
             /**
              *
@@ -64,7 +59,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor : "#ffffff",
+            txtcolor : "",
 
             /**
              *
@@ -86,7 +81,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: true
                 },
-                color : "#4bb0cb"
+                color : ""
             }
         }
     },

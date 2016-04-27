@@ -394,8 +394,7 @@
                     </button>
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 7">
-                    <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 2)"><i class="fa fa-chevron-left"></i> Back
-                    </button>
+                    <button class="btn btn-danger pull-right" ng-click="deleteOrderFn(order)"><i class="fa fa-trash"></i> Cancel</button>
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>

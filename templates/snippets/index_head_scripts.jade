@@ -36,7 +36,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
     script(type="text/javascript").
         WebFont.load({
             google: {
-                families: ['Roboto', 'Roboto Condensed', 'Roboto Slab, 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display' ]
+                families: ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display' ]
             }
         });
         window.WebFontConfig = {
@@ -128,9 +128,4 @@ if pages
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         window.indigenous.precache.siteData.pages = !{JSON.stringify(pages)};
-
-if account._id == 890
-    script(src="//load.sumome.com/" data-sumo-site-id="ebfbe1c031968e0d81f4ca79b2fdc7a86b9132054a40985e435727147fd894f3")
-
-if account._id == 346
-    script(src="//load.sumome.com/" data-sumo-site-id="42b22a1deed3102e2003c6eecda9c8f3df6e27c8271cde498c88526229397b47")
+        console.log(window.indigenous.precache.siteData.pages);

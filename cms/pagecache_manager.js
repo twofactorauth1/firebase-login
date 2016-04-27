@@ -13,6 +13,7 @@ var fs = require('fs');
 var appConfig = require('../configs/app.config');
 var async = require('async');
 var cmsDao = require('../cms/dao/cms.dao');
+var pageDao = require('../ssb/dao/page.dao');
 
 var s3Client = knox.createClient({
     key:s3config.AWS_ACCESS_KEY,
@@ -140,6 +141,96 @@ module.exports = {
     },
 
     updateS3Template: function(accountId, pageName, pageId, fn) {
+        var self = this;
+        var html = '';
+        var pageName = pageName;
+        async.waterfall([
+            function getPublishedPage(cb) {
+                if(pageName) {
+                    var query = {
+                        accountId:accountId,
+                        handle:pageName
+                    };
+                    pageDao.findPublishedPages(query, function(err, pages){
+                        if(pages && pages.length >0) {
+                            cb(null, null, pages[0]);
+                        } else {
+                            cb('page not found');
+                        }
+                    });
+                } else if(pageId) {
+                    var query = {
+                        accountId:accountId,
+                        _id:pageId
+                    };
+                    pageDao.findPublishedPages(query, function(err, pages){
+                        if(pages && pages.length >0) {
+                            cb(null, null, pages[0]);
+                        } else {
+                            self.log.debug('query: ', query);
+                            self.log.debug('pages: ', pages);
+                            cb('page not found');
+                        }
+                    });
+                } else {
+                    cb('Both pageName and pageId are null');
+                }
+            },
+            function readComponents(webpageData, page, cb) {
+                if(page) {
+                    pageName = page.get('handle');
+                    if(page.get('sections') != null && page.get('sections').length > 0) {
+                        //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
+                        _.each(page.get('sections'), function(section, index){
+                            html = html + '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+                        });
+                    } else {
+                        _.each(page.get('components'), function(component, index){
+                            var divName = self.getDirectiveNameDivByType(component.type);
+                            html = html + divName + ' component="components_' + index + '"></div>';
+                        });
+                    }
+                    cb(null);
+                } else {
+                    cb('Could not find page with handle ' + pageName);
+                }
+
+            },
+            function writeTemplate(cb) {
+                self.log.debug('Storing to s3');
+                self.log.debug('pageId', pageId);
+                self.log.debug('pageName', pageName);
+                var environmentName = 'prod';
+                if(appConfig.nonProduction === true) {
+                    environmentName = 'test';
+                }
+                var path = environmentName + '/acct_' + accountId + '/' + pageName;
+                var req = s3Client.put(path, {
+                    'Content-Length': Buffer.byteLength(html),
+                    'Content-Type': 'text/html'
+                });
+                req.on('response', function(res){
+                    if (200 == res.statusCode) {
+                        self.log.debug('Success!');
+                        cb();
+                    }
+                });
+                req.end(html);
+
+            }],
+            function done(err){
+                if(err) {
+                    self.log.error("Error building template:", err);
+                    fn(err);
+
+                } else {
+                    fn(null, html);
+                }
+            }
+        );
+    },
+
+    __updateS3Template: function(accountId, pageName, pageId, fn) {
         var self = this;
         var html = '';
         async.waterfall([

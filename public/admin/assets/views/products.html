@@ -74,10 +74,10 @@
                 <thead ng-class="{'bg-white': tableView == 'grid'}">
                     <tr>
                         <th class="center">Image</th>
-                        <th class="hidden-xs" st-sort="status">Status</th>
-                        <th>Name</th>
-                        <th class="hidden-xs" st-sort="type">Type</th>
-                        <th st-sort="modified.date" st-sort-default="reverse"class="hidden-xs">Modified</th>
+                        <th class="hidden-xs" ng-click='sortFn("status")'><i class='fa' ng-class='{"fa-sort": !sortFields["status"], "fa-sort-asc": sortFields["status"] == 1, "fa-sort-desc": sortFields["status"] == -1}'></i>Status</th>
+                        <th ng-click='sortFn("name")'><i class='fa' ng-class='{"fa-sort": !sortFields["name"], "fa-sort-asc": sortFields["name"] == 1, "fa-sort-desc": sortFields["name"] == -1}'></i>Name</th>
+                        <th class="hidden-xs" ng-click='sortFn("type")'><i class='fa' ng-class='{"fa-sort": !sortFields["type"], "fa-sort-asc": sortFields["type"] == 1, "fa-sort-desc": sortFields["type"] == -1}'></i>Type</th>
+                        <th class="hidden-xs" ng-click='sortFn("modified.date")'><i class='fa' ng-class='{"fa-sort": !sortFields["modified.date"], "fa-sort-asc": sortFields["modified.date"] == 1, "fa-sort-desc": sortFields["modified.date"] == -1}'></i>Modified</th>
                     </tr>
                     <tr ng-if="showFilter">
                         <th>

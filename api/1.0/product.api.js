@@ -114,14 +114,14 @@ _.extend(api.prototype, baseApi.prototype, {
             sortFields = [sortFields];
             sortDirections = [sortDirections];
         }
-        var sortValue = [];
+        var sortValue = {};
 
         if (sortFields) {
             sortFields.forEach(function(field, index) {
-                sortValue.push([field, sortDirections[index]]);
+                sortValue[field] = parseInt(sortDirections[index]);
             });
         }
-
+        
         var accountId = parseInt(self.currentAccountId(req));
         productManager.listProducts(accountId, limit, skip, sortValue, function(err, list){
             self.log.debug('<< listProducts');
@@ -155,6 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> listIndigenousProducts');
 
         var accountId = appConfig.mainAccountID;
+        self.log.debug(accountId, null, '>> listIndigenousProducts');
         var skip,limit;
         if(req.query.skip) {
             skip = parseInt(req.query.skip);
@@ -166,6 +167,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< listIndigenousProducts');
             self.sendResultOrError(res, err, list, 'Error listing Indigenous products');
         });
+
     },
 
     updateProduct: function(req, res) {

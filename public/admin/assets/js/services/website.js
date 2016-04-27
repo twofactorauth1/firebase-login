@@ -316,7 +316,7 @@
             _pages[data.handle] = data;
             pagecache.put('pages', _pages);
           }
-          
+
         }
         fn(data);
       }).error(function (err) {
@@ -324,7 +324,7 @@
         fn(null, err);
       });
     };
-    
+
     //page/:id/components/all
     this.updateComponentOrder = function (pageId, componentId, newOrder, fn) {
       var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId, 'order', newOrder].join('/');
@@ -476,7 +476,7 @@
               if(updatedEmail) {
                 var _emailIndex  = _.indexOf(_emails, updatedEmail);
                 _emails[_emailIndex] = data;
-              } 
+              }
             emailcache.put('emails', _emails);
           }
         fn(data, null);
@@ -515,7 +515,7 @@
           if (_pages) {
             _pages[data.handle] = data;
             pagecache.put('pages', _pages);
-          }          
+          }
         }
         fn(data);
       }).error(function (err) {
@@ -596,7 +596,7 @@
       $http({
         url: apiUrl,
         method: "POST",
-        data: {id: postIds}, 
+        data: {id: postIds},
       })
       .success(function (data, status, headers, config) {
         fn(data);
@@ -793,14 +793,14 @@
       return deferred.promise;
     }
 
-    this.checkSystemRoute = function(handle){    
+    this.checkSystemRoute = function(handle){
       var inValidPageHandles = pageConstant.inValidPageHandles;
       if(inValidPageHandles[handle.toLowerCase()]){
         return "Page handle cannot be a system route.";
       }
       return false;
     }
-    
+
 
   });
 }(angular));

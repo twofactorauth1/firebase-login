@@ -82,7 +82,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: false
                 },
-                color : "#89c4f4"
+                color : ""
             },
 
             // Allow user to save custom nav
