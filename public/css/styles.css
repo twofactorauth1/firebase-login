@@ -2663,6 +2663,7 @@ div[data-type="feature-block"] .component-inner {
 .simple-form-v1 input {
   width: 100%;
   text-indent: 10px;
+  border-radius: 4px !important;
 }
 .simple-form-v1 .inner-page {
   padding: 15px 0 30px;
@@ -12926,6 +12927,7 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-component textarea {
   min-height: 34px;
   height: auto;
+  border-radius: 4px !important;
 }
 .form-builder-component .thank-you {
   padding: 0;
