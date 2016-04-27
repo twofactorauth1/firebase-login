@@ -193,7 +193,7 @@ var emailMessageManager = {
 
                                     var scheduledJob = new $$.m.ScheduledJob({
                                         accountId: accountId,
-                                        scheduledAt: moment(stepSettings.sendAt).utc().toDate(),
+                                        scheduledAt: moment.unix(send_at).toDate(),
                                         runAt: null,
                                         job:code
                                     });
