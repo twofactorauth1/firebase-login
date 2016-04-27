@@ -15,7 +15,8 @@
         vm.userExists = false;
 
         vm.formBuilder = {};
-				vm.checkoutModalState = 1;
+        vm.checkoutModalState = 1;
+				vm.showPaypalErrorMsg = false;
 
         vm.fieldClass = fieldClass;
 
@@ -27,6 +28,7 @@
         vm.addCustomField = addCustomField;
         vm.addPattern = addPattern;
         vm.formValidations = formValidations;
+        vm.setCheckoutState = setCheckoutState;
 
         vm.nthRow = 'nth-row';
 
@@ -276,15 +278,35 @@
             });
         };
 
+        function setCheckoutState(state) {
+            vm.checkoutModalState = state;
+        }
 
         function init(element) {
             vm.element = element;
-						if ($injector.has("productService")) {
-		            var productService = $injector.get('productService');
-								productService.getProduct(vm.component.productSettings.product.data, function(product) {
-									vm.product = product;
-								});
-		        }
+            if ($injector.has("productService")) {
+                var productService = $injector.get('productService');
+                productService.getProduct(vm.component.productSettings.product.data, function(product) {
+                    vm.product = product;
+                });
+            }
+
+            if ($injector.has('accountService')) {
+                var accountService = $injector.get('accountService');
+                accountService(function(err, account) {
+                    vm.account = account;
+                    vm.paypalInfo = null;
+                    vm.stripeInfo = null;
+
+                    account.credentials.forEach(function(cred, index) {
+                        if (cred.type == 'stripe') {
+                            vm.stripeInfo = cred;
+                        }
+                    });
+
+										vm.paypalInfo = account.commerceSettings.paypal;
+                });
+            }
         }
 
     }

@@ -35,7 +35,7 @@
                                 <h4 class="modal-title" id="myModalLabel">My Donation</h4>
                             </div>
                             <div class="modal-body">
-                                <div class="shopping-cart" ng-show="vm.checkoutModalState == 1">
+                                <div class='row billing-shipping' ng-show="vm.checkoutModalState == 1">
                                     <div class='row'>
                                         <div class='col-sm-8'>
                                             <strong>{{vm.product.name}}</strong>
@@ -115,10 +115,114 @@
                                         </div>
                                     </form>
                                 </div>
+
+                                <div class="row thank-you" style="height:400px" ng-show="vm.checkoutModalState == 2">
+                                    <h3 class="center mb20">Payment Choice</h3>
+                                    <div class="alert alert-danger" ng-show='vm.showPaypalErrorMsg'>Try again with paypal or use Credit Card?</div>
+                                    <div ng-show='vm.paypalInfo' ng-class='{"col-sm-6": vm.stripeInfo, "col-sm-12": !vm.stripeInfo}'>
+                                        <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
+                                            <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="showPaypalLoading || paypalPayment()" ng-disabled='showPaypalLoading'>
+                                                <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                                <h3 class="StepTitle margin-top-10">Paypal</h3>
+                                                <p class="text-small">
+                                                    Checkout with Paypal
+                                                    <img src='/images/paypal-loading.gif' ng-show='showPaypalLoading' />
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-show='vm.stripeInfo' ng-class='{"col-sm-6": vm.paypalInfo, "col-sm-12": !vm.paypalInfo}'>
+                                        <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
+                                            <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.setCheckoutState(4)">
+                                                <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                                <h3 class="StepTitle margin-top-10">Credit Card</h3>
+                                                <p class="text-small">
+                                                    Checkout with a Credit Card (Powered by Stripe)
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix" style="margin-bottom:30px"></div>
+                                </div>
+
+                                <div class="row thank-you" style="height:400px" ng-if="vm.checkoutModalState == 3">
+                                    <h3 class="center mb20">Paypal Payment</h3>
+                                    <form action="{{paypalURL}}" target="_self" class="standard">
+                                        <label for="buy">Buy Now:</label>
+                                        <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" ng-click='paypalLoginClickFn()'>
+                                        <input id="type" type="hidden" name="expType" value="light">
+                                        <input id="paykey" type="hidden" name="paykey" value="{{paypalKey}}">
+                                    </form>
+                                </div>
+
+                                <div class="row payment" ng-show="vm.checkoutModalState == 4">
+                                    <div class="col-sm-12 col-xs-12 information">
+                                        <div class="clearfix margin-bottom-30"></div>
+                                        <div class="card-wrapper"></div>
+                                        <div class="clearfix margin-bottom-30"></div>
+                                        <div class="active col-xs-12">
+                                            <form id="product-card-details" name="product-card-details" action="">
+                                                <div class="row">
+                                                    <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
+                                                        <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control">
+                                                        <span class="glyphicon form-control-feedback"></span>
+                                                        <span class="error help-block" />
+                                                    </div>
+                                                    <div class="visible-xs mb20"></div>
+                                                    <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
+                                                        <input placeholder="Full name" type="text" id="name" name="name" class="form-control" ng-blur="checkCardName()">
+                                                        <span class="glyphicon form-control-feedback"></span>
+                                                        <span class="error help-block" />
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix mb20"></div>
+                                                <div class="row">
+                                                    <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
+                                                        <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control">
+                                                        <span class="glyphicon form-control-feedback"></span>
+                                                        <span class="error help-block" />
+                                                    </div>
+                                                    <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
+                                                        <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control">
+                                                        <span class="glyphicon form-control-feedback"></span>
+                                                        <span class="error help-block" />
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix mb20"></div>
+                                                <h4 ng-if="failedOrderMessage.length" class="center" style="color: #a94442;">{{failedOrderMessage}}</h4>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row thank-you" style="height:400px" ng-if="vm.checkoutModalState == 5">
+                                    <h3 class="center mb20">Thank you for your donation.</h3>
+                                    <div class="clearfix" style="margin-bottom:30px"></div>
+                                    <div class="col-xs-12 text-center">
+                                        <span class="fa fa-check-circle fa-5x text-green"></span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="modal-footer">
+                            <!-- <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">{{vm.component.modalSettings.closeBtnText}}</button>
                                 <button type="button" class="btn btn-primary" ng-disabled="formBuilder.$invalid">{{vm.component.modalSettings.submitBtnText}}</button>
+                            </div> -->
+                            <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 1">
+                                <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="vm.setCheckoutState(2)"> Next <i class="fa fa-chevron-right"></i></button>
+                            </div>
+                            <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 2">
+                                <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="vm.setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back</button>
+                            </div>
+                            <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 3">
+                                <button class="btn btn-danger pull-right" ng-click="vm.deleteOrderFn(order)"><i class="fa fa-trash"></i> Cancel</button>
+                            </div>
+                            <div class="modal-footer cart-footer" ng-show="vm.checkoutModalState == 4">
+                                <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="vmsetCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
+                                </button>
+                                <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="vm.makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                            </div>
+                            <div class="modal-footer cart-footer" ng-show="vm.checkoutModalState == 5">
+                                <button type="button" class="btn ssb-theme-btn pull-right" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
