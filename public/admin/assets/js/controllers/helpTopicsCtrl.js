@@ -22,7 +22,6 @@
       'site-analytics': [],
       'social-feed': [],
       website: [],
-      websites: [],
     };
 
     $rootScope.$on('$locationChangeSuccess', function (event, newUrl, oldUrl) {

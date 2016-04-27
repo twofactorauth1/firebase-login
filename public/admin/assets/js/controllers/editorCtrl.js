@@ -1143,7 +1143,7 @@
      * -
      */
 
-    $scope.topicCategories = ['Account', 'Billing', 'Contacts', 'Campaigns', 'Dashboard', 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed', 'Website', 'Websites'];
+    $scope.topicCategories = ['Account', 'Billing', 'Contacts', 'Campaigns', 'Dashboard', 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed', 'Website'];
 
 
     $scope.deleteTopic = function () {
