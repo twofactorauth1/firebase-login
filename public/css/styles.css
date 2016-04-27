@@ -10988,6 +10988,13 @@ ssb-topbar.dragging {
   max-height: calc(100vh - 250px);
   border-radius: 0px 0px 5px 5px;
 }
+.ssb-sidebar-section-panel-scrollable .ui-select-match-text > small {
+  width: 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
 .ssb-sidebar-section-panel-loading-background {
   position: absolute;
   height: 90px;
