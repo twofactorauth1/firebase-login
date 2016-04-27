@@ -212,7 +212,7 @@
     </div>
 </div>
 
-<div ng-if="(component.bg.img.show && component.bg.img.url) || (component.bg.video.show && component.bg.video.url)">
+<div ng-if="(vm.component.components[0] && vm.component.components[0].src) || (component.bg.img.show && component.bg.img.url) || (component.bg.video.show && component.bg.video.url)">
 
     <h4 class="ssb-sidebar-sub-heading-separator">Effects</h4>
 
@@ -227,7 +227,7 @@
                 </label>
                 <switch ng-model="component.bg.img.blur" class="pull-right"></switch>
             </div>
-            <div class="form-group" ng-show="component.bg.img.show && !component.bg.video.show">
+            <div class="form-group" ng-show="component.bg.img.show && !component.bg.video.show && !vm.component.components[0].src">
                 <label for="bg_parallax" ng-if="component.type != 'navigation'">
                     Parallax
                     <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image.">

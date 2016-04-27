@@ -21,7 +21,8 @@
       profile: [],
       'site-analytics': [],
       'social-feed': [],
-      websites: [],
+      website: [],
+      websites: []
     };
 
     $rootScope.$on('$locationChangeSuccess', function (event, newUrl, oldUrl) {

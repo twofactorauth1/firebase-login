@@ -1,4 +1,38 @@
 <div ng-controller="SSBComponentSettingsModalCtrl">
+    <h4 class="ssb-sidebar-sub-heading-separator">Product & Modal Settings</h4>
+    <div class="row padding-10">
+        <div class="form-group">
+            <label>
+                Product
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="donation product to use"><i class="fa fa-info-circle" /></span>
+            </label>
+            <ui-select ng-model="component.productSettings.product" theme="bootstrap" ng-disabled="disabled">
+                <ui-select-match placeholder="Select product...">{{$select.selected.label}}</ui-select-match>
+                <ui-select-choices repeat="product in vm.donationProductTags | orderBy:'label' | filter:$select.search">
+                    {{product.label}}
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group">
+            <label>
+                Modal close btn text
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="text which will show up on the close button"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-7 pull-right">
+                <input type="text" class='form-control margin-bottom-15' ng-model="component.modalSettings.closeBtnText"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>
+                Modal submit btn text
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="text which will show up on the submit button"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-7 pull-right">
+                <input type="text" class='form-control margin-bottom-15' ng-model="component.modalSettings.submitBtnText"/>
+            </div>
+        </div>
+    </div>
+
     <h4 class="ssb-sidebar-sub-heading-separator">Form Layout</h4>
     <div class="row padding-10">
         <div class="form-group">
@@ -7,7 +41,7 @@
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
-                <input type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" ng-change="component.layout=0" touchspin>
+                <input type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" touchspin>
             </div>
         </div>
         <div class="form-group">

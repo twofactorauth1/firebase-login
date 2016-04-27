@@ -29,6 +29,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
     vm.customerTags = pVm.customerTags;
     vm.constructVideoUrl = pVm.constructVideoUrl;
+    vm.donationProductTags = pVm.donationProductTags;
 
     vm.addSectionToPage = addSectionToPage;
     vm.tagToCustomer = tagToCustomer;

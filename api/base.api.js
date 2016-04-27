@@ -107,17 +107,17 @@ _.extend(apiBase.prototype, {
         var sSub = req.session.subdomain;
         var sDom = req.session.domain;
         if(sSub=== null && sDom===null) {//nothing to match
-            logger.debug('matchHostToSession - nothing to match.  false');
+            logger.trace('matchHostToSession - nothing to match.  false');
             return false;
         }
 
         if(subObj.isMainApp === true) {
             var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app');
-            logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
+            logger.trace('matchHostToSession - mainAppTest: ' + mainAppTest);
             return mainAppTest;
         }
         var matchHostToSessionTest = (sSub === subObj.subdomain || sDom === subObj.domain);
-        logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
+        logger.trace('matchHostToSession test: ' + matchHostToSessionTest);
         return matchHostToSessionTest;
     },
 
@@ -226,7 +226,7 @@ _.extend(apiBase.prototype, {
     currentAccountId: function(req) {
         try {
             var accountId = req.session.unAuthAccountId !== null ? req.session.unAuthAccountId: req.session.accountId;
-            console.log('currentAccountId: ' + accountId);
+            //console.log('currentAccountId: ' + accountId);
             return accountId;
         } catch(exception) {
             return null;
@@ -312,9 +312,9 @@ _.extend(apiBase.prototype, {
     },
 
     send403: function(res) {
-        console.log('before send403');
+        //console.log('before send403');
         res.send(403, {code:403, status:'fail', message:'Unauthorized', detail:'You are not authorized to complete this action.'});
-        console.log('after send403');
+        //console.log('after send403');
     },
 
 

@@ -58,14 +58,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getCurrentAccount: function(req, resp) {
         var self = this;
-        self.log.debug('>> getCurrentAccount');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCurrentAccount');
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if (!err) {
                 if (value == null) {
-                    self.log.debug('<< getCurrentAccount');
+                    self.log.debug(accountId, userId, '<< getCurrentAccount');
                     return resp.send({});
                 } else {
-                    self.log.debug('<< getCurrentAccount');
+                    self.log.debug(accountId, userId, '<< getCurrentAccount');
                     self._addTrialDaysToAccount(value);
 
                     //no security for now.  Currently can be called without authentication.

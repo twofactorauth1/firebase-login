@@ -88,6 +88,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
             }
 
+            if (section.bg && section.bg.img && section.bg.img.blur) {
+                classString += ' ssb-page-section-layout-blur-image';
+            }
+
         }
         // console.debug('section classString')
         // console.debug(classString)
@@ -335,12 +339,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
         }
 
-        if(component.border && component.border.show && component.border.color){
-                styleString += 'border-color: ' + component.border.color + ';';
-                styleString += 'border-width: ' + component.border.width + 'px;';
-                styleString += 'border-style: ' + component.border.style + ';';
-                styleString += 'border-radius: ' + component.border.radius + '%;';
-            }
+        if (component.border && component.border.show && component.border.color) {
+            styleString += 'border-color: ' + component.border.color + ';';
+            styleString += 'border-width: ' + component.border.width + 'px;';
+            styleString += 'border-style: ' + component.border.style + ';';
+            styleString += 'border-radius: ' + component.border.radius + '%;';
+        }
 
         return styleString;
     }
