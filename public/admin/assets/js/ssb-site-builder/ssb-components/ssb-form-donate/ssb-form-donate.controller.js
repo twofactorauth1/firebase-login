@@ -423,6 +423,7 @@
             var _item = {
                 "product_id": vm.product._id,
                 "quantity": 1,
+								"sale_price": totalAmount,
                 "regular_price": totalAmount,
                 "variation_id": '',
                 "tax_class": null,

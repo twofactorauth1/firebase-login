@@ -901,7 +901,7 @@ module.exports = {
                         }
                     });
                     log.debug('found product ', product);
-                    var lineItemSubtotal = item.quantity * product.get('regular_price');
+                    var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
                     if(product.get('on_sale') === true) {
                         var startDate = product.get('sale_date_from', 'day');
                         var endDate = product.get('sale_date_to', 'day');
