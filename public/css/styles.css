@@ -12982,7 +12982,6 @@ ssb-topbar .ui-select-match-text > small {
   position: relative;
   width: 50%;
   margin: auto;
-  width: 100%;
 }
 .form-builder-layout .form-layout-1 label {
   display: block;
@@ -13001,7 +13000,6 @@ ssb-topbar .ui-select-match-text > small {
   position: relative;
   width: 50%;
   margin: auto;
-  width: 100%;
 }
 .form-builder-layout .form-layout-2 button {
   float: right;
@@ -13016,8 +13014,6 @@ ssb-topbar .ui-select-match-text > small {
 }
 .form-builder-layout .form-layout-3 {
   position: relative;
-  width: 100%;
-  margin: auto;
 }
 .form-builder-layout .form-layout-3 button {
   float: right;
@@ -13033,7 +13029,6 @@ ssb-topbar .ui-select-match-text > small {
   position: relative;
   width: 50%;
   margin: auto;
-  width: 100%;
 }
 .form-builder-layout .form-layout-4 button {
   float: right;
@@ -13048,7 +13043,6 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .form-layout-custom {
   position: relative;
   margin: auto;
-  width: 100%;
 }
 .form-builder-layout .form-layout-custom button {
   float: right;
