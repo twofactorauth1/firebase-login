@@ -1,8 +1,30 @@
+.ssb-media-query-xsmall-only(@rules) {
+  &[data-eq-state$="small"] {
+    @rules();
+  }
+  @media screen and (max-width: 400px) {
+    &:not([class*="ssb-edit-mode"]) {
+      @rules();
+    }
+  }
+}
+
 .ssb-media-query-small-only(@rules) {
   &[data-eq-state$="small"] {
     @rules();
   }
   @media screen and (max-width: 767px) {
+    &:not([class*="ssb-edit-mode"]) {
+      @rules();
+    }
+  }
+}
+
+.ssb-media-query-small-and-up(@rules) {
+  &[data-eq-state$="small"] {
+    @rules();
+  }
+  @media screen and (min-width: 400px) {
     &:not([class*="ssb-edit-mode"]) {
       @rules();
     }
@@ -32,6 +54,15 @@
   }
 }
 
+// .ssb-responsive-font-size-adjust(@fontSize, @min, @max) {
+//     & {
+//         [style*=~"font-size: @{fontSize}px"] {
+//             @large_min_font: @min - @fontSize;
+//             @large_max_font: @max - @fontSize;
+//         }
+//     }
+// }
+
 
 [class*="ssb-theme-"] {
 
@@ -49,7 +80,6 @@
     .ssb-page-section-layout-hero [ssb-text-component] {
 
         .ssb-media-query-small-only({
-            font-size: 14vw;
             text-align: center;
             line-height: 1;
             width: 100%!important;
@@ -57,12 +87,8 @@
             padding: 0!important;
 
             .element-wrap {
-                width: 60%;
-                margin: .25em auto 0;
-            }
-
-            span[style] {
-                font-size: 14vw!important;
+                width: 80%;
+                margin: .25em auto;
             }
         });
 
@@ -70,10 +96,6 @@
             font-size: 96px;
             margin: initial;
             width: 100%;
-
-            span[style] {
-                font-size: inherit;
-            }
         });
     }
 

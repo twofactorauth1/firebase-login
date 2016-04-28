@@ -325,8 +325,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
               }
 
               if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-                styleString += 'background-image: url("' + component.bg.img.url + '")';
+                styleString += 'background-image: url("' + component.bg.img.url + '");';
               }
+            }
+
+            if (component.src) {
+                if (component.src && component.src !== '') {
+                    styleString += 'background-image: url("' + component.src + '");';
+                }
             }
 
         }
