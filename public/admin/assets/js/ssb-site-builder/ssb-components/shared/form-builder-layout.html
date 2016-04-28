@@ -107,7 +107,7 @@
 		</div>
 	</div>
 	<div class="row well padding-10" ng-class="{'panel-active': vm.component.layout===3}">
-		<div class="form-layout-3 col-sm-12" ng-click="vm.component.formSettings.fieldsPerRow = 1">
+		<div class="form-layout-3 col-sm-12" ng-click="vm.component.layout=3; vm.component.formSettings.fieldsPerRow = 1">
 			<div class="disabled">
 				<div class="col-sm-6">
 					<div class="form-group">
@@ -157,6 +157,7 @@
 			    <div class="form-group ">
 			        <textarea placeholder="XXXX" class="form-control" rows="6"></textarea>
 			    </div>
+                <div class="clearfix"></div>
 			    <div class="form-group ">
 			        <button type="button" class="btn btn-primary btn-form">button</button>
 			    </div>
