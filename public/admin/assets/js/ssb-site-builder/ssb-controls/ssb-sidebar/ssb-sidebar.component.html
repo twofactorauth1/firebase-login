@@ -289,8 +289,8 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                         <a href="javascript:void(0)" class="accordion-toggle">
-                                        <span ng-class="{ 'hidden-faded': !section.visibility }" ng-if="!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit">{{section.name}}</span>
-                                        <span onhide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit=false" id="editable_{{section._id}}" ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit" editable-text="section.name">{{section.name}}</span>
+                                        <span ng-class="{ 'hidden-faded': !section.visibility }" ng-if="!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit">{{section.name || section.title}}</span>
+                                        <span onhide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit=false" id="editable_{{section._id}}" ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit" editable-text="section.name">{{section.name || section.title}}</span>
                                         </a>
                                     </h4>
                                 </div>
