@@ -161,16 +161,16 @@
                                         <div class="card-wrapper"></div>
                                         <div class="clearfix margin-bottom-30"></div>
                                         <div class="active col-xs-12">
-                                            <form id="product-card-details" name="product-card-details" action="">
+                                            <form id="donation-card-details" name="donation-card-details" action="">
                                                 <div class="row">
                                                     <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
-                                                        <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control">
+                                                        <input placeholder="Card number" ng-blur="vm.checkCardNumber()" type="text" name="number" id="number" class="form-control">
                                                         <span class="glyphicon form-control-feedback"></span>
                                                         <span class="error help-block" />
                                                     </div>
                                                     <div class="visible-xs mb20"></div>
                                                     <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
-                                                        <input placeholder="Full name" type="text" id="name" name="name" class="form-control" ng-blur="checkCardName()">
+                                                        <input placeholder="Full name" type="text" id="name" name="name" class="form-control" ng-blur="vm.checkCardName()">
                                                         <span class="glyphicon form-control-feedback"></span>
                                                         <span class="error help-block" />
                                                     </div>
@@ -178,18 +178,18 @@
                                                 <div class="clearfix mb20"></div>
                                                 <div class="row">
                                                     <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
-                                                        <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control">
+                                                        <input placeholder="MM/YY" ng-blur="vm.checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control">
                                                         <span class="glyphicon form-control-feedback"></span>
                                                         <span class="error help-block" />
                                                     </div>
                                                     <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
-                                                        <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control">
+                                                        <input placeholder="CVC" ng-blur="vm.checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control">
                                                         <span class="glyphicon form-control-feedback"></span>
                                                         <span class="error help-block" />
                                                     </div>
                                                 </div>
                                                 <div class="clearfix mb20"></div>
-                                                <h4 ng-if="failedOrderMessage.length" class="center" style="color: #a94442;">{{failedOrderMessage}}</h4>
+                                                <h4 ng-if="vm.failedOrderMessage.length" class="center" style="color: #a94442;">{{vm.failedOrderMessage}}</h4>
                                             </form>
                                         </div>
                                     </div>
@@ -201,6 +201,14 @@
                                     <div class="col-xs-12 text-center">
                                         <span class="fa fa-check-circle fa-5x text-green"></span>
                                     </div>
+                                </div>
+
+                                <div class="row processing" style="height:400px" ng-if="vm.checkoutModalState == 6">
+                                    <h3 style="margin-top: 110px">Order Processing</h3>
+                                    <div class="text-center">
+                                        <span class="fa fa-spinner fa-spin fa-4x"></span>
+                                    </div>
+                                    <div style="margin-bottom:30px"></div>
                                 </div>
                             </div>
                             <!-- <div class="modal-footer">
