@@ -36,10 +36,11 @@
         vm.formValidations = formValidations;
         vm.setCheckoutState = setCheckoutState;
         vm.paypalPayment = paypalPayment;
-				vm.checkCardNumber = checkCardNumber;
-				vm.checkCardName = checkCardName;
-				vm.checkCardCvv = checkCardCvv;
-				vm.checkCardExpiry = checkCardExpiry;
+        vm.checkCardNumber = checkCardNumber;
+        vm.checkCardName = checkCardName;
+        vm.checkCardCvv = checkCardCvv;
+        vm.checkCardExpiry = checkCardExpiry;
+        vm.makeCartPayment = makeCartPayment;
 
         vm.nthRow = 'nth-row';
 
@@ -481,76 +482,180 @@
             $('#form-donate-modal-' + vm.component._id).modal('hide');
         }
 
-				function checkCardNumber() {
-						vm.failedOrderMessage = "";
-						var card_number = angular.element('#donation-card-details #number').val();
-						console.log(card_number);
-						if (!card_number) {
-								angular.element("#donation-card-details #card_number .error").html("Card Number Required");
-								angular.element("#donation-card-details #card_number").addClass('has-error');
-								angular.element("#donation-card-details #card_number .glyphicon").addClass('glyphicon-remove');
-						} else {
-								angular.element("#donation-card-details #card_number .error").html("");
-								angular.element("#donation-card-details #card_number").removeClass('has-error').addClass('has-success');
-								angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-						}
-				};
+        function checkCardNumber() {
+            vm.failedOrderMessage = "";
+            var card_number = angular.element('#donation-card-details #number').val();
+            if (!card_number) {
+                angular.element("#donation-card-details #card_number .error").html("Card Number Required");
+                angular.element("#donation-card-details #card_number").addClass('has-error');
+                angular.element("#donation-card-details #card_number .glyphicon").addClass('glyphicon-remove');
+            } else {
+                angular.element("#donation-card-details #card_number .error").html("");
+                angular.element("#donation-card-details #card_number").removeClass('has-error').addClass('has-success');
+                angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            }
+        };
 
-				function checkCardName() {
-						vm.failedOrderMessage = "";
-						var name = angular.element('#donation-card-details #card_name #name').val();
-						if (!name) {
-								angular.element("#donation-card-details #card_name .error").html("Card Name Required");
-								angular.element("#donation-card-details #card_name").addClass('has-error');
-								angular.element("#donation-card-details #card_name .glyphicon").addClass('glyphicon-remove');
-						} else {
-								angular.element("#donation-card-details #card_name .error").html("");
-								angular.element("#donation-card-details #card_name").removeClass('has-error').addClass('has-success');
-								angular.element("#donation-card-details #card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-						}
+        function checkCardName() {
+            vm.failedOrderMessage = "";
+            var name = angular.element('#donation-card-details #card_name #name').val();
+            if (!name) {
+                angular.element("#donation-card-details #card_name .error").html("Card Name Required");
+                angular.element("#donation-card-details #card_name").addClass('has-error');
+                angular.element("#donation-card-details #card_name .glyphicon").addClass('glyphicon-remove');
+            } else {
+                angular.element("#donation-card-details #card_name .error").html("");
+                angular.element("#donation-card-details #card_name").removeClass('has-error').addClass('has-success');
+                angular.element("#donation-card-details #card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            }
 
-				};
+        };
 
-				function checkCardExpiry() {
-						vm.failedOrderMessage = "";
-						var expiry = angular.element('#donation-card-details #expiry').val();
-						var card_expiry = expiry.split("/");
-						var exp_month = card_expiry[0].trim();
-						var exp_year;
-						if (card_expiry.length > 1) {
-								exp_year = card_expiry[1].trim();
-						}
+        function checkCardExpiry() {
+            vm.failedOrderMessage = "";
+            var expiry = angular.element('#donation-card-details #expiry').val();
+            var card_expiry = expiry.split("/");
+            var exp_month = card_expiry[0].trim();
+            var exp_year;
+            if (card_expiry.length > 1) {
+                exp_year = card_expiry[1].trim();
+            }
 
-						if (!expiry || !exp_month || !exp_year) {
-								if (!expiry) {
-										angular.element("#donation-card-details #card_expiry .error").html("Expiry Required");
-								} else if (!exp_month) {
-										angular.element("#donation-card-details #card_expiry .error").html("Expiry Month Required");
-								} else if (!exp_year) {
-										angular.element("#donation-card-details #card_expiry .error").html("Expiry Year Required");
-								}
-								angular.element("#donation-card-details #card_expiry").addClass('has-error');
-								angular.element("#donation-card-details #card_expiry .glyphicon").addClass('glyphicon-remove');
-						} else {
-								angular.element("#donation-card-details #card_expiry .error").html("");
-								angular.element("#donation-card-details #card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-								angular.element("#donation-card-details #card_expiry").removeClass('has-error').addClass('has-success');
-						}
-				};
+            if (!expiry || !exp_month || !exp_year) {
+                if (!expiry) {
+                    angular.element("#donation-card-details #card_expiry .error").html("Expiry Required");
+                } else if (!exp_month) {
+                    angular.element("#donation-card-details #card_expiry .error").html("Expiry Month Required");
+                } else if (!exp_year) {
+                    angular.element("#donation-card-details #card_expiry .error").html("Expiry Year Required");
+                }
+                angular.element("#donation-card-details #card_expiry").addClass('has-error');
+                angular.element("#donation-card-details #card_expiry .glyphicon").addClass('glyphicon-remove');
+            } else {
+                angular.element("#donation-card-details #card_expiry .error").html("");
+                angular.element("#donation-card-details #card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                angular.element("#donation-card-details #card_expiry").removeClass('has-error').addClass('has-success');
+            }
+        };
 
-				function checkCardCvv() {
-						vm.failedOrderMessage = "";
-						var card_cvc = angular.element('#donation-card-details #cvc').val();
-						if (!card_cvc) {
-								angular.element("#donation-card-details #card_cvc .error").html("CVC Required");
-								angular.element("#donation-card-details #card_cvc").addClass('has-error');
-								angular.element("#donation-card-details #card_cvc .glyphicon").addClass('glyphicon-remove');
-						} else {
-								angular.element("#donation-card-details #card_cvc .error").html("");
-								angular.element("#donation-card-details #card_cvc").removeClass('has-error').addClass('has-success');
-								angular.element("#donation-card-details #card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-						}
-				};
+        function checkCardCvv() {
+            vm.failedOrderMessage = "";
+            var card_cvc = angular.element('#donation-card-details #cvc').val();
+            if (!card_cvc) {
+                angular.element("#donation-card-details #card_cvc .error").html("CVC Required");
+                angular.element("#donation-card-details #card_cvc").addClass('has-error');
+                angular.element("#donation-card-details #card_cvc .glyphicon").addClass('glyphicon-remove');
+            } else {
+                angular.element("#donation-card-details #card_cvc .error").html("");
+                angular.element("#donation-card-details #card_cvc").removeClass('has-error').addClass('has-success');
+                angular.element("#donation-card-details #card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            }
+        };
+
+        function makeCartPayment() {
+            if ($injector.has('orderService')) {
+                vm.failedOrderMessage = "";
+                vm.checkoutModalState = 6;
+
+                var expiry = angular.element('#donation-card-details #expiry').val().split("/");
+                var exp_month = expiry[0].trim();
+                var exp_year = "";
+                if (expiry.length > 1) {
+                    exp_year = expiry[1].trim();
+                }
+                var cardInput = {
+                    name: angular.element('#donation-card-details #card_name #name').val(),
+                    number: angular.element('#donation-card-details #number').val(),
+                    cvc: angular.element('#donation-card-details #cvc').val(),
+                    exp_month: exp_month,
+                    exp_year: exp_year
+                        //TODO: add the following:
+                        /*
+                         * name:name,
+                         * address_city:city,
+                         * address_country:country,
+                         * address_line1:line1,
+                         * address_line2:line2,
+                         * address_state:state,
+                         * address_zip:zip
+                         */
+                };
+                if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year || !cardInput.name) {
+                    vm.checkCardName();
+                    vm.checkCardNumber();
+                    vm.checkCardExpiry();
+                    vm.checkCardCvv();
+                    vm.checkoutModalState = 4;
+                    return;
+                }
+                var orderService = $injector.get('orderService');
+                var order = _formattedOrder();
+                if (order.customer) {
+                    cardInput.name = order.customer.first + ' ' + order.customer.last;
+                    cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
+                    cardInput.address_city = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].city : '';
+                    cardInput.address_state = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].state : '';
+                    cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
+                    cardInput.address_country = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].country : 'US';
+                    if (order.customer.details[0].addresses.length && order.customer.details[0].addresses[0].address2) {
+                        cardInput.address_line2 = order.customer.details[0].addresses[0].address2;
+                    }
+                }
+
+                if ($injector.has('paymentService')) {
+                    var paymentService = $injector.get('paymentService');
+                    paymentService.getStripeCardToken(cardInput, function(token, error) {
+                        if (error) {
+                            switch (error.param) {
+                                case "number":
+                                    angular.element("#donation-card-details #card_number .error").html(error.message);
+                                    angular.element("#donation-card-details #card_number").addClass('has-error');
+                                    angular.element("#donation-card-details #card_number .glyphicon").addClass('glyphicon-remove');
+                                    break;
+                                case "exp_month":
+                                    angular.element("#donation-card-details #card_expiry .error").html(error.message);
+                                    angular.element("#donation-card-details #card_expiry").addClass('has-error');
+                                    angular.element("#donation-card-details #card_expiry .glyphicon").addClass('glyphicon-remove');
+                                    break;
+                                case "exp_year":
+                                    angular.element("#donation-card-details #card_expiry .error").html(error.message);
+                                    angular.element("#donation-card-details #card_expiry").addClass('has-error');
+                                    angular.element("#donation-card-details #card_expiry .glyphicon").addClass('glyphicon-remove');
+                                    break;
+                                case "cvc":
+                                    angular.element("#donation-card-details #card_cvc .error").html(error.message);
+                                    angular.element("#donation-card-details #card_cvc").addClass('has-error');
+                                    angular.element("#donation-card-details #card_cvc .glyphicon").addClass('glyphicon-remove');
+                                    break;
+                                case "name":
+                                    angular.element("#donation-card-details #card_name .error").html(error.message);
+                                    angular.element("#donation-card-details #card_name").addClass('has-error');
+                                    angular.element("#donation-card-details #card_name .glyphicon").addClass('glyphicon-remove');
+
+                            }
+                            vm.checkoutModalState = 4;
+                            return;
+                        }
+
+                        orderService.createOrder(order, function(data) {
+                            if (data && !data._id) {
+                                var failedOrderMessage = "Error in order processing";
+                                console.log(failedOrderMessage);
+                                if (data.message)
+                                    failedOrderMessage = data.message;
+                                vm.checkoutModalState = 4;
+                                vm.failedOrderMessage = failedOrderMessage;
+                                return;
+                            }
+                            console.log('order, ', order);
+                            vm.checkoutModalState = 5;
+                            vm.formBuilder = {};
+                            localStorageService.remove(cookieKey);
+                        });
+                    });
+                }
+            }
+        }
 
         function init(element) {
             vm.element = element;
