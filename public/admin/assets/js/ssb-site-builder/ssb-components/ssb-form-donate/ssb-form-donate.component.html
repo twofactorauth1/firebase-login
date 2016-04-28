@@ -230,7 +230,7 @@
                                 <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="vm.makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
                             </div>
                             <div class="modal-footer cart-footer" ng-show="vm.checkoutModalState == 5">
-                                <button type="button" class="btn ssb-theme-btn pull-right" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn ssb-theme-btn pull-right" data-dismiss="modal" ng-click='vm.checkoutModalState = 1'>Close</button>
                             </div>
                         </div>
                     </div>
