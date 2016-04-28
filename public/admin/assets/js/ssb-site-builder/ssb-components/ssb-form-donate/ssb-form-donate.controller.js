@@ -2,13 +2,15 @@
 
     app.controller('SiteBuilderFormDonateComponentController', ssbFormDonateComponentController);
 
-    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', 'ENV'];
+    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', 'ENV', 'localStorageService', '$routeParams'];
     /* @ngInject */
-    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, ENV) {
+    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, ENV, localStorageService, $routeParams) {
 
         console.info('ssb-form-donate directive init...')
 
         var vm = this;
+        var orderCookieKey = 'order_cookie';
+        var orderCookieData = localStorageService.get(orderCookieKey);
 
         vm.init = init;
 
@@ -18,9 +20,9 @@
         vm.checkoutModalState = 1;
         vm.showPaypalErrorMsg = false;
         vm.showPaypalLoading = false;
-				vm.paypalLoginClickFn =paypalLoginClickFn;
-				vm.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
-				console.log('url:', vm.paypalURL);
+        vm.paypalLoginClickFn = paypalLoginClickFn;
+        vm.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
+        console.log('url:', vm.paypalURL);
 
         vm.fieldClass = fieldClass;
 
@@ -287,9 +289,7 @@
             vm.checkoutModalState = state;
         }
 
-        function paypalPayment() {
-            vm.showPaypalLoading = true;
-
+        function _formattedOrder() {
             if ($injector.has("ipCookie")) {
                 ipCookie = $injector.get("ipCookie");
             }
@@ -367,11 +367,14 @@
                 });
             }
 
+            var url = $location.absUrl().split('?')[0];
             var order = {
                 //"customer_id": customer._id,
+                "cancelUrl": url + '?state=2&comp=donation',
+                "returnUrl": url + '?state=5&comp=donation',
                 "customer": formatted,
                 "session_id": null,
-                "status": "completed",
+                "status": "pending_payment",
                 "cart_discount": 0,
                 "total_discount": 0,
                 "total_shipping": 0,
@@ -391,30 +394,30 @@
                 },
                 "shipping_methods": "",
                 "shipping_address": {
-									"first_name": formatted.first,
-									"last_name": formatted.last,
-									"phone": vm.formBuilder.Phone || '',
-									"city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
-									"country": "US",
-									"address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
-									"company": "",
-									"postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
-									"email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
-									"address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
-									"state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                    "first_name": formatted.first,
+                    "last_name": formatted.last,
+                    "phone": vm.formBuilder.Phone || '',
+                    "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+                    "country": "US",
+                    "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+                    "company": "",
+                    "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+                    "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+                    "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+                    "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
                 },
                 "billing_address": {
                     "first_name": formatted.first,
                     "last_name": formatted.last,
                     "phone": vm.formBuilder.Phone || '',
-										"city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
-										"country": "US",
-										"address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
-										"company": "",
-										"postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
-										"email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
-										"address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
-										"state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
+                    "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
+                    "country": "US",
+                    "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
+                    "company": "",
+                    "postcode": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].zip : '',
+                    "email": formatted.details[0].emails.length ? formatted.details[0].emails[0].email : '',
+                    "address_2": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address2 : '',
+                    "state": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].state : ''
                 },
                 "notes": []
             };
@@ -423,7 +426,7 @@
             var _item = {
                 "product_id": vm.product._id,
                 "quantity": 1,
-								"sale_price": totalAmount,
+                "sale_price": totalAmount,
                 "regular_price": totalAmount,
                 "variation_id": '',
                 "tax_class": null,
@@ -435,33 +438,44 @@
             };
             order.line_items.push(_item);
 
-						if ($injector.has('orderService')) {
-							var orderService = $injector.get('orderService');
-							orderService.createPaypalOrder(order, function(data) {
-								vm.order = data;
-								vm.showPaypalLoading = false;
-								if (data && !data._id) {
-									var failedOrderMessage = "Error in order processing";
-									console.log(failedOrderMessage);
-									if (data.message)
-									failedOrderMessage = data.message;
-									vm.checkoutModalState = 5;
-									vm.failedOrderMessage = failedOrderMessage;
-									return;
-								}
-								console.log('order, ', order);
-								vm.checkoutModalState = 3;
-								vm.paypalKey = data.payment_details.payKey;
-								vm.formBuilder = {};
-							});
-						}
+            return order;
         }
 
-				function paypalLoginClickFn() {
-						var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
-						dgFlow.startFlow($location.absUrl());
-						$('#form-donate-modal-' + vm.component._id).modal('hide');
-				}
+        function paypalPayment() {
+            vm.showPaypalLoading = true;
+
+            if ($injector.has('orderService')) {
+                var orderService = $injector.get('orderService');
+                var order = _formattedOrder();
+
+                orderService.createPaypalOrder(order, function(data) {
+                    vm.order = data;
+                    vm.showPaypalLoading = false;
+                    if (data && !data._id) {
+                        var failedOrderMessage = "Error in order processing";
+                        console.log(failedOrderMessage);
+                        if (data.message)
+                            failedOrderMessage = data.message;
+                        vm.checkoutModalState = 5;
+                        vm.failedOrderMessage = failedOrderMessage;
+                        return;
+                    }
+                    console.log('order, ', order);
+                    vm.checkoutModalState = 3;
+                    localStorageService.set(orderCookieKey, data);
+                    vm.paypalKey = data.payment_details.payKey;
+                    vm.formBuilder = {};
+                });
+            }
+        }
+
+        function paypalLoginClickFn() {
+            var dgFlow = new PAYPAL.apps.DGFlow({
+                expType: null
+            });
+            dgFlow.startFlow($location.absUrl());
+            $('#form-donate-modal-' + vm.component._id).modal('hide');
+        }
 
         function init(element) {
             vm.element = element;
@@ -487,6 +501,31 @@
 
                     vm.paypalInfo = account.commerceSettings.paypal;
                 });
+            }
+
+						console.log($routeParams, orderCookieData);
+            if ($routeParams.state && $routeParams.comp == 'donation') {
+                vm.checkoutModalState = parseInt($routeParams.state);
+                $('#form-donate-modal-' + vm.component._id).modal('show');
+                if (vm.checkoutModalState == 5 && orderCookieData) {
+                    if ($injector.has('orderService')) {
+                        var orderService = $injector.get('orderService');
+                        orderService.setOrderPaid(orderCookieData, function(data) {
+                            if (data && !data._id) {
+                                var failedOrderMessage = "Error in order processing";
+                                console.log(failedOrderMessage);
+                                if (data.message)
+                                    failedOrderMessage = data.message;
+                                vm.failedOrderMessage = failedOrderMessage;
+                                return;
+                            }
+                            localStorageService.remove(orderCookieKey);
+                        });
+                    }
+                }
+                if (vm.checkoutModalState == 2) {
+                    vm.showPaypalErrorMsg = true;
+                }
             }
         }
 

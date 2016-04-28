@@ -97,12 +97,12 @@ _.extend(api.prototype, baseApi.prototype, {
         if(order.get('cancelUrl')) {
             cancelUrl = order.get('cancelUrl');
         } else {
-            cancelUrl = fullUrl + '?state=6';
+            cancelUrl = fullUrl + '?state=6&comp=products';
         }
         if(order.get('returnUrl')) {
             returnUrl = order.get('returnUrl');
         } else {
-            returnUrl = fullUrl + '?state=5';
+            returnUrl = fullUrl + '?state=5&comp=products';
         }
 
         orderManager.createPaypalOrder(order, userId, cancelUrl, returnUrl, function(err, order){
