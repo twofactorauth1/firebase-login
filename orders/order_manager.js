@@ -26,21 +26,22 @@ module.exports = {
 
     createPaidOrder: function(order, fn) {
         var self = this;
-        log.debug('>> createPaidOrder');
+        var accountId = order.get('account_id');
+        log.debug(accountId, null, '>> createPaidOrder');
 
         //set order_id based on orders length for the account
         var query = {
-            account_id: order.get('account_id')
+            account_id: accountId
         };
 
         dao.findMany(query, $$.m.Order, function(err, orders){
             order.set('order_id', orders.length);
             dao.saveOrUpdate(order, function(err, savedOrder){
                 if(err) {
-                    log.error('Error saving order: ' + err);
+                    log.error(accountId, null, 'Error saving order: ' + err);
                     return fn(err, null);
                 } else {
-                    log.debug('<< createPaidOrder');
+                    log.debug(accountId, null, '<< createPaidOrder');
                     return fn(null, savedOrder);
                 }
             });
@@ -51,7 +52,7 @@ module.exports = {
 
     createOrderFromStripeInvoice: function(invoice, accountId, contactId, fn) {
         var self = this;
-        log.debug('>> createOrderFromStripeInvoice');
+        log.debug(accountId, null, '>> createOrderFromStripeInvoice');
         //set order_id based on orders length for the account
         var query = {
             account_id: accountId
@@ -136,10 +137,10 @@ module.exports = {
 
                 dao.saveOrUpdate(order, function(err, savedOrder){
                     if(err) {
-                        log.error('Error saving order: ' + err);
+                        log.error(accountId, null, 'Error saving order: ' + err);
                         return fn(err, null);
                     } else {
-                        log.debug('<< createOrderFromStripeInvoice');
+                        log.debug(accountId, null, '<< createOrderFromStripeInvoice');
                         return fn(null, savedOrder);
                     }
                 });
@@ -152,7 +153,8 @@ module.exports = {
 
     createOrder: function(order, accessToken, userId, fn) {
         var self = this;
-        log.debug('>> createOrder');
+        var accountId = parseInt(order.get('account_id'));
+        log.debug(accountId, userId, '>> createOrder');
         /*
          * Validation
          *
@@ -160,18 +162,18 @@ module.exports = {
          * - Assumption: customer_id = contact_id with a stripeId
          * - Assumption: total_line_items_quantity = sum(line_items.quantity)
          */
-        var accountId = parseInt(order.get('account_id'));
+
         async.waterfall([
             //get the account
             function(callback) {
-                log.debug('fetching account ' + order.get('account_id'));
+                log.debug(accountId, userId, 'fetching account ' + order.get('account_id'));
                 accountDao.getAccountByID(accountId, function(err, account){
                     callback(err, account);
                 });
             },
             //get the products
             function(account, callback) {
-                log.debug('fetching products');
+                log.debug(accountId, userId, 'fetching products');
                 var productAry = [];
                 async.each(order.get('line_items'), function iterator(item, cb){
                     productManager.getProduct(item.product_id, function(err, product){
@@ -181,7 +183,7 @@ module.exports = {
                             productAry.push(product);
                             item.sku = product.get('sku');
                             item.name = product.get('name');
-                            log.debug('Product is', product);
+                            log.debug(accountId, null, 'Product is', product);
                             cb();
                         }
                     });
@@ -191,7 +193,7 @@ module.exports = {
             },
             //determine tax rate
             function(account, productAry, callback) {
-                log.debug('commerceSettings');
+                log.debug(accountId, userId, 'commerceSettings');
                 var _taxRate = 0;
                 var commerceSettings = account.get('commerceSettings');
 
@@ -209,39 +211,39 @@ module.exports = {
                     }
                     if(zip !== 0) {
                         productManager.getTax(zip, function(err, rate){
-                            log.debug('Tax Service Response: ', rate);
+                            log.debug(accountId, null, 'Tax Service Response: ', rate);
                             if(rate && rate.results && rate.results.length > 0) {
                                 _taxRate = rate.results[0].taxSales.toFixed(4); // nexus location or business_location
-                                log.debug('Initial Tax Rate: ', _taxRate);
+                                log.debug(accountId, userId, 'Initial Tax Rate: ', _taxRate);
 
                                 if(commerceSettings.taxbased !== 'business_location'
                                     && commerceSettings.taxnexus && commerceSettings.taxnexus.length > 0) {
 
-                                    log.debug('Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
+                                    log.debug(accountId, userId, 'Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
                                     if (_.pluck(commerceSettings.taxnexus, "text").indexOf(rate.results[0].geoState) < 0) {
                                         _taxRate = 0; // Force rate to zero. Non-nexus location
                                     }
                                 }
                             } else {
-                                log.debug('Tax Service (productManager.getTax) Response ERR: ', err);
+                                log.debug(accountId, userId, 'Tax Service (productManager.getTax) Response ERR: ', err);
                                 _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
                             }
-                            log.debug('Applicable Tax Rate (first): ', _taxRate);
+                            log.debug(accountId, userId, 'Applicable Tax Rate (first): ', _taxRate);
                             callback(err, account, productAry, _taxRate);
                         });
                     } else {
-                        log.debug('Applicable Tax Rate (second): ', _taxRate);
+                        log.debug(accountId, userId, 'Applicable Tax Rate (second): ', _taxRate);
                         callback(null, account, productAry, _taxRate);
                     }
                 } else {
-                    log.debug('Applicable Tax Rate (third): ', _taxRate);
+                    log.debug(accountId, userId, 'Applicable Tax Rate (third): ', _taxRate);
                     callback(null, account, productAry, _taxRate);
                 }
             },
             //validate
             function(account, productAry, taxPercent, callback){
-                log.debug('validating order on account ' + order.get('account_id'));
-                log.debug('using a tax rate of ', taxPercent);
+                log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
+                log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                 //calculate total amount and number line items
                 var totalAmount = 0;
                 var subTotal = 0;
@@ -263,7 +265,7 @@ module.exports = {
                             return true;
                         }
                     });
-                    log.debug('found product ', product);
+                    log.debug(accountId, userId, 'found product ', product);
                     var lineItemSubtotal = item.quantity * product.get('regular_price');
                     if(product.get('on_sale') === true) {
                         var startDate = product.get('sale_date_from', 'day');
@@ -283,16 +285,16 @@ module.exports = {
                     subTotal += lineItemSubtotal;
                     totalLineItemsQuantity += parseFloat(item.quantity);
                 });
-                log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
 
                  if(order.get('cart_discount')) {
                      discount += parseFloat(order.get('cart_discount'));
-                     log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                     log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
                  }
 
                  if(order.get('total_discount')) {
                      discount += parseFloat(order.get('total_discount'));
-                     log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                     log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
                  }
 
                  totalAmount = (subTotal - discount) + taxAdded;
@@ -301,7 +303,7 @@ module.exports = {
                 order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
-                log.debug('total is now: ' + order.get('total'));
+                log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                 order.set('total_line_items_quantity', totalLineItemsQuantity);
                 callback(null, account, order, productAry);
 
@@ -322,7 +324,7 @@ module.exports = {
                     contact.createdBy(userId, $$.constants.social.types.LOCAL);
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                         if(err) {
-                            log.error('Error creating contact for new order', err);
+                            log.error(accountId, null, 'Error creating contact for new order', err);
                             callback(err);
                         } else {
                             validatedOrder.set('customer_id', savedContact.id());
@@ -337,13 +339,13 @@ module.exports = {
             },
             //get contact
             function(account, savedOrder, productAry, callback) {
-                log.debug('getting contact');
+                log.debug(accountId, userId, 'getting contact');
                 contactDao.getById(savedOrder.get('customer_id'), $$.m.Contact, function(err, contact){
                     if(err) {
-                        log.error('Error getting contact: ' + err);
+                        log.error(accountId, userId, 'Error getting contact: ' + err);
                         callback(err);
                     } else if(contact === null) {
-                        log.error('Could not find contact for id: ' + savedOrder.get('customer_id'));
+                        log.error(accountId, null, 'Could not find contact for id: ' + savedOrder.get('customer_id'));
                         callback('contact not found');
                     } else {
 
@@ -379,7 +381,7 @@ module.exports = {
                     var cardToken = savedOrder.get('payment_details').card_token;
                     stripeDao.createStripeCustomer(cardToken, contact, accountId, accountId, accessToken, function(err, customer){
                         if(err) {
-                            log.error('Error creating stripe customer:', err);
+                            log.error(accountId, userId, 'Error creating stripe customer:', err);
                             callback(err);
                         } else {
                             contact.set('stripeId', customer.id);
@@ -387,7 +389,7 @@ module.exports = {
                             savedOrder.get('payment_details').card_token = null;
                             contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                                 if(err) {
-                                    log.error('Error saving stripe customerId:', err);
+                                    log.error(accountId, userId, 'Error saving stripe customerId:', err);
                                     callback(err);
                                 } else {
                                     callback(null, account, savedOrder, savedContact, productAry);
@@ -399,17 +401,17 @@ module.exports = {
             },
             //charge
             function(account, savedOrder, contact, productAry, callback){
-                log.debug('attempting to charge order');
+                log.debug(accountId, null, 'attempting to charge order');
                 var paymentDetails = savedOrder.get('payment_details');
                 if (savedOrder.get('total') > 0) {
                     if(paymentDetails.method_id === 'cc') {
                         var card = paymentDetails.card_token;
                         //total is a double but amount needs to be in cents (integer)
                         var amount = Math.round(savedOrder.get('total') * 100);
-                        log.debug('amount ', savedOrder.get('total'));
+                        log.debug(accountId, null, 'amount ', savedOrder.get('total'));
                         var currency = savedOrder.get('currency');
                         var customerId = contact.get('stripeId');
-                        log.debug('customerId:', customerId);
+                        log.debug(accountId, null, 'customerId:', customerId);
                         var contactId = savedOrder.get('customer_id');
                         var description = "Charge for order " + savedOrder.id();
                         if(paymentDetails.charge_description) {
@@ -426,12 +428,12 @@ module.exports = {
                         }
                         var application_fee = 0;
                         var userId = null;
-                        log.debug('contact ', contact);
+                        log.debug(accountId, userId, 'contact ', contact);
                         var receipt_email = contact.getEmails()[0].email;
-                        log.debug('Setting receipt_email to ' + receipt_email);
+                        log.debug(accountId, userId, 'Setting receipt_email to ' + receipt_email);
                         //TODO: if the product is a subscription, create a subscription rather than a charge
                         if(_.find(productAry, function(product){return product.get('type') === 'SUBSCRIPTION'})) {
-                            log.debug('creating a subscription');
+                            log.debug(accountId, userId, 'creating a subscription');
                             var subscriptionProduct = _.find(productAry, function(product){
                                 return product.get('type') === 'SUBSCRIPTION';});
                             var productAttributes = subscriptionProduct.get('product_attributes');
@@ -441,7 +443,7 @@ module.exports = {
                             var trial_end = null;
                             var quantity = 1;
                             var application_fee_percent = null;
-                            var accountId = savedOrder.get('account_id');
+                            //var accountId = savedOrder.get('account_id');
                             //other items in the purchase can be add-ons
                             var invoiceItems = _.reject(productAry, function(product){
                                 return product.get('type') === 'SUBSCRIPTION';
@@ -455,9 +457,9 @@ module.exports = {
                              });
                              */
                             stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                                    application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
+                                    application_fee_percent, metadata, accountId, contactId, null, accessToken, function(err, value){
                                 if(err) {
-                                    log.error('Error creating Stripe Subscription: ' + err);
+                                    log.error(accountId, null, 'Error creating Stripe Subscription: ' + err);
                                     //set the status of the order to failed
                                     savedOrder.set('status', $$.m.Order.status.FAILED);
                                     savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
@@ -475,12 +477,12 @@ module.exports = {
                             });
 
                         } else {
-                            log.debug('creating a charge');
+                            log.debug(accountId, userId, 'creating a charge');
                             stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
                                 capture, statement_description, receipt_email, application_fee, userId, accessToken,
                                 function(err, charge){
                                     if(err) {
-                                        log.error('Error creating Stripe Charge: ' + err);
+                                        log.error(accountId, null, 'Error creating Stripe Charge: ' + err);
                                         //set the status of the order to failed
                                         savedOrder.set('status', $$.m.Order.status.FAILED);
                                         savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
@@ -508,7 +510,7 @@ module.exports = {
             },
             //update
             function(account, savedOrder, charge, contact, callback){
-                log.debug('updating saved order');
+                log.debug(accountId, userId, 'updating saved order');
                 /*
                  * need to set:
                  * paid:true
@@ -530,7 +532,7 @@ module.exports = {
                 savedOrder.set('modified', modified);
                 dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
                     if(err) {
-                        log.error('Error updating order: ' + err);
+                        log.error(accountId, userId, 'Error updating order: ' + err);
                         callback(err);
                     } else {
                         callback(null, account, updatedOrder, contact);
@@ -540,18 +542,18 @@ module.exports = {
             },
             //send new order email
             function(account, updatedOrder, contact, callback) {
-                log.debug('Sending new order email');
+                log.debug(accountId, userId, 'Sending new order email');
                 var toAddress = "";
                 if(contact.getEmails()[0])
                     toAddress = contact.getEmails()[0].email;
                 var toName = contact.get('first') + ' ' + contact.get('last');
-                var accountId = updatedOrder.get('account_id');
+                //var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
                 var vars = [];
 
-                log.debug('toAddress ', toAddress);
-                log.debug('toName ', toName);
-                log.debug('toAddress ', toAddress);
+                log.debug(accountId, userId, 'toAddress ', toAddress);
+                log.debug(accountId, userId, 'toName ', toName);
+                log.debug(accountId, userId, 'toAddress ', toAddress);
 
                 accountDao.getAccountByID(accountId, function(err, account){
                     if(err) {
@@ -580,15 +582,15 @@ module.exports = {
                                     app.render('emails/base_email_order_admin_notification', component, function(err, html){
                                         juice.juiceResources(html, {}, function(err, _html) {
                                             if (err) {
-                                                log.error('A juice error occurred. Failed to set styles inline.')
+                                                log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
                                                 log.error(err);
                                                 fn(err, null);
                                             } else {
-                                                log.debug('juiced - one ' + _html);
+                                                log.debug(accountId, userId, 'juiced - one ' + _html);
                                                 html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             }
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
-                                                log.debug('Admin Notification Sent');
+                                                log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
                                         });
                                     });
@@ -597,15 +599,15 @@ module.exports = {
                             } else {
                                 var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
-                                log.debug('Using this for data', component);
+                                log.debug(accountId, userId, 'Using this for data', component);
                                 app.render('emails/base_email_order', component, function(err, html) {
                                     juice.juiceResources(html, {}, function(err, _html) {
                                         if (err) {
-                                            log.error('A juice error occurred. Failed to set styles inline.')
+                                            log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
                                             log.error(err);
                                             fn(err, null);
                                         } else {
-                                            log.debug('juiced - two' + _html);
+                                            log.debug(accountId, userId, 'juiced - two' + _html);
                                             html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         }
 
@@ -623,16 +625,16 @@ module.exports = {
                                         app.render('emails/base_email_order_admin_notification', component, function(err, html){
                                             juice.juiceResources(html, {}, function(err, _html) {
                                                 if (err) {
-                                                    log.error('A juice error occurred. Failed to set styles inline.')
+                                                    log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
                                                     log.error(err);
                                                     fn(err, null);
                                                 } else {
-                                                    log.debug('juiced - three' + _html);
+                                                    log.debug(accountId, userId, 'juiced - three' + _html);
                                                     html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                 }
 
                                                 emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
-                                                    log.debug('Admin Notification Sent');
+                                                    log.debug(accountId, userId, 'Admin Notification Sent');
                                                 });
                                             });
                                         });
@@ -649,7 +651,7 @@ module.exports = {
             },
             // check and get fulfillment email products
             function(account, order, callback) {
-                log.debug('Order is', order);
+                log.debug(accountId, userId, 'Order is', order);
                 if(order.get('payment_details') && order.get('payment_details').charge && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
                     var productAry = [];
                     async.each(order.get('line_items'), function iterator(item, cb){
@@ -660,12 +662,12 @@ module.exports = {
                                 if(product.get('fulfillment_email')){
                                     productAry.push(product);
                                 }
-                                log.debug('Product is', product);
+                                log.debug(accountId, userId, 'Product is', product);
                                 cb();
                             }
                         });
                     }, function done(err){
-                        log.debug('productAry', productAry);
+                        log.debug(accountId, userId, 'productAry', productAry);
                         callback(err, account, order, productAry)
                     });
                 }
@@ -683,10 +685,10 @@ module.exports = {
                             note: 'No email address provided with order. No fulfillment email sent.',
                             user_id: userId,
                             date: new Date()
-                        })
+                        });
                         dao.saveOrUpdate(order, function(err, order){
                             if(err) {
-                                log.error('Error updating order: ' + err);
+                                log.error(accountId, userId, 'Error updating order: ' + err);
                                 callback(err);
                             } else {
                                 callback(null,order);
@@ -712,7 +714,7 @@ module.exports = {
 
                             emailDao.getEmailById(emailId, function(err, email){
                                 if(err || !email) {
-                                    log.error('Error getting email to render: ' + err);
+                                    log.error(accountId, userId, 'Error getting email to render: ' + err);
                                     return fn(err, null);
                                 }
                                 var components = [];
@@ -744,7 +746,7 @@ module.exports = {
 
                                 app.render('emails/base_email_v2', { components: components }, function(err, html) {
                                     if (err) {
-                                        log.error('Error updating order: ' + err);
+                                        log.error(accountId, userId, 'Error updating order: ' + err);
                                         log.warn('email will not be sent.');
                                         cb();
                                     } else {
@@ -755,18 +757,19 @@ module.exports = {
                                                     note: 'Error sending fulfillment email.',
                                                     user_id: userId,
                                                     date: new Date()
-                                                })
+                                                });
                                                 dao.saveOrUpdate(order, function(err, order){
                                                     if(err) {
-                                                        log.error('Error updating order: ' + err);
+                                                        log.error(accountId, userId, 'Error updating order: ' + err);
                                                         callback(err);
                                                     } else {
                                                         cb();
                                                     }
                                                 });
-                                            }
-                                            else
+                                            } else {
                                                 cb();
+                                            }
+
                                         });
                                     }
                                 });
@@ -783,10 +786,10 @@ module.exports = {
 
         ], function(err, result){
             if(err) {
-                log.error('Error creating order: ' + err);
+                log.error(accountId, userId, 'Error creating order: ' + err);
                 return fn(err.message, null);
             } else {
-                log.debug('<< createOrder');
+                log.debug(accountId, userId, '<< createOrder');
                 return fn(null, result);
             }
         });
@@ -796,20 +799,21 @@ module.exports = {
     createPaypalOrder: function(order, userId, cancelUrl, returnUrl, fn) {
 
         var self = this;
-        log.debug('>> createPaypalOrder');
-
         var accountId = parseInt(order.get('account_id'));
+        log.debug(accountId, userId, '>> createPaypalOrder');
+
+
         async.waterfall([
             //get the account
             function getAccount(callback) {
-                log.debug('fetching account ' + order.get('account_id'));
+                log.debug(accountId, userId, 'fetching account ' + order.get('account_id'));
                 accountDao.getAccountByID(accountId, function(err, account){
                     callback(err, account);
                 });
             },
             //get the products
             function getProducts(account, callback) {
-                log.debug('fetching products');
+                log.debug(accountId, userId, 'fetching products');
                 var productAry = [];
                 async.each(order.get('line_items'), function iterator(item, cb){
                     productManager.getProduct(item.product_id, function(err, product){
@@ -819,7 +823,7 @@ module.exports = {
                             productAry.push(product);
                             item.sku = product.get('sku');
                             item.name = product.get('name');
-                            log.debug('Product is', product);
+                            log.debug(accountId, userId, 'Product is', product);
                             cb();
                         }
                     });
@@ -829,7 +833,7 @@ module.exports = {
             },
             //determine tax rate
             function getTaxRate(account, productAry, callback) {
-                log.debug('commerceSettings');
+                log.debug(accountId, userId, 'commerceSettings');
                 var _taxRate = 0;
                 var commerceSettings = account.get('commerceSettings');
 
@@ -847,39 +851,39 @@ module.exports = {
                     }
                     if(zip !== 0) {
                         productManager.getTax(zip, function(err, rate){
-                            log.debug('Tax Service Response: ', rate);
+                            log.debug(accountId, userId, 'Tax Service Response: ', rate);
                             if(rate && rate.results && rate.results.length > 0) {
                                 _taxRate = rate.results[0].taxSales.toFixed(4); // nexus location or business_location
-                                log.debug('Initial Tax Rate: ', _taxRate);
+                                log.debug(accountId, userId, 'Initial Tax Rate: ', _taxRate);
 
                                 if(commerceSettings.taxbased !== 'business_location'
                                     && commerceSettings.taxnexus && commerceSettings.taxnexus.length > 0) {
 
-                                    log.debug('Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
+                                    log.debug(accountId, userId, 'Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
                                     if (_.pluck(commerceSettings.taxnexus, "text").indexOf(rate.results[0].geoState) < 0) {
                                         _taxRate = 0; // Force rate to zero. Non-nexus location
                                     }
                                 }
                             } else {
-                                log.debug('Tax Service (productManager.getTax) Response ERR: ', err);
+                                log.debug(accountId, userId, 'Tax Service (productManager.getTax) Response ERR: ', err);
                                 _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
                             }
-                            log.debug('Applicable Tax Rate (first): ', _taxRate);
+                            log.debug(accountId, userId, 'Applicable Tax Rate (first): ', _taxRate);
                             callback(err, account, productAry, _taxRate);
                         });
                     } else {
-                        log.debug('Applicable Tax Rate (second): ', _taxRate);
+                        log.debug(accountId, userId, 'Applicable Tax Rate (second): ', _taxRate);
                         callback(null, account, productAry, _taxRate);
                     }
                 } else {
-                    log.debug('Applicable Tax Rate (third): ', _taxRate);
+                    log.debug(accountId, userId, 'Applicable Tax Rate (third): ', _taxRate);
                     callback(null, account, productAry, _taxRate);
                 }
             },
             //validate
             function validateOrder(account, productAry, taxPercent, callback){
-                log.debug('validating order on account ' + order.get('account_id'));
-                log.debug('using a tax rate of ', taxPercent);
+                log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
+                log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                 //calculate total amount and number line items
                 var totalAmount = 0;
                 var subTotal = 0;
@@ -900,7 +904,7 @@ module.exports = {
                             return true;
                         }
                     });
-                    log.debug('found product ', product);
+                    log.debug(accountId, userId, 'found product ', product);
                     var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
                     if(product.get('on_sale') === true) {
                         var startDate = product.get('sale_date_from', 'day');
@@ -920,7 +924,7 @@ module.exports = {
                     subTotal += lineItemSubtotal;
                     totalLineItemsQuantity += parseFloat(item.quantity);
                 });
-                log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
                 /*
                  * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
                  * side to avoid shenanigans.
@@ -931,7 +935,7 @@ module.exports = {
                 order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
-                log.debug('total is now: ' + order.get('total'));
+                log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                 order.set('total_line_items_quantity', totalLineItemsQuantity);
                 callback(null, account, order, productAry);
 
@@ -952,7 +956,7 @@ module.exports = {
                     contact.createdBy(userId, $$.constants.social.types.LOCAL);
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                         if(err) {
-                            log.error('Error creating contact for new order', err);
+                            log.error(accountId, userId, 'Error creating contact for new order', err);
                             callback(err);
                         } else {
                             validatedOrder.set('customer_id', savedContact.id());
@@ -967,13 +971,13 @@ module.exports = {
             },
             //get contact
             function getContact(account, savedOrder, productAry, callback) {
-                log.debug('getting contact');
+                log.debug(accountId, userId, 'getting contact');
                 contactDao.getById(savedOrder.get('customer_id'), $$.m.Contact, function(err, contact){
                     if(err) {
-                        log.error('Error getting contact: ' + err);
+                        log.error(accountId, userId, 'Error getting contact: ' + err);
                         callback(err);
                     } else if(contact === null) {
-                        log.error('Could not find contact for id: ' + savedOrder.get('customer_id'));
+                        log.error(accountId, userId, 'Could not find contact for id: ' + savedOrder.get('customer_id'));
                         callback('contact not found');
                     } else {
 
@@ -1011,10 +1015,10 @@ module.exports = {
                     var memo = "Order #" + orderID + " for " + account.get('business').name;
                     paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
                         if (err) {
-                            log.error('Error creating paypal pay key: ' + err);
+                            log.error(accountId, userId, 'Error creating paypal pay key: ' + err);
                             callback(err.message, savedOrder, null);
                         } else {
-                            log.debug('<< getPaypalPayKey');
+                            log.debug(accountId, userId, '<< getPaypalPayKey');
                             callback(null, savedOrder, value);
                         }
                     });
@@ -1028,10 +1032,10 @@ module.exports = {
                 order.set('payment_details', paypalInfo);
                 dao.saveOrUpdate(savedOrder, function(err, savedOrder) {
                   if (err) {
-                    log.error('Error updating order: ' + err);
+                    log.error(accountId, userId, 'Error updating order: ' + err);
                     callback(err, null);
                   } else {
-                    log.debug('<< updateOrder');
+                    log.debug(accountId, userId, '<< updateOrder');
                     callback(null, savedOrder);
                   }
                 });
@@ -1039,26 +1043,26 @@ module.exports = {
 
         ], function done(err, result){
             if(err) {
-                log.error('Error creating order: ' + err);
+                log.error(accountId, userId, 'Error creating order: ' + err);
                 return fn(err, null);
             } else {
-                log.debug('<< createPaypalOrder');
+                log.debug(accountId, userId, '<< createPaypalOrder');
                 return fn(null, result);
             }
         });
     },
 
     completeOrder: function(accountId, orderId, note, userId, fn) {
-        log.debug('>> completeOrder ');
-        log.debug('>> note ', note);
+        log.debug(accountId, userId, '>> completeOrder ');
+        log.debug(accountId, userId, '>> note ', note);
         var query = {
             _id: orderId,
             account_id: accountId
         };
         dao.findOne(query, $$.m.Order, function(err, order){
-            log.debug('retrieved order >>> ', order);
+            log.debug(accountId, userId, 'retrieved order >>> ', order);
             if(err) {
-                log.error('Error getting order: ' + err);
+                log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             }
 
@@ -1084,10 +1088,10 @@ module.exports = {
             order.set('modified', modified);
             dao.saveOrUpdate(order, function(err, updatedOrder){
                 if(err) {
-                    log.error('Error updating order: ' + err);
+                    log.error(accountId, userId, 'Error updating order: ' + err);
                     return fn(err, null);
                 }
-                log.debug('<< completeOrder');
+                log.debug(accountId, userId, '<< completeOrder');
                 return fn(null, updatedOrder);
             });
 
@@ -1101,17 +1105,18 @@ module.exports = {
      * @param note
      * @param userId
      * @param fn
+     * @param accountId
      */
     cancelOrder: function(accountId, orderId, note, userId, fn) {
         var self = this;
-        log.debug('>> cancelOrder');
+        log.debug(accountId, userId, '>> cancelOrder');
         var query = {
             _id: orderId,
             accountId: accountId
         };
         dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
-                log.error('Error getting order: ' + err);
+                log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             }
             order.set('note', order.get('note') + '\n' + note);
@@ -1124,10 +1129,10 @@ module.exports = {
 
             dao.saveOrUpdate(order, function(err, updatedOrder){
                 if(err) {
-                    log.error('Error updating order: ' + err);
+                    log.error(accountId, userId, 'Error updating order: ' + err);
                     return fn(err, null);
                 }
-                log.debug('<< cancelOrder');
+                log.debug(accountId, userId, '<< cancelOrder');
                 return fn(null, updatedOrder);
             });
         });
@@ -1142,30 +1147,31 @@ module.exports = {
      * @param accessToken
      * @param reason (duplicate|fraudulent|requested_by_customer)
      * @param fn
+     * @param accountId
      */
     refundOrder: function(accountId, orderId, note, userId, amount, reason, accessToken, fn) {
         var self = this;
-        log.debug('>> refundOrder ', orderId);
+        log.debug(accountId, userId, '>> refundOrder ', orderId);
         var query = {
             _id: orderId,
             account_id: accountId
         };
-        log.debug('>> query ', query);
+        log.debug(accountId, userId, '>> query ', query);
         dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
-                log.error('Error getting order: ' + err);
+                log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             }
             var paymentDetails = order.get('payment_details');
             if(!paymentDetails.charge) {
-                log.error('Error creating refund.  No charge found.');
+                log.error(accountId, userId, 'Error creating refund.  No charge found.');
                 return fn('No charge found', null);
             }
 
             var chargeId = paymentDetails.charge.id;
-            log.debug('>> chargeId ', chargeId);
+            log.debug(accountId, userId, '>> chargeId ', chargeId);
             if(!chargeId) {
-                log.error('Error creating refund.  No charge found.');
+                log.error(accountId, userId, 'Error creating refund.  No charge found.');
                 return fn('No charge found', null);
             }
             var refundAmount = paymentDetails.charge.amount;
@@ -1176,7 +1182,7 @@ module.exports = {
 
             stripeDao.createRefund(chargeId, refundAmount, false, reason, metadata, accessToken, function(err, refund){
                 if(err) {
-                    log.error('Error creating refund: ' + err);
+                    log.error(accountId, userId, 'Error creating refund: ' + err);
                     return fn(err, null);
                 }
                 paymentDetails.refund = refund;
@@ -1191,10 +1197,10 @@ module.exports = {
 
                 dao.saveOrUpdate(order, function(err, updatedOrder){
                     if(err) {
-                        log.error('Error updating order: ' + err);
+                        log.error(accountId, userId, 'Error updating order: ' + err);
                         return fn(err, null);
                     }
-                    log.debug('<< refundOrder');
+                    log.debug(accountId, userId, '<< refundOrder');
                     return fn(null, updatedOrder);
                 });
             });
@@ -1208,17 +1214,18 @@ module.exports = {
      * @param note
      * @param userId
      * @param fn
+     * @param accountId
      */
     holdOrder: function(accountId, orderId, note, userId, fn) {
         var self = this;
-        log.debug('>> holdOrder');
+        log.debug(accountId, userId, '>> holdOrder');
         var query = {
             _id: orderId,
             accountId: accountId
         };
         dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
-                log.error('Error getting order: ' + err);
+                log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             }
             order.set('note', order.get('note') + '\n' + note);
@@ -1231,10 +1238,10 @@ module.exports = {
 
             dao.saveOrUpdate(order, function(err, updatedOrder){
                 if(err) {
-                    log.error('Error updating order: ' + err);
+                    log.error(accountId, userId, 'Error updating order: ' + err);
                     return fn(err, null);
                 }
-                log.debug('<< holdOrder');
+                log.debug(accountId, userId, '<< holdOrder');
                 return fn(null, updatedOrder);
             });
         });
@@ -1246,17 +1253,18 @@ module.exports = {
      * @param note
      * @param userId
      * @param fn
+     * @param accountId
      */
     failOrder: function(accountId, orderId, note, userId, fn) {
         var self = this;
-        log.debug('>> failOrder');
+        log.debug(accountId, userId, '>> failOrder');
         var query = {
             _id: orderId,
             accountId: accountId
         };
         dao.findOne(query, $$.m.Order, function(err, order) {
             if (err) {
-                log.error('Error getting order: ' + err);
+                log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             }
             order.set('note', order.get('note') + '\n' + note);
@@ -1269,24 +1277,24 @@ module.exports = {
 
             dao.saveOrUpdate(order, function(err, updatedOrder){
                 if(err) {
-                    log.error('Error updating order: ' + err);
+                    log.error(accountId, userId, 'Error updating order: ' + err);
                     return fn(err, null);
                 }
-                log.debug('<< failOrder');
+                log.debug(accountId, userId, '<< failOrder');
                 return fn(null, updatedOrder);
             });
         });
     },
 
     addOrderNote: function(accountId, orderId, note, userId, fn) {
-        log.debug('>> addOrderNote ');
+        log.debug(accountId, userId, '>> addOrderNote ');
         var query = {
             _id: orderId,
             account_id: accountId
         };
         dao.findOne(query, $$.m.Order, function(err, order){
             if(err) {
-                log.error('Error getting order: ' + err);
+                log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             }
 
@@ -1310,10 +1318,10 @@ module.exports = {
             order.set('modified', modified);
             dao.saveOrUpdate(order, function(err, updatedOrder){
                 if(err) {
-                    log.error('Error updating order: ' + err);
+                    log.error(accountId, userId, 'Error updating order: ' + err);
                     return fn(err, null);
                 }
-                log.debug('<< addOrderNote');
+                log.debug(accountId, userId, '<< addOrderNote');
                 return fn(null, updatedOrder);
             });
 
@@ -1347,25 +1355,27 @@ module.exports = {
 
     updateOrderById: function(order, fn) {
         var self = this;
-        log.debug('>> updateOrderById');
+        var accountId = parseInt(order.get('account_id'));
+        var userId = null;
+        log.debug(accountId, userId, '>> updateOrderById');
         dao.getById(order._id, $$.m.Order, function(err, ord){
             if(err) {
-                log.error('Error getting order: ' + err);
+                log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             } else {
-                var accountId = parseInt(order.get('account_id'));
+
 
                 async.waterfall([
                     //get the account
                     function(callback) {
-                        log.debug('fetching account ' + order.get('account_id'));
+                        log.debug(accountId, userId, 'fetching account ' + order.get('account_id'));
                         accountDao.getAccountByID(accountId, function(err, account){
                             callback(err, account);
                         });
                     },
                     //get the products
                     function(account, callback) {
-                        log.debug('fetching products');
+                        log.debug(accountId, userId, 'fetching products');
                         var productAry = [];
                         async.each(order.get('line_items'), function iterator(item, cb){
                             productManager.getProduct(item.product_id, function(err, product){
@@ -1375,7 +1385,7 @@ module.exports = {
                                     productAry.push(product);
                                     item.sku = product.get('sku');
                                     item.name = product.get('name');
-                                    log.debug('Product is', product);
+                                    log.debug(accountId, userId, 'Product is', product);
                                     cb();
                                 }
                             });
@@ -1385,7 +1395,7 @@ module.exports = {
                     },
                     //determine tax rate
                     function(account, productAry, callback) {
-                        log.debug('commerceSettings');
+                        log.debug(accountId, userId, 'commerceSettings');
                         var _taxRate = 0;
                         var commerceSettings = account.get('commerceSettings');
 
@@ -1403,39 +1413,39 @@ module.exports = {
                             }
                             if(zip !== 0) {
                                 productManager.getTax(zip, function(err, rate){
-                                    log.debug('Tax Service Response: ', rate);
+                                    log.debug(accountId, userId, 'Tax Service Response: ', rate);
                                     if(rate && rate.results && rate.results.length > 0) {
                                         _taxRate = rate.results[0].taxSales.toFixed(4); // nexus location or business_location
-                                        log.debug('Initial Tax Rate: ', _taxRate);
+                                        log.debug(accountId, userId, 'Initial Tax Rate: ', _taxRate);
 
                                         if(commerceSettings.taxbased !== 'business_location'
                                             && commerceSettings.taxnexus && commerceSettings.taxnexus.length > 0) {
 
-                                            log.debug('Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
+                                            log.debug(accountId, userId, 'Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
                                             if (_.pluck(commerceSettings.taxnexus, "text").indexOf(rate.results[0].geoState) < 0) {
                                                 _taxRate = 0; // Force rate to zero. Non-nexus location
                                             }
                                         }
                                     } else {
-                                        log.debug('Tax Service (productManager.getTax) Response ERR: ', err);
+                                        log.debug(accountId, userId, 'Tax Service (productManager.getTax) Response ERR: ', err);
                                         _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
                                     }
-                                    log.debug('Applicable Tax Rate (first): ', _taxRate);
+                                    log.debug(accountId, userId, 'Applicable Tax Rate (first): ', _taxRate);
                                     callback(err, account, productAry, _taxRate);
                                 });
                             } else {
-                                log.debug('Applicable Tax Rate (second): ', _taxRate);
+                                log.debug(accountId, userId, 'Applicable Tax Rate (second): ', _taxRate);
                                 callback(null, account, productAry, _taxRate);
                             }
                         } else {
-                            log.debug('Applicable Tax Rate (third): ', _taxRate);
+                            log.debug(accountId, userId, 'Applicable Tax Rate (third): ', _taxRate);
                             callback(null, account, productAry, _taxRate);
                         }
                     },
                     //validate
                     function(account, productAry, taxPercent, callback){
-                        log.debug('validating order on account ' + order.get('account_id'));
-                        log.debug('using a tax rate of ', taxPercent);
+                        log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
+                        log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                         //calculate total amount and number line items
                         var totalAmount = 0;
                         var subTotal = 0;
@@ -1457,7 +1467,7 @@ module.exports = {
                                     return true;
                                 }
                             });
-                            log.debug('found product ', product);
+                            log.debug(accountId, userId, 'found product ', product);
                             var lineItemSubtotal = item.quantity * product.get('regular_price');
                             if(product.get('on_sale') === true) {
                                 var startDate = product.get('sale_date_from', 'day');
@@ -1477,16 +1487,16 @@ module.exports = {
                             subTotal += lineItemSubtotal;
                             totalLineItemsQuantity += parseFloat(item.quantity);
                         });
-                        log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                        log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
 
                         if(order.get('cart_discount')) {
                             discount += parseFloat(order.get('cart_discount'));
-                            log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                            log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
                         }
 
                         if(order.get('total_discount')) {
                             discount += parseFloat(order.get('total_discount'));
-                            log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                            log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
                         }
 
                         totalAmount = (subTotal - discount) + taxAdded;
@@ -1495,7 +1505,7 @@ module.exports = {
                         order.set('tax_rate', taxPercent);
                         order.set('subtotal', subTotal.toFixed(2));
                         order.set('total', totalAmount.toFixed(2));
-                        log.debug('total is now: ' + order.get('total'));
+                        log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                         order.set('total_line_items_quantity', totalLineItemsQuantity);
                         callback(null, account, order);
 
@@ -1528,9 +1538,9 @@ module.exports = {
                         var orderId = order.id();
                         var vars = [];
 
-                        log.debug('toAddress ', toAddress);
-                        log.debug('toName ', toName);
-                        log.debug('toAddress ', toAddress);
+                        log.debug(accountId, userId, 'toAddress ', toAddress);
+                        log.debug(accountId, userId, 'toName ', toName);
+                        log.debug(accountId, userId, 'toAddress ', toAddress);
 
                         var business = account.get('business');
                         var emailPreferences = account.get('email_preferences');
@@ -1553,13 +1563,13 @@ module.exports = {
                                 app.render('emails/base_email_order_admin_notification', component, function(err, html){
                                     juice.juiceResources(html, {}, function(err, _html) {
                                         if (err) {
-                                            log.error('A juice error occurred. Failed to set styles inline:', err);
+                                            log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline:', err);
                                         } else {
-                                            log.debug('juiced - one ' + _html);
+                                            log.debug(accountId, userId, 'juiced - one ' + _html);
                                             html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         }
                                         emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
-                                            log.debug('Admin Notification Sent');
+                                            log.debug(accountId, userId, 'Admin Notification Sent');
                                         });
                                     });
                                 });
@@ -1567,13 +1577,13 @@ module.exports = {
                         } else {
                             var component = template.get('components')[0];
                             component.order = order.attributes;
-                            log.debug('Using this for data', component);
+                            log.debug(accountId, userId, 'Using this for data', component);
                             app.render('emails/base_email_order', component, function(err, html) {
                                 juice.juiceResources(html, {}, function(err, _html) {
                                     if (err) {
-                                        log.error('A juice error occurred. Failed to set styles inline:', err);
+                                        log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline:', err);
                                     } else {
-                                        log.debug('juiced - two' + _html);
+                                        log.debug(accountId, userId, 'juiced - two' + _html);
                                         html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                     }
 
@@ -1590,14 +1600,14 @@ module.exports = {
                                     app.render('emails/base_email_order_admin_notification', component, function(err, html){
                                         juice.juiceResources(html, {}, function(err, _html) {
                                             if (err) {
-                                                log.error('A juice error occurred. Failed to set styles inline:', err);
+                                                log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline:', err);
                                             } else {
-                                                log.debug('juiced - three' + _html);
+                                                log.debug(accountId, userId, 'juiced - three' + _html);
                                                 html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             }
 
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, template._id, function(){
-                                                log.debug('Admin Notification Sent');
+                                                log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
                                         });
                                     });
@@ -1609,10 +1619,10 @@ module.exports = {
                     }
                 ], function (err, result) {
                     if (err) {
-                        log.error('Error updating order: ' + err);
+                        log.error(accountId, userId, 'Error updating order: ' + err);
                         return fn(err.message, null);
                     } else {
-                        log.debug('<< updateOrderById');
+                        log.debug(accountId, userId, '<< updateOrderById');
                         return fn(null, order);
                     }
                 });
@@ -1621,20 +1631,21 @@ module.exports = {
     },
 
     listOrdersByAccount: function(accountId, fn) {
-        log.debug('>> listOrdersByAccount');
+        var userId = null;
+        log.debug(accountId, userId, '>> listOrdersByAccount');
         var query = {
             account_id: accountId
         };
 
         dao.findMany(query, $$.m.Order, function(err, orders){
             if(err) {
-                log.error('Error listing orders: ', err);
+                log.error(accountId, userId, 'Error listing orders: ', err);
                 return fn(err, null);
             } else {
                 async.each(orders, function(order, cb){
                     contactDao.getById(order.get('customer_id'), $$.m.Contact, function(err, contact){
                         if(err) {
-                            log.error('Error getting contact: ' + err);
+                            log.error(accountId, userId, 'Error getting contact: ' + err);
                             cb(err);
                         } else {
                             order.set('customer', contact);
@@ -1643,10 +1654,10 @@ module.exports = {
                     });
                 }, function(err){
                     if(err) {
-                        log.error('Error fetching customers for orders: ' + err);
+                        log.error(accountId, userId, 'Error fetching customers for orders: ' + err);
                         return fn(err, orders);
                     } else {
-                        log.debug('<< listOrdersByAccount');
+                        log.debug(accountId, userId, '<< listOrdersByAccount');
                         return fn(null, orders);
                     }
                 });
@@ -1656,16 +1667,17 @@ module.exports = {
     },
 
     listOrdersByCustomer: function(customerId, accountId, fn) {
-        log.debug('>> listOrdersByCustomer ', customerId, accountId);
+        var userId = null;
+        log.debug(accountId, userId, '>> listOrdersByCustomer ', customerId, accountId);
         var query = {
             'customer_id': customerId,
             'account_id': accountId
         };
 
         dao.findMany(query, $$.m.Order, function(err, orders){
-            log.debug('>> listOrdersByCustomer ', orders);
+            log.debug(accountId, userId, '<< listOrdersByCustomer ', orders);
             if(err) {
-                log.error('Error listing orders: ', err);
+                log.error(accountId, userId, 'Error listing orders: ', err);
                 return fn(err, null);
             } else {
                 return fn(null, orders);
