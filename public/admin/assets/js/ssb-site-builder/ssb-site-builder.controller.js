@@ -536,7 +536,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }, 3000);
     };
 
-    function legacyComponentMedia(componentId, index, update) {
+    function legacyComponentMedia(componentId, index, update, fields) {
         var component = _(vm.state.page.sections)
             .chain()
             .pluck('components')
@@ -544,7 +544,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             .findWhere({_id: componentId})
             .value();
 
-        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
+        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update, fields).result.then(function(){
            if(component.type === 'thumbnail-slider'){
                 $scope.$broadcast('refreshThumbnailSlider');
            }
