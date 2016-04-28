@@ -503,7 +503,6 @@
                 });
             }
 
-						console.log($routeParams, orderCookieData);
             if ($routeParams.state && $routeParams.comp == 'donation') {
                 vm.checkoutModalState = parseInt($routeParams.state);
                 $('#form-donate-modal-' + vm.component._id).modal('show');
