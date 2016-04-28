@@ -155,9 +155,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
 
             if (section.spacing.mw) {
-                styleString += (section.spacing.mw == '100%') ?
-                    'max-width: ' + section.spacing.mw + ';' :
-                    'max-width: ' + section.spacing.mw  + 'px;margin:0 auto!important;';
+                styleString += 'max-width: ' + section.spacing.mw + ';'
             }
 
             if (section.spacing.lineHeight) {
