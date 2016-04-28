@@ -127,7 +127,7 @@ var emailMessageManager = {
                         if(stepSettings.bcc) {
                             params.bcc = stepSettings.bcc;
                         }
-
+                        params.batchId = campaignId;
                         self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
                             //we should not have an err here
                             if(err) {
@@ -990,6 +990,9 @@ var emailMessageManager = {
             openedDate:null,
             clickedDate:null
         });
+        if(sendgridParam.batchId) {
+            emailmessage.set('batchId',sendgridParam.batchId);
+        }
         dao.saveOrUpdate(emailmessage, function(err, value){
             if(err) {
                 log.error('Error storing emailmessage:', err);
