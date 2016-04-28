@@ -9384,6 +9384,10 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout {
   margin: 10px;
 }
+.form-builder-layout .form-group label {
+  margin-top: 8px;
+  font-weight: normal;
+}
 .form-builder-layout .panel-active {
   box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
 }
