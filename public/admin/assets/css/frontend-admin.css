@@ -8568,6 +8568,9 @@ ssb-topbar .ui-select-match-text > small {
 }
 [class*="ssb-theme-"] {
   /*
+     * layout-gallery-common
+     */
+  /*
      * layout-gallery-v2
      */
   /*
@@ -8606,6 +8609,9 @@ ssb-topbar .ui-select-match-text > small {
   /*
      * layout-gallery-v14
      */
+}
+[class*="ssb-theme-"] .ssb-page-section-image-gallery [image-gallery-component] .slick-slide {
+  padding: 0 !important;
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v2 [image-gallery-component] {
   padding: 50px 0 !important;
