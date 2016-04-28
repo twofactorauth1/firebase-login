@@ -637,6 +637,7 @@
                             return;
                         }
 
+												order.payment_details.card_token = token;
                         orderService.createOrder(order, function(data) {
                             if (data && !data._id) {
                                 var failedOrderMessage = "Error in order processing";
@@ -650,7 +651,6 @@
                             console.log('order, ', order);
                             vm.checkoutModalState = 5;
                             vm.formBuilder = {};
-                            localStorageService.remove(cookieKey);
                         });
                     });
                 }
@@ -685,7 +685,9 @@
 
             if ($routeParams.state && $routeParams.comp == 'donation') {
                 vm.checkoutModalState = parseInt($routeParams.state);
-                $('#form-donate-modal-' + vm.component._id).modal('show');
+                $timeout(function() {
+                    $('#form-donate-modal-' + vm.component._id).modal('show');
+                }, 1000);
                 if (vm.checkoutModalState == 5 && orderCookieData) {
                     if ($injector.has('orderService')) {
                         var orderService = $injector.get('orderService');

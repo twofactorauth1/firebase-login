@@ -429,7 +429,7 @@ module.exports = {
                         var application_fee = 0;
                         var userId = null;
                         log.debug(accountId, userId, 'contact ', contact);
-                        var receipt_email = contact.getEmails()[0].email;
+                        var receipt_email = contact.getEmails().length ? contact.getEmails()[0].email : '';
                         log.debug(accountId, userId, 'Setting receipt_email to ' + receipt_email);
                         //TODO: if the product is a subscription, create a subscription rather than a charge
                         if(_.find(productAry, function(product){return product.get('type') === 'SUBSCRIPTION'})) {
