@@ -188,18 +188,55 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> handleSendgridEvent:', events);
         self.send200(resp);
         var savedEvents = [];
+        var contactActivitiesJSON = [];
         async.eachSeries(events, function(event, cb){
+            var obj = {
+                email : event.email,
+                ts : moment.unix(event.timestamp).toDate(),
+                accountId: event.accountId,
+                contactId: event.contactId
+            };
+
             if(event.event === 'delivered') {
                 emailMessageManager.markMessageDelivered(event.emailmessageId, event, function(err, value){
                     if(value) {
                         savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.batchId) {
+                            campaignManager.handleCampaignEmailSentEvent(event.accountId, event.batchId, event.contactId, function(){
+                                if(err) {
+                                    self.log.error('Error handling email send event:' + err);
+                                    return;
+                                } else {
+                                    self.log.debug('Handled email sent event.');
+                                    return;
+                                }
+                            });
+                        }
                     }
+
                     cb(err);
                 });
             } else if(event.event === 'open') {
                 emailMessageManager.markMessageOpened(event.emailmessageId, event, function(err, value){
                     if(value) {
                         savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.batchId) {
+                            campaignManager.handleCampaignEmailOpenEvent(event.accountId, event.batchId, event.contactId, function(err, value){
+                                if(err) {
+                                    self.log.error('Error handling email open event:' + err);
+                                    return;
+                                } else {
+                                    self.log.debug('Handled email open event.');
+                                    return;
+                                }
+                            });
+                        }
                     }
                     cb(err);
                 });
@@ -207,6 +244,20 @@ _.extend(api.prototype, baseApi.prototype, {
                 emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value){
                     if(value) {
                         savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.batchId) {
+                            campaignManager.handleCampaignEmailClickEvent(event.accountId, event.batchId, event.contactId, function(err, value){
+                                if(err) {
+                                    self.log.error('Error handling email click event:' + err);
+                                    return;
+                                } else {
+                                    self.log.debug('Handled email click event.');
+                                    return;
+                                }
+                            });
+                        }
                     }
                     cb(err);
                 });
@@ -225,10 +276,15 @@ _.extend(api.prototype, baseApi.prototype, {
             if(err) {
                 self.log.error('Error handling events:', err);
             }
-            self.log.debug('<< handleSendgridEvent', savedEvents);
+            async.eachSeries(contactActivitiesJSON, function(obj, cb){
+                var activity = new $$.m.ContactActivity(obj);
+                contactActivityManager.createActivity(activity, function(err, value){
+                    cb(err);
+                });
+            }, function(err){
+                self.log.debug('<< handleSendgridEvent', savedEvents);
+            });
         });
-
-
     },
 
     testSendgridEvent: function(req, resp) {
