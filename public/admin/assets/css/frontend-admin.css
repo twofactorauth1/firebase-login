@@ -1352,11 +1352,11 @@
   line-height: 36px;
 }
 #componentloader .navigation-v2 .navbar ul.navbar-nav li > a {
-  height: 48px;
+  min-height: 48px;
   font-family: 'Lato', sans-serif;
   font-size: 12px;
   text-shadow: none;
-  line-height: 35px;
+  line-height: inherit;
 }
 #componentloader .navigation-v2 .navbar .container-fluid {
   padding: 0 0 0 0;
@@ -8568,6 +8568,9 @@ ssb-topbar .ui-select-match-text > small {
 }
 [class*="ssb-theme-"] {
   /*
+     * layout-gallery-common
+     */
+  /*
      * layout-gallery-v2
      */
   /*
@@ -8606,6 +8609,9 @@ ssb-topbar .ui-select-match-text > small {
   /*
      * layout-gallery-v14
      */
+}
+[class*="ssb-theme-"] .ssb-page-section-image-gallery [image-gallery-component] .slick-slide {
+  padding: 0 !important;
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-gallery-v2 [image-gallery-component] {
   padding: 50px 0 !important;
