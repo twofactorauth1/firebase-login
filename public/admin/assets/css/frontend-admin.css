@@ -1352,11 +1352,11 @@
   line-height: 36px;
 }
 #componentloader .navigation-v2 .navbar ul.navbar-nav li > a {
-  height: 48px;
+  min-height: 48px;
   font-family: 'Lato', sans-serif;
   font-size: 12px;
   text-shadow: none;
-  line-height: 35px;
+  line-height: inherit;
 }
 #componentloader .navigation-v2 .navbar .container-fluid {
   padding: 0 0 0 0;
