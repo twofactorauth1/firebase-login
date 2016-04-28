@@ -4,8 +4,8 @@
         <span class="message"></span>
     </div>
     <div class="simple-form-{{component._id}}">
-        <div data-edit class="col-xs-12 component-body" ng-class="{'default-font-size': component.formSettings.formTextSize}" style="{{formStyle(component.formSettings)}}">
-            <div ng-if="!component.isModal">
+        <div data-edit class="col-xs-12 component-body" style="{{formStyle(component.formSettings)}}">
+            <div ng-class="{'default-font-size': component.formSettings.formTextSize}" class="component-content" ng-if="!component.isModal">
                 <div class="inner-page row">
                     <div class="simple-form-title ssb-theme-heading-text">
                         <div elem ng-model="component.maintitle"></div>
@@ -142,8 +142,12 @@
         }
     };
 }
-.simple-form-v1 .simple-form-{{component._id}} .component-body.default-font-size * {
+.simple-form-v1 .simple-form-{{component._id}} .component-content.default-font-size * {
     font-size: {{component.formSettings.formTextSize}}px !important;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .component-content.default-font-size .editable-title {
+    font-size: 14px !important;
 }
 
 .simple-form-v1 .simple-form-{{component._id}} .input-fields.nth-row2 div:nth-child(2n) {
