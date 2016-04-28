@@ -14,6 +14,7 @@
     input, textarea{
         min-height: 34px;
         height: auto;
+        border-radius: 4px !important;
     }
 
 
@@ -59,6 +60,11 @@
 
 .form-builder-layout{
 
+    .form-group label {
+        margin-top: 8px;
+        font-weight: normal;
+    }
+
     .panel-active{
         box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
     }
@@ -85,8 +91,7 @@
             display:block;
         }
         button{
-            float:right;
-            min-width: 50% !important;
+            width:auto;
         }
 
         &:hover {
@@ -103,9 +108,9 @@
         width: 50%;
         margin: auto;
         button{
-            float:right;
+
             margin-right:15px;
-            min-width: 50% !important;
+            width:auto;
         }
          &:hover {
             cursor: pointer;
@@ -117,8 +122,8 @@
     .form-layout-3{
         position: relative;
         button{
-            float:right;
             margin-right:15px;
+            width:auto;
         }
          &:hover {
             cursor: pointer;
@@ -132,8 +137,7 @@
         width: 50%;
         margin: auto;
         button{
-            float:right;
-            min-width: 50% !important;
+            width:auto;
         }
          &:hover {
             cursor: pointer;
@@ -147,7 +151,7 @@
         margin: auto;
 
         button{
-            float:right;
+
         }
 
         &:hover {
@@ -191,4 +195,8 @@
     .element-wrap{
         padding: 5px !important
     }
+}
+.editable-btn-form{
+    opacity: 0.65;
+    display:table;
 }

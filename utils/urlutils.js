@@ -22,7 +22,7 @@ var urlutils = {
     },
 
     getSubdomainFromHost: function(host) {
-        _log.debug('>> getSubdomainFromHost(' + host + ')');
+        _log.trace('>> getSubdomainFromHost(' + host + ')');
         var self = this
             , defaultHost = process.env.ROOT_HOST || "indigenous"
             , globalSubdomains = process.env.GLOBAL_SUBDOMAINS || "www"
@@ -96,7 +96,7 @@ var urlutils = {
             'domain': domain,
             'environment': environment
         };
-        _log.debug('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain );
+        _log.trace('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain );
         return returnObj;
     },
 

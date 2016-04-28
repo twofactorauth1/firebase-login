@@ -26,7 +26,10 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
             scope.media({
                 componentId: componentId,
                 index: index,
-                update: update
+                update: update,
+                fields: {
+                    title: '<span style="font-size: 30px;">Service Title Here</span>'
+                }
             });
         };
 

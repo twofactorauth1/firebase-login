@@ -127,7 +127,7 @@ var emailMessageManager = {
                         if(stepSettings.bcc) {
                             params.bcc = stepSettings.bcc;
                         }
-
+                        params.batchId = campaignId;
                         self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
                             //we should not have an err here
                             if(err) {
@@ -155,10 +155,11 @@ var emailMessageManager = {
                                 if(stepSettings.offset) {
                                     //the offset is the number of mintues from now to send it at.
                                     send_at = moment().utc().add('minutes', stepSettings.offset).unix();
-                                    self.log.debug('send_at ' + send_at);
+                                    self.log.debug('send_at (offset) ' + send_at);
                                 } else if(stepSettings.scheduled) {
                                     send_at = self._getSecheduledUTCUnix(stepSettings.scheduled.day,
                                         stepSettings.scheduled.hour, stepSettings.scheduled.minute, stepSettings.offset||0);
+                                    self.log.debug('send_at (scheduled): ' + send_at);
                                 } else if(stepSettings.sendAt) {
                                     self.log.debug('send details >>> ', stepSettings.sendAt);
                                     // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
@@ -181,7 +182,7 @@ var emailMessageManager = {
 
                                 var maxSendTime = moment().add(72, 'hours');
                                 email.setSendAt(send_at);
-                                if(maxSendTime.isBefore(moment(stepSettings.sendAt))) {
+                                if(maxSendTime.isBefore(moment.unix(send_at))) {
                                     //schedule the email
                                     self.log.debug('Scheduling email');
                                     var code = '';
@@ -192,14 +193,14 @@ var emailMessageManager = {
 
                                     var scheduledJob = new $$.m.ScheduledJob({
                                         accountId: accountId,
-                                        scheduledAt: moment(stepSettings.sendAt).utc().toDate(),
+                                        scheduledAt: moment.unix(send_at).toDate(),
                                         runAt: null,
                                         job:code
                                     });
 
 
                                     scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
-                                        self.log.debug('<< sendAccountWelcomeEmail');
+                                        self.log.debug('<< sendCampaignEmail');
                                         return fn(err, value);
                                     });
 
@@ -210,7 +211,7 @@ var emailMessageManager = {
                                             self.log.error('Error sending email:', err);
                                             return fn(err);
                                         } else {
-                                            self.log.debug('<< sendAccountWelcomeEmail');
+                                            self.log.debug('<< sendCampaignEmail');
                                             return fn(null, json);
                                         }
                                     });
@@ -291,7 +292,7 @@ var emailMessageManager = {
     },
 
     sendFulfillmentEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId,
-                                   vars, emailId, fn) {
+                                   vars, emailId, bcc,  fn) {
         var self = this;
         self.log.debug('>> sendFulfillmentEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
@@ -329,6 +330,9 @@ var emailMessageManager = {
                     }
                     if(toName && toName.length > 0) {
                         params.toname = toName;
+                    }
+                    if(bcc && bcc.length > 0) {
+                        params.bcc = bcc;
                     }
 
                     self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
@@ -609,6 +613,129 @@ var emailMessageManager = {
         fn();
     },
 
+    markMessageDelivered: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> markMessageDelivered');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('deliveredDate', eventDate);
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markMessageDelivered');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
+    markMessageOpened: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> markMessageOpened');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('openedDate', eventDate);
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markMessageOpened');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
+    markMessageClicked: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> markMessageClicked');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('clickedDate', eventDate);
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markMessageClicked');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
+    addEvent: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> addEvent');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< addEvent');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
     _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
         var shiftedUtcDate = moment().utc().hours(hoursValue).minutes(minutesValue).add('minutes', timezoneOffset).add('days', daysShift);
         return shiftedUtcDate.toISOString();
@@ -863,6 +990,9 @@ var emailMessageManager = {
             openedDate:null,
             clickedDate:null
         });
+        if(sendgridParam.batchId) {
+            emailmessage.set('batchId',sendgridParam.batchId);
+        }
         dao.saveOrUpdate(emailmessage, function(err, value){
             if(err) {
                 log.error('Error storing emailmessage:', err);

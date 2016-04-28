@@ -15,7 +15,7 @@
 
     <div>
         <div data-edit ng-cloak>
-            <div ng-repeat="image in component.images track by $index">
+            <div ng-repeat="image in component.images">
                 <div class="col-sm-6 col-md-4 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
                     <div class="thumbnail img-height single-image">
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>

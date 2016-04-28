@@ -22,7 +22,7 @@ var view = function(req,resp,options) {
 _.extend(view.prototype, BaseView.prototype, {
 
     show: function(root) {
-        logger.debug('>> show');
+        logger.trace('>> show');
         var data = {
             router:"account/admin",
             root:root || "admin",
@@ -65,12 +65,12 @@ _.extend(view.prototype, BaseView.prototype, {
             data.user.user_preferences.welcome_alert = data.user.user_preferences.welcome_alert || {};
             data.environment = urlUtils.getEnvironmentFromRequest(_req);
             if(!data.user.intercomHash) {
-                logger.debug('calculating hash');
+                logger.trace('calculating hash');
                 data.user.intercomHash = CryptoJS.HmacSHA256(data.user.email, intercomConfig.INTERCOM_SECRET_KEY).toString(CryptoJS.enc.Hex);
-                logger.debug('hash:', data.user.intercomHash);
+                logger.trace('hash:', data.user.intercomHash);
                 //TODO: save this to the user for next time.
             }
-            logger.debug('<< show');
+            logger.trace('<< show');
             //console.dir(data);
             self.resp.render('admin', data);
             //logger.debug('_cleanUp');
