@@ -292,7 +292,7 @@ var emailMessageManager = {
     },
 
     sendFulfillmentEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId,
-                                   vars, emailId, fn) {
+                                   vars, emailId, bcc,  fn) {
         var self = this;
         self.log.debug('>> sendFulfillmentEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
@@ -330,6 +330,9 @@ var emailMessageManager = {
                     }
                     if(toName && toName.length > 0) {
                         params.toname = toName;
+                    }
+                    if(bcc && bcc.length > 0) {
+                        params.bcc = bcc;
                     }
 
                     self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
