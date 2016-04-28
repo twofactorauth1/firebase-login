@@ -97,12 +97,12 @@ _.extend(api.prototype, baseApi.prototype, {
         if(order.get('cancelUrl')) {
             cancelUrl = order.get('cancelUrl');
         } else {
-            cancelUrl = fullUrl + '?state=6';
+            cancelUrl = fullUrl + '?state=6&comp=products';
         }
         if(order.get('returnUrl')) {
             returnUrl = order.get('returnUrl');
         } else {
-            returnUrl = fullUrl + '?state=5';
+            returnUrl = fullUrl + '?state=5&comp=products';
         }
 
         orderManager.createPaypalOrder(order, userId, cancelUrl, returnUrl, function(err, order){
@@ -338,7 +338,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var order = new $$.m.Order(req.body);
         var orderId = req.params.id;
         order.set('_id', orderId);
-        order.set('status', 'processing');
+        if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
+          order.set('status', 'completed');
+        } else {
+          order.set('status', 'processing');
+        }
         order.attributes.modified.date = new Date();
         self.log.debug(accountId, userId, '>> Order', order);
         var created_at = order.get('created_at');
