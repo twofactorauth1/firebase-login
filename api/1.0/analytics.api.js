@@ -204,8 +204,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         obj.sender = value.get('sender');
                         obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
                         contactActivitiesJSON.push(obj);
-                        if(event.batchId) {
-                            campaignManager.handleCampaignEmailSentEvent(event.accountId, event.batchId, event.contactId, function(){
+                        if(event.campaignId) {
+                            campaignManager.handleCampaignEmailSentEvent(event.accountId, event.campaignId, event.contactId, function(){
                                 if(err) {
                                     self.log.error('Error handling email send event:' + err);
                                     return;
@@ -226,8 +226,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         obj.sender = value.get('sender');
                         obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
                         contactActivitiesJSON.push(obj);
-                        if(event.batchId) {
-                            campaignManager.handleCampaignEmailOpenEvent(event.accountId, event.batchId, event.contactId, function(err, value){
+                        if(event.campaignId) {
+                            campaignManager.handleCampaignEmailOpenEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
                                 if(err) {
                                     self.log.error('Error handling email open event:' + err);
                                     return;
@@ -247,8 +247,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         obj.sender = value.get('sender');
                         obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
                         contactActivitiesJSON.push(obj);
-                        if(event.batchId) {
-                            campaignManager.handleCampaignEmailClickEvent(event.accountId, event.batchId, event.contactId, function(err, value){
+                        if(event.campaignId) {
+                            campaignManager.handleCampaignEmailClickEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
                                 if(err) {
                                     self.log.error('Error handling email click event:' + err);
                                     return;
