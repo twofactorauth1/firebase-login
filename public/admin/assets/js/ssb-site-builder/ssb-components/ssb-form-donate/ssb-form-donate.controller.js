@@ -2,15 +2,32 @@
 
     app.controller('SiteBuilderFormDonateComponentController', ssbFormDonateComponentController);
 
-    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', 'ENV', 'localStorageService', '$routeParams'];
+    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', 'ENV'];
     /* @ngInject */
-    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, ENV, localStorageService, $routeParams) {
+    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, ENV) {
 
         console.info('ssb-form-donate directive init...')
 
+        var productService = null;
+        var localStorageService = null;
+        var $routeParams = null;
+        var orderCookieData = null;
+
+        if ($injector.has("productService")) {
+            productService = $injector.get('productService');
+        }
+
+        if ($injector.has("localStorageService")) {
+            localStorageService = $injector.get('localStorageService');
+        }
+
+        if ($injector.has("$routeParams")) {
+            $routeParams = $injector.get('$routeParams');
+            orderCookieData = localStorageService.get(orderCookieKey);
+        }
+
         var vm = this;
         var orderCookieKey = 'order_cookie';
-        var orderCookieData = localStorageService.get(orderCookieKey);
 
         vm.init = init;
 
@@ -46,9 +63,6 @@
 
         vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
 
-        if ($injector.has("productService")) {
-            var productService = $injector.get('productService');
-        }
 
         function fieldClass(field) {
             var classString = 'col-sm-12';
@@ -659,53 +673,57 @@
 
         function init(element) {
             vm.element = element;
-            if ($injector.has("productService")) {
-                var productService = $injector.get('productService');
-                productService.getProduct(vm.component.productSettings.product.data, function(product) {
-                    vm.product = product;
-                });
-            }
 
-            if ($injector.has('accountService')) {
-                var accountService = $injector.get('accountService');
-                accountService(function(err, account) {
-                    vm.account = account;
-                    vm.paypalInfo = null;
-                    vm.stripeInfo = null;
+            if (vm.component.productSettings) {
 
-                    account.credentials.forEach(function(cred, index) {
-                        if (cred.type == 'stripe') {
-                            vm.stripeInfo = cred;
-                        }
+                if ($injector.has("productService")) {
+                    var productService = $injector.get('productService');
+                    productService.getProduct(vm.component.productSettings.product.data, function(product) {
+                        vm.product = product;
                     });
-
-                    vm.paypalInfo = account.commerceSettings.paypal;
-                });
-            }
-
-            if ($routeParams.state && $routeParams.comp == 'donation') {
-                vm.checkoutModalState = parseInt($routeParams.state);
-                $timeout(function() {
-                    $('#form-donate-modal-' + vm.component._id).modal('show');
-                }, 1000);
-                if (vm.checkoutModalState == 5 && orderCookieData) {
-                    if ($injector.has('orderService')) {
-                        var orderService = $injector.get('orderService');
-                        orderService.setOrderPaid(orderCookieData, function(data) {
-                            if (data && !data._id) {
-                                var failedOrderMessage = "Error in order processing";
-                                console.log(failedOrderMessage);
-                                if (data.message)
-                                    failedOrderMessage = data.message;
-                                vm.failedOrderMessage = failedOrderMessage;
-                                return;
-                            }
-                            localStorageService.remove(orderCookieKey);
-                        });
-                    }
                 }
-                if (vm.checkoutModalState == 2) {
-                    vm.showPaypalErrorMsg = true;
+
+                if ($injector.has('accountService')) {
+                    var accountService = $injector.get('accountService');
+                    accountService(function(err, account) {
+                        vm.account = account;
+                        vm.paypalInfo = null;
+                        vm.stripeInfo = null;
+
+                        account.credentials.forEach(function(cred, index) {
+                            if (cred.type == 'stripe') {
+                                vm.stripeInfo = cred;
+                            }
+                        });
+
+                        vm.paypalInfo = account.commerceSettings.paypal;
+                    });
+                }
+
+                if ($routeParams && $routeParams.state && $routeParams.comp == 'donation') {
+                    vm.checkoutModalState = parseInt($routeParams.state);
+                    $timeout(function() {
+                        $('#form-donate-modal-' + vm.component._id).modal('show');
+                    }, 1000);
+                    if (vm.checkoutModalState == 5 && orderCookieData) {
+                        if ($injector.has('orderService')) {
+                            var orderService = $injector.get('orderService');
+                            orderService.setOrderPaid(orderCookieData, function(data) {
+                                if (data && !data._id) {
+                                    var failedOrderMessage = "Error in order processing";
+                                    console.log(failedOrderMessage);
+                                    if (data.message)
+                                        failedOrderMessage = data.message;
+                                    vm.failedOrderMessage = failedOrderMessage;
+                                    return;
+                                }
+                                localStorageService.remove(orderCookieKey);
+                            });
+                        }
+                    }
+                    if (vm.checkoutModalState == 2) {
+                        vm.showPaypalErrorMsg = true;
+                    }
                 }
             }
         }
