@@ -632,9 +632,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         });
 
                     } else {
-
-                        return true
-
+                        console.log(diff1);
+                        console.log(diff2);
+                        return true;
                     }
                 }
             } else {
@@ -701,6 +701,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 if (moment(diff1).isValid()) {
                     ret = true;
                 }
+            }
+            else if(diff1.date && !diff2){
+                ret = true;
             }
         }
 
