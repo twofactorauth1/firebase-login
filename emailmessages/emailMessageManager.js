@@ -706,6 +706,37 @@ var emailMessageManager = {
         });
     },
 
+    markMessageBounced: function(messageId, event, fn) {
+        var self = this;
+        self.log.debug('>> markMessageBounced');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage){
+            if(err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if(!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                var eventDate = moment.unix(event.timestamp).toDate();
+                var modified = {date: new Date(), by:'webhook'};
+                emailMessage.set('bouncedDate', eventDate);
+                emailMessage.set('modified', modified);
+                var eventAry = emailMessage.get('events') || [];
+                eventAry.push(event);
+                emailMessage.set('events', eventAry);
+                dao.saveOrUpdate(emailMessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error updating emailmessage:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markMessageBounced');
+                        return fn(null, value);
+                    }
+                });
+            }
+        });
+    },
+
     addEvent: function(messageId, event, fn) {
         var self = this;
         self.log.debug('>> addEvent');
@@ -732,6 +763,24 @@ var emailMessageManager = {
                         return fn(null, value);
                     }
                 });
+            }
+        });
+    },
+
+    findMessagesByCampaign: function(accountId, campaignId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> findMessagesByCampaign');
+        var query = {
+            accountId:accountId,
+            batchId:campaignId
+        };
+        dao.findMany(query, $$.m.Emailmessage, function(err, messages){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding campaign emails:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< findMessagesByCampaign');
+                return fn(err, messages);
             }
         });
     },

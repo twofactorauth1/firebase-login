@@ -632,9 +632,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         });
 
                     } else {
-
-                        return true
-
+                        console.log(diff1);
+                        console.log(diff2);
+                        return true;
                     }
                 }
             } else {
@@ -656,7 +656,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * - handles temp IDs for buttons inside Froala editor (button was added)
      */
     function dataIsCompiledAdded(diff1, diff2) {
-        return  diff1 &&
+            var updated =   diff1 &&
                 diff2 &&
                 angular.isDefined(diff1) &&
                 angular.isDefined(diff1.indexOf) &&
@@ -666,6 +666,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 angular.isDefined(diff2.indexOf) &&
                 diff2.indexOf('data-compiled') !== -1 &&
                 diff2.indexOf('ssb-theme-btn') !== -1
+            if(updated && angular.isDefined(diff1) && angular.isDefined(diff2)){
+                updated = angular.equals(diff1, diff2)
+            }
+            return updated;
     };
 
     /**
@@ -697,6 +701,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 if (moment(diff1).isValid()) {
                     ret = true;
                 }
+            }
+            else if(diff1.date && !diff2){
+                ret = true;
             }
         }
 
