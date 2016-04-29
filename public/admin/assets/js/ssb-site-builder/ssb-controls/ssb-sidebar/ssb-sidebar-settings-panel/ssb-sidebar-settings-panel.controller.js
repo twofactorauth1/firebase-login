@@ -183,8 +183,9 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     }
 
     function addCustomField(type){
+        var cleanType = type.replace(' ','');
         var newInfo = {
-            name: type,
+            name: cleanType,
             type: type,
             label: type,
             custom: true,
