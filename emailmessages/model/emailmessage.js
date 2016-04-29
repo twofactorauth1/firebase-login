@@ -22,6 +22,8 @@ var emailmessage = $$.m.ModelBase.extend({
             deliveredDate:null,
             openedDate:null,
             clickedDate:null,
+            bouncedDate:null,
+            events:[],
             created: {
                 date: new Date(),
                 by: null

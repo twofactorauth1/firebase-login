@@ -264,6 +264,16 @@ _.extend(api.prototype, baseApi.prototype, {
             } else if (event.event === 'unsubscribe') {
                 //TODO: handle unsubscribe
                 cb();
+            } else if (event.event === 'bounce'){
+                emailMessageManager.markMessageBounced(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_BOUNCED;
+                        contactActivitiesJSON.push(obj);
+                    }
+                    cb(err);
+                });
             } else {
                 emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
                     if(value) {
