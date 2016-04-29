@@ -5,6 +5,7 @@
     .feature-list-title {
         text-align: center;
         position: relative;
+        z-index: 1;
     }
     .title {
         text-align: center;
@@ -23,7 +24,7 @@
     .feature-content-container {
         max-width: 70%;
     }
-    
+
     .container-xs-height {
         display: table;
         padding-left: 0px;
@@ -32,11 +33,15 @@
     .row div div div h5 {
         font-size: 18px;
     }
-    
+
     .feature {
         img {
             max-width: 100%;
         }
+    }
+    .feature-content {
+        position: relative;
+        z-index: 1;
     }
     @media (min-width: 768px) {
         .container-sm-height {
@@ -90,7 +95,7 @@
         vertical-align: bottom;
     }
     /* fix firefox responsive images */
-    
+
     .img-responsive {
         max-width: 100%
     }

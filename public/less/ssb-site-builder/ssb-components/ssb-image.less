@@ -1,9 +1,12 @@
 [ssb-image-component] {
-  float: left;
-  width: 100%;
-  min-height: 300px;
-
-  img {
+    float: left;
     width: 100%;
-  }
+
+    @media screen and (min-width: 768px) {
+        min-height: 240px;
+    }
+
+    img {
+        width: 100%;
+    }
 }

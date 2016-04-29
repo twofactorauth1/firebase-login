@@ -38,12 +38,6 @@
   background-color: #000!important;
 }
 @media screen and (min-width: 768px) {
-  .ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
-    font-size: 96px;
-  }
-  .ssb-theme-young-soul .ssb-page-section-layout-hero [ssb-text-component] {
-    font-size: 96px;
-  }
   .ssb-theme-young-soul .ssb-theme-heading-text {
     font-size: 16px;
   }
