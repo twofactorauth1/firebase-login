@@ -1075,20 +1075,20 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
         setupSectionContent();
         CustomerService.getCustomers(function(customers){
-          CustomerService.getAllCustomerTags(customers,function(tags){
-            vm.customerTags = [];
-          });
+            CustomerService.getAllCustomerTags(customers,function(tags){
+            vm.customerTags = tags;
+            });
         })
 
-				vm.donationProductTags = [];
-				ProductService.getProducts(function(products) {
-					products.forEach(function(product, index) {
-						if (product.type !== 'DONATION') {
-							return;
-						}
-						vm.donationProductTags.push({data: product._id, label: product.name});
-					});
-				});
+		vm.donationProductTags = [];
+		ProductService.getProducts(function(products) {
+			products.forEach(function(product, index) {
+				if (product.type !== 'DONATION') {
+					return;
+				}
+				vm.donationProductTags.push({data: product._id, label: product.name});
+			});
+		});
     }
 }
 

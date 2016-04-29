@@ -1139,7 +1139,7 @@
          * @returns {object} $modal instance
          *
          */
-        function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update) {
+        function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update, fields) {
             console.log('openModal >>> ', modal, controller, index);
             var _modal = {
                 templateUrl: modal,
@@ -1156,7 +1156,7 @@
                     insertMedia: function () {
                         return function(asset) {
 
-                            ssbService.setMediaForComponent(asset, component, componentItemIndex, update);
+                            ssbService.setMediaForComponent(asset, component, componentItemIndex, update, fields);
 
                         }
                     },
@@ -1200,7 +1200,7 @@
          * @returns {object} $modal instance
          *
          */
-        function setMediaForComponent(asset, component, index, update) {
+        function setMediaForComponent(asset, component, index, update, fields) {
 
             var obj = {};
             var type = component.type;
@@ -1219,8 +1219,14 @@
                 } else {
                         $rootScope.$broadcast('$refreshSlickSlider');
                         component.images.splice(index + 1, 0, {
-                            url: asset.url
+                            url: asset.url,
+                            title: '<span style="font-size: 30px;">Service Title Here</span>'
                         });
+                        if(fields){
+                            angular.forEach(fields, function(v, k) {
+                                component.images[index + 1][k] = v;
+                            });
+                        }
                 }
 
             } else if (type === 'thumbnail-slider') {

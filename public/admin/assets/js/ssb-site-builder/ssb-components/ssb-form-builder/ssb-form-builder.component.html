@@ -1,12 +1,12 @@
 <div class="form-builder-{{vm.component._id}} form-builder-component">
 
-        <div
-            class="col-xs-12 component-body"
-            ng-class="{'default-font-size': vm.component.formSettings.formTextSize}"
-            style="{{vm.formStyle(vm.component.formSettings)}}">
+    <div
+        class="col-xs-12 component-body"
+        style="{{vm.formStyle(vm.component.formSettings)}}">
 
-            <div class="inner-page">
-                <div data-edit class="row">
+        <div class="inner-page">
+            <div  data-edit class="row">
+                <div class="component-content" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}">
                     <div class="form-title ssb-theme-heading-text">
                         <div elem ng-model="vm.component.maintitle"></div>
                     </div>
@@ -126,84 +126,87 @@
                     </form>
                 </div>
             </div>
-
         </div>
-        <style>
-            .form-builder-{{vm.component._id}} .form-builder-title {
-            color: {
-                {
-                    vm.component.txtcolor || 'white'
-                }
-            };
-            }
-            .form-builder-{{vm.component._id}} .component-body.default-font-size * {
-                font-size: {{vm.component.formSettings.formTextSize}}px !important;
-            }
 
-            .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n) {
-                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n+1) {
-                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n) {
-                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n+1) {
-                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:not(:nth-child(3n)), .input-fields.nth-row3 div:not(:nth-child(3n+1)) {
-                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n) {
-                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n+1) {
-                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:not(:nth-child(4n)), .input-fields.nth-row4 div:not(:nth-child(4n+1)) {
-                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n) {
-                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n+1) {
-                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-            .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:not(:nth-child(5n)), .input-fields.nth-row5 div:not(:nth-child(5n+1)) {
-                padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-                padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            }
-
-
-            .form-builder-{{vm.component._id}} .btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
+    </div>
+    <style>
+        .form-builder-{{vm.component._id}} .form-builder-title {
+        color: {
             {
-                color: {{vm.component.btn.color}}!important
+                vm.component.txtcolor || 'white'
             }
-            .form-builder-{{vm.component._id}} ::-webkit-input-placeholder {
-                color: {{vm.component.formSettings.inputTextColor}};
-            }
-            .form-builder-{{vm.component._id}} :-moz-placeholder {
-                color: {{vm.component.formSettings.inputTextColor}};
-            }
-            .form-builder-{{vm.component._id}} ::-moz-placeholder {
-                color: {{vm.component.formSettings.inputTextColor}};
-            }
-            .form-builder-{{vm.component._id}} :-ms-input-placeholder {
-                color: {{vm.component.formSettings.inputTextColor}};
-            }
-        </style>
-</div>
+        };
+        }
+        .form-builder-{{vm.component._id}} .component-content.default-font-size * {
+            font-size: {{vm.component.formSettings.formTextSize}}px !important;
+        }
+        .form-builder-{{vm.component._id}} .component-content.default-font-size .editable-title {
+            font-size: 14px !important;
+        }
 
+        .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n+1) {
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n+1) {
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:not(:nth-child(3n)), .input-fields.nth-row3 div:not(:nth-child(3n+1)) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n+1) {
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:not(:nth-child(4n)), .input-fields.nth-row4 div:not(:nth-child(4n+1)) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n+1) {
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:not(:nth-child(5n)), .input-fields.nth-row5 div:not(:nth-child(5n+1)) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+
+        .form-builder-{{vm.component._id}} .btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
+        {
+            color: {{vm.component.btn.color}}!important
+        }
+        .form-builder-{{vm.component._id}} ::-webkit-input-placeholder {
+            color: {{vm.component.formSettings.inputTextColor}};
+        }
+        .form-builder-{{vm.component._id}} :-moz-placeholder {
+            color: {{vm.component.formSettings.inputTextColor}};
+        }
+        .form-builder-{{vm.component._id}} ::-moz-placeholder {
+            color: {{vm.component.formSettings.inputTextColor}};
+        }
+        .form-builder-{{vm.component._id}} :-ms-input-placeholder {
+            color: {{vm.component.formSettings.inputTextColor}};
+        }
+    </style>
+</div>

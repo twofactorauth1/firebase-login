@@ -36,7 +36,7 @@ function ssbComponentLoader($compile, $timeout) {
                         'class="ssb-component ssb-{{vm.component.type}} {{vm.componentClass(vm.component)}}" ' +
                         'ng-attr-style="{{vm.componentStyle(vm.component)}}" ' +
                         'control="vm.componentControl"' +
-                        'media="vm.componentMedia(componentId, index, update)" ' +
+                        'media="vm.componentMedia(componentId, index, update, fields)" ' +
                         'ng-mouseenter="vm.hover($event);" ' +
                         'ng-if="vm.showComponent">' +
                       '</div>';

@@ -310,7 +310,7 @@
             <div>
                 <select ng-model="component.nav.font.family" class="form-control margin-bottom-0">
                     <option value="">--Select--</option>
-                    <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.formFontFamily}}">{{key}}</option>
+                    <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.nav.font.family}}">{{key}}</option>
                 </select>
             </div>
     </div>
