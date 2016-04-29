@@ -500,7 +500,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getPageByHandle: function(req, resp) {
         var self = this;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> getPageByHandle');
         var websiteId = req.params.id;
