@@ -931,20 +931,6 @@ iframe.fr-iframe {
 .fr-sticky-on + .fr-sticky-dummy {
   display: block;
 }
-.fr-popup .fr-color-set > span{
-  width: 18px !important;
-  height: 18px !important;
-  margin: 2px;
-}
-.fr-popup .fr-color-set > span.fr-selected-color::after {
-  line-height: 18px !important;
-}
-.fr-popup .fr-color-set > span > i {
-    line-height: 18px !important;
-    height: 18px !important;
-    width: 18px !important;
-    font-size: 16px !important;
-}
 .fr-insert-helper {
   display: none;
 }

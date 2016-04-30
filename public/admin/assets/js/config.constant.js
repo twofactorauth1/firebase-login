@@ -795,7 +795,7 @@ app.constant('JS_REQUIRES', {
     name: 'froala-wysiwyg-editor-plugins',
     files: [
       "../js/libs/froala-wysiwyg-editor/js/plugins/align.min.js",
-      "../js/libs/froala-wysiwyg-editor/js/plugins/colors.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/colors.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/emoticons.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
@@ -812,7 +812,7 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/js/plugins/table.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/url.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/video.min.js",
-      "../js/libs/froala-wysiwyg-editor/css/plugins/colors.css",
+      "../js/libs_misc/froala-wysiwyg-editor/css/plugins/colors.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/emoticons.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/image.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/image_manager.css",
