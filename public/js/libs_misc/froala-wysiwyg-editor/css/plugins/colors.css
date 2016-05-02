@@ -128,4 +128,9 @@
     right: 0;
     padding: 10px;
 }
-
+.fr-color-set.sp-container .sp-cancel.fr-command:hover,
+.fr-color-set.sp-container .sp-clear.fr-command:hover,
+.fr-color-set.sp-container .sp-choose.fr-command:hover
+{
+    background: inherit !important;
+}

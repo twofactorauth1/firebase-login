@@ -54,7 +54,12 @@
     ],
     colorsStep: 7,
     colorsDefaultTab: 'text',
-    colorsButtons: ['colorsBack', '|', '-']
+    colorsButtons: ['colorsBack', '|', '-'],
+    defaultColors:{
+        background: '',
+        color: ''
+    },
+    isIE: !!/msie/i.exec( window.navigator.userAgent )
   });
 
   $.FE.PLUGINS.colors = function (editor) {
@@ -138,6 +143,10 @@
       // Get colors according to tab name.
       var colors = (tab == 'text' ? editor.opts.colorsText : editor.opts.colorsBackground);
 
+      var dataCmdClear = (tab == 'text' ? "clearTextColor" : "clearBackgroundColor");
+
+      var dataCmdSpectrum = (tab == 'text' ? "textColorSpectrum" : "bgColorSpectrum");
+
       // Create colors html.
       var colors_html = '<div class="sp-container sp-light sp-alpha-enabled sp-clear-enabled sp-initial-disabled fr-color-set fr-' + tab + '-color' + ((editor.opts.colorsDefaultTab == tab || (editor.opts.colorsDefaultTab != 'text' && editor.opts.colorsDefaultTab != 'background' && tab == 'text')) ? ' fr-selected-set' : '') + '">';
       //colors_html += '<div class="sp-palette-container"><div class="sp-palette sp-thumb sp-cf">';
@@ -153,12 +162,12 @@
         }
 
         else {
-          colors_html += '<span class="fr-command fr-select-color" data-cmd="' + tab + 'Color" data-param1="REMOVE" title="' + editor.language.translate('Clear Formatting') + '"><i class="fa fa-eraser"></i></span>';
+          colors_html += '<span style="visibility: hidden;" class="fr-command fr-select-color" data-cmd="' + tab + 'Color" data-param1="REMOVE" title="' + editor.language.translate('Clear Formatting') + '"><i class="fa fa-eraser"></i></span>';
         }
       }
 
      colors_html += '</div>';
-     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel" href="#">cancel</a><button type="button" class="sp-choose">choose</button></div></div>'
+     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="closeColorPicker">choose</button></div></div>'
      colors_html += '</div>';
       return colors_html
     }
@@ -185,6 +194,12 @@
       // Find the selected color.
       while ($element.get(0) != editor.$el.get(0)) {
         // Transparent or black.
+
+        // Check initial colors means txt color and bg color
+
+        editor.opts.defaultColors.background = editor.helpers.RGBToHex($element.css('background-color'));
+        editor.opts.defaultColors.color = editor.helpers.RGBToHex($element.css('color'));
+
         if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
           $element = $element.parent();
         }
@@ -223,6 +238,8 @@
       // Set background  color.
       if (val != 'REMOVE') {
         editor.commands.applyProperty('background-color', editor.helpers.HEXtoRGB(val));
+        $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
+        $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val+"']").addClass("fr-selected-color");
       }
 
       // Remove background color.
@@ -241,7 +258,7 @@
         editor.selection.restore();
       }
 
-      _hideColorsPopup();
+     // _hideColorsPopup();
     }
 
     /*
@@ -251,6 +268,8 @@
       // Set text color.
       if (val != 'REMOVE') {
         editor.commands.applyProperty('color', editor.helpers.HEXtoRGB(val));
+        $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
+        $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val+"']").addClass("fr-selected-color");
       }
 
       // Remove text color.
@@ -269,7 +288,273 @@
         editor.selection.restore();
       }
 
+     // _hideColorsPopup();
+    }
+
+    /*
+     * Remove color.
+     */
+    function removeColor (tab, val) {
+
+      // Remove text color.
+      if(tab === 'text') {
+        $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
+        editor.commands.applyProperty('color', '#123456');
+
+        editor.selection.save();
+        editor.$el.find('span').each(function (index, span) {
+          var $span = $(span);
+          var color = $span.css('color');
+
+          if (color === '#123456' || editor.helpers.RGBToHex(color) === '#123456') {
+            $span.replaceWith($span.html());
+          }
+        });
+        editor.selection.restore();
+      }
+      else{
+        $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
+        editor.commands.applyProperty('background-color', '#123456');
+        editor.selection.save();
+        editor.$el.find('span').each(function (index, span) {
+          var $span = $(span);
+          var color = $span.css('background-color');
+
+          if (color === '#123456' || editor.helpers.RGBToHex(color) === '#123456') {
+            $span.replaceWith($span.html());
+          }
+        });
+        editor.selection.restore();
+      }
+
+      //_hideColorsPopup();
+    }
+
+    /*
+     * Remove color.
+     */
+    function closeColorPicker(cancel) {
+        if(cancel){
+            background(editor.opts.defaultColors.background || 'REMOVE');
+            text(editor.opts.defaultColors.color || 'REMOVE');
+        }
       _hideColorsPopup();
+    }
+
+    /*
+     * click Spectrum.
+     */
+    function initializeSpectrum(val) {
+        var container = val === 'text' ? $(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
+        dragHelper = container.find(".sp-dragger"),
+        slideHelper = container.find(".sp-slider"),
+        alphaSlideHelper = container.find(".sp-alpha-handle"),
+        dragger = container.find(".sp-color"),
+        slider = container.find(".sp-hue"),
+        alphaSlider = container.find(".sp-alpha"),
+        dragWidth = dragger.width(),
+        dragHeight = dragger.height(),
+        dragHelperHeight = dragHelper.height(),
+        slideWidth = slider.width(),
+        slideHeight = slider.height(),
+        slideHelperHeight = slideHelper.height(),
+        alphaWidth = alphaSlider.width(),
+        alphaSlideHelperWidth = alphaSlideHelper.width(),
+        alphaSliderInner = container.find(".sp-alpha-inner"),
+        draggingClass = "sp-dragging",
+        shiftMovementDirection = null,
+        isEmpty = true,
+        isDragging = false,
+        currentHue = 0,
+        currentSaturation = 0,
+        currentValue = 0,
+        currentAlpha = 1,
+        allowEmpty = false;
+
+
+        dragHelper.show();
+        slideHelper.show();
+        alphaSlideHelper.show();
+
+        draggable(alphaSlider, function (dragX, dragY, e) {
+                currentAlpha = (dragX / alphaWidth);
+                isEmpty = false;
+                if (e.shiftKey) {
+                    currentAlpha = Math.round(currentAlpha * 10) / 10;
+                }
+
+                move();
+            }, dragStart, dragStop);
+
+        draggable(slider, function (dragX, dragY) {
+            currentHue = parseFloat(dragY / slideHeight);
+            isEmpty = false;
+            //if (!opts.showAlpha) {
+                //currentAlpha = 1;
+            //}
+            move();
+        }, dragStart, dragStop);
+
+        draggable(dragger, function (dragX, dragY, e) {
+
+
+
+            //if (setSaturation) {
+                currentSaturation = parseFloat(dragX / dragWidth);
+            //}
+            //if (setValue) {
+                currentValue = parseFloat((dragHeight - dragY) / dragHeight);
+            //}
+
+            isEmpty = false;
+            //if (!opts.showAlpha) {
+              //  currentAlpha = 1;
+            //}
+
+            move();
+
+        }, dragStart, dragStop);
+
+        function dragStart() {
+            if (dragHeight <= 0 || dragWidth <= 0 || slideHeight <= 0) {
+                reflow();
+            }
+            isDragging = true;
+            container.addClass(draggingClass);
+            shiftMovementDirection = null;
+            //boundElement.trigger('dragstart.spectrum', [ get() ]);
+        }
+
+        function dragStop() {
+            isDragging = false;
+            container.removeClass(draggingClass);
+            //boundElement.trigger('dragstop.spectrum', [ get() ]);
+        }
+
+        function move() {
+            updateUI(val);
+
+            //callbacks.move(get());
+            //boundElement.trigger('move.spectrum', [ get() ]);
+        }
+
+        function updateUI(val) {
+
+            //textInput.removeClass("sp-validation-error");
+
+            updateHelperLocations();
+
+            // Update dragger background color (gradients take care of saturation and value).
+            var flatColor = tinycolor.fromRatio({ h: currentHue, s: 1, v: 1 });
+            dragger.css("background-color", flatColor.toHexString());
+
+            // Get a format that alpha will be included in (hex and names ignore alpha)
+
+
+            var realColor = get();
+
+            if (!realColor && allowEmpty) {
+                previewElement.addClass("sp-clear-display");
+            }
+            else {
+                var realHex = realColor.toHexString(),
+                    realRgb = realColor.toRgbString();
+                    if(val === 'text')
+                        text(realHex);
+                    else
+                        background(realHex);
+                // Update the replaced elements background color (with actual selected color)
+
+
+
+                if (true) {
+                    var rgb = realColor.toRgb();
+                    rgb.a = 0;
+                    var realAlpha = tinycolor(rgb).toRgbString();
+                    var gradient = "linear-gradient(left, " + realAlpha + ", " + realHex + ")";
+
+                    if (editor.opts.isIE) {
+                        alphaSliderInner.css("filter", tinycolor(realAlpha).toFilter({ gradientType: 1 }, realHex));
+                    }
+                    else {
+                        alphaSliderInner.css("background", "-webkit-" + gradient);
+                        alphaSliderInner.css("background", "-moz-" + gradient);
+                        alphaSliderInner.css("background", "-ms-" + gradient);
+                        // Use current syntax gradient on unprefixed property.
+                        alphaSliderInner.css("background",
+                            "linear-gradient(to right, " + realAlpha + ", " + realHex + ")");
+                    }
+                }
+
+                //displayColor = realColor.toString(format);
+            }
+
+            // Update the text entry input as it changes happen
+            //if (opts.showInput) {
+                //textInput.val(displayColor);
+           // }
+
+           // if (opts.showPalette) {
+              //  drawPalette();
+           // }
+
+           // drawInitial();
+        }
+
+        function get(opts) {
+
+            return tinycolor.fromRatio({
+                h: currentHue,
+                s: currentSaturation,
+                v: currentValue,
+                a: Math.round(currentAlpha * 100) / 100
+            }, { format: 'hex' });
+        }
+
+        function updateHelperLocations() {
+            var s = currentSaturation;
+            var v = currentValue;
+
+            if(allowEmpty && isEmpty) {
+                //if selected color is empty, hide the helpers
+                alphaSlideHelper.hide();
+                slideHelper.hide();
+                dragHelper.hide();
+            }
+            else {
+                //make sure helpers are visible
+                alphaSlideHelper.show();
+                slideHelper.show();
+                dragHelper.show();
+
+                // Where to show the little circle in that displays your current selected color
+                var dragX = s * dragWidth;
+                var dragY = dragHeight - (v * dragHeight);
+                dragX = Math.max(
+                    -dragHelperHeight,
+                    Math.min(dragWidth - dragHelperHeight, dragX - dragHelperHeight)
+                );
+                dragY = Math.max(
+                    -dragHelperHeight,
+                    Math.min(dragHeight - dragHelperHeight, dragY - dragHelperHeight)
+                );
+                dragHelper.css({
+                    "top": dragY + "px",
+                    "left": dragX + "px"
+                });
+
+                var alphaX = currentAlpha * alphaWidth;
+                alphaSlideHelper.css({
+                    "left": (alphaX - (alphaSlideHelperWidth / 2)) + "px"
+                });
+
+                // Where to show the bar that displays your current selected hue
+                var slideY = (currentHue) * slideHeight;
+                slideHelper.css({
+                    "top": (slideY - slideHelperHeight) + "px"
+                });
+            }
+        }
     }
 
     /*
@@ -280,13 +565,105 @@
       editor.toolbar.showInline();
     }
 
+    function draggable(element, onmove, onstart, onstop) {
+        onmove = onmove || function () { };
+        onstart = onstart || function () { };
+        onstop = onstop || function () { };
+        var doc = document;
+        var dragging = false;
+        var offset = {};
+        var maxHeight = 0;
+        var maxWidth = 0;
+        var hasTouch = ('ontouchstart' in window);
+
+        var duringDragEvents = {};
+        duringDragEvents["selectstart"] = prevent;
+        duringDragEvents["dragstart"] = prevent;
+        duringDragEvents["touchmove mousemove"] = move;
+        duringDragEvents["touchend mouseup"] = stop;
+
+        function prevent(e) {
+            if (e.stopPropagation) {
+                e.stopPropagation();
+            }
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            e.returnValue = false;
+        }
+
+        function move(e) {
+
+            if (dragging) {
+                // Mouseup happened outside of window
+                if (editor.opts.isIE && doc.documentMode < 9 && !e.button) {
+                    return stop();
+                }
+
+                var t0 = e.originalEvent && e.originalEvent.touches && e.originalEvent.touches[0];
+                var pageX = t0 && t0.pageX || e.pageX;
+                var pageY = t0 && t0.pageY || e.pageY;
+
+                var dragX = Math.max(0, Math.min(pageX - offset.left, maxWidth));
+                var dragY = Math.max(0, Math.min(pageY - offset.top, maxHeight));
+
+                if (hasTouch) {
+                    // Stop scrolling in iOS
+                    prevent(e);
+                }
+
+                onmove.apply(element, [dragX, dragY, e]);
+            }
+        }
+
+        function start(e) {
+            var rightclick = (e.which) ? (e.which == 3) : (e.button == 2);
+
+            if (!rightclick && !dragging) {
+                if (onstart.apply(element, arguments) !== false) {
+                    dragging = true;
+                    maxHeight = $(element).height();
+                    maxWidth = $(element).width();
+                    offset = $(element).offset();
+
+                    $(doc).bind(duringDragEvents);
+                    $(doc.body).addClass("sp-dragging");
+
+                    move(e);
+
+                    prevent(e);
+                }
+            }
+        }
+
+        function stop() {
+            if (dragging) {
+                $(doc).unbind(duringDragEvents);
+                $(doc.body).removeClass("sp-dragging");
+
+                // Wait a tick before notifying observers to allow the click event
+                // to fire in Chrome.
+                setTimeout(function() {
+                    onstop.apply(element, arguments);
+                }, 0);
+            }
+            dragging = false;
+        }
+
+        $(element).bind("touchstart mousedown", start);
+        $(element).bind("touchend mouseup", stop);
+    }
+
     return {
       showColorsPopup: _showColorsPopup,
       hideColorsPopup: _hideColorsPopup,
       changeSet: _changeSet,
       background: background,
       text: text,
-      back: back
+      back: back,
+      removeColor: removeColor,
+      closeColorPicker: closeColorPicker,
+      initializeSpectrum: initializeSpectrum
     }
   }
 
@@ -337,6 +714,72 @@
       this.colors.changeSet($tab, val);
     }
   });
+
+  // Clear text color selection
+  $.FE.RegisterCommand('clearTextColor', {
+    undo: false,
+    focus: false,
+    callback: function (cmd, val) {
+      var $tab = this.popups.get('colors.picker').find('.fr-command[data-cmd="' + cmd + '"][data-param1="' + val + '"]');
+      this.colors.removeColor('text', val);
+    }
+  });
+
+  // Clear bg color selection
+  $.FE.RegisterCommand('clearBackgroundColor', {
+    undo: false,
+    focus: false,
+    callback: function (cmd, val) {
+      var $tab = this.popups.get('colors.picker').find('.fr-command[data-cmd="' + cmd + '"][data-param1="' + val + '"]');
+      this.colors.removeColor('background', val);
+    }
+  });
+
+
+  // Close color picker
+  $.FE.RegisterCommand('closeColorPicker', {
+    undo: false,
+    focus: false,
+    callback: function (cmd, val) {
+      this.colors.closeColorPicker();
+    }
+  });
+
+  // Cancel current color selection
+  $.FE.RegisterCommand('cancelColor', {
+    undo: false,
+    focus: false,
+    callback: function (cmd, val) {
+      this.colors.closeColorPicker(true);
+    }
+  });
+
+
+
+  //on click text Spectrum
+  $.FE.RegisterCommand('textColorSpectrum', {
+    undo: false,
+    focus: false,
+    callback: function (cmd) {
+      this.colors.initializeSpectrum("text");
+    }
+  });
+
+//on click bg Spectrum
+  $.FE.RegisterCommand('bgColorSpectrum', {
+    undo: false,
+    focus: false,
+    callback: function (cmd) {
+      this.colors.initializeSpectrum("background");
+    }
+  });
+
+
+
+
+
+
+
 
   // Colors back.
   $.FE.DefineIcon('colorsBack', { NAME: 'arrow-left' });
