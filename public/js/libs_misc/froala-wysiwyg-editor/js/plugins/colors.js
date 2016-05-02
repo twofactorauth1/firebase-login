@@ -200,6 +200,9 @@
         editor.opts.defaultColors.background = editor.helpers.RGBToHex($element.css('background-color'));
         editor.opts.defaultColors.color = editor.helpers.RGBToHex($element.css('color'));
 
+        setTimeout(function() {
+            initializeSpectrum(color_type, color_type == 'color' ? editor.opts.defaultColors.color : editor.opts.defaultColors.background);
+        }, 0)
         if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
           $element = $element.parent();
         }
@@ -234,12 +237,14 @@
     /*
      * Change background color.
      */
-    function background (val) {
+    function background (val, init) {
       // Set background  color.
       if (val != 'REMOVE') {
         editor.commands.applyProperty('background-color', editor.helpers.HEXtoRGB(val));
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-        $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val+"']").addClass("fr-selected-color");
+        setTimeout(function() {
+            $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val+"']").addClass("fr-selected-color");
+        },0)
       }
 
       // Remove background color.
@@ -258,18 +263,24 @@
         editor.selection.restore();
       }
 
+      if(init)
+        initializeSpectrum("background", val);
+
      // _hideColorsPopup();
     }
 
     /*
      * Change text color.
      */
-    function text (val) {
+    function text (val, init) {
       // Set text color.
       if (val != 'REMOVE') {
         editor.commands.applyProperty('color', editor.helpers.HEXtoRGB(val));
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-        $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val+"']").addClass("fr-selected-color");
+        setTimeout(function() {
+            $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val+"']").addClass("fr-selected-color");
+        },0)
+
       }
 
       // Remove text color.
@@ -287,8 +298,9 @@
         });
         editor.selection.restore();
       }
-
-     // _hideColorsPopup();
+      if(init){
+            initializeSpectrum("color", val);
+        }
     }
 
     /*
@@ -344,8 +356,8 @@
     /*
      * click Spectrum.
      */
-    function initializeSpectrum(val) {
-        var container = val === 'text' ? $(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
+    function initializeSpectrum(val, current_color) {
+        var container = val === 'color' ? $(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
         dragHelper = container.find(".sp-dragger"),
         slideHelper = container.find(".sp-slider"),
         alphaSlideHelper = container.find(".sp-alpha-handle"),
@@ -371,11 +383,6 @@
         currentAlpha = 1,
         allowEmpty = false;
 
-
-        dragHelper.show();
-        slideHelper.show();
-        alphaSlideHelper.show();
-
         draggable(alphaSlider, function (dragX, dragY, e) {
                 currentAlpha = (dragX / alphaWidth);
                 isEmpty = false;
@@ -384,7 +391,7 @@
                 }
 
                 move();
-            }, dragStart, dragStop);
+        }, dragStart, dragStop);
 
         draggable(slider, function (dragX, dragY) {
             currentHue = parseFloat(dragY / slideHeight);
@@ -396,8 +403,6 @@
         }, dragStart, dragStop);
 
         draggable(dragger, function (dragX, dragY, e) {
-
-
 
             //if (setSaturation) {
                 currentSaturation = parseFloat(dragX / dragWidth);
@@ -412,7 +417,6 @@
             //}
 
             move();
-
         }, dragStart, dragStop);
 
         function dragStart() {
@@ -433,14 +437,13 @@
 
         function move() {
             updateUI(val);
+        }
 
-            //callbacks.move(get());
-            //boundElement.trigger('move.spectrum', [ get() ]);
+        function reflow() {
+            updateHelperLocations();
         }
 
         function updateUI(val) {
-
-            //textInput.removeClass("sp-validation-error");
 
             updateHelperLocations();
 
@@ -459,7 +462,7 @@
             else {
                 var realHex = realColor.toHexString(),
                     realRgb = realColor.toRgbString();
-                    if(val === 'text')
+                    if(val === 'color')
                         text(realHex);
                     else
                         background(realHex);
@@ -488,17 +491,6 @@
 
                 //displayColor = realColor.toString(format);
             }
-
-            // Update the text entry input as it changes happen
-            //if (opts.showInput) {
-                //textInput.val(displayColor);
-           // }
-
-           // if (opts.showPalette) {
-              //  drawPalette();
-           // }
-
-           // drawInitial();
         }
 
         function get(opts) {
@@ -509,6 +501,30 @@
                 v: currentValue,
                 a: Math.round(currentAlpha * 100) / 100
             }, { format: 'hex' });
+        }
+
+        function set(color, ignoreFormatChange) {
+            if (tinycolor.equals(color, get())) {
+                // Update UI just in case a validation error needs
+                // to be cleared.
+                updateUI(val);
+                return;
+            }
+
+            var newColor, newHsv;
+            if (!color && allowEmpty) {
+                isEmpty = true;
+            } else {
+                isEmpty = false;
+                newColor = tinycolor(color);
+                newHsv = newColor.toHsv();
+
+                currentHue = (newHsv.h % 360) / 360;
+                currentSaturation = newHsv.s;
+                currentValue = newHsv.v;
+                currentAlpha = newHsv.a;
+            }
+            updateUI(val);
         }
 
         function updateHelperLocations() {
@@ -555,6 +571,13 @@
                 });
             }
         }
+
+        if(current_color)
+            set(current_color);
+
+        dragHelper.show();
+        slideHelper.show();
+        alphaSlideHelper.show();
     }
 
     /*
@@ -694,7 +717,7 @@
   $.FE.RegisterCommand('textColor', {
     undo: true,
     callback: function (cmd, val) {
-      this.colors.text(val);
+      this.colors.text(val, true);
     }
   });
 
@@ -702,7 +725,7 @@
   $.FE.RegisterCommand('backgroundColor', {
     undo: true,
     callback: function (cmd, val) {
-      this.colors.background(val);
+      this.colors.background(val, true);
     }
   });
 
@@ -761,7 +784,7 @@
     undo: false,
     focus: false,
     callback: function (cmd) {
-      this.colors.initializeSpectrum("text");
+      this.colors.initializeSpectrum("text", true);
     }
   });
 
@@ -770,15 +793,9 @@
     undo: false,
     focus: false,
     callback: function (cmd) {
-      this.colors.initializeSpectrum("background");
+      this.colors.initializeSpectrum("background", true);
     }
   });
-
-
-
-
-
-
 
 
   // Colors back.
