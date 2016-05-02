@@ -1226,6 +1226,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 });
             };
 
+            scope.showModalFn = function () {
+              $('#cart-checkout-modal').appendTo("body").modal('show');
+            };
+
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie';
