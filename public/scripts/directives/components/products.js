@@ -1177,7 +1177,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 if ($routeParams.state && $routeParams.comp == 'products') {
                     scope.checkoutModalState = parseInt($routeParams.state);
-                    $('#cart-checkout-modal').modal('show');
+                    $('#cart-checkout-modal').appendTo("body").modal('show');
                     if (scope.checkoutModalState == 5 && orderCookieData) {
                         OrderService.setOrderPaid(orderCookieData, function(data) {
                             if (data && !data._id) {
