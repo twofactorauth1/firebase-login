@@ -55,6 +55,31 @@ var dao = {
     dereferenceSections: function(sectionAry, fn) {
         var self = this;
         var deReffedAry = [];
+        var sectionIDAry = _.pluck(sectionAry, '_id');
+        var query = {_id: {$in:sectionIDAry}};
+        self.findMany(query, $$.m.ssb.Section, function(err, deReffedSections){
+            if(err) {
+                self.log.error('Error dereferencing sections:', err);
+                fn(err);
+            } else {
+                _.each(sectionAry, function(section){
+                    var foundDeReffed = _.find(deReffedSections, function(deReffed){
+                        return section._id === deReffed.id();
+                    });
+                    if(foundDeReffed) {
+                        deReffedAry.push(foundDeReffed);
+                    } else {
+                        deReffedAry.push(new $$.m.ssb.Section(section));
+                    }
+                });
+                return fn(err, deReffedAry);
+            }
+        });
+    },
+
+    _dereferenceSections: function(sectionAry, fn) {
+        var self = this;
+        var deReffedAry = [];
         async.eachSeries(sectionAry, function(section, cb){
             self.log.debug('Section:', section);
             if(section._id) {

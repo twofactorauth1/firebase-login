@@ -372,8 +372,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var modified = {date: new Date(), by:self.userId(req)};
+                var now = moment();
                 ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, self.userId(req), function(err, page){
-                    self.log.debug(accountId, userId, '<< updatePage');
+                    var duration = moment().diff(now);
+                    self.log.debug(accountId, userId, '<< updatePage [' + duration + ']');
                     self.sendResultOrError(resp, err, page, "Error updating page");
                     self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });

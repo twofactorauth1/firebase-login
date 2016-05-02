@@ -78,7 +78,7 @@ module.exports = {
                 self.log.error(accountId, userId, 'Error getting theme:', err);
                 return fn(err, null);
             } else {
-                self.log.debug(accountId, userId, '<< getTheme', theme);
+                self.log.debug(accountId, userId, '<< getTheme');
                 return fn(null, theme);
             }
         });
@@ -665,7 +665,7 @@ module.exports = {
                 self.log.error(accountId, null,'Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
                 fn(err, null);
             } else {
-                self.log.debug(accountId, null,'got the website:', website);
+                self.log.debug(accountId, null,'got the website');
 
                 var linkListAry = website.get('linkLists');
                 var targetList = null;
@@ -685,6 +685,18 @@ module.exports = {
         var self = this;
         self.log.debug(accountId, null,'>> listPages');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
+
+        /*
+        pageDao.findAndOrder(query, null, $$.m.ssb.Page, 'handle', -1, function(err, pages){
+            if(err) {
+                self.log.error(accountId, null,'error getting pages:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, null,'<< listPages');
+                return fn(null, pages);
+            }
+        });
+        */
         pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
             if(err) {
                 self.log.error(accountId, null,'error getting pages:', err);
@@ -705,6 +717,7 @@ module.exports = {
                 return fn(null, pages);
             }
         });
+
     },
 
     listPublishedPages: function(accountId, websiteId, fn) {
@@ -1086,11 +1099,14 @@ module.exports = {
     updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId,'>> updatePage (' + pageId + ')');
+        var timingLog = $$.g.getLogger('timing');
 
         page = self.cleanEditorHTML(page);
-
+        var startTime = moment();
+        var checkTime = moment();
         async.waterfall([
             function getExistingPage(cb){
+                timingLog.warn('Start: ' + startTime);
                 pageDao.getPageById(accountId, pageId, function(err, existingPage){
                     if(err) {
                         self.log.error(accountId, userId,'Error getting page:', err);
@@ -1101,6 +1117,9 @@ module.exports = {
                 });
             },
             function getGlobalHeader(existingPage, cb){
+                checkTime = moment();
+                timingLog.warn('getGlobalHeader: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 var query = {
                     accountId:accountId,
                     globalHeader:true
@@ -1116,6 +1135,9 @@ module.exports = {
             },
             function getGlobalFooter(existingPage, globalHeader, cb){
                 self.log.info('getGlobalFooter');
+                checkTime = moment();
+                timingLog.warn('getGlobalFooter: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 var query = {
                     accountId:accountId,
                     globalFooter:true
@@ -1131,6 +1153,9 @@ module.exports = {
             },
             function getExistingSections(existingPage, globalHeader, globalFooter, cb) {
                 self.log.info('getExistingSections');
+                checkTime = moment();
+                timingLog.warn('getExistingSections: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 if(existingPage.hasSectionReferences()) {
                     sectionDao.dereferenceSections(existingPage.get('sections'), function(err, existingSectionAry){
                         if(err) {
@@ -1146,6 +1171,9 @@ module.exports = {
             },
             function getNewSections(existingPage, globalHeader, globalFooter, existingSections, cb) {
                 self.log.info('getNewSections');
+                checkTime = moment();
+                timingLog.warn('getNewSections: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 if(page.hasSectionReferences()) {
                     sectionDao.dereferenceSections(page.get('sections'), function(err, pageSectionAry){
                         if(err) {
@@ -1162,6 +1190,9 @@ module.exports = {
             },
             function dereferenceSections(existingPage, globalHeader, globalFooter, existingSections, cb) {
                 self.log.info('dereferenceSections');
+                checkTime = moment();
+                timingLog.warn('dereferenceSections: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 var sections = page.get('sections');
                 var dereferencedSections = [];
 
@@ -1216,11 +1247,14 @@ module.exports = {
                  *  -- update other pages with reference
                  */
                 self.log.info('updateSections');
+                checkTime = moment();
+                timingLog.warn('updateSections: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 var otherPagesWithSectionReferences = [];
                 async.eachSeries(dereferencedSections, function(section, callback){
 
                     var existingSection = _.find(existingSections, function(existingSection) {
-                        self.log.debug(accountId, userId,'existing section?', existingSection);
+                        //self.log.debug(accountId, userId,'existing section?');
                         if (existingSection && existingSection.id) {
                             return section.id() === existingSection.id()
                         } else {
@@ -1279,6 +1313,9 @@ module.exports = {
             },
             function updateOtherPagesWithSectionReferences(existingPage, updatedSections, otherPagesWithSectionReferences, cb) {
                 self.log.info('updateOtherPagesWithSectionReferences');
+                checkTime = moment();
+                timingLog.warn('updateOtherPagesWithSectionReferences: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 async.eachSeries(otherPagesWithSectionReferences, function(obj, callback){
                     var pageId = obj.pageId;
                     var oldId = obj.oldId;
@@ -1319,6 +1356,9 @@ module.exports = {
             },
             function incrementPageVersion(existingPage, updatedSections, cb) {
                 self.log.info('incrementPageVersion');
+                checkTime = moment();
+                timingLog.warn('incrementPageVersion: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 //TODO: this is a problem if we are not updating the latest.
                 var currentVersion = existingPage.get('version') || 0;
                 var newVersion = currentVersion + 1;
@@ -1336,6 +1376,9 @@ module.exports = {
             },
             function updateThePage(existingPage, updatedSections, newVersion, cb){
                 self.log.info('updateThePage');
+                checkTime = moment();
+                timingLog.warn('updateThePage: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 //var sections = page.get('sections');
                 page.set('modified', modified);
                 var jsonSections = [];
@@ -1388,6 +1431,9 @@ module.exports = {
             */
             function setAsHomePage(existingPage, updatedPage, updatedSections, cb){
                 self.log.info('setAsHomePage');
+                checkTime = moment();
+                timingLog.warn('setAsHomePage: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
                     self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
                         if (err) {
@@ -1462,18 +1508,27 @@ module.exports = {
             },
             function listPages(existingPage, updatedPage, updatedSections, cb){
                 self.log.info('listPages');
-                self.listPages(accountId, updatedPage.get('websiteId'), function(err, pages){
-                    if (err) {
-                        self.log.error(accountId, userId,'Error getting index page: ' + err);
+                checkTime = moment();
+                timingLog.warn('listPages: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+
+                var query = {accountId:accountId, websiteId:updatedPage.get('websiteId'), latest:true};
+                timingLog.warn('>> FindMany');
+                pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                    timingLog.warn('<< FindMany');
+                    if(err) {
+                        self.log.error(accountId, null,'error getting pages:', err);
                         cb(err);
-                    }
-                    else{
+                    } else {
                         cb(null, existingPage, updatedPage, updatedSections, pages);
                     }
-                })
+                });
             },
             function updateLinkList(existingPage, updatedPage, updatedSections, pages, cb){
                 self.log.info('updateLinkList');
+                checkTime = moment();
+                timingLog.warn('updateLinkList: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 if (updatedPage.get('mainmenu') === false) {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
@@ -1575,6 +1630,9 @@ module.exports = {
             // update existing pages if global sections set as true OR false
             function updateExistingPages(updatedPage, updatedSections, pages, cb){
                 self.log.info('updateExistingPages');
+                checkTime = moment();
+                timingLog.warn('updateExistingPages: ' + checkTime.diff(startTime));
+                startTime = checkTime;
                 var _update = false;
                 self.rejectSystemPages(pages, function(err, filteredPages) {
                     pages = filteredPages;
@@ -1767,6 +1825,9 @@ module.exports = {
             }
         ], function done(err, updatedPage, updatedSections){
             self.log.info('done');
+            checkTime = moment();
+            timingLog.warn('done: ' + checkTime.diff(startTime));
+            startTime = checkTime;
             if(updatedPage) {
                 var sectionArray = [];
 
