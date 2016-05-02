@@ -64,6 +64,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.constructVideoUrl = constructVideoUrl;
     vm.closeSectionPanel = closeSectionPanel;
     vm.initializeMapSlider = initializeMapSlider;
+    vm.addCustomField = addCustomField;
+    vm.checkDuplicateField = checkDuplicateField;
 
     editableOptions.theme = 'bs3';
 
@@ -1067,6 +1069,27 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         $timeout(function () {
           $scope.$broadcast('rzSliderForceRender');
         }, 0);
+    }
+
+    function addCustomField(type){
+        var cleanType = type.replace(' ','');
+        var newInfo = {
+            name: cleanType,
+            type: type,
+            label: type,
+            custom: true,
+            optional:true,
+            visible: true
+        }
+        vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.push(newInfo);
+        vm.contactInfo = {};
+    }
+
+    function checkDuplicateField(_type){
+        var activeComponent = vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex];
+        return _.filter(activeComponent.contactInfo, function(info){
+            return info.type.toLowerCase() === _type.toLowerCase();
+        }).length;
     }
 
     function init(element) {

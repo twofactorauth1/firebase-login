@@ -41,7 +41,14 @@
                                 <div class='donate-step billing-shipping' ng-show="vm.checkoutModalState == 1">
                                     <h3 class="donate-step-header">Choose a donation amount below</h3>
                                     <div class='donate-flex-container'>
-                                        <button ng-repeat="amount in [1,2,3,4,5]" class="flex-item btn ssb-theme-btn donate-amount-btn">{{amount}}</button>
+                                        <button
+                                            ng-repeat="amount in vm.component.productSettings.donateButtons"
+                                            class="flex-item btn ssb-theme-btn donate-amount-btn"
+                                            ng-class="{ 'active': vm.formBuilder.amount == amount }"
+                                            ng-click="vm.formBuilder.amount = amount">
+                                            ${{amount}}
+                                        </button>
+                                        <label class="control-label padding-right-20">Your donation amount:</label>
                                         <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
                                     </div>
                                     <hr/>
