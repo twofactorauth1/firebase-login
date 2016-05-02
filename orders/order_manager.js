@@ -1697,5 +1697,160 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+    orderPaymentComplete: function (userId, order, fn) {
+      var self = this;
+      
+      var orderId = order.get('_id');
+      var accountId = order.get('account_id');
+
+      async.waterfall([
+        function (callback) {
+          if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
+            order.set('status', 'completed');
+          } else {
+            order.set('status', 'processing');
+          }
+          order.attributes.modified.date = new Date();
+          log.debug(accountId, userId, '>> Order', order);
+          var created_at = order.get('created_at');
+
+          if (created_at && _.isString(created_at)) {
+              created_at = moment(created_at).toDate();
+              order.set('created_at', created_at);
+          }
+          self.updateOrderById(order, function(err, order){
+              callback(err, order);
+          });
+        },
+        function (order, callback) {
+          var productAry = [];
+          async.each(order.get('line_items'), function iterator(item, cb){
+              productManager.getProduct(item.product_id, function(err, product){
+                  if(err) {
+                      cb(err);
+                  } else {
+                      if(product.get('fulfillment_email')){
+                          productAry.push(product);
+                      }
+                      log.debug(accountId, userId, 'Product is', product);
+                      cb();
+                  }
+              });
+          }, function done(err){
+              log.debug(accountId, userId, 'productAry', productAry);
+              callback(err, order, productAry);
+          });
+        },
+        function(order, fulfillmentProductArr, callback) {
+            if(fulfillmentProductArr && fulfillmentProductArr.length){
+                if(!order || !order.get('billing_address') || !order.get('billing_address').email) {
+                    log.warn('No order email address.  No Fulfillment email sent.');
+                    order.get("notes").push({
+                        note: 'No email address provided with order. No fulfillment email sent.',
+                        user_id: userId,
+                        date: new Date()
+                    });
+                    dao.saveOrUpdate(order, function(err, order){
+                        if(err) {
+                            log.error(accountId, userId, 'Error updating order: ' + err);
+                            callback(err);
+                        } else {
+                            callback(null,order);
+                        }
+                    });
+                }
+                else{
+                    var _ba = order.get('billing_address');
+                    var toName = (_ba.first_name || '') + ' ' + (_ba.last_name || '');
+                    var accountId = order.get('account_id');
+                    var toAddress = _ba.email;
+
+                    async.each(fulfillmentProductArr, function iterator(product, cb){
+                        var settings = product.get("emailSettings");
+                        var fromAddress = settings.fromEmail;
+                        var subject = settings.subject;
+                        var orderId = order.get("_id");
+                        var accountId = order.get('accountId');
+                        var vars = settings.vars || [];
+                        var fromName = settings.fromName;
+                        var emailId = settings.emailId;
+                        var bcc = settings.bcc;
+
+                        emailDao.getEmailById(emailId, function(err, email){
+                            if(err || !email) {
+                                log.error(accountId, userId, 'Error getting email to render: ' + err);
+                                return fn(err, null);
+                            }
+                            var components = [];
+                            var keys = ['logo','title','text','text1','text2','text3'];
+                            var regex = new RegExp('src="//s3.amazonaws', "g");
+
+                            email.get('components').forEach(function(component){
+                                if(component.visibility){
+                                    for (var i = 0; i < keys.length; i++) {
+                                        if (component[keys[i]]) {
+                                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                                        }
+                                    }
+                                    if (!component.bg.color) {
+                                        component.bg.color = '#ffffff';
+                                    }
+                                    if (!component.emailBg) {
+                                        component.emailBg = '#ffffff';
+                                    }
+                                    if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                    }
+                                    if (!component.txtcolor) {
+                                        component.txtcolor = '#000000';
+                                    }
+                                    components.push(component);
+                                }
+                            });
+
+                            app.render('emails/base_email_v2', { components: components }, function(err, html) {
+                                if (err) {
+                                    log.error(accountId, userId, 'Error updating order: ' + err);
+                                    log.warn('email will not be sent.');
+                                    cb();
+                                } else {
+                                    emailMessageManager.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, bcc, function(){
+                                        if(err) {
+                                            log.warn('Error sending email');
+                                            order.get("notes").push({
+                                                note: 'Error sending fulfillment email.',
+                                                user_id: userId,
+                                                date: new Date()
+                                            });
+                                            dao.saveOrUpdate(order, function(err, order){
+                                                if(err) {
+                                                    log.error(accountId, userId, 'Error updating order: ' + err);
+                                                    callback(err);
+                                                } else {
+                                                    cb();
+                                                }
+                                            });
+                                        } else {
+                                            cb();
+                                        }
+
+                                    });
+                                }
+                            });
+                        });
+                    }, function done(err){
+                        callback(null, order);
+                    });
+                }
+            }
+            else{
+                callback(null, order);
+            }
+        }
+      ], function(err, order) {
+        fn(err, order);
+      });
     }
 };
