@@ -1168,13 +1168,13 @@ module.exports = {
                 return fn('No charge found', null);
             }
 
-            var chargeId = paymentDetails.charge.id;
+            var chargeId = paymentDetails.charge.charge.id;
             log.debug(accountId, userId, '>> chargeId ', chargeId);
             if(!chargeId) {
                 log.error(accountId, userId, 'Error creating refund.  No charge found.');
                 return fn('No charge found', null);
             }
-            var refundAmount = paymentDetails.charge.amount;
+            var refundAmount = paymentDetails.charge.charge.amount;
             if(amount) {
                 refundAmount = amount;
             }
