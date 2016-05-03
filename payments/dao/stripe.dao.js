@@ -1477,7 +1477,7 @@ var dao = {
 
     createRefund: function(chargeId, amount, refundApplicationFee, reason, metadata, accessToken, fn) {
         var self = this;
-        self.log.debug('>> createRefund');
+        self.log.debug('>> createRefund ' + chargeId + ':' + amount + ':' + refundApplicationFee + ':' + reason + ':' + metadata);
         var apiToken = self.delegateStripe(accessToken);
         var params ={};
         if(amount) {
@@ -1496,7 +1496,7 @@ var dao = {
         stripe.charges.refund(chargeId, params, apiToken, function(err, refund){
             if(err) {
                 self.log.error('error: ' + err);
-                return fn(err, charges);
+                return fn(err, params);
             }
             self.log.debug('<< createRefund');
             return fn(err, refund);
