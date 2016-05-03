@@ -11,7 +11,6 @@
     }
 
     .donate-step hr {
-        padding: 15px 0;
         width: calc(~"100% + 30px");
         margin-left: -15px;
     }
@@ -21,7 +20,6 @@
     }
 
     .donate-step-header {
-        // text-align: center;
         color: #444444;
         font-size: 18px;
     }
@@ -35,6 +33,9 @@
     .billing-shipping .donate-amount-btn {
         flex: 1 0 15%;
         margin: 0 15px 15px 0;
+        justify-content: center;
+        font-size: 2em;
+        font-weight: bold;
     }
 
     .billing-shipping .donate-amount-btn.active {
@@ -45,9 +46,18 @@
         margin-right: 0;
     }
 
+    .billing-shipping label {
+        font-weight: normal;
+        font-size: 1.25em;
+    }
+
     .billing-shipping .donate-other-amount {
         display: inline-block;
-        flex: 0 0 125px;
+        flex: 0 0 9em;
+        justify-content: center;
+        font-size: 2em;
+        font-weight: bold;
+        height: auto;
     }
 
     .billing-shipping .input-fields {
