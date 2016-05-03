@@ -398,7 +398,8 @@
      * init Spectrum.
      */
     function initializeSpectrum(val, current_color) {
-        var container = val === 'color' ? $(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
+        var popup = editor.popups.get('colors.picker');
+        var container = val === 'color' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color"),
         dragHelper = container.find(".sp-dragger"),
         slideHelper = container.find(".sp-slider"),
         alphaSlideHelper = container.find(".sp-alpha-handle"),
