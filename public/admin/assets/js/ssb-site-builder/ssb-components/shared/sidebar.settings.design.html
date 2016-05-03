@@ -14,7 +14,7 @@
 
     <div class="form-group ssb-spectrum-color-picker-small">
         <div class="ssb-spectrum-color-picker-background-container">
-            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
             <i class="fa fa-eyedropper" />
         </div>
         <label>
@@ -142,7 +142,7 @@
 
     <div class="form-group ssb-spectrum-color-picker-small">
         <div class="ssb-spectrum-color-picker-background-container">
-            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
             <i class="fa fa-eyedropper" />
         </div>
         <label>
@@ -184,12 +184,12 @@
 
 <div class="row padding-10" ng-if="component.type == 'products'">
     <div class="form-group ssb-spectrum-color-picker-small">
-        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
+        <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
         <br />
         <label for="colorpicker">Title Box BG <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background color of title and description box."><i class="fa fa-info-circle" /></span></label>
     </div>
     <div class="form-group ssb-spectrum-color-picker-small">
-        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.iconColor"></spectrum-colorpicker>
+        <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.iconColor"></spectrum-colorpicker>
         <br />
         <label for="colorpicker">Icon Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span></label>
     </div>
@@ -368,7 +368,7 @@
 
         <div ng-if="component.bg.img.overlay" class="form-group ssb-spectrum-color-picker-small">
             <div class="ssb-spectrum-color-picker-background-container">
-                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
                 <i class="fa fa-eyedropper" />
             </div>
             <label>
