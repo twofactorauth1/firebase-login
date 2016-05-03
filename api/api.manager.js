@@ -55,6 +55,7 @@ var adminUserApi = require('./1.0/admin/user.api');
 //2.0
 var cms2Api = require('./2.0/cms.api');
 var dashboard2Api = require('./2.0/dashboard.api');
+var componentdata2Api = require('./2.0/componentdata.api');
 
 module.exports = {
 
