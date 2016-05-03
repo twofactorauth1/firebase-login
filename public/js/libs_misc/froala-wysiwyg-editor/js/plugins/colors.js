@@ -56,8 +56,14 @@
     colorsDefaultTab: 'text',
     colorsButtons: ['colorsBack', '|', '-'],
     defaultColors:{
-        background: '',
-        color: ''
+        background: {
+            init: false,
+            color: ''
+        },
+        text: {
+            init: false,
+            color: ''
+        }
     },
     isIE: !!/msie/i.exec( window.navigator.userAgent )
   });
@@ -147,6 +153,8 @@
 
       var dataCmdSpectrum = (tab == 'text' ? "textColorSpectrum" : "bgColorSpectrum");
 
+      var dataToggle = (tab == 'text' ? "toggleTextSpectrum" : "toggleBgSpectrum");
+
       // Create colors html.
       var colors_html = '<div class="sp-container sp-light sp-alpha-enabled sp-clear-enabled sp-initial-disabled fr-color-set fr-' + tab + '-color' + ((editor.opts.colorsDefaultTab == tab || (editor.opts.colorsDefaultTab != 'text' && editor.opts.colorsDefaultTab != 'background' && tab == 'text')) ? ' fr-selected-set' : '') + '">';
       //colors_html += '<div class="sp-palette-container"><div class="sp-palette sp-thumb sp-cf">';
@@ -165,6 +173,9 @@
           colors_html += '<span style="visibility: hidden;" class="fr-command fr-select-color" data-cmd="' + tab + 'Color" data-param1="REMOVE" title="' + editor.language.translate('Clear Formatting') + '"><i class="fa fa-eraser"></i></span>';
         }
       }
+
+
+     colors_html += '<div class="sp-palette-button-container sp-cf"><button type="button" class="sp-palette-toggle fr-command" data-cmd="'+dataToggle+'">less</button></div>';
 
      colors_html += '</div>';
      colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="closeColorPicker">choose</button></div></div>'
@@ -197,11 +208,17 @@
 
         // Check initial colors means txt color and bg color
 
-        editor.opts.defaultColors.background = editor.helpers.RGBToHex($element.css('background-color'));
-        editor.opts.defaultColors.color = editor.helpers.RGBToHex($element.css('color'));
+        editor.opts.defaultColors.background.color = editor.helpers.RGBToHex($element.css('background-color'));
+        editor.opts.defaultColors.text.color = editor.helpers.RGBToHex($element.css('color'));
 
         setTimeout(function() {
-            initializeSpectrum(color_type, color_type == 'color' ? editor.opts.defaultColors.color : editor.opts.defaultColors.background);
+            initializeSpectrum(color_type, color_type == 'color' ? editor.opts.defaultColors.text.color : editor.opts.defaultColors.background.color);
+            if(color_type == 'color'){
+                editor.opts.defaultColors.text.init = true;
+            }
+            else{
+                editor.opts.defaultColors.background.init = true;
+            }
         }, 0)
         if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
           $element = $element.parent();
@@ -263,8 +280,12 @@
         editor.selection.restore();
       }
 
-      if(init)
-        initializeSpectrum("background", val);
+      if(init){
+        //editor.opts.defaultColors.background.init = false;
+        initializeSpectrum("background-color", val);
+      }
+
+
 
      // _hideColorsPopup();
     }
@@ -299,6 +320,7 @@
         editor.selection.restore();
       }
       if(init){
+            //editor.opts.defaultColors.text.init = false;
             initializeSpectrum("color", val);
         }
     }
@@ -310,6 +332,7 @@
 
       // Remove text color.
       if(tab === 'text') {
+
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
         editor.commands.applyProperty('color', '#123456');
 
@@ -323,6 +346,7 @@
           }
         });
         editor.selection.restore();
+        initializeSpectrum("color");
       }
       else{
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
@@ -337,9 +361,10 @@
           }
         });
         editor.selection.restore();
+        initializeSpectrum("background-color");
       }
 
-      //_hideColorsPopup();
+
     }
 
     /*
@@ -347,14 +372,30 @@
      */
     function closeColorPicker(cancel) {
         if(cancel){
-            background(editor.opts.defaultColors.background || 'REMOVE');
-            text(editor.opts.defaultColors.color || 'REMOVE');
+            background(editor.opts.defaultColors.background.color || 'REMOVE');
+            text(editor.opts.defaultColors.text.color || 'REMOVE');
         }
       _hideColorsPopup();
     }
 
+    function toggleSpectrum(val){
+        var container = val === 'text' ? $(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
+        toggleContainer = container.find(".sp-picker-container"),
+        toggleButton = container.find(".sp-palette-toggle");
+        toggleContainer.toggle();
+        var isVisible = toggleContainer.is(":visible");
+        if(isVisible){
+            toggleButton.text("less");
+            container.removeClass("no-spectrum");
+        }
+        else{
+            toggleButton.text("more");
+            container.addClass("no-spectrum");
+        }
+    }
+
     /*
-     * click Spectrum.
+     * init Spectrum.
      */
     function initializeSpectrum(val, current_color) {
         var container = val === 'color' ? $(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
@@ -380,9 +421,7 @@
         currentHue = 0,
         currentSaturation = 0,
         currentValue = 0,
-        currentAlpha = 1,
-        allowEmpty = false;
-
+        currentAlpha = 1;
         draggable(alphaSlider, function (dragX, dragY, e) {
                 currentAlpha = (dragX / alphaWidth);
                 isEmpty = false;
@@ -396,25 +435,16 @@
         draggable(slider, function (dragX, dragY) {
             currentHue = parseFloat(dragY / slideHeight);
             isEmpty = false;
-            //if (!opts.showAlpha) {
-                //currentAlpha = 1;
-            //}
             move();
         }, dragStart, dragStop);
 
         draggable(dragger, function (dragX, dragY, e) {
 
-            //if (setSaturation) {
-                currentSaturation = parseFloat(dragX / dragWidth);
-            //}
-            //if (setValue) {
-                currentValue = parseFloat((dragHeight - dragY) / dragHeight);
-            //}
+            currentSaturation = parseFloat(dragX / dragWidth);
+
+            currentValue = parseFloat((dragHeight - dragY) / dragHeight);
 
             isEmpty = false;
-            //if (!opts.showAlpha) {
-              //  currentAlpha = 1;
-            //}
 
             move();
         }, dragStart, dragStop);
@@ -447,6 +477,9 @@
 
             updateHelperLocations();
 
+            if(isEmpty)
+                return;
+
             // Update dragger background color (gradients take care of saturation and value).
             var flatColor = tinycolor.fromRatio({ h: currentHue, s: 1, v: 1 });
             dragger.css("background-color", flatColor.toHexString());
@@ -456,8 +489,8 @@
 
             var realColor = get();
 
-            if (!realColor && allowEmpty) {
-                previewElement.addClass("sp-clear-display");
+            if (!realColor) {
+                return;
             }
             else {
                 var realHex = realColor.toHexString(),
@@ -512,7 +545,7 @@
             }
 
             var newColor, newHsv;
-            if (!color && allowEmpty) {
+            if (!color) {
                 isEmpty = true;
             } else {
                 isEmpty = false;
@@ -531,7 +564,7 @@
             var s = currentSaturation;
             var v = currentValue;
 
-            if(allowEmpty && isEmpty) {
+            if(isEmpty) {
                 //if selected color is empty, hide the helpers
                 alphaSlideHelper.hide();
                 slideHelper.hide();
@@ -572,12 +605,15 @@
             }
         }
 
-        if(current_color)
+        if(current_color){
             set(current_color);
-
-        dragHelper.show();
-        slideHelper.show();
-        alphaSlideHelper.show();
+            move();
+        }
+        else
+        {
+            isEmpty = true;
+            move();
+        }
     }
 
     /*
@@ -673,8 +709,10 @@
             dragging = false;
         }
 
-        $(element).bind("touchstart mousedown", start);
-        $(element).bind("touchend mouseup", stop);
+
+        $(element).off("touchstart mousedown").on("touchstart mousedown", start);
+        $(element).off("touchend mouseup").on("touchend mouseup", stop);
+
     }
 
     return {
@@ -686,7 +724,8 @@
       back: back,
       removeColor: removeColor,
       closeColorPicker: closeColorPicker,
-      initializeSpectrum: initializeSpectrum
+      initializeSpectrum: initializeSpectrum,
+      toggleSpectrum: toggleSpectrum
     }
   }
 
@@ -779,7 +818,7 @@
 
 
 
-  //on click text Spectrum
+  //on initialize text Spectrum
   $.FE.RegisterCommand('textColorSpectrum', {
     undo: false,
     focus: false,
@@ -788,7 +827,7 @@
     }
   });
 
-//on click bg Spectrum
+//on initialize bg Spectrum
   $.FE.RegisterCommand('bgColorSpectrum', {
     undo: false,
     focus: false,
@@ -796,6 +835,26 @@
       this.colors.initializeSpectrum("background", true);
     }
   });
+
+  //toggle text Spectrum
+  $.FE.RegisterCommand('toggleTextSpectrum', {
+    undo: false,
+    focus: false,
+    callback: function (cmd) {
+      this.colors.toggleSpectrum("text");
+    }
+  });
+
+  //toggle bg Spectrum
+  $.FE.RegisterCommand('toggleBgSpectrum', {
+    undo: false,
+    focus: false,
+    callback: function (cmd) {
+      this.colors.toggleSpectrum("background");
+    }
+  });
+
+
 
 
   // Colors back.

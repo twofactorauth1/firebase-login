@@ -74,6 +74,7 @@
   position: relative;
   z-index: 1;
   margin: 2px;
+  outline: solid 1px #d0d0d0;
 }
 .fr-popup .fr-color-set .color-inner-row > span > i {
   text-align: center;
@@ -116,21 +117,33 @@
 .fr-color-set.sp-container{
     padding: 10px;
     position: relative;
-    width: 415px;
-    height: 215px;
 }
 .fr-color-set.sp-container .color-inner-row{
     float: left;
 }
 .fr-color-set.sp-container .sp-picker-container{
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 10px;
+    position: relative;
+    margin-top: -10px;
+    margin-left: 10px;
+    padding-left: 10px;
 }
 .fr-color-set.sp-container .sp-cancel.fr-command:hover,
 .fr-color-set.sp-container .sp-clear.fr-command:hover,
-.fr-color-set.sp-container .sp-choose.fr-command:hover
+.fr-color-set.sp-container .sp-choose.fr-command:hover,
+.fr-color-set.sp-container .sp-palette-toggle.fr-command:hover
 {
     background: inherit !important;
+}
+.fr-color-set .sp-palette-button-container{
+    float: none;
+}
+.fr-color-set button.sp-palette-toggle{
+    float: right;
+}
+.fr-color-set.sp-container.no-spectrum{
+    width: auto !important;
+}
+.fr-popup .fr-color-set .color-inner-row{
+    padding-bottom: 300px;
+    margin-bottom: -290px;
 }
