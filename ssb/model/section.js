@@ -102,7 +102,6 @@ var section = $$.m.ModelBase.extend({
 
         if(lastIndex !== -1) {
             tempId = originalId.slice(0, lastIndex);
-            console.debug('tempId: ', tempId);
             updatedId = tempId + '_' + newver;
         } else {
             updatedId = originalId + '_' + newver;

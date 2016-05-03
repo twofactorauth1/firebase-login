@@ -1,6 +1,10 @@
 
 <div class="row padding-10">
 
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Form Builder', id: 'form-builder' + component._id, componentId: component._id });" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="fa fa-align-justify display-ib"></i> Manage Form Builder
+    </button>
+
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="fa fa-magic display-ib"></i> Style
     </button>
@@ -15,10 +19,6 @@
 
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Settings', id: 'form-builder-settings' + component._id, componentId: component._id });" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="fa fa-gear display-ib"></i> Settings
-    </button>
-
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Form Builder', id: 'form-builder' + component._id, componentId: component._id });" class="ssb-sidebar-section-panel-btn btn btn-link">
-        <i class="fa fa-list-alt display-ib"></i> Form Builder
     </button>
 
 </div>

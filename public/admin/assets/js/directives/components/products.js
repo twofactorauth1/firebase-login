@@ -1,6 +1,6 @@
 'use strict';
 /*global app, moment*/
-app.directive('productsComponent', ['ProductService', '$location', '$timeout', function (ProductService, $location, $timeout) {
+app.directive('productsComponent', ['ProductService', '$location', '$timeout', 'AccountService', function (ProductService, $location, $timeout, AccountService) {
   return {
     scope: {
       component: '=',
@@ -116,6 +116,18 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', f
         filterProducts(data, function () {
           scope.pageChanged(1);
         });
+      });
+
+      AccountService.getAccount(function(account) {
+        scope.account = account;
+        scope.paypalInfo = null;
+        scope.stripeInfo = null;
+        scope.account.credentials.forEach(function(cred, index) {
+            if (cred.type == 'stripe') {
+                scope.stripeInfo = cred;
+            }
+        });
+        scope.paypalInfo = scope.account.commerceSettings.paypal;
       });
 
       /*

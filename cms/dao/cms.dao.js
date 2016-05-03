@@ -1226,7 +1226,7 @@ var dao = {
                             self.log.error('Error getting theme, themeId:', themeId);
                             return fn(err, obj);
                         } else {
-                            self.log.debug('<< getThemeById', theme);
+                            self.log.debug('<< getThemeById');
                             if (theme) {
                                 website.set('theme', theme.toJSON('public'));
                             } else {

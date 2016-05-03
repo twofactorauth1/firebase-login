@@ -6,9 +6,13 @@
  */
 
 var baseApi = require('../base.api');
+var async = require('async');
 var orderManager = require('../../orders/order_manager');
 var appConfig = require('../../configs/app.config');
-
+var dao = require('../../orders/dao/order.dao');
+var emailDao = require('../../cms/dao/email.dao');
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
+var productManager = require('../../products/product_manager');
 
 
 var api = function () {
@@ -338,22 +342,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var order = new $$.m.Order(req.body);
         var orderId = req.params.id;
         order.set('_id', orderId);
-        if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
-          order.set('status', 'completed');
-        } else {
-          order.set('status', 'processing');
-        }
-        order.attributes.modified.date = new Date();
-        self.log.debug(accountId, userId, '>> Order', order);
-        var created_at = order.get('created_at');
 
-        if (created_at && _.isString(created_at)) {
-            created_at = moment(created_at).toDate();
-            order.set('created_at', created_at);
-        }
-        orderManager.updateOrderById(order, function(err, order){
-            self.log.debug(accountId, userId, '<< orderPaymentComplete');
-            self.sendResultOrError(res, err, order, 'Error updating order');
+        orderManager.orderPaymentComplete(userId, order, function(err, order) {
+          self.log.debug(accountId, userId, '<< orderPaymentComplete');
+          self.sendResultOrError(res, err, order, 'Error updating order');
         });
     },
 
