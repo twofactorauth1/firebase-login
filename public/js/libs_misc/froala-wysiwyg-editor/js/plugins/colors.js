@@ -30,16 +30,16 @@
         // Browser globals
         factory(jQuery);
     }
-}(function ($) {
+}(function (a) {
 
   'use strict';
 
-  $.extend($.FE.POPUP_TEMPLATES, {
+  a.extend(a.FroalaEditor.POPUP_TEMPLATES, {
     'colors.picker': '[_BUTTONS_][_TEXT_COLORS_][_BACKGROUND_COLORS_]'
   })
 
   // Extend defaults.
-  $.extend($.FE.DEFAULTS, {
+  a.extend(a.FroalaEditor.DEFAULTS, {
     colorsText: [
       '#61BD6D', '#1ABC9C', '#54ACD2', '#2C82C9', '#9365B8', '#475577', '#CCCCCC',
       '#41A85F', '#00A885', '#3D8EB9', '#2969B0', '#553982', '#28324E', '#000000',
@@ -68,7 +68,7 @@
     isIE: !!/msie/i.exec( window.navigator.userAgent )
   });
 
-  $.FE.PLUGINS.colors = function (editor) {
+  a.FroalaEditor.PLUGINS.colors = function (editor) {
     /*
      * Show the colors popup.
      */
@@ -730,8 +730,8 @@
   }
 
   // Toolbar colors button.
-  $.FE.DefineIcon('colors', { NAME: 'tint' });
-  $.FE.RegisterCommand('color', {
+  a.FroalaEditor.DefineIcon('colors', { NAME: 'tint' });
+  a.FroalaEditor.RegisterCommand('color', {
     title: 'Colors',
     undo: false,
     focus: true,
@@ -753,7 +753,7 @@
   });
 
   // Select text color command.
-  $.FE.RegisterCommand('textColor', {
+  a.FroalaEditor.RegisterCommand('textColor', {
     undo: true,
     callback: function (cmd, val) {
       this.colors.text(val, true);
@@ -761,14 +761,14 @@
   });
 
   // Select background color command.
-  $.FE.RegisterCommand('backgroundColor', {
+  a.FroalaEditor.RegisterCommand('backgroundColor', {
     undo: true,
     callback: function (cmd, val) {
       this.colors.background(val, true);
     }
   });
 
-  $.FE.RegisterCommand('colorChangeSet', {
+  a.FroalaEditor.RegisterCommand('colorChangeSet', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {
@@ -778,7 +778,7 @@
   });
 
   // Clear text color selection
-  $.FE.RegisterCommand('clearTextColor', {
+  a.FroalaEditor.RegisterCommand('clearTextColor', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {
@@ -788,7 +788,7 @@
   });
 
   // Clear bg color selection
-  $.FE.RegisterCommand('clearBackgroundColor', {
+  a.FroalaEditor.RegisterCommand('clearBackgroundColor', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {
@@ -799,7 +799,7 @@
 
 
   // Close color picker
-  $.FE.RegisterCommand('closeColorPicker', {
+  a.FroalaEditor.RegisterCommand('closeColorPicker', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {
@@ -808,7 +808,7 @@
   });
 
   // Cancel current color selection
-  $.FE.RegisterCommand('cancelColor', {
+  a.FroalaEditor.RegisterCommand('cancelColor', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {
@@ -819,7 +819,7 @@
 
 
   //on initialize text Spectrum
-  $.FE.RegisterCommand('textColorSpectrum', {
+  a.FroalaEditor.RegisterCommand('textColorSpectrum', {
     undo: false,
     focus: false,
     callback: function (cmd) {
@@ -828,7 +828,7 @@
   });
 
 //on initialize bg Spectrum
-  $.FE.RegisterCommand('bgColorSpectrum', {
+  a.FroalaEditor.RegisterCommand('bgColorSpectrum', {
     undo: false,
     focus: false,
     callback: function (cmd) {
@@ -837,7 +837,7 @@
   });
 
   //toggle text Spectrum
-  $.FE.RegisterCommand('toggleTextSpectrum', {
+  a.FroalaEditor.RegisterCommand('toggleTextSpectrum', {
     undo: false,
     focus: false,
     callback: function (cmd) {
@@ -846,7 +846,7 @@
   });
 
   //toggle bg Spectrum
-  $.FE.RegisterCommand('toggleBgSpectrum', {
+  a.FroalaEditor.RegisterCommand('toggleBgSpectrum', {
     undo: false,
     focus: false,
     callback: function (cmd) {
@@ -858,8 +858,8 @@
 
 
   // Colors back.
-  $.FE.DefineIcon('colorsBack', { NAME: 'arrow-left' });
-  $.FE.RegisterCommand('colorsBack', {
+  a.FroalaEditor.DefineIcon('colorsBack', { NAME: 'arrow-left' });
+  a.FroalaEditor.RegisterCommand('colorsBack', {
     title: 'Back',
     undo: false,
     focus: false,
