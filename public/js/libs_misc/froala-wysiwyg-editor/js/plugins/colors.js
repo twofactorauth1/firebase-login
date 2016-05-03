@@ -183,6 +183,14 @@
       return colors_html
     }
 
+    function rgb2hex(rgb){
+       rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+       return (rgb && rgb.length === 4) ? "#" +
+        ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+        ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+    }
+
     /*
      * Show the current selected color.
      */
@@ -208,17 +216,11 @@
 
         // Check initial colors means txt color and bg color
 
-        editor.opts.defaultColors.background.color = editor.helpers.RGBToHex($element.css('background-color'));
-        editor.opts.defaultColors.text.color = editor.helpers.RGBToHex($element.css('color'));
+        editor.opts.defaultColors.background.color = $element.css('background-color');
+        editor.opts.defaultColors.text.color = $element.css('color');
 
         setTimeout(function() {
             initializeSpectrum(color_type, color_type == 'color' ? editor.opts.defaultColors.text.color : editor.opts.defaultColors.background.color);
-            if(color_type == 'color'){
-                editor.opts.defaultColors.text.init = true;
-            }
-            else{
-                editor.opts.defaultColors.background.init = true;
-            }
         }, 0)
         if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
           $element = $element.parent();
@@ -257,10 +259,11 @@
     function background (val, init) {
       // Set background  color.
       if (val != 'REMOVE') {
-        editor.commands.applyProperty('background-color', editor.helpers.HEXtoRGB(val));
+        var val_hex =  editor.helpers.RGBToHex(val);
+        editor.commands.applyProperty('background-color', val);
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
         setTimeout(function() {
-            $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val+"']").addClass("fr-selected-color");
+            $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
         },0)
       }
 
@@ -296,10 +299,11 @@
     function text (val, init) {
       // Set text color.
       if (val != 'REMOVE') {
-        editor.commands.applyProperty('color', editor.helpers.HEXtoRGB(val));
+        var val_hex =  editor.helpers.RGBToHex(val);
+        editor.commands.applyProperty('color', val);
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
         setTimeout(function() {
-            $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val+"']").addClass("fr-selected-color");
+            $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
         },0)
 
       }
@@ -363,8 +367,6 @@
         editor.selection.restore();
         initializeSpectrum("background-color");
       }
-
-
     }
 
     /*
@@ -497,9 +499,9 @@
                 var realHex = realColor.toHexString(),
                     realRgb = realColor.toRgbString();
                     if(val === 'color')
-                        text(realHex);
+                        text(realRgb);
                     else
-                        background(realHex);
+                        background(realRgb);
                 // Update the replaced elements background color (with actual selected color)
 
 
@@ -534,7 +536,7 @@
                 s: currentSaturation,
                 v: currentValue,
                 a: Math.round(currentAlpha * 100) / 100
-            }, { format: 'hex' });
+            }, { format: 'rgb' });
         }
 
         function set(color, ignoreFormatChange) {
