@@ -4,7 +4,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$rootScope', 'pagesService', '$wind
     $scope.isEditing = false;
     $scope.blog_post = null;
     console.log('layout crtl');
-    function checkIntercom(data) {,
+    function checkIntercom(data) {
         if (data.hideIntercom) {
             $scope.$parent.hideIntercom = true;
         }
