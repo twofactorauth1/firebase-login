@@ -71,6 +71,25 @@ module.exports = {
                 });
             }
         });
+    },
+
+    deleteComponentData: function(accountId, userId, type, key, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> deleteComponentData');
+        var query = {
+            accountId:accountId,
+            type:type,
+            key:key
+        };
+        dao.remove(query, $$.m.ComponentData, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error removing data:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< deleteComponentData');
+                return fn(null, value);
+            }
+        });
     }
 
 
