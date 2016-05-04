@@ -606,14 +606,14 @@
                 var order = _formattedOrder();
                 if (order.customer) {
                     cardInput.name = order.customer.first + ' ' + order.customer.last;
-                    cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
-                    cardInput.address_city = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].city : '';
-                    cardInput.address_state = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].state : '';
+                    // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
+                    // cardInput.address_city = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].city : '';
+                    // cardInput.address_state = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].state : '';
                     cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
-                    cardInput.address_country = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].country : 'US';
-                    if (order.customer.details[0].addresses.length && order.customer.details[0].addresses[0].address2) {
-                        cardInput.address_line2 = order.customer.details[0].addresses[0].address2;
-                    }
+                    // cardInput.address_country = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].country : 'US';
+                    // if (order.customer.details[0].addresses.length && order.customer.details[0].addresses[0].address2) {
+                    //     cardInput.address_line2 = order.customer.details[0].addresses[0].address2;
+                    // }
                 }
 
                 if ($injector.has('paymentService')) {

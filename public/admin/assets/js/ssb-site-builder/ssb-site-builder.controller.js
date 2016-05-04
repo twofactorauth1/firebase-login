@@ -94,12 +94,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 var _heightDiff = _height + _top;
                 angular.element(".sortable-page-content").height(_winHeight - _heightDiff);
             },
-            onEnd: function (evt) {
+            onEnd: function (evt, e) {
+                var _top =
+                vm.uiState.activeSectionIndex = evt.newIndex;
                 angular.element(".sortable-page-content").removeClass("dragging");
                 angular.element(".sortable-page-content").css('height','auto');
                 $timeout(function() {
                     vm.uiState.sortableListPageContentConfig.disabled = true;
                     vm.uiState.openSidebarPanel = '';
+                    var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
+                    var activeSection = document.querySelector('.ssb-active-section');
+                    if (activeSection) {
+                      scrollContainerEl.scrollTop = activeSection.offsetTop;
+                    }
                 });
             },
             onSort: function (evt) {

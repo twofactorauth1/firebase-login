@@ -335,7 +335,7 @@
                 c.stopPropagation(), b.browser.msie && (b.$el.attr("contenteditable", !0), b.events.enableBlur()), a(this).removeClass("fr-img-move")
             });
             var c = function(a) {
-                    var c = b.$document.find("img.fr-img-move").get(0);
+                    var c = b.$document && b.$document.find("img.fr-img-move").get(0);
                     return c ? (b.browser.msie && a.preventDefault(), "undefined" != typeof b.browser.msie || "undefined" != typeof b.browser.edge) : void a.preventDefault()
                 },
                 d = function(a) {
