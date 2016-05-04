@@ -246,7 +246,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             csv += contact.getPrimaryEmail() + ',';
                             csv += contact.get('created').date + ',';
                             csv += contact.get('type') + ',';
-                            csv += contact.get('tags') + '\n';
+                            csv += contact.get('tags').join(' | ') + '\n';
                         });
                         self.log.debug('<< exportCsvContacts');
                         resp.set('Content-Type', 'text/csv');
