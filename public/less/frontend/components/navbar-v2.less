@@ -19,7 +19,8 @@
         // margin-bottom: -210px;
         .navbar-header {
             float: none;
-            min-height: 150px;
+            // min-height: 150px;
+            padding-bottom: 20px;
             .navbar-toggle {
                 margin-top: 50px;
 
@@ -78,10 +79,17 @@
                 margin: 0 auto;
                 display: block;
             }
+
+            @media (max-width: 767px) {
+                width: 60%;
+                top: 10px;
+                position: relative;
+            }
+
         }
         @media (max-width: 625px) {
             .navbar-brand img {
-                max-width: 250px;
+                // max-width: 250px;
             }
         }
         @media (max-width: 796px) {
