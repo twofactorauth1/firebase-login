@@ -37,6 +37,7 @@
         vm.checkoutModalState = 1;
         vm.showPaypalErrorMsg = false;
         vm.showPaypalLoading = false;
+        vm.isAnonymous = false;
         vm.paypalLoginClickFn = paypalLoginClickFn;
         vm.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
         console.log('url:', vm.paypalURL);
@@ -391,6 +392,7 @@
                 //"customer_id": customer._id,
                 "cancelUrl": url + '?state=2&comp=donation',
                 "returnUrl": url + '?state=5&comp=donation',
+                "isAnonymous": vm.isAnonymous,
                 "customer": formatted,
                 "session_id": null,
                 "status": "pending_payment",

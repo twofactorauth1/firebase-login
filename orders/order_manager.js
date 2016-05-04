@@ -319,7 +319,19 @@ module.exports = {
                     //return an error.
                     callback('Either a customer or customer_id is required.');
                 } else if(validatedOrder.get('customer')) {
-                    var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    if (validatedOrder.get('isAnonymous')) {
+                      var tmpCust = {
+                        isAnonymous: true,
+                        details: [{
+                          emails: [{
+                            email: 'noreply@indigenous.io'
+                          }]
+                        }]
+                      };
+                      var contact = new $$.m.Contact(tmpCust);
+                    } else {
+                      var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    }
                     contact.set('accountId', parseInt(validatedOrder.get('account_id')));
                     contact.createdBy(userId, $$.constants.social.types.LOCAL);
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
@@ -951,7 +963,19 @@ module.exports = {
                     //return an error.
                     callback('Either a customer or customer_id is required.');
                 } else if(validatedOrder.get('customer')) {
-                    var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    if (validatedOrder.get('isAnonymous')) {
+                      var tmpCust = {
+                        isAnonymous: true,
+                        details: [{
+                          emails: [{
+                            email: 'noreply@indigenous.io'
+                          }]
+                        }]
+                      };
+                      var contact = new $$.m.Contact(tmpCust);
+                    } else {
+                      var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    }
                     contact.set('accountId', parseInt(validatedOrder.get('account_id')));
                     contact.createdBy(userId, $$.constants.social.types.LOCAL);
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
