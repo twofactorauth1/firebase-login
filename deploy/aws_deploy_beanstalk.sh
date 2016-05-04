@@ -84,7 +84,10 @@ main(){
 	# rename /min to /js directory
 	#mv public/min public/js
 	########################
-	#rm -r public/comps	
+	#rm -r public/comps
+
+	echo Remove as much as possible
+    npm prune --production
 
 	echo Starting zip
 	# zip the application
