@@ -736,7 +736,7 @@ module.exports = {
 
     getUserAccountPermissions: function(userId, accountId, fn) {
         dao.getById(userId, $$.m.User, function(err, user){
-            if(err) {
+            if(err || !user) {
                 return fn(err, null);
             } else {
                 return fn(null, user.getPermissionsForAccount(accountId));
