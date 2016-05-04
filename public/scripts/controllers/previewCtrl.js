@@ -1,7 +1,7 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('PreviewCtrl', ['$scope', 'previewPagesService', '$window', '$location', '$document', '$timeout',
-    function ($scope, previewPagesService, $window, $location, $document, $timeout) {
+mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService', '$window', '$location', '$document', '$timeout',
+    function ($scope, $rootScope, previewPagesService, $window, $location, $document, $timeout) {
         $scope.isEditing = false;
         $scope.blog_post = null;
 
@@ -56,6 +56,7 @@ mainApp.controller('PreviewCtrl', ['$scope', 'previewPagesService', '$window', '
 
             } else {
                 $scope.page = data;
+                $rootScope.title = $scope.page.title;
                 $scope.sections = data.sections;
                 checkIntercom(data);
                 angular.element(document).ready(function () {

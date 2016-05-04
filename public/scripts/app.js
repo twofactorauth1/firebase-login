@@ -137,6 +137,10 @@ var mainApp = angular
         };
 
 
+        $rootScope.pageTitle = function () {
+            return $rootScope.title;
+        };
+
         $rootScope.$on("$routeChangeStart", function (scope, next, current) {
             var self = this;
         });
