@@ -38,14 +38,14 @@
             From
             <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Start date for donation campaign."><i class="fa fa-info-circle" /></span>
         </label>
-        <input type="text" class="form-control" datepicker-popup="MMM dd, yyyy" ng-model="vm.component.productSettings.timePeriod.startDate" is-open="vm.startCalOpened" close-text="Close" ng-focus="vm.openCal($event, 'start')" />
+        <input type="text" class="form-control" datepicker-popup="MMM dd, yyyy" ng-model="vm.component.productSettings.timePeriod.startDate" show-button-bar='false' is-open="vm.startCalOpened" close-text="Close" ng-focus="vm.openCal($event, 'start')" />
     </div>
     <div class="form-group" ng-if="vm.component.productSettings.timePeriod.enabled">
         <label>
             To
             <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="End date for donation campaign."><i class="fa fa-info-circle" /></span>
         </label>
-        <input type="text" class="form-control" datepicker-popup="MMM dd, yyyy" ng-model="vm.component.productSettings.timePeriod.endDate" is-open="vm.endCalOpened" close-text="Close" ng-focus="vm.openCal($event, 'end')" />
+        <input type="text" class="form-control" datepicker-popup="MMM dd, yyyy" ng-model="vm.component.productSettings.timePeriod.endDate" show-button-bar='false' is-open="vm.endCalOpened" close-text="Close" ng-focus="vm.openCal($event, 'end')" />
     </div>
 </div>
 
