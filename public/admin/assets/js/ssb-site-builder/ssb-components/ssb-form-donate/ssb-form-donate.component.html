@@ -48,11 +48,18 @@
                                             ng-click="vm.formBuilder.amount = amount">
                                             ${{amount}}
                                         </button>
-                                        <label class="control-label padding-right-20">Your donation amount:</label>
-                                        <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
+                                        <div class='form-group'>
+                                          <label class="control-label padding-right-20">Your donation amount:</label>
+                                          <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
+                                        </div>
+                                        <div class='form-group'>
+                                          <div class="checkbox">
+                                            <label><input type="checkbox" ng-model='vm.isAnonymous'>Anonymous</label>
+                                          </div>
+                                        </div>
                                     </div>
-                                    <hr/>
-                                    <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
+                                    <hr ng-hide='vm.isAnonymous' />
+                                    <form name="formBuilder" ng-submit="vm.createUser(formBuilder)" ng-hide='vm.isAnonymous'>
                                         <div class="form-donate-layout" ng-switch="vm.component.layout">
                                             <div ng-switch-when="1" class="donate-flex-container form-layout-1 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">

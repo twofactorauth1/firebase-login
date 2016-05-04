@@ -31,6 +31,7 @@ var order = $$.m.ModelBase.extend({
             "shipping_tax" : 0.0,
             "cart_tax" : 0.0,
             "currency" : "usd",
+            "isAnonymous": false,
             "line_items" : [
                 /*
                 {

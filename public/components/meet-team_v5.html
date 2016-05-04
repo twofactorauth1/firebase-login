@@ -5,7 +5,7 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<div ng-class="component.type+'-v'+component.version">
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div class="row text-center top-buffer">
         <div class="col-md-12 text-center">
             <div elem ng-model="component.title"></div>
@@ -40,18 +40,18 @@
                         </li>
                     </ul>
                     <div ng-if="isEditing" class="add-addtional-team">
-                        <button ng-if="isEditing" ng-click="openModal('social-links-modal', null, $parent.$index)" class="clickable-link social-links btn btn-{{network.icon}}" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip-html-unsafe="Add social network."><i class="fa fa-plus"></i></button>
+                        <a ng-if="isEditing" ng-click="openModal('social-links-modal', null, $parent.$index)" class="clickable-link social-links btn btn-{{network.icon}}" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip-html-unsafe="Add social network."><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
                 <div ng-if="isEditing" class="delete-team-member center">
-                    <button ng-click="deleteTeamMember($index)" class="ng-scope btn-delete-team-member" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this team member.">
+                    <a ng-click="deleteTeamMember($index)" class="ng-scope btn-delete-team-member" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this team member.">
                         <i class='fa fa-trash'></i>
-                    </button>
+                    </a>
                 </div>
                 <div ng-if="isEditing" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add team member.">
-                    <button ng-click="addTeamMember($index)">
+                    <a ng-click="addTeamMember($index)">
                         <i class="fa fa-plus"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

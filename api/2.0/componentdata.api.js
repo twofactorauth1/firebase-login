@@ -62,10 +62,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     deleteComponentData: function(req, resp) {
         var self = this;
-        self.log.debug('>> noop');
         var accountId = parseInt(self.accountId(req));
-        self.log.debug('<< noop');
-        self.sendResult(resp, {msg:'method not implemented'});
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> deleteComponentData');
+        var type = req.params.type;
+        var key = req.params.key;
+        manager.deleteComponentData(accountId, userId, type, key, function(err, data){
+            self.log.debug(accountId, userId, '<< deleteComponentData');
+            self.sendResultOrError(resp, err, data, 'Could not save component data');
+        });
     }
 
 });
