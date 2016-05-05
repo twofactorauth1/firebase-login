@@ -119,7 +119,7 @@ main(){
 	# update the asia env if necessary
 	if [ "$1" = "master" ]; then
 	    echo Updating Asia
-	    export AWS_DEFAULT_REGION="ap-southeast-1a"
+	    export AWS_DEFAULT_REGION="ap-southeast-1"
         export ENV_NAME="indigeweb-asia-env"
         echo "Checking for old revisions to clean up..."
         LIMIT_REVISIONS=100
