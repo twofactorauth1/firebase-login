@@ -14,7 +14,19 @@
 
                 <div class="form-donate-layout">
                     <div class="form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                        <div class="clearfix mb15 visible-xs"></div>
+                        <div ng-if="vm.component.productSettings.goal" class="ssb-form-donate-progress col-sm-12">
+                            <h3 class="ssb-form-donate-progress-total">${{vm.total}}</h3>
+                            <div class="ssb-form-donate-progress-bar">
+                                <div id="loading-bar">
+                                    <div class="bar" ng-style="{ 'width': vm.completePercentageStyle }">
+                                        <div class="peg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="ssb-form-donate-progress-percentage">
+                                {{vm.percentage}}% raised of {{vm.component.productSettings.goal}}
+                            </span>
+                        </div>
                         <div class="center col-sm-12">
                             <button ng-disabled="!vm.component.productSettings" ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" data-toggle="modal" data-target="#form-donate-modal-{{vm.component._id}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
                                 class="btn btn-form btn-default pull-right btn-block">
@@ -60,7 +72,7 @@
                                     </div>
                                     <hr ng-hide='vm.isAnonymous' />
                                     <form name="formBuilder" ng-submit="vm.createUser(formBuilder)" ng-hide='vm.isAnonymous'>
-                                        <div class="form-donate-layout" ng-switch="vm.component.layout">
+                                        <div class="form-donate-layout-cart" ng-switch="vm.component.layout">
                                             <div ng-switch-when="1" class="donate-flex-container form-layout-1 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                                     <label class="control-label">{{val.label || val.type}}</label>
@@ -161,7 +173,7 @@
 
                                 <div class="donate-step payment" ng-show="vm.checkoutModalState == 4">
                                     <div class="col-sm-12 col-xs-12 information">
-                                        <div class="clearfix margin-bottom-30"></div>
+                                        <div class="clearfix"></div>
                                         <div class="card-wrapper"></div>
                                         <div class="clearfix margin-bottom-30"></div>
                                         <div class="active col-xs-12">

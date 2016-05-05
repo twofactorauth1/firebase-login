@@ -2,9 +2,9 @@
 
     app.controller('SiteBuilderFormDonateComponentController', ssbFormDonateComponentController);
 
-    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', 'ENV'];
+    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', '$interval', 'ENV'];
     /* @ngInject */
-    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, ENV) {
+    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, $interval, ENV) {
 
         console.info('ssb-form-donate directive init...')
 
@@ -59,6 +59,11 @@
         vm.checkCardCvv = checkCardCvv;
         vm.checkCardExpiry = checkCardExpiry;
         vm.makeCartPayment = makeCartPayment;
+        vm.getDonations = getDonations;
+        vm.augmentCompletePercentage = augmentCompletePercentage;
+        vm.total = 0;
+        vm.percentage = 0;
+        vm.product = {};
 
         vm.nthRow = 'nth-row';
 
@@ -653,7 +658,7 @@
                             return;
                         }
 
-												order.payment_details.card_token = token;
+						order.payment_details.card_token = token;
                         orderService.createOrder(order, function(data) {
                             if (data && !data._id) {
                                 var failedOrderMessage = "Error in order processing";
@@ -673,16 +678,55 @@
             }
         }
 
+        function augmentCompletePercentage(percentage) {
+
+            var p = 0;
+
+            var stop = $interval(function() {
+
+                if (p === percentage) {
+                    $interval.cancel(stop);
+                }
+                vm.completeStyle = p;
+                p = p + 1;
+                vm.completePercentageStyle = p + '%';
+
+            }, 10);
+
+        }
+
+        function getDonations(id) {
+            if (vm.component.productSettings.goal) {
+                productService.getAllOrdersForProduct(id, function(data) {
+                    if (data.total) {
+                        var percentage = data.total / vm.component.productSettings.goal * 100;
+                        vm.augmentCompletePercentage(percentage);
+                        vm.total = data.total;
+                        vm.percentage = percentage;
+                    }
+                })
+            }
+        }
+
         function init(element) {
             vm.element = element;
+
+            if ($.card) {
+                vm.card = $(element).card({
+                    container: '.card-wrapper'
+                });
+            }
 
             if (vm.component.productSettings) {
 
                 if ($injector.has("productService")) {
                     var productService = $injector.get('productService');
-                    productService.getProduct(vm.component.productSettings.product.data, function(product) {
-                        vm.product = product;
-                    });
+                    if (vm.component.productSettings.product) {
+                        productService.getProduct(vm.component.productSettings.product.data, function(product) {
+                            vm.product = product;
+                            vm.getDonations(vm.product._id);
+                        });
+                    }
                 }
 
                 if ($injector.has('accountService')) {

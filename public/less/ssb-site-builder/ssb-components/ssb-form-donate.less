@@ -1,5 +1,10 @@
+.ssb-page-section-donate-button {}
+
 [ssb-form-donate-component] {
 
+    /**
+     * Modal styles
+     */
     color: #444444;
 
     .modal {
@@ -79,8 +84,58 @@
 
     }
 
-    .payment {
-
+    .payment .form-control-feedback {
+        position: absolute;
+        top: 0px;
+        right: 13px;
     }
 
+}
+
+.form-donate-layout {
+    position: relative;
+    border: 1px solid #e5e5e5;
+    padding: 25px;
+    float: left;
+    clear: both;
+    width: 80%;
+    border-radius: 5px;
+    margin: 0 10%;
+    border-color: #e5e5e5;
+    border-bottom-width: 10px;
+
+    &:before {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        border: 1px solid white;
+        border-radius: 5px;
+    }
+
+}
+.ssb-form-donate-progress-total {
+    text-align: center;
+}
+
+
+/**
+ * v1 (includes image + text and  progress bar by default)
+ */
+.ssb-page-section-layout-donate-v1 [ssb-text-component]:first-of-type { //title
+    text-align: center;
+    padding: 15px 0;
+}
+
+.ssb-page-section-layout-donate-v1 [ssb-image-component]:first-of-type { //image
+    text-align: center;
+    padding: 15px 0;
+}
+
+.ssb-page-section-layout-donate-v1 .form-title,
+.ssb-page-section-layout-donate-v1 .form-subtitle {
+    display: none;
 }
