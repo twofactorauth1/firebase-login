@@ -598,7 +598,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-postcss');
     // grunt.loadNpmTasks('grunt-serve');
-    grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
+    //grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
