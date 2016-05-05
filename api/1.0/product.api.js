@@ -7,6 +7,7 @@
 
 var baseApi = require('../base.api');
 var productManager = require('../../products/product_manager');
+var orderManager = require('../../orders/order_manager');
 var appConfig = require('../../configs/app.config');
 
 var api = function () {
@@ -29,6 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateProduct.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteProduct.bind(this));
         app.get(this.url('type/:type'), this.isAuthApi.bind(this), this.getProductsByType.bind(this));
+        app.get(this.url(':id/orders'), this.setup.bind(this), this.getProductOrders.bind(this));
 
         app.get(this.url('tax/:postcode'), this.setup.bind(this), this.getTax.bind(this));
 
@@ -241,6 +243,31 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    getProductOrders: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getProductOrders');
+
+        var productId = req.params.id;
+        var results = {};
+        orderManager.listOrdersByProduct(accountId, userId, productId, function(err, list){
+            self.log.debug(accountId, userId, '<< getProductOrders');
+            if(err) {
+                self.sendResultOrError(resp, err, list, 'Error listing orders by product');
+            } else {
+                //format results?
+                results.count = list.length;
+                results.total = 0;
+                _.each(list, function(order){
+                    results.total += parseFloat(order.get('total'));
+                });
+                results.results = list;
+                self.sendResultOrError(resp, err, results, 'Error listing orders by product');
+            }
+        });
     }
 });
 

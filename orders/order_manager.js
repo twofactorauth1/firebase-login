@@ -434,7 +434,7 @@ module.exports = {
                             accountId: savedOrder.get('account_id')
                         };
                         var capture = true;
-                        var statement_description = 'INDIGENOUS CHARGE';
+                        var statement_description = 'INDIGENOUS CHARGE';//TODO: make this configurable
                         if(paymentDetails.statement_description) {
                             statement_description = paymentDetails.statement_description;
                         }
@@ -1700,6 +1700,24 @@ module.exports = {
 
         dao.findMany(query, $$.m.Order, function(err, orders){
             log.debug(accountId, userId, '<< listOrdersByCustomer ', orders);
+            if(err) {
+                log.error(accountId, userId, 'Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                return fn(null, orders);
+            }
+        });
+    },
+
+    listOrdersByProduct: function(accountId, userId, productId, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> listOrdersByProduct');
+        var query = {
+            account_id:accountId,
+            'line_items.product_id': productId
+        };
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            log.debug(accountId, userId, '<< listOrdersByProduct ', orders);
             if(err) {
                 log.error(accountId, userId, 'Error listing orders: ', err);
                 return fn(err, null);
