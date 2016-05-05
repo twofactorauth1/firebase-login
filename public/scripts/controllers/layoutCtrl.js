@@ -1,6 +1,6 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, pagesService, $window, $location, $document, $timeout) {
+mainApp.controller('LayoutCtrl', ['$scope', '$rootScope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, $rootScope, pagesService, $window, $location, $document, $timeout) {
     $scope.isEditing = false;
     $scope.blog_post = null;
     console.log('layout crtl');
@@ -51,6 +51,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
 
         } else {
             $scope.page = data;
+            $rootScope.title = $scope.page.title;
             $scope.sections = data.sections;
             $scope.components = data.components;
             if (data.handle === 'single-post') {

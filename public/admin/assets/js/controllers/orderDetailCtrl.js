@@ -711,7 +711,7 @@
       if (newStatus === 'refunded') {
         SweetAlert.swal({
           title: "Are you sure?",
-          text: "This order will be refunded and funds will be returned.",
+          text: "This order will be refunded and all funds will be returned.",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
@@ -721,12 +721,6 @@
           closeOnCancel: false
         }, function (isConfirm) {
           if (isConfirm) {
-            $scope.reasonData = {
-              note: 'Order has been refunded $42.68',
-              amount: '$42.68',
-              reason: "duplicate" //duplicate, fraudulent, requested_by_customer
-            };
-
             OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data, error) {
               if (error) {
                 SweetAlert.swal(error.status, error.message, "error");

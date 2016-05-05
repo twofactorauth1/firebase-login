@@ -319,7 +319,19 @@ module.exports = {
                     //return an error.
                     callback('Either a customer or customer_id is required.');
                 } else if(validatedOrder.get('customer')) {
-                    var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    if (validatedOrder.get('isAnonymous')) {
+                      var tmpCust = {
+                        isAnonymous: true,
+                        details: [{
+                          emails: [{
+                            email: 'noreply@indigenous.io'
+                          }]
+                        }]
+                      };
+                      var contact = new $$.m.Contact(tmpCust);
+                    } else {
+                      var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    }
                     contact.set('accountId', parseInt(validatedOrder.get('account_id')));
                     contact.createdBy(userId, $$.constants.social.types.LOCAL);
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
@@ -422,7 +434,7 @@ module.exports = {
                             accountId: savedOrder.get('account_id')
                         };
                         var capture = true;
-                        var statement_description = 'INDIGENOUS CHARGE';
+                        var statement_description = 'INDIGENOUS CHARGE';//TODO: make this configurable
                         if(paymentDetails.statement_description) {
                             statement_description = paymentDetails.statement_description;
                         }
@@ -951,7 +963,19 @@ module.exports = {
                     //return an error.
                     callback('Either a customer or customer_id is required.');
                 } else if(validatedOrder.get('customer')) {
-                    var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    if (validatedOrder.get('isAnonymous')) {
+                      var tmpCust = {
+                        isAnonymous: true,
+                        details: [{
+                          emails: [{
+                            email: 'noreply@indigenous.io'
+                          }]
+                        }]
+                      };
+                      var contact = new $$.m.Contact(tmpCust);
+                    } else {
+                      var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    }
                     contact.set('accountId', parseInt(validatedOrder.get('account_id')));
                     contact.createdBy(userId, $$.constants.social.types.LOCAL);
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
@@ -1120,7 +1144,7 @@ module.exports = {
                 return fn(err, null);
             }
             order.set('note', order.get('note') + '\n' + note);
-            order.set('status', order.status.CANCELLED);
+            order.set('status', $$.m.Order.status.CANCELLED);
             var modified = {
                 date: new Date(),
                 by: userId
@@ -1168,13 +1192,13 @@ module.exports = {
                 return fn('No charge found', null);
             }
 
-            var chargeId = paymentDetails.charge.id;
+            var chargeId = paymentDetails.charge.charge.id;
             log.debug(accountId, userId, '>> chargeId ', chargeId);
             if(!chargeId) {
                 log.error(accountId, userId, 'Error creating refund.  No charge found.');
                 return fn('No charge found', null);
             }
-            var refundAmount = paymentDetails.charge.amount;
+            var refundAmount = paymentDetails.charge.charge.amount;
             if(amount) {
                 refundAmount = amount;
             }
@@ -1187,7 +1211,7 @@ module.exports = {
                 }
                 paymentDetails.refund = refund;
                 order.set('note', order.get('note') + '\n' + note);
-                order.set('status', order.status.REFUNDED);
+                order.set('status', $$.m.Order.status.REFUNDED);
                 order.set('updated_at', new Date());
                 var modified = {
                     date: new Date(),
@@ -1229,7 +1253,7 @@ module.exports = {
                 return fn(err, null);
             }
             order.set('note', order.get('note') + '\n' + note);
-            order.set('status', order.status.ON_HOLD);
+            order.set('status', $$.m.Order.status.ON_HOLD);
             var modified = {
                 date: new Date(),
                 by: userId
@@ -1268,7 +1292,7 @@ module.exports = {
                 return fn(err, null);
             }
             order.set('note', order.get('note') + '\n' + note);
-            order.set('status', order.status.FAILED);
+            order.set('status', $$.m.Order.status.FAILED);
             var modified = {
                 date: new Date(),
                 by: userId
@@ -1685,6 +1709,24 @@ module.exports = {
         });
     },
 
+    listOrdersByProduct: function(accountId, userId, productId, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> listOrdersByProduct');
+        var query = {
+            account_id:accountId,
+            'line_items.product_id': productId
+        };
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            log.debug(accountId, userId, '<< listOrdersByProduct ', orders);
+            if(err) {
+                log.error(accountId, userId, 'Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                return fn(null, orders);
+            }
+        });
+    },
+
     deleteOrder: function(orderId, fn) {
         var self = this;
         log.debug('>> deleteOrder');
@@ -1701,7 +1743,7 @@ module.exports = {
 
     orderPaymentComplete: function (userId, order, fn) {
       var self = this;
-      
+
       var orderId = order.get('_id');
       var accountId = order.get('account_id');
 

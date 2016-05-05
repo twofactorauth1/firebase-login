@@ -1222,7 +1222,7 @@
                             url: asset.url,
                             title: '<span style="font-size: 30px;">Service Title Here</span>'
                         });
-                        if(fields){
+                        if(fields && component.images[index + 1]){
                             angular.forEach(fields, function(v, k) {
                                 component.images[index + 1][k] = v;
                             });

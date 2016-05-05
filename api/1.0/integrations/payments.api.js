@@ -196,7 +196,9 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     subscribeToIndigenous: function(req, resp) {
         var self = this;
-        self.log.debug('>> subscribeToIndigenous');
+        var accountId = parseInt(req.body.accountId) || parseInt(self.accountId(req));//REQUIRED
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> subscribeToIndigenous');
         /*
 
          - createStripeSubscription
@@ -211,8 +213,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var planId = req.params.planId;//REQUIRED
         var coupon = req.body.coupon;
-        var accountId = parseInt(req.body.accountId) || parseInt(self.accountId(req));//REQUIRED
-        var userId = self.userId(req);
+
 
         //these may be unused
         var trial_end = req.body.trial_end;
@@ -221,7 +222,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var application_fee_percent = req.body.application_fee_percent;
         var metadata = req.body.metadata;
         var addOnArray = req.body.addOns;
-        self.log.debug('Received arguments coupon [' + coupon + '] and addOnArray:', addOnArray);
+        self.log.debug(accountId, userId, 'Received arguments coupon [' + coupon + '] and addOnArray:', addOnArray);
 
 
         var setupFee = 0;
@@ -248,7 +249,7 @@ _.extend(api.prototype, baseApi.prototype, {
             function getAccount(cb) {
                 accountDao.getAccountByID(accountId, function(err, _account) {
                     if (err) {
-                        self.log.error('Error fetching account:', err);
+                        self.log.error(accountId, userId, 'Error fetching account:', err);
                         cb(err);
                     } else {
                         account = _account;
@@ -262,7 +263,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee',
                         null, null, function(err, value){
                             if(err) {
-                                self.log.error('Error creating signup fee as invoice item:', err);
+                                self.log.error(accountId, userId, 'Error creating signup fee as invoice item:', err);
                                 cb(err);
                             } else {
                                 invoiceItems.push(value);
@@ -281,7 +282,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     async.each(addOnArray, function(addOn, done){
                         productManager.getProduct(addOn, function(err, product){
                             if(err) {
-                                self.log.error('Error fetching products:', err);
+                                self.log.error(accountId, userId, 'Error fetching products:', err);
                                 done(err);
                             } else {
                                 //TODO: handle sales
@@ -289,7 +290,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 var description = product.get('name');
                                 stripeDao.createInvoiceItem(customerId, price, 'usd', null, null, description, null, null, function(err, value){
                                     if(err) {
-                                        self.log.error('Error creating Stripe Invoice Item:', err);
+                                        self.log.error(accountId, userId, 'Error creating Stripe Invoice Item:', err);
                                         done(err);
                                     } else {
                                         invoiceItems.push(value);
@@ -300,7 +301,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                     }, function (err){
                         if(err) {
-                            self.log.error('Error handling the addOns:', err);
+                            self.log.error(accountId, userId, 'Error handling the addOns:', err);
                             cb(err);
                         } else {
                             cb();
@@ -316,16 +317,16 @@ _.extend(api.prototype, baseApi.prototype, {
                         invoiceItems.forEach(function(item, index) {
                             stripeDao.deleteInvoiceItem(item._id, null, function(err, confirmation) {
                                 if (err) {
-                                    self.log.error('Error deleting invoice item: ' + err);
+                                    self.log.error(accountId, userId, 'Error deleting invoice item: ' + err);
                                 }
                             });
                         });
-                        self.log.error('Error subscribing to Indigenous: ' + err);
+                        self.log.error(accountId, userId, 'Error subscribing to Indigenous: ' + err);
                         cb(err);
                     } else {
                         self.sm.addBillingInfoToAccount(accountId, customerId, sub.id, planId, userId, function(err, subPrivs){
                             if(err) {
-                                self.log.error('Error adding billing info to account: ' + err);
+                                self.log.error(accountId, userId, 'Error adding billing info to account: ' + err);
                                 cb(err);
                             }
                             stripeSubscription = sub;
@@ -347,7 +348,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 req.session.locked_sub = false;
                 accountDao.saveOrUpdate(account, function(err, savedAccount){
                     if(err) {
-                        self.log.error('Error saving account:', err);
+                        self.log.error(accountId, userId, 'Error saving account:', err);
                         cb(err);
                     } else {
                         cb(null, savedAccount);
@@ -358,9 +359,9 @@ _.extend(api.prototype, baseApi.prototype, {
             function sendConversionEmail(account, cb){
                 //TODO: if we need a conversion email, add it here
                 //update close.io
-                self.log.debug('About to call close');
+                self.log.debug(accountId, userId, 'About to call close');
                 self.updateLead(account, function() {
-                    self.log.debug('Back from call');
+                    self.log.debug(accountId, userId, 'Back from call');
                     cb(null, account);
                 });
             },
@@ -375,11 +376,22 @@ _.extend(api.prototype, baseApi.prototype, {
                         userEmail = email;
                         contactDao.findContactsByEmail(appConfig.mainAccountID, email, function(err, contacts){
                             if(err) {
-                                self.log.error('Error finding contact for user:', err);
+                                self.log.error(accountId, userId, 'Error finding contact for user:', err);
                                 cb(err);
                             } else if (!contacts || contacts.length < 1) {
-                                self.log.error('Error finding contact for user (null)');
-                                cb('Error finding contact for user (null)');
+                                self.log.warn(accountId, userId, 'Could not find contact for user with email [' + email + ']');
+                                var fingerprint = req.body.fingerprint || '';
+                                var ip = self.ip(req);
+                                contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, ip, function(err, value){
+                                    if(err || !value) {
+                                        self.log.error(accountId, userId, 'Error creating contact for user:', err);
+                                        cb(err);
+                                    } else {
+                                        self.log.debug(accountId, userId, 'Created contact.');
+                                        cb(null, account, value);
+                                    }
+                                });
+                                //cb('Error finding contact for user (null)');
                             } else {
                                 var contact = contacts[0];
                                 cb(null, account, contact);
@@ -404,7 +416,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
                 contactActivityManager.createActivity(activity, function(err, value){
                     if(err) {
-                        self.log.error('Error creating contactActivity:', err);
+                        self.log.error(accountId, userId, 'Error creating contactActivity:', err);
                         cb(err);
                     } else {
                         cb(null, account, contact);
@@ -424,15 +436,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 paymentsManager.getInvoiceForSubscription(stripeCustomerId, subscriptionId, null, function(err, invoice){
                     if(err) {
-                        self.log.error('Error getting invoice for subscription: ' + err);
+                        self.log.error(accountId, userId, 'Error getting invoice for subscription: ' + err);
                         cb(err);
                     } else {
                         orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contactId, function(err, order){
                             if(err) {
-                                self.log.error('Error creating order for invoice: ' + err);
+                                self.log.error(accountId, userId, 'Error creating order for invoice: ' + err);
                                 cb(err);
                             } else {
-                                self.log.debug('Order created.');
+                                self.log.debug(accountId, userId, 'Order created.');
                                 cb(null, account, order, userEmail, purchaseAmount);
                             }
                         });
@@ -443,7 +455,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var note = 'order for new account id:' + account.id();
                 orderManager.addOrderNote(appConfig.mainAccountID, order.id(), note, 'admin', function(err, order){
                     if(err) {
-                        self.log.error('Error adding order note: ', err);
+                        self.log.error(accountId, userId, 'Error adding order note: ', err);
                         cb(err);
                     } else {
                         cb(null, email, amount);
@@ -453,17 +465,17 @@ _.extend(api.prototype, baseApi.prototype, {
             function recordAffiliatePurchase(email, amount, cb) {
                 affiliates_manager.recordPurchase(email, amount, function(err, value){
                     if(err) {
-                        self.log.error('Error recording affiliate purchase:', err);
+                        self.log.error(accountId, userId, 'Error recording affiliate purchase:', err);
                         //return anyway
                         cb(null);
                     } else {
-                        self.log.debug('Recorded affiliate purchase:', value);
+                        self.log.debug(accountId, userId, 'Recorded affiliate purchase:', value);
                         cb(null);
                     }
                 });
             }
         ], function done(err){
-            self.log.debug('<< subscribeToIndigenous');
+            self.log.debug(accountId, userId, '<< subscribeToIndigenous');
             return self.sendResultOrError(resp, err, stripeSubscription, "Error creating subscription");
         });
 

@@ -107,16 +107,52 @@ define([], function () {
                 LEAD: 'ld',
                 OTHER: "ot",
 
-                dp: [
-                    {label: "Customer", data: "cu"},
-                    {label: "Colleague", data: "co"},
-                    {label: "Friend", data: "fr"},
-                    {label: "Member", data: "mb"},
-                    {label: "Family", data: "fa"},
-                    {label: "Admin", data: "ad"},
-                    {label: 'Lead', data: 'ld'},
-                    {label: "Other", data: "ot"}
-                ]
+                dp: [{
+                  label: "Admin",
+                  data: "ad"
+                }, {
+                  label: "Affiliate",
+                  data: "af"
+                }, {
+                    label: 'Anonymous Donor',
+                    data: 'and'
+                }, {
+                  label: "Cancelled Customer",
+                  data: "cc"
+                }, {
+                  label: "Cancelled Trial Customer",
+                  data: "ct"
+                }, {
+                  label: "Cheatsheet Lead",
+                  data: "cs"
+                }, {
+                  label: "Colleague",
+                  data: "co"
+                }, {
+                  label: "Customer",
+                  data: "cu"
+                }, {
+                  label: "Expired Trial Customer",
+                  data: "ex"
+                }, {
+                  label: "Family",
+                  data: "fa"
+                }, {
+                  label: "Friend",
+                  data: "fr"
+                }, {
+                  label: "Lead",
+                  data: "ld"
+                }, {
+                  label: "Member",
+                  data: "mb"
+                }, {
+                  label: "Other",
+                  data: "ot"
+                }, {
+                  label: "Trial Customer",
+                  data: "tc"
+                }]
             },
 
             phone_types: {
@@ -1245,7 +1281,7 @@ define([], function () {
             VIDEO: [ "mp4" ],
             AUDIO: [ "mp3" ]
         },
-        
+
         googleApiKey : 'AIzaSyCQyG-ND5NsItTzZ0m_t1CYPLylcw2ZszQ'
     };
 

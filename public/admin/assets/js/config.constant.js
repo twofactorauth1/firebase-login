@@ -179,6 +179,9 @@ app.constant('contactConstant', {
       label: "Affiliate",
       data: "af"
     }, {
+        label: 'Anonymous Donor',
+        data: 'and'
+    }, {
       label: "Cancelled Customer",
       data: "cc"
     }, {

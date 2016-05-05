@@ -12,16 +12,16 @@ var paypalClient = require('./paypal/paypal.client');
 
 module.exports = {
     createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, fn) {
-        log.debug('>> createStripeCustomerForUser');
+        log.debug(accountId, user.id(), '>> createStripeCustomerForUser');
         //check for customer first.
         var customerId = user.get('stripeId');
         if(customerId && customerId.length >0){
             stripeDao.getStripeCustomer(customerId, accessToken, function(err, stripeCustomer){
                 if(err) {
-                    log.error('Error fetching Stripe customer:',err);
+                    log.error(accountId, user.id(), 'Error fetching Stripe customer:',err);
                     return fn(err);
                 } else {
-                    log.debug('got stripe customer:', stripeCustomer);
+                    log.debug(accountId, user.id(), 'got stripe customer:', stripeCustomer);
                     var accounts = [];
                     accounts.push(stripeCustomer.metadata.accounts ||'');
                     accounts.push(newAccountId);
@@ -36,14 +36,14 @@ module.exports = {
     },
 
     createStripeSubscription: function(customerId, planId, accountId, userId, coupon, setupFee, fn) {
-        log.debug('>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ','+ setupFee + ',callback)');
+        log.debug(accountId, userId, '>> createStripeSubscription(' + customerId + ',' + planId +',' + accountId + ',' + userId + ',' + coupon + ','+ setupFee + ',callback)');
         if(setupFee && setupFee > 0) {
             stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee', null, null, function(err, value){
                 if(err) {
-                    log.error('Error creating signup fee invoice item: ' + err);
+                    log.error(accountId, userId, 'Error creating signup fee invoice item: ' + err);
                     return fn(err, null);
                 } else {
-                    log.debug('Created signup fee invoice item.');
+                    log.debug(accountId, userId, 'Created signup fee invoice item.');
                     stripeDao.createStripeSubscription(customerId, planId, coupon, null, null, null, null, null, accountId, null, userId, null, fn);
                 }
             });

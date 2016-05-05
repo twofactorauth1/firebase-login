@@ -95,7 +95,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 angular.element(".sortable-page-content").height(_winHeight - _heightDiff);
             },
             onEnd: function (evt, e) {
-                var _top =
                 vm.uiState.activeSectionIndex = evt.newIndex;
                 angular.element(".sortable-page-content").removeClass("dragging");
                 angular.element(".sortable-page-content").css('height','auto');
