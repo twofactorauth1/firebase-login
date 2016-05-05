@@ -1,14 +1,16 @@
-.ssb-page-section-donate-button {}
+.ssb-page-section-donate-button {
+    //
+}
 
 [ssb-form-donate-component] {
 
     /**
      * Modal styles
      */
-    color: #444444;
+
 
     .modal {
-
+        color: #444444;
     }
 
     .modal-header, .modal-footer {
@@ -80,8 +82,9 @@
         padding-right: 0;
     }
 
-    .thank-you {
-
+    .thank-you .payment-panel {
+        margin: 15px 0;
+        min-height: 250px;
     }
 
     .payment .form-control-feedback {
@@ -90,19 +93,29 @@
         right: 13px;
     }
 
+    .donate-social-share {
+        margin: 25px 15px;
+        text-align: center;
+        vertical-align: middle;
+
+        .twitter-share-button, .facebook-share-button {
+            vertical-align: top;
+        }
+
+    }
+
 }
 
 .form-donate-layout {
     position: relative;
     border: 1px solid #e5e5e5;
     padding: 25px;
-    float: left;
-    clear: both;
-    width: 80%;
+    width: 100%;
     border-radius: 5px;
-    margin: 0 10%;
+    margin: 0 auto;
     border-color: #e5e5e5;
     border-bottom-width: 10px;
+    max-width: 250px;
 
     &:before {
         content: '';
@@ -117,22 +130,70 @@
     }
 
 }
+
 .ssb-form-donate-progress-total {
     text-align: center;
+    transition: all linear 0.5s;
+    opacity: 0;
+    color: #444!important;
+
+    &.on {
+        opacity: 1;
+    }
 }
 
+.ssb-form-donate-progress-bar .loading-bar {
+    height: 25px;
+    background: #f4f4f4;
+    border-radius: 15px;
+    border: 1px solid #e5e5e5;
+    margin: 15px auto 0;
+    width: 80%;
+    position: relative;
+}
+
+.ssb-form-donate-progress-bar .bar {
+    height: 23px;
+    background: #a0d956;
+    border-radius: 15px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: width 0s ease-in;
+}
+
+.ssb-form-donate-progress-percentage {
+    color: #888888;
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+
+    &.on {
+        opacity: 1;
+    }
+}
 
 /**
  * v1 (includes image + text and  progress bar by default)
  */
+.ssb-page-section-layout-donate-v1 .inner-page {
+    @media screen and (min-width: 768px) {
+        padding: 0!important;
+    }
+}
 .ssb-page-section-layout-donate-v1 [ssb-text-component]:first-of-type { //title
     text-align: center;
-    padding: 15px 0;
+    padding: 15px 0!important;
 }
 
 .ssb-page-section-layout-donate-v1 [ssb-image-component]:first-of-type { //image
     text-align: center;
     padding: 15px 0;
+}
+
+.ssb-page-section-layout-donate-v1 [ssb-text-component]:nth-of-type(2) { //text under image
+    margin: 20px 0;
+    clear: both;
 }
 
 .ssb-page-section-layout-donate-v1 .form-title,
