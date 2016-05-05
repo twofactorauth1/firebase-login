@@ -240,13 +240,21 @@ _.extend(api.prototype, baseApi.prototype, {
                     contactDao.findMany(query, $$.m.Contact, function(err, contacts){
                         var csv = "first,middle,last,email,created,type,tags\n";
                         _.each(contacts, function(contact){
+                            var tags = _.map(contact.get('tags'), function (x) {
+                              var tag = _.findWhere($$.constants.contact.contact_types.dp, {data: x});
+                              if (tag) {
+                                return tag.label;
+                              } else {
+                                return x;
+                              }
+                            });
                             csv += contact.get('first') + ',';
                             csv += contact.get('middle') + ',';
                             csv += contact.get('last') + ',';
                             csv += contact.getPrimaryEmail() + ',';
                             csv += contact.get('created').date + ',';
                             csv += contact.get('type') + ',';
-                            csv += contact.get('tags').join(' | ') + '\n';
+                            csv += tags.join(' | ') + '\n';
                         });
                         self.log.debug('<< exportCsvContacts');
                         resp.set('Content-Type', 'text/csv');

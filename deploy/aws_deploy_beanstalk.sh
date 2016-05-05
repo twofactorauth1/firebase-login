@@ -86,7 +86,7 @@ main(){
 	########################
 	#rm -r public/comps
 
-	echo Remove as much as possible
+	echo "Remove as much as possible"
     npm prune --production
 
 	echo Starting zip
