@@ -80,7 +80,7 @@ var emailTemplateUtil = {
             var url = value;
             var tokens = {};
             tokens[self.tokens.USER_EMAIL] = user.get("email") || toEmail;
-            tokens[self.tokens.RESET_PASSWORD_URL] = url + "/forgotpassword/reset/" + resetPasswordToken;
+            tokens[self.tokens.RESET_PASSWORD_URL] = url + "/forgotpassword/reset/" + resetPasswordToken + '?email=' +  encodeURIComponent(toEmail);
             tokens[self.tokens.SYSTEM_INFO] = "Date: "+ props.date + "<br/>" +
                                               "Browser: "+ props.browser + "<br/>" +
                                               "Operating System: "+ props.os + "<br/>" +
