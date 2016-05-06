@@ -7,7 +7,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             component: '='
         },
         templateUrl: '/components/component-wrap.html',
-        link: function(scope) {
+        link: function(scope, element) {
             scope.showPaypalLoading = false;
             scope.showPaypalErrorMsg = false;
             scope.order = null;
@@ -537,28 +537,28 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.checkCardNumber = function() {
-                var card_number = angular.element('#cart-checkout-modal #number').val();
+                var card_number = _.compact($('.modal #number').map( function(){return $(this).val(); }).get())[0]
                 if (!card_number) {
-                    angular.element('#cart-checkout-modal #card_number .error').html('Card Number Required');
-                    angular.element('#cart-checkout-modal #card_number').addClass('has-error');
-                    angular.element('#cart-checkout-modal #card_number .glyphicon').addClass('glyphicon-remove');
+                    $('.modal #card_number .error').html('Card Number Required');
+                    $('.modal #card_number').addClass('has-error');
+                    $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element('#cart-checkout-modal #card_number .error').html('');
-                    angular.element('#cart-checkout-modal #card_number').removeClass('has-error').addClass('has-success');
-                    angular.element('#cart-checkout-modal #card_number .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_number .error').html('');
+                    $('.modal #card_number').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_number .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
             /*scope.checkCardName = function() {
-             var name = angular.element('#cart-checkout-modal #card_name #name').val();
+             var name = $('.modal #card_name #name').val();
              if (!name) {
-             angular.element('#cart-checkout-modal #card_name .error').html('Card Name Required');
-             angular.element('#cart-checkout-modal #card_name').addClass('has-error');
-             angular.element('#cart-checkout-modal #card_name .glyphicon').addClass('glyphicon-remove');
+             $('.modal #card_name .error').html('Card Name Required');
+             $('.modal #card_name').addClass('has-error');
+             $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
              } else {
-             angular.element('#cart-checkout-modal #card_name .error').html('');
-             angular.element('#cart-checkout-modal #card_name').removeClass('has-error').addClass('has-success');
-             angular.element('#cart-checkout-modal #card_name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+             $('.modal #card_name .error').html('');
+             $('.modal #card_name').removeClass('has-error').addClass('has-success');
+             $('.modal #card_name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
              }
 
              };*/
@@ -746,16 +746,19 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.makeCartPayment = function() {
                 scope.failedOrderMessage = '';
                 scope.checkoutModalState = 4;
-                var expiry = angular.element('#cart-checkout-modal #expiry').val().split('/');
+                var expiry = _.compact($('.modal #expiry').map( function(){ return $(this).val(); }).get())[0];
+                if (expiry && expiry.indexOf('/') !== -1) {
+                    expiry = expiry.split('/');
+                }
                 var exp_month = expiry[0].trim();
                 var exp_year = '';
                 if (expiry.length > 1) {
                     exp_year = expiry[1].trim();
                 }
                 var cardInput = {
-                    name: angular.element('#cart-checkout-modal #card_name #name').val(),
-                    number: angular.element('#cart-checkout-modal #number').val(),
-                    cvc: angular.element('#cart-checkout-modal #cvc').val(),
+                    name: _.compact($('.modal #card_name #name').map( function(){ return $(this).val(); }).get())[0],
+                    number: _.compact($('.modal #number').map( function(){ return $(this).val(); }).get())[0],
+                    cvc: _.compact($('.modal #cvc').map( function(){return $(this).val(); }).get())[0],
                     exp_month: exp_month,
                     exp_year: exp_year
                         //TODO: add the following:
@@ -807,29 +810,29 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (error) {
                         switch (error.param) {
                             case 'number':
-                                angular.element('#cart-checkout-modal #card_number .error').html(error.message);
-                                angular.element('#cart-checkout-modal #card_number').addClass('has-error');
-                                angular.element('#cart-checkout-modal #card_number .glyphicon').addClass('glyphicon-remove');
+                                $('.modal #card_number .error').html(error.message);
+                                $('.modal #card_number').addClass('has-error');
+                                $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
                                 break;
                             case 'exp_month':
-                                angular.element('#cart-checkout-modal #card_expiry .error').html(error.message);
-                                angular.element('#cart-checkout-modal #card_expiry').addClass('has-error');
-                                angular.element('#cart-checkout-modal #card_expiry .glyphicon').addClass('glyphicon-remove');
+                                $('.modal #card_expiry .error').html(error.message);
+                                $('.modal #card_expiry').addClass('has-error');
+                                $('.modal #card_expiry .glyphicon').addClass('glyphicon-remove');
                                 break;
                             case 'exp_year':
-                                angular.element('#cart-checkout-modal #card_expiry .error').html(error.message);
-                                angular.element('#cart-checkout-modal #card_expiry').addClass('has-error');
-                                angular.element('#cart-checkout-modal #card_expiry .glyphicon').addClass('glyphicon-remove');
+                                $('.modal #card_expiry .error').html(error.message);
+                                $('.modal #card_expiry').addClass('has-error');
+                                $('.modal #card_expiry .glyphicon').addClass('glyphicon-remove');
                                 break;
                             case 'cvc':
-                                angular.element('#cart-checkout-modal #card_cvc .error').html(error.message);
-                                angular.element('#cart-checkout-modal #card_cvc').addClass('has-error');
-                                angular.element('#cart-checkout-modal #card_cvc .glyphicon').addClass('glyphicon-remove');
+                                $('.modal #card_cvc .error').html(error.message);
+                                $('.modal #card_cvc').addClass('has-error');
+                                $('.modal #card_cvc .glyphicon').addClass('glyphicon-remove');
                                 break;
                             case 'name':
-                                angular.element('#cart-checkout-modal #card_name .error').html(error.message);
-                                angular.element('#cart-checkout-modal #card_name').addClass('has-error');
-                                angular.element('#cart-checkout-modal #card_name .glyphicon').addClass('glyphicon-remove');
+                                $('.modal #card_name .error').html(error.message);
+                                $('.modal #card_name').addClass('has-error');
+                                $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
 
                         }
                         scope.checkoutModalState = 3;
@@ -967,20 +970,20 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             var clearCardDetails = function() {
-                angular.element('#cart-checkout-modal #product-card-details').trigger('reset');
-                angular.element('#cart-checkout-modal #card_number').removeClass('has-error has-success');
-                angular.element('#cart-checkout-modal #card_number .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
-                angular.element('#cart-checkout-modal #card_name').removeClass('has-error has-success');
-                angular.element('#cart-checkout-modal #card_name .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
-                angular.element('#cart-checkout-modal #card_expiry').removeClass('has-error has-success');
-                angular.element('#cart-checkout-modal #card_expiry .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
-                angular.element('#cart-checkout-modal #card_cvc').removeClass('has-error has-success');
-                angular.element('#cart-checkout-modal #card_cvc .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
-                angular.element('.jp-card-number').text('•••• •••• •••• ••••');
-                angular.element('.jp-card-cvc').text('•••');
-                angular.element('.jp-card-name').text('Full Name');
-                angular.element('.jp-card-expiry').text('••/••');
-                angular.element('.jp-card').removeClass('jp-card-identified');
+                $('.modal #product-card-details').trigger('reset');
+                $('.modal #card_number').removeClass('has-error has-success');
+                $('.modal #card_number .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $('.modal #card_name').removeClass('has-error has-success');
+                $('.modal #card_name .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $('.modal #card_expiry').removeClass('has-error has-success');
+                $('.modal #card_expiry .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $('.modal #card_cvc').removeClass('has-error has-success');
+                $('.modal #card_cvc .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $(element).find('.jp-card-number').text('•••• •••• •••• ••••');
+                $(element).find('.jp-card-cvc').text('•••');
+                $(element).find('.jp-card-name').text('Full Name');
+                $(element).find('.jp-card-expiry').text('••/••');
+                $(element).find('.jp-card').removeClass('jp-card-identified');
             }
 
             /*
@@ -988,7 +991,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * -
              */
             scope.initializeModalEvents = function() {
-                angular.element('#cart-checkout-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+                $('.modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                     console.log('modal closed');
                     $timeout(function() {
                         scope.$apply(function() {
@@ -1043,29 +1046,29 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.checkCardNumber = function() {
                 scope.failedOrderMessage = '';
-                var card_number = angular.element('#cart-checkout-modal #number').val();
+                var card_number = _.compact($('.modal #number').map( function(){return $(this).val(); }).get())[0];
                 if (!card_number) {
-                    angular.element('#cart-checkout-modal #card_number .error').html('Card Number Required');
-                    angular.element('#cart-checkout-modal #card_number').addClass('has-error');
-                    angular.element('#cart-checkout-modal #card_number .glyphicon').addClass('glyphicon-remove');
+                    $('.modal #card_number .error').html('Card Number Required');
+                    $('.modal #card_number').addClass('has-error');
+                    $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element('#cart-checkout-modal #card_number .error').html('');
-                    angular.element('#cart-checkout-modal #card_number').removeClass('has-error').addClass('has-success');
-                    angular.element('#cart-checkout-modal #card_number .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_number .error').html('');
+                    $('.modal #card_number').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_number .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
             scope.checkCardName = function() {
                 scope.failedOrderMessage = '';
-                var name = angular.element('#cart-checkout-modal #card_name #name').val();
+                var name = _.compact($('.modal #card_name #name').map( function(){return $(this).val(); }).get())[0];
                 if (!name) {
-                    angular.element('#cart-checkout-modal #card_name .error').html('Card Name Required');
-                    angular.element('#cart-checkout-modal #card_name').addClass('has-error');
-                    angular.element('#cart-checkout-modal #card_name .glyphicon').addClass('glyphicon-remove');
+                    $('.modal #card_name .error').html('Card Name Required');
+                    $('.modal #card_name').addClass('has-error');
+                    $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element('#cart-checkout-modal #card_name .error').html('');
-                    angular.element('#cart-checkout-modal #card_name').removeClass('has-error').addClass('has-success');
-                    angular.element('#cart-checkout-modal #card_name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_name .error').html('');
+                    $('.modal #card_name').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
 
             };
@@ -1073,42 +1076,45 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.checkCardExpiry = function() {
                 scope.failedOrderMessage = '';
-                var expiry = angular.element('#cart-checkout-modal #expiry').val();
-                var card_expiry = expiry.split('/');
-                var exp_month = card_expiry[0].trim();
+                var expiry = _.compact($('.modal #expiry').map( function(){return $(this).val(); }).get())[0]
+                if (expiry && expiry.indexOf('/') !== -1) {
+                    expiry = expiry.split('/');
+                }
+                var card_expiry = expiry;
+                var exp_month = card_expiry && card_expiry[0].trim();
                 var exp_year;
-                if (card_expiry.length > 1) {
+                if (card_expiry && card_expiry.length > 1) {
                     exp_year = card_expiry[1].trim();
                 }
 
                 if (!expiry || !exp_month || !exp_year) {
                     if (!expiry) {
-                        angular.element('#cart-checkout-modal #card_expiry .error').html('Expiry Required');
+                        $('.modal #card_expiry .error').html('Expiry Required');
                     } else if (!exp_month) {
-                        angular.element('#cart-checkout-modal #card_expiry .error').html('Expiry Month Required');
+                        $('.modal #card_expiry .error').html('Expiry Month Required');
                     } else if (!exp_year) {
-                        angular.element('#cart-checkout-modal #card_expiry .error').html('Expiry Year Required');
+                        $('.modal #card_expiry .error').html('Expiry Year Required');
                     }
-                    angular.element('#cart-checkout-modal #card_expiry').addClass('has-error');
-                    angular.element('#cart-checkout-modal #card_expiry .glyphicon').addClass('glyphicon-remove');
+                    $('.modal #card_expiry').addClass('has-error');
+                    $('.modal #card_expiry .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element('#cart-checkout-modal #card_expiry .error').html('');
-                    angular.element('#cart-checkout-modal #card_expiry .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                    angular.element('#cart-checkout-modal #card_expiry').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_expiry .error').html('');
+                    $('.modal #card_expiry .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_expiry').removeClass('has-error').addClass('has-success');
                 }
             };
 
             scope.checkCardCvv = function() {
                 scope.failedOrderMessage = '';
-                var card_cvc = angular.element('#cart-checkout-modal #cvc').val();
+                var card_cvc = _.compact($('.modal #cvc').map( function(){return $(this).val(); }).get())[0];
                 if (!card_cvc) {
-                    angular.element('#cart-checkout-modal #card_cvc .error').html('CVC Required');
-                    angular.element('#cart-checkout-modal #card_cvc').addClass('has-error');
-                    angular.element('#cart-checkout-modal #card_cvc .glyphicon').addClass('glyphicon-remove');
+                    $('.modal #card_cvc .error').html('CVC Required');
+                    $('.modal #card_cvc').addClass('has-error');
+                    $('.modal #card_cvc .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element('#cart-checkout-modal #card_cvc .error').html('');
-                    angular.element('#cart-checkout-modal #card_cvc').removeClass('has-error').addClass('has-success');
-                    angular.element('#cart-checkout-modal #card_cvc .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_cvc .error').html('');
+                    $('.modal #card_cvc').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_cvc .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
@@ -1121,22 +1127,22 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     PaymentService.validateCoupon(coupon, function(data) {
                         if (data.id && data.id === coupon) {
                             console.log('valid');
-                            angular.element('#cart-checkout-modal #coupon-name .error').html('');
-                            angular.element('#cart-checkout-modal #coupon-name').removeClass('has-error').addClass('has-success');
-                            angular.element('#cart-checkout-modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                            $('.modal #coupon-name .error').html('');
+                            $('.modal #coupon-name').removeClass('has-error').addClass('has-success');
+                            $('.modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                             scope.couponIsValid = true;
                         } else {
                             console.log('invalid');
-                            angular.element('#cart-checkout-modal #coupon-name .error').html('Invalid Coupon');
-                            angular.element('#cart-checkout-modal #coupon-name').addClass('has-error');
-                            angular.element('#cart-checkout-modal #coupon-name .glyphicon').addClass('glyphicon-remove');
+                            $('.modal #coupon-name .error').html('Invalid Coupon');
+                            $('.modal #coupon-name').addClass('has-error');
+                            $('.modal #coupon-name .glyphicon').addClass('glyphicon-remove');
                             scope.couponIsValid = false;
                         }
                     });
                 } else {
-                    angular.element('#cart-checkout-modal #coupon-name .error').html('');
-                    angular.element('#cart-checkout-modal #coupon-name').removeClass('has-error').addClass('has-success');
-                    angular.element('#cart-checkout-modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #coupon-name .error').html('');
+                    $('.modal #coupon-name').removeClass('has-error').addClass('has-success');
+                    $('.modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                     scope.couponIsValid = true;
                 }
             };
