@@ -1725,10 +1725,10 @@ module.exports = {
         });
     },
 
-    deleteOrder: function(orderId, fn) {
+    deletePaypalOrder: function(orderId, payKey, fn) {
         var self = this;
         log.debug('>> deleteOrder');
-        dao.removeById(orderId, $$.m.Order, function(err, value){
+        dao.removeByQuery({_id: orderId, 'payment_details.payKey': payKey}, $$.m.Order, function(err, value){
             if(err) {
                 log.error('Error deleting order: ' + err);
                 fn(err, null);
