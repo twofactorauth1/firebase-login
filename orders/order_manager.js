@@ -1725,15 +1725,29 @@ module.exports = {
         });
     },
 
-    deletePaypalOrder: function(orderId, payKey, fn) {
+    deleteOrder: function(orderId, fn) {
         var self = this;
         log.debug('>> deleteOrder');
-        dao.removeByQuery({_id: orderId, 'payment_details.payKey': payKey}, $$.m.Order, function(err, value){
+        dao.removeById(orderId, $$.m.Order, function(err, value){
             if(err) {
                 log.error('Error deleting order: ' + err);
                 fn(err, null);
             } else {
                 log.debug('<< deleteOrder');
+                fn(null, value);
+            }
+        });
+    },
+
+    deletePaypalOrder: function(orderId, payKey, fn) {
+        var self = this;
+        log.debug('>> deletePaypalOrder');
+        dao.removeByQuery({_id: orderId, 'payment_details.payKey': payKey, status: 'pending_payment'}, $$.m.Order, function(err, value){
+            if(err) {
+                log.error('Error deleting paypal order: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< deletePaypalOrder');
                 fn(null, value);
             }
         });
