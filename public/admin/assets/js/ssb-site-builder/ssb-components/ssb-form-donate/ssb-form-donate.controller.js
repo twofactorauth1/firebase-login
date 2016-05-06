@@ -72,6 +72,9 @@
         vm.close = close;
         vm.parseFBShare = parseFBShare;
         vm.shareUrl = 'indigenous.io';
+        vm.getProduct = getProduct;
+        vm.getCredentials = getCredentials;
+        vm.setInitialCheckoutState = setInitialCheckoutState;
 
         vm.nthRow = 'nth-row';
 
@@ -692,18 +695,7 @@
 
         function augmentCompletePercentage(percentage) {
 
-            var p = 0;
-
-            var stop = $interval(function() {
-
-                if (p === percentage || p > 100) {
-                    $interval.cancel(stop);
-                }
-                vm.completeStyle = p;
-                p = p + 1;
-                vm.completePercentageStyle = p + '%';
-
-            }, 10);
+            vm.completePercentageStyle = percentage + '%';
 
         }
 
@@ -757,6 +749,64 @@
             }
         };
 
+        function getProduct() {
+            if (productService) {
+                if (vm.component.productSettings.product) {
+                    productService.getProduct(vm.component.productSettings.product.data, function(product) {
+                        vm.product = product;
+                        vm.getDonations(vm.product._id);
+                    });
+                }
+            }
+        }
+
+        function getCredentials() {
+            if ($injector.has('accountService')) {
+                var accountService = $injector.get('accountService');
+                accountService(function(err, account) {
+                    vm.account = account;
+                    vm.paypalInfo = null;
+                    vm.stripeInfo = null;
+
+                    account.credentials.forEach(function(cred, index) {
+                        if (cred.type == 'stripe') {
+                            vm.stripeInfo = cred;
+                        }
+                    });
+
+                    vm.paypalInfo = account.commerceSettings.paypal;
+                });
+            }
+        }
+
+        function setInitialCheckoutState() {
+            if ($routeParams && $routeParams.state && $routeParams.comp == 'donation') {
+                vm.checkoutModalState = parseInt($routeParams.state);
+                $timeout(function() {
+                    $('#form-donate-modal-' + vm.component._id).modal('show');
+                }, 1000);
+                if (vm.checkoutModalState == 5 && orderCookieData) {
+                    if ($injector.has('orderService')) {
+                        var orderService = $injector.get('orderService');
+                        orderService.setOrderPaid(orderCookieData, function(data) {
+                            if (data && !data._id) {
+                                var failedOrderMessage = "Error in order processing";
+                                console.log(failedOrderMessage);
+                                if (data.message)
+                                    failedOrderMessage = data.message;
+                                vm.failedOrderMessage = failedOrderMessage;
+                                return;
+                            }
+                            localStorageService.remove(orderCookieKey);
+                        });
+                    }
+                }
+                if (vm.checkoutModalState == 2) {
+                    vm.showPaypalErrorMsg = true;
+                }
+            }
+        }
+
         function init(element) {
             vm.element = element;
 
@@ -770,59 +820,20 @@
                 });
             }
 
+            $scope.$watch('vm.component.productSettings.product', function(val) {
+                if (val) {
+                    vm.getProduct();
+                }
+            });
+
             if (vm.component.productSettings) {
 
-                if (productService) {
-                    if (vm.component.productSettings.product) {
-                        productService.getProduct(vm.component.productSettings.product.data, function(product) {
-                            vm.product = product;
-                            vm.getDonations(vm.product._id);
-                        });
-                    }
-                }
+                vm.getProduct();
 
-                if ($injector.has('accountService')) {
-                    var accountService = $injector.get('accountService');
-                    accountService(function(err, account) {
-                        vm.account = account;
-                        vm.paypalInfo = null;
-                        vm.stripeInfo = null;
+                vm.getCredentials();
 
-                        account.credentials.forEach(function(cred, index) {
-                            if (cred.type == 'stripe') {
-                                vm.stripeInfo = cred;
-                            }
-                        });
+                vm.setInitialCheckoutState();
 
-                        vm.paypalInfo = account.commerceSettings.paypal;
-                    });
-                }
-
-                if ($routeParams && $routeParams.state && $routeParams.comp == 'donation') {
-                    vm.checkoutModalState = parseInt($routeParams.state);
-                    $timeout(function() {
-                        $('#form-donate-modal-' + vm.component._id).modal('show');
-                    }, 1000);
-                    if (vm.checkoutModalState == 5 && orderCookieData) {
-                        if ($injector.has('orderService')) {
-                            var orderService = $injector.get('orderService');
-                            orderService.setOrderPaid(orderCookieData, function(data) {
-                                if (data && !data._id) {
-                                    var failedOrderMessage = "Error in order processing";
-                                    console.log(failedOrderMessage);
-                                    if (data.message)
-                                        failedOrderMessage = data.message;
-                                    vm.failedOrderMessage = failedOrderMessage;
-                                    return;
-                                }
-                                localStorageService.remove(orderCookieKey);
-                            });
-                        }
-                    }
-                    if (vm.checkoutModalState == 2) {
-                        vm.showPaypalErrorMsg = true;
-                    }
-                }
             }
         }
 
