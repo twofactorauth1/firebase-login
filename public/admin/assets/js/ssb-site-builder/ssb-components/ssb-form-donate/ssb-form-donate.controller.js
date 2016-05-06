@@ -63,6 +63,7 @@
         vm.checkCardCvv = checkCardCvv;
         vm.checkCardExpiry = checkCardExpiry;
         vm.makeCartPayment = makeCartPayment;
+        vm.deleteOrderFn = deleteOrderFn;
         vm.getDonations = getDonations;
         vm.augmentCompletePercentage = augmentCompletePercentage;
         vm.total = 0;
@@ -743,6 +744,18 @@
                 }(document, 'script', 'facebook-jssdk'));
             }, 500);
         }
+
+        function deleteOrderFn(order) {
+            if ($injector.has('orderService')) {
+              var orderService = $injector.has('orderService');
+              orderService.deleteOrder(order._id, function (data) {
+                if (data.deleted) {
+                  $('#form-donate-modal-' + vm.component._id).modal('hide');
+                  vm.checkoutModalState = 1;
+                }
+              });
+            }
+        };
 
         function init(element) {
             vm.element = element;
