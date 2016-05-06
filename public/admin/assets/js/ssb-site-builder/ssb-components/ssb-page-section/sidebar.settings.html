@@ -14,7 +14,7 @@
     </div> -->
 
     <div class="row padding-10">
-        <div ng-if="childComponent.type !== 'ssb-image' && childComponent.type !== 'ssb-text'" data-ng-repeat="childComponent in component.components track by $index">
+        <div ng-if="childComponent.type !== 'ssb-image' && childComponent.type !== 'ssb-text' && childComponent.type !== 'text-only'" data-ng-repeat="childComponent in component.components track by $index">
             <button ng-click="vm.uiState.navigation.componentPanel.loadPanel(vm.uiState.activeSectionIndex, $index)" class="ssb-sidebar-section-panel-btn btn btn-link ssb-sidebar-section-panel-manage-link-{{childComponent.type}}">
                 <i class="fa {{vm.uiState.componentIcons[childComponent.type].icon || 'fa-align-justify'}} display-ib"></i> Manage {{childComponent.type | cleanType}}
             </button>
