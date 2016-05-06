@@ -30,7 +30,7 @@ var dao = {
 
     getUserByUsername: function(username, fn) {
         var self = this;
-        self.log.debug('getUserByUsername >>> ', username);
+        self.log.debug('>> getUserByUsername:', username);
         if (username == null) {
             return fn(null, null);
         }

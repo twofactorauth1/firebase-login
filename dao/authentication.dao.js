@@ -391,6 +391,8 @@ var dao = {
      *  };
      */
     sendForgotPasswordEmailByUsernameOrEmail: function (accountId, email, requestorProps, fn) {
+        var self = this;
+        self.log.debug(accountId, null, '>> sendForgotPasswordEmailByUsernameOrEmail');
         var _email = email, promise = $.Deferred();
 
         if (accountId !== appConfig.mainAccountID) {//TODO: != mainApp
@@ -409,6 +411,7 @@ var dao = {
 
                         if (value == null) {
                             promise.reject();
+                            self.log.debug(accountId, null, '<< senForgotPasswordEmailByUsernameOrEmail (null)');
                             return fn("No user found with username or email: " + _email);
                         }
 

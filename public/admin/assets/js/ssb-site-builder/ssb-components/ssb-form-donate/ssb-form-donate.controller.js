@@ -740,7 +740,7 @@
         function deleteOrderFn(order) {
             if ($injector.has('orderService')) {
               var orderService = $injector.has('orderService');
-              orderService.deleteOrder(order._id, function (data) {
+              orderService.deleteOrder(order, function (data) {
                 if (data.deleted) {
                   $('#form-donate-modal-' + vm.component._id).modal('hide');
                   vm.checkoutModalState = 1;

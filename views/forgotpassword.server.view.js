@@ -74,6 +74,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data = self = null;
             } else {
                 var data = self.baseData({
+                    userNotFound: username,
                     errorMsg: "Recover password failed: " + err,
                     supportEmail : appConfig.support_email
                 });
