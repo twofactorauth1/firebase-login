@@ -155,6 +155,27 @@
             }
         }
 
+        ssbService.manageComponentIcons = {
+            'navigation': {
+                icon: 'fa-align-justify'
+            },
+            'social-link': {
+                icon: 'fa-bullhorn'
+            },
+            'text': {
+                icon: 'fa-text-height'
+            },
+            'image': {
+                icon: 'fa-file-image-o'
+            },
+            'ssb-image': {
+                icon: 'fa-file-image-o'
+            },
+            'ssb-text': {
+                icon: 'fa-text-height'
+            }
+        }
+
         /**
          * Events for compiled editor elememts
          */
@@ -1551,6 +1572,9 @@
             // other browser
             return false;
         }
+
+
+
 
 
 		(function init() {
