@@ -819,11 +819,14 @@ var dao = {
 
         params.amount = amount;
         params.currency = currency;
-        if(customerId) {
-            params.customer = customerId;
-        } else if (card) {
+
+        if (card) {
             params.card = card;
-        } else {
+        } else if(customerId) {
+            params.customer = customerId;
+        }
+
+        if(!customerId && !card) {
             self.log.error('Either a customerId or a card token is required.');
             return fn('Either a customerId or a card token is required');
         }

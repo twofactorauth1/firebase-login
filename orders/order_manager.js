@@ -391,14 +391,12 @@ module.exports = {
                     callback(null, account, savedOrder, contact, productAry);
                 } else {
                     var cardToken = savedOrder.get('payment_details').card_token;
-                    stripeDao.createStripeCustomer(cardToken, contact, accountId, accountId, accessToken, function(err, customer){
+                    stripeDao.createStripeCustomer(null, contact, accountId, accountId, accessToken, function(err, customer){
                         if(err) {
                             log.error(accountId, userId, 'Error creating stripe customer:', err);
                             callback(err);
                         } else {
                             contact.set('stripeId', customer.id);
-                            //clear the card token so we don't try to use it again for purchase
-                            savedOrder.get('payment_details').card_token = null;
                             contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                                 if(err) {
                                     log.error(accountId, userId, 'Error saving stripe customerId:', err);
