@@ -265,7 +265,7 @@
                                 <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="vm.setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back</button>
                             </div>
                             <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 3">
-                                <button class="btn btn-danger pull-right" ng-click="vm.deleteOrderFn(order)"><i class="fa fa-trash"></i> Cancel</button>
+                                <button class="btn btn-danger pull-right" ng-click="vm.deleteOrderFn(vm.order)"><i class="fa fa-trash"></i> Cancel</button>
                             </div>
                             <div class="modal-footer cart-footer" ng-show="vm.checkoutModalState == 4">
                                 <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="vm.setCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
