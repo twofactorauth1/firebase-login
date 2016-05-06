@@ -341,6 +341,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.checkoutModalState = 6;
                     } else if (scope.stripeInfo) {
                         scope.checkoutModalState = 3;
+                        scope.setupCardForm();
                     } else if (scope.paypalInfo) {
                         scope.checkoutModalState = 6;
                     }
@@ -1233,9 +1234,24 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.showModalFn = function () {
-              var cartModal =
-              $('#cart-checkout-modal').appendTo('body').modal('show');
+              var cartModal = $('#cart-checkout-modal').appendTo('body').modal('show');
             };
+
+            scope.setupCardForm = function() {
+                if ($.card) {
+                    var cart = $(element).find('.modal#cart-checkout-modal');
+
+                    if (!cart.length) {
+                        cart = $('.modal#cart-checkout-modal');
+                    }
+
+                    cart.each(function() {
+                        $(this).card({
+                            container: $(this).find('.card-wrapper')
+                        });
+                    });
+                }
+            }
 
         },
         controller: function($scope) {
@@ -1252,6 +1268,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
                 $scope.checkoutModalState = state;
+                $scope.setupCardForm();
             };
         }
     };
