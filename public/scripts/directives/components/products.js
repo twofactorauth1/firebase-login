@@ -1225,7 +1225,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.deleteOrderFn = function (order) {
-                OrderService.deleteOrder(order._id, function (data) {
+                OrderService.deleteOrder(order, function (data) {
                     if (data.deleted) {
                         $('#cart-checkout-modal').modal('hide');
                         scope.checkoutModalState = 1;
