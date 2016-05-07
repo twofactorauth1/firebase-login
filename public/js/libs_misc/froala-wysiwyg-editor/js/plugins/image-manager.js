@@ -599,6 +599,11 @@
             b.toolbar.disable(), c.preventDefault(), b.helpers.isMobile() && (b.events.disableBlur(), b.$el.blur(), b.events.enableBlur()), b.opts.iframe && b.size.syncIframe(), ia = a(this), j(), e(), b.selection.clear(), b.button.bulkRefresh(), b.events.trigger("video.hideResizer");
             for (var d = 0; d < a.FroalaEditor.INSTANCES.length; d++) a.FroalaEditor.INSTANCES[d] != b && a.FroalaEditor.INSTANCES[d].events.trigger("image.hideResizer");
             b.helpers.isIOS() && setTimeout(e, 100)
+            if(b.popups.get("image.edit")){
+                setTimeout(function() {
+                    b.popups.get("image.edit").removeClass("fr-hidden");
+                }, 0)
+            }
         }
 
         function Y(a) {
