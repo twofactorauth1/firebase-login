@@ -746,6 +746,8 @@
 
         $(element).off("touchstart mousedown").on("touchstart mousedown", start);
         $(element).off("touchend mouseup").on("touchend mouseup", stop);
+        var $popup = editor.popups.get('colors.picker');
+        $popup.off("touchend mouseup").on("touchend mouseup", stop);
 
     }
 
