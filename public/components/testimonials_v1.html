@@ -24,9 +24,9 @@
                     </div>
                 </div>
                 <div ng-if="isEditing" class="delete-single-testimonial center">
-                    <button ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this testimonial.">
+                    <a ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this testimonial.">
                         <i class='fa fa-trash'></i>
-                    </button>
+                    </a>
                 </div>
                 <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another testimonial.">
                     <a href="" ng-click="addTestimonial($index)">
@@ -37,5 +37,5 @@
             <div class="clearfix mb30"></div>
         </div>
     </div>
-    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(0)" class="btn ssb-theme-btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
+    <a ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(0)" class="btn ssb-theme-btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</a>
 </div>
