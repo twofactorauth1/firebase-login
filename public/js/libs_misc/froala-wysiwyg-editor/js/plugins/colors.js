@@ -72,6 +72,11 @@
     /*
      * Show the colors popup.
      */
+
+
+
+
+
     function _showColorsPopup () {
       var $btn = editor.$tb.find('.fr-command[data-cmd="color"]');
 
@@ -88,7 +93,10 @@
         // Colors popup left and top position.
         var left = $btn.offset().left + $btn.outerWidth() / 2;
         var top = $btn.offset().top + (editor.opts.toolbarBottom ? 10 : $btn.outerHeight() - 10);
+        editor.selection.save();
+
         editor.popups.show('colors.picker', left, top, $btn.outerHeight());
+        editor.selection.restore();
       }
     }
 
@@ -178,7 +186,7 @@
      colors_html += '<div class="sp-palette-button-container sp-cf"><button type="button" class="sp-palette-toggle fr-command" data-cmd="'+dataToggle+'">less</button></div>';
 
      colors_html += '</div>';
-     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input style="display:none;" class="sp-input" type="text" spellcheck="false"></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="closeColorPicker">choose</button></div></div>'
+     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input class="sp-input" type="text" spellcheck="false"></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="closeColorPicker">choose</button></div></div>'
      colors_html += '</div>';
       return colors_html
     }
@@ -257,8 +265,11 @@
      * Change background color.
      */
     function background (val, init) {
+      var $popup = editor.popups.get('colors.picker');
+      $popup.find('input:focus').blur();
       // Set background  color.
       if (val != 'REMOVE') {
+        $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
         editor.commands.applyProperty('background-color', val);
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
@@ -269,6 +280,7 @@
 
       // Remove background color.
       else {
+        $popup.find('input.sp-input').val("");
         editor.commands.applyProperty('background-color', '#123456');
 
         editor.selection.save();
@@ -297,8 +309,11 @@
      * Change text color.
      */
     function text (val, init) {
+      var $popup = editor.popups.get('colors.picker');
+      $popup.find('input:focus').blur();
       // Set text color.
       if (val != 'REMOVE') {
+        $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
         editor.commands.applyProperty('color', val);
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
@@ -311,7 +326,7 @@
       // Remove text color.
       else {
         editor.commands.applyProperty('color', '#123456');
-
+        $popup.find('input.sp-input').val(val);
         editor.selection.save();
         editor.$el.find('span').each(function (index, span) {
           var $span = $(span);
@@ -333,7 +348,9 @@
      * Remove color.
      */
     function removeColor (tab, val) {
-
+      var $popup = editor.popups.get('colors.picker');
+      $popup.find('input:focus').blur();
+      $popup.find('input.sp-input').val("");
       // Remove text color.
       if(tab === 'text') {
 
@@ -426,8 +443,9 @@
         currentValue = 0,
         currentAlpha = 1,
         textInput = container.find(".sp-input");
-        txtInputFocus(textInput);
+        //txtInputFocus(textInput);
         draggable(alphaSlider, function (dragX, dragY, e) {
+
                 currentAlpha = (dragX / alphaWidth);
                 isEmpty = false;
                 if (e.shiftKey) {
@@ -438,6 +456,7 @@
         }, dragStart, dragStop);
 
         draggable(slider, function (dragX, dragY) {
+
             currentHue = parseFloat(dragY / slideHeight);
             isEmpty = false;
             move();
@@ -631,12 +650,8 @@
     }
 
     function txtInputFocus(element){
-        $(element).on("focus", function(){
-            setTimeout(function() {
-                editor.events.disableBlur();
-                editor.selection.restore();
-            }, 0);
-
+        $(element).on("blur", function(){
+            editor.selection.restore();
         });
     }
 
@@ -754,6 +769,7 @@
     refreshOnCallback: false,
     popup: true,
     callback: function () {
+
       if (!this.popups.isVisible('colors.picker')) {
         this.colors.showColorsPopup();
       }
