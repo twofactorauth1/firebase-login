@@ -97,6 +97,7 @@
 
         editor.popups.show('colors.picker', left, top, $btn.outerHeight());
         editor.selection.restore();
+        _setInitialColors();
       }
     }
 
@@ -221,12 +222,6 @@
       // Find the selected color.
       while ($element.get(0) != editor.$el.get(0)) {
         // Transparent or black.
-
-        // Check initial colors means txt color and bg color
-
-        editor.opts.defaultColors.background.color = $element.css('background-color');
-        editor.opts.defaultColors.text.color = $element.css('color');
-
         setTimeout(function() {
             initializeSpectrum(color_type, color_type == 'color' ? editor.opts.defaultColors.text.color : editor.opts.defaultColors.background.color);
         }, 0)
@@ -240,6 +235,14 @@
           break;
         }
       }
+    }
+
+    function _setInitialColors () {
+      var $element = $(editor.selection.element());
+        // Check initial colors means txt color and bg color
+
+        editor.opts.defaultColors.background.color = $element.css('background-color');
+        editor.opts.defaultColors.text.color = $element.css('color');
     }
 
     /*
