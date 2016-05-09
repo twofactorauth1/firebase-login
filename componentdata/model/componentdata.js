@@ -16,6 +16,7 @@ var componentdata = $$.m.ModelBase.extend({
         return {
             _id: null,
             accountId: 0,
+            type:null,
             key:null,
             data:null,
             created:{

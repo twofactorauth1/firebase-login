@@ -10,7 +10,7 @@ app.directive("billingInvoice", [function () {
       {
       var _date = scope.upcomingInvoice.period_start;
       var interval = scope.upcomingInvoice.lines.data[0].plan.interval;
-      
+
       if (_date.toString().length === 10) {
         _date = _date * 1000;
       }
@@ -31,12 +31,12 @@ app.directive("billingInvoice", [function () {
           else
           {
             //formattedDate = formattedDate.add(options.addNum, options.addType);
-          console.log("Formatted date: ")  
+          console.log("Formatted date: ")
           }
           console.log("Formatted date: ")
           console.log(formattedDate);
-        
-      
+
+
         scope.paymentDueDate = formattedDate.format("MMMM Do, YYYY");
       }
     }
@@ -65,7 +65,7 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
           setTimeout(function () {
             scope.$apply(function () {
                 scope.billingSubscriptionUnavailable = false;
-            }); 
+            });
           },0);
         } else {
           scope.billingSubscriptionUnavailable = true;
@@ -96,8 +96,8 @@ app.directive("billingAddon", [ 'PaymentService', function(PaymentService){
             if (attrs.showselectbtn) {
                 scope.showSelectBtn = attrs.showselectbtn;
             }
-            scope.priceDollars = ("" + scope.addOn.regular_price).split(".")[0];
-            scope.priceCents = ("" + scope.addOn.regular_price).split(".")[1] || "00";
+            scope.priceDollars = ("" + (scope.addOn.on_sale ? scope.addOn.sale_price : scope.addOn.regular_price)).split(".")[0];
+            scope.priceCents = ("" + (scope.addOn.on_sale ? scope.addOn.sale_price : scope.addOn.regular_price)).split(".")[1] || "00";
 
         }
     };
@@ -135,7 +135,7 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
             var cardObj = scope.credit.card;
             cardObj.exp_month = cardObj.expiry.split('/')[0].trim();
             cardObj.exp_year = cardObj.expiry.split('/')[1].trim();
-            
+
             scope.selectedPlan.paymentProcessing = true;
 
             PaymentService.getStripeCardToken(cardObj, function(token) {
@@ -237,7 +237,7 @@ app.directive('billingCreditCard', ['$timeout', function($timeout) {
         if (value && value._id != null) {
           // $(el[0]).find('input:last').focus();
           $timeout(function() {
-            $(el[0]).find('input:first').focus();  
+            $(el[0]).find('input:first').focus();
           }, 0);
         }
       });

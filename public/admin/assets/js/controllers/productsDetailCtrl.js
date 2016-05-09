@@ -1162,6 +1162,15 @@
       $scope.originalIcon = $scope.product.icon;
     };
 
+    $scope.planToggleActiveFn = function (id, active) {
+      $scope.product.product_attributes.stripePlans.forEach(function(plan, index) {
+        if (plan.id == id) {
+          plan.active = active;
+          console.log(plan);
+        }
+      });
+    }
+
     $scope.init = (function(){
       $scope.getProduct().then(function(data) {
         return $scope.getEmails();
