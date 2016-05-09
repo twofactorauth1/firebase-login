@@ -42,6 +42,18 @@
                     </div>
                 </div>
 
+                <div ng-if="vm.product._id" class="donate-social-share">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="indigenous_io" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+                    <div
+                        class="fb-share-button"
+                        data-href="{{vm.shareUrl}}"
+                        data-layout="button"
+                        data-mobile-iframe="true">
+                    </div>
+
+                </div>
 
                 <div class="modal fade" id="form-donate-modal-{{vm.component._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog modal-lg" role="document">

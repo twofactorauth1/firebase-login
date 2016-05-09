@@ -823,6 +823,8 @@
         function init(element) {
             vm.element = element;
 
+            vm.parseFBShare();
+
             $(vm.element).find('.modal').on('hidden.bs.modal', function () {
                 vm.close();
             })
