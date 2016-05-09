@@ -65,6 +65,7 @@
     "sendgrid": "^2.0.0",
     "slug": "^0.9.1",
     "stripe": "~2.4.0",
+    "superagent": "^1.8.3",
     "temporary": "0.0.8",
     "tldtools": "0.0.9",
     "ua-parser-js": "^0.7.3",
