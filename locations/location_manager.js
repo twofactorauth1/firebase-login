@@ -23,7 +23,11 @@ module.exports = {
                 return fn(err);
             } else {
                 self.log.debug(accountId, userId, '<< findLocations');
-                return fn(null, locations);
+                var response = {
+                    count:locations.length,
+                    results:locations
+                };
+                return fn(null, response);
             }
         });
     }

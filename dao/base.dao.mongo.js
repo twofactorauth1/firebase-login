@@ -127,7 +127,6 @@ var mongodao = {
             nearQuery.$near.$maxDistance=maxdistance;
         }
         query[field] = nearQuery;
-        console.dir(query);
         this._findManyWithFieldsMongo(query, null, type, fn);
     },
 
