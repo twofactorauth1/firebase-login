@@ -13,7 +13,7 @@
 var baseApi = require('../base.api');
 var campaignManager = require('../../campaign/campaign_manager');
 var accountDao = require('../../dao/account.dao');
-
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -31,6 +31,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateCampaign.bind(this));
         app.post(this.url(':id/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.duplicateCampaign.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
+        app.get(this.url(':id/statistics'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignStatistics.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));
 
@@ -202,6 +203,24 @@ _.extend(api.prototype, baseApi.prototype, {
                     } else {
                         self.sendResult(resp, value);
                     }
+                });
+            }
+        });
+    },
+
+    getCampaignStatistics: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCampaignStatistics');
+        var campaignId = req.params.id;
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                emailMessageManager.findMessagesByCampaign(accountId, campaignId, userId, function(err, messages){
+                    self.log.debug(accountId, userId, '<< getCampaignStatistics');
+                    self.sendResultOrError(resp, err, messages, "Error finding campaign messages");
                 });
             }
         });

@@ -55,11 +55,19 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
       angular.element($window).bind('resize', function () {
         scope.resizeFeatureTiles();
       });
-      angular.element(document).ready(function () {
-        $timeout(function () {
-          scope.resizeFeatureTiles();
-        }, 1000);
-      });
+
+        angular.element(document).ready(function() {
+            var unbindWatcher = scope.$watch(function() {
+                return angular.element('.feature-single').length;
+            }, function(newValue, oldValue) {
+                if (newValue) {
+                    unbindWatcher();
+                    $timeout(function() {
+                        scope.resizeFeatureTiles();
+                    }, 2000);
+                }
+            });
+        });
     }
   };
 }]);

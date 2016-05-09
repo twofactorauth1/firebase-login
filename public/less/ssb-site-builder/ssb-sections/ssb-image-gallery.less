@@ -1,4 +1,43 @@
 [class*="ssb-theme-"] {
+
+    /*
+     * layout-gallery-common
+     */
+
+    .ssb-page-section-image-gallery {
+        [image-gallery-component] {
+            .component-wrap {
+                position: static; //needed for the lightbox effect
+            }
+            .slick-slide{
+                padding: 0 !important;
+                outline: 0 !important;
+            }
+            .slider-main{
+                margin:0 !important;
+            }
+
+            .editing.image-wrap {
+                &:hover {
+                    margin-top: 4px!important;
+                }
+            }
+            .slider-nav-thumbnails{
+                bottom: 0;
+                .slick-slide{
+                    img{
+                        height:150px;
+                        width: 150px;
+                    }
+                }
+            }
+            .single-image{
+                background: transparent;
+            }
+        }
+    }
+
+
     /*
      * layout-gallery-v2
      */
@@ -32,6 +71,22 @@
             padding: 50px 0 !important;
             .image-gallery-title{
                 display:none;
+            }
+
+            @media screen and (min-width: 768px) and (max-width: 991px) {
+               .image-gallery-images:not(:first-child):nth-child(2n+1){
+                    .image-wrap{
+                        clear:left;
+                    }
+                }
+            }
+
+            @media screen and (min-width: 992px) {
+                .image-gallery-images:not(:first-child):nth-child(3n+1){
+                    .image-wrap{
+                        clear:left;
+                    }
+                }
             }
 
             .editing.image-wrap {
@@ -307,7 +362,7 @@
     .ssb-page-section-layout-gallery-v11 {
         [image-gallery-component]
         {
-            padding: 50px 0 !important;
+            padding: 0 !important;
             .img-container{
                 position: relative;
             }
@@ -316,7 +371,9 @@
             }
 
             .slider-nav-thumbnails{
-                bottom: 0;
+                bottom: 200px;
+                margin-bottom: -180px;
+                left:50%;
             }
             .slick-dots{
                 z-index: 1;
@@ -369,7 +426,8 @@
             }
 
             .slider-nav-thumbnails{
-                bottom: 0;
+                bottom: 170px;
+                margin-bottom: -150px;
             }
             .slick-dots{
                 z-index: 1;
@@ -413,7 +471,7 @@
     .ssb-page-section-layout-gallery-v13 {
         [image-gallery-component]
         {
-            padding: 50px 0 !important;
+            padding: 0 !important;
             .img-container{
                 position: relative;
             }

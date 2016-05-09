@@ -44,13 +44,20 @@
                         <div class="site" ng-style="{'color': component.txtcolor || 'black'}">
                             <div elem ng-model="testimonial.site"></div>
                         </div>
+
+                        <div class="slide-title">
+                            <div elem ng-model="testimonial.title"></div>
+                        </div>
+                        <div class="slide-subtitle">
+                            <div elem ng-model="testimonial.subtitle"></div>
+                        </div>
                     </div>
                 </div>
                 <div ng-if="isEditing">
                     <div class="delete-single-testimonial center">
-                        <button ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial">
+                        <a ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial">
                             <i class='fa fa-trash'></i>
-                        </button>
+                        </a>
                     </div>
                     <div class="add-addtional center">
                         <a href="" ng-click="addTestimonial($index)">

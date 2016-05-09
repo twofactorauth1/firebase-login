@@ -84,9 +84,9 @@
                                         </i>
                                     </div>
                                     <div class="ssb-sidebar-add-section-btn">
-                                        <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
+                                        <a type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
                                             <span>Add {{section.name || section.title}}</span>
-                                        </button>
+                                        </a>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -107,9 +107,9 @@
                                         </i>
                                     </div>
                                     <div class="ssb-sidebar-add-section-btn">
-                                        <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
+                                        <a type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
                                             <span>Add {{section.name || section.title}}</span>
-                                        </button>
+                                        </a>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -289,8 +289,8 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                         <a href="javascript:void(0)" class="accordion-toggle">
-                                        <span ng-class="{ 'hidden-faded': !section.visibility }" ng-if="!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit">{{section.name}}</span>
-                                        <span onhide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit=false" id="editable_{{section._id}}" ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit" editable-text="section.name">{{section.name}}</span>
+                                        <span ng-class="{ 'hidden-faded': !section.visibility }" ng-if="!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit">{{section.name || section.title}}</span>
+                                        <span onhide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit=false" id="editable_{{section._id}}" ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit" editable-text="section.name">{{section.name || section.title}}</span>
                                         </a>
                                     </h4>
                                 </div>

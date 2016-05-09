@@ -181,9 +181,10 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.pages = pageHolder;
                 self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
+                value.website = value.website || {};
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
-                value.website = value.website || {};
+
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {

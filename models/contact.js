@@ -39,6 +39,7 @@ var contact = $$.m.ModelBase.extend({
       type: "c", //contact_types
       stripeId: "", //stripe ID if available
       isAuthenticated: false, //flag to check if contact is authenticated
+      isAnonymous: false,
       gender: null,
       tags: null,
       _v: "0.1",
@@ -267,7 +268,7 @@ var contact = $$.m.ModelBase.extend({
   },
 
 
-  createdBy: function(userId, socialType, socialId) {   
+  createdBy: function(userId, socialType, socialId) {
      var created = this.get("created");
         if (created != null) {
           created.by = userId;

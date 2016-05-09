@@ -86,7 +86,7 @@
             'navigation',
             'welcome hero',
             'products & services',
-            // 'donations',
+            'donations',
             'forms',
             'gallery',
             'text',
@@ -152,6 +152,27 @@
             },
             'all':{
                 'icon': 'fa-sort-amount-asc'
+            }
+        }
+
+        ssbService.manageComponentIcons = {
+            'navigation': {
+                icon: 'fa-align-justify'
+            },
+            'social-link': {
+                icon: 'fa-bullhorn'
+            },
+            'text': {
+                icon: 'fa-text-height'
+            },
+            'image': {
+                icon: 'fa-file-image-o'
+            },
+            'ssb-image': {
+                icon: 'fa-file-image-o'
+            },
+            'ssb-text': {
+                icon: 'fa-text-height'
             }
         }
 
@@ -1139,7 +1160,7 @@
          * @returns {object} $modal instance
          *
          */
-        function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update) {
+        function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update, fields) {
             console.log('openModal >>> ', modal, controller, index);
             var _modal = {
                 templateUrl: modal,
@@ -1156,7 +1177,7 @@
                     insertMedia: function () {
                         return function(asset) {
 
-                            ssbService.setMediaForComponent(asset, component, componentItemIndex, update);
+                            ssbService.setMediaForComponent(asset, component, componentItemIndex, update, fields);
 
                         }
                     },
@@ -1200,7 +1221,7 @@
          * @returns {object} $modal instance
          *
          */
-        function setMediaForComponent(asset, component, index, update) {
+        function setMediaForComponent(asset, component, index, update, fields) {
 
             var obj = {};
             var type = component.type;
@@ -1217,10 +1238,16 @@
                     component.images[index].url = asset.url;
 
                 } else {
-                        $rootScope.$broadcast('$refreshSlickSlider');
+                        $rootScope.$broadcast('$refreshSlickSlider', index + 1);
                         component.images.splice(index + 1, 0, {
-                            url: asset.url
+                            url: asset.url,
+                            title: '<span style="font-size: 30px;">Service Title Here</span>'
                         });
+                        if(fields && component.images[index + 1]){
+                            angular.forEach(fields, function(v, k) {
+                                component.images[index + 1][k] = v;
+                            });
+                        }
                 }
 
             } else if (type === 'thumbnail-slider') {
@@ -1545,6 +1572,9 @@
             // other browser
             return false;
         }
+
+
+
 
 
 		(function init() {

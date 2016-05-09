@@ -26,7 +26,10 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
             scope.media({
                 componentId: componentId,
                 index: index,
-                update: update
+                update: update,
+                fields: {
+                    title: '<span style="font-size: 30px;">Service Title Here</span>'
+                }
             });
         };
 
@@ -36,8 +39,10 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
         */
 
         scope.deleteImageFromGallery = function (componentId, index) {
-            scope.$broadcast('$refreshSlickSlider');
-            scope.component.images.splice(index, 1);
+            scope.$broadcast('$refreshSlickSlider', index);
+            var images = angular.copy(scope.component.images);
+            images.splice(index, 1);
+            scope.component.images = images;
         };
 
         scope.touchMove = false;

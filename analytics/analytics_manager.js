@@ -9,8 +9,8 @@ var _log = $$.g.getLogger("analytics_manager");
 var SEGMENTIO = 'segment.io';
 var dao = require('./dao/analytics.dao.js');
 var segmentConfig = require('../configs/segmentio.config');
-var Analytics = require('analytics-node');
-var analytics = new Analytics(segmentConfig.SEGMENT_WRITE_KEY);
+//var Analytics = require('analytics-node');
+//var analytics = new Analytics(segmentConfig.SEGMENT_WRITE_KEY);
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var async = require('async');
@@ -128,7 +128,7 @@ module.exports = {
             }
         });
     },
-
+    /*
     linkUsers: function(oldId, newId, fn) {
         var self = this;
         _log.debug('>> linkUsers');
@@ -145,6 +145,7 @@ module.exports = {
             fn(null, value);
         });
     },
+    */
 
     storeSessionEvent: function(sessionEvent, fn) {
         var self = this;

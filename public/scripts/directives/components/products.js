@@ -7,7 +7,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             component: '='
         },
         templateUrl: '/components/component-wrap.html',
-        link: function(scope) {
+        link: function(scope, element) {
             scope.showPaypalLoading = false;
             scope.showPaypalErrorMsg = false;
             scope.order = null;
@@ -57,13 +57,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             function filterTags(_product) {
-                var regex = new RegExp("[\\?&]tags=([^&#]*)");
+                var regex = new RegExp('[\\?&]tags=([^&#]*)');
                 var _tags = scope.component.productTags;
 
                 // If additional tags were passed on the URI ('-' delimited), parse and union w/ _product.tags
                 var _dynamicTag = regex.exec(location.search);
                 if (_dynamicTag && _dynamicTag.length > 1) {
-                    _tags = _.union(_tags, _dynamicTag[1].split("-"));
+                    _tags = _.union(_tags, _dynamicTag[1].split('-'));
                 }
 
                 if (_tags && _tags.length > 0) {
@@ -135,7 +135,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 ProductService.getTax(postcode, function(taxdata) {
                     if (taxdata.results[0] && taxdata.results[0].taxSales) {
                         CartDetailsService.showTax = true;
-                        if ((scope.settings.taxbased === 'business_location') || (!scope.settings.taxnexus) || (scope.settings.taxnexus && scope.settings.taxnexus.length == 0) || (scope.settings.taxnexus && _.pluck(scope.settings.taxnexus, "text").indexOf(taxdata.results[0].geoState) > -1)) {
+                        if ((scope.settings.taxbased === 'business_location') || (!scope.settings.taxnexus) || (scope.settings.taxnexus && scope.settings.taxnexus.length == 0) || (scope.settings.taxnexus && _.pluck(scope.settings.taxnexus, 'text').indexOf(taxdata.results[0].geoState) > -1)) {
                             console.debug('Nexus location - taxable: ', taxdata.results[0].geoState);
                             CartDetailsService.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(2);
                         } else {
@@ -341,6 +341,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.checkoutModalState = 6;
                     } else if (scope.stripeInfo) {
                         scope.checkoutModalState = 3;
+                        scope.setupCardForm();
                     } else if (scope.paypalInfo) {
                         scope.checkoutModalState = 6;
                     }
@@ -537,28 +538,28 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.checkCardNumber = function() {
-                var card_number = angular.element('#number').val();
+                var card_number = _.compact($('.modal #number').map( function(){return $(this).val(); }).get())[0]
                 if (!card_number) {
-                    angular.element("#card_number .error").html("Card Number Required");
-                    angular.element("#card_number").addClass('has-error');
-                    angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                    $('.modal #card_number .error').html('Card Number Required');
+                    $('.modal #card_number').addClass('has-error');
+                    $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element("#card_number .error").html("");
-                    angular.element("#card_number").removeClass('has-error').addClass('has-success');
-                    angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_number .error').html('');
+                    $('.modal #card_number').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_number .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
             /*scope.checkCardName = function() {
-             var name = angular.element('#card_name #name').val();
+             var name = $('.modal #card_name #name').val();
              if (!name) {
-             angular.element("#card_name .error").html("Card Name Required");
-             angular.element("#card_name").addClass('has-error');
-             angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+             $('.modal #card_name .error').html('Card Name Required');
+             $('.modal #card_name').addClass('has-error');
+             $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
              } else {
-             angular.element("#card_name .error").html("");
-             angular.element("#card_name").removeClass('has-error').addClass('has-success');
-             angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+             $('.modal #card_name .error').html('');
+             $('.modal #card_name').removeClass('has-error').addClass('has-success');
+             $('.modal #card_name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
              }
 
              };*/
@@ -600,7 +601,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.paypalPayment = function() {
                 scope.showPaypalLoading = true;
-                scope.failedOrderMessage = "";
+                scope.failedOrderMessage = '';
 
                 var contact = scope.newContact;
                 if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
@@ -626,12 +627,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         address2: scope.newContact.details[0].addresses[0].address2,
                         state: scope.newContact.details[0].addresses[0].state,
                         zip: scope.newContact.details[0].addresses[0].zip,
-                        country: "US",
+                        country: 'US',
                         defaultShipping: false,
                         defaultBilling: false,
                         city: scope.newContact.details[0].addresses[0].city,
-                        countryCode: "",
-                        displayName: ""
+                        countryCode: '',
+                        displayName: ''
                     }]
                 }];
                 if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
@@ -649,69 +650,69 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 //UserService.postContact(scope.newContact, function (customer) {
                 var order = {
-                    //"customer_id": customer._id,
-                    "customer": customer,
-                    "session_id": null,
-                    "status": "processing",
-                    "cart_discount": 0,
-                    "total_discount": 0,
-                    "total_shipping": 0,
-                    "total_tax": formatNum(scope.totalTax),
-                    "shipping_tax": 0,
-                    "cart_tax": 0,
-                    "currency": "usd",
-                    "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
-                    "total_line_items_quantity": CartDetailsService.items.length,
-                    "payment_details": {
-                        "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
-                        "method_id": 'cc', //check, cc
-                        "card_token": null, //Stripe card token if applicable
-                        "charge_description": null, //description of charge if applicable
-                        "statement_description": null, //22char string for cc statement if applicable
-                        "paid": true
+                    //'customer_id': customer._id,
+                    'customer': customer,
+                    'session_id': null,
+                    'status': 'processing',
+                    'cart_discount': 0,
+                    'total_discount': 0,
+                    'total_shipping': 0,
+                    'total_tax': formatNum(scope.totalTax),
+                    'shipping_tax': 0,
+                    'cart_tax': 0,
+                    'currency': 'usd',
+                    'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
+                    'total_line_items_quantity': CartDetailsService.items.length,
+                    'payment_details': {
+                        'method_title': 'Credit Card Payment', //Check Payment, Credit Card Payment
+                        'method_id': 'cc', //check, cc
+                        'card_token': null, //Stripe card token if applicable
+                        'charge_description': null, //description of charge if applicable
+                        'statement_description': null, //22char string for cc statement if applicable
+                        'paid': true
                     },
-                    "shipping_methods": "", // "Free Shipping",
-                    "shipping_address": {
-                        "first_name": customer.first,
-                        "last_name": customer.last,
-                        "phone": phone_number,
-                        "city": customer.details[0].addresses[0].city,
-                        "country": "US",
-                        "address_1": customer.details[0].addresses[0].address,
-                        "company": "",
-                        "postcode": customer.details[0].addresses[0].zip,
-                        "email": customer.details[0].emails[0].email,
-                        "address_2": customer.details[0].addresses[0].address2,
-                        "state": customer.details[0].addresses[0].state
+                    'shipping_methods': '', // 'Free Shipping',
+                    'shipping_address': {
+                        'first_name': customer.first,
+                        'last_name': customer.last,
+                        'phone': phone_number,
+                        'city': customer.details[0].addresses[0].city,
+                        'country': 'US',
+                        'address_1': customer.details[0].addresses[0].address,
+                        'company': '',
+                        'postcode': customer.details[0].addresses[0].zip,
+                        'email': customer.details[0].emails[0].email,
+                        'address_2': customer.details[0].addresses[0].address2,
+                        'state': customer.details[0].addresses[0].state
                     },
-                    "billing_address": {
-                        "first_name": customer.first,
-                        "last_name": customer.last,
-                        "phone": phone_number,
-                        "city": customer.details[0].addresses[0].city,
-                        "country": "US",
-                        "address_1": customer.details[0].addresses[0].address,
-                        "company": "",
-                        "postcode": customer.details[0].addresses[0].zip,
-                        "email": customer.details[0].emails[0].email,
-                        "address_2": customer.details[0].addresses[0].address2,
-                        "state": customer.details[0].addresses[0].state
+                    'billing_address': {
+                        'first_name': customer.first,
+                        'last_name': customer.last,
+                        'phone': phone_number,
+                        'city': customer.details[0].addresses[0].city,
+                        'country': 'US',
+                        'address_1': customer.details[0].addresses[0].address,
+                        'company': '',
+                        'postcode': customer.details[0].addresses[0].zip,
+                        'email': customer.details[0].emails[0].email,
+                        'address_2': customer.details[0].addresses[0].address2,
+                        'state': customer.details[0].addresses[0].state
                     },
-                    "notes": []
+                    'notes': []
                 };
                 _.each(CartDetailsService.items, function(item) {
                     var totalAmount = item.regular_price * item.quantity;
                     var _item = {
-                        "product_id": item._id,
-                        "quantity": item.quantity,
-                        "regular_price": formatNum(item.regular_price),
-                        "variation_id": '',
-                        "tax_class": null,
-                        "sku": "",
-                        "total": formatNum(totalAmount),
-                        "name": item.name,
-                        "total_tax": "0.00",
-                        "type": item.type
+                        'product_id': item._id,
+                        'quantity': item.quantity,
+                        'regular_price': formatNum(item.regular_price),
+                        'variation_id': '',
+                        'tax_class': null,
+                        'sku': '',
+                        'total': formatNum(totalAmount),
+                        'name': item.name,
+                        'total_tax': '0.00',
+                        'type': item.type
                     };
                     order.line_items.push(_item);
                 });
@@ -720,7 +721,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.order = data;
                     scope.showPaypalLoading = false;
                     if (data && !data._id) {
-                        var failedOrderMessage = "Error in order processing";
+                        var failedOrderMessage = 'Error in order processing';
                         console.log(failedOrderMessage);
                         if (data.message)
                             failedOrderMessage = data.message;
@@ -744,18 +745,21 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.makeCartPayment = function() {
-                scope.failedOrderMessage = "";
+                scope.failedOrderMessage = '';
                 scope.checkoutModalState = 4;
-                var expiry = angular.element('#expiry').val().split("/");
-                var exp_month = expiry[0].trim();
-                var exp_year = "";
-                if (expiry.length > 1) {
+                var expiry = _.compact($('.modal #expiry').map( function(){ return $(this).val(); }).get())[0];
+                if (expiry && expiry.indexOf('/') !== -1) {
+                    expiry = expiry.split('/');
+                }
+                var exp_month = expiry && expiry[0].trim();
+                var exp_year = '';
+                if (expiry && expiry.length > 1) {
                     exp_year = expiry[1].trim();
                 }
                 var cardInput = {
-                    name: angular.element('#card_name #name').val(),
-                    number: angular.element('#number').val(),
-                    cvc: angular.element('#cvc').val(),
+                    name: _.compact($('.modal #card_name #name').map( function(){ return $(this).val(); }).get())[0],
+                    number: _.compact($('.modal #number').map( function(){ return $(this).val(); }).get())[0],
+                    cvc: _.compact($('.modal #cvc').map( function(){return $(this).val(); }).get())[0],
                     exp_month: exp_month,
                     exp_year: exp_year
                         //TODO: add the following:
@@ -806,30 +810,30 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     // Is this checking to see if the customer already exists
                     if (error) {
                         switch (error.param) {
-                            case "number":
-                                angular.element("#card_number .error").html(error.message);
-                                angular.element("#card_number").addClass('has-error');
-                                angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                            case 'number':
+                                $('.modal #card_number .error').html(error.message);
+                                $('.modal #card_number').addClass('has-error');
+                                $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
                                 break;
-                            case "exp_month":
-                                angular.element("#card_expiry .error").html(error.message);
-                                angular.element("#card_expiry").addClass('has-error');
-                                angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                            case 'exp_month':
+                                $('.modal #card_expiry .error').html(error.message);
+                                $('.modal #card_expiry').addClass('has-error');
+                                $('.modal #card_expiry .glyphicon').addClass('glyphicon-remove');
                                 break;
-                            case "exp_year":
-                                angular.element("#card_expiry .error").html(error.message);
-                                angular.element("#card_expiry").addClass('has-error');
-                                angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                            case 'exp_year':
+                                $('.modal #card_expiry .error').html(error.message);
+                                $('.modal #card_expiry').addClass('has-error');
+                                $('.modal #card_expiry .glyphicon').addClass('glyphicon-remove');
                                 break;
-                            case "cvc":
-                                angular.element("#card_cvc .error").html(error.message);
-                                angular.element("#card_cvc").addClass('has-error');
-                                angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                            case 'cvc':
+                                $('.modal #card_cvc .error').html(error.message);
+                                $('.modal #card_cvc').addClass('has-error');
+                                $('.modal #card_cvc .glyphicon').addClass('glyphicon-remove');
                                 break;
-                            case "name":
-                                angular.element("#card_name .error").html(error.message);
-                                angular.element("#card_name").addClass('has-error');
-                                angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+                            case 'name':
+                                $('.modal #card_name .error').html(error.message);
+                                $('.modal #card_name').addClass('has-error');
+                                $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
 
                         }
                         scope.checkoutModalState = 3;
@@ -853,12 +857,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             address2: scope.newContact.details[0].addresses[0].address2,
                             state: scope.newContact.details[0].addresses[0].state,
                             zip: scope.newContact.details[0].addresses[0].zip,
-                            country: "US",
+                            country: 'US',
                             defaultShipping: false,
                             defaultBilling: false,
                             city: scope.newContact.details[0].addresses[0].city,
-                            countryCode: "",
-                            displayName: ""
+                            countryCode: '',
+                            displayName: ''
                         }]
                     }];
                     if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
@@ -876,74 +880,74 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                     //UserService.postContact(scope.newContact, function (customer) {
                     var order = {
-                        //"customer_id": customer._id,
-                        "customer": customer,
-                        "session_id": null,
-                        "status": "processing",
-                        "cart_discount": 0,
-                        "total_discount": 0,
-                        "total_shipping": 0,
-                        "total_tax": formatNum(CartDetailsService.totalTax),
-                        "shipping_tax": 0,
-                        "cart_tax": 0,
-                        "currency": "usd",
-                        "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
-                        "total_line_items_quantity": CartDetailsService.items.length,
-                        "payment_details": {
-                            "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
-                            "method_id": 'cc', //check, cc
-                            "card_token": token, //Stripe card token if applicable
-                            "charge_description": null, //description of charge if applicable
-                            "statement_description": null, //22char string for cc statement if applicable
-                            "paid": true
+                        //'customer_id': customer._id,
+                        'customer': customer,
+                        'session_id': null,
+                        'status': 'processing',
+                        'cart_discount': 0,
+                        'total_discount': 0,
+                        'total_shipping': 0,
+                        'total_tax': formatNum(CartDetailsService.totalTax),
+                        'shipping_tax': 0,
+                        'cart_tax': 0,
+                        'currency': 'usd',
+                        'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
+                        'total_line_items_quantity': CartDetailsService.items.length,
+                        'payment_details': {
+                            'method_title': 'Credit Card Payment', //Check Payment, Credit Card Payment
+                            'method_id': 'cc', //check, cc
+                            'card_token': token, //Stripe card token if applicable
+                            'charge_description': null, //description of charge if applicable
+                            'statement_description': null, //22char string for cc statement if applicable
+                            'paid': true
                         },
-                        "shipping_methods": "", // "Free Shipping",
-                        "shipping_address": {
-                            "first_name": customer.first,
-                            "last_name": customer.last,
-                            "phone": phone_number,
-                            "city": customer.details[0].addresses[0].city,
-                            "country": "US",
-                            "address_1": customer.details[0].addresses[0].address,
-                            "company": "",
-                            "postcode": customer.details[0].addresses[0].zip,
-                            "email": customer.details[0].emails[0].email,
-                            "address_2": customer.details[0].addresses[0].address2,
-                            "state": customer.details[0].addresses[0].state
+                        'shipping_methods': '', // 'Free Shipping',
+                        'shipping_address': {
+                            'first_name': customer.first,
+                            'last_name': customer.last,
+                            'phone': phone_number,
+                            'city': customer.details[0].addresses[0].city,
+                            'country': 'US',
+                            'address_1': customer.details[0].addresses[0].address,
+                            'company': '',
+                            'postcode': customer.details[0].addresses[0].zip,
+                            'email': customer.details[0].emails[0].email,
+                            'address_2': customer.details[0].addresses[0].address2,
+                            'state': customer.details[0].addresses[0].state
                         },
-                        "billing_address": {
-                            "first_name": customer.first,
-                            "last_name": customer.last,
-                            "phone": phone_number,
-                            "city": customer.details[0].addresses[0].city,
-                            "country": "US",
-                            "address_1": customer.details[0].addresses[0].address,
-                            "company": "",
-                            "postcode": customer.details[0].addresses[0].zip,
-                            "email": customer.details[0].emails[0].email,
-                            "address_2": customer.details[0].addresses[0].address2,
-                            "state": customer.details[0].addresses[0].state
+                        'billing_address': {
+                            'first_name': customer.first,
+                            'last_name': customer.last,
+                            'phone': phone_number,
+                            'city': customer.details[0].addresses[0].city,
+                            'country': 'US',
+                            'address_1': customer.details[0].addresses[0].address,
+                            'company': '',
+                            'postcode': customer.details[0].addresses[0].zip,
+                            'email': customer.details[0].emails[0].email,
+                            'address_2': customer.details[0].addresses[0].address2,
+                            'state': customer.details[0].addresses[0].state
                         },
-                        "notes": []
+                        'notes': []
                     };
                     _.each(CartDetailsService.items, function(item) {
                         var totalAmount = item.regular_price * item.quantity;
                         var _item = {
-                            "product_id": item._id,
-                            "quantity": item.quantity,
-                            "regular_price": formatNum(item.regular_price),
-                            "variation_id": '',
-                            "tax_class": null,
-                            "sku": "",
-                            "total": formatNum(totalAmount),
-                            "name": item.name,
-                            "total_tax": "0.00"
+                            'product_id': item._id,
+                            'quantity': item.quantity,
+                            'regular_price': formatNum(item.regular_price),
+                            'variation_id': '',
+                            'tax_class': null,
+                            'sku': '',
+                            'total': formatNum(totalAmount),
+                            'name': item.name,
+                            'total_tax': '0.00'
                         };
                         order.line_items.push(_item);
                     });
                     OrderService.createOrder(order, function(data) {
                         if (data && !data._id) {
-                            var failedOrderMessage = "Error in order processing";
+                            var failedOrderMessage = 'Error in order processing';
                             console.log(failedOrderMessage);
                             if (data.message)
                                 failedOrderMessage = data.message;
@@ -967,20 +971,20 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             var clearCardDetails = function() {
-                angular.element("#product-card-details").trigger("reset");
-                angular.element("#card_number").removeClass('has-error has-success');
-                angular.element("#card_number .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
-                angular.element("#card_name").removeClass('has-error has-success');
-                angular.element("#card_name .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
-                angular.element("#card_expiry").removeClass('has-error has-success');
-                angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
-                angular.element("#card_cvc").removeClass('has-error has-success');
-                angular.element("#card_cvc .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
-                angular.element(".jp-card-number").text("•••• •••• •••• ••••");
-                angular.element(".jp-card-cvc").text("•••");
-                angular.element(".jp-card-name").text("Full Name");
-                angular.element(".jp-card-expiry").text("••/••");
-                angular.element(".jp-card").removeClass("jp-card-identified");
+                $('.modal #product-card-details').trigger('reset');
+                $('.modal #card_number').removeClass('has-error has-success');
+                $('.modal #card_number .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $('.modal #card_name').removeClass('has-error has-success');
+                $('.modal #card_name .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $('.modal #card_expiry').removeClass('has-error has-success');
+                $('.modal #card_expiry .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $('.modal #card_cvc').removeClass('has-error has-success');
+                $('.modal #card_cvc .glyphicon').removeClass('glyphicon-remove glyphicon-ok')
+                $(element).find('.jp-card-number').text('•••• •••• •••• ••••');
+                $(element).find('.jp-card-cvc').text('•••');
+                $(element).find('.jp-card-name').text('Full Name');
+                $(element).find('.jp-card-expiry').text('••/••');
+                $(element).find('.jp-card').removeClass('jp-card-identified');
             }
 
             /*
@@ -988,8 +992,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * -
              */
             scope.initializeModalEvents = function() {
-                angular.element('#cart-checkout-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
-                    console.log("modal closed");
+                $('.modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
+                    console.log('modal closed');
                     $timeout(function() {
                         scope.$apply(function() {
                             if (scope.checkoutModalState === 5) {
@@ -1042,73 +1046,76 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.checkCardNumber = function() {
-                scope.failedOrderMessage = "";
-                var card_number = angular.element('#number').val();
+                scope.failedOrderMessage = '';
+                var card_number = _.compact($('.modal #number').map( function(){return $(this).val(); }).get())[0];
                 if (!card_number) {
-                    angular.element("#card_number .error").html("Card Number Required");
-                    angular.element("#card_number").addClass('has-error');
-                    angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                    $('.modal #card_number .error').html('Card Number Required');
+                    $('.modal #card_number').addClass('has-error');
+                    $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element("#card_number .error").html("");
-                    angular.element("#card_number").removeClass('has-error').addClass('has-success');
-                    angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_number .error').html('');
+                    $('.modal #card_number').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_number .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
             scope.checkCardName = function() {
-                scope.failedOrderMessage = "";
-                var name = angular.element('#card_name #name').val();
+                scope.failedOrderMessage = '';
+                var name = _.compact($('.modal #card_name #name').map( function(){return $(this).val(); }).get())[0];
                 if (!name) {
-                    angular.element("#card_name .error").html("Card Name Required");
-                    angular.element("#card_name").addClass('has-error');
-                    angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+                    $('.modal #card_name .error').html('Card Name Required');
+                    $('.modal #card_name').addClass('has-error');
+                    $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element("#card_name .error").html("");
-                    angular.element("#card_name").removeClass('has-error').addClass('has-success');
-                    angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_name .error').html('');
+                    $('.modal #card_name').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
 
             };
 
 
             scope.checkCardExpiry = function() {
-                scope.failedOrderMessage = "";
-                var expiry = angular.element('#expiry').val();
-                var card_expiry = expiry.split("/");
-                var exp_month = card_expiry[0].trim();
+                scope.failedOrderMessage = '';
+                var expiry = _.compact($('.modal #expiry').map( function(){return $(this).val(); }).get())[0]
+                if (expiry && expiry.indexOf('/') !== -1) {
+                    expiry = expiry.split('/');
+                }
+                var card_expiry = expiry;
+                var exp_month = card_expiry && card_expiry[0].trim();
                 var exp_year;
-                if (card_expiry.length > 1) {
+                if (card_expiry && card_expiry.length > 1) {
                     exp_year = card_expiry[1].trim();
                 }
 
                 if (!expiry || !exp_month || !exp_year) {
                     if (!expiry) {
-                        angular.element("#card_expiry .error").html("Expiry Required");
+                        $('.modal #card_expiry .error').html('Expiry Required');
                     } else if (!exp_month) {
-                        angular.element("#card_expiry .error").html("Expiry Month Required");
+                        $('.modal #card_expiry .error').html('Expiry Month Required');
                     } else if (!exp_year) {
-                        angular.element("#card_expiry .error").html("Expiry Year Required");
+                        $('.modal #card_expiry .error').html('Expiry Year Required');
                     }
-                    angular.element("#card_expiry").addClass('has-error');
-                    angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                    $('.modal #card_expiry').addClass('has-error');
+                    $('.modal #card_expiry .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element("#card_expiry .error").html("");
-                    angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                    angular.element("#card_expiry").removeClass('has-error').addClass('has-success');
+                    $('.modal #card_expiry .error').html('');
+                    $('.modal #card_expiry .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_expiry').removeClass('has-error').addClass('has-success');
                 }
             };
 
             scope.checkCardCvv = function() {
-                scope.failedOrderMessage = "";
-                var card_cvc = angular.element('#cvc').val();
+                scope.failedOrderMessage = '';
+                var card_cvc = _.compact($('.modal #cvc').map( function(){return $(this).val(); }).get())[0];
                 if (!card_cvc) {
-                    angular.element("#card_cvc .error").html("CVC Required");
-                    angular.element("#card_cvc").addClass('has-error');
-                    angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                    $('.modal #card_cvc .error').html('CVC Required');
+                    $('.modal #card_cvc').addClass('has-error');
+                    $('.modal #card_cvc .glyphicon').addClass('glyphicon-remove');
                 } else {
-                    angular.element("#card_cvc .error").html("");
-                    angular.element("#card_cvc").removeClass('has-error').addClass('has-success');
-                    angular.element("#card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #card_cvc .error').html('');
+                    $('.modal #card_cvc').removeClass('has-error').addClass('has-success');
+                    $('.modal #card_cvc .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
@@ -1121,33 +1128,33 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     PaymentService.validateCoupon(coupon, function(data) {
                         if (data.id && data.id === coupon) {
                             console.log('valid');
-                            angular.element("#coupon-name .error").html("");
-                            angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
-                            angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                            $('.modal #coupon-name .error').html('');
+                            $('.modal #coupon-name').removeClass('has-error').addClass('has-success');
+                            $('.modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                             scope.couponIsValid = true;
                         } else {
                             console.log('invalid');
-                            angular.element("#coupon-name .error").html("Invalid Coupon");
-                            angular.element("#coupon-name").addClass('has-error');
-                            angular.element("#coupon-name .glyphicon").addClass('glyphicon-remove');
+                            $('.modal #coupon-name .error').html('Invalid Coupon');
+                            $('.modal #coupon-name').addClass('has-error');
+                            $('.modal #coupon-name .glyphicon').addClass('glyphicon-remove');
                             scope.couponIsValid = false;
                         }
                     });
                 } else {
-                    angular.element("#coupon-name .error").html("");
-                    angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
-                    angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.modal #coupon-name .error').html('');
+                    $('.modal #coupon-name').removeClass('has-error').addClass('has-success');
+                    $('.modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                     scope.couponIsValid = true;
                 }
             };
 
             /* scope.checkCardName = function () {
-             scope.failedOrderMessage = "";
+             scope.failedOrderMessage = '';
              var name = $('#card_name #name').val();
              if (name) {
-             $("#card_name .error").html("");
-             $("#card_name").removeClass('has-error').addClass('has-success');
-             $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+             $('#card_name .error').html('');
+             $('#card_name').removeClass('has-error').addClass('has-success');
+             $('#card_name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
              }
              };*/
 
@@ -1175,13 +1182,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.newContact = cookieData.contactInfo;
                 }
 
-                if ($routeParams.state) {
+                if ($routeParams.state && $routeParams.comp == 'products') {
                     scope.checkoutModalState = parseInt($routeParams.state);
-                    $('#cart-checkout-modal').modal('show');
+                    $('#cart-checkout-modal').appendTo('body').modal('show');
                     if (scope.checkoutModalState == 5 && orderCookieData) {
                         OrderService.setOrderPaid(orderCookieData, function(data) {
                             if (data && !data._id) {
-                                var failedOrderMessage = "Error in order processing";
+                                var failedOrderMessage = 'Error in order processing';
                                 console.log(failedOrderMessage);
                                 if (data.message)
                                     failedOrderMessage = data.message;
@@ -1218,13 +1225,33 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.deleteOrderFn = function (order) {
-                OrderService.deleteOrder(order._id, function (data) {
+                OrderService.deletePaypalOrder(order, function (data) {
                     if (data.deleted) {
                         $('#cart-checkout-modal').modal('hide');
                         scope.checkoutModalState = 1;
                     }
                 });
             };
+
+            scope.showModalFn = function () {
+              var cartModal = $('#cart-checkout-modal').appendTo('body').modal('show');
+            };
+
+            scope.setupCardForm = function() {
+                if ($.card) {
+                    var cart = $(element).find('.modal#cart-checkout-modal');
+
+                    if (!cart.length) {
+                        cart = $('.modal#cart-checkout-modal');
+                    }
+
+                    cart.each(function() {
+                        $(this).card({
+                            container: $(this).find('.card-wrapper')
+                        });
+                    });
+                }
+            }
 
         },
         controller: function($scope) {
@@ -1241,6 +1268,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
                 $scope.checkoutModalState = state;
+                $scope.setupCardForm();
             };
         }
     };

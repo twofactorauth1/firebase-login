@@ -69,6 +69,12 @@
   .bio {
     text-align: center;
   }
+  .team-min-width {
+        min-width: 256px;
+        @media(max-width:767px) {
+            min-width: 100%;
+        }
+    }
 .social {
       margin: 20px auto;
       font-size: 14px;
@@ -93,7 +99,7 @@
       }
 
     /* Small devices (tablets, 768px and up) */
-    @media (min-width: 768px) { 
+    @media (min-width: 768px) {
       .team-member-container{
         margin: 0;
       }

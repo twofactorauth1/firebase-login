@@ -19,7 +19,7 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container {{isEditing ? 'top-bar-wrap' : ''}}">
             <div class="main-block">
-                <div class="social-list-icons" data-edit="{ type: 'component' }">
+                <div class="social-list-icons  no-offset-top" data-edit="{ type: 'component' }">
                     <ul ng-sortable="sortableConfig" class="nav left-navbar-nav left-block {{isEditing ? 'edit-mode' : ''}}">
                         <li ng-repeat="network in component.networks">
                             <a ng-if="!isEditing" href="{{getUrl(network.url)}}"><i class="fa fa-lg fa-{{network.icon}}"></i></a>

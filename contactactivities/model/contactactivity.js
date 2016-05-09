@@ -55,6 +55,7 @@ var contactActivity = $$.m.ModelBase.extend({
         EMAIL_OPENED: 'EMAIL_OPENED',
         EMAIL_CLICKED: 'EMAIL_CLICKED',
         EMAIL_UNSUB: 'EMAIL_UNSUB',
+        EMAIL_BOUNCED: 'EMAIL_BOUNCED',
         SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
         SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
         OTHER: 'OTHER'

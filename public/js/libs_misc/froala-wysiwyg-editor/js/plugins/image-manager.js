@@ -61,9 +61,12 @@
         function e() {
             var c = b.popups.get("image.edit");
             c || (c = p()), b.popups.setContainer("image.edit", a(b.opts.scrollableContainer)), b.popups.refresh("image.edit");
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.outerWidth() / 2,
-                e = ia.offset().top + ia.outerHeight();
+            e = ia.offset().top + ia.outerHeight();
             b.popups.show("image.edit", d, e, ia.outerHeight())
+
         }
 
         function f() {
@@ -95,7 +98,9 @@
             ja || R();
             var a = b.$wp ? b.$wp.scrollTop() - (b.$wp.offset().top + 1) : -1,
                 c = b.$wp ? b.$wp.scrollLeft() - (b.$wp.offset().left + 1) : -1;
-            b.$wp && (c -= b.helpers.getPX(b.$wp.css("border-left-width"))), ja.css("top", b.opts.iframe ? ia.offset().top - 1 : ia.offset().top + a).css("left", b.opts.iframe ? ia.offset().left - 1 : ia.offset().left + c).css("width", ia.outerWidth()).css("height", ia.outerHeight()).addClass("fr-active")
+            b.$wp && (c -= b.helpers.getPX(b.$wp.css("border-left-width")));
+            if(ja && ia)
+                ja.css("top", b.opts.iframe ? ia.offset().top - 1 : ia.offset().top + a).css("left", b.opts.iframe ? ia.offset().left - 1 : ia.offset().left + c).css("width", ia.outerWidth()).css("height", ia.outerHeight()).addClass("fr-active")
         }
 
         function k(a) {
@@ -335,7 +340,7 @@
                 c.stopPropagation(), b.browser.msie && (b.$el.attr("contenteditable", !0), b.events.enableBlur()), a(this).removeClass("fr-img-move")
             });
             var c = function(a) {
-                    var c = b.$document.find("img.fr-img-move").get(0);
+                    var c = b.$document && b.$document.find("img.fr-img-move").get(0);
                     return c ? (b.browser.msie && a.preventDefault(), "undefined" != typeof b.browser.msie || "undefined" != typeof b.browser.edge) : void a.preventDefault()
                 },
                 d = function(a) {
@@ -419,6 +424,8 @@
         function H() {
             var c = b.popups.get("image.alt");
             c || (c = I()), r(), b.popups.refresh("image.alt"), b.popups.setContainer("image.alt", a(b.opts.scrollableContainer));
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.width() / 2,
                 e = ia.offset().top + ia.height();
             b.popups.show("image.alt", d, e, ia.outerHeight())
@@ -460,6 +467,8 @@
         function L() {
             var c = b.popups.get("image.size");
             c || (c = M()), r(), b.popups.refresh("image.size"), b.popups.setContainer("image.size", a(b.opts.scrollableContainer));
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.width() / 2,
                 e = ia.offset().top + ia.height();
             b.popups.show("image.size", d, e, ia.outerHeight())
@@ -596,9 +605,14 @@
         function X(c) {
             if (c && "touchend" == c.type && va) return !0;
             if (b.edit.isDisabled()) return c.stopPropagation(), c.preventDefault(), !1;
-            b.toolbar.disable(), c.stopPropagation(), c.preventDefault(), b.helpers.isMobile() && (b.events.disableBlur(), b.$el.blur(), b.events.enableBlur()), b.opts.iframe && b.size.syncIframe(), ia = a(this), j(), e(), b.selection.clear(), b.button.bulkRefresh(), b.events.trigger("video.hideResizer");
+            b.toolbar.disable(), c.preventDefault(), b.helpers.isMobile() && (b.events.disableBlur(), b.$el.blur(), b.events.enableBlur()), b.opts.iframe && b.size.syncIframe(), ia = a(this), j(), e(), b.selection.clear(), b.button.bulkRefresh(), b.events.trigger("video.hideResizer");
             for (var d = 0; d < a.FroalaEditor.INSTANCES.length; d++) a.FroalaEditor.INSTANCES[d] != b && a.FroalaEditor.INSTANCES[d].events.trigger("image.hideResizer");
             b.helpers.isIOS() && setTimeout(e, 100)
+            if(b.popups.get("image.edit")){
+                setTimeout(function() {
+                    b.popups.get("image.edit").removeClass("fr-hidden");
+                }, 0)
+            }
         }
 
         function Y(a) {
@@ -640,6 +654,8 @@
         function ea() {
             var c = b.popups.get("image.insert");
             c || (c = F()), b.popups.isVisible("image.insert") || (r(), b.popups.refresh("image.insert"), b.popups.setContainer("image.insert", a(b.opts.scrollableContainer)));
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.width() / 2,
                 e = ia.offset().top + ia.height();
             b.popups.show("image.insert", d, e, ia.outerHeight())

@@ -58,8 +58,9 @@ mainApp.service('orderService', function ($http) {
     });
   };
 
-  this.deleteOrder = function (orderId, fn) {
-    var apiUrl = baseUrl + ['orders', orderId].join('/');
+  this.deletePaypalOrder = function (order, fn) {
+    var apiUrl = baseUrl + ['orders', order._id, 'paypal'].join('/');
+    apiUrl = apiUrl + '?payKey=' + order.payment_details.payKey;
     $http({
       url: apiUrl,
       method: "DELETE"

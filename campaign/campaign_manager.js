@@ -1053,6 +1053,29 @@ module.exports = {
         });
     },
 
+    handleCampaignEmailBounceEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        self.log.debug('>> handleCampaignEmailBounceEvent');
+        self.getCampaign(campaignId, function(err, campaign){
+            if(err || !campaign) {
+                self.log.error('Error fetching campaign', err);
+                return fn(err, null);
+            } else {
+                var stats = campaign.get('statistics');
+                if(!stats.emailsBounced) {
+                    stats.emailsBounced = 0;
+                }
+                stats.emailsBounced = stats.emailsBounced  + 1;
+                var modified = {
+                    date: new Date(),
+                    by: 'ADMIN'
+                };
+                campaign.set('modified', modified);
+                campaignDao.saveOrUpdate(campaign, fn);
+            }
+        });
+    },
+
     _handleSpecificCampaignEvent: function(accountId, campaignId, contactId, trigger, fn) {
         var self = this;
         self.log.debug('>> _handleSpecificCampaignEvent (' + trigger + ')');

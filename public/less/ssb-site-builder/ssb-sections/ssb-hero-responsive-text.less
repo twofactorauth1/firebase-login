@@ -1,0 +1,172 @@
+/**
+ *  ssb-hero-responsive-text.less
+ *  These rules govern how the font-size — and only the font-size — property is set for smaller screens
+ *
+ *  - based on the screen size, a screen width range, and a font-size range, the rule is:
+ *      `font-size: calc( ~"@{min_font}px + (@{max_font} - @{min_font}) * ( (100vw - @{min_width}px) / ( @{max_width} - @{min_width}) )")`
+ *
+ */
+@fontSizes: 8, 9, 10, 11, 12, 14, 18, 24, 30, 36, 48, 60, 72, 96;
+
+.ssb-page-section-layout-hero .ssb-hero-main-header .ssb-text-settings * {
+    @min_width: 200;
+    @max_width: 768;
+    @min_font: 32;
+    @max_font: 50;
+    @large_min_width: 768;
+    @large_max_width: 1100;
+    @large_min_font: 48;
+    @large_max_font: 96;
+
+    .loop0(@i: length(@fontSizes)) when (@i > 0) {
+        @fontSize: extract(@fontSizes, @i);
+        &[style*="font-size: @{fontSize}px"] {
+            @tmpMin: (@large_min_font - @fontSize);
+            .setMin (@minArg) when (@minArg > @fontSize) {
+                content: 'wayowayowayo';
+                @min: @fontSize;
+            }
+            .setMin (@minArg) when (@minArg < 0) {
+                content: 'mymymy';
+                @min: 0;
+            }
+            .setMin (@minArg) when (default()) {
+                content: 'mememe';
+                @min: @tmpMin;
+            }
+            .setMin(@tmpMin);
+
+            @max: (@fontSize);
+            @media (min-width: ~"@{large_min_width}px) and (max-width: @{large_max_width}px"){
+                font-size: calc( ~"@{min}px + (@{max} - @{min}) * ( (100vw - @{large_min_width}px) / ( @{large_max_width} - @{large_min_width}) )")!important;
+
+                & > * {
+                    font-size: inherit!important;
+                }
+            }
+        }
+
+        .loop0((@i - 1));
+
+    } .loop0;
+
+    @media (min-width: ~"@{large_min_width}px) and (max-width: @{large_max_width}px"){
+        font-size: calc( ~"@{large_min_font}px + (@{large_max_font} - @{large_min_font}) * ( (100vw - @{large_min_width}px) / ( @{large_max_width} - @{large_min_width}) )")!important;
+    }
+
+    @media (min-width: ~"@{min_width}px) and (max-width: @{max_width}px"){
+        font-size: calc( ~"@{min_font}px + (@{max_font} - @{min_font}) * ( (100vw - @{min_width}px) / ( @{max_width} - @{min_width}) )")!important;
+    }
+
+}
+
+
+.ssb-page-section-layout-hero .ssb-hero-sub-header .ssb-text-settings * {
+
+    @min_width: 200;
+    @max_width: 768;
+    @min_font: 16;
+    @max_font: 32;
+
+    @large_min_width: 768;
+    @large_max_width: 1100;
+    @large_min_font: 30;
+    @large_max_font: 60;
+
+    @media (min-width: ~"@{large_min_width}px) and (max-width: @{large_max_width}px"){
+        font-size: calc( ~"@{large_min_font}px + (@{large_max_font} - @{large_min_font}) * ( (100vw - @{large_min_width}px) / ( @{large_max_width} - @{large_min_width}) )")!important;
+    }
+    @media (min-width: ~"@{min_width}px) and (max-width: @{max_width}px"){
+        font-size: calc( ~"@{min_font}px + (@{max_font} - @{min_font}) * ( (100vw - @{min_width}px) / ( @{max_width} - @{min_width}) )")!important;
+    }
+
+}
+
+.ssb-page-section-layout-hero-v1,
+.ssb-page-section-layout-hero-v2,
+.ssb-page-section-layout-hero-v3,
+.ssb-page-section-layout-hero-v4 {
+
+    [ssb-text-component] .ssb-text-settings > *:not(.btn),
+    [ssb-text-component] .ssb-text-settings :not(.btn) [style*="font-size"] {
+
+        @min_width: 200;
+        @max_width: 768;
+        @min_font: 32;
+        @max_font: 50;
+
+        @large_min_width: 768;
+        @large_max_width: 1100;
+        @large_min_font: 48;
+        @large_max_font: 96;
+
+        @fontSizes: 8, 9, 10, 11, 12, 14, 18, 24, 30, 36, 48, 60, 72, 96;
+
+        .loop1(@i: length(@fontSizes)) when (@i > 0) {
+            @fontSize: extract(@fontSizes, @i);
+            &[style*="font-size: @{fontSize}px"] {
+                @tmpMin: (@large_min_font - @fontSize);
+                .setMin (@minArg) when (@minArg > @fontSize) {
+                    content: 'wayowayowayo';
+                    @min: @fontSize;
+                }
+                .setMin (@minArg) when (@minArg < 0) {
+                    content: 'mymymy';
+                    @min: 0;
+                }
+                .setMin (@minArg) when (default()) {
+                    content: 'mememe';
+                    @min: @tmpMin;
+                }
+                .setMin(@tmpMin);
+
+                @max: (@fontSize);
+                @media (min-width: ~"@{large_min_width}px) and (max-width: @{large_max_width}px"){
+                    font-size: calc( ~"@{min}px + (@{max} - @{min}) * ( (100vw - @{large_min_width}px) / ( @{large_max_width} - @{large_min_width}) )")!important;
+                }
+            }
+
+            .loop1((@i - 1));
+
+        } .loop1;
+
+        @media (min-width: ~"@{large_min_width}px) and (max-width: @{large_max_width}px"){
+            font-size: calc( ~"@{large_min_font}px + (@{large_max_font} - @{large_min_font}) * ( (100vw - @{large_min_width}px) / ( @{large_max_width} - @{large_min_width}) )")!important;
+        }
+
+
+        .loop2(@i: length(@fontSizes)) when (@i > 0) {
+            @fontSize: extract(@fontSizes, @i);
+            &[style*="font-size: @{fontSize}px"] {
+                @tmpMin: (@min_font - @fontSize);
+                .setMin (@minArg) when (@minArg > @fontSize) {
+                    content: '@minArg > @fontSize';
+                    @min: @fontSize;
+                }
+                .setMin (@minArg) when (@minArg < 0) {
+                    content: '@minArg < 0';
+                    @min: 0;
+                }
+                .setMin (@minArg) when (default()) {
+                    content: 'default()';
+                    @min: @tmpMin;
+                }
+                .setMin(@tmpMin);
+
+                @max: (@fontSize);
+                @media (min-width: ~"@{min_width}px) and (max-width: @{max_width}px"){
+                    font-size: calc( ~"@{min}px + (@{max} - @{min}) * ( (100vw - @{min_width}px) / ( @{max_width} - @{min_width}) )")!important;
+                }
+            }
+
+            .loop2((@i - 1));
+
+        } .loop2;
+
+        @media (min-width: ~"@{min_width}px) and (max-width: @{max_width}px"){
+            font-size: calc( ~"@{min_font}px + (@{max_font} - @{min_font}) * ( (100vw - @{min_width}px) / ( @{max_width} - @{min_width}) )")!important;
+        }
+
+    }
+
+}

@@ -1,7 +1,11 @@
 /********** Form Builder **********/
 
 .form-builder-component {
-
+    span.required{
+        position: absolute;
+        color: #E6674A;
+        display: inline;
+    }
     .form-title {
         padding-left: 10px;
         position: relative;
@@ -60,6 +64,11 @@
 
 .form-builder-layout{
 
+    .form-group label {
+        margin-top: 8px;
+        font-weight: normal;
+    }
+
     .panel-active{
         box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
     }
@@ -78,6 +87,10 @@
 
     margin: 10px;
     .form-layout-1{
+         span.required{
+            margin-left: -10px;
+            margin-top: 5px;
+        }
         position: relative;
         width: 50%;
         margin: auto;
@@ -87,6 +100,7 @@
         }
         button{
             width:auto;
+            float:right;
         }
 
         &:hover {
@@ -99,11 +113,14 @@
 
     }
     .form-layout-2{
+        span.required{
+            margin-top: 5px;
+        }
         position: relative;
         width: 50%;
         margin: auto;
         button{
-
+            float:right;
             margin-right:15px;
             width:auto;
         }
@@ -115,10 +132,14 @@
         }
     }
     .form-layout-3{
+        span.required{
+            margin-left: -10px;
+        }
         position: relative;
         button{
             margin-right:15px;
             width:auto;
+            float:right;
         }
          &:hover {
             cursor: pointer;
@@ -128,11 +149,15 @@
         }
     }
     .form-layout-4{
+        span.required{
+            margin-left: -10px;
+        }
         position: relative;
         width: 50%;
         margin: auto;
         button{
             width:auto;
+            float:right;
         }
          &:hover {
             cursor: pointer;
@@ -142,11 +167,15 @@
         }
     }
     .form-layout-custom{
+        span.required{
+            margin-left: -10px;
+        }
         position: relative;
         margin: auto;
 
         button{
-
+            float:right;
+            width:auto;
         }
 
         &:hover {
@@ -194,4 +223,16 @@
 .editable-btn-form{
     opacity: 0.65;
     display:table;
+}
+
+
+.form-builder-modal-body {
+    background: white;
+    padding: 0 15px;
+
+    .information-header {
+        background: #e8e8e8;
+        padding: 15px;
+        margin: 0 0 15px;
+    }
 }

@@ -43,4 +43,12 @@ mainApp.service('productService', function ($http) {
         });
   };
 
+    this.getAllOrdersForProduct = function (id, fn) {
+        var apiUrl = [baseUrl, id, 'orders'].join('/');
+        $http.get(apiUrl)
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+    };
+
 });

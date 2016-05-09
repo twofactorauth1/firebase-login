@@ -1,4 +1,4 @@
-<div ng-class="component.type+'-v'+component.version">
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div elem ng-model="component.title"></div>
     <div class=" {{isEditing ? 'editing' : ''}} team-member-wrap">
         <div class="row clearfix mb30 team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
@@ -6,7 +6,7 @@
                 <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img meet-team-image" ng-click="addImageFromMedia(component._id, $index, true)" style="width: 200px;height: 200px" />
                 <div class="mb15 clearfix visible-sm visible-xs"></div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 team-min-width">
                 <div ng-if="component.teamSettings.name" class="name">
                     <div elem ng-model="teamMember.name"></div>
                 </div>
@@ -26,19 +26,19 @@
                         </li>
                     </ul>
                     <div ng-if="isEditing" class="add-addtional-team">
-                        <button ng-if="isEditing" ng-click="openModal('social-links-modal', null, $parent.$index)" class="clickable-link social-links" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip-html-unsafe="Add social network."><i class="fa fa-plus"></i></button>
+                        <a ng-if="isEditing" ng-click="openModal('social-links-modal', null, $parent.$index)" class="clickable-link social-links" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip-html-unsafe="Add social network."><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
             </div>
             <div ng-if="isEditing" class="delete-team-member center">
-                <button ng-click="deleteTeamMember($index)" class="ng-scope btn-delete-team-member" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this team member.">
+                <a ng-click="deleteTeamMember($index)" class="ng-scope btn-delete-team-member" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this team member.">
                     <i class='fa fa-trash'></i>
-                </button>
+                </a>
             </div>
             <div ng-if="isEditing" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add team member.">
-                <button ng-click="addTeamMember($index)">
+                <a ng-click="addTeamMember($index)">
                     <i class="fa fa-plus"></i>
-                </button>
+                </a>
             </div>
         </div>
     </div>

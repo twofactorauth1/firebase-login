@@ -38,8 +38,10 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.isSelectedLayout = isSelectedLayout;
     vm.resizeWindow = resizeWindow;
     vm.changeButtonDesign = changeButtonDesign;
-    vm.addCustomField = addCustomField;
-    vm.checkDuplicateField = checkDuplicateField;
+    vm.addCustomField = pVm.addCustomField;
+    vm.checkDuplicateField = pVm.checkDuplicateField;
+    vm.openCal = openCal;
+    vm.closeCal = closeCal;
 
     vm.isHero = vm.component.title && vm.component.title.toLowerCase() === 'hero';
 
@@ -182,22 +184,23 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
         }
     }
 
-    function addCustomField(type){
-        var newInfo = {
-            name: type,
-            type: type,
-            label: type,
-            custom: true,
-            optional:true,
-            visible: true
-        }
-        vm.component.contactInfo.push(newInfo);
-        vm.contactInfo = {};
-    }
+    // function addCustomField(type){
+    //     var cleanType = type.replace(' ','');
+    //     var newInfo = {
+    //         name: cleanType,
+    //         type: type,
+    //         label: type,
+    //         custom: true,
+    //         optional:true,
+    //         visible: true
+    //     }
+    //     vm.component.contactInfo.push(newInfo);
+    //     vm.contactInfo = {};
+    // }
 
-    function checkDuplicateField(_type){
-        return _.filter(vm.component.contactInfo, function(info){ return info.type.toLowerCase() === _type.toLowerCase(); }).length;
-    }
+    // function checkDuplicateField(_type){
+    //     return _.filter(vm.component.contactInfo, function(info){ return info.type.toLowerCase() === _type.toLowerCase(); }).length;
+    // }
 
 
     function resizeWindow(){
@@ -214,6 +217,23 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
         var button = vm.uiState.activeElement;
         button.version = version;
     }
+
+    function openCal($event, type) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        if (type == 'start') {
+          vm.startCalOpened = true;
+        }
+        if (type == 'end') {
+          vm.endCalOpened = true;
+        }
+    };
+
+    function closeCal($event) {
+        $event.preventDefault();
+        $event.stopPropagation();
+        $scope.opened = false;
+    };
 
 
     function init(element) {

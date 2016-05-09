@@ -94,12 +94,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 var _heightDiff = _height + _top;
                 angular.element(".sortable-page-content").height(_winHeight - _heightDiff);
             },
-            onEnd: function (evt) {
+            onEnd: function (evt, e) {
+                vm.uiState.activeSectionIndex = evt.newIndex;
                 angular.element(".sortable-page-content").removeClass("dragging");
                 angular.element(".sortable-page-content").css('height','auto');
                 $timeout(function() {
                     vm.uiState.sortableListPageContentConfig.disabled = true;
                     vm.uiState.openSidebarPanel = '';
+                    var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
+                    var activeSection = document.querySelector('.ssb-active-section');
+                    if (activeSection) {
+                      scrollContainerEl.scrollTop = activeSection.offsetTop;
+                    }
                 });
             },
             onSort: function (evt) {
@@ -163,10 +169,34 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
                 vm.uiState.navigation.sectionPanel.navigationHistory = [];
             }
+        },
+        componentPanel: {
+            loadPanel: function(sectionIndex, componentIndex) {
+                var component = vm.state.page.sections[sectionIndex].components[componentIndex];
+                var name = $filter('cleanType')(component.type).toLowerCase().trim().replace(' ', '-');
+                var sectionPanelLoadConfig = {
+                    name: name,
+                    id: component._id,
+                    componentId: component._id
+                };
+
+                $timeout(function() {
+
+                    SimpleSiteBuilderService.setActiveSection(sectionIndex);
+                    SimpleSiteBuilderService.setActiveComponent(componentIndex);
+
+                    vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+
+                    if (sectionIndex !== undefined && componentIndex !== undefined) {
+                        vm.uiState.showSectionPanel = true;
+                    }
+
+                });
+            }
         }
     };
 
-
+    vm.uiState.componentIcons = SimpleSiteBuilderService.manageComponentIcons;
 
     /**
      * event listeners
@@ -536,7 +566,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }, 3000);
     };
 
-    function legacyComponentMedia(componentId, index, update) {
+    function legacyComponentMedia(componentId, index, update, fields) {
         var component = _(vm.state.page.sections)
             .chain()
             .pluck('components')
@@ -544,7 +574,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             .findWhere({_id: componentId})
             .value();
 
-        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
+        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update, fields).result.then(function(){
            if(component.type === 'thumbnail-slider'){
                 $scope.$broadcast('refreshThumbnailSlider');
            }
@@ -632,9 +662,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         });
 
                     } else {
-
-                        return true
-
+                        console.log(diff1);
+                        console.log(diff2);
+                        return true;
                     }
                 }
             } else {
@@ -656,7 +686,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * - handles temp IDs for buttons inside Froala editor (button was added)
      */
     function dataIsCompiledAdded(diff1, diff2) {
-        return  diff1 &&
+            var updated =   diff1 &&
                 diff2 &&
                 angular.isDefined(diff1) &&
                 angular.isDefined(diff1.indexOf) &&
@@ -666,6 +696,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 angular.isDefined(diff2.indexOf) &&
                 diff2.indexOf('data-compiled') !== -1 &&
                 diff2.indexOf('ssb-theme-btn') !== -1
+            if(updated && angular.isDefined(diff1) && angular.isDefined(diff2)){
+                updated = angular.equals(diff1, diff2)
+            }
+            return updated;
     };
 
     /**
@@ -697,6 +731,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 if (moment(diff1).isValid()) {
                     ret = true;
                 }
+            }
+            else if(diff1.date && !diff2){
+                ret = true;
             }
         }
 

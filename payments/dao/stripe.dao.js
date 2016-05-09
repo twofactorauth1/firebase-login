@@ -34,7 +34,7 @@ var dao = {
     createStripeCustomer: function(cardToken, contact, accountId, newAccountId, accessToken, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
-        self.log.debug(">> createStripeCustomer");
+        self.log.debug(accountId, null, ">> createStripeCustomer");
         var params = {};
         params.email = contact.getPrimaryEmail();
         params.description = 'Customer for ' + contact.getEmails()[0];
@@ -47,7 +47,7 @@ var dao = {
             params.card = cardToken;
         }
         var apiToken = self.delegateStripe(accessToken);
-        self.log.debug('creating with params', params);
+        self.log.debug(accountId, null, 'creating with params', params);
         stripe.customers.create(params, apiToken, function(err, customer) {
 
             if(err) {
@@ -55,7 +55,7 @@ var dao = {
                 return fn = null;
             }
             contact.set('stripeId', customer.id);
-            self.log.debug('Setting contact stripeId to ' + contact.get('stripeId'));
+            self.log.debug(accountId, null, 'Setting contact stripeId to ' + contact.get('stripeId'));
             var p1 = $.Deferred(), p2 = $.Deferred();
             var savedCustomer = customer;
             contactDao.saveOrUpdateContact(contact, function(err, value){
@@ -63,22 +63,22 @@ var dao = {
                     fn(err, value);
                     fn = null;
                 }
-                self.log.debug('updated contact');
+                self.log.debug(accountId, null, 'updated contact');
                 p1.resolve();
             });
 
             customerLinkDao.safeCreate(accountId, contact.id(), customer.id, function(err, value){
                 if (err) {
-                    self.log.warn('attempted to create a customer link that already exists.');
+                    self.log.warn(accountId, null, 'attempted to create a customer link that already exists.');
                     //fn(err, value);
                     //fn = null;
                 }
-                self.log.debug('Created link');
+                self.log.debug(accountId, null, 'Created link');
                 p2.resolve();
             });
 
             $.when(p1,p2).done(function(){
-                self.log.debug('<< createStripeCustomer');
+                self.log.debug(accountId, null, '<< createStripeCustomer');
                 return fn(err, savedCustomer);
             });
 
@@ -88,7 +88,8 @@ var dao = {
     createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, newAccountId, accessToken, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
-        self.log.debug(">> createStripeCustomerForUser");
+        var userId = user.id();
+        self.log.debug(accountId, userId, ">> createStripeCustomerForUser");
         var params = {};
         params.email = user.get('email');
         params.description = 'Customer for ' + user.get('email');
@@ -115,7 +116,7 @@ var dao = {
                     return;
                 }
                 user.set('stripeId', customer.id);
-                self.log.debug('Setting user stripeId to ' + user.get('stripeId'));
+                self.log.debug(accountId, userId, 'Setting user stripeId to ' + user.get('stripeId'));
                 var p1 = $.Deferred(), p2 = $.Deferred();
                 var savedCustomer = customer;
                 // TESTING
@@ -146,13 +147,13 @@ var dao = {
                 });
 
                 $.when(p1,p2).done(function(){
-                    self.log.debug('<< createStripeCustomerForUser');
+                    self.log.debug(accountId, userId, '<< createStripeCustomerForUser');
                     return fn(err, savedCustomer);
                 });
 
             });
         } else {
-            self.log.warn('Attempted to create customer that already exists.');
+            self.log.warn(accountId, userId, 'Attempted to create customer that already exists.');
             stripe.customers.retrieve(user.get('stripeId'), apiToken, function(err, customer) {
                 // asynchronously called
                 if (err) {
@@ -161,7 +162,7 @@ var dao = {
                     return;
                 }
 
-                self.log.debug('<< createStripeCustomerForUser');
+                self.log.debug(accountId, userId, '<< createStripeCustomerForUser');
                 return fn(err, customer);
             });
         }
@@ -170,7 +171,8 @@ var dao = {
 
     listStripeCustomers: function(accountId, limit, accessToken, fn) {
         var self = this;
-        self.log.debug('>> listStripeCustomers');
+        var userId = null;
+        self.log.debug(accountId, userId, '>> listStripeCustomers');
         var _limit = limit || 100;
         var apiToken = self.delegateStripe(accessToken);
         stripe.customers.list({limit: _limit}, apiToken, function(err, customers) {
@@ -181,7 +183,7 @@ var dao = {
                 return;
             }
 
-            self.log.debug('<< listStripeCustomers');
+            self.log.debug(accountId, userId, '<< listStripeCustomers');
             return fn(err, customers);
         });
     },
@@ -480,7 +482,7 @@ var dao = {
     createStripeSubscription: function(customerId, planId, coupon, trial_end, card, quantity, application_fee_percent,
                                        metadata, accountId, contactId, userId, accessToken, fn) {
         var self = this;
-        self.log.debug('>> createStripeSubscription');
+        self.log.debug(accountId, userId, '>> createStripeSubscription');
         var params = {};
         params.plan = planId;
         if(coupon && coupon.length>0) {params.coupon = coupon;}
@@ -509,10 +511,10 @@ var dao = {
                 });
                 subscriptionDao.saveOrUpdate(sub, function(err, _sub){
                     if(err) {
-                        self.log.error('error: ' + err);
+                        self.log.error(accountId, userId, 'error: ' + err);
                         return fn(err, subscription);
                     }
-                    self.log.debug('<< createStripeSubscription');
+                    self.log.debug(accountId, userId, '<< createStripeSubscription');
                     return fn(err, subscription);
                 });
             }
@@ -579,7 +581,8 @@ var dao = {
      */
     cancelStripeSubscription: function(accountId, customerId, subscriptionId, at_period_end, accessToken, fn) {
         var self = this;
-        self.log.debug('>> cancelStripeSubscription');
+        var userId = null;
+        self.log.debug(accountId, userId, '>> cancelStripeSubscription');
         var params = {};
         if(at_period_end === true) {
             params.at_period_end = true;
@@ -597,21 +600,21 @@ var dao = {
                 if(at_period_end !== true) {
                     subscriptionDao.getSubscriptionByAccountAndId(accountId, subscriptionId, function(err, sub){
                         if(err) {
-                            self.log.error('error: ' + err);
+                            self.log.error(accountId, userId, 'error: ' + err);
                             return fn(err, confirmation);
                         }
                         sub.set('isActive', false);
                         subscriptionDao.saveOrUpdate(sub, function(err, sub){
                             if(err) {
-                                self.log.error('error: ' + err);
+                                self.log.error(accountId, userId, 'error: ' + err);
                                 return fn(err, confirmation);
                             }
-                            self.log.debug('<< cancelStripeSubscription');
+                            self.log.debug(accountId, userId, '<< cancelStripeSubscription');
                             return fn(err, confirmation);
                         });
                     });
                 } else {
-                    self.log.debug('<< cancelStripeSubscription');
+                    self.log.debug(accountId, userId, '<< cancelStripeSubscription');
                     return fn(err, confirmation);
                 }
             }
@@ -816,11 +819,14 @@ var dao = {
 
         params.amount = amount;
         params.currency = currency;
-        if(customerId) {
-            params.customer = customerId;
-        } else if (card) {
+
+        if (card) {
             params.card = card;
-        } else {
+        } else if(customerId) {
+            params.customer = customerId;
+        }
+
+        if(!customerId && !card) {
             self.log.error('Either a customerId or a card token is required.');
             return fn('Either a customerId or a card token is required');
         }
@@ -1477,7 +1483,7 @@ var dao = {
 
     createRefund: function(chargeId, amount, refundApplicationFee, reason, metadata, accessToken, fn) {
         var self = this;
-        self.log.debug('>> createRefund');
+        self.log.debug('>> createRefund ' + chargeId + ':' + amount + ':' + refundApplicationFee + ':' + reason + ':' + metadata);
         var apiToken = self.delegateStripe(accessToken);
         var params ={};
         if(amount) {
@@ -1496,7 +1502,7 @@ var dao = {
         stripe.charges.refund(chargeId, params, apiToken, function(err, refund){
             if(err) {
                 self.log.error('error: ' + err);
-                return fn(err, charges);
+                return fn(err, params);
             }
             self.log.debug('<< createRefund');
             return fn(err, refund);

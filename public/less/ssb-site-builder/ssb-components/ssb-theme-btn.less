@@ -15,6 +15,20 @@
     // left: 1px;
 }
 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .ssb-theme-btn{
+        -ms-user-select: text;
+        display:inline;
+    }
+}
+
+.ssb-theme-btn{
+    -moz-user-select: text;
+}
+
+
+
+
 .ssb-sidebar .ssb-theme-btn,
 [class*="ssb-theme-"] .ssb-theme-btn {
 
@@ -50,7 +64,7 @@
         -moz-box-shadow: inset 0px 1px 0px 0px #ffe0b5;
         box-shadow: inset 0px 1px 0px 0px #ffe0b5;
         filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89306',GradientType=0);
-        background-color: ;
+        background-color: @ssb-theme-btn-style-2-bg-color;
         -moz-border-radius: 7px;
         -webkit-border-radius: 7px;
         border-radius: 7px;

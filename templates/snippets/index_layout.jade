@@ -20,7 +20,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             block headattributes
                 include index_head_styles
                 include index_head_scripts
-            title=title
+            title(data-ng-bind='pageTitle()')
             meta(charset="utf-8")
             meta(name="viewport", content="width=device-width, initial-scale=1.0")
             meta(name="description", content=seo.description)

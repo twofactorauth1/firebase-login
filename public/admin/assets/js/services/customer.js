@@ -449,10 +449,11 @@
     };
 
     this.exportCsvContacts = function (ids) {
-      var params = _.map(ids, function (x) {return ('ids=' + x);});
       var apiUrl = baseUrl + ['contact', 'export', 'csv'].join('/');
-      var apiUrl = apiUrl + '?' + params.join('&');
-      console.log(apiUrl);
+      if (ids) {
+        var params = _.map(ids, function (x) {return ('ids=' + x);});
+        var apiUrl = apiUrl + '?' + params.join('&');
+      }
       window.location = apiUrl;
     };
 

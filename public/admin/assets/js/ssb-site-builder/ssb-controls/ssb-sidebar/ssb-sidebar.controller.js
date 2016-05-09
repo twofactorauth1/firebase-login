@@ -64,6 +64,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.constructVideoUrl = constructVideoUrl;
     vm.closeSectionPanel = closeSectionPanel;
     vm.initializeMapSlider = initializeMapSlider;
+    vm.addCustomField = addCustomField;
+    vm.checkDuplicateField = checkDuplicateField;
 
     editableOptions.theme = 'bs3';
 
@@ -1069,26 +1071,47 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }, 0);
     }
 
+    function addCustomField(type){
+        var cleanType = type.replace(' ','');
+        var newInfo = {
+            name: cleanType,
+            type: type,
+            label: type,
+            custom: true,
+            optional:true,
+            visible: true
+        }
+        vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].contactInfo.push(newInfo);
+        vm.contactInfo = {};
+    }
+
+    function checkDuplicateField(_type){
+        var activeComponent = vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex];
+        return _.filter(activeComponent.contactInfo, function(info){
+            return info.type.toLowerCase() === _type.toLowerCase();
+        }).length;
+    }
+
     function init(element) {
 
         vm.element = element;
 
         setupSectionContent();
         CustomerService.getCustomers(function(customers){
-          CustomerService.getAllCustomerTags(customers,function(tags){
-            vm.customerTags = [];
-          });
+            CustomerService.getAllCustomerTags(customers,function(tags){
+            vm.customerTags = tags;
+            });
         })
 
-				vm.donationProductTags = [];
-				ProductService.getProducts(function(products) {
-					products.forEach(function(product, index) {
-						if (product.type !== 'DONATION') {
-							return;
-						}
-						vm.donationProductTags.push({data: product._id, label: product.name});
-					});
-				});
+		vm.donationProductTags = [];
+		ProductService.getProducts(function(products) {
+			products.forEach(function(product, index) {
+				if (product.type !== 'DONATION') {
+					return;
+				}
+				vm.donationProductTags.push({data: product._id, label: product.name});
+			});
+		});
     }
 }
 

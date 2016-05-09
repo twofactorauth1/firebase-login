@@ -29,7 +29,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
             }
         });
 
-        scope.newTestimonial = {
+        scope.newTestimonial = scope.component.newSlide ? angular.copy(scope.component.newSlide) : {
             "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
             "name": "First Last",
             "site": "www.examplesite.com",
@@ -37,7 +37,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
         };
 
         function addRemoveTestimonials(index, add){
-            scope.$broadcast('$refreshSlickSlider');
+            scope.$broadcast('$refreshSlickSlider', index + 1);
             var testimonials = angular.copy(scope.component.testimonials);
             if(add){
                 testimonials.splice(index + 1, 0, angular.copy(scope.newTestimonial));

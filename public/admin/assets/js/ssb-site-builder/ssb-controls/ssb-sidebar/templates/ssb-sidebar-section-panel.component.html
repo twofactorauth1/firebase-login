@@ -5,14 +5,13 @@
     ind-draggable>
 
     <h4 class="ssb-sidebar-sub-heading draggable-handle">
-
-        <span
+    <span
             onhide="vm.state.editSection=false"
             id="edit_section_name"
             ng-if="vm.state.editSection"
             editable-text="vm.state.page.sections[vm.uiState.activeSectionIndex].name">
 
-            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
+            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name || vm.state.page.sections[vm.uiState.activeSectionIndex].title}}
 
         </span>
 
@@ -24,7 +23,7 @@
             </span>
             <!-- Heading for Sections -->
             <span ng-if="!vm.state.editSection && !vm.uiState.openSidebarSectionPanel.id">
-                {{vm.state.page.sections[vm.uiState.activeSectionIndex].name | cleanType}}
+                {{vm.state.page.sections[vm.uiState.activeSectionIndex].name || vm.state.page.sections[vm.uiState.activeSectionIndex].title | cleanType}}
             </span>
         </div>
     </h4>
@@ -162,7 +161,7 @@
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('form-donate' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
-            settings-template="assets/js/ssb-site-builder/ssb-components/shared/form-builder.html"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/form-donate.html"
             component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
             state="vm.state"
             ui-state="vm.uiState">

@@ -18,6 +18,8 @@ var campaignManager = require('../../campaign/campaign_manager');
 var appConfig = require('../../configs/app.config');
 var accountDao = require('../../dao/account.dao');
 var moment = require('moment');
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
+require('superagent');
 
 
 var api = function() {
@@ -46,6 +48,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
         app.post(this.url('mandrill/event/unsub'), this.handleUnsubscribe.bind(this));
 
+        app.post(this.url('sendgrid/event'), this.filterSendgridEvents.bind(this), this.handleSendgridEvent.bind(this));
+        app.get(this.url('sendgrid/event'), this.testSendgridEvent.bind(this));
         app.post(this.url('stripe/event'), this.sendStripeEventToKeen.bind(this));
 
         app.post(this.url('intercom/event'), this.handleIntercomEvent.bind(this));
@@ -173,6 +177,211 @@ _.extend(api.prototype, baseApi.prototype, {
     verifyEvent: function(req, res, next) {
         //TODO: verify event comes from segment
         next();
+    },
+
+    filterSendgridEvents: function(req, resp, next) {
+        next();
+    },
+
+    handleSendgridEvent: function(req, resp) {
+        var self = this;
+        var events = req.body;
+        self.log.debug('>> handleSendgridEvent:', events);
+        self.send200(resp);
+        var savedEvents = [];
+        var contactActivitiesJSON = [];
+        async.eachSeries(events, function(event, cb){
+            var obj = {
+                email : event.email,
+                ts : moment.unix(event.timestamp).toDate(),
+                accountId: event.accountId,
+                contactId: event.contactId
+            };
+
+            if(event.event === 'delivered') {
+                emailMessageManager.markMessageDelivered(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.campaignId) {
+                            campaignManager.handleCampaignEmailSentEvent(event.accountId, event.campaignId, event.contactId, function(){
+                                if(err) {
+                                    self.log.error('Error handling email send event:' + err);
+                                    return;
+                                } else {
+                                    self.log.debug('Handled email sent event.');
+                                    return;
+                                }
+                            });
+                        }
+                    }
+
+                    cb(err);
+                });
+            } else if(event.event === 'open') {
+                emailMessageManager.markMessageOpened(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.campaignId) {
+                            campaignManager.handleCampaignEmailOpenEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
+                                if(err) {
+                                    self.log.error('Error handling email open event:' + err);
+                                    return;
+                                } else {
+                                    self.log.debug('Handled email open event.');
+                                    return;
+                                }
+                            });
+                        }
+                    }
+                    cb(err);
+                });
+            } else if(event.event === 'click') {
+                emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.campaignId) {
+                            campaignManager.handleCampaignEmailClickEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
+                                if(err) {
+                                    self.log.error('Error handling email click event:' + err);
+                                    return;
+                                } else {
+                                    self.log.debug('Handled email click event.');
+                                    return;
+                                }
+                            });
+                        }
+                    }
+                    cb(err);
+                });
+            } else if (event.event === 'unsubscribe') {
+                //TODO: handle unsubscribe
+                cb();
+            } else if (event.event === 'bounce'){
+                emailMessageManager.markMessageBounced(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                        obj.sender = value.get('sender');
+                        obj.activityType = $$.m.ContactActivity.types.EMAIL_BOUNCED;
+                        contactActivitiesJSON.push(obj);
+                        if(event.campaignId) {
+                            campaignManager.handleCampaignEmailBounceEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
+                                if(err) {
+                                    self.log.error('Error handling email bounce event:' + err);
+                                    return;
+                                } else {
+                                    self.log.debug('Handled email bounce event.');
+                                    return;
+                                }
+                            });
+                        }
+                    }
+                    cb(err);
+                });
+            } else {
+                emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                    }
+                    cb(err);
+                });
+            }
+        }, function(err){
+            if(err) {
+                self.log.error('Error handling events:', err);
+            }
+            async.eachSeries(contactActivitiesJSON, function(obj, cb){
+                var activity = new $$.m.ContactActivity(obj);
+                contactActivityManager.createActivity(activity, function(err, value){
+                    cb(err);
+                });
+            }, function(err){
+                self.log.debug('<< handleSendgridEvent', savedEvents);
+            });
+        });
+    },
+
+    testSendgridEvent: function(req, resp) {
+        var self = this;
+        self.log.debug('>> testSendgridEvent');
+        var body = [
+            {
+                "email":"example@test.com",
+                "timestamp":1461788739,
+                "smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"delivered","category":"cat facts","sg_event_id":"vy-AmLZlCAfyRkYxLSwmsQ==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0",
+                "response":"250 OK",
+                "emailmessageId": "d0f2f69a-9613-4b12-8375-16bde5eb75f8"
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"open","category":"cat facts","sg_event_id":"GqPHf6OmLVGbTRaRCTXoig==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0","useragent":"Mozilla/4.0 (compatible; MSIE 6.1; Windows XP; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
+                "ip":"255.255.255.255",
+                "emailmessageId":'36914d17-8fa4-498f-93fa-3d61fff2941f'
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"click","category":"cat facts","sg_event_id":"jWkA13sN6mIDrbCU4rW4Lw==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0","useragent":"Mozilla/4.0 (compatible; MSIE 6.1; Windows XP; .NET CLR 1.1.4322; .NET CLR 2.0.50727)",
+                "ip":"255.255.255.255","url":"http://www.sendgrid.com/",
+                "emailmessageId":'a9f5b61d-2f3b-4a74-869a-d26f42ce3a7d'
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"bounce","category":"cat facts","sg_event_id":"7na7oN5lbWK7XZEIKPhdvQ==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0","reason":"500 unknown recipient",
+                "status":"5.0.0",
+                "emailmessageId":'f78b7a32-ed93-4e06-b4ad-b0c87224c748'
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"dropped","category":"cat facts","sg_event_id":"04_ecve7IWgrqI45xMVYBg==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0","reason":"Bounced Address",
+                "status":"5.0.0"
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"spamreport","category":"cat facts","sg_event_id":"3JPbDKRZLShT-3xwKZey1Q==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0"
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"unsubscribe","category":"cat facts","sg_event_id":"2LgeW68pbifwY8JOTWtspw==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0"
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"group_unsubscribe","category":"cat facts","sg_event_id":"Cwv0jgI1jmILLtV1zoyz6w==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0","useragent":"Mozilla/4.0 (compatible; MSIE 6.1; Windows XP; .NET CLR 1.1.4322; .NET CLR 2.0.50727)","ip":"255.255.255.255","url":"http://www.sendgrid.com/","asm_group_id":10
+            },{"email":"example@test.com","timestamp":1461788739,"smtp-id":"\u003c14c5d75ce93.dfd.64b469@ismtpd-555\u003e",
+                "event":"group_resubscribe","category":"cat facts","sg_event_id":"XCd89PWAa9GOROCq_rt1Sw==","sg_message_id":"14c5d75ce93.dfd.64b469.filter0001.16648.5515E0B88.0","useragent":"Mozilla/4.0 (compatible; MSIE 6.1; Windows XP; .NET CLR 1.1.4322; .NET CLR 2.0.50727)","ip":"255.255.255.255","url":"http://www.sendgrid.com/","asm_group_id":10}];
+
+        var savedEvents = [];
+        async.eachSeries(body, function(event, cb){
+            if(event.event === 'delivered') {
+                emailMessageManager.markMessageDelivered(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                    }
+                    cb(err);
+                });
+            } else if(event.event === 'open') {
+                emailMessageManager.markMessageOpened(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                    }
+                    cb(err);
+                });
+            } else if(event.event === 'click') {
+                emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                    }
+                    cb(err);
+                });
+            } else if (event.event === 'unsubscribe') {
+                //TODO: handle unsubscribe
+                cb();
+            } else {
+                emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                    if(value) {
+                        savedEvents.push(value);
+                    }
+                    cb(err);
+                });
+            }
+        }, function(err){
+            self.log.debug('<< testSendgridEvent');
+            self.sendResultOrError(resp, err, savedEvents, 'Error handling event');
+        });
     },
 
     filterMandrillEvents: function(req, res, next) {

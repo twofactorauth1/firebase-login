@@ -125,6 +125,7 @@ ssb-topbar #ssb-froala-scrollable-container {
  * want to hide it visually so that it doesn't mess
  * with centering, etc.
  *
+ * - NOTE: Not currently in use
  * - See /indigeweb/public/js/libs_misc/froala-wysiwyg-editor/config/config.js for usage
  */
 .ssb-froala-content-editable-false {
@@ -298,7 +299,10 @@ body[ng-controller] .fr-popup .fr-buttons {
     color: white;
 }
 
-
+.fr-popup .fr-checkbox input:checked + span {
+    background: @indigenous-blue!important;
+    border-color: @indigenous-blue!important;
+}
 
 
 
@@ -910,11 +914,11 @@ body[ng-controller] .fr-file-progress-bar-layer > div.fr-loader span {
   -o-transition: width 0.2s ease 0s;
 }
 body[ng-controller] .fr-image-resizer {
-  border: solid 1px #ffffff;
+  border: solid 1px @indigenous-blue;
 }
 body[ng-controller] .fr-image-resizer .fr-handler {
-  background: #ffffff;
-  border: solid 1px #ffffff;
+  background: @indigenous-blue;
+  border: solid 1px @indigenous-blue;
 }
 body[ng-controller] .fr-image-resizer .fr-handler {
   width: 12px;

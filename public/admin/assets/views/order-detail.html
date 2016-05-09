@@ -488,7 +488,7 @@
                                         <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
                                         <p class="text-danger" ng-if="order.status == 'refunded'">
                                             <span class="text-bold">Refunded:</span>
-                                            <span class="pull-right">-$0.00</span>
+                                            <span class="pull-right">-{{order.total | currency}}</span>
                                         </p>
                                     </div>
                                 </div>
