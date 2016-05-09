@@ -1666,7 +1666,9 @@ module.exports = {
                                         //look through the sections on this page to any whose _id matches the global section
                                         //TODO: match irrespective of version
                                         var exists = _.filter(sections, function(section) { return gsection.get("_id").indexOf(section._id) !== -1; });
+
                                         self.log.debug(accountId, userId,'exists: ' , exists);
+
                                         if(!exists.length){// if the global section does NOT already appear on the page
                                             var globalSection = {_id: gsection.get("_id")};
                                             var globalSectionID = gsection.id();
