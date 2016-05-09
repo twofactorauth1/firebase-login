@@ -226,6 +226,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findNear: function(query, field, lat, lng, mindistance, maxdistance, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findNearMongo(query, field, lat, lng, null, maxdistance, type, fn);
+        } else {
+            fn("No storage medium available for this model");
+        }
+    },
+
 
     findMany: function (query, type, fn) {
         if (this.getStorage(type) === "mongo") {
