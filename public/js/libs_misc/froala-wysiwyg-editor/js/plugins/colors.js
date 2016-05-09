@@ -269,7 +269,6 @@
      */
     function background (val, init) {
       var $popup = editor.popups.get('colors.picker');
-      $popup.find('input:focus').blur();
       // Set background  color.
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
@@ -313,7 +312,6 @@
      */
     function text (val, init) {
       var $popup = editor.popups.get('colors.picker');
-      $popup.find('input:focus').blur();
       // Set text color.
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
@@ -352,7 +350,6 @@
      */
     function removeColor (tab, val) {
       var $popup = editor.popups.get('colors.picker');
-      $popup.find('input:focus').blur();
       $popup.find('input.sp-input').val("");
       // Remove text color.
       if(tab === 'text') {
@@ -421,6 +418,7 @@
      */
     function initializeSpectrum(val, current_color) {
         var popup = editor.popups.get('colors.picker');
+        popup.find('input:focus').blur();
         var container = val === 'color' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color"),
         dragHelper = container.find(".sp-dragger"),
         slideHelper = container.find(".sp-slider"),
