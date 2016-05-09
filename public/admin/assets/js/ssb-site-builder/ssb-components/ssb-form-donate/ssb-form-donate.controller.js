@@ -726,7 +726,7 @@
             vm.shareUrl = $location.url;
             window.fbAsyncInit = function() {
                 FB.init({
-                    appId      : '1718675191683921', //TODO: change me to official Indigenous appid
+                    appId      : '622171824473460',
                     xfbml      : true,
                     version    : 'v2.6'
                 });
