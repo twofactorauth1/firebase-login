@@ -556,14 +556,13 @@
             $scope.product.status = 'inactive';
         }
 
-        if (fn) {
-          fn();
-        }
-
         if (saveProduct) {
           $scope.saveProductFn();
         }
 
+        if (fn) {
+          fn();
+        }
       }, true);
     };
 
