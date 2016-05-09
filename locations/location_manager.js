@@ -17,7 +17,15 @@ module.exports = {
         var self = this;
         self.log.debug(accountId, userId, '>> findLocations');
         var query = {accountId:accountId};
-        dao.findNear(query, 'loc', lat, lon, null, distance, $$.m.Location, fn);
+        dao.findNear(query, 'loc', lat, lon, null, distance, $$.m.Location, function(err, locations){
+            if(err) {
+                self.log.error('Error finding locations:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< findLocations');
+                return fn(null, locations);
+            }
+        });
     }
 
 
