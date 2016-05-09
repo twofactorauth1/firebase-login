@@ -9,6 +9,8 @@ var baseApi = require('../base.api');
 var GeoDao = require('../../dao/geo.dao');
 var geoConfig = require('../../configs/geo.config');
 var Lob = require('lob')(geoConfig.lob.key);
+var manager = require('../../locations/location_manager');
+var METERS_PER_MILE = 1609.34;
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -24,6 +26,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //GET
         app.get(this.url('search/address/:address'), this.setup.bind(this), this.searchAddress.bind(this));
         app.get(this.url('address/verify'), this.setup.bind(this), this.verifyAddress.bind(this));
+        app.get(this.url('locations'), this.setup.bind(this), this.findLocations.bind(this));
     },
 
 
@@ -59,6 +62,26 @@ _.extend(api.prototype, baseApi.prototype, {
             console.log (err, res);
             resp.send(res);
         });
+    },
+
+    findLocations: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> findLocations');
+        var lat = parseFloat(req.query.lat) || 0;
+        var lon = parseFloat(req.query.lon) || 0;
+        var distance = null;
+        if(req.query.d) {
+            //distance supplied in miles.  Mongo needs meters.
+            distance = parseInt(req.query.d) * METERS_PER_MILE;
+        }
+
+        manager.findLocations(accountId, userId, lat ,lon, distance, function(err, locations){
+            self.log.debug(accountId, userId, '<< findLocations');
+            self.sendResultOrError(resp, err, locations, 'Error finding locations');
+        });
+
     }
 });
 
