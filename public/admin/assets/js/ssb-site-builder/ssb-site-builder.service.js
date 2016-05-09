@@ -86,7 +86,7 @@
             'navigation',
             'welcome hero',
             'products & services',
-            // 'donations',
+            'donations',
             'forms',
             'gallery',
             'text',
