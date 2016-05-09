@@ -58,6 +58,10 @@
         font-size: 1.25em;
     }
 
+    .donation-amount-other-label {
+        //
+    }
+
     .billing-shipping .donate-other-amount {
         display: inline-block;
         flex: 0 0 9em;
@@ -129,6 +133,10 @@
         border-radius: 5px;
     }
 
+    .ssb-in-context-info {
+        display: none;
+    }
+
 }
 
 .ssb-form-donate-progress-total {
@@ -173,13 +181,22 @@
     }
 }
 
+[ssb-form-donate-component] .form-donate-layout .ssb-in-context-info {
+    position: absolute;
+    bottom: -.85em;
+    transform: translate(0,100%);
+    width: 100%;
+    left: 0;
+    border: 1px dashed @indigenous-blue;
+    border-radius: 5px;
+    padding: .75em 1em;
+}
+
 /**
  * v1 (includes image + text and  progress bar by default)
  */
 .ssb-page-section-layout-donate-v1 .inner-page {
-    @media screen and (min-width: 768px) {
-        padding: 0!important;
-    }
+    padding: 0!important;
 }
 
 .ssb-page-section-layout-donate-v1 .ssb-theme-heading-text [ssb-text-component] { //title

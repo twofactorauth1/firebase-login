@@ -10,8 +10,8 @@
                 <div class="form-subtitle">
                     <div elem ng-model="vm.component.subtitle"></div>
                 </div>
-                <div class="form-donate-layout">
-                    <div ng-if="vm.product._id" class="form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                <div class="form-donate-layout" ng-class="{ 'has-ssb-in-context-info': !vm.product._id }">
+                    <div class="form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                         <div ng-if="vm.component.productSettings.goal" class="ssb-form-donate-progress col-sm-12">
                             <h3 class="ssb-form-donate-progress-total" ng-class="{ 'on': vm.total }">{{vm.total | currency:undefined:0}}</h3>
                             <div class="ssb-form-donate-progress-bar">
@@ -35,11 +35,24 @@
                             </div>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
                     <div ng-if="!vm.product._id" class="ssb-in-context-info">
                         <span class="fa fa-info-circle"></span>
                         <span>To accept donations, be sure to set up a payment provider and <a ui-sref="app.commerce.products" href>create a donation product</a>.</span>
                     </div>
-                    <div class="clearfix"></div>
+                </div>
+
+                <div ng-if="vm.product._id" class="donate-social-share">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="indigenous_io" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+                    <div
+                        class="fb-share-button"
+                        data-href="{{vm.shareUrl}}"
+                        data-layout="button"
+                        data-mobile-iframe="true">
+                    </div>
+
                 </div>
 
                 <div class="modal fade" id="form-donate-modal-{{vm.component._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -57,14 +70,17 @@
                                     <h3 class="donate-step-header">Choose a donation amount below</h3>
                                     <div class='donate-flex-container'>
                                         <button
-                                            ng-repeat="amount in vm.component.productSettings.donateButtons"
+                                            ng-repeat="amount in vm.component.productSettings.donateButtons track by $index"
+                                            ng-if="amount > 0"
                                             class="flex-item btn ssb-theme-btn donate-amount-btn"
                                             ng-class="{ 'active': vm.formBuilder.amount == amount }"
                                             ng-click="vm.formBuilder.amount = amount">
                                             {{amount | currency:undefined:0}}
                                         </button>
-                                        <label class="control-label padding-right-20">Your donation amount:</label>
-                                        <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
+                                        <div class="flex-break">
+                                            <label class="donation-amount-other-label control-label padding-right-20">Your donation amount:</label>
+                                            <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
+                                        </div>
                                     </div>
                                     <hr />
                                     <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">

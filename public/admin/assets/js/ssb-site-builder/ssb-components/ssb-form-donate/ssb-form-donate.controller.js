@@ -66,8 +66,8 @@
         vm.deleteOrderFn = deleteOrderFn;
         vm.getDonations = getDonations;
         vm.augmentCompletePercentage = augmentCompletePercentage;
-        vm.total = 0;
-        vm.percentage = 0;
+        vm.total = null;
+        vm.percentage = null;
         vm.product = {};
         vm.close = close;
         vm.parseFBShare = parseFBShare;
@@ -75,6 +75,7 @@
         vm.getProduct = getProduct;
         vm.getCredentials = getCredentials;
         vm.setInitialCheckoutState = setInitialCheckoutState;
+        vm.setDefaultValues = setDefaultValues;
 
         vm.nthRow = 'nth-row';
 
@@ -707,8 +708,12 @@
                         vm.augmentCompletePercentage(percentage);
                         vm.total = data.total;
                         vm.percentage = percentage.toFixed(0);
+                    } else {
+                        vm.setDefaultValues();
                     }
                 })
+            } else {
+                vm.setDefaultValues();
             }
         }
 
@@ -756,8 +761,16 @@
                         vm.product = product;
                         vm.getDonations(vm.product._id);
                     });
+                } else {
+                    vm.setDefaultValues();
                 }
+
             }
+        }
+
+        function setDefaultValues() {
+            vm.total = "0";
+            vm.percentage = "0";
         }
 
         function getCredentials() {
@@ -809,6 +822,8 @@
 
         function init(element) {
             vm.element = element;
+
+            vm.parseFBShare();
 
             $(vm.element).find('.modal').on('hidden.bs.modal', function () {
                 vm.close();
