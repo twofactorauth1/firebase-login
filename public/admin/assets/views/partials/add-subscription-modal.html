@@ -76,9 +76,11 @@
                 </div>
                 <div class="form-group">
                     <label for="interval_count">Interval Count</label>
-                    <span tooltip-placement="top" tooltip-html-unsafe="Enter a interval count for the interval type"><i class="fa fa-info-circle" /></span>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Enter a interval count for the interval type. Maximum of one year interval allowed (1 year, 12 months, or 52 weeks)"><i class="fa fa-info-circle" /></span>
                     <div class="input-subscription">
-                        <input ng-change="setFormDirtyFn()" type="number" name="interval_count" validation-type="interval_count" interval-count-validate="interval_count" class="form-control " id="interval_count" placeholder="Interval Count" ng-model='newSubscription.interval_count' />
+                        <input ng-if='newSubscription.interval == "week"' ng-change="setFormDirtyFn()" min='1' max='52' type="number" name="interval_count" validation-type="interval_count" interval-count-validate="interval_count" class="form-control " id="interval_count" placeholder="Interval Count" ng-model='newSubscription.interval_count' />
+                        <input ng-if='newSubscription.interval == "month"' ng-change="setFormDirtyFn()" min='1' max='12' type="number" name="interval_count" validation-type="interval_count" interval-count-validate="interval_count" class="form-control " id="interval_count" placeholder="Interval Count" ng-model='newSubscription.interval_count' />
+                        <input ng-if='newSubscription.interval == "year"' ng-change="setFormDirtyFn()" min='1' max='1' type="number" name="interval_count" validation-type="interval_count" interval-count-validate="interval_count" class="form-control " id="interval_count" placeholder="Interval Count" ng-model='newSubscription.interval_count' />
                     </div>
                     <div class="error-container" ng-show="subscriptionForm.interval_count.$dirty && subscriptionForm.interval_count.$invalid ">
                         <small class="error" ng-show="subscriptionForm.interval_count.$error.maxInterval">That username is taken, please try another</small>

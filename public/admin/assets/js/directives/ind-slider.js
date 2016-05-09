@@ -7,11 +7,13 @@ app.directive('indSlider',function($timeout){
      });
 
 
-    scope.$on('$refreshSlickSlider', function (event) {
+    scope.$on('$refreshSlickSlider', function (event, index) {
         $(element).slick("unslick");
         $timeout(function () {
             scope.$apply(function () {
-                $(element).slick(scope.$eval(attrs.indSlider));
+               $(element).slick(scope.$eval(attrs.indSlider));
+                if(index)
+                    $(element).slick("slickGoTo", index);
             })
         }, 100);
     });

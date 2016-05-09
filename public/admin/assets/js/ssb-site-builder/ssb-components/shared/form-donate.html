@@ -2,11 +2,15 @@
 <h4 class="ssb-sidebar-sub-heading-separator">DONATION</h4>
 <div class="form-builder row padding-10">
     <div class="form-group">
-        <label>
+        <div ng-if="vm.donationProductTags.length === 0">
+            <span class="fa fa-info-circle"></span>
+            To accept donations, be sure to setup payments and <a ui-sref="app.commerce.products" href="#/commerce/products"><span class="title">create a donation product</span></a>.
+        </div>
+        <label ng-if="vm.donationProductTags.length">
             Select Donation
             <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="donation product to use"><i class="fa fa-info-circle" /></span>
         </label>
-        <ui-select ng-model="vm.component.productSettings.product" theme="bootstrap" ng-disabled="disabled">
+        <ui-select ng-if="vm.donationProductTags.length" ng-model="vm.component.productSettings.product" theme="bootstrap" ng-disabled="disabled">
             <ui-select-match placeholder="Select product...">{{$select.selected.label}}</ui-select-match>
             <ui-select-choices repeat="product in vm.donationProductTags | orderBy:'label' | filter:$select.search">
                 {{product.label}}

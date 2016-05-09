@@ -380,8 +380,8 @@
                     <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 7">
 
                         <h3 class="center mb20">Paypal Payment</h3>
-                        <form action="{{paypalURL}}" target="_self" class="standard">
-                            <label for="buy">Buy Now:</label>
+                        <form action="{{paypalURL}}" target="_self" class="center standard">
+                            <!-- <label for="buy">Buy Now:</label> -->
                             <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" ng-click='paypalLoginClickFn()'>
                             <input id="type" type="hidden" name="expType" value="light">
                             <input id="paykey" type="hidden" name="paykey" value="{{paypalKey}}">
@@ -394,7 +394,7 @@
                     </button>
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 7">
-                    <button class="btn btn-danger pull-right" ng-click="deleteOrderFn(order)"><i class="fa fa-trash"></i> Cancel</button>
+                    <button class="btn btn-danger pull-left" ng-click="deleteOrderFn(order)"><i class="fa fa-trash"></i> Cancel</button>
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
@@ -490,9 +490,3 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    if ($('.payment :first').card)
-        card = $('.payment :first').card({
-            container: '.card-wrapper'
-        });
-</script>

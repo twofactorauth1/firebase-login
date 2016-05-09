@@ -199,12 +199,16 @@
         .testimonial-row {
             // display: none;
             position: absolute;
-            top: 30px;
-            z-index: 1;
-            width: 80%;
-            height: calc(~"100% - 30px");
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;
+            right: 0;
+            bottom: 40%;
+            z-index: 999;
+            .name, .text, .site{
+                display: none !important;
+            }
+            .slide-title, .slide-subtitle{
+                display: block !important;
+            }
         }
 
         .slick-slider {
@@ -220,6 +224,9 @@
         }
 
         .slick-dots {
+            width: auto !important;
+            display: inline-table !important;
+            margin: auto, 0 !important;
             z-index: 1;
             bottom: 50px !important;
             margin: 0 !important;

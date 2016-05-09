@@ -20,7 +20,7 @@
   .team-member {
     border: 4px solid rgba(0, 0, 0, 0);
     position: relative;
-  }  
+  }
   .team-member:hover {
     border: 4px dashed rgba(0, 0, 0, 0.4);
   }
@@ -84,6 +84,13 @@
       margin-bottom: 0;
     }
 
+    .meet-team-height {
+        min-width: 256px;
+        @media(max-width:767px) {
+            min-width: 100%;
+        }
+    }
+
     .team-member {
       max-width: 220px;
       padding-bottom: 25px;
@@ -144,7 +151,7 @@
         }
       }
     }
-    /* 
+    /*
      * Social icons
      * --------------------------------------------------------- */
 
@@ -165,9 +172,9 @@
       display: inline-block;
       line-height: 28px;
     }
-     
+
     /* Small devices (tablets, 768px and up) */
-    @media (min-width: 768px) { 
+    @media (min-width: 768px) {
       .team-member-container{
         margin: 0;
       }

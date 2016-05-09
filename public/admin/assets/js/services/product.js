@@ -116,30 +116,13 @@
           fn(productStatusTypes);
         };
 
-        // this.postCustomer = function (customer, fn) {
-        //     var apiUrl = baseUrl + ['contact'].join('/');
-        //     $http.post(apiUrl, customer)
-        //     .success(function (data, status, headers, config) {
-        //         fn(data);
-        //     });
-        // };
+        this.getAllOrdersForProduct = function (id, fn) {
+            var apiUrl = baseUrl + ['products', id, 'orders'].join('/');
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
 
-        // this.putCustomer = function (customer, fn) {
-        //     var apiUrl = baseUrl + ['contact'].join('/');
-        //     $http.put(apiUrl, customer)
-        //     .success(function (data, status, headers, config) {
-        //         fn(data);
-        //     });
-        // };
-
-        // this.saveCustomer = function (customer, fn) {
-        //     var apiFn = null;
-        //     if (customer._id) {
-        //         apiFn = this.putCustomer;
-        //     } else {
-        //         apiFn = this.postCustomer;
-        //     }
-        //     apiFn(customer, fn);
-        // };
     }]);
 })(angular);

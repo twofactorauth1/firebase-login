@@ -86,7 +86,7 @@
             'navigation',
             'welcome hero',
             'products & services',
-            // 'donations',
+            'donations',
             'forms',
             'gallery',
             'text',
@@ -152,6 +152,27 @@
             },
             'all':{
                 'icon': 'fa-sort-amount-asc'
+            }
+        }
+
+        ssbService.manageComponentIcons = {
+            'navigation': {
+                icon: 'fa-align-justify'
+            },
+            'social-link': {
+                icon: 'fa-bullhorn'
+            },
+            'text': {
+                icon: 'fa-text-height'
+            },
+            'image': {
+                icon: 'fa-file-image-o'
+            },
+            'ssb-image': {
+                icon: 'fa-file-image-o'
+            },
+            'ssb-text': {
+                icon: 'fa-text-height'
             }
         }
 
@@ -1217,7 +1238,7 @@
                     component.images[index].url = asset.url;
 
                 } else {
-                        $rootScope.$broadcast('$refreshSlickSlider');
+                        $rootScope.$broadcast('$refreshSlickSlider', index + 1);
                         component.images.splice(index + 1, 0, {
                             url: asset.url,
                             title: '<span style="font-size: 30px;">Service Title Here</span>'
@@ -1551,6 +1572,9 @@
             // other browser
             return false;
         }
+
+
+
 
 
 		(function init() {

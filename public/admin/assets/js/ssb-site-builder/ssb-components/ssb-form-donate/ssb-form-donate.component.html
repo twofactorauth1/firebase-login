@@ -10,12 +10,22 @@
                 <div class="form-subtitle">
                     <div elem ng-model="vm.component.subtitle"></div>
                 </div>
-                <div class="clearfix mb15"></div>
-
-                <div class="form-donate-layout">
+                <div class="form-donate-layout" ng-class="{ 'has-ssb-in-context-info': !vm.product._id }">
                     <div class="form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                        <div class="clearfix mb15 visible-xs"></div>
-                        <div class="center col-sm-12">
+                        <div ng-if="vm.component.productSettings.goal" class="ssb-form-donate-progress col-sm-12">
+                            <h3 class="ssb-form-donate-progress-total" ng-class="{ 'on': vm.total }">{{vm.total | currency:undefined:0}}</h3>
+                            <div class="ssb-form-donate-progress-bar">
+                                <div class="loading-bar">
+                                    <div class="bar" ng-style="{ 'width': vm.completePercentageStyle }">
+                                        <div class="peg"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ssb-form-donate-progress-percentage" ng-class="{ 'on': vm.total }">
+                                {{vm.percentage}}% raised of ${{vm.component.productSettings.goal}}
+                            </div>
+                        </div>
+                        <div class="center margin-top-30 col-sm-12">
                             <button ng-disabled="!vm.component.productSettings" ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" data-toggle="modal" data-target="#form-donate-modal-{{vm.component._id}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
                                 class="btn btn-form btn-default pull-right btn-block">
                                 <span elem ng-model="vm.component.submitBtn"></span>
@@ -25,6 +35,24 @@
                             </div>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
+                    <div ng-if="!vm.product._id" class="ssb-in-context-info">
+                        <span class="fa fa-info-circle"></span>
+                        <span>To accept donations, be sure to set up a payment provider and <a ui-sref="app.commerce.products" href>create a donation product</a>.</span>
+                    </div>
+                </div>
+
+                <div ng-if="vm.product._id" class="donate-social-share">
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="indigenous_io" data-dnt="true">Tweet</a>
+                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+                    <div
+                        class="fb-share-button"
+                        data-href="{{vm.shareUrl}}"
+                        data-layout="button"
+                        data-mobile-iframe="true">
+                    </div>
+
                 </div>
 
                 <div class="modal fade" id="form-donate-modal-{{vm.component._id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -42,91 +70,94 @@
                                     <h3 class="donate-step-header">Choose a donation amount below</h3>
                                     <div class='donate-flex-container'>
                                         <button
-                                            ng-repeat="amount in vm.component.productSettings.donateButtons"
+                                            ng-repeat="amount in vm.component.productSettings.donateButtons track by $index"
+                                            ng-if="amount > 0"
                                             class="flex-item btn ssb-theme-btn donate-amount-btn"
                                             ng-class="{ 'active': vm.formBuilder.amount == amount }"
                                             ng-click="vm.formBuilder.amount = amount">
-                                            ${{amount}}
+                                            {{amount | currency:undefined:0}}
                                         </button>
-                                        <div class='form-group'>
-                                          <label class="control-label padding-right-20">Your donation amount:</label>
-                                          <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
-                                        </div>
-                                        <div class='form-group'>
-                                          <div class="checkbox">
-                                            <label><input type="checkbox" ng-model='vm.isAnonymous'>Anonymous</label>
-                                          </div>
+                                        <div class="flex-break">
+                                            <label class="donation-amount-other-label control-label padding-right-20">Your donation amount:</label>
+                                            <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
                                         </div>
                                     </div>
-                                    <hr ng-hide='vm.isAnonymous' />
-                                    <form name="formBuilder" ng-submit="vm.createUser(formBuilder)" ng-hide='vm.isAnonymous'>
-                                        <div class="form-donate-layout" ng-switch="vm.component.layout">
-                                            <div ng-switch-when="1" class="donate-flex-container form-layout-1 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                                    <label class="control-label">{{val.label || val.type}}</label>
-                                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
-                                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
-                                                </div>
-                                            </div>
-                                            <div ng-switch-when="2" class="flex-container form-layout-2 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                                    <label class="col-sm-2 control-label">{{val.label || val.type}}</label>
-                                                    <div class="col-sm-10">
-                                                        <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                    <hr />
+                                    <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
+                                        <fieldset ng-disabled="vm.isAnonymous">
+                                            <div class="form-donate-layout-cart" ng-switch="vm.component.layout">
+                                                <div ng-switch-when="1" class="donate-flex-container form-layout-1 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                        <label class="control-label">{{val.label || val.type}}</label>
+                                                        <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
                                                         <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div ng-switch-when="3" class="flex-container form-layout-3 col-sm-12 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                <div class="col-sm-6">
-                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                                        <input placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                                <div ng-switch-when="2" class="flex-container form-layout-2 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                        <label class="col-sm-2 control-label">{{val.label || val.type}}</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                                            <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                                <div ng-switch-when="3" class="flex-container form-layout-3 col-sm-12 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                                                    <div class="col-sm-6">
+                                                        <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                            <input placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                                        </div>
+                                                    </div>
 
-                                                <div class="col-sm-6">
-                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                                        <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
+                                                    <div class="col-sm-6">
+                                                        <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group" ng-if="val.visible && val.name === 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                            <textarea placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div ng-switch-when="4" class="flex-container form-layout-4 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                        <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
+                                                        <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional'
+                                                            ng-pattern="vm.addPattern(val)"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div ng-switch-default class="flex-container form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                        <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}">
+                                                        <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"
+                                                            placeholder="{{val.label || val.type}}"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div ng-switch-when="4" class="flex-container form-layout-4 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                                    <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
-                                                    <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional'
-                                                        ng-pattern="vm.addPattern(val)"></textarea>
-                                                </div>
-                                            </div>
-                                            <div ng-switch-default class="flex-container form-layout-custom input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                                    <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}">
-                                                    <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"
-                                                        placeholder="{{val.label || val.type}}"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <div class="clearfix mb15"></div>
-                                        <div ng-show="vm.formSuccess">
-                                            <div class="row thank-you animated" ng-class="{fadeOut: !vm.formSuccess, tada: vm.formSuccess}">
-                                                <h3 class="center mb20" ng-bind-html="vm.component.formSettings.successMessage || 'Thank You for Submitting!'"></h3>
+                                            <div class="clearfix mb15"></div>
+                                            <div ng-show="vm.formSuccess">
+                                                <div class="row thank-you animated" ng-class="{fadeOut: !vm.formSuccess, tada: vm.formSuccess}">
+                                                    <h3 class="center mb20" ng-bind-html="vm.component.formSettings.successMessage || 'Thank You for Submitting!'"></h3>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div ng-show="vm.formError">
-                                            <div class="row thank-you animated" ng-class="{fadeOut: !vm.formError, tada: vm.formError}">
-                                                <h3 class="center mb20" ng-bind-html="vm.component.formSettings.errorMessage || 'Error while Submitting!'"></h3>
+                                            <div ng-show="vm.formError">
+                                                <div class="row thank-you animated" ng-class="{fadeOut: !vm.formError, tada: vm.formError}">
+                                                    <h3 class="center mb20" ng-bind-html="vm.component.formSettings.errorMessage || 'Error while Submitting!'"></h3>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </fieldset>
                                     </form>
+                                    <div class='form-group'>
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" ng-model="vm.isAnonymous">Anonymous</label>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="donate-step thank-you"  ng-show="vm.checkoutModalState == 2">
-                                    <h3 class="donate-step-header center mb20">Payment Choice</h3>
+                                    <!-- <h3 class="donate-step-header center mb20">Payment Choice</h3> -->
                                     <div class="alert alert-danger" ng-show='vm.showPaypalErrorMsg'>Try again with paypal or use Credit Card?</div>
-                                    <div ng-show='vm.paypalInfo' ng-class='{"col-sm-6": vm.stripeInfo, "col-sm-12": !vm.stripeInfo}'>
+                                    <div class="payment-panel" g-show='vm.paypalInfo' ng-class='{"col-sm-6": vm.stripeInfo, "col-sm-12": !vm.stripeInfo}'>
                                         <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
-                                            <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.showPaypalLoading || vm.paypalPayment()" ng-disabled='vm.showPaypalLoading'>
-                                                <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                            <div class="panel-body" ng-click="vm.showPaypalLoading || vm.paypalPayment()" ng-disabled='vm.showPaypalLoading'>
+                                                <img class="img-responsive" src="/images/simple-cart-paypal.png" />
                                                 <h3 class="StepTitle margin-top-10">Paypal</h3>
                                                 <p class="text-small">
                                                     Checkout with Paypal
@@ -135,13 +166,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div ng-show='vm.stripeInfo' ng-class='{"col-sm-6": vm.paypalInfo, "col-sm-12": !vm.paypalInfo}'>
+                                    <div class="payment-panel" ng-show='vm.stripeInfo' ng-class='{"col-sm-6": vm.paypalInfo, "col-sm-12": !vm.paypalInfo}'>
                                         <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
-                                            <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.setCheckoutState(4)">
-                                                <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                            <div class="panel-body" ng-click="vm.setCheckoutState(4)">
+                                                <img class="img-responsive" src="/images/simple-cart-stripe.png" />
                                                 <h3 class="StepTitle margin-top-10">Credit Card</h3>
-                                                <p class="text-small">
-                                                    Checkout with a Credit Card (Powered by Stripe)
+                                                <p class="text-small center">
+                                                    Checkout with a Credit Card <br>(Powered by Stripe)
                                                 </p>
                                             </div>
                                         </div>
@@ -150,9 +181,9 @@
                                 </div>
 
                                 <div class="donate-step thank-you"  ng-if="vm.checkoutModalState == 3">
-                                    <h3 class="donate-step-header center mb20">Paypal Payment</h3>
-                                    <form action="{{vm.paypalURL}}" target="_self" class="standard">
-                                        <label for="buy">Buy Now:</label>
+                                    <!-- <h3 class="donate-step-header center mb20">Paypal Payment</h3> -->
+                                    <form action="{{vm.paypalURL}}" target="_self" class="center standard">
+                                        <!-- <label for="buy">Buy Now:</label> -->
                                         <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" ng-click='vm.paypalLoginClickFn()'>
                                         <input id="type" type="hidden" name="expType" value="light">
                                         <input id="paykey" type="hidden" name="paykey" value="{{vm.paypalKey}}">
@@ -161,7 +192,7 @@
 
                                 <div class="donate-step payment" ng-show="vm.checkoutModalState == 4">
                                     <div class="col-sm-12 col-xs-12 information">
-                                        <div class="clearfix margin-bottom-30"></div>
+                                        <div class="clearfix"></div>
                                         <div class="card-wrapper"></div>
                                         <div class="clearfix margin-bottom-30"></div>
                                         <div class="active col-xs-12">
@@ -200,21 +231,39 @@
                                 </div>
 
                                 <div class="donate-step thank-you"  ng-if="vm.checkoutModalState == 5">
-                                    <h3 class="donate-step-header center mb20">Thank you for your donation.</h3>
+
                                     <div class="clearfix" style="margin-bottom:30px"></div>
+
                                     <div class="col-xs-12 text-center">
                                         <span class="fa fa-check-circle fa-5x text-green"></span>
                                     </div>
+
+                                    <div class="clearfix" style="margin-bottom:30px"></div>
+
+                                    <h3 class="donate-step-header center mb20">
+                                        Thank you for your {{vm.formBuilder.amount | currency:undefined:0}} donation.
+                                    </h3>
+
+                                    <p class="center">
+                                        Help raise even more money by sharing this page.
+                                    </p>
+
                                     <div class="donate-social-share">
                                         <a href="https://twitter.com/share" class="twitter-share-button" data-via="indigenous_io" data-dnt="true">Tweet</a>
                                         <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-                                        <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button" data-mobile-iframe="true"></div>
+                                        <div
+                                            class="fb-share-button"
+                                            data-href="{{vm.shareUrl}}"
+                                            data-layout="button"
+                                            data-mobile-iframe="true">
+                                        </div>
+
                                     </div>
                                 </div>
 
                                 <div class="donate-step processing"  ng-if="vm.checkoutModalState == 6">
-                                    <h3 class="donate-step-header">Donation Processing...</h3>
+                                    <h3 class="center donate-step-header mb20">Donation Processing...</h3>
                                     <div class="text-center padding-20">
                                         <span class="fa fa-spinner fa-spin fa-4x"></span>
                                     </div>
@@ -232,15 +281,15 @@
                                 <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="vm.setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back</button>
                             </div>
                             <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 3">
-                                <button class="btn btn-danger pull-right" ng-click="vm.deleteOrderFn(order)"><i class="fa fa-trash"></i> Cancel</button>
+                                <button class="btn btn-danger pull-left" ng-click="vm.deleteOrderFn(vm.order)"><i class="fa fa-trash"></i> Cancel</button>
                             </div>
                             <div class="modal-footer cart-footer" ng-show="vm.checkoutModalState == 4">
-                                <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="vmsetCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
+                                <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="vm.setCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
                                 </button>
                                 <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="vm.makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
                             </div>
                             <div class="modal-footer cart-footer" ng-show="vm.checkoutModalState == 5">
-                                <button type="button" class="btn ssb-theme-btn pull-right" data-dismiss="modal" ng-click='vm.checkoutModalState = 1'>Close</button>
+                                <button type="button" class="btn ssb-theme-btn pull-right" data-dismiss="modal" ng-click='vm.close()'>Close</button>
                             </div>
                         </div>
                     </div>

@@ -459,7 +459,9 @@
     });
 
     $scope.newSubscription = {
-      planId: CommonService.generateUniqueAlphaNumericShort()
+      planId: CommonService.generateUniqueAlphaNumericShort(),
+      interval: 'week',
+      interval_count: 1
     };
 
     $scope.plans = [];
@@ -500,7 +502,9 @@
         $scope.saveProductFn();
 
         $scope.newSubscription = {
-          planId: CommonService.generateUniqueAlphaNumericShort()
+          planId: CommonService.generateUniqueAlphaNumericShort(),
+          interval: 'week',
+          interval_count: 1
         };
         $scope.signup_fee = null;
         $scope.closeModal('add-subscription-modal');
@@ -526,7 +530,9 @@
       $scope.saveLoadingPlan = false;
       $scope.signup_fee = null;
       $scope.newSubscription = {
-        planId: CommonService.generateUniqueAlphaNumericShort()
+        planId: CommonService.generateUniqueAlphaNumericShort(),
+        interval: 'week',
+        interval_count: 1
       };
       $scope.closeModal('add-subscription-modal');
     };
@@ -550,14 +556,13 @@
             $scope.product.status = 'inactive';
         }
 
-        if (fn) {
-          fn();
-        }
-
         if (saveProduct) {
           $scope.saveProductFn();
         }
 
+        if (fn) {
+          fn();
+        }
       }, true);
     };
 
@@ -1156,6 +1161,15 @@
       $scope.product.icon = $scope.product.assets[$index];
       $scope.originalIcon = $scope.product.icon;
     };
+
+    $scope.planToggleActiveFn = function (id, active) {
+      $scope.product.product_attributes.stripePlans.forEach(function(plan, index) {
+        if (plan.id == id) {
+          plan.active = active;
+          console.log(plan);
+        }
+      });
+    }
 
     $scope.init = (function(){
       $scope.getProduct().then(function(data) {

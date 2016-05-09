@@ -74,6 +74,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data = self = null;
             } else {
                 var data = self.baseData({
+                    userNotFound: username,
                     errorMsg: "Recover password failed: " + err,
                     supportEmail : appConfig.support_email
                 });
@@ -86,7 +87,7 @@ _.extend(view.prototype, BaseView.prototype, {
     },
 
 
-    resetByToken: function(token) {
+    resetByToken: function(token, email) {
         var self = this;
 
         authenticationDao.verifyPasswordResetToken(this.accountId(), token, function(err, value) {
@@ -94,6 +95,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 //we have the user value, now lets load the
                 var data = self.baseData({
                     reset:true,
+                    email:email,
                     token:token
                 });
 
