@@ -97,6 +97,7 @@ $.FroalaEditor.config = {
     },
     //imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
     linkEditButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
+    linkAutoPrefix: '',
     imageEditButtons: ["imageReplace", "imageAlign", "imageRemove", "imageLink", "linkOpen", "linkEdit", "linkRemove", "imageDisplay", "imageStyle", "imageAlt", "imageSize"],
     colorsText: [].concat.apply([], spectrumColors),
     colorsBackground: [].concat.apply([], spectrumColors),
