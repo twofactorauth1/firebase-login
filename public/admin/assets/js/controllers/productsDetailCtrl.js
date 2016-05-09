@@ -459,7 +459,9 @@
     });
 
     $scope.newSubscription = {
-      planId: CommonService.generateUniqueAlphaNumericShort()
+      planId: CommonService.generateUniqueAlphaNumericShort(),
+      interval: 'week',
+      interval_count: 1
     };
 
     $scope.plans = [];
@@ -500,7 +502,9 @@
         $scope.saveProductFn();
 
         $scope.newSubscription = {
-          planId: CommonService.generateUniqueAlphaNumericShort()
+          planId: CommonService.generateUniqueAlphaNumericShort(),
+          interval: 'week',
+          interval_count: 1
         };
         $scope.signup_fee = null;
         $scope.closeModal('add-subscription-modal');
@@ -526,7 +530,9 @@
       $scope.saveLoadingPlan = false;
       $scope.signup_fee = null;
       $scope.newSubscription = {
-        planId: CommonService.generateUniqueAlphaNumericShort()
+        planId: CommonService.generateUniqueAlphaNumericShort(),
+        interval: 'week',
+        interval_count: 1
       };
       $scope.closeModal('add-subscription-modal');
     };
