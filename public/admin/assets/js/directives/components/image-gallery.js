@@ -39,7 +39,7 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
         */
 
         scope.deleteImageFromGallery = function (componentId, index) {
-            scope.$broadcast('$refreshSlickSlider');
+            scope.$broadcast('$refreshSlickSlider', index);
             var images = angular.copy(scope.component.images);
             images.splice(index, 1);
             scope.component.images = images;

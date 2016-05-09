@@ -37,7 +37,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
         };
 
         function addRemoveTestimonials(index, add){
-            scope.$broadcast('$refreshSlickSlider');
+            scope.$broadcast('$refreshSlickSlider', index + 1);
             var testimonials = angular.copy(scope.component.testimonials);
             if(add){
                 testimonials.splice(index + 1, 0, angular.copy(scope.newTestimonial));

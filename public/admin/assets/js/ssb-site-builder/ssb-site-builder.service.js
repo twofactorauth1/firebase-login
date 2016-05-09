@@ -1238,7 +1238,7 @@
                     component.images[index].url = asset.url;
 
                 } else {
-                        $rootScope.$broadcast('$refreshSlickSlider');
+                        $rootScope.$broadcast('$refreshSlickSlider', index + 1);
                         component.images.splice(index + 1, 0, {
                             url: asset.url,
                             title: '<span style="font-size: 30px;">Service Title Here</span>'
