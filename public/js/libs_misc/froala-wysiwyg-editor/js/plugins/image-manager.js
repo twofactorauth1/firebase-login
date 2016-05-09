@@ -61,9 +61,12 @@
         function e() {
             var c = b.popups.get("image.edit");
             c || (c = p()), b.popups.setContainer("image.edit", a(b.opts.scrollableContainer)), b.popups.refresh("image.edit");
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.outerWidth() / 2,
-                e = ia.offset().top + ia.outerHeight();
+            e = ia.offset().top + ia.outerHeight();
             b.popups.show("image.edit", d, e, ia.outerHeight())
+
         }
 
         function f() {
@@ -95,7 +98,9 @@
             ja || R();
             var a = b.$wp ? b.$wp.scrollTop() - (b.$wp.offset().top + 1) : -1,
                 c = b.$wp ? b.$wp.scrollLeft() - (b.$wp.offset().left + 1) : -1;
-            b.$wp && (c -= b.helpers.getPX(b.$wp.css("border-left-width"))), ja.css("top", b.opts.iframe ? ia.offset().top - 1 : ia.offset().top + a).css("left", b.opts.iframe ? ia.offset().left - 1 : ia.offset().left + c).css("width", ia.outerWidth()).css("height", ia.outerHeight()).addClass("fr-active")
+            b.$wp && (c -= b.helpers.getPX(b.$wp.css("border-left-width")));
+            if(ja && ia)
+                ja.css("top", b.opts.iframe ? ia.offset().top - 1 : ia.offset().top + a).css("left", b.opts.iframe ? ia.offset().left - 1 : ia.offset().left + c).css("width", ia.outerWidth()).css("height", ia.outerHeight()).addClass("fr-active")
         }
 
         function k(a) {
@@ -419,6 +424,8 @@
         function H() {
             var c = b.popups.get("image.alt");
             c || (c = I()), r(), b.popups.refresh("image.alt"), b.popups.setContainer("image.alt", a(b.opts.scrollableContainer));
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.width() / 2,
                 e = ia.offset().top + ia.height();
             b.popups.show("image.alt", d, e, ia.outerHeight())
@@ -460,6 +467,8 @@
         function L() {
             var c = b.popups.get("image.size");
             c || (c = M()), r(), b.popups.refresh("image.size"), b.popups.setContainer("image.size", a(b.opts.scrollableContainer));
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.width() / 2,
                 e = ia.offset().top + ia.height();
             b.popups.show("image.size", d, e, ia.outerHeight())
@@ -645,6 +654,8 @@
         function ea() {
             var c = b.popups.get("image.insert");
             c || (c = F()), b.popups.isVisible("image.insert") || (r(), b.popups.refresh("image.insert"), b.popups.setContainer("image.insert", a(b.opts.scrollableContainer)));
+            if(!ia)
+                return;
             var d = ia.offset().left + ia.width() / 2,
                 e = ia.offset().top + ia.height();
             b.popups.show("image.insert", d, e, ia.outerHeight())

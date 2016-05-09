@@ -36,7 +36,7 @@
     }), a.FroalaEditor.RegisterCommand('deleteButton', {
         title: 'Delete',
         callback: function () {
-           this.link.get("a").remove();
+           this.link.remove();
         }
     });
 });

@@ -139,5 +139,6 @@ $.FroalaEditor.config = {
     linkMultipleStyles: false,
     paragraphMultipleStyles: false,
     placeholderText: 'Type here',
-    imageManagerScrollOffset: 0
+    imageManagerScrollOffset: 0,
+    dragImage: false
 }
