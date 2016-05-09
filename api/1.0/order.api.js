@@ -159,6 +159,11 @@ _.extend(api.prototype, baseApi.prototype, {
             created_at = moment(created_at).toDate();
             order.set('created_at', created_at);
         }
+
+        if(order.get('total_tax') && order.get('total_tax') > 0) {
+            //set the total_tax to 0.  We need to calculate this ourselves.
+            order.set('total_tax', 0);
+        }
         self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);

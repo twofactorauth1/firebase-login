@@ -212,12 +212,17 @@
             $scope.order.subtotal = _subtotal;
             $scope.order.total_discount = _discount;
             if (_discount) {
-                $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotalTaxable)).toFixed(2);
+                $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotal)).toFixed(2);
             } else {
                 $scope.calculatedDiscountPercent = '';
             }
-            $scope.order.total_tax = (_subtotalTaxable - _discount) * _taxrate;
-            $scope.order.total = (_subtotal - _discount) + $scope.order.total_tax;
+            if(_subtotalTaxable > 0) {
+                $scope.order.total_tax = (_subtotalTaxable - _discount) * _taxrate;
+            } else {
+                $scope.order.total_tax = 0;
+            }
+
+            $scope.order.total = (_subtotal - _discount);
         };
 
         /*
