@@ -477,12 +477,14 @@
         SocialConfigService.addFacebookPostComment($scope.selectedSocial.parentSocialAccount, $scope.addCommentPage.sourceId, $scope.addCommentinModal, function (comment) {
           var tempDate = new Date();
           tempDate.setHours(tempDate.getHours() + 7);
-          $scope.visibleComments.unshift({
+          var insertComment = {
             picture: $scope.selectedSocial.profile.picture.data.url,
             created: $filter('date')(tempDate, 'yyyy-MM-ddTHH:mm:ss') + '+0000',
             name: $scope.selectedSocial.profile.name,
             comment: $scope.addCommentinModal
-          });
+          };
+          $scope.visibleComments.unshift(insertComment);
+          $scope.fbSelectedPost.comments.unshift(insertComment);
           $scope.addCommentinModal = '';
           toaster.pop('success', 'Comment added', 'Comment added to the facebook post.');
         });
@@ -520,6 +522,7 @@
       console.log('comments ', page.comments);
       if (page.comments) {
         $scope.visibleComments = page.comments;
+        $scope.fbSelectedPost = page;
       } else {
         $scope.visibleComments = [];
       }

@@ -6,7 +6,7 @@
                 <img ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img meet-team-image" ng-click="addImageFromMedia(component._id, $index, true)" style="width: 200px;height: 200px" />
                 <div class="mb15 clearfix visible-sm visible-xs"></div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8 team-min-width">
                 <div ng-if="component.teamSettings.name" class="name">
                     <div elem ng-model="teamMember.name"></div>
                 </div>

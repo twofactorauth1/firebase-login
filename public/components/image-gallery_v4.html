@@ -8,7 +8,7 @@
 
 <div ng-class="component.type+'-v'+component.version">
     <div class="img-container">
-        <div ng-if="dataLoaded" class="slider-main-{{component._id}}" ind-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  slidesToScroll:1, autoplay:{{autoplay}},  asNavFor: ".slider-nav-thumbnails-{{component._id}}"}'>
+        <div ng-if="dataLoaded" class="slider-main slider-main-{{component._id}}" ind-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  slidesToScroll:1, autoplay:{{autoplay}},  asNavFor: ".slider-nav-thumbnails-{{component._id}}"}'>
             <div class="img-row col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}" ng-repeat="image in component.images">
 
                     <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" style="background-image:url('{{image.url}}');"></div>
@@ -23,7 +23,7 @@
         </div>
         <div ng-if="dataLoaded" class="slider-nav-thumbnails slider-nav-thumbnails-{{component._id}} hidden-xs" ind-slider='{slidesToShow:6, touchMove:{{touchMove}}, draggable:true, dots:false, arrows:false,  slidesToScroll:1, autoplay:false, asNavFor: ".slider-main-{{component._id}}", focusOnSelect: true}'>
             <div  ng-repeat="image in component.images track by $index">
-                <img ng-src="{{image.url}}" class="img-thumbnail" style="height:150px" />
+                <img ng-src="{{image.url}}" class="img-thumbnail"/>
             </div>
         </div>
 

@@ -55,7 +55,7 @@ iframe.fr-iframe {
 }
 .fr-wrapper {
   position: relative;
-  overflow: auto;
+  overflow: hidden;
   z-index: 1;
 }
 .fr-wrapper .fr-placeholder {
