@@ -19,6 +19,7 @@ var appConfig = require('../../configs/app.config');
 var accountDao = require('../../dao/account.dao');
 var moment = require('moment');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
+require('superagent');
 
 
 var api = function() {

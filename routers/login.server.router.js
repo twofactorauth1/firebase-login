@@ -355,7 +355,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     showResetPasswordByToken: function (req, resp) {
         var token = req.params.token;
-        new ForgotPasswordView(req, resp).resetByToken(token);
+        var email = req.query.email;
+        new ForgotPasswordView(req, resp).resetByToken(token, email);
     },
 
 

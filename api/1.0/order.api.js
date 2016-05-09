@@ -40,7 +40,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/note'), this.isAuthAndSubscribedApi.bind(this), this.addOrderNote.bind(this));
         app.post(this.url(':id/paid'), this.setup.bind(this), this.orderPaymentComplete.bind(this));
 
-        app.delete(this.url(':id'), this.setup.bind(this), this.deleteOrder.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteOrder.bind(this));
+        app.delete(this.url(':id/paypal'), this.setup.bind(this), this.deletePaypalOrder.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -157,6 +158,11 @@ _.extend(api.prototype, baseApi.prototype, {
         if (created_at && _.isString(created_at)) {
             created_at = moment(created_at).toDate();
             order.set('created_at', created_at);
+        }
+
+        if(order.get('total_tax') && order.get('total_tax') > 0) {
+            //set the total_tax to 0.  We need to calculate this ourselves.
+            order.set('total_tax', 0);
         }
         self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -355,9 +361,34 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> deleteOrder');
         var orderId = req.params.id;
+
+        self.checkPermission(req, self.sc.privs.MODIFY_ORDER, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.deleteOrder(orderId, function(err, value){
+                    self.log.debug(accountId, userId, '<< deleteOrder');
+                    if (!err && value != null) {
+                        self.sendResult(res, {deleted:true});
+                        self.createUserActivity(req, 'DELETE_ORDER', null, {id: orderId}, function(){});
+                    } else {
+                        self.wrapError(res, 401, null, err, value);
+                    }
+                });
+            }
+        });
+    },
+
+    deletePaypalOrder: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> deletePaypalOrder');
+        var orderId = req.params.id;
         var payKey = req.query.payKey;
+
         orderManager.deletePaypalOrder(orderId, payKey, function(err, value){
-            self.log.debug(accountId, userId, '<< deleteOrder');
+            self.log.debug(accountId, userId, '<< deletePaypalOrder');
             if (!err && value != null) {
                 self.sendResult(res, {deleted:true});
                 self.createUserActivity(req, 'DELETE_ORDER', null, {id: orderId}, function(){});
