@@ -16,6 +16,7 @@
             .slider-main{
                 margin:0 !important;
             }
+
             .editing.image-wrap {
                 &:hover {
                     margin-top: 4px!important;
@@ -70,6 +71,22 @@
             padding: 50px 0 !important;
             .image-gallery-title{
                 display:none;
+            }
+
+            @media screen and (min-width: 768px) and (max-width: 991px) {
+               .image-gallery-images:not(:first-child):nth-child(2n+1){
+                    .image-wrap{
+                        clear:left;
+                    }
+                }
+            }
+
+            @media screen and (min-width: 992px) {
+                .image-gallery-images:not(:first-child):nth-child(3n+1){
+                    .image-wrap{
+                        clear:left;
+                    }
+                }
             }
 
             .editing.image-wrap {
