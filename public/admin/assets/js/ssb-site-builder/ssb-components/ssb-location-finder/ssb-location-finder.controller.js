@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderLocationFinderComponentController', ssbLocationFinderComponentController);
 
-ssbLocationFinderComponentController.$inject = ['$scope', '$q', '$timeout'];
+ssbLocationFinderComponentController.$inject = ['$scope', '$q', '$timeout', 'geocodeService'];
 /* @ngInject */
-function ssbLocationFinderComponentController($scope, $q, $timeout) {
+function ssbLocationFinderComponentController($scope, $q, $timeout, geocodeService) {
 
     console.info('ssb-location-finder directive init...')
 
@@ -12,12 +12,19 @@ function ssbLocationFinderComponentController($scope, $q, $timeout) {
 
     vm.map = {};
     vm.mapId = 'ssb-map-canvas-' + vm.component._id;
+    vm.searchAddress = '';
+    vm.searchLat = '';
+    vm.searchLong = '';
+    vm.searchRadius = 5;
+    vm.searchResults = [];
+    vm.loading = false;
 
     vm.init = init;
     vm.setupMap = setupMap;
     vm.loadScript = loadScript;
     vm.initMap = initMap;
     vm.search = search;
+
 
 
 
@@ -116,14 +123,41 @@ function ssbLocationFinderComponentController($scope, $q, $timeout) {
 
     function search() {
 
-        var deferred = $q.defer();
+        if (vm.searchAddress.length) {
 
-        var testData = [{'stuff':true}];
+            vm.loading = true;
 
-        $timeout(function(){
-            deferred.resolve(testData);
-            // deferred.reject("Location error");
-        }, 1000);
+            vm.geocoder = vm.geocoder || new google.maps.Geocoder();
+
+            vm.geocoder.geocode( { 'address': vm.searchAddress }, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+
+                    vm.map.setCenter(results[0].geometry.location);
+
+                    vm.searchLat = results[0].geometry.location.lat();
+                    vm.searchLong = results[0].geometry.location.lng();
+
+                    var marker = new google.maps.Marker({
+                        map: vm.map,
+                        position: results[0].geometry.location
+                    });
+
+                    geocodeService.getLocations(vm.searchLat, vm.searchLong, vm.searchRadius).then(function(data) {
+                        console.debug(data);
+                        vm.loading = false;
+                    }).catch(function(err) {
+                        console.error(JSON.stringify(err));
+                    }).finally(function() {
+                        vm.loading = false;
+                    });
+
+                } else {
+                    console.debug("Geocode was not successful for the following reason: " + status);
+                    vm.loading = false;
+                }
+            });
+
+        }
 
     }
 

@@ -1,50 +1,71 @@
 <div>
 
     <div class="ssb-location-finder-form">
+
         <form ng-submit="vm.search()">
-            <div class="address-search">
-                <div class="search-item">
-                    <label for="address-input">
-                        <div>Address / Zip</div>
-                        <input type="text" class="address-input" name="address-input" placeholder="" size="50" value="">
-                    </label>
-                </div>
-                <div class="search-item">
-                    <div>
-                        <label for="radius-select">
-                            <div>Within</div>
-                            <select class="radius-select">
-                                <option value="5" selected="selected">5 miles</option>
-                                <option value="10">10 miles</option>
-                                <option value="25">25 miles</option>
-                                <option value="50">50 miles</option>
-                                <option value="100">100 miles</option>
-                                <option value="200">200 miles</option>
-                            </select>
-                        </label>
+
+            <fieldset ng-disabled="vm.loading">
+
+                <div class="address-search">
+
+                    <div class="search-item">
+                        <div>
+                            <label for="address-input">
+                                Address / Zip
+                            </label>
+                        </div>
+                        <input
+                            type="text"
+                            class="address-input"
+                            name="address-input"
+                            placeholder=""
+                            size="50"
+                            value=""
+                            ng-model="vm.searchAddress" />
                     </div>
-                    <div>
-                        <input type="submit" class="ssb-theme-btn" value="Find Locations">
+
+                    <div class="search-item">
+                        <div>
+                            <label for="radius-select-{{vm.component._id}}">
+                                Within
+                            </label>
+                        </div>
+                        <select id="radius-select-{{vm.component._id}}" class="radius-select" ng-model="vm.searchRadius">
+                            <option value="5" selected="selected">5 miles</option>
+                            <option value="10">10 miles</option>
+                            <option value="25">25 miles</option>
+                            <option value="50">50 miles</option>
+                            <option value="100">100 miles</option>
+                            <option value="200">200 miles</option>
+                        </select>
                     </div>
+
+                    <div class="search-item">
+                        <input type="submit" class="btn ssb-theme-btn" value="Find Locations">
+                    </div>
+
                 </div>
-            </div>
+
+            </fieldset>
+
         </form>
+
     </div>
 
     <div class="ssb-location-finder-map">
+
         <div id="ssb-map-canvas-{{vm.component._id}}" class="ssb-map-canvas"></div>
+
     </div>
 
     <div class="ssb-location-finder-search-results">
-        <ul>
-            <li>search result</li>
-            <li>search result</li>
-            <li>search result</li>
-            <li>search result</li>
-            <li>search result</li>
-            <li>search result</li>
-            <li>search result</li>
+
+        <ul ng-if="vm.searchResults">
+            <li ng-repeat="result in vm.searchResults track by $index">
+            {{result}}
+            </li>
         </ul>
+
     </div>
 
 </div>

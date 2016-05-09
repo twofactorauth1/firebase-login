@@ -2,6 +2,30 @@
 
 [ssb-location-finder-component] {
 
+    .search-item {
+        margin: 15px 0;
+    }
+
+    input[type="text"],
+    select {
+        padding: 1em;
+        color: black;
+        border: 1px solid #333;
+    }
+
+    input[type="text"] {
+        width: 100%;
+    }
+
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: #FFFFFF;
+        background-image: none;
+        border-radius: 0 0 0 0 !important;
+    }
+
 }
 
 .ssb-location-finder-form {
@@ -23,6 +47,8 @@
 
 .ssb-location-finder-search-results {
     max-width: 600px;
+    z-index: 1;
+    position: relative;
 }
 
 .ssb-map-canvas {
