@@ -5,10 +5,10 @@
     <div class="features-wrap">
         <div ng-repeat="feature in component.features" class="feature">
             <div class="row row-xs-height feature-single" ng-style="{'background': component.blockbgcolor}">
-                <div class="col-sm-3 col-xs-4 col-xs-height feature-icon">
+                <div class="col-sm-3 col-xs-4 col-xs-height feature-icon {{featureClass()}}">
                     <div elem ng-model="feature.top"></div>
                 </div>
-                <div class="col-sm-9 img-rounded col-top col-xs-8 col-xs-height feature-content-container">
+                <div class="col-sm-9 img-rounded col-top col-xs-8 col-xs-height feature-content-container {{featureClass()}}">
                     <div class="feature-content">
                         <div elem ng-model="feature.content"></div>
                     </div>
