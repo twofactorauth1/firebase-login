@@ -57,6 +57,7 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
             } else {
                 $scope.page = data;
                 $rootScope.title = $scope.page.title;
+                $rootScope.pageHandle = $scope.page.handle;
                 $scope.sections = data.sections;
                 checkIntercom(data);
                 angular.element(document).ready(function () {

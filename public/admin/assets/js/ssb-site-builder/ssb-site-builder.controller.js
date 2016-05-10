@@ -762,8 +762,30 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         });
     }
 
-    function toggleSectionVisiblity(section){
-        if(section.global){
+    function toggleSectionVisiblity(section, global){
+        if(global){
+            if(section.global === false)
+            {
+                SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Turning off this setting will remove the section from all pages except for this one.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Remove from other pages",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                //Cancel
+                if (!isConfirm) {
+                    section.global = true;
+                }
+            });
+            }
+        }
+        else if(section.global){
             if(!section.hiddenOnPages){
                 section.hiddenOnPages = {}
             }
@@ -775,6 +797,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 delete section.hiddenOnPages[vm.state.page.handle];
             }
         }
+
     }
 
 

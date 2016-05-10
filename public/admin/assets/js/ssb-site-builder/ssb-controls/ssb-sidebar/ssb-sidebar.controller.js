@@ -353,7 +353,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Remove from all pages",
-                cancelButtonText: "Remove from this page",
+                cancelButtonText: "Hide on this page",
                 showNoActionButton: true,
                 noActionButtonText: 'Cancel',
                 closeOnConfirm: true,
@@ -364,7 +364,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 if (isConfirm) {
                     SimpleSiteBuilderService.removeSectionFromPage(index);
                 }
-                //Remove from all pages
+                //Hide on this page
                 else if(angular.isDefined(isConfirm) && isConfirm === false){
                     vm.state.page.sections[index].visibility = false;
                     vm.uiState.toggleSection(vm.state.page.sections[index]);
