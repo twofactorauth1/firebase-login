@@ -49,6 +49,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.displayMarker = displayMarker;
     vm.setupInfoWindowCallback = setupInfoWindowCallback;
     vm.getDirectionsLink = getDirectionsLink;
+    vm.onDestroy = onDestroy;
 
     $scope.$watch('vm.loading', function(val) {
         if (!val) {
@@ -362,6 +363,10 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         return geocodeService.getDirectionsLinkGoogle(vm.searchAddress, destinationAddress);
     }
 
+    function onDestroy() {
+        window['initialize' + vm.component._id] = angular.noop;
+    }
+
     function init(element) {
 
         vm.element = element;
@@ -375,6 +380,8 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         if(navigator.geolocation) {
             vm.geolocationEnabled = true;
         }
+
+        vm.element.on('$destroy', vm.onDestroy);
 
     }
 
