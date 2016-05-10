@@ -719,7 +719,8 @@
 
         function close() {
             vm.formBuilder = {};
-            vm.checkoutModalState = 1
+            vm.checkoutModalState = 1;
+            vm.getDonations(vm.product._id);
         }
 
         function parseFBShare() {
