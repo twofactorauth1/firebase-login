@@ -35,6 +35,30 @@
             return hostname;
         };
 
+        this.getCommaSeparatedHostNames = function(account) {
+            var hostname = '';
+            var windowHostname = window.location.hostname;
+            if (windowHostname.indexOf(".local") > -1) {
+                hostname = account.subdomain + '.indigenous.local';
+            } else if (windowHostname.indexOf(".test.") > -1) {
+                hostname = windowHostname;
+            } else {
+                hostname = account.subdomain + '.indigenous.io';
+            }
+            if (account._id === 6 && windowHostname.indexOf(".local") <= 0 && windowHostname.indexOf(".test") <= 0) {
+                hostname = 'indigenous.io,www.indigneous.io';
+            }
+            if(account.customDomain) {
+                hostname += ',' + account.customDomain + ',www.' + account.customDomain;
+            }
+            if(account.alternateDomains) {
+                _.each(account.alternateDomains, function(domain){
+                    hostname += ',' + domain + ',www.' + domain;
+                });
+            }
+            return hostname;
+        };
+
         this.calculatePercentage = function (oldval, newval) {
             var result;
             oldval = parseInt(oldval, 10);
@@ -316,7 +340,7 @@
 
         //reports
 
-        this.queryReports = function (date, _hostname) {
+        this.queryReports = function (date, _hostname, _hostnameAry) {
             var queryData = {};
 
             queryData.visitorLocations = new Keen.Query("count", {
@@ -421,10 +445,11 @@
                     {
                         "property_name": "url.domain",
                         "operator": "in",
-                        "property_value": ["www." + _hostname, _hostname]
+                        "property_value": _hostnameAry.split(',')
                     }
                 ]
             });
+
 
             queryData.pageviewsPreviousReport = new Keen.Query("count", {
                 eventCollection: "page_data",
@@ -437,7 +462,7 @@
                     {
                         "property_name": "url.domain",
                         "operator": "in",
-                        "property_value": ["www." + _hostname, _hostname]
+                        "property_value": _hostnameAry.split(',')
                     }
                 ]
             });
@@ -692,11 +717,13 @@
         this.runReports = function (date, account, fn) {
             var self = this;
             var hostname = this.getHostName(account);
+            var hostnameAry = this.getCommaSeparatedHostNames(account);
             console.log('hostname ', hostname);
             console.log('date range ', date);
+            console.log('hostnameAry', hostnameAry);
 
             KeenService.keenClient(function (client) {
-                var queryData = self.queryReports(date, hostname);
+                var queryData = self.queryReports(date, hostname, hostnameAry);
                 client.run([
                     queryData.visitorLocations,
                     queryData.deviceReportByCategory,
@@ -725,11 +752,13 @@
         this.runPagedReports = function (date, account, fn) {
             var filters = [];
             var hostname = this.getHostName(account);
+            var hostnameAry = this.getCommaSeparatedHostNames(account);
             filters.push({
                 "property_name": "url.domain",
                 "operator": "in",
-                "property_value": ["www." + hostname, hostname]
+                "property_value": hostnameAry.split(',')
             });
+
 
             var reportData = {};
             var params2 = {
@@ -942,7 +971,7 @@
                     },
                     tooltip: {
                         headerFormat: '<b>{point.x:%b %d}</b><br>',
-                        pointFormat: '<b class="text-center">{point.y}</b>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
                         enabled: true
@@ -1014,7 +1043,7 @@
                     },
                     tooltip: {
                         headerFormat: '<b>{point.x:%b %d}</b><br>',
-                        pointFormat: '<b class="text-center">{point.y}</b>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
                         enabled: true
@@ -1166,7 +1195,7 @@
                 var chart1 = new Highcharts.Map({
                     chart: {
                         renderTo: 'visitor_locations',
-                        height: 360,
+                        height: 360
                     },
 
                     title: {
