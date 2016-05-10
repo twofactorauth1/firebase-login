@@ -55,7 +55,7 @@ mainApp.service('geocodeService', ['$http', function ($http) {
     };
 
     this.getLocations = function (lat, long, radius, fn) {
-        var apiUrl = baseUrl + 'geo/locations?lat=' + lat + '&long' + long + '&d=' + radius;
+        var apiUrl = baseUrl + 'geo/locations?lat=' + lat + '&lon=' + long + '&d=' + radius;
         return $http.get(apiUrl);
     };
 
