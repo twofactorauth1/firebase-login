@@ -141,5 +141,6 @@ $.FroalaEditor.config = {
     paragraphMultipleStyles: false,
     placeholderText: 'Type here',
     imageManagerScrollOffset: 0,
-    dragImage: false
+    dragImage: false,
+    pastePlain: true
 }
