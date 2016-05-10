@@ -2,11 +2,15 @@
 
 app.controller('SiteBuilderLocationFinderComponentController', ssbLocationFinderComponentController);
 
-ssbLocationFinderComponentController.$inject = ['$scope', '$q', '$timeout', 'geocodeService'];
+ssbLocationFinderComponentController.$inject = ['$scope', '$q', '$timeout', '$injector'];
 /* @ngInject */
-function ssbLocationFinderComponentController($scope, $q, $timeout, geocodeService) {
+function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     console.info('ssb-location-finder directive init...')
+
+    if ($injector.has("geocodeService")) {
+        geocodeService = $injector.get('geocodeService');
+    }
 
     var vm = this;
 
