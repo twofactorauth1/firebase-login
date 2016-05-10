@@ -67,12 +67,9 @@
   .para span p{
     text-align: left;
   }
-  .meet-team-height {
-        min-width: 256px;
-        @media(max-width:767px) {
-            min-width: 100%;
-        }
-    }
+  .team-max-width {
+        min-width: 100% !important;
+  }
   .social {
       margin: 20px auto;
       font-size: 14px;
@@ -99,5 +96,21 @@
       .team-member-container{
         margin: 0;
       }
+
+      .meet-team-height:not(:first-child):nth-child(2n+1){
+            clear:left;
+        }
+    }
+
+    .team-xs-width {
+        min-width: 100%;
+    }
+
+    .team-sm-width{
+        min-width: 33.33%;
+    }
+
+    .team-sm-width.meet-team-height:not(:first-child):nth-child(2n+1){
+        clear:left;
     }
 }

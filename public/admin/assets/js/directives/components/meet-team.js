@@ -28,7 +28,6 @@ app.directive('meetTeamComponent',["$window", function ($window) {
       scope.deleteTeamMember = function (index) {
         console.log('index', index);
         scope.component.teamMembers.splice(index, 1);
-        scope.resizeTeamTiles();
       };
 
       scope.addTeamMember = function (index) {
@@ -47,32 +46,23 @@ app.directive('meetTeamComponent',["$window", function ($window) {
           }]
         };
         scope.component.teamMembers.splice(index + 1, 0, newTeam);
-        setTimeout(function () {
-          scope.$apply(function () {
-            scope.resizeTeamTiles();
-          });
-        }, 0);
+
       };
 
-      scope.resizeTeamTiles = function (argument) {
-        var parent_id = scope.component.anchor || scope.component._id;
-        var element = angular.element("#"+parent_id + " div.meet-team-height")
-        if (element && element.length) {
-          element.css("min-height", 0);
-          var maxTeamHeight = Math.max.apply(null, element.map(function () {
-            return this.offsetHeight;
-          }).get());
-          element.css("min-height", maxTeamHeight);
+        scope.teamClass = function(){
+            var parent_id = scope.component.anchor || scope.component._id;
+            var element = angular.element("#"+parent_id + " div.team-member-wrap")
+            if(element.width() < 768){
+                return "team-xs-width";
+            }
+            else if(element.width() < 992){
+                return "team-sm-width";
+            }
+            else{
+                return "";
+            }
         }
-      };
-      angular.element($window).bind('resize', function () {
-        scope.resizeTeamTiles();
-      });
-      angular.element(document).ready(function () {
-        setTimeout(function () {
-          scope.resizeTeamTiles();
-        }, 500)
-      });
+
     }
   };
 }]);
