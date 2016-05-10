@@ -10,69 +10,58 @@ app.directive('meetTeamComponent',["$window", function ($window) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-      scope.isEditing = true;
+        scope.isEditing = true;
 
-      scope.addImageFromMedia = function (componentId, index, update) {
-        scope.media({
-          componentId: componentId,
-          index: index,
-          update: update
-        });
-      };
+        scope.addImageFromMedia = function (componentId, index, update) {
+            scope.media({
+            componentId: componentId,
+            index: index,
+            update: update
+            });
+        };
 
       /*
        * @deleteTeamMember
        * -
        */
 
-      scope.deleteTeamMember = function (index) {
-        console.log('index', index);
-        scope.component.teamMembers.splice(index, 1);
-        scope.resizeTeamTiles();
-      };
-
-      scope.addTeamMember = function (index) {
-        if (!index) {
-          index = 0;
-        }
-        var newTeam = {
-          "name": "<p>First Last</p>",
-          "position": "<p>Position of Person</p>",
-          "profilepic": "https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png",
-          "bio": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
-          "networks": [{
-            "name": "linkedin",
-            "url": "http://www.linkedin.com",
-            "icon": "linkedin"
-          }]
+        scope.deleteTeamMember = function (index) {
+            console.log('index', index);
+            scope.component.teamMembers.splice(index, 1);
         };
-        scope.component.teamMembers.splice(index + 1, 0, newTeam);
-        setTimeout(function () {
-          scope.$apply(function () {
-            scope.resizeTeamTiles();
-          });
-        }, 0);
-      };
 
-      scope.resizeTeamTiles = function (argument) {
-        var parent_id = scope.component.anchor || scope.component._id;
-        var element = angular.element("#"+parent_id + " div.meet-team-height")
-        if (element && element.length) {
-          element.css("min-height", 0);
-          var maxTeamHeight = Math.max.apply(null, element.map(function () {
-            return this.offsetHeight;
-          }).get());
-          element.css("min-height", maxTeamHeight);
+        scope.addTeamMember = function (index) {
+            if (!index) {
+              index = 0;
+            }
+            var newTeam = {
+              "name": "<p>First Last</p>",
+              "position": "<p>Position of Person</p>",
+              "profilepic": "https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png",
+              "bio": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
+              "networks": [{
+                "name": "linkedin",
+                "url": "http://www.linkedin.com",
+                "icon": "linkedin"
+              }]
+            };
+            scope.component.teamMembers.splice(index + 1, 0, newTeam);
+        };
+
+        scope.teamClass = function(){
+            var parent_id = scope.component.anchor || scope.component._id;
+            var element = angular.element("#"+parent_id + " div.team-member-wrap")
+            if(element.width() < 768){
+                return "team-xs-width";
+            }
+            else if(element.width() < 992){
+                return "team-sm-width";
+            }
+            else{
+                return "";
+            }
         }
-      };
-      angular.element($window).bind('resize', function () {
-        scope.resizeTeamTiles();
-      });
-      angular.element(document).ready(function () {
-        setTimeout(function () {
-          scope.resizeTeamTiles();
-        }, 500)
-      });
+
     }
   };
 }]);

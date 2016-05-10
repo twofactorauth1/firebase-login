@@ -719,14 +719,15 @@
 
         function close() {
             vm.formBuilder = {};
-            vm.checkoutModalState = 1
+            vm.checkoutModalState = 1;
+            vm.getDonations(vm.product._id);
         }
 
         function parseFBShare() {
             vm.shareUrl = $location.url;
             window.fbAsyncInit = function() {
                 FB.init({
-                    appId      : '1718675191683921', //TODO: change me to official Indigenous appid
+                    appId      : '622171824473460',
                     xfbml      : true,
                     version    : 'v2.6'
                 });

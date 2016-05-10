@@ -605,7 +605,7 @@
         function X(c) {
             if (c && "touchend" == c.type && va) return !0;
             if (b.edit.isDisabled()) return c.stopPropagation(), c.preventDefault(), !1;
-            b.toolbar.disable(), c.preventDefault(), b.helpers.isMobile() && (b.events.disableBlur(), b.$el.blur(), b.events.enableBlur()), b.opts.iframe && b.size.syncIframe(), ia = a(this), j(), e(), b.selection.clear(), b.button.bulkRefresh(), b.events.trigger("video.hideResizer");
+            b.toolbar.disable(), c.stopPropagation(), c.preventDefault(), b.helpers.isMobile() && (b.events.disableBlur(), b.$el.blur(), b.events.enableBlur()), b.opts.iframe && b.size.syncIframe(), ia = a(this), j(), e(), b.selection.clear(), b.button.bulkRefresh(), b.events.trigger("video.hideResizer");
             for (var d = 0; d < a.FroalaEditor.INSTANCES.length; d++) a.FroalaEditor.INSTANCES[d] != b && a.FroalaEditor.INSTANCES[d].events.trigger("image.hideResizer");
             b.helpers.isIOS() && setTimeout(e, 100)
             if(b.popups.get("image.edit")){

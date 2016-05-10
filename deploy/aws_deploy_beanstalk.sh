@@ -138,6 +138,29 @@ main(){
         interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
         [ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
+	elif [ "$1" = "develop" ]; then
+	    echo "Updating Other"
+	    export AWS_DEFAULT_REGION="us-west-1"
+	    export ENV_NAME="indiwebTestB-env"
+	    export OTHER_APP_NAME="indiweb-test-b"
+	    export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
+
+	    echo "Uploading to Other"
+        aws s3 cp ${APP_NAME}-${APP_VERSION}.zip s3://${S3_BUCKET}/${APP_NAME}-${APP_VERSION}.zip	|| on_err "$_"
+
+	    echo "Checking for old revisions to clean up..."
+	    LIMIT_REVISIONS=100
+	    aws elasticbeanstalk describe-application-versions --application-name "${OTHER_APP_NAME}" --output text \
+          --query 'ApplicationVersions[*].[VersionLabel,DateCreated,Description]' | \
+          grep -vi sample | tail -n +${LIMIT_REVISIONS} | \
+          while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${OTHER_APP_NAME}" --version-label "${ver}" --delete-source-bundle; done
+
+        # create a new version and update the environment to use this version
+        aws elasticbeanstalk create-application-version --application-name "${OTHER_APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
+
+        interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+
+        [ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
 	fi
 }
 

@@ -10,64 +10,35 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
 
-      scope.isEditing = true;
-      scope.addFeatureList = function (index) {
-        if (!index) {
-          index = 0;
-        }
-        var newFeature = {
-          "top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
-          "content": "<div style=\"text-align: center;\"><br><span style=\"font-size:24px;\">Feature Title</span></div><div style=\"text-align: center;\"><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</div><div style=\"text-align: center;\"><br><a class=\"btn ssb-theme-btn\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></div>"
+        scope.isEditing = true;
+        scope.addFeatureList = function (index) {
+            if (!index) {
+                index = 0;
+            }
+            var newFeature = {
+            "top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
+            "content": "<div style=\"text-align: center;\"><br><span style=\"font-size:24px;\">Feature Title</span></div><div style=\"text-align: center;\"><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</div><div style=\"text-align: center;\"><br><a class=\"btn ssb-theme-btn\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></div>"
+            };
+            scope.component.features.splice(index + 1, 0, newFeature);
         };
 
-        scope.component.features.splice(index + 1, 0, newFeature);
-        resetHeight();
-        $timeout(function () {
-          scope.resizeFeatureTiles();
-        }, 0)
-      };
+        scope.deleteFeatureList = function (index) {
+            scope.component.features.splice(index, 1);
+        };
 
-      scope.deleteFeatureList = function (index) {
-        scope.component.features.splice(index, 1);
-        resetHeight();
-        $timeout(function () {
-          scope.resizeFeatureTiles();
-        }, 2000)
-      };
-
-      scope.resizeFeatureTiles = function (argument) {
-        var parent_id = scope.component.anchor || scope.component._id;
-        var element = angular.element("#"+parent_id + " div.feature-height")
-        if (element && element.length) {
-          var maxFeatureHeight = Math.max.apply(null, element.map(function () {
-            return this.offsetHeight;
-          }).get());
-          element.css("min-height", maxFeatureHeight);
+        scope.featureClass = function(){
+            var parent_id = scope.component.anchor || scope.component._id;
+            var element = angular.element("#"+parent_id + " div.features-wrap")
+            if(element.width() < 768){
+                return "feature-xs-width";
+            }
+            else if(element.width() < 992){
+                return "feature-sm-width";
+            }
+            else{
+                return "";
+            }
         }
-      };
-
-      function resetHeight(){
-        var parent_id = scope.component.anchor || scope.component._id;
-        var element = angular.element("#"+parent_id + " div.feature-height");
-        element.css("min-height", 0);
-      }
-
-      angular.element($window).bind('resize', function () {
-        scope.resizeFeatureTiles();
-      });
-
-        angular.element(document).ready(function() {
-            var unbindWatcher = scope.$watch(function() {
-                return angular.element('.feature-single').length;
-            }, function(newValue, oldValue) {
-                if (newValue) {
-                    unbindWatcher();
-                    $timeout(function() {
-                        scope.resizeFeatureTiles();
-                    }, 2000);
-                }
-            });
-        });
     }
   };
 }]);

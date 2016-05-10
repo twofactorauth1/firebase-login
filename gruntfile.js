@@ -574,6 +574,12 @@ module.exports = function(grunt) {
         accountActivity.cleanupContacts(done);
     });
 
+    grunt.registerTask('loadLocations', 'Load Locations', function(){
+        var done = this.async();
+        var locationLoader = require('./utils/locationLoader');
+        locationLoader.loadFromFile(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');

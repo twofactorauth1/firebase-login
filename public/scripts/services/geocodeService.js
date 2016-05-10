@@ -54,4 +54,15 @@ mainApp.service('geocodeService', ['$http', function ($http) {
       }
     };
 
+    this.getLocations = function (lat, long, radius, fn) {
+        var apiUrl = baseUrl + 'geo/locations?lat=' + lat + '&lon=' + long + '&d=' + radius;
+        return $http.get(apiUrl);
+    };
+
+    this.getDirectionsLinkGoogle = function (startAddress, destinationAddress) {
+        var urlEncodedStartAddress = encodeURIComponent(startAddress || '');
+        var urlEncodedDestinationAddress = encodeURIComponent(destinationAddress);
+        return '//maps.google.com/maps?saddr=' + urlEncodedStartAddress + '&daddr=' + urlEncodedDestinationAddress;
+    }
+
 }]);

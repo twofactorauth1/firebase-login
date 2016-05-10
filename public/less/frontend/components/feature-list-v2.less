@@ -49,4 +49,30 @@
     .btn-add-feature {
         position: relative !important;
     }
+
+    .feature-xs-width {
+        min-width: 100%;
+    }
+
+    .feature-sm-width{
+        min-width: 25%;
+    }
+
+    .feature-list{
+        .feature-list:not(:first-child):nth-child(4n+1){
+            .feature-height{
+                clear:left !important;
+            }
+        }
+    }
+
+
+
+    @media screen and (min-width: 768px) {
+        .feature-list:not(:first-child):nth-child(4n+1){
+            .feature-height{
+                clear:left !important;
+            }
+        }
+    }
 }

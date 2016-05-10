@@ -2,19 +2,54 @@
 
 [ssb-location-finder-component] {
 
+    .search-item {
+        margin: 15px 0;
+    }
+
+    input[type="text"],
+    select {
+        padding: 1em;
+        color: black;
+        border: 1px solid #333;
+    }
+
+    input[type="text"] {
+        width: 100%;
+    }
+
+    select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-color: #FFFFFF;
+        background-image: none;
+        border-radius: 0 0 0 0 !important;
+    }
+
+}
+
+.ssb-location-finder-form,
+.ssb-location-finder-search-results {
+    max-width: 600px;
+    margin: 0 auto 15px;
+    z-index: 1;
+    position: relative;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .ssb-location-finder-form {
-    max-width: 600px;
-    margin-bottom: 15px;
-    z-index: 1;
-    position: relative;
 
-    // @media screen and (min-width: 768px) {
-        padding-left: 15px;
-        padding-right: 15px;
-    // }
+    fieldset {
+        border: none;
+        background: transparent;
+    }
 
+}
+
+.ssb-location-finder-my-location {
+    padding: 5px;
+    font-size: 10px;
 }
 
 .ssb-location-finder-map {
@@ -22,13 +57,47 @@
 }
 
 .ssb-location-finder-search-results {
-    max-width: 600px;
+
+    .ssb-theme-heading-text {
+        text-align: center;
+    }
+
+    .ssb-theme-heading-text.empty {
+        margin: 85px 30px;
+    }
+
+    ul {
+        list-style: none;
+        margin: 15px 0 30px;
+        padding: 0;
+    }
+
+    li {
+        position: relative;
+    }
+
+    .ssb-location-result-item-list li {
+        padding-right: 100px;
+    }
+
+    .ssb-location-result-item-list li.ssb-location-finder-directions-link {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0;
+    }
+
 }
 
 .ssb-map-canvas {
   max-width: 100%;
-  height: 600px;
+  height: 300px;
   padding: 0px;
+
+  @media screen and (min-width: 768px) {
+    height: 600px;
+  }
+
 }
 
 .ssb-map-canvas img {

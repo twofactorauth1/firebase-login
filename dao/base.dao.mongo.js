@@ -111,6 +111,24 @@ var mongodao = {
         });
     },
 
+    _findNearMongo: function(query, field, lat, lng, mindistance, maxdistance, type, fn) {
+        var nearQuery = {
+            $near:{
+                $geometry:{
+                    type:"Point",
+                    coordinates:[lng, lat]
+                }
+            }
+        };
+        if(mindistance) {
+            nearQuery.$near.$minDistance=mindistance;
+        }
+        if(maxdistance) {
+            nearQuery.$near.$maxDistance=maxdistance;
+        }
+        query[field] = nearQuery;
+        this._findManyWithFieldsMongo(query, null, type, fn);
+    },
 
     _findManyMongo: function (query, type, fn) {
         this._findManyWithFieldsMongo(query, null, type, fn);
