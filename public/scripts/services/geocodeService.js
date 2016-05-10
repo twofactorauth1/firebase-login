@@ -59,4 +59,10 @@ mainApp.service('geocodeService', ['$http', function ($http) {
         return $http.get(apiUrl);
     };
 
+    this.getDirectionsLinkGoogle = function (startAddress, destinationAddress) {
+        var urlEncodedStartAddress = encodeURIComponent(startAddress || '');
+        var urlEncodedDestinationAddress = encodeURIComponent(destinationAddress);
+        return '//maps.google.com/maps?saddr=' + urlEncodedStartAddress + '&daddr=' + urlEncodedDestinationAddress;
+    }
+
 }]);
