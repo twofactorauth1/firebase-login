@@ -143,6 +143,11 @@ main(){
 	    export AWS_DEFAULT_REGION="us-west-1"
 	    export ENV_NAME="indiwebTestB-env"
 	    export OTHER_APP_NAME="indiweb-test-b"
+	    export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
+
+	    echo "Uploading to Other"
+        aws s3 cp ${APP_NAME}-${APP_VERSION}.zip s3://${S3_BUCKET}/${APP_NAME}-${APP_VERSION}.zip	|| on_err "$_"
+
 	    echo "Checking for old revisions to clean up..."
 	    LIMIT_REVISIONS=100
 	    aws elasticbeanstalk describe-application-versions --application-name "${OTHER_APP_NAME}" --output text \
