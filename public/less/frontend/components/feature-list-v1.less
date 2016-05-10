@@ -114,7 +114,6 @@
         background-size: 15% auto;
     }
     .feature{
-        min-width: 256px;
         @media(max-width:767px) {
             min-width: 100%;
         }
@@ -123,6 +122,26 @@
         position: relative;
         z-index: 1;
     }
+
+    .feature-xs-width {
+        min-width: 100%;
+    }
+
+    .feature-sm-width{
+        min-width: 33.33%;
+    }
+
+    .feature-sm-width.feature-height:not(:first-child):nth-child(2n+1){
+        clear:left;
+    }
+
+    @media screen and (min-width: 768px) {
+        .feature-height:not(:first-child):nth-child(2n+1){
+            clear:left;
+        }
+    }
+
+
 }
 
 div[data-type="feature-list"] .inner-page {

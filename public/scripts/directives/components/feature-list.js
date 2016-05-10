@@ -7,38 +7,19 @@ app.directive('featureListComponent',['$window', function ($window) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-		scope.resizeFeatureTiles = function (argument) {
-			var parent_id = scope.component.anchor || scope.component._id;
-			var element = angular.element("#"+parent_id + " div.feature-height");
-			if (element && element.length) {
-			  var maxFeatureHeight = Math.max.apply(null, element.map(function () {
-			    return this.offsetHeight;
-			  }).get());
-			  scope.maxFeatureHeight = maxFeatureHeight;
-			  element.css("min-height", maxFeatureHeight + 1);
-			}
-		};
-		function resetHeight(){
-			var parent_id = scope.component.anchor || scope.component._id;
-			var element = angular.element("#"+parent_id + " div.feature-height");
-			element.css("min-height", scope.maxFeatureHeight);
-		}
-		angular.element($window).bind('resize', function () {	
-			resetHeight();		
-			scope.resizeFeatureTiles();
-		});
-        /*
-		angular.element(document).ready(function () {
-			setTimeout(function () {
-			  scope.resizeFeatureTiles();
-			}, 2000)
-		});
-		*/
-        scope.$watch('component', function(){
-            if(scope.component) {
-                scope.resizeFeatureTiles();
+		scope.featureClass = function(){
+            var parent_id = scope.component.anchor || scope.component._id;
+            var element = angular.element("#"+parent_id + " div.features-wrap")
+            if(element.width() < 768){
+                return "feature-xs-width";
             }
-        });
+            else if(element.width() < 992){
+                return "feature-sm-width";
+            }
+            else{
+                return "";
+            }
+        }
     }
   };
 }]);
