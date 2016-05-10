@@ -21,7 +21,7 @@
                 <i class="fa fa-info-circle" />
             </span>
         </label>
-        <switch ng-model="component.visibility" ng-true-value="true" ng-false-value="false" class="pull-right"></switch>
+        <switch ng-model="component.visibility" ng-change="vm.uiState.toggleSection(component)" class="pull-right"></switch>
     </div>
     <div class="form-group" ng-if="component.title === 'Header' || component.layoutModifiers" style="opacity: .5; pointer-events:none;">
         <label>

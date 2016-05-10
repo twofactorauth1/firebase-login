@@ -30,7 +30,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.checkIfDirty = checkIfDirty;
     vm.resetDirty = resetDirty;
     vm.pageChanged = pageChanged;
-
+    vm.toggleSectionVisiblity = toggleSectionVisiblity
 
     vm.uiState = {
         loading: 0,
@@ -117,7 +117,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     _id: sectionId
                 });
             }
-        }
+        },
+
+        toggleSection: vm.toggleSectionVisiblity
+
 
     };
 
@@ -759,6 +762,20 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         });
     }
 
+    function toggleSectionVisiblity(section){
+        if(section.global){
+            if(!section.hiddenOnPages){
+                section.hiddenOnPages = {}
+            }
+            if(section.visibility === false)
+            {
+                section.hiddenOnPages[vm.state.page.handle] = true;
+            }
+            else{
+                delete section.hiddenOnPages[vm.state.page.handle];
+            }
+        }
+    }
 
 
     function init(element) {
