@@ -95,9 +95,11 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
         var helmsLocation = new google.maps.LatLng(32.837377, -117.138966);
 
-        var MY_MAPTYPE_ID = 'custom_style';
+        // var MY_MAPTYPE_ID = 'custom_style';
+        var MY_MAPTYPE_ID = 'HYBRID';
 
-        var featureOpts = [ { "stylers": [ { "saturation": -100 }, { "lightness": -5 } ] } ];
+        // var featureOpts = [ { "stylers": [ { "saturation": -100 }, { "lightness": -5 } ] } ];
+        var featureOpts = [];
 
         vm.initIcons();
 
@@ -176,19 +178,25 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
                 textColor: 'white',
                 url: '/images/indi-location-marker-small.png',
                 width: 75,
-                height: 75
+                height: 75,
+                fontFamily:  "inherit",
+                textSize: 15
             },
             {
                 textColor: 'white',
                 url: '/images/indi-location-marker-medium.png',
                 width: 100,
-                height: 100
+                height: 100,
+                fontFamily:  "inherit",
+                textSize: 18
             },
             {
                 textColor: 'white',
                 url: '/images/indi-location-marker-large.png',
                 width: 125,
-                height: 125
+                height: 125,
+                fontFamily:  "inherit",
+                textSize: 20
             }]
         };
 

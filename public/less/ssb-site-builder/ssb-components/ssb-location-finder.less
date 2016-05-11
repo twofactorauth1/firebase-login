@@ -1,10 +1,21 @@
 // ssb-location-finder.less
 
-[ssb-location-finder-component] {
-
-    .search-item {
-        margin: 15px 0;
+.ssb-address-search {
+    @media screen and (min-width: 600px) {
+        display: flex;
     }
+}
+
+.ssb-search-item {
+    margin: 15px 0;
+
+    @media screen and (min-width: 600px) {
+        align-self: flex-end;
+        margin: 15px;
+    }
+}
+
+[ssb-location-finder-component] {
 
     input[type="text"],
     select {
@@ -15,6 +26,10 @@
 
     input[type="text"] {
         width: 100%;
+    }
+
+    input[type="submit"] {
+        padding: 12px;
     }
 
     select {
