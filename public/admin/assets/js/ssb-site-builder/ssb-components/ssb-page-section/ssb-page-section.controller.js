@@ -462,6 +462,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     _pageHandle = $scope.$root.pageHandle;
                 }
                 _showSection = !section.hiddenOnPages[_pageHandle];
+                section.visibility =  _showSection;
             }
         }
         return _showSection;

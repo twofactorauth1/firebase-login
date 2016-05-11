@@ -10,7 +10,7 @@
     component-media="vm.uiState.componentMedia"
     section-index="vm.index"
     component-index="0"
-    show-component="vm.section.visibility || vm.section.visibility === undefined"
+    show-component="vm.showSection(vm.section)"
     >
 </ssb-component-loader>
 
@@ -28,7 +28,7 @@
                 component-media="vm.uiState.componentMedia"
                 section-index="vm.index"
                 component-index="1"
-                show-component="vm.section.visibility || vm.section.visibility === undefined"
+                show-component="vm.showSection(vm.section)"
                 >
             </ssb-component-loader>
         </div>

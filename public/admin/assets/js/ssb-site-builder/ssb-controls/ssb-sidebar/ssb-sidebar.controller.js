@@ -66,6 +66,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.initializeMapSlider = initializeMapSlider;
     vm.addCustomField = addCustomField;
     vm.checkDuplicateField = checkDuplicateField;
+    vm.showSection = showSection;
 
     editableOptions.theme = 'bs3';
 
@@ -306,6 +307,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         } else {
             section.visibility = true;
             setActiveSection(index);
+            vm.uiState.toggleSection(section);
         }
 
     }
@@ -1119,6 +1121,20 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         return _.filter(activeComponent.contactInfo, function(info){
             return info.type.toLowerCase() === _type.toLowerCase();
         }).length;
+    }
+
+    function showSection(section){
+        var _showSection = false;
+        if(section)
+        {
+            _showSection = section.visibility || section.visibility === undefined;
+            if(section.global && section.hiddenOnPages){
+                var _pageHandle = _pageHandle = vm.state.page.handle;
+                _showSection = !section.hiddenOnPages[_pageHandle];
+                section.visibility =  _showSection;
+            }
+        }
+        return _showSection;
     }
 
     function init(element) {
