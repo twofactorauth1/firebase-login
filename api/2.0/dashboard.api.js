@@ -61,12 +61,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> getWorkstreamsForAccount');
+        self.log.trace(accountId, userId, '>> getWorkstreamsForAccount');
 
 
         //No Authorization
         workstreamManager.listWorkstreams(accountId, function(err, workstreams){
-            self.log.debug(accountId, userId, '<< getWorkstreamsForAccount');
+            self.log.trace(accountId, userId, '<< getWorkstreamsForAccount');
             return self.sendResultOrError(resp, err, workstreams, "Error getting workstreams");
         });
     },

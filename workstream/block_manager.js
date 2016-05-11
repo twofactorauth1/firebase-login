@@ -23,7 +23,7 @@ module.exports = {
 
     getCompletedBlocks: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> getCompletedBlocks');
+        self.log.trace('>> getCompletedBlocks');
 
         async.waterfall([
             function getAccount(cb){
@@ -79,23 +79,29 @@ module.exports = {
 
             },
             function updateAccount(account, blocks, completedBlocks, cb) {
-                self.log.debug('Updating account');
-                account.set('blocks', completedBlocks);
-                accountDao.saveOrUpdate(account, function(err, updatedAccount){
-                    if(err) {
-                        self.log.error('Error updating account:', err);
-                        cb(err);
-                    } else {
-                        cb(null, updatedAccount, blocks, completedBlocks);
-                    }
-                });
+                var currentBlocks = account.get('blocks');
+                if(!_.isEqual(currentBlocks, completedBlocks)) {
+                    self.log.debug('Updating account');
+                    account.set('blocks', completedBlocks);
+                    accountDao.saveOrUpdate(account, function(err, updatedAccount){
+                        if(err) {
+                            self.log.error('Error updating account:', err);
+                            cb(err);
+                        } else {
+                            cb(null, updatedAccount, blocks, completedBlocks);
+                        }
+                    });
+                } else {
+                    cb(null, account, blocks, completedBlocks);
+                }
+
             }
         ], function done(err, account, blocks, completedBlocks){
             if(err) {
                 self.log.error('Error finding completed blocks:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< getCompletedBlocks');
+                self.log.trace('<< getCompletedBlocks');
                 return fn(null, completedBlocks);
             }
         });
