@@ -66,6 +66,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.initializeMapSlider = initializeMapSlider;
     vm.addCustomField = addCustomField;
     vm.checkDuplicateField = checkDuplicateField;
+    vm.showSection = showSection;
 
     editableOptions.theme = 'bs3';
 
@@ -299,12 +300,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 if (isConfirm) {
                     section.visibility = false;
                     setActiveSection(index);
+                    vm.uiState.toggleSection(section);
                 }
             });
 
         } else {
             section.visibility = true;
             setActiveSection(index);
+            vm.uiState.toggleSection(section);
         }
 
     }
@@ -344,22 +347,50 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function removeSectionFromPage(index) {
-      SweetAlert.swal({
-        title: "Are you sure?",
-        text: "Do you want to delete this section?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, delete it!",
-        cancelButtonText: "No, do not delete it!",
-        closeOnConfirm: true,
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
-          SimpleSiteBuilderService.removeSectionFromPage(index)
+        if(vm.state.page.sections[index].global){
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You are removing a global section. Changes made to global sections on this page will be reflected on all other pages. Consider removing from this page only.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Remove from all pages",
+                cancelButtonText: "Hide on this page",
+                showNoActionButton: true,
+                noActionButtonText: 'Cancel',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                //Remove from all pages
+                if (isConfirm) {
+                    SimpleSiteBuilderService.removeSectionFromPage(index);
+                }
+                //Hide on this page
+                else if(angular.isDefined(isConfirm) && isConfirm === false){
+                    vm.state.page.sections[index].visibility = false;
+                    vm.uiState.toggleSection(vm.state.page.sections[index]);
+                }
+            });
         }
-      });
+        else{
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Do you want to delete this section?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, do not delete it!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+            if (isConfirm) {
+                SimpleSiteBuilderService.removeSectionFromPage(index)
+            }
+            });
+        }
     }
 
     function removeComponentFromSection(index) {
@@ -1090,6 +1121,20 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         return _.filter(activeComponent.contactInfo, function(info){
             return info.type.toLowerCase() === _type.toLowerCase();
         }).length;
+    }
+
+    function showSection(section){
+        var _showSection = false;
+        if(section)
+        {
+            _showSection = section.visibility || section.visibility === undefined;
+            if(section.global && section.hiddenOnPages){
+                var _pageHandle = _pageHandle = vm.state.page.handle;
+                _showSection = !section.hiddenOnPages[_pageHandle];
+                section.visibility =  _showSection;
+            }
+        }
+        return _showSection;
     }
 
     function init(element) {

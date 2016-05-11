@@ -1,5 +1,5 @@
 <section
-    ng-show="vm.section.visibility || vm.section.visibility === undefined"
+    ng-show="vm.showSection(vm.section)"
     id="section_{{vm.section._id}}"
     class="ssb-section-layout ssb-section-section ssb-section-type-{{vm.section.components[0].type}} {{vm.sectionClass(vm.section)}}"
     ng-attr-style="{{vm.sectionStyle(vm.section)}}">
@@ -57,7 +57,7 @@
         component-media="vm.uiState.componentMedia"
         section-index="vm.index"
         component-index="$index"
-        show-component="vm.section.visibility || vm.section.visibility === undefined"
+        show-component="vm.showSection(vm.section)"
         >
     </ssb-component-loader>
 
