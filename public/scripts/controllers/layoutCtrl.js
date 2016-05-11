@@ -52,6 +52,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$rootScope', 'pagesService', '$wind
         } else {
             $scope.page = data;
             $rootScope.title = $scope.page.title;
+            $rootScope.pageHandle = $scope.page.handle;
             $scope.sections = data.sections;
             $scope.components = data.components;
             if (data.handle === 'single-post') {
