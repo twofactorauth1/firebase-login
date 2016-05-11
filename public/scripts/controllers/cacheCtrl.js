@@ -80,6 +80,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
         } else {
             $scope.page = data;
             $rootScope.title = $scope.page.title;
+            $rootScope.pageHandle = $scope.page.handle;
             $scope.sections = data.sections;
 
             _.each(data.sections, function(section, index1){

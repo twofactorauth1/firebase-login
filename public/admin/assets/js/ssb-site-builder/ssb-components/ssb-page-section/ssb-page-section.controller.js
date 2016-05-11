@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderPageSectionController', ssbPageSectionController);
 
-ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$window'];
+ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$window', '$location'];
 /* @ngInject */
-function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window) {
+function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window, $location) {
 
     console.info('page-section directive init...')
 
@@ -446,6 +446,26 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
     vm.onPlayerError = function(event) {
         console.log('onPlayerError', JSON.stringify(event));
+    }
+
+    vm.showSection = function(section){
+        var _showSection = false;
+        if(section)
+        {
+            _showSection = section.visibility || section.visibility === undefined;
+            if(section.global && section.hiddenOnPages){
+                var _pageHandle;
+                if(vm.state){
+                    _pageHandle = vm.state.page.handle;
+                }
+                else{
+                    _pageHandle = $scope.$root.pageHandle;
+                }
+                _showSection = !section.hiddenOnPages[_pageHandle];
+                section.visibility =  _showSection;
+            }
+        }
+        return _showSection;
     }
 
     function init(element) {

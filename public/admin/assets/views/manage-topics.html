@@ -65,7 +65,7 @@
                                 <th class="hidden-xs text-center" st-sort="statistics.helpful">Helpful</th>
                                 <th class="hidden-xs text-center" st-sort="statistics.nothelpful">Not Helpful</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
-                                <th class="hidden-xs" st-sort-default="reverse" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+                                <th class="hidden-xs" st-sort-default="reverse" st-sort="getters.updated" ng-class="{'center': tableView != 'grid'}">Updated</th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
@@ -103,7 +103,7 @@
                                 <td><strong>Helpful: </strong><span class="text-success text-bold"><span class="fa fa-thumbs-up"></span> {{topic.statistics.helpful}} </span></td>
                                 <td><strong>Not Helpful: </strong><span class="text-danger text-bold"><span class="fa fa-thumbs-down"></span> {{topic.statistics.nothelpful}}</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{topic.created.date | date:'MMM d yy'}}</td>
-                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{topic.modified.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Updated: </strong>{{topic.updated.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
                     </table>

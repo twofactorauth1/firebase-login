@@ -1755,10 +1755,50 @@ var dao = {
             "screenshot" : null
         });
 
+        var newDonationEmailPage = new $$.m.cms.Email({
+
+            "accountId" : accountId,
+            "title" : "New Donation",
+            "subject" : "New Donation",
+            "handle" : "new-donation",
+            "type" : "notification",
+            "components" : [
+                {
+                    "_id" : componentId,
+                    "anchor" : componentId,
+                    "type" : "email",
+                    "version" : 1,
+                    "txtcolor" : "#888888",
+                    "logo" : "<h2>Logo Here</h2>",
+                    "title" : "<h2 class='center'>New Donation</h2>",
+                    "subtitle" : "subtitle",
+                    "text" : "New Donation",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "visibility" : true
+                }
+            ],
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            }
+        });
 
         var defaultPageArray = [welcomeEmailPage, newOrderEmailPage, orderProcessingEmailPage,
             orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage, blogPage,
-            singlePostPage];
+            singlePostPage, newDonationEmailPage];
 
         async.each(defaultPageArray, function(page, callback){
             self.log.debug('saving default page with handle: ' + page.get('handle') );

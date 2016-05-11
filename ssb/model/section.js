@@ -61,6 +61,7 @@ var section = $$.m.ModelBase.extend({
                 "mr" : 0,
                 "mb" : 0
             },
+            hiddenOnPages: {},
             created: {
                 date: new Date(),
                 by: null

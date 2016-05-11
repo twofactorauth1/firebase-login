@@ -1185,11 +1185,11 @@ module.exports = {
                 return fn(err, null);
             }
             var paymentDetails = order.get('payment_details');
+            log.debug('Payment Details >>', JSON.stringify(paymentDetails, null, 4));
             if(!paymentDetails.charge) {
                 log.error(accountId, userId, 'Error creating refund.  No charge found.');
                 return fn('No charge found', null);
             }
-
             var chargeId = paymentDetails.charge.charge.id;
             log.debug(accountId, userId, '>> chargeId ', chargeId);
             if(!chargeId) {
