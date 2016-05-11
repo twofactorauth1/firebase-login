@@ -33,6 +33,7 @@ var section = $$.m.ModelBase.extend({
             preview:'',
             enabled:true,
             reusable:true,
+            global:false,
             globalHeader: false,
             globalFooter:false,
             canAddComponents: false,
