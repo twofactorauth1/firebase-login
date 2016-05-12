@@ -745,7 +745,7 @@
 
         function deleteOrderFn(order) {
             if ($injector.has('orderService')) {
-              var orderService = $injector.has('orderService');
+              var orderService = $injector.get('orderService');
               orderService.deletePaypalOrder(order, function (data) {
                 if (data.deleted) {
                   $('#form-donate-modal-' + vm.component._id).modal('hide');

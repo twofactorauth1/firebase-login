@@ -1,5 +1,10 @@
 .thumbnail-slider-v1{
 
+    @media screen and (max-width: 767px) {
+       .col-xs-width {
+            min-width: 100% !important;
+        }
+    }
   .single-image {
     padding: 0;
     margin: 0;
@@ -54,7 +59,7 @@
       display: none;
     }
   }
-  
+
 }
   .hideText .text {
     position:relative;
@@ -90,7 +95,7 @@
     top: 62px;
     width: 2%;
   }
-  .carousel-control.left{    
+  .carousel-control.left{
     top: 42%;
   }
   .hide-scroll{
@@ -98,7 +103,7 @@
   }
 
  @media (max-width: 768px) {
-  .carousel-control.left{    
+  .carousel-control.left{
     top: 42%;
     margin-left: -18px;
   }

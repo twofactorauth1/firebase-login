@@ -14,6 +14,7 @@ var cmsDao = require('../../cms/dao/cms.dao.js');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var Page = require('../../cms/model/page');
 var Topic = require('../../cms/model/topic');
+var topicDao = require('../../cms/dao/topic.dao');
 require('../../cms/model/email');
 //var Components = require('../../cms/model/components');
 
@@ -1261,10 +1262,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 topicObj.set('_id', topicId);
 
                 self.log.debug('topicObj ', topicObj);
-                cmsManager.updateTopic(topicObj, function(err, value){
+                topicDao.getById(topicId, function(err, topic) {
+                  if (topicObj.attributes.statistics === topic.attributes.statistics) {
+                    topicObj.attributes.updated.by = self.userId(req);
+                    topicObj.attributes.updated.date = new Date();
+                  }
+                  cmsManager.updateTopic(topicObj, function(err, value){
                     self.log.debug('<< updateTopic ', value.components);
                     self.sendResultOrError(res, err, value, 'Error updating topic.');
-
+                  });
                 });
             }
         });

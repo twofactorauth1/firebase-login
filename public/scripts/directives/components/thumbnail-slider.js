@@ -11,7 +11,12 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
       scope.showSlider = true;
       scope.bindThumbnailSlider = function (width, is_mobile) {
         var number_of_arr = 4;
-        scope.imagesPerPage = number_of_arr;
+        if(scope.component.layoutModifiers && scope.component.layoutModifiers.columns){
+            number_of_arr = scope.component.layoutModifiers.columns
+        }
+        if (width < 768 || is_mobile) {
+          number_of_arr = 1;
+        }
           scope.slider = partition(scope.component.thumbnailCollection, number_of_arr);
         if (scope.slider.length > 1)
           scope.displayThumbnailPaging = true;
@@ -54,6 +59,10 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
                 unbindWatcher();
             }
         });
+      });
+
+      angular.element($window).bind('resize', function () {
+          scope.bindThumbnailSlider(w.width());
       });
     }
   }

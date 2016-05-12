@@ -162,7 +162,7 @@ module.exports = {
         var self = this;
         self.log = log;
 
-        self.log.debug('>> findBySource');
+        self.log.trace('>> findBySource');
         var query = {
             'accountId': accountId,
             'source': source
@@ -172,7 +172,7 @@ module.exports = {
                 self.log.error('Exception in findBySource: ' + err);
                 fn(err, null);
             } else {
-                self.log.debug('<< findBySource');
+                self.log.trace('<< findBySource');
                 fn(null, list);
             }
         });

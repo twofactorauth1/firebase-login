@@ -60,6 +60,11 @@ var topic = $$.m.ModelBase.extend({
       modified: {
         date: null,
         by: null
+      },
+
+      updated: {
+        date: null,
+        by: null
       }
     }
   },

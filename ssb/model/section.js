@@ -33,6 +33,7 @@ var section = $$.m.ModelBase.extend({
             preview:'',
             enabled:true,
             reusable:true,
+            global:false,
             globalHeader: false,
             globalFooter:false,
             canAddComponents: false,
@@ -61,6 +62,7 @@ var section = $$.m.ModelBase.extend({
                 "mr" : 0,
                 "mb" : 0
             },
+            hiddenOnPages: {},
             created: {
                 date: new Date(),
                 by: null
@@ -68,7 +70,8 @@ var section = $$.m.ModelBase.extend({
             modified: {
                 date: new Date(),
                 by: null
-            }
+            },
+            _v:0
         }
     },
 
@@ -109,6 +112,36 @@ var section = $$.m.ModelBase.extend({
 
         this.id(updatedId);
 
+    },
+
+    equals:function(other) {
+        var idEquals = this.id() === other.id();
+        var componentsEquals = _.isEqual(this.get('components'), other.get('components'));
+        var bgEquals = _.isEqual(this.get('bg'), other.get('bg'));
+        var spacingEquals = _.isEqual(this.get('spacing'), other.get('spacing'));
+        var fieldNames = ['anchor',
+            'accountId',
+            'layout',
+            'name',
+            'title',
+            'type',
+            'icon',
+            'description',
+            'filter',
+            'preview',
+            'enabled',
+            'reusable',
+            'globalHeader',
+            'globalFooter',
+            'canAddComponents',
+            'version',
+            'txtcolor',
+            'visibility'];
+        var self = this;
+        var fieldsEqual = _.every(fieldNames, function(fieldName){
+            return self.get('fieldName') === other.get('fieldName');
+        });
+        return idEquals && componentsEquals && bgEquals && spacingEquals && fieldsEqual;
     }
 
 

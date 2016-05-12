@@ -8,6 +8,8 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     console.info('ssb-location-finder directive init...')
 
+    var geocodeService;
+
     if ($injector.has("geocodeService")) {
         geocodeService = $injector.get('geocodeService');
     }
@@ -30,6 +32,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.locationMarkerIcon = {};
     vm.clusterOptions = {};
     vm.geolocationEnabled = false;
+    vm.mapCenterLocation = new google.maps.LatLng(32.837377, -117.138966); //helms
 
     vm.helmsMarker = {};
     vm.searchBasisMarker = {};
@@ -50,6 +53,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.setupInfoWindowCallback = setupInfoWindowCallback;
     vm.getDirectionsLink = getDirectionsLink;
     vm.onDestroy = onDestroy;
+    vm.addStaticLocations = addStaticLocations;
 
     $scope.$watch('vm.loading', function(val) {
         if (!val) {
@@ -64,6 +68,8 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             $timeout(vm.initMap, 2000);
 
         } else {
+
+            window['initialize' + vm.component._id] = $timeout(vm.initMap, 1000);
 
             vm.loadScript('http://maps.googleapis.com/maps/api/js?v=3&callback=initialize' + vm.component._id, function(){
                 console.debug('google-loader async loaded');
@@ -93,17 +99,17 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     function initMap() {
 
-        var helmsLocation = new google.maps.LatLng(32.837377, -117.138966);
+        // var MY_MAPTYPE_ID = 'custom_style';
+        var MY_MAPTYPE_ID = 'HYBRID';
 
-        var MY_MAPTYPE_ID = 'custom_style';
-
-        var featureOpts = [ { "stylers": [ { "saturation": -100 }, { "lightness": -5 } ] } ];
+        // var featureOpts = [ { "stylers": [ { "saturation": -100 }, { "lightness": -5 } ] } ];
+        var featureOpts = [];
 
         vm.initIcons();
 
         var mapOptions = {
-            zoom: 12,
-            center: helmsLocation,
+            zoom: 11,
+            center: vm.mapCenterLocation,
             mapTypeControl: false,
             scrollwheel: false,
             zoomControl: true,
@@ -117,32 +123,9 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
         var customMapType = new google.maps.StyledMapType(featureOpts);
 
-        var contentString = '<div class="ssb-infowindow-content">' +
-                '<ul>' +
-                '<li><b>Helms Brewing Co</b></li>' +
-                '<li>5640 Kearny Mesa Rd.</li>' +
-                '<li>Suite C/N</li>' +
-                '<li>San Diego, CA 92111</li>' +
-                '</ul>' +
-            '</div>';
-
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
-
-        vm.helmsMarker = new google.maps.Marker({
-          position: helmsLocation,
-          map: vm.map,
-          draggable: false,
-          icon: vm.helmsMarkerIcon,
-          title: 'Helms Brewing Co'
-        });
-
-        vm.setupInfoWindowCallback(infowindow, vm.helmsMarker);
+        addStaticLocations();
 
         vm.map.mapTypes.set(MY_MAPTYPE_ID, customMapType);
-
-        // google.maps.event.addDomListener(window, 'load', initialize);
 
         google.maps.event.addDomListener(window, "resize", function() {
             var center = vm.map.getCenter();
@@ -155,12 +138,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     function initIcons() {
 
         vm.helmsMarkerIcon = {
-            path: "M0-165c-27.618 0-50 21.966-50 49.054C-50-88.849 0 0 0 0s50-88.849 50-115.946C50-143.034 27.605-165 0-165z",
-            fillColor: '#333333',
-            fillOpacity: .8,
-            strokeWeight: 0,
-            scale: 1/4,
-            anchor: new google.maps.Point(0,0)
+            url: '/images/indi-location-marker-small-helms.png'
         };
 
         vm.searchBasisMarkerIcon = {
@@ -176,19 +154,25 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
                 textColor: 'white',
                 url: '/images/indi-location-marker-small.png',
                 width: 75,
-                height: 75
+                height: 75,
+                fontFamily:  "inherit",
+                textSize: 15
             },
             {
                 textColor: 'white',
                 url: '/images/indi-location-marker-medium.png',
                 width: 100,
-                height: 100
+                height: 100,
+                fontFamily:  "inherit",
+                textSize: 18
             },
             {
                 textColor: 'white',
                 url: '/images/indi-location-marker-large.png',
                 width: 125,
-                height: 125
+                height: 125,
+                fontFamily:  "inherit",
+                textSize: 20
             }]
         };
 
@@ -342,7 +326,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     }
 
-    function setupInfoWindowCallback(infowindow, marker) {
+    function setupInfoWindowCallback(infowindow, marker, open) {
         google.maps.event.addListener(marker, 'click', function() {
             if (vm.infowindow && vm.infowindow.close) {
                 vm.infowindow.close();
@@ -350,6 +334,14 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             vm.infowindow = infowindow;
             vm.infowindow.open(vm.map, marker);
         });
+
+        if (open) {
+            $timeout(function() {
+                vm.infowindow = infowindow;
+                vm.infowindow.open(vm.map, marker);
+            }, 1000);
+        }
+
     }
 
     function getDirectionsLink(location) {
@@ -360,11 +352,59 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
                 location.state + ' ' +
                 location.zip + ' ' +
                 location.country;
-        return geocodeService.getDirectionsLinkGoogle(vm.searchAddress, destinationAddress);
+        return geocodeService && geocodeService.getDirectionsLinkGoogle(vm.searchAddress, destinationAddress);
     }
 
     function onDestroy() {
         window['initialize' + vm.component._id] = angular.noop;
+    }
+
+    function addStaticLocations() {
+
+        var staticLocations = [{
+            name: 'Helms Brewing Co',
+            address: '5640 Kearny Mesa Road',
+            address2: '',
+            city: 'San Diego',
+            state: 'CA',
+            zip: '92111',
+            lat: 32.837377,
+            lng: -117.138966
+        },
+        {
+            name: 'Tasting Room',
+            address: '4896 Newport Ave',
+            address2: '',
+            city: 'San Diego',
+            state: 'CA',
+            zip: '92107',
+            lat: 32.7458203,
+            lng: -117.24903540000003
+        }];
+
+        staticLocations.forEach(function(location, index) {
+
+            vm.setupInfoWindowCallback(new google.maps.InfoWindow({
+                content: '<div class="ssb-infowindow-content">' +
+                    '<ul>' +
+                    '<li><b>' + location.name + '</b></li>' +
+                    '<li>' + location.address + '</li>' +
+                    '<li>' + location.address2 + '</li>' +
+                    '<li>' + location.city + ', ' + location.state + ' ' + location.zip + '</li>' +
+                    '<li><a href="' + vm.getDirectionsLink(location) + ' class="btn ssb-theme-btn" target="_blank">Directions</a>' +
+                    '</ul>' +
+                '</div>'
+            }), new google.maps.Marker({
+                position: new google.maps.LatLng(location.lat, location.lng),
+                map: vm.map,
+                draggable: false,
+                icon: vm.helmsMarkerIcon,
+                title: location.name
+            }), index === 0); //trigger click on first static location
+
+        });
+
+
     }
 
     function init(element) {
@@ -374,8 +414,6 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         vm.setupMap();
 
         vm.setupSubmitBtn();
-
-        window['initialize' + vm.component._id] = $timeout(vm.initMap, 1000);
 
         if(navigator.geolocation) {
             vm.geolocationEnabled = true;

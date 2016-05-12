@@ -40,7 +40,7 @@ module.exports = {
 
     listWorkstreams: function(accountId, fn){
         var self = this;
-        self.log.debug('>> listWorkstreams');
+        self.log.trace('>> listWorkstreams');
 
         var query = {accountId:accountId};
 
@@ -117,7 +117,7 @@ module.exports = {
                 self.log.error('Error listing workstreams:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listWorkstreams');
+                self.log.trace('<< listWorkstreams');
                 return fn(null, workstreams);
             }
         });
