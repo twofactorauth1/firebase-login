@@ -54,6 +54,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         sortableListPageContentConfig: {
             sort: false,
+            filter: '.fr-wrapper',
             group: 'section',
             scroll: true,
             animation: 150,
