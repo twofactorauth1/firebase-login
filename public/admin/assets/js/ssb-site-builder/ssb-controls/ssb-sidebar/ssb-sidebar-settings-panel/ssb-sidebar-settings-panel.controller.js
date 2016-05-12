@@ -140,6 +140,8 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
                 //match title if current section has title else match component type
                 if(currentSection.title)
                   return section.title === currentSection.title;
+                else if(currentSection.name)
+                  return section.name === currentSection.name;
                 else if(currentSection.components.length === 1){
                   if(currentSection.components[0].type === "navigation"){
                     return section.title === "Header";
