@@ -51,6 +51,9 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	        styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
 	    }
 	}
+    if(field && field.fieldsPerRow){
+        styleString = "min-width:" + Math.floor(100/field.fieldsPerRow) + '%';
+    }
 	return styleString;
 	};
 
