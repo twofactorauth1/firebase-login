@@ -560,10 +560,12 @@ module.exports = {
                 //var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
                 var vars = [];
+                var isDonation = updatedOrder.attributes.line_items[0].type == 'DONATION' ? true : false;
 
                 log.debug(accountId, userId, 'toAddress ', toAddress);
                 log.debug(accountId, userId, 'toName ', toName);
                 log.debug(accountId, userId, 'toAddress ', toAddress);
+                log.debug(accountId, userId, 'is donation ', isDonation)
 
                 accountDao.getAccountByID(accountId, function(err, account){
                     if(err) {
@@ -572,24 +574,32 @@ module.exports = {
                         var business = account.get('business');
                         var emailPreferences = account.get('email_preferences');
                         if(!business || !business.emails || !business.emails[0].email) {
-                            log.warn('No account email.  No NEW_ORDER email sent');
+                            if (isDonation) {
+                              log.warn('No account email.  No NEW_DONATION email sent');
+                            } else {
+                              log.warn('No account email.  No NEW_ORDER email sent');
+                            }
                             callback(null, account, updatedOrder);
                         }
-                        var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
+
+                        var subject = isDonation ? ('Your '+business.name+' donation receipt from '+moment().format('MMM Do, YYYY')) : ('Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY'));
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
+                        var emailPageHandle = isDonation ? 'new-donation' : 'new-order';
 
-                        cmsManager.getEmailPage(accountId, 'new-order', function(err, email){
+                        cmsManager.getEmailPage(accountId, emailPageHandle, function(err, email){
                             if(err || !email) {
-                                log.warn('No NEW_ORDER email receipt sent: ' + err);
+                                log.warn('No ' + (isDonation ? 'NEW_DONATION' : 'NEW_ORDER') + ' email receipt sent: ' + err);
                                 if(emailPreferences.new_orders === true) {
                                     //Send additional details
-                                    subject = "New order created!";
+                                    subject = isDonation ? "New donation received!" : "New order created!";
                                     var component = {};
                                     component.order = updatedOrder.attributes;
-                                    component.text = "The following order was created:";
+                                    component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                    app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+                                    
+                                    app.render(adminNotificationEmailTemplate, component, function(err, html){
                                         juice.juiceResources(html, {}, function(err, _html) {
                                             if (err) {
                                                 log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
