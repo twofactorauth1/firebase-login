@@ -377,7 +377,8 @@
                 skipWelcomeEmail: skipWelcomeEmail,
                 fromEmail: vm.component.fromEmail,
                 fromName: vm.component.fromName,
-                contact_type: vm.component.tags,
+                contact_type: vm.component.contact_type,
+                tags: vm.component.tags,
                 uniqueEmail: vm.component.uniqueEmail || false,
                 activity: {
                     activityType: 'DONATE_FORM',
@@ -632,9 +633,9 @@
                     // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
                     // cardInput.address_city = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].city : '';
                     // cardInput.address_state = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].state : '';
-                    if (!vm.isAnonymous) {
-                        cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
-                    }
+                    // if (!vm.isAnonymous) {
+                    //     cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
+                    // }
                     // cardInput.address_country = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].country : 'US';
                     // if (order.customer.details[0].addresses.length && order.customer.details[0].addresses[0].address2) {
                     //     cardInput.address_line2 = order.customer.details[0].addresses[0].address2;
