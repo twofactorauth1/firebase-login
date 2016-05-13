@@ -1233,11 +1233,13 @@
 
             } else if (type === 'image-gallery') {
 
-                if (update) {
+                if(isImage(asset.url))
+                {
+                    if (update) {
 
-                    component.images[index].url = asset.url;
+                        component.images[index].url = asset.url;
 
-                } else {
+                    } else {
                         $rootScope.$broadcast('$refreshSlickSlider', index + 1);
                         component.images.splice(index + 1, 0, {
                             url: asset.url,
@@ -1248,6 +1250,8 @@
                                 component.images[index + 1][k] = v;
                             });
                         }
+                    }
+
                 }
 
             } else if (type === 'thumbnail-slider') {
@@ -1274,6 +1278,19 @@
 
             }
 
+        }
+
+        function isImage(src) {
+              var deferred = $q.defer();
+              var image = new Image();
+              image.onerror = function() {
+                  deferred.resolve(false);
+              };
+              image.onload = function() {
+                  deferred.resolve(true);
+              };
+              image.src = src;
+              return deferred.promise;
         }
 
         function getTempUUID() {
