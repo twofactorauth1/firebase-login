@@ -598,7 +598,7 @@ module.exports = {
                                     component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
                                     var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
-                                    
+
                                     app.render(adminNotificationEmailTemplate, component, function(err, html){
                                         juice.juiceResources(html, {}, function(err, _html) {
                                             if (err) {
@@ -620,7 +620,9 @@ module.exports = {
                                 var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
                                 log.debug(accountId, userId, 'Using this for data', component);
-                                app.render('emails/base_email_order', component, function(err, html) {
+                                var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
+
+                                app.render(baseEmailTemplate, component, function(err, html) {
                                     juice.juiceResources(html, {}, function(err, _html) {
                                         if (err) {
                                             log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
@@ -639,10 +641,12 @@ module.exports = {
 
                                     if(emailPreferences.new_orders === true) {
                                         //Send additional details
-                                        subject = "New order created!";
-                                        component.text = "The following order was created:";
+                                        subject = isDonation ? "New donation received!" : "New order created!";
+                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                        app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                        var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                        app.render(adminNotificationEmailTemplate, component, function(err, html){
                                             juice.juiceResources(html, {}, function(err, _html) {
                                                 if (err) {
                                                     log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');

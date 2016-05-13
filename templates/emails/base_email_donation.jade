@@ -289,21 +289,17 @@ html
                           tr
                             td.bodyContent(valign='top')
                               div(mc:edit='std_content00')
-                                h4 Order # !{order.order_id}
+                                h4 Donation # !{order.order_id}
                                 div.orderTableWrap
                                   table.orderTable(border='0', cellpadding='0', cellspacing='0', width='580')
                                     thead
                                       tr
-                                        th Product Name
-                                        th(class="orderTd") Price
-                                        th(class="orderTd") Quantity
-                                        th(class="orderTd") Total
+                                        th Donation For
+                                        th(class="orderTd") Amount
                                     tbody
                                         each val, index in order.line_items
                                           tr
                                             td= val.name
-                                            td(class="orderTd")= '$' + val.regular_price
-                                            td(class="orderTd")= val.quantity
                                             td(class="orderTd")= '$' + val.total
                                       tr
                                         td(colspan="4", class="spacer")
