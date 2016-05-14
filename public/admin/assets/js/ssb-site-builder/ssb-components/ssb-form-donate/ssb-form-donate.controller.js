@@ -76,6 +76,7 @@
         vm.getCredentials = getCredentials;
         vm.setInitialCheckoutState = setInitialCheckoutState;
         vm.setDefaultValues = setDefaultValues;
+        vm.checkDateValidityFn = checkDateValidityFn;
 
         vm.nthRow = 'nth-row';
 
@@ -824,6 +825,18 @@
                 }
             }
         }
+
+        function checkDateValidityFn() {
+          if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
+            return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate));
+          } else if (vm.component.productSettings.timePeriod.startDate) {
+            return moment().isAfter(vm.component.productSettings.timePeriod.startDate);
+          } else if (vm.component.productSettings.timePeriod.endDate) {
+            return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
+          } else {
+            return true;
+          }
+        };
 
         function init(element) {
             vm.element = element;
