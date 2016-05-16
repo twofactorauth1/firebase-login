@@ -8,7 +8,7 @@
     </div>
     <div class="modal-body pages-modal ssb-pages-modal bg-white no-padding pages-padding-top">
         <div>
-            <div ng-repeat="template in vm.state.templates | orderBy:'title'">
+            <div ng-repeat="template in vm.state.templates">
                 <div class="single-type margin-bottom-15" ng-click="vm.createPage(template)">
                     <div class="ssb-pages-modal-preview-image col-sm-5 col-xs-12">
                         <img class="img-responsive" src="{{template.previewUrl}}" alt="" />

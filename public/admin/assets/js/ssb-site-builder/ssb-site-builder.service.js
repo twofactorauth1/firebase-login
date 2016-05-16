@@ -754,7 +754,9 @@
         function getTemplates() {
 
           function success(data) {
-            ssbService.templates = data;
+            ssbService.templates = data.sort(function(a, b) {
+                return a.modified.date > b.modified.date;
+            });
             console.log('SimpleSiteBuilderService getTemplates: ' + data);
           }
 
