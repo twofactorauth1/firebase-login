@@ -1,8 +1,8 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", '$state',
-    function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant, $state) {
+app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", '$state',
+    function ($scope, OrderService, ContactService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant, $state) {
 
     $scope.accountHideDohy = false;
 
@@ -81,8 +81,8 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     return days;
   };
 
-  CustomerService.getCustomers(function (customers) {
-    CustomerService.getAllCustomerActivities(function (activities) {
+  ContactService.getContacts(function (customers) {
+    ContactService.getAllCustomerActivities(function (activities) {
       $scope.activities = activities.results;
       _.each($scope.activities, function (activity) {
         var matchingCustomer = _.findWhere(customers, {
@@ -151,7 +151,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
    * - get customer for the customer widget
    */
   $scope.customerNames = [];
-  CustomerService.getCustomers(function (customers) {
+  ContactService.getContacts(function (customers) {
 
     $scope.customers = customers;
     $scope.customersThisMonth = [];
@@ -360,7 +360,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       $scope.newActivity.activityType = activity_hash.data;
     }
 
-    CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
+    ContactService.postCustomerActivity($scope.newActivity, function (activity) {
       var matchingCustomer = _.findWhere($scope.customers, {
         _id: activity.contactId
       });

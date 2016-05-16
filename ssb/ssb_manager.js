@@ -1276,7 +1276,9 @@ module.exports = {
                                                 pageSections.splice(insertAt, numberToRemove, section);
                                             } else {
                                                //put it next to last
-                                                pageSections.splice(pageSections.length-2, 0, section);
+                                                insertAt = pageSections.length - 2;
+                                                self.log.debug('Inserting at ' + insertAt);
+                                                pageSections.splice(insertAt, 0, section);
                                             }
                                         });
                                         //done with this page

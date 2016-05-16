@@ -91,10 +91,10 @@
         "TEMPLATES": "Templates",
         "SETTINGS": "Settings"
       },
-      "customers": {
-        "MAIN": "Customers",
+      "contacts": {
+        "MAIN": "Contacts",
         "MANAGE": "Manage",
-        "SETTINGS": "Customer Settings"
+        "SETTINGS": "Contact Settings"
       },
       "commerce": {
         "MAIN": "Commerce",

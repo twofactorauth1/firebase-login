@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", "productConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant, productConstant) {
+    app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "ContactService", "UserService", "ProductService", "SweetAlert", "orderConstant", "productConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, ContactService, UserService, ProductService, SweetAlert, orderConstant, productConstant) {
 
         $scope.dataLoaded = false;
         $scope.billing = {sameAsBilling: false};
@@ -34,7 +34,7 @@
          * get all customers to for customer select
          */
 
-        CustomerService.getCustomers(function (customers) {
+        ContactService.getContacts(function (customers) {
             $scope.customers = customers;
             $scope.getUsers();
         });

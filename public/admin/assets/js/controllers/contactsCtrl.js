@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -44,7 +44,7 @@
      */
 
     $scope.getCustomers = function () {
-      CustomerService.getCustomers(function (customers) {
+      ContactService.getContacts(function (customers) {
         _.each(customers, function (customer) {
           customer.bestEmail = $scope.checkBestEmail(customer);
           customer.hasFacebookId = $scope.checkFacebookId(customer);
@@ -74,7 +74,7 @@
           $scope.setSortOrder($state.current.sort);
         }
         $scope.showCustomers = true;
-        CustomerService.getAllCustomerTags(customers, function(tags){
+        ContactService.getAllCustomerTags(customers, function(tags){
           $scope.customerTags = tags;
         });
 
@@ -83,7 +83,7 @@
 
     $scope.getCustomers();
 
-    CustomerService.getCustomerTags(function(tags){
+    ContactService.getCustomerTags(function(tags){
       $scope.customerTags = tags;
     });
 
@@ -225,43 +225,43 @@
     };
 
     $scope.contactTags = function (customer) {
-      return CustomerService.contactTags(customer);
+      return ContactService.contactTags(customer);
     };
 
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkBestEmail(contact);
+      var returnVal = ContactService.checkBestEmail(contact);
       this.email = contact.email;
       return returnVal;
     };
 
     $scope.checkFacebookId = function (contact) {
-      var returnVal = CustomerService.checkFacebookId(contact);
+      var returnVal = ContactService.checkFacebookId(contact);
       this.facebookId = contact.facebookId;
       return returnVal;
     };
 
     $scope.checkTwitterId = function (contact) {
-      var returnVal = CustomerService.checkTwitterId(contact);
+      var returnVal = ContactService.checkTwitterId(contact);
       this.twitterId = contact.twitterId;
       return returnVal;
     };
 
     $scope.checkLinkedInId = function (contact) {
-      var returnVal = CustomerService.checkLinkedInId(contact);
+      var returnVal = ContactService.checkLinkedInId(contact);
       this.linkedInUrl = contact.linkedInUrl;
       this.linkedInId = contact.linkedInId;
       return returnVal;
     };
 
     $scope.checkGoogleId = function (contact) {
-      var returnVal = CustomerService.checkGoogleId(contact);
+      var returnVal = ContactService.checkGoogleId(contact);
       this.googleUrl = contact.googleUrl;
       this.googleId = contact.googleId;
       return returnVal;
     };
 
     $scope.checkAddress = function (contact) {
-      var returnVal = CustomerService.checkAddress(contact);
+      var returnVal = ContactService.checkAddress(contact);
       this.address = contact.address;
       return returnVal;
     };
@@ -295,7 +295,7 @@
     $scope.viewSingle = function (customer) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
-      window.location = '/admin/#/customers/' + customer._id;
+      window.location = '/admin/#/contacts/' + customer._id;
     };
 
     /* 18-Sep Unioned set of tags in system with those needed by Indigenous
@@ -328,7 +328,7 @@
 
 
     $scope.tagToCustomer = function(value) {
-     return CustomerService.tagToCustomer(value);
+     return ContactService.tagToCustomer(value);
     }
 
     $scope.customerPhotoOptions = [{
@@ -377,7 +377,7 @@
           }]
         })
       }
-      CustomerService.saveCustomer(tempCustomer, function (returnedCustomer) {
+      ContactService.saveContact(tempCustomer, function (returnedCustomer) {
         $scope.saveLoading = false;
         $scope.fullName = '';
         $scope.customer.tags = {};
@@ -449,7 +449,7 @@
     // });
 
     $scope.importFacebookFriends = function () {
-      CustomerService.importFacebookFriends(function (data, success) {
+      ContactService.importFacebookFriends(function (data, success) {
         if (success) {
           $('#import-contacts-modal').modal('hide');
           toaster.pop('success', "Contacts being imported.");
@@ -549,7 +549,7 @@
                 if (isConfirm) {
                     var selectedCustomers = $scope.selectedCustomersFn();
                     selectedCustomers.forEach(function(sc, sci) {
-                        CustomerService.deleteCustomer(sc._id, function () {});
+                        ContactService.deleteContact(sc._id, function () {});
                         $scope.customers.splice(_.findIndex($scope.customers, function(c) {return c._id == sc._id; }), 1);
                         $scope.displayedCustomers.splice(_.findIndex($scope.displayedCustomers, function(c) {return c._id == sc._id; }), 1);
                     });
@@ -570,7 +570,7 @@
         }
 
         if ($scope.bulkActionChoice.action.data == 'export') {
-          CustomerService.exportCsvContacts(_.pluck($scope.selectedCustomersFn(), '_id'));
+          ContactService.exportCsvContacts(_.pluck($scope.selectedCustomersFn(), '_id'));
           $scope.bulkActionChoice = null;
           $scope.bulkActionChoice = {};
           $scope.clearSelectionFn();
@@ -631,7 +631,7 @@
                 customer.tags = _.difference(customer.tags, tags);
             }
 
-            CustomerService.saveCustomer(customer, function() {});
+            ContactService.saveContact(customer, function() {});
         });
 
         $scope.tagsBulkAction = {};
@@ -642,9 +642,9 @@
 
     $scope.exportContactsFn = function () {
       if (_.pluck($scope.selectedCustomersFn().length)) {
-        CustomerService.exportCsvContacts(_.pluck($scope.selectedCustomersFn(), '_id'));
+        ContactService.exportCsvContacts(_.pluck($scope.selectedCustomersFn(), '_id'));
       } else {
-        CustomerService.exportCsvContacts(null);
+        ContactService.exportCsvContacts(null);
       }
       $scope.clearSelectionFn();
       toaster.pop('success', 'Customer export started.');

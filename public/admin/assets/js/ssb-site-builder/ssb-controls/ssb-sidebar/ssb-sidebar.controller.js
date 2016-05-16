@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService', 'toaster', 'ProductService'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'ContactService', 'toaster', 'ProductService'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService, toaster, ProductService) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, ContactService, toaster, ProductService) {
 
     console.info('site-build sidebar directive init...')
 
@@ -1145,8 +1145,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.element = element;
 
         setupSectionContent();
-        CustomerService.getCustomers(function(customers){
-            CustomerService.getAllCustomerTags(customers,function(tags){
+        ContactService.getContacts(function(customers){
+            ContactService.getAllCustomerTags(customers,function(tags){
             vm.customerTags = tags;
             });
         })

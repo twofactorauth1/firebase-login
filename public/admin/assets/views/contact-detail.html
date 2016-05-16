@@ -1,9 +1,9 @@
-<div class="customer-detail" ng-controller="CustomerDetailCtrl">
+<div class="customer-detail" ng-controller="ContactDetailCtrl">
 <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="customerSaveFn()" save-page-check="!pageSaving"></indig-navprompt>
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">{{ data.fullName || 'No Customer Name'}} </h1>
+                <h1 class="mainTitle">{{ data.fullName || 'No Contact Name'}} </h1>
                 <span class="mainDescription">{{displayCustomerTags()}}</span>
             </div>
         </div>
@@ -171,7 +171,7 @@
                                         <div class="btn-group btn-group-justified margin-top-10">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteCustomerFn(customer)">
-                                                    <span>Delete Customer</span>
+                                                    <span>Delete Contact</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -180,7 +180,7 @@
                                 <div class="col-md-8">
                                     <div class="panel panel-white" id="notes">
                                         <div class="panel-heading border-light">
-                                            <h4 class="panel-title">Customer <span class="text-bold">Notes</span></h4>
+                                            <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
                                             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                                         </div>
                                         <div class="panel-wrapper" collapse="notes" ng-init="notes=false">
@@ -228,7 +228,7 @@
                                 </div>
                             </div>
                         </tab>
-                        <tab heading="Edit Customer" active="editActive">
+                        <tab heading="Edit Contact" active="editActive">
                             <div class="col-xs-12">
                                 <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading || (form.$invalid && !form.$pristine )"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
                             </div>

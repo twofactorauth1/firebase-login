@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", "orderConstant", "ProductService", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService, orderConstant, ProductService) {
+  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "ContactService", "orderConstant", "ProductService", function ($scope, toaster, $modal, $filter, $state, OrderService, ContactService, orderConstant, ProductService) {
     
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -35,7 +35,7 @@
      * get all customers to for customer select
      */
 
-    CustomerService.getCustomers(function (customers) {
+    ContactService.getContacts(function (customers) {
       $scope.customers = customers;
     });
 

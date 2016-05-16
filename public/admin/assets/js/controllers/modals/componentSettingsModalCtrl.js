@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', 'testimonialSlider', 'websiteLinks', 'isEmail', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService, testimonialSlider, websiteLinks, isEmail) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'ContactService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', 'testimonialSlider', 'websiteLinks', 'isEmail', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, ContactService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService, testimonialSlider, websiteLinks, isEmail) {
 
   $scope.blog = {};
   $scope.components = components;
@@ -98,12 +98,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   $scope.getAllCustomerTags = function(){
-    CustomerService.getCustomerTags(function(tags){
+    ContactService.getCustomerTags(function(tags){
       $scope.customerTags = tags;
       $scope.setTags(tags);
     });
-    CustomerService.getCustomers(function(customers){
-      CustomerService.getAllCustomerTags(customers,function(tags){
+    ContactService.getContacts(function(customers){
+      ContactService.getAllCustomerTags(customers,function(tags){
         $scope.customerTags = tags;
         $scope.setTags(tags);
       });
@@ -1214,7 +1214,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     };
 
   $scope.tagToCustomer = function(value) {
-    return CustomerService.tagToCustomer(value);
+    return ContactService.tagToCustomer(value);
   }
 
 }]);

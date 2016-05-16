@@ -44,7 +44,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: "/_dashboard",
         templateUrl: "/admin/assets/views/dashboard.html",
         title: 'Dashboard',
-        resolve: loadSequence('dashboardCtrl', 'orderService', 'customerService', 'jquery-sparkline', 'chartAnalyticsService', 'userService', 'chartCommerceService' , 'offset')
+        resolve: loadSequence('dashboardCtrl', 'orderService', 'contactService', 'jquery-sparkline', 'chartAnalyticsService', 'userService', 'chartCommerceService' , 'offset')
     }).state('app.website', {
         url: '/website',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -116,18 +116,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Editor',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
-    }).state('app.customers', {
-        url: '/customers',
-        templateUrl: "/admin/assets/views/customers.html",
-        title: 'Customers',
+    }).state('app.contacts', {
+        url: '/contacts',
+        templateUrl: "/admin/assets/views/contacts.html",
+        title: 'Contacts',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
-    }).state('app.singleCustomer', {
-        url: '/customers/:contactId',
-        templateUrl: "/admin/assets/views/customer-detail.html",
-        title: 'Single Customer',
+        resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'contactService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
+    }).state('app.singleContact', {
+        url: '/contacts/:contactId',
+        templateUrl: "/admin/assets/views/contact-detail.html",
+        title: 'Single Contact',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
+        resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -149,13 +149,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/orders.html",
         title: 'Orders',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('ordersCtrl', 'orderService', 'customerService', 'dateRangePicker')
+        resolve: loadSequence('ordersCtrl', 'orderService', 'contactService', 'dateRangePicker')
     }).state('app.commerce.orderdetail', {
         url: '/orders/:orderId',
         templateUrl: "/admin/assets/views/order-detail.html",
         title: 'Order Detail',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('orderDetailCtrl', 'orderService', 'customerService', 'userService')
+        resolve: loadSequence('orderDetailCtrl', 'orderService', 'contactService', 'userService')
     }).state('app.marketing', {
         url: '/marketing',
         template: '<div ui-view class="fade-in-up"></div>',

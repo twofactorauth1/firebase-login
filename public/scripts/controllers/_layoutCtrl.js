@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'customerService', 'pageService', 'analyticsService', 'leafletData', 'cartService',
-  function ($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, customerService, pageService, analyticsService, leafletData, cartService) {
+mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'websiteService', 'postsService', 'userService', 'accountService', 'ENV', '$window', '$location', '$route', '$routeParams', '$filter', '$document', '$anchorScroll', '$sce', 'postService', 'paymentService', 'productService', 'courseService', 'ipCookie', '$q', 'contactService', 'pageService', 'analyticsService', 'leafletData', 'cartService',
+  function ($scope, $timeout, pagesService, websiteService, postsService, userService, accountService, ENV, $window, $location, $route, $routeParams, $filter, $document, $anchorScroll, $sce, PostService, PaymentService, ProductService, CourseService, ipCookie, $q, contactService, pageService, analyticsService, leafletData, cartService) {
     var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
     route = $location.$$path;
@@ -180,10 +180,10 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         if ($route.current.params.custid != null) {
           $scope.custid = $route.current.params.custid;
-          customerService.getCustomer($scope.custid, function (data) {
+          contactService.getCustomer($scope.custid, function (data) {
             that.customer = data;
-            that.shipping = customerService.getAddressByType(data, "shipping");
-            that.billing = customerService.getAddressByType(data, "billing");
+            that.shipping = contactService.getAddressByType(data, "shipping");
+            that.billing = contactService.getAddressByType(data, "billing");
             that.billingChange = false;
             that.shippingChange = false;
           });
@@ -191,7 +191,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           $scope.getAddressByType = function (customer, type) {
             var address;
             if (customer) {
-              address = customerService.getAddressByType(customer, type)
+              address = contactService.getAddressByType(customer, type)
               if (address == "") {
                 return '';
               }
@@ -541,7 +541,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           }, 500);
         });
       } else {
-        customerService.getGeoSearchAddress($scope.stringifyAddress(component.location), function (data) {
+        contactService.getGeoSearchAddress($scope.stringifyAddress(component.location), function (data) {
           if (data.lat && data.lon) {
             component.location.lat = data.lat;
             component.location.lon = data.lon;
@@ -624,7 +624,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
     $scope.saveCustomerAccount = function (customer) {
       if (customer && customer.accountId)
-        customerService.putCustomer(customer, function (data) {
+        contactService.putCustomer(customer, function (data) {
           that.customer = data;
         });
     };

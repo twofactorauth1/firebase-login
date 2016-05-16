@@ -1,10 +1,10 @@
-<div class="customers" ng-controller="CustomersCtrl">
+<div class="contacts" ng-controller="ContactsCtrl">
     <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle" translate="sidebar.nav.customers.MAIN"></h1>
-                <span ng-if="customers" class="mainDescription">There are currently {{customers.length}} customers. ({{displayedCustomers.length || 0}} in filtered view)</span>
+                <h1 class="mainTitle" translate="sidebar.nav.contacts.MAIN"></h1>
+                <span ng-if="customers" class="mainDescription">There are currently {{customers.length}} contacts. ({{displayedCustomers.length || 0}} in filtered view)</span>
             </div>
         </div>
     </section>
@@ -43,12 +43,12 @@
                                 <div class="visible-xs clearfix margin-bottom-15"></div>
                                 <div class="col-xs-12 col-sm-6 row margin-bottom-0 pull-right">
                                     <div class="form-group margin-bottom-0 pull-right">
-                                        <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="openSimpleModal('new-customer-modal')">
-                                            <span>New Customer</span>
+                                        <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="openSimpleModal('new-contact-modal')">
+                                            <span>New Contact</span>
                                         </button>
                                     </div>
                                     <div class="form-group margin-bottom-0 margin-right-5 pull-right">
-                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="openModal('import-customer-modal', 'ImportCustomerModalCtrl','md')">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="openModal('import-contact-modal', 'ImportCustomerModalCtrl','md')">
                                             <span>Import</span>
                                         </button>
                                     </div>
@@ -126,7 +126,7 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
-                                <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Customer ID</th>
+                                <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Contact ID</th>
                                 <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
                                 <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
@@ -140,7 +140,7 @@
                             </tr>
                             <tr ng-if="showFilter">
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="_id" placeholder="Customer ID" class="form-control" type="search" />
+                                    <input st-search="_id" placeholder="Contact ID" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.photo">
                                     <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
@@ -192,7 +192,7 @@
                         <tbody>
                             <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
                                 <td ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-click='customerSelectClickFn($event, customer)' ng-class='{"fa-check-circle": customer.isSelected, "fa-circle-o": !customer.isSelected}'></i></td>
-                                <td ng-show="column.name"><strong>Customer ID: </strong>{{customer._id}}</td>
+                                <td ng-show="column.name"><strong>Contact ID: </strong>{{customer._id}}</td>
                                 <td class="center" ng-show="column.photo && tableView == 'list'">
                                     <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
                                 </td>
@@ -235,6 +235,6 @@
         </div>
     </div>
 </div>
-<div data-ng-include=" 'assets/views/partials/new-customer-modal.html' "></div>
-<div data-ng-include=" 'assets/views/partials/import-customer-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/new-contact-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/import-contact-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/tags-bulk-action-modal.html' "></div>

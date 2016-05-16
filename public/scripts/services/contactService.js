@@ -4,7 +4,7 @@
 
 
 'use strict';
-mainApp.service('customerService', ['$http', function ($http) {
+mainApp.service('contactService', ['$http', function ($http) {
     var baseUrl = '/api/1.0/';
 
     this.getCustomer = function(id, fn) {
@@ -37,7 +37,7 @@ mainApp.service('customerService', ['$http', function ($http) {
                     });
                 }
                 if(addresses) {
-                    return addresses;    
+                    return addresses;
                 }
                 return "";
             }

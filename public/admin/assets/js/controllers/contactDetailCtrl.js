@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
+  app.controller('ContactDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "ContactService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, ContactService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
 
     /*
      * @openModal
@@ -108,7 +108,7 @@
       $scope.customer_data = $scope.customer_data || {};
       $scope.customer_data.tags = $scope.unsetTags();
       console.log('customer_data:', $scope.customer_data);
-      CustomerService.saveCustomer($scope.customer_data, function (customer) {
+      ContactService.saveContact($scope.customer_data, function (customer) {
         $scope.customer = customer;
         $scope.setTags();
         $scope.originalCustomer = angular.copy($scope.customer);
@@ -169,7 +169,7 @@
 
     $scope.getCustomer = function () {
       console.log('getCustomer >>>');
-      CustomerService.getCustomer($stateParams.contactId, function (customer, error) {
+      ContactService.getContact($stateParams.contactId, function (customer, error) {
         if(error){
             toaster.pop('warning', error.message);
             if(error.code === 404)
@@ -182,8 +182,8 @@
         $scope.setDefaults();
         $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
         $scope.getMapData();
-        // $scope.contactLabel = CustomerService.contactLabel(customer);
-        // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
+        // $scope.contactLabel = ContactService.contactLabel(customer);
+        // $scope.checkBestEmail = ContactService.checkBestEmail(customer);
       });
     };
 
@@ -220,7 +220,7 @@
       }
       var validMapData = false;
       if ($scope.ip_geo_address && !angular.equals($scope.originalCustomer.details[0].addresses[0], $scope.customer.details[0].addresses[0])) {
-        CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
+        ContactService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
             $scope.location.lon = parseFloat(data.lon);
@@ -298,7 +298,7 @@
 
               $scope.localtime = moment().format('h:mm a');
               if ($scope.ip_geo_address) {
-                CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
+                ContactService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
                   if (data.error === undefined) {
                     $scope.location.lat = parseFloat(data.lat);
                     $scope.location.lon = parseFloat(data.lon);
@@ -337,7 +337,7 @@
     };
 
     $scope.convertAddressToLatLon = function (_address, fn) {
-      CustomerService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
+      ContactService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
         if (data.error === undefined) {
           fn(data);
         } else {
@@ -452,7 +452,7 @@
           }
 
           $scope.errorMapData = false;
-          CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
+          ContactService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
             if(!angular.equals($scope.customer_data.details[0].emails[0].email, $scope.originalCustomer.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
             {
               console.log("duplicate email");
@@ -500,7 +500,7 @@
     // Save customer
 
     $scope.saveCustomerChanges =function(hideToaster, showAlert, newUrl){
-        CustomerService.saveCustomer($scope.customer_data, function (customer) {
+        ContactService.saveContact($scope.customer_data, function (customer) {
           $scope.customer = customer;
           $scope.setDefaults();
           $scope.setTags();
@@ -601,7 +601,7 @@
      */
 
     $scope.customerDeleteFn = function () {
-      CustomerService.deleteCustomer($scope.customerId, function (customer) {
+      ContactService.deleteContact($scope.customerId, function (customer) {
         toaster.pop('warning', 'Contact Deleted.');
       });
     };
@@ -716,7 +716,7 @@
      */
 
     $scope.contactLabel = function (customer) {
-      return CustomerService.contactLabel(customer);
+      return ContactService.contactLabel(customer);
     };
 
     /*
@@ -725,7 +725,7 @@
      */
 
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkBestEmail(contact);
+      var returnVal = ContactService.checkBestEmail(contact);
       this.email = contact.email;
       return returnVal;
     };
@@ -736,7 +736,7 @@
      */
 
     $scope.checkFacebookId = function (contact) {
-      var returnVal = CustomerService.checkFacebookId(contact);
+      var returnVal = ContactService.checkFacebookId(contact);
       this.facebookId = contact.facebookId;
       return returnVal;
     };
@@ -747,7 +747,7 @@
      */
 
     $scope.checkTwitterId = function (contact) {
-      var returnVal = CustomerService.checkTwitterId(contact);
+      var returnVal = ContactService.checkTwitterId(contact);
       this.twitterId = contact.twitterId;
       return returnVal;
     };
@@ -758,7 +758,7 @@
      */
 
     $scope.checkLinkedInId = function (contact) {
-      var returnVal = CustomerService.checkLinkedInId(contact);
+      var returnVal = ContactService.checkLinkedInId(contact);
       this.linkedInUrl = contact.linkedInUrl;
       this.linkedInId = contact.linkedInId;
       return returnVal;
@@ -770,7 +770,7 @@
      */
 
     $scope.checkAddress = function (contact) {
-      var returnVal = CustomerService.checkAddress(contact);
+      var returnVal = ContactService.checkAddress(contact);
       this.address = contact.address;
       return returnVal;
     };
@@ -940,7 +940,7 @@
       $scope.customer.tags = {};
     };
 
-    CustomerService.getCustomerTags(function(tags){
+    ContactService.getCustomerTags(function(tags){
       $scope.customerTags = tags;
     });
 
@@ -1038,10 +1038,10 @@
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
-          CustomerService.deleteCustomer(customer._id, function () {
+          ContactService.deleteContact(customer._id, function () {
             toaster.pop('warning', 'Customer Deleted.');
             $scope.originalCustomer = angular.copy($scope.customer);
-            $state.go('app.customers');
+            $state.go('app.contacts');
           });
         }
       });
@@ -1070,14 +1070,14 @@
       $scope.customer = null;
     }
 
-    CustomerService.getCustomers(function (customers) {
-      CustomerService.getAllCustomerTags(customers, function(tags){
+    ContactService.getContacts(function (customers) {
+      ContactService.getAllCustomerTags(customers, function(tags){
         $scope.customerTags = tags;
       });
     });
 
     $scope.tagToCustomer = function(value) {
-     return CustomerService.tagToCustomer(value);
+     return ContactService.tagToCustomer(value);
     }
 
     $scope.viewSingleOrder = function(orderId) {
