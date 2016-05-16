@@ -764,7 +764,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function toggleSectionVisiblity(section, global){
-        if(global){
+        if (global) {
             if(section.global === false)
             {
                 SweetAlert.swal({
@@ -785,8 +785,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 }
             });
             }
-        }
-        else if(section.global){
+        } else if(section.global) {
             if(!section.hiddenOnPages){
                 section.hiddenOnPages = {}
             }
