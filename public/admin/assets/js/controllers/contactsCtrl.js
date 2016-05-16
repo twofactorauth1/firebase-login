@@ -295,7 +295,7 @@
     $scope.viewSingle = function (customer) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
-      window.location = '/admin/#/customers/' + customer._id;
+      window.location = '/admin/#/contacts/' + customer._id;
     };
 
     /* 18-Sep Unioned set of tags in system with those needed by Indigenous

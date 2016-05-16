@@ -122,12 +122,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Contacts',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
-    }).state('app.singleCustomer', {
-        url: '/customers/:contactId',
-        templateUrl: "/admin/assets/views/customer-detail.html",
-        title: 'Single Customer',
+    }).state('app.singleContact', {
+        url: '/contacts/:contactId',
+        templateUrl: "/admin/assets/views/contact-detail.html",
+        title: 'Single Contact',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
+        resolve: loadSequence('contactDetailCtrl', 'customerService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',

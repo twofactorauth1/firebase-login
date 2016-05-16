@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
+  app.controller('ContactDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
 
     /*
      * @openModal
