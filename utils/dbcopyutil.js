@@ -655,7 +655,7 @@ var copyutil = {
             },
             function getPages(website, cb) {
                 console.log('getPages: fetch account pages and loop through section data');
-                pagesCollection.find({'accountId': accountId, 'ssb': true}).toArray(function(err, pages){
+                pagesCollection.find({'accountId': accountId, 'ssb': true, 'latest': true}).toArray(function(err, pages){
                     if (err) {
                         console.log('Error finding pages:', err);
                         return cb(err);
