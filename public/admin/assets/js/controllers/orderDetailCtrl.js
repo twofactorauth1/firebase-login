@@ -850,5 +850,14 @@
             }
         };
 
+        $scope.isDonationOrderFn = function () {
+          if (!$scope.order) {
+            return isDonation;
+          }
+
+          var isDonation = _.findWhere($scope.order.line_items, {type: 'DONATION'}) ? true : false;
+          return isDonation;
+        };
+
     }]);
 }(angular));

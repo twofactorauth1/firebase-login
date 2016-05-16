@@ -176,6 +176,14 @@
             }
         }
 
+        // function to get component sort order
+        function getComponentSortOrder(newComponents, newSection){
+            if(newSection && newSection.componentSortOrder)
+               return newSection.componentSortOrder;
+            else
+               return _.invert(_.object(_.pairs(_.pluck(newComponents, 'type'))))
+        }
+
         /**
          * Events for compiled editor elememts
          */
@@ -948,9 +956,10 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers'];
+            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
             var newComponents = angular.copy(newSection.components);
-            var newComponentsOrder = _.invert(_.object(_.pairs(_.pluck(newComponents, 'type')))); // ['componentType1', 'componentType2', ...]
+
+            var newComponentsOrder =  getComponentSortOrder(newComponents, newSection); // ['componentType1', 'componentType2', ...]
             var oldComponents = _(angular.copy(oldSection.components)).chain()
 
                                     .sortBy(function(x) { // sort by order of newComponents
@@ -959,6 +968,17 @@
 
                                     .value(); // return the new array
 
+            if(newSection.componentSortOrder){
+                // get current sort order
+                var componentOrder =  angular.copy(getComponentSortOrder(newComponents));
+                //arrange components in requested order
+                newComponents = _(newComponents).chain()
+                                    .sortBy(function(x) { // sort by order of newComponents
+                                        return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10)
+                                    }).value(); // return the new array
+            }
+
+
             delete newSection.components;
             delete oldSection.components;
 
@@ -966,7 +986,16 @@
                 return $.extend({}, c, _.omit(oldComponents[index], keysToOmit));
             });
 
+            if(newSection.componentSortOrder){
+                // set current sort order
+                newSection.components = _(newSection.components).chain().sortBy(function(section){
+                    return componentOrder[section.type] && parseInt(componentOrder[section.type], 10)
+                }).value();
+            }
+
             return $.extend({}, newSection, _.omit(oldSection, keysToOmit));
+
+
 
         }
 
@@ -1233,11 +1262,13 @@
 
             } else if (type === 'image-gallery') {
 
-                if (update) {
+                if(isImage(asset.url))
+                {
+                    if (update) {
 
-                    component.images[index].url = asset.url;
+                        component.images[index].url = asset.url;
 
-                } else {
+                    } else {
                         $rootScope.$broadcast('$refreshSlickSlider', index + 1);
                         component.images.splice(index + 1, 0, {
                             url: asset.url,
@@ -1248,6 +1279,8 @@
                                 component.images[index + 1][k] = v;
                             });
                         }
+                    }
+
                 }
 
             } else if (type === 'thumbnail-slider') {
@@ -1274,6 +1307,19 @@
 
             }
 
+        }
+
+        function isImage(src) {
+              var deferred = $q.defer();
+              var image = new Image();
+              image.onerror = function() {
+                  deferred.resolve(false);
+              };
+              image.onload = function() {
+                  deferred.resolve(true);
+              };
+              image.src = src;
+              return deferred.promise;
         }
 
         function getTempUUID() {

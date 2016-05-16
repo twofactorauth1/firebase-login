@@ -16,7 +16,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
                     'class="ssb-text-settings" ' +
                     'ng-bind-html="ngModel | unsafe">' +
                 '</div>' +
-              '</dizv>',
+              '</div>',
     link: function(scope, element, attrs, modelCtrl) {
 
 

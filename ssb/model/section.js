@@ -131,6 +131,7 @@ var section = $$.m.ModelBase.extend({
             'preview',
             'enabled',
             'reusable',
+            'global',
             'globalHeader',
             'globalFooter',
             'canAddComponents',
@@ -139,7 +140,7 @@ var section = $$.m.ModelBase.extend({
             'visibility'];
         var self = this;
         var fieldsEqual = _.every(fieldNames, function(fieldName){
-            return self.get('fieldName') === other.get('fieldName');
+            return self.get(fieldName) === other.get(fieldName);
         });
         return idEquals && componentsEquals && bgEquals && spacingEquals && fieldsEqual;
     }

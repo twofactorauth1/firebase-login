@@ -560,10 +560,12 @@ module.exports = {
                 //var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
                 var vars = [];
+                var isDonation = updatedOrder.attributes.line_items[0].type == 'DONATION' ? true : false;
 
                 log.debug(accountId, userId, 'toAddress ', toAddress);
                 log.debug(accountId, userId, 'toName ', toName);
                 log.debug(accountId, userId, 'toAddress ', toAddress);
+                log.debug(accountId, userId, 'is donation ', isDonation)
 
                 accountDao.getAccountByID(accountId, function(err, account){
                     if(err) {
@@ -572,24 +574,32 @@ module.exports = {
                         var business = account.get('business');
                         var emailPreferences = account.get('email_preferences');
                         if(!business || !business.emails || !business.emails[0].email) {
-                            log.warn('No account email.  No NEW_ORDER email sent');
+                            if (isDonation) {
+                              log.warn('No account email.  No NEW_DONATION email sent');
+                            } else {
+                              log.warn('No account email.  No NEW_ORDER email sent');
+                            }
                             callback(null, account, updatedOrder);
                         }
-                        var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
+
+                        var subject = isDonation ? ('Your '+business.name+' donation receipt from '+moment().format('MMM Do, YYYY')) : ('Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY'));
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
+                        var emailPageHandle = isDonation ? 'new-donation' : 'new-order';
 
-                        cmsManager.getEmailPage(accountId, 'new-order', function(err, email){
+                        cmsManager.getEmailPage(accountId, emailPageHandle, function(err, email){
                             if(err || !email) {
-                                log.warn('No NEW_ORDER email receipt sent: ' + err);
+                                log.warn('No ' + (isDonation ? 'NEW_DONATION' : 'NEW_ORDER') + ' email receipt sent: ' + err);
                                 if(emailPreferences.new_orders === true) {
                                     //Send additional details
-                                    subject = "New order created!";
+                                    subject = isDonation ? "New donation received!" : "New order created!";
                                     var component = {};
                                     component.order = updatedOrder.attributes;
-                                    component.text = "The following order was created:";
+                                    component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                    app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                    app.render(adminNotificationEmailTemplate, component, function(err, html){
                                         juice.juiceResources(html, {}, function(err, _html) {
                                             if (err) {
                                                 log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
@@ -610,7 +620,9 @@ module.exports = {
                                 var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
                                 log.debug(accountId, userId, 'Using this for data', component);
-                                app.render('emails/base_email_order', component, function(err, html) {
+                                var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
+
+                                app.render(baseEmailTemplate, component, function(err, html) {
                                     juice.juiceResources(html, {}, function(err, _html) {
                                         if (err) {
                                             log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
@@ -629,10 +641,12 @@ module.exports = {
 
                                     if(emailPreferences.new_orders === true) {
                                         //Send additional details
-                                        subject = "New order created!";
-                                        component.text = "The following order was created:";
+                                        subject = isDonation ? "New donation received!" : "New order created!";
+                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                        app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                        var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                        app.render(adminNotificationEmailTemplate, component, function(err, html){
                                             juice.juiceResources(html, {}, function(err, _html) {
                                                 if (err) {
                                                     log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
@@ -1385,7 +1399,7 @@ module.exports = {
                 log.error(accountId, userId, 'Error getting order: ' + err);
                 return fn(err, null);
             } else {
-
+                var isDonation = order.get('line_items')[0].type == 'DONATION' ? true : false;
 
                 async.waterfall([
                     //get the account
@@ -1546,7 +1560,8 @@ module.exports = {
                     },
                     //get email template
                     function (contact, account, callback) {
-                        cmsManager.getEmailPage(accountId, 'new-order', function(err, template) {
+                        var emailPageHandle = isDonation ? 'new-donation' : 'new-order';
+                        cmsManager.getEmailPage(accountId, emailPageHandle, function(err, template) {
                             callback(err, template, contact, account);
                         });
                     },
@@ -1563,26 +1578,33 @@ module.exports = {
                         log.debug(accountId, userId, 'toAddress ', toAddress);
                         log.debug(accountId, userId, 'toName ', toName);
                         log.debug(accountId, userId, 'toAddress ', toAddress);
+                        log.debug(accountId, userId, 'is donation ', isDonation);
 
                         var business = account.get('business');
                         var emailPreferences = account.get('email_preferences');
                         if(!business || !business.emails || !business.emails[0].email) {
+                          if (isDonation) {
+                            log.warn('No account email.  No NEW_DONATION email sent');
+                          } else {
                             log.warn('No account email.  No NEW_ORDER email sent');
+                          }
                         }
-                        var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
+                        var subject = isDonation ? ('Your '+business.name+' donation receipt from '+moment().format('MMM Do, YYYY')) : ('Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY'));
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
 
                         if(!template) {
-                            log.warn('No NEW_ORDER email receipt sent');
+                            log.warn('No ' + (isDonation ? 'NEW_DONATION' : 'NEW_ORDER') + ' email receipt sent: ');
                             if(emailPreferences.new_orders === true) {
                                 //Send additional details
-                                subject = "New order created!";
+                                subject = isDonation ? "New donation received!" : "New order created!";
                                 var component = {};
                                 component.order = order.attributes;
-                                component.text = "The following order was created:";
+                                component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                 component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + order.attributes._id;
-                                app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                app.render(adminNotificationEmailTemplate, component, function(err, html){
                                     juice.juiceResources(html, {}, function(err, _html) {
                                         if (err) {
                                             log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline:', err);
@@ -1600,7 +1622,9 @@ module.exports = {
                             var component = template.get('components')[0];
                             component.order = order.attributes;
                             log.debug(accountId, userId, 'Using this for data', component);
-                            app.render('emails/base_email_order', component, function(err, html) {
+                            var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
+
+                            app.render(baseEmailTemplate, component, function(err, html) {
                                 juice.juiceResources(html, {}, function(err, _html) {
                                     if (err) {
                                         log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline:', err);
@@ -1616,10 +1640,12 @@ module.exports = {
 
                                 if(emailPreferences.new_orders === true) {
                                     //Send additional details
-                                    subject = "New order created!";
-                                    component.text = "The following order was created:";
+                                    subject = isDonation ? "New donation received!" : "New order created!";
+                                    component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + order.attributes._id;
-                                    app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                    app.render(adminNotificationEmailTemplate, component, function(err, html){
                                         juice.juiceResources(html, {}, function(err, _html) {
                                             if (err) {
                                                 log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline:', err);
