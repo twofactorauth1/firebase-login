@@ -58,7 +58,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     function getSiteTemplates() {
         SimpleSiteBuilderService.getSiteTemplates().then(function(siteTemplates) {
             if (siteTemplates.data) {
-                vm.state.siteTemplates = siteTemplates.data;
+                vm.state.siteTemplates = siteTemplates.data.reverse();
             }
         });
     }
