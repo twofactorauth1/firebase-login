@@ -2584,7 +2584,7 @@ module.exports = {
         var self = this;
         self.log.debug(accountId, null, '>> listSiteTemplates');
 
-        siteTemplateDao.findMany({_id: {$ne:'__counter__'}}, $$.m.ssb.SiteTemplate, function(err, siteTemplates){
+        siteTemplateDao.findMany({_id: {$ne:'__counter__'}, public: true}, $$.m.ssb.SiteTemplate, function(err, siteTemplates){
             if(err) {
                 self.log.error(accountId, null, 'Error listing site templates:', err);
                 return fn(err);
