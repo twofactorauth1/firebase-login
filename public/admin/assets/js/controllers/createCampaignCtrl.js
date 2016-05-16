@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular, moment*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope",  "$rootScope", "$modal", "$location", "$window", "$stateParams", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", "SweetAlert", function ($scope, $rootScope, $modal, $location, $window, $stateParams, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations, SweetAlert) {
+  app.controller('CreateCampaignCtrl', ["$scope",  "$rootScope", "$modal", "$location", "$window", "$stateParams", "toaster", "$timeout", "CampaignService", "ContactService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", "SweetAlert", function ($scope, $rootScope, $modal, $location, $window, $stateParams, toaster, $timeout, CampaignService, ContactService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations, SweetAlert) {
 
     /*
      * set editor theme
@@ -55,7 +55,7 @@
 
     $scope.emails = [];
 
-    CustomerService.getCustomerTags(function(tags){
+    ContactService.getCustomerTags(function(tags){
       $scope.customerTags = tags;
     });
 
@@ -750,7 +750,7 @@
      * -
      */
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkCustomerBestEmail(contact);
+      var returnVal = ContactService.checkCustomerBestEmail(contact);
       return returnVal;
     };
 
@@ -829,7 +829,7 @@
     };
 
      $scope.contactTags = function (customer) {
-       return CustomerService.contactTags(customer);
+       return ContactService.contactTags(customer);
      };
 
     /*
@@ -887,7 +887,7 @@
           });
           if (!contact) {
             var tempCustomer = $scope.createCustomerData(email.text);
-            promises.push(CustomerService.createCustomer(tempCustomer));
+            promises.push(ContactService.createCustomer(tempCustomer));
           } else {
             contactsArr.push(contact._id);
           }
@@ -1061,7 +1061,7 @@
 
         if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
 
-            CustomerService.getCustomers(function (customers) {
+            ContactService.getCustomers(function (customers) {
                 $scope.customers = customers;
                 var tags = _.uniq(_.pluck($scope.newCampaignObj.searchTags.tags, 'data'));
                 recipients.forEach(function(id, index) {
@@ -1077,7 +1077,7 @@
                             c.tags = tags;
                         }
                         c.tags = _.uniq(c.tags);
-                        CustomerService.saveCustomer(c, function() {});
+                        ContactService.saveCustomer(c, function() {});
                     }
                 });
             });
@@ -1606,7 +1606,7 @@
      * - get all customers for this user
      */
     $scope.getCustomers = function() {
-      var promise = CustomerService.getCustomers(function (customers) {
+      var promise = ContactService.getCustomers(function (customers) {
         var customerWithoutEmails = [];
         _.each(customers, function (customer) {
           if (!$scope.checkBestEmail(customer)) {
@@ -1615,7 +1615,7 @@
         });
         customers = _.difference(customers, customerWithoutEmails);
         $scope.customers = customers;
-        CustomerService.getAllCustomerTags(customers, function(tags){
+        ContactService.getAllCustomerTags(customers, function(tags){
           customerTags = tags;
         })
         var _tags = [];
@@ -1752,7 +1752,7 @@
     }
 
     $scope.tagToCustomer = function(value) {
-     return CustomerService.tagToCustomer(value);
+     return ContactService.tagToCustomer(value);
     };
 
     $scope.formatTagsFn = function () {

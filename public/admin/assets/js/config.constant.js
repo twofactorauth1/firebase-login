@@ -603,7 +603,7 @@ app.constant('JS_REQUIRES', {
     'paymentService': 'assets/js/services/product.js',
     'websiteService': 'assets/js/services/webiste.js',
     'userService': 'assets/js/services/user.js',
-    'customerService': 'assets/js/services/customer.js',
+    'contactService': 'assets/js/services/contact.js',
     'campaignService': 'assets/js/services/campaign.js',
     'toasterService': 'assets/js/services/toaster.js',
     'ImportContactService': 'assets/js/services/import_contacts.js',

@@ -1,6 +1,6 @@
 'use strict';
 /*global app, Papa*/
-app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'CustomerService', 'userConstant', 'SocialConfigService', 'getCustomers', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, CustomerService, userConstant, SocialConfigService, getCustomers, toaster) {
+app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getCustomers', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getCustomers, toaster) {
 
   $scope.getCustomers = getCustomers;
   /*
@@ -610,8 +610,8 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
     });
 
     $scope.uploadingServerCsv = true;
-    CustomerService.resetCount();
-    CustomerService.importCsvCustomers(customersToAdd, function () {
+    ContactService.resetCount();
+    ContactService.importCsvCustomers(customersToAdd, function () {
       console.log('upload started ...', $scope.uploadingServerCsv);
     });
   };

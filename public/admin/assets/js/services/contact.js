@@ -2,15 +2,15 @@
 /*global app, Keen, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-  app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations) {
+  app.service('ContactService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations) {
     var baseUrl = '/api/1.0/';
 
     this.getCache = function () {
-      var cache = $cacheFactory.get('CustomerService');
+      var cache = $cacheFactory.get('ContactService');
       if (cache) {
         return cache;
       }
-      return $cacheFactory('CustomerService');
+      return $cacheFactory('ContactService');
     };
 
     this.getCustomers = function (fn) {

@@ -1,4 +1,4 @@
-app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'contactConstant', function($filter, CustomerService, $modal, contactConstant) {
+app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'contactConstant', function($filter, ContactService, $modal, contactConstant) {
 
     return {
         require: [],
@@ -28,7 +28,7 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
                     start: new Date(),
                     end: new Date()
                 };
-                CustomerService.getActivityTypes(function(activity_types) {
+                ContactService.getActivityTypes(function(activity_types) {
                     scope.activity_types = activity_types;
                 });
             }
@@ -76,14 +76,14 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
                     if(!activity_hash)
                     {
                         scope.newActivity.activityType = activity_type;
-                    }else                    
+                    }else
                         scope.newActivity.activityType = activity_hash.data;
                     scope.newActivity.start = new Date();
                     scope.newActivity.end = new Date();
                 }
-                
-                CustomerService.postCustomerActivity(scope.newActivity, function(activity) {
-                    if(scope.singleCustomer) {                    
+
+                ContactService.postCustomerActivity(scope.newActivity, function(activity) {
+                    if(scope.singleCustomer) {
                         activity.customer = scope.$parent.customer;
                     }
                     scope.all_activities.push(activity);
@@ -124,12 +124,12 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
                     skip: (scope.main.page - 1) * scope.main.take
                 }
                 if (scope.singleCustomer) {
-                    CustomerService.getCustomerUnreadActivities(scope.customerId, function(activities) {
+                    ContactService.getCustomerUnreadActivities(scope.customerId, function(activities) {
                         scope.unread = activities.length;
                     });
 
-                    CustomerService.getCustomerActivities(scope.customerId, function(activities) {
-                        CustomerService.getCustomer(scope.customerId, function (customer) {
+                    ContactService.getCustomerActivities(scope.customerId, function(activities) {
+                        ContactService.getCustomer(scope.customerId, function (customer) {
                             for (var i = 0; i < activities.length; i++) {
                                 activities[i]['customer'] = customer;
                                 activities[i]['activityType'] = activities[i]['activityType'];
@@ -158,7 +158,7 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
                             activityType: "CONTACT_CREATED,ACCOUNT_CREATED"
                         }
                     }
-                    CustomerService.getAllCustomerActivitiesWithLimit(queryParams, function(data) {
+                    ContactService.getAllCustomerActivitiesWithLimit(queryParams, function(data) {
                         var activites = data.results;
                         for (var i = 0; i < activites.length; i++) {
                             var customer = _.where(scope.customers, {
@@ -178,15 +178,15 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             else {
                 if (scope.$parent.customers) {
                     scope.customers = scope.$parent.customers;
-                    CustomerService.getAllCustomerUnreadActivities(function(data) {
+                    ContactService.getAllCustomerUnreadActivities(function(data) {
                         scope.unread = data.total;
                     });
                     scope.loadPage();
                 } else {
-                    CustomerService.getCustomers(function(customers) {
+                    ContactService.getCustomers(function(customers) {
                         scope.$parent.customers = customers;
                         scope.customers = customers;
-                        CustomerService.getAllCustomerUnreadActivities(function(data) {
+                        ContactService.getAllCustomerUnreadActivities(function(data) {
                             scope.unread = data.total;
                         });
                         scope.loadPage();
@@ -219,7 +219,7 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
             };
             /*
            * @getActivityName
-           * - get activity actual name 
+           * - get activity actual name
            */
             scope.getActivityName = function(activity)
             {
