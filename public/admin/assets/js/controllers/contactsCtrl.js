@@ -44,7 +44,7 @@
      */
 
     $scope.getCustomers = function () {
-      ContactService.getCustomers(function (customers) {
+      ContactService.getContacts(function (customers) {
         _.each(customers, function (customer) {
           customer.bestEmail = $scope.checkBestEmail(customer);
           customer.hasFacebookId = $scope.checkFacebookId(customer);
@@ -549,7 +549,7 @@
                 if (isConfirm) {
                     var selectedCustomers = $scope.selectedCustomersFn();
                     selectedCustomers.forEach(function(sc, sci) {
-                        ContactService.deleteCustomer(sc._id, function () {});
+                        ContactService.deleteContact(sc._id, function () {});
                         $scope.customers.splice(_.findIndex($scope.customers, function(c) {return c._id == sc._id; }), 1);
                         $scope.displayedCustomers.splice(_.findIndex($scope.displayedCustomers, function(c) {return c._id == sc._id; }), 1);
                     });

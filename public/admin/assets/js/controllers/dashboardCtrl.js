@@ -81,7 +81,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
     return days;
   };
 
-  ContactService.getCustomers(function (customers) {
+  ContactService.getContacts(function (customers) {
     ContactService.getAllCustomerActivities(function (activities) {
       $scope.activities = activities.results;
       _.each($scope.activities, function (activity) {
@@ -151,7 +151,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
    * - get customer for the customer widget
    */
   $scope.customerNames = [];
-  ContactService.getCustomers(function (customers) {
+  ContactService.getContacts(function (customers) {
 
     $scope.customers = customers;
     $scope.customersThisMonth = [];

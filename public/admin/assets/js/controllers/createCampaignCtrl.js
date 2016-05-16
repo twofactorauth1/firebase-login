@@ -1061,7 +1061,7 @@
 
         if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
 
-            ContactService.getCustomers(function (customers) {
+            ContactService.getContacts(function (customers) {
                 $scope.customers = customers;
                 var tags = _.uniq(_.pluck($scope.newCampaignObj.searchTags.tags, 'data'));
                 recipients.forEach(function(id, index) {
@@ -1606,7 +1606,7 @@
      * - get all customers for this user
      */
     $scope.getCustomers = function() {
-      var promise = ContactService.getCustomers(function (customers) {
+      var promise = ContactService.getContacts(function (customers) {
         var customerWithoutEmails = [];
         _.each(customers, function (customer) {
           if (!$scope.checkBestEmail(customer)) {

@@ -169,7 +169,7 @@
 
     $scope.getCustomer = function () {
       console.log('getCustomer >>>');
-      ContactService.getCustomer($stateParams.contactId, function (customer, error) {
+      ContactService.getContact($stateParams.contactId, function (customer, error) {
         if(error){
             toaster.pop('warning', error.message);
             if(error.code === 404)
@@ -601,7 +601,7 @@
      */
 
     $scope.customerDeleteFn = function () {
-      ContactService.deleteCustomer($scope.customerId, function (customer) {
+      ContactService.deleteContact($scope.customerId, function (customer) {
         toaster.pop('warning', 'Contact Deleted.');
       });
     };
@@ -1038,7 +1038,7 @@
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
-          ContactService.deleteCustomer(customer._id, function () {
+          ContactService.deleteContact(customer._id, function () {
             toaster.pop('warning', 'Customer Deleted.');
             $scope.originalCustomer = angular.copy($scope.customer);
             $state.go('app.contacts');
@@ -1070,7 +1070,7 @@
       $scope.customer = null;
     }
 
-    ContactService.getCustomers(function (customers) {
+    ContactService.getContacts(function (customers) {
       ContactService.getAllCustomerTags(customers, function(tags){
         $scope.customerTags = tags;
       });

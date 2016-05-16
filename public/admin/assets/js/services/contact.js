@@ -13,7 +13,7 @@
       return $cacheFactory('ContactService');
     };
 
-    this.getCustomers = function (fn) {
+    this.getContacts = function (fn) {
       var apiUrl = baseUrl + ['contact'].join('/');
       return $http.get(apiUrl)
         .success(function (data) {
@@ -21,13 +21,13 @@
         });
     };
 
-    this.getCustomersShortForm = function (fields, fn) {
+    this.getContactsShortForm = function (fields, fn) {
       var apiUrl = baseUrl + ['contact', 'shortform'].join('/');
-      var data = this.getCache().get('customers');
+      var data = this.getCache().get('contacts');
       var cache = this.getCache();
 
       if (data) {
-        console.info('Customers call hit cache');
+        console.info('Contacts call hit cache');
         fn(data);
       } else {
         $http({
@@ -37,13 +37,13 @@
             fields: fields
           }
         }).success(function (data) {
-          cache.put('customers', data);
+          cache.put('contacts', data);
           fn(data);
         });
       }
     };
 
-    this.getCustomer = function (id, fn) {
+    this.getContact = function (id, fn) {
       var apiUrl = baseUrl + ['contact', id].join('/');
       $http.get(apiUrl)
         .success(function (data) {
@@ -55,15 +55,15 @@
         });
     };
 
-    this.deleteCustomer = function (id, fn) {
-      var customers = this.getCache().get('customers');
-      if (customers) {
-        customers.forEach(function (value, index) {
+    this.deleteContact = function (id, fn) {
+      var contacts = this.getCache().get('contacts');
+      if (contacts) {
+        contacts.forEach(function (value, index) {
           if (value._id === id) {
-            customers.splice(index, 1);
+            contacts.splice(index, 1);
           }
         });
-        this.getCache().put('customers', customers);
+        this.getCache().put('contacts', contacts);
       }
 
       var apiUrl = baseUrl + ['contact', id].join('/');
@@ -73,15 +73,15 @@
         });
     };
 
-    this.postCustomer = function (cache, customer, fn) {
-      var customers = cache.get('customers');
+    this.postContact = function (cache, contact, fn) {
+      var contacts = cache.get('contacts');
 
       var apiUrl = baseUrl + ['contact'].join('/');
-      $http.post(apiUrl, customer)
+      $http.post(apiUrl, contact)
         .success(function (data) {
-          if (customers) {
-            customers.push(data);
-            cache.put('customers', customers);
+          if (contacts) {
+            contacts.push(data);
+            cache.put('contacts', contacts);
           }
           fn(data);
         });

@@ -129,7 +129,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     });
 
                     ContactService.getCustomerActivities(scope.customerId, function(activities) {
-                        ContactService.getCustomer(scope.customerId, function (customer) {
+                        ContactService.getContact(scope.customerId, function (customer) {
                             for (var i = 0; i < activities.length; i++) {
                                 activities[i]['customer'] = customer;
                                 activities[i]['activityType'] = activities[i]['activityType'];
@@ -183,7 +183,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     });
                     scope.loadPage();
                 } else {
-                    ContactService.getCustomers(function(customers) {
+                    ContactService.getContacts(function(customers) {
                         scope.$parent.customers = customers;
                         scope.customers = customers;
                         ContactService.getAllCustomerUnreadActivities(function(data) {

@@ -102,7 +102,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.customerTags = tags;
       $scope.setTags(tags);
     });
-    ContactService.getCustomers(function(customers){
+    ContactService.getContacts(function(customers){
       ContactService.getAllCustomerTags(customers,function(tags){
         $scope.customerTags = tags;
         $scope.setTags(tags);

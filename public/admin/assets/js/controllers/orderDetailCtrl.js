@@ -34,7 +34,7 @@
          * get all customers to for customer select
          */
 
-        ContactService.getCustomers(function (customers) {
+        ContactService.getContacts(function (customers) {
             $scope.customers = customers;
             $scope.getUsers();
         });
