@@ -74,7 +74,7 @@ module.exports = function (config) {
         'public/admin/assets/js/services/payment.js',
         'public/admin/assets/js/services/user.js',
         'public/admin/assets/js/services/order.js',
-        'public/admin/assets/js/services/customer.js',
+        'public/admin/assets/js/services/contact.js',
         'public/admin/assets/js/services/import_contacts.js',
         'public/admin/assets/js/services/campaign.js',
         'public/admin/assets/js/services/common.js',
