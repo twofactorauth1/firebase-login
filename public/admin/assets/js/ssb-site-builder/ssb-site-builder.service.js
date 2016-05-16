@@ -818,7 +818,8 @@
                     method: 'POST',
                     data: {
                         siteTemplateId: siteTemplate._id,
-                        siteThemeId: siteTemplate.defaultTheme
+                        siteThemeId: siteTemplate.siteThemeId,
+                        siteThemeOverrides: siteTemplate.siteThemeOverrides
                     }
                 }).success(success).error(error))
             )

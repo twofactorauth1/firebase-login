@@ -2607,7 +2607,7 @@ module.exports = {
         });
     },
 
-    setSiteTemplate: function(accountId, siteTemplateId, siteThemeId, websiteId, created, fn) {
+    setSiteTemplate: function(accountId, siteTemplateId, siteThemeId, siteThemeOverrides, websiteId, created, fn) {
         var self = this;
         var userId = created.by;
         self.log.debug(accountId, userId, '>> setSiteTemplate', siteTemplateId);
@@ -2635,6 +2635,7 @@ module.exports = {
 
                 website.set('siteTemplateId', siteTemplateId);
                 website.set('themeId', siteThemeId);
+                website.set('themeOverrides', siteThemeOverrides);
                 website.set('modified', created);
                 websiteDao.saveOrUpdate(website, function(err, updatedWebsite){
                     if(err) {

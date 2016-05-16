@@ -565,6 +565,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.id;
         var siteTemplateId = req.params.siteTemplateId;
         var siteThemeId = req.body.siteThemeId;
+        var siteThemeOverrides = req.body.siteThemeOverrides;
         var created = {
             date: new Date(),
             by: userId
@@ -572,7 +573,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.log.debug('siteThemeId', siteThemeId)
 
-        ssbManager.setSiteTemplate(accountId, siteTemplateId, siteThemeId, websiteId, created, function(err, value){
+        ssbManager.setSiteTemplate(accountId, siteTemplateId, siteThemeId, siteThemeOverrides, websiteId, created, function(err, value){
             self.log.debug(accountId, userId, '<< setSiteTemplate');
             return self.sendResultOrError(resp, err, value, "Error setting Site Template");
         });
