@@ -319,15 +319,16 @@ module.exports = {
             function getGlobalSections(website, theme, template, sections, header, footer, cb){
                 var query = {
                     accountId:accountId,
-                    global:true
+                    global:true,
+                    latest:true
                 };
                 sectionDao.findMany(query, $$.m.ssb.Section, function(err, gsections){
                     if(err) {
                         self.log.error(accountId, userId, 'Error finding global sections:', err);
                         cb(err);
                     } else {
-                        var latestSections = self.getLatestSections(gsections);
-                        cb(null, website, theme, template, sections, header, footer, latestSections);
+                        //var latestSections = self.getLatestSections(gsections);
+                        cb(null, website, theme, template, sections, header, footer, gsections);
                     }
                 });
             },
