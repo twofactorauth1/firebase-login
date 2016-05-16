@@ -1262,8 +1262,10 @@
 
             } else if (type === 'image-gallery') {
 
-                if(isImage(asset.url))
-                {
+                isImage(asset.url).then(function(response){
+                  if(response === false)
+                    return;
+
                     if (update) {
 
                         component.images[index].url = asset.url;
@@ -1280,8 +1282,7 @@
                             });
                         }
                     }
-
-                }
+                })
 
             } else if (type === 'thumbnail-slider') {
 
@@ -1313,6 +1314,7 @@
               var deferred = $q.defer();
               var image = new Image();
               image.onerror = function() {
+                  console.log("Not a valid image");
                   deferred.resolve(false);
               };
               image.onload = function() {
