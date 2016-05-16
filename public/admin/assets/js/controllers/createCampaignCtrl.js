@@ -1077,7 +1077,7 @@
                             c.tags = tags;
                         }
                         c.tags = _.uniq(c.tags);
-                        ContactService.saveCustomer(c, function() {});
+                        ContactService.saveContact(c, function() {});
                     }
                 });
             });

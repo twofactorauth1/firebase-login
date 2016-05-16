@@ -377,7 +377,7 @@
           }]
         })
       }
-      ContactService.saveCustomer(tempCustomer, function (returnedCustomer) {
+      ContactService.saveContact(tempCustomer, function (returnedCustomer) {
         $scope.saveLoading = false;
         $scope.fullName = '';
         $scope.customer.tags = {};
@@ -631,7 +631,7 @@
                 customer.tags = _.difference(customer.tags, tags);
             }
 
-            ContactService.saveCustomer(customer, function() {});
+            ContactService.saveContact(customer, function() {});
         });
 
         $scope.tagsBulkAction = {};

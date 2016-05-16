@@ -108,7 +108,7 @@
       $scope.customer_data = $scope.customer_data || {};
       $scope.customer_data.tags = $scope.unsetTags();
       console.log('customer_data:', $scope.customer_data);
-      ContactService.saveCustomer($scope.customer_data, function (customer) {
+      ContactService.saveContact($scope.customer_data, function (customer) {
         $scope.customer = customer;
         $scope.setTags();
         $scope.originalCustomer = angular.copy($scope.customer);
@@ -500,7 +500,7 @@
     // Save customer
 
     $scope.saveCustomerChanges =function(hideToaster, showAlert, newUrl){
-        ContactService.saveCustomer($scope.customer_data, function (customer) {
+        ContactService.saveContact($scope.customer_data, function (customer) {
           $scope.customer = customer;
           $scope.setDefaults();
           $scope.setTags();

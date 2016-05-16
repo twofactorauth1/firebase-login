@@ -87,32 +87,32 @@
         });
     };
 
-    this.putCustomer = function (cache, customer, fn) {
-      var customers = cache.get('customers');
+    this.putContact = function (cache, contact, fn) {
+      var contacts = cache.get('contacts');
 
       var apiUrl = baseUrl + ['contact'].join('/');
-      $http.put(apiUrl, customer)
+      $http.put(apiUrl, contact)
         .success(function (data) {
-          if (customers) {
-            customers.forEach(function (value, index) {
+          if (contacts) {
+            contacts.forEach(function (value, index) {
               if (value._id === customer._id) {
-                customers[index] = customer;
+                contacts[index] = contact;
               }
             });
-            cache.put('customers', customers);
+            cache.put('contacts', contacts);
           }
           fn(data);
         });
     };
 
-    this.saveCustomer = function (customer, fn) {
+    this.saveCustomer = function (contact, fn) {
       var apiFn = null;
-      if (customer._id) {
-        apiFn = this.putCustomer;
+      if (contact._id) {
+        apiFn = this.putContact;
       } else {
-        apiFn = this.postCustomer;
+        apiFn = this.postContact;
       }
-      apiFn(this.getCache(), customer, fn);
+      apiFn(this.getCache(), contact, fn);
     };
 
     var customerUploading = 0;
