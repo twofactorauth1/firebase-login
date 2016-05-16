@@ -553,7 +553,7 @@ app.constant('JS_REQUIRES', {
     'billingCtrl': 'assets/js/controllers/billingCtrl.js',
     'postsCtrl': 'assets/js/controllers/postsCtrl.js',
     'socialFeedCtrl': 'assets/js/controllers/socialFeedCtrl.js',
-    'customersCtrl': 'assets/js/controllers/customersCtrl.js',
+    'contactsCtrl': 'assets/js/controllers/contactsCtrl.js',
     'customerDetailCtrl': 'assets/js/controllers/customerDetailCtrl.js',
     'productsCtrl': 'assets/js/controllers/productsCtrl.js',
     'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',

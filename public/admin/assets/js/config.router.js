@@ -116,12 +116,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Editor',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
-    }).state('app.customers', {
-        url: '/customers',
-        templateUrl: "/admin/assets/views/customers.html",
-        title: 'Customers',
+    }).state('app.contacts', {
+        url: '/contacts',
+        templateUrl: "/admin/assets/views/contacts.html",
+        title: 'Contacts',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
+        resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
     }).state('app.singleCustomer', {
         url: '/customers/:contactId',
         templateUrl: "/admin/assets/views/customer-detail.html",

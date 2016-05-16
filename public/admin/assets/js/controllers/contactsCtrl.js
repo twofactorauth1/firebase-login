@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
