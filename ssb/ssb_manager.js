@@ -1239,7 +1239,8 @@ module.exports = {
                     var query = {
                         accountId:accountId,
                         latest:true,
-                        _id:{$ne:pageId}
+                        _id:{$ne:pageId},
+                        handle: {$nin: ['signup', 'single-post', 'blog']}
                     };
 
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
@@ -1276,7 +1277,15 @@ module.exports = {
                                                 pageSections.splice(insertAt, numberToRemove, section);
                                             } else {
                                                //put it next to last
-                                                insertAt = pageSections.length - 2;
+
+                                                var lastSection = pageSections[pageSections.length - 1];
+                                                if(lastSection && lastSection.get('name') === 'Footer'){
+                                                   insertAt = pageSections.length - 1;
+                                                }
+                                                else
+                                                {
+                                                    insertAt = pageSections.length;
+                                                }
                                                 self.log.debug('Inserting at ' + insertAt);
                                                 pageSections.splice(insertAt, 0, section);
                                             }
