@@ -125,6 +125,7 @@ $.FroalaEditor.config = {
         'ssb-table-black-border': 'Black Border',
         'ssb-table-white-border': 'White Border'
     },
+    tableCellMultipleStyles: false,
     tableColors: [].concat.apply([], spectrumColors),
     tableColorsStep: 10,
     paragraphStyles: {
