@@ -4,8 +4,8 @@
     }
     @media(max-width:767px) {
         .widget-weather {
-            margin-top: -280px !important;
-            margin-left: 20px !important;
+            margin-top: -280px!important;
+            margin-left: 0!important;
             padding: 0!important;
             .panel-body {
                 padding: 0!important;
@@ -27,7 +27,7 @@
         margin-right: 0px;
     }
     .widget-weather .temp {
-        padding: 12px !important;
+        padding: 12px!important;
         height: 230px;
         text-align: center;
         vertical-align: middle;
@@ -90,6 +90,16 @@
           top: 0;
           border: none !important;
           width: 100%;
+
+          @media screen and (max-width: 768px) {
+            position: absolute!important;
+            left: 50%;
+            top: 50%;
+            right: auto;
+            transform: translate(-50%);
+            background: white!important;
+          }
+
         }
         .rg-right span{
             border-left: 1px solid #efa022;
