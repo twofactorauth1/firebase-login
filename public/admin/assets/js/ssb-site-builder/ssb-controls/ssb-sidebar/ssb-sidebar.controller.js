@@ -1008,7 +1008,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                         SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                             console.log('page saved');
-                            // toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                             vm.state.saveLoading = false;
                             vm.uiState.navigation.loadPage(page._id);
                             SimpleSiteBuilderService.getPages();
