@@ -1153,171 +1153,7 @@ module.exports = {
                     cb(null, existingPage, globalSections, existingPage.get('sections'));
                 }
             },
-            function objectifyUpdatedSections(existingPage, globalSections, existingSections, cb) {
-                checkTime = moment();
-                timingLog.warn('objectifyUpdatedSections: ' + checkTime.diff(startTime));
-                startTime = checkTime;
-                var sections = page.get('sections');
-                var objectAry = [];
-                _.each(sections, function(section){
-                    objectAry.push(new $$.m.ssb.Section(section));
-                });
-                cb(null, existingPage, globalSections, existingSections, objectAry);
-            },
-            function removeDeletedGlobals(existingPage, globalSections, existingSections, updatedSections, cb) {
-                checkTime = moment();
-                timingLog.warn('removeDeletedGlobals: ' + checkTime.diff(startTime));
-                startTime = checkTime;
-                var sectionsToBeDeleted = [];
 
-                _.each(globalSections, function(gSection){
-                    var id = gSection.id();
-                    var foundSection = _.find(updatedSections, function(eSection){
-                        return (eSection.id() === id && eSection.get('global')===true);
-                    });
-                    if(!foundSection) {
-                        sectionsToBeDeleted.push(gSection);
-                    }
-                });
-                if(sectionsToBeDeleted.length > 0) {
-                    self.log.debug('Removing these global sections:', sectionsToBeDeleted);
-                    var idAry = _.map(sectionsToBeDeleted, function(section){return section.id();});
-                    var query = {
-                        accountId:accountId,
-                        latest:true,
-                        'sections._id': {$in:idAry},
-                        _id:{$ne:pageId}
-                    };
-                    self.log.debug('using this query:', query);
-                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
-                        if(err) {
-                            self.log.error(accountId, userId, 'Error finding pages with global sections:', err);
-                            cb(err);
-                        } else {
-                            self.log.debug('Found:', pages);
-                            _.each(pages, function(page){
-                                var sections = [];
-                                _.each(page.get('sections'), function(section){
-                                    var found = _.find(sectionsToBeDeleted, function (delSection){
-                                        return delSection.id() === section._id;
-                                    });
-                                    if(!found) {
-                                        sections.push(section);
-                                    }
-                                });
-                                page.set('sections', sections);
-                            });
-                            pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
-                                if(err) {
-                                    self.log.error(accountId, userId, 'Error removing deleted global sections:', err);
-                                }
-                                cb(err, existingPage, globalSections, existingSections, updatedSections);
-                            });
-                        }
-                    });
-                } else {
-                    cb(null, existingPage, globalSections, existingSections, updatedSections);
-                }
-            },
-            function addNewGlobals(existingPage, globalSections, existingSections, updatedSections, cb) {
-                checkTime = moment();
-                timingLog.warn('addNewGlobals: ' + checkTime.diff(startTime));
-                startTime = checkTime;
-                var sectionsToBeAdded = [];
-
-                _.each(updatedSections, function(section){
-                    var id = section.id();
-                    var foundSection = _.find(globalSections, function(gSection){
-                        return gSection.id() === id;
-                    });
-                    if(!foundSection && section.get('global')===true) {
-                        sectionsToBeAdded.push(section);
-                    }
-                });
-                if(sectionsToBeAdded.length > 0) {
-                    self.log.debug('Adding these global sections:', sectionsToBeAdded);
-                    var query = {
-                        accountId:accountId,
-                        latest:true,
-                        _id:{$ne:pageId},
-                        handle: {$nin: ['signup', 'single-post', 'blog']}
-                    };
-
-                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
-                        if(err) {
-                            self.log.error(accountId, userId, 'Error finding pages with global sections:', err);
-                            cb(err);
-                        } else {
-                            async.eachSeries(pages, function(page, callback){
-                                sectionDao.dereferenceSections(page.get('sections'), function(err, pageSections){
-                                    if(err) {
-                                       self.log.error(accountId, userId, 'Error dereferencing pageSections:', err);
-                                       callback(err);
-                                    } else {
-                                        _.each(sectionsToBeAdded, function(section){
-                                            var insertAt = 0;
-                                            var numberToRemove = 0;
-                                            if(section.get('globalHeader')===true) {
-                                               //replace existing section with Name==Header
-                                                _.each(pageSections, function(pageSection, index){
-                                                    if(pageSection.get('name') === 'Header') {
-                                                        insertAt = index;
-                                                        numberToRemove = 1;
-                                                    }
-                                                });
-                                                pageSections.splice(insertAt, numberToRemove, section);
-                                            } else if(section.get('globalFooter')===true) {
-                                               //replace existing section with Name==Footer
-                                                _.each(pageSections, function(pageSection, index){
-                                                    if(pageSection.get('name') === 'Footer') {
-                                                        insertAt = index;
-                                                        numberToRemove = 1;
-                                                    }
-                                                });
-                                                pageSections.splice(insertAt, numberToRemove, section);
-                                            } else {
-                                               //put it next to last
-
-                                                var lastSection = pageSections[pageSections.length - 1];
-                                                if(lastSection && lastSection.get('name') === 'Footer'){
-                                                   insertAt = pageSections.length - 1;
-                                                }
-                                                else
-                                                {
-                                                    insertAt = pageSections.length;
-                                                }
-                                                self.log.debug('Inserting at ' + insertAt);
-                                                pageSections.splice(insertAt, 0, section);
-                                            }
-                                        });
-                                        //done with this page
-                                        var jsonSections = [];
-                                        _.each(pageSections, function(section){
-                                            jsonSections.push({_id: section.id()});
-                                        });
-                                        page.set('sections', jsonSections);
-                                        callback();
-                                    }
-
-                                });
-                            }, function(err){
-                                if(err) {
-                                    cb(err);
-                                } else {
-                                    pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
-                                        if(err) {
-                                            self.log.error(accountId, userId, 'Error removing deleted global sections:', err);
-                                        }
-                                        cb(err, existingPage, globalSections, existingSections);
-                                    });
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    cb(null, existingPage, globalSections, existingSections);
-                }
-            },
             function dereferenceSections(existingPage, globalSections, existingSections, cb) {
                 checkTime = moment();
                 timingLog.warn('dereferenceSections: ' + checkTime.diff(startTime));
@@ -1410,11 +1246,11 @@ module.exports = {
                         self.log.error(accountId, userId,'Error updating sections:', err);
                         cb(err);
                     } else {
-                        cb(null, existingPage, dereferencedSections);
+                        cb(null, existingPage, dereferencedSections, globalSections);
                     }
                 });
             },
-            function upatePageVersion(existingPage, dereferencedSections, cb){
+            function upatePageVersion(existingPage, dereferencedSections, globalSections, cb){
                 checkTime = moment();
                 timingLog.warn('upatePageVersion: ' + checkTime.diff(startTime));
                 startTime = checkTime;
@@ -1438,7 +1274,7 @@ module.exports = {
                                     self.log.error(accountId, userId,'Error saving existing page with new id:', err);
                                     cb(err);
                                 } else {
-                                    cb(null, existingPage, dereferencedSections, newVersion);
+                                    cb(null, existingPage, dereferencedSections, newVersion, globalSections);
                                 }
                             });
                         }
@@ -1453,12 +1289,12 @@ module.exports = {
                             self.log.error(accountId, userId,'Error saving existing page with new id:', err);
                             cb(err);
                         } else {
-                            cb(null, value, dereferencedSections, newVersion);
+                            cb(null, value, dereferencedSections, newVersion,  globalSections);
                         }
                     });
                 }
             },
-            function updateThePage(existingPage, updatedSections, newVersion, cb){
+            function updateThePage(existingPage, updatedSections, newVersion, globalSections, cb){
                 self.log.info('updateThePage');
                 checkTime = moment();
                 timingLog.warn('updateThePage: ' + checkTime.diff(startTime));
@@ -1478,10 +1314,167 @@ module.exports = {
                         self.log.error(accountId, userId,'Error updating page:', err);
                         cb(err);
                     } else {
-                        cb(null, existingPage, updatedPage, updatedSections);
+                        cb(null, existingPage, updatedPage, updatedSections, globalSections);
                     }
                 });
             },
+
+            function removeDeletedGlobals(existingPage, updatedPage, updatedSections, globalSections, cb) {
+                checkTime = moment();
+                timingLog.warn('removeDeletedGlobals: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                var sectionsToBeDeleted = [];
+
+                _.each(globalSections, function(gSection){
+                    var id = gSection.id();
+                    var foundSection = _.find(updatedSections, function(eSection){
+                        return (eSection.id() === id && eSection.get('global')===true);
+                    });
+                    if(!foundSection) {
+                        sectionsToBeDeleted.push(gSection);
+                    }
+                });
+                if(sectionsToBeDeleted.length > 0) {
+                    self.log.debug('Removing these global sections:', sectionsToBeDeleted);
+                    var idAry = _.map(sectionsToBeDeleted, function(section){return section.id();});
+                    var query = {
+                        accountId:accountId,
+                        latest:true,
+                        'sections._id': {$in:idAry},
+                        _id:{$ne:pageId}
+                    };
+                    self.log.debug('using this query:', query);
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding pages with global sections:', err);
+                            cb(err);
+                        } else {
+                            self.log.debug('Found:', pages);
+                            _.each(pages, function(page){
+                                var sections = [];
+                                _.each(page.get('sections'), function(section){
+                                    var found = _.find(sectionsToBeDeleted, function (delSection){
+                                        return delSection.id() === section._id;
+                                    });
+                                    if(!found) {
+                                        sections.push(section);
+                                    }
+                                });
+                                page.set('sections', sections);
+                            });
+                            pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error removing deleted global sections:', err);
+                                }
+                                cb(err, existingPage, globalSections, updatedSections, updatedPage);
+                            });
+                        }
+                    });
+                } else {
+                    cb(null, existingPage, globalSections, updatedSections, updatedPage);
+                }
+            },
+
+            function addNewGlobals(existingPage, globalSections, updatedSections, updatedPage, cb) {
+                checkTime = moment();
+                timingLog.warn('addNewGlobals: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                var sectionsToBeAdded = [];
+
+                _.each(updatedSections, function(section){
+                    var id = section.id();
+                    var foundSection = _.find(globalSections, function(gSection){
+                        return gSection.id() === id;
+                    });
+                    if(!foundSection && section.get('global')===true) {
+                        sectionsToBeAdded.push(section);
+                    }
+                });
+                if(sectionsToBeAdded.length > 0) {
+                    self.log.debug('Adding these global sections:', sectionsToBeAdded);
+                    var query = {
+                        accountId:accountId,
+                        latest:true,
+                        _id:{$ne:pageId},
+                        handle: {$nin: ['signup', 'single-post', 'blog']}
+                    };
+
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding pages with global sections:', err);
+                            cb(err);
+                        } else {
+                            async.eachSeries(pages, function(page, callback){
+                                sectionDao.dereferenceSections(page.get('sections'), function(err, pageSections){
+                                    if(err) {
+                                       self.log.error(accountId, userId, 'Error dereferencing pageSections:', err);
+                                       callback(err);
+                                    } else {
+                                        _.each(sectionsToBeAdded, function(section){
+                                            var insertAt = 0;
+                                            var numberToRemove = 0;
+                                            if(section.get('globalHeader')===true) {
+                                               //replace existing section with Name==Header
+                                                _.each(pageSections, function(pageSection, index){
+                                                    if(pageSection.get('name') === 'Header') {
+                                                        insertAt = index;
+                                                        numberToRemove = 1;
+                                                    }
+                                                });
+                                                pageSections.splice(insertAt, numberToRemove, section);
+                                            } else if(section.get('globalFooter')===true) {
+                                               //replace existing section with Name==Footer
+                                                _.each(pageSections, function(pageSection, index){
+                                                    if(pageSection.get('name') === 'Footer') {
+                                                        insertAt = index;
+                                                        numberToRemove = 1;
+                                                    }
+                                                });
+                                                pageSections.splice(insertAt, numberToRemove, section);
+                                            } else {
+                                               //put it next to last
+
+                                                var lastSection = pageSections[pageSections.length - 1];
+                                                if(lastSection && lastSection.get('name') === 'Footer'){
+                                                   insertAt = pageSections.length - 1;
+                                                }
+                                                else
+                                                {
+                                                    insertAt = pageSections.length;
+                                                }
+                                                self.log.debug('Inserting at ' + insertAt);
+                                                pageSections.splice(insertAt, 0, section);
+                                            }
+                                        });
+                                        //done with this page
+                                        var jsonSections = [];
+                                        _.each(pageSections, function(section){
+                                            jsonSections.push({_id: section.id()});
+                                        });
+                                        page.set('sections', jsonSections);
+                                        callback();
+                                    }
+
+                                });
+                            }, function(err){
+                                if(err) {
+                                    cb(err);
+                                } else {
+                                    pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
+                                        if(err) {
+                                            self.log.error(accountId, userId, 'Error removing deleted global sections:', err);
+                                        }
+                                        cb(null, existingPage, updatedPage, updatedSections);
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    cb(null, existingPage, updatedPage, updatedSections);
+                }
+            },
+
             function updateHomePage(existingPage, updatedPage, updatedSections, cb){
                 checkTime = moment();
                 timingLog.warn('setAsHomePage: ' + checkTime.diff(startTime));
@@ -1558,6 +1551,7 @@ module.exports = {
                     cb(null, existingPage, updatedPage, updatedSections);
                 }
             },
+
             function listPages(existingPage, updatedPage, updatedSections, cb){
                 checkTime = moment();
                 timingLog.warn('listPages: ' + checkTime.diff(startTime));
