@@ -347,6 +347,11 @@
                     a.preventDefault()
                 };
             b.events.on("dragenter", d, !0), b.events.on("dragover", c, !0), b.events.on("drop", function(c) {
+                if(!b.opts.dragImage)
+                {
+                    c.preventDefault(), c.stopPropagation();
+                    return;
+                }
                 for (var d, e, f = 0; f < a.FroalaEditor.INSTANCES.length; f++)
                     if (d = a.FroalaEditor.INSTANCES[f].$el.find("img.fr-img-move").get(0)) {
                         e = a.FroalaEditor.INSTANCES[f];
