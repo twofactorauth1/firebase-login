@@ -44,6 +44,7 @@
         vm.isAnonymous = false;
         vm.paypalLoginClickFn = paypalLoginClickFn;
         vm.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
+        vm.facebookClientID = ENV.facebookClientID;
         console.log('url:', vm.paypalURL);
 
         vm.fieldClass = fieldClass;
@@ -70,8 +71,8 @@
         vm.percentage = null;
         vm.product = {};
         vm.close = close;
-        vm.parseFBShare = parseFBShare;
-        vm.shareUrl = 'indigenous.io';
+        //vm.parseFBShare = parseFBShare;
+        vm.shareUrl = $location.url;
         vm.getProduct = getProduct;
         vm.getCredentials = getCredentials;
         vm.setInitialCheckoutState = setInitialCheckoutState;
@@ -500,7 +501,7 @@
                         if (data.message)
                             failedOrderMessage = data.message;
                         vm.checkoutModalState = 5;
-                        vm.parseFBShare();
+                        //vm.parseFBShare();
                         vm.failedOrderMessage = failedOrderMessage;
                         return;
                     }
@@ -678,7 +679,7 @@
                             return;
                         }
 
-						order.payment_details.card_token = token;
+                        order.payment_details.card_token = token;
                         orderService.createOrder(order, function(data) {
                             if (data && !data._id) {
                                 var failedOrderMessage = "Error in order processing";
@@ -690,7 +691,7 @@
                                 return;
                             }
                             console.log('order, ', order);
-                            vm.parseFBShare();
+                            //vm.parseFBShare();
                             vm.checkoutModalState = 5;
                             // vm.formBuilder = {};
                         });
@@ -726,26 +727,6 @@
             vm.formBuilder = {};
             vm.checkoutModalState = 1;
             vm.getDonations(vm.product._id);
-        }
-
-        function parseFBShare() {
-            vm.shareUrl = $location.url;
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId      : '622171824473460',
-                    xfbml      : true,
-                    version    : 'v2.6'
-                });
-            };
-            $timeout(function() {
-                (function(d, s, id){
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {return;}
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/en_US/sdk.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-            }, 500);
         }
 
         function deleteOrderFn(order) {
@@ -845,7 +826,7 @@
         function init(element) {
             vm.element = element;
 
-            vm.parseFBShare();
+            //vm.parseFBShare();
 
             $(vm.element).find('.modal').on('hidden.bs.modal', function () {
                 vm.close();
