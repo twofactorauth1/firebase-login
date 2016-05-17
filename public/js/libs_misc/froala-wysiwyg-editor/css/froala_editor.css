@@ -951,3 +951,7 @@ iframe.fr-iframe {
 .fr-image-size-layer .fr-image-group .fr-input-line {
    width: calc(50% - 2em) !important;
 }
+.fr-image-upload-layer{
+    min-height: 200px;
+    padding-top: 75px !important;
+}
