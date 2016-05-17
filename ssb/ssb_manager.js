@@ -172,7 +172,7 @@ module.exports = {
     createPage: function(accountId, websiteId, templateId, created, fn) {
         var self = this;
         var userId = created.by;
-        self.log.debug(accountId, userId, '>> createPage');
+        self.log.debug(accountId, userId, '>> createPage [' + templateId + ']');
 
         /*
          * 1. Get the website
@@ -237,11 +237,13 @@ module.exports = {
                         sectionDao.getById(section._id, $$.m.ssb.Section, function(err, referencedSection){
                             if(err) {
                                 callback(err);
+                            } else if(!referencedSection){
+                                self.log.warn(accountId, userId, 'No referenced section for [' + section._id + ']', section);
+                                callback();
                             } else {
-                                self.log.debug(accountId, userId, 'referencedSection', referencedSection);
+                                self.log.debug(accountId, userId, 'referencedSection [' + section._id + ']', referencedSection);
                                 var id = $$.u.idutils.generateUUID();
-                                if(referencedSection)
-                                {
+                                if(referencedSection) {
                                     var s = section;
                                     var refId = s._id;
                                     s = referencedSection.toJSON();
@@ -250,8 +252,7 @@ module.exports = {
                                     s.anchor = id;
                                     s.accountId = accountId;
                                     self.log.debug(accountId, userId, 'new dereferenced', s);
-                                }
-                                else{
+                                } else {
                                     section._id = id;
                                     section.anchor = id;
                                     section.accountId = accountId;
