@@ -716,6 +716,7 @@
         }
 
         function move(e) {
+            editor.events.disableBlur();
             editor.selection.restore();
             if (dragging) {
                 // Mouseup happened outside of window
@@ -736,6 +737,7 @@
                 }
 
                 onmove.apply(element, [dragX, dragY, e]);
+                //editor.popups.show('colors.picker');
             }
         }
 
@@ -753,7 +755,7 @@
                     $(doc).bind(duringDragEvents);
                     $(doc.body).addClass("sp-dragging");
 
-                    //move(e);
+                    move(e);
 
                     //prevent(e);
                 }
