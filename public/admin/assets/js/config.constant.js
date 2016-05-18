@@ -576,7 +576,7 @@ app.constant('JS_REQUIRES', {
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
-    'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
+    'importContactModalCtrl': 'assets/js/controllers/modals/importContactModalCtrl.js',
     'onboardingCtrl': 'assets/js/controllers/onboardingCtrl.js',
     'DOHYCtrl': 'assets/js/dashboard/dashboard.controller.js',
     // 'DashboardWorkstreamTileComponent': 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.component.js',
