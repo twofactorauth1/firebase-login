@@ -940,7 +940,7 @@
       $scope.customer.tags = {};
     };
 
-    ContactService.getCustomerTags(function(tags){
+    ContactService.getContactTags(function(tags){
       $scope.customerTags = tags;
     });
 
@@ -1071,13 +1071,13 @@
     }
 
     ContactService.getContacts(function (customers) {
-      ContactService.getAllCustomerTags(customers, function(tags){
+      ContactService.getAllContactTags(customers, function(tags){
         $scope.customerTags = tags;
       });
     });
 
     $scope.tagToCustomer = function(value) {
-     return ContactService.tagToCustomer(value);
+     return ContactService.tagToContact(value);
     }
 
     $scope.viewSingleOrder = function(orderId) {

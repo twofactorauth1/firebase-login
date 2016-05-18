@@ -95,7 +95,7 @@
         .success(function (data) {
           if (contacts) {
             contacts.forEach(function (value, index) {
-              if (value._id === customer._id) {
+              if (value._id === contact._id) {
                 contacts[index] = contact;
               }
             });
@@ -115,37 +115,37 @@
       apiFn(this.getCache(), contact, fn);
     };
 
-    var customerUploading = 0;
-    var customerArr = [];
+    var contactUploading = 0;
+    var contactArr = [];
 
     this.resetCount = function(){
-      customerUploading = 0;
+      contactUploading = 0;
     }
 
-    this.importCsvCustomers = function (customers, fn) {
+    this.importCsvContacts = function (contacts, fn) {
       var self = this;
       var passedFn;
-      if (customers) {
-        customerArr = customers;
+      if (contacts) {
+        contactArr = contacts;
       }
 
       if (fn) {
         self.passedFn = fn;
       }
 
-      self.postCustomer(self.getCache(), customerArr[customerUploading], function () {
-        if (customerUploading < customerArr.length - 1) {
-          $rootScope.$broadcast('importingCustomers', {
-            current: customerUploading + 1,
-            total: customerArr.length
+      self.postContact(self.getCache(), contactArr[contactUploading], function () {
+        if (contactUploading < contactArr.length - 1) {
+          $rootScope.$broadcast('importingContacts', {
+            current: contactUploading + 1,
+            total: contactArr.length
           });
-          customerUploading++;
-          self.importCsvCustomers();
+          contactUploading++;
+          self.importCsvContacts();
         }
-        if (customerUploading === customerArr.length - 1) {
-          $rootScope.$broadcast('importingCustomers', {
-            current: customerUploading + 1,
-            total: customerArr.length
+        if (contactUploading === contactArr.length - 1) {
+          $rootScope.$broadcast('importingContacts', {
+            current: contactUploading + 1,
+            total: contactArr.length
           });
         }
       });
@@ -159,10 +159,10 @@
         });
     };
 
-    this.postFullContact = function (customerId, fn) {
-      var apiUrl = baseUrl + ['contact', customerId, 'fullcontact'].join('/');
+    this.postFullContact = function (contactId, fn) {
+      var apiUrl = baseUrl + ['contact', contactId, 'fullcontact'].join('/');
       $http.post(apiUrl, {
-        _id: customerId
+        _id: contactId
       }).success(function (data) {
         fn(data);
       });
@@ -206,7 +206,7 @@
       }
     };
 
-    this.checkCustomerBestEmail = function (contact) {
+    this.checkContactBestEmail = function (contact) {
       if (contact && contact.details && contact.details.length > 0) {
         //see if we have a google contact, that's the best source of email
         var details = _.findWhere(contact.details, {
@@ -312,22 +312,22 @@
       return false;
     };
 
-    this.getCustomerActivities = function (customerId, fn) {
-      var apiUrl = baseUrl + ['contact', customerId, 'activity'].join('/');
+    this.getContactActivities = function (contactId, fn) {
+      var apiUrl = baseUrl + ['contact', contactId, 'activity'].join('/');
       $http.get(apiUrl)
         .success(function (data) {
           fn(data);
         });
     };
-    this.getCustomerUnreadActivities = function (customerId, fn) {
-      var apiUrl = baseUrl + ['contact', customerId, 'activity', 'unread'].join('/');
+    this.getContactUnreadActivities = function (contactId, fn) {
+      var apiUrl = baseUrl + ['contact', contactId, 'activity', 'unread'].join('/');
       $http.get(apiUrl)
         .success(function (data) {
           fn(data);
         });
     };
 
-    this.getAllCustomerActivities = function (fn) {
+    this.getAllContactActivities = function (fn) {
       var apiUrl = baseUrl + ['contact', 'activities'].join('/');
       $http.get(apiUrl)
         .success(function (data) {
@@ -336,7 +336,7 @@
     };
 
 
-    this.getAllCustomerActivitiesWithLimit = function (queryParams, fn) {
+    this.getAllContactActivitiesWithLimit = function (queryParams, fn) {
       var apiUrl = baseUrl + ['contact', 'activities'].join('/');
       $http({
         url: apiUrl,
@@ -346,7 +346,7 @@
         fn(data);
       });
     };
-    this.getAllCustomerUnreadActivities = function (fn) {
+    this.getAllContactUnreadActivities = function (fn) {
       var apiUrl = baseUrl + ['contact', 'activities', 'unread'].join('/');
       $http.get(apiUrl)
         .success(function (data) {
@@ -354,7 +354,7 @@
         });
     };
 
-    this.postCustomerActivity = function (activity, fn) {
+    this.postContactActivity = function (activity, fn) {
       var apiUrl = baseUrl + ['contact', 'activity'].join('/');
       $http.post(apiUrl, activity)
         .success(function (data) {
@@ -363,24 +363,24 @@
     };
 
     this.getActivityTypes = function (fn) {
-      var activityTypes = contactConstant.customer_activity_types.dp;
+      var activityTypes = contactConstant.contact_activity_types.dp;
       fn(activityTypes);
     };
 
 
-    this.getCustomerTags = function (fn) {
-      var customerTags = contactConstant.customer_tags.dp;
-      fn(customerTags);
+    this.getContactTags = function (fn) {
+      var contactTags = contactConstant.contact_tags.dp;
+      fn(contactTags);
     };
 
 
-    this.getAllCustomerTags = function (customers, fn) {
-      var customerTags = contactConstant.customer_tags.dp;
+    this.getAllContactTags = function (contacts, fn) {
+      var contactTags = contactConstant.contact_tags.dp;
         var contactTags = [];
-        _.each(customers, function (contact) {
+        _.each(contacts, function (contact) {
           if (contact.tags) {
             _.each(contact.tags, function (tag) {
-              var type = _.find(customerTags, function (type) {
+              var type = _.find(contactTags, function (type) {
                 return type.data === tag;
               });
               if (!type) {
@@ -392,12 +392,12 @@
             });
           }
         })
-      customerTags = _.uniq(customerTags.concat(contactTags), function(c) { return c.label; })
-      fn(customerTags);
+      contactTags = _.uniq(contactTags.concat(contactTags), function(c) { return c.label; })
+      fn(contactTags);
     };
 
-    this.tagToCustomer = function (value, fn) {
-      var regexTag = formValidations.customerTags;
+    this.tagToContact = function (value, fn) {
+      var regexTag = formValidations.contactTags;
       var isValid = regexTag.test(value);
       if(isValid){
         var item = {
@@ -431,9 +431,9 @@
       });
     };
 
-    this.createCustomer = function (customer) {
+    this.createContact = function (contact) {
       var apiUrl = baseUrl + ['contact'].join('/');
-      return $http.post(apiUrl, customer);
+      return $http.post(apiUrl, contact);
     };
 
     this.checkDuplicateEmail = function (email, check, fn) {

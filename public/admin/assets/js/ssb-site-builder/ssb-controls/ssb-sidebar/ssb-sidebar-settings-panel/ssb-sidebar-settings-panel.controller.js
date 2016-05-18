@@ -161,7 +161,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     }
 
     function tagToCustomer(value) {
-      return ContactService.tagToCustomer(value);
+      return ContactService.tagToContact(value);
     }
 
     function setTags(_customerTags) {

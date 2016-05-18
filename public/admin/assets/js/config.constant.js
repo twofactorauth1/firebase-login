@@ -21,7 +21,7 @@ app.constant('formValidations', {
    'phone': /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/,
    'zip': /(^\d{5}$)|(^\d{5}-\d{4}$)/,
    'extension': /^[0-9]*$/,
-   'customerTags': /^[a-z\d\-_\s]+$/i
+   'contactTags': /^[a-z\d\-_\s]+$/i
   });
 
 /*
@@ -105,7 +105,7 @@ app.constant('social', {
 });
 
 app.constant('contactConstant', {
-  customer_activity_types: {
+  contact_activity_types: {
     PAGE_VIEW: "PAGE_VIEW",
     SUBSCRIBE: "SUBSCRIBE",
     CONTACT_CREATED: "CONTACT_CREATED",
@@ -171,7 +171,7 @@ app.constant('contactConstant', {
       data: "OTHER"
     }]
   },
-  customer_tags:{
+  contact_tags:{
     dp:[{
       label: "Admin",
       data: "ad"

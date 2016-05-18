@@ -29,7 +29,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
    * - get activity actual name
    */
   $scope.getActivityName = function (activity) {
-    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
       data: activity
     });
     if (activity_hash) {
@@ -82,7 +82,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
   };
 
   ContactService.getContacts(function (customers) {
-    ContactService.getAllCustomerActivities(function (activities) {
+    ContactService.getAllContactActivities(function (activities) {
       $scope.activities = activities.results;
       _.each($scope.activities, function (activity) {
         var matchingCustomer = _.findWhere(customers, {
@@ -317,12 +317,12 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
 
   $scope.activityTypes = [];
 
-  contactConstant.customer_activity_types.dp.forEach(function (value, index) {
+  contactConstant.contact_activity_types.dp.forEach(function (value, index) {
     $scope.activityTypes.push(value.label);
   });
 
   $scope.updateActivityTypeFn = function (selection) {
-    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
       label: selection
     });
     if (activity_hash) {
@@ -346,7 +346,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
     angular.element("#activity_type .error").html("");
     angular.element("#activity_type .error").removeClass('has-error');
     var activity_type = angular.element("#activity_type input").val();
-    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
       label: activity_type
     });
      if(!activity_type || !activity_type.trim()) {
@@ -360,7 +360,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
       $scope.newActivity.activityType = activity_hash.data;
     }
 
-    ContactService.postCustomerActivity($scope.newActivity, function (activity) {
+    ContactService.postContactActivity($scope.newActivity, function (activity) {
       var matchingCustomer = _.findWhere($scope.customers, {
         _id: activity.contactId
       });

@@ -1032,7 +1032,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         $scope.availableProductTagsString = $scope.availableProductTags.join(",");
       });
 
-      ContactService.getCustomerTags(function(tags){
+      ContactService.getContactTags(function(tags){
         $scope.customerTags = tags;
       });
 

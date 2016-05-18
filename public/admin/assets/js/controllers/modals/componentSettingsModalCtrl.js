@@ -98,12 +98,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   $scope.getAllCustomerTags = function(){
-    ContactService.getCustomerTags(function(tags){
+    ContactService.getContactTags(function(tags){
       $scope.customerTags = tags;
       $scope.setTags(tags);
     });
     ContactService.getContacts(function(customers){
-      ContactService.getAllCustomerTags(customers,function(tags){
+      ContactService.getAllContactTags(customers,function(tags){
         $scope.customerTags = tags;
         $scope.setTags(tags);
       });
@@ -1214,7 +1214,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     };
 
   $scope.tagToCustomer = function(value) {
-    return ContactService.tagToCustomer(value);
+    return ContactService.tagToContact(value);
   }
 
 }]);

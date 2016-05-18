@@ -55,7 +55,7 @@
 
     $scope.emails = [];
 
-    ContactService.getCustomerTags(function(tags){
+    ContactService.getContactTags(function(tags){
       $scope.customerTags = tags;
     });
 
@@ -750,7 +750,7 @@
      * -
      */
     $scope.checkBestEmail = function (contact) {
-      var returnVal = ContactService.checkCustomerBestEmail(contact);
+      var returnVal = ContactService.checkContactBestEmail(contact);
       return returnVal;
     };
 
@@ -887,7 +887,7 @@
           });
           if (!contact) {
             var tempCustomer = $scope.createCustomerData(email.text);
-            promises.push(ContactService.createCustomer(tempCustomer));
+            promises.push(ContactService.createContact(tempCustomer));
           } else {
             contactsArr.push(contact._id);
           }
@@ -1615,7 +1615,7 @@
         });
         customers = _.difference(customers, customerWithoutEmails);
         $scope.customers = customers;
-        ContactService.getAllCustomerTags(customers, function(tags){
+        ContactService.getAllContactTags(customers, function(tags){
           customerTags = tags;
         })
         var _tags = [];
@@ -1752,7 +1752,7 @@
     }
 
     $scope.tagToCustomer = function(value) {
-     return ContactService.tagToCustomer(value);
+     return ContactService.tagToContact(value);
     };
 
     $scope.formatTagsFn = function () {

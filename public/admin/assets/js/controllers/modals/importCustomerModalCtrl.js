@@ -611,17 +611,17 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
 
     $scope.uploadingServerCsv = true;
     ContactService.resetCount();
-    ContactService.importCsvCustomers(customersToAdd, function () {
+    ContactService.importCsvContacts(customersToAdd, function () {
       console.log('upload started ...', $scope.uploadingServerCsv);
     });
   };
 
   /*
-   * @on:importingCustomers
+   * @on:importingContacts
    * - callback from service to update import progress
    */
 
-  $scope.$on('importingCustomers', function (event, args) {
+  $scope.$on('importingContacts', function (event, args) {
     console.log('on import ', args);
     $scope.serverUploadPercent = Math.round(args.current / args.total * 100);
     if (args.current === args.total) {

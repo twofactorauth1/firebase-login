@@ -35,12 +35,12 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
 
             scope.activityTypes = [];
 
-            contactConstant.customer_activity_types.dp.forEach(function(value, index) {
+            contactConstant.contact_activity_types.dp.forEach(function(value, index) {
               scope.activityTypes.push(value.label);
             });
 
             scope.updateActivityTypeFn = function(selection) {
-                var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
                     label: selection
                 });
                 if(activity_hash)
@@ -64,7 +64,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     angular.element("#customer_activity_type .error").html("");
                     angular.element("#customer_activity_type .error").removeClass('has-error');
                     var activity_type = angular.element("#customer_activity_type input").val();
-                    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
                         label: activity_type
                     });
                     if(!activity_type || !activity_type.trim())
@@ -82,7 +82,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     scope.newActivity.end = new Date();
                 }
 
-                ContactService.postCustomerActivity(scope.newActivity, function(activity) {
+                ContactService.postContactActivity(scope.newActivity, function(activity) {
                     if(scope.singleCustomer) {
                         activity.customer = scope.$parent.customer;
                     }
@@ -124,11 +124,11 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     skip: (scope.main.page - 1) * scope.main.take
                 }
                 if (scope.singleCustomer) {
-                    ContactService.getCustomerUnreadActivities(scope.customerId, function(activities) {
+                    ContactService.getContactUnreadActivities(scope.customerId, function(activities) {
                         scope.unread = activities.length;
                     });
 
-                    ContactService.getCustomerActivities(scope.customerId, function(activities) {
+                    ContactService.getContactActivities(scope.customerId, function(activities) {
                         ContactService.getContact(scope.customerId, function (customer) {
                             for (var i = 0; i < activities.length; i++) {
                                 activities[i]['customer'] = customer;
@@ -158,7 +158,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                             activityType: "CONTACT_CREATED,ACCOUNT_CREATED"
                         }
                     }
-                    ContactService.getAllCustomerActivitiesWithLimit(queryParams, function(data) {
+                    ContactService.getAllContactActivitiesWithLimit(queryParams, function(data) {
                         var activites = data.results;
                         for (var i = 0; i < activites.length; i++) {
                             var customer = _.where(scope.customers, {
@@ -178,7 +178,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
             else {
                 if (scope.$parent.customers) {
                     scope.customers = scope.$parent.customers;
-                    ContactService.getAllCustomerUnreadActivities(function(data) {
+                    ContactService.getAllContactUnreadActivities(function(data) {
                         scope.unread = data.total;
                     });
                     scope.loadPage();
@@ -186,7 +186,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     ContactService.getContacts(function(customers) {
                         scope.$parent.customers = customers;
                         scope.customers = customers;
-                        ContactService.getAllCustomerUnreadActivities(function(data) {
+                        ContactService.getAllContactUnreadActivities(function(data) {
                             scope.unread = data.total;
                         });
                         scope.loadPage();
@@ -223,7 +223,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
            */
             scope.getActivityName = function(activity)
             {
-                var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+                var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
                     data: activity
                 });
                 if(activity_hash)

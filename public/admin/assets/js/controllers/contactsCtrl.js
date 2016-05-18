@@ -74,7 +74,7 @@
           $scope.setSortOrder($state.current.sort);
         }
         $scope.showCustomers = true;
-        ContactService.getAllCustomerTags(customers, function(tags){
+        ContactService.getAllContactTags(customers, function(tags){
           $scope.customerTags = tags;
         });
 
@@ -83,7 +83,7 @@
 
     $scope.getCustomers();
 
-    ContactService.getCustomerTags(function(tags){
+    ContactService.getContactTags(function(tags){
       $scope.customerTags = tags;
     });
 
@@ -328,7 +328,7 @@
 
 
     $scope.tagToCustomer = function(value) {
-     return ContactService.tagToCustomer(value);
+     return ContactService.tagToContact(value);
     }
 
     $scope.customerPhotoOptions = [{
