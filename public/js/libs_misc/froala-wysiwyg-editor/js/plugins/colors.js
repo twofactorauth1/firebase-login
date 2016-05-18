@@ -674,8 +674,8 @@
     function txtInputFocus(element, val){
         $(element).off("keypress").on("keypress", function(e){
             if(e.which == 13) {
-                e.preventDefault();
-                e.stopPropagation();
+                //e.preventDefault();
+                //e.stopPropagation();
                 var realRgb = $(element).val();
                 editor.selection.restore();
                 if(val === 'color')
@@ -740,6 +740,7 @@
         }
 
         function start(e) {
+
             var rightclick = (e.which) ? (e.which == 3) : (e.button == 2);
 
             if (!rightclick && !dragging) {
@@ -752,9 +753,9 @@
                     $(doc).bind(duringDragEvents);
                     $(doc.body).addClass("sp-dragging");
 
-                    move(e);
+                    //move(e);
 
-                    prevent(e);
+                    //prevent(e);
                 }
             }
         }
@@ -823,8 +824,9 @@
   a.FroalaEditor.RegisterCommand('textColor', {
     undo: true,
     callback: function (cmd, val) {
+        //this.events.disableBlur();
         this.selection.restore();
-      this.colors.text(val, true);
+        this.colors.text(val, true);
     }
   });
 
@@ -832,8 +834,9 @@
   a.FroalaEditor.RegisterCommand('backgroundColor', {
     undo: true,
     callback: function (cmd, val) {
+        //this.events.disableBlur();
         this.selection.restore();
-      this.colors.background(val, true);
+        this.colors.background(val, true);
     }
   });
 
