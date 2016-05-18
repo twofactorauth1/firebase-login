@@ -1,8 +1,8 @@
 'use strict';
 /*global app, Papa*/
-app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getCustomers', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getCustomers, toaster) {
+app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getContacts', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getContacts, toaster) {
 
-  $scope.getCustomers = getCustomers;
+  $scope.getContacts = getContacts;
   /*
    * @editableOptions
    * - editable options for xeditable in preview customers
@@ -628,7 +628,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
       $scope.uploadingComplete = true;
       var _diff = (new Date() - startServerUploadTime) / 1000;
       $scope.endServerUpload = _diff.toFixed(2);
-      $scope.getCustomers();
+      $scope.getContacts();
     }
   });
 
