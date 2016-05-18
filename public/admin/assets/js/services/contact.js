@@ -105,7 +105,7 @@
         });
     };
 
-    this.saveCustomer = function (contact, fn) {
+    this.saveContact = function (contact, fn) {
       var apiFn = null;
       if (contact._id) {
         apiFn = this.putContact;
