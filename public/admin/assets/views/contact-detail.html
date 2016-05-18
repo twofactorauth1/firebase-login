@@ -77,7 +77,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Tags:</td>
-                                                    <td>{{myCustomerTags}}</td>
+                                                    <td>{{myContactTags}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Gender:</td>
@@ -170,7 +170,7 @@
                                         </table>
                                         <div class="btn-group btn-group-justified margin-top-10">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteCustomerFn(contact)">
+                                                <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteContactFn(contact)">
                                                     <span>Delete Contact</span>
                                                 </button>
                                             </div>
@@ -363,7 +363,7 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="customerAddAddressFn()">Add another address</div>
+                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="contactAddAddressFn()">Add another address</div>
                                                     <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
                                                 </div>
                                                 <div class="clearfix"></div>
@@ -443,9 +443,9 @@
                                                 <label class="block">
                                                     Tags
                                                 </label>
-                                                <ui-select tagging="tagToCustomer" tagging-match-to-key="label" multiple ng-model="contact.tags" theme="bootstrap" ng-disabled="disabled">
+                                                <ui-select tagging="tagToContact" tagging-match-to-key="label" multiple ng-model="contact.tags" theme="bootstrap" ng-disabled="disabled">
                                                     <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                                                    <ui-select-choices repeat="tag in customerTags | orderBy:'label' | filter:$select.search">
+                                                    <ui-select-choices repeat="tag in contactTags | orderBy:'label' | filter:$select.search">
                                                         {{tag.label}}
                                                     </ui-select-choices>
                                                 </ui-select>

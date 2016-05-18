@@ -558,7 +558,7 @@
     };
 
     /*
-     * @customerPhoneTypeSaveFn
+     * @contactPhoneTypeSaveFn
      * -
      */
 
@@ -573,7 +573,7 @@
       if (type === 'w') {
         typeLabel = 'work';
       }
-      $('#customer-phone-type-' + index).html(typeLabel);
+      $('#contact-phone-type-' + index).html(typeLabel);
       $scope.contact.details[0].phones[index].type = type;
     };
 
@@ -596,12 +596,12 @@
     };
 
     /*
-     * @customerDeleteFn
+     * @contactDeleteFn
      * -
      */
 
     $scope.contactDeleteFn = function () {
-      ContactService.deleteContact($scope.contactId, function (customer) {
+      ContactService.deleteContact($scope.contactId, function (contact) {
         toaster.pop('warning', 'Contact Deleted.');
       });
     };
@@ -617,7 +617,7 @@
           $scope.contact.type = $scope.userPreferences.default_customer_type;
         }
         if ($scope.contact.details[0].addresses.length === 0) {
-          //$scope.customer.details[0].addresses.push({});
+          //$scope.contact.details[0].addresses.push({});
           $scope.contact.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
           $scope.contact.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
           $scope.contact.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
@@ -625,7 +625,7 @@
         }
       } else {
         $scope.contact.type = $scope.userPreferences.default_customer_type;
-        //$scope.customer.details[0].addresses.push({});
+        //$scope.contact.details[0].addresses.push({});
         $scope.contact.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
         $scope.contact.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
         $scope.contact.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
@@ -715,8 +715,8 @@
      * -
      */
 
-    $scope.contactLabel = function (customer) {
-      return ContactService.contactLabel(customer);
+    $scope.contactLabel = function (contact) {
+      return ContactService.contactLabel(contact);
     };
 
     /*
@@ -776,7 +776,7 @@
     };
 
     /*
-     * @customerAddEmailFn
+     * @contactAddEmailFn
      * -
      */
 
@@ -807,7 +807,7 @@
     };
 
     /*
-     * @addCustomerContactFn
+     * @addContactPhoneFn
      * - Add/Remove phone numbers
      */
 
@@ -856,11 +856,11 @@
     };
 
     /*
-     * @customerAddAddressFn
+     * @contactAddAddressFn
      * -
      */
 
-    $scope.customerAddAddressFn = function () {
+    $scope.contactAddAddressFn = function () {
       $scope.contact.details[0].addresses.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
         address: '',
@@ -876,7 +876,7 @@
         lat: '',
         lon: ''
       });
-      //$scope.customerAddressWatchFn($scope.customer.details[0].addresses.length - 1);
+      //$scope.contactAddressWatchFn($scope.contact.details[0].addresses.length - 1);
     };
 
     /*
@@ -885,7 +885,7 @@
      */
 
     $scope.setDefaults = function () {
-      // New customer
+      // New contact
       if ($scope.contact.details.length === 0) {
         $scope.contact.details[0] = {};
       }
@@ -907,7 +907,7 @@
           $scope.addContactPhoneFn();
         }
         if (!$scope.contact.details[0].addresses.length) {
-          $scope.customerAddAddressFn();
+          $scope.contactAddAddressFn();
         }
       }
     };
@@ -941,7 +941,7 @@
     };
 
     ContactService.getContactTags(function(tags){
-      $scope.customerTags = tags;
+      $scope.contactTags = tags;
     });
 
     /*
@@ -954,7 +954,7 @@
       var tempTags = [];
       var cutomerTags = [];
       _.each($scope.contact.tags, function (tag , index) {
-        var matchingTag = _.findWhere($scope.customerTags, {
+        var matchingTag = _.findWhere($scope.contactTags, {
           data: tag
         });
         if(matchingTag)
@@ -970,7 +970,7 @@
           });
         }
       });
-      $scope.myCustomerTags = cutomerTags.join(", ");
+      $scope.myContactTags = cutomerTags.join(", ");
       $scope.contact.tags = tempTags;
       console.log('$scope.contact.tags >>>', $scope.contact.tags);
     };
@@ -1021,14 +1021,14 @@
     };
 
     /*
-     * @deleteCustomerFn
+     * @deleteContactFn
      * -
      */
 
-    $scope.deleteCustomerFn = function (customer) {
+    $scope.deleteContactFn = function (contact) {
       SweetAlert.swal({
         title: "Are you sure?",
-        text: "Do you want to delete this customer?",
+        text: "Do you want to delete this contact?",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
@@ -1038,8 +1038,8 @@
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
-          ContactService.deleteContact(customer._id, function () {
-            toaster.pop('warning', 'Customer Deleted.');
+          ContactService.deleteContact(contact._id, function () {
+            toaster.pop('warning', 'Contact Deleted.');
             $scope.originalContact = angular.copy($scope.contact);
             $state.go('app.contacts');
           });
@@ -1070,13 +1070,13 @@
       $scope.contact = null;
     }
 
-    ContactService.getContacts(function (customers) {
-      ContactService.getAllContactTags(customers, function(tags){
-        $scope.customerTags = tags;
+    ContactService.getContacts(function (contacts) {
+      ContactService.getAllContactTags(contacts, function(tags){
+        $scope.contactTags = tags;
       });
     });
 
-    $scope.tagToCustomer = function(value) {
+    $scope.tagToContact = function(value) {
      return ContactService.tagToContact(value);
     }
 
