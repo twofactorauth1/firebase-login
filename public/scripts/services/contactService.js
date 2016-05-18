@@ -7,7 +7,7 @@
 mainApp.service('contactService', ['$http', function ($http) {
     var baseUrl = '/api/1.0/';
 
-    this.getCustomer = function(id, fn) {
+    this.getContact = function(id, fn) {
                 var apiUrl = baseUrl + ['contact', id].join('/');
                 $http.get(apiUrl)
                     .success(function(data, status, headers, config) {
@@ -15,9 +15,9 @@ mainApp.service('contactService', ['$http', function ($http) {
                     });
             };
 
-    this.putCustomer = function(customer, fn) {
+    this.putContact = function(contact, fn) {
                 var apiUrl = baseUrl + ['contact'].join('/');
-                $http.put(apiUrl, customer)
+                $http.put(apiUrl, contact)
                     .success(function(data, status, headers, config) {
                         fn(data);
                     });
@@ -53,9 +53,9 @@ mainApp.service('contactService', ['$http', function ($http) {
         });
     };
 
-    this.postCsvCustomers = function(customers, fn) {
+    this.postCsvContacts = function(contacts, fn) {
         var apiUrl = baseUrl + ['contact', 'importcsv'].join('/');
-        $http.post(apiUrl, customers)
+        $http.post(apiUrl, contacts)
             .success(function(data, status, headers, config) {
                 fn(data);
             });

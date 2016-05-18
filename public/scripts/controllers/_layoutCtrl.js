@@ -180,7 +180,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         if ($route.current.params.custid != null) {
           $scope.custid = $route.current.params.custid;
-          contactService.getCustomer($scope.custid, function (data) {
+          contactService.getContact($scope.custid, function (data) {
             that.customer = data;
             that.shipping = contactService.getAddressByType(data, "shipping");
             that.billing = contactService.getAddressByType(data, "billing");
@@ -624,7 +624,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
     $scope.saveCustomerAccount = function (customer) {
       if (customer && customer.accountId)
-        contactService.putCustomer(customer, function (data) {
+        contactService.putContact(customer, function (data) {
           that.customer = data;
         });
     };
