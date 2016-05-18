@@ -4,11 +4,11 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.contacts.MAIN"></h1>
-                <span ng-if="customers" class="mainDescription">There are currently {{customers.length}} contacts. ({{displayedCustomers.length || 0}} in filtered view)</span>
+                <span ng-if="contacts" class="mainDescription">There are currently {{contacts.length}} contacts. ({{displayedContacts.length || 0}} in filtered view)</span>
             </div>
         </div>
     </section>
-    <div st-table="displayedCustomers" st-sort-table st-safe-src="customers">
+    <div st-table="displayedContacts" st-sort-table st-safe-src="contacts">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">
@@ -24,12 +24,12 @@
                                     </span>
                                         </div>
                                         <div class="col-xs-3 col-md-3 padding-right-0">
-                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterCustomers()">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterContacts()">
                                                 <span>Filter</span>
                                             </button>
                                         </div>
                                         <div class="col-xs-3 col-md-3 padding-right-0">
-                                            <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedCustomersFn()).length'>
+                                            <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
                                                 <ui-select-match placeholder="Actions">
                                                     <small ng-bind-html="$select.selected.label"></small>
                                                 </ui-select-match>
@@ -54,12 +54,12 @@
                                     </div>
                                     <div class="form-group margin-bottom-0 margin-right-5 pull-right">
                                         <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="exportContactsFn()">
-                                            <span ng-hide='(selectedCustomersFn()).length'>Export</span>
-                                            <span ng-show='(selectedCustomersFn()).length'>Export Selected ({{(selectedCustomersFn()).length}})</span>
+                                            <span ng-hide='(selectedContactsFn()).length'>Export</span>
+                                            <span ng-show='(selectedContactsFn()).length'>Export Selected ({{(selectedContactsFn()).length}})</span>
                                         </button>
                                     </div>
                                     <div class="form-group margin-bottom-0 margin-right-5 pull-right hidden">
-                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="openModal('customer-templates')">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="openModal('contact-templates')">
                                             <span>Templates</span>
                                         </button>
                                     </div>
@@ -122,10 +122,10 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedCustomers">
+                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedContacts">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
+                                <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedContacts.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
                                 <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Contact ID</th>
                                 <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
@@ -143,13 +143,13 @@
                                     <input st-search="_id" placeholder="Contact ID" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.photo">
-                                    <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
-                                    <ui-select ng-model="filterCustomer.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
+                                    <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterContact.photo.selected.value" />
+                                    <ui-select ng-model="filterContact.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Photo">
                                             <small ng-bind-html="$select.selected.name"></small>
                                             <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPicture', 'photo')"></span>
                                         </ui-select-match>
-                                        <ui-select-choices repeat="option in customerPhotoOptions">
+                                        <ui-select-choices repeat="option in contactPhotoOptions">
                                             <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
                                             <small ng-bind-html="option.name | highlight: $select.search"></small>
                                         </ui-select-choices>
@@ -162,13 +162,13 @@
                                     <input st-search="last" placeholder="Last Name" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.tags">
-                                    <input st-search="tempTags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.label" />
-                                    <ui-select ng-model="filterCustomer.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
+                                    <input st-search="tempTags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterContact.type.selected.label" />
+                                    <ui-select ng-model="filterContact.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
                                             <small ng-bind-html="$select.selected.label"></small>
                                             <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')"></span>
                                         </ui-select-match>
-                                        <ui-select-choices repeat="tag in customerTags |  orderBy:'label' | filter: $select.search">
+                                        <ui-select-choices repeat="tag in contactTags |  orderBy:'label' | filter: $select.search">
                                             <small ng-bind-html="tag.label | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
@@ -190,36 +190,36 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
-                                <td ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-click='customerSelectClickFn($event, customer)' ng-class='{"fa-check-circle": customer.isSelected, "fa-circle-o": !customer.isSelected}'></i></td>
-                                <td ng-show="column.name"><strong>Contact ID: </strong>{{customer._id}}</td>
+                            <tr ng-repeat="contact in displayedContacts" ng-click="viewSingle(contact)">
+                                <td ng-show='displayedContacts.length'><i class="fa fa-2x" ng-click='contactSelectClickFn($event, contact)' ng-class='{"fa-check-circle": contact.isSelected, "fa-circle-o": !contact.isSelected}'></i></td>
+                                <td ng-show="column.name"><strong>Contact ID: </strong>{{contact._id}}</td>
                                 <td class="center" ng-show="column.photo && tableView == 'list'">
-                                    <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
+                                    <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail screenshot" alt="image">
                                 </td>
-                                <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
-                                <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.last">--</span></td>
+                                <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="contact.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first">--</span></td>
+                                <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="contact.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.last">--</span></td>
                                 <td ng-show="column.tags"><strong>Tags: </strong>
-                                    <span ng-text-truncate="contactTags(customer) || '--'" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
-                                <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.bestEmail"><a href="mailto:{{customer.bestEmail}}"><span ng-text-truncate="customer.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
-                                    </span><span ng-if="!customer.bestEmail">--</span></td>
+                                    <span ng-text-truncate="contactTagsFn(contact) || '--'" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
+                                <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span ng-text-truncate="contact.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
+                                    </span><span ng-if="!contact.bestEmail">--</span></td>
                                 <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
-                                    <span ng-if="customer.details[0].addresses[0]" tooltip-placement="top" tooltip="{{customer.bestAddress}}" ng-text-truncate="customer.bestAddress" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
-                                    <span ng-if="!customer.details[0].addresses[0]">--</span>
+                                    <span ng-if="contact.details[0].addresses[0]" tooltip-placement="top" tooltip="{{contact.bestAddress}}" ng-text-truncate="contact.bestAddress" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
+                                    <span ng-if="!contact.details[0].addresses[0]">--</span>
                                 </td>
-                                <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{customer.details[0].phones[0].number || '--'}}">{{customer.details[0].phones[0].number || '--'}}</a></td>
+                                <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
                                 <td ng-show="column.social" class="hidden-xs"><strong>Social: </strong>
                                     <ul class="social">
-                                        <li ng-if="customer.hasFacebookId"><i class="fa fa-facebook-square"></i>
+                                        <li ng-if="contact.hasFacebookId"><i class="fa fa-facebook-square"></i>
                                         </li>
-                                        <li ng-if="customer.hasTwitterId"><i class="fa fa-twitter-square"></i>
+                                        <li ng-if="contact.hasTwitterId"><i class="fa fa-twitter-square"></i>
                                         </li>
-                                        <li ng-if="customer.hasLinkedInId"><a ng-href="{{customer.linkedInUrl}}" target="_blank"><i class="fa fa-linkedin-square"></i></a>
+                                        <li ng-if="contact.hasLinkedInId"><a ng-href="{{contact.linkedInUrl}}" target="_blank"><i class="fa fa-linkedin-square"></i></a>
                                         </li>
-                                        <li ng-if="customer.hasGoogleId"><i class="fa fa-google-plus-square"></i>
+                                        <li ng-if="contact.hasGoogleId"><i class="fa fa-google-plus-square"></i>
                                         </li>
                                     </ul>
                                 </td>
-                                <td ng-show="column.created" class="hidden-xs"><strong>Created: </strong> {{customer.created.date | date:'MMM d yy' || '--'}}</td>
+                                <td ng-show="column.created" class="hidden-xs"><strong>Created: </strong> {{contact.created.date | date:'MMM d yy' || '--'}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
@@ -229,7 +229,7 @@
                             </tr>
                         </tfoot>
                     </table>
-                    <div class="load1 csspinner height-400" ng-show="!customers"></div>
+                    <div class="load1 csspinner height-400" ng-show="!contacts"></div>
                 </div>
             </div>
         </div>
