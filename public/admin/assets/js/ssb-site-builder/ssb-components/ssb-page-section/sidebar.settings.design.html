@@ -71,7 +71,7 @@
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <i class="fa fa-close" ng-click="vm.removeImage(component.components[0])"></i>
+            <i class="fa fa-close hidden" ng-click="vm.removeImage(component.components[0])"></i>
             <img ng-src="{{component.components[0].src}}" ng-model="component.components[0].src" ng-click="vm.addImage(vm.uiState.activeSectionIndex, 0)" class="img-thumbnail">
         </div>
     </div>
