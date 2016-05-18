@@ -162,18 +162,18 @@ defaultWorkstreams[2] = {
                 { type: "help", name: "Create automated email", link: "/admin/#/support/help-topics?topic=559719c0-c5c4-41bb-b11f-8962efbdd7cf" }
             ]
         },
-        {
-            "_id" : 9,
-            "name" : "Integrate social media",
-            "link" : "/admin/#/account/integrations",
-            "helpText" : "Connect your social media accounts so you can view feeds and post to your own.",
-            "complete" : false,
-            "optional" : true,
-            "helpLinks": [
-                { type: "help", name: "Connect to social networks", link: "/admin/#/support/help-topics?topic=47259629-279f-4365-bbb8-c7205d758f3d" },
-                { type: "help", name: "Post to social networks", link: "/admin/#/support/help-topics?topic=a2ea8916-45c7-4aca-ada3-243920bb8a9a" }
-            ]
-        },
+        //{
+        //    "_id" : 9,
+        //    "name" : "Integrate social media",
+        //    "link" : "/admin/#/account/integrations",
+        //    "helpText" : "Connect your social media accounts so you can view feeds and post to your own.",
+        //    "complete" : false,
+        //    "optional" : true,
+        //    "helpLinks": [
+        //        { type: "help", name: "Connect to social networks", link: "/admin/#/support/help-topics?topic=47259629-279f-4365-bbb8-c7205d758f3d" },
+        //        { type: "help", name: "Post to social networks", link: "/admin/#/support/help-topics?topic=a2ea8916-45c7-4aca-ada3-243920bb8a9a" }
+        //    ]
+        //},
         {
             "_id" : 10,
             "name" : "Write a blog post",
