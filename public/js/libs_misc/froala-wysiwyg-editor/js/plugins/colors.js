@@ -164,6 +164,8 @@
 
       var dataToggle = (tab == 'text' ? "toggleTextSpectrum" : "toggleBgSpectrum");
 
+      var dataChooseColor = (tab == 'text' ? "chooseTextColor" : "chooseBGColor");
+
       // Create colors html.
       var colors_html = '<div class="sp-container sp-light sp-alpha-enabled sp-clear-enabled sp-initial-disabled fr-color-set fr-' + tab + '-color' + ((editor.opts.colorsDefaultTab == tab || (editor.opts.colorsDefaultTab != 'text' && editor.opts.colorsDefaultTab != 'background' && tab == 'text')) ? ' fr-selected-set' : '') + '">';
       //colors_html += '<div class="sp-palette-container"><div class="sp-palette sp-thumb sp-cf">';
@@ -187,7 +189,7 @@
      colors_html += '<div class="sp-palette-button-container sp-cf"><button type="button" class="sp-palette-toggle fr-command" data-cmd="'+dataToggle+'">less</button></div>';
 
      colors_html += '</div>';
-     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="closeColorPicker">choose</button></div></div>'
+     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="'+dataChooseColor+'">choose</button></div></div>'
      colors_html += '</div>';
       return colors_html
     }
@@ -274,6 +276,7 @@
         $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
         editor.commands.applyProperty('background-color', val);
+        editor.selection.save();
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
         setTimeout(function() {
             $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
@@ -317,6 +320,7 @@
         $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
         editor.commands.applyProperty('color', val);
+        editor.selection.save();
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
         setTimeout(function() {
             $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
@@ -397,8 +401,23 @@
       _hideColorsPopup();
     }
 
+    function chooseColorPicker(val){
+        var popup = editor.popups.get('colors.picker');
+        var container = val === 'text' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color");
+        var textInput = container.find(".sp-input");
+        var color = textInput.val();
+        editor.selection.restore();
+        if(val === 'text'){
+           text(color || 'REMOVE');
+        }
+        else
+            background(color || 'REMOVE');
+        _hideColorsPopup();
+
+    }
     function toggleSpectrum(val){
-        var container = val === 'text' ? $(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
+        var popup = editor.popups.get('colors.picker');
+        var container = val === 'text' ? popup.find(".fr-color-set.sp-container.fr-text-color") : $(".fr-color-set.sp-container.fr-background-color"),
         toggleContainer = container.find(".sp-picker-container"),
         toggleButton = container.find(".sp-palette-toggle");
         toggleContainer.toggle();
@@ -417,6 +436,8 @@
      * init Spectrum.
      */
     function initializeSpectrum(val, current_color) {
+
+        //editor.selection.restore();
         var popup = editor.popups.get('colors.picker');
         popup.find('input:focus').blur();
         var container = val === 'color' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color"),
@@ -444,7 +465,7 @@
         currentValue = 0,
         currentAlpha = 1,
         textInput = container.find(".sp-input");
-        //txtInputFocus(textInput);
+        txtInputFocus(textInput, val);
         draggable(alphaSlider, function (dragX, dragY, e) {
 
                 currentAlpha = (dragX / alphaWidth);
@@ -650,10 +671,21 @@
       editor.toolbar.showInline();
     }
 
-    function txtInputFocus(element){
-        $(element).on("blur", function(){
-            editor.selection.restore();
+    function txtInputFocus(element, val){
+        $(element).off("keypress").on("keypress", function(e){
+            if(e.which == 13) {
+                e.preventDefault();
+                e.stopPropagation();
+                var realRgb = $(element).val();
+                editor.selection.restore();
+                if(val === 'color')
+                    text(realRgb, true);
+                else
+                    background(realRgb, true);
+                _hideColorsPopup();
+            }
         });
+
     }
 
     function draggable(element, onmove, onstart, onstop) {
@@ -684,7 +716,7 @@
         }
 
         function move(e) {
-
+            editor.selection.restore();
             if (dragging) {
                 // Mouseup happened outside of window
                 if (editor.opts.isIE && doc.documentMode < 9 && !e.button) {
@@ -746,7 +778,6 @@
         $(element).off("touchend mouseup").on("touchend mouseup", stop);
         var $popup = editor.popups.get('colors.picker');
         $popup.on("touchend mouseup", stop);
-
     }
 
     return {
@@ -757,6 +788,7 @@
       text: text,
       back: back,
       removeColor: removeColor,
+      chooseColorPicker: chooseColorPicker,
       closeColorPicker: closeColorPicker,
       initializeSpectrum: initializeSpectrum,
       toggleSpectrum: toggleSpectrum
@@ -791,6 +823,7 @@
   a.FroalaEditor.RegisterCommand('textColor', {
     undo: true,
     callback: function (cmd, val) {
+        this.selection.restore();
       this.colors.text(val, true);
     }
   });
@@ -799,6 +832,7 @@
   a.FroalaEditor.RegisterCommand('backgroundColor', {
     undo: true,
     callback: function (cmd, val) {
+        this.selection.restore();
       this.colors.background(val, true);
     }
   });
@@ -833,12 +867,21 @@
   });
 
 
-  // Close color picker
-  a.FroalaEditor.RegisterCommand('closeColorPicker', {
+  // Choose text color picker
+  a.FroalaEditor.RegisterCommand('chooseTextColor', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {
-      this.colors.closeColorPicker();
+      this.colors.chooseColorPicker("text");
+    }
+  });
+
+  // Choose bg color picker
+  a.FroalaEditor.RegisterCommand('chooseBGColor', {
+    undo: false,
+    focus: false,
+    callback: function (cmd, val) {
+      this.colors.chooseColorPicker("background");
     }
   });
 
