@@ -35,7 +35,7 @@ env_check(){
 
 	  	export AWS_DEFAULT_REGION="us-west-1"
         export ENV_NAME="indiwebTestB-env"
-        #export OTHER_APP_NAME="indiweb-test-b"
+        export APP_NAME="indiweb-test-b"
         export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 	else
 		on_err "No environment specified"
