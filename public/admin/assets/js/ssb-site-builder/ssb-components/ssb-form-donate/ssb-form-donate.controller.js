@@ -227,6 +227,14 @@
                     last_name = name_arr[1];
                 }
             }
+            else{
+                if(vm.formBuilder.FirstName){
+                    first_name = vm.formBuilder.FirstName;
+                }
+                 if(vm.formBuilder.LastName){
+                    last_name = vm.formBuilder.LastName;
+                }
+            }
 
             var formatted = {
                 fingerprint: fingerprint,
@@ -360,6 +368,14 @@
                 first_name = name_arr[0];
                 if (name_arr.length > 1) {
                     last_name = name_arr[1];
+                }
+            }
+            else{
+                if(vm.formBuilder.FirstName){
+                    first_name = vm.formBuilder.FirstName;
+                }
+                 if(vm.formBuilder.LastName){
+                    last_name = vm.formBuilder.LastName;
                 }
             }
 
