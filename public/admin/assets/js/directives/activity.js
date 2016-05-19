@@ -1,30 +1,30 @@
-app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'contactConstant', function($filter, ContactService, $modal, contactConstant) {
+app.directive('contactActivity', ['$filter', 'ContactService', '$modal', 'contactConstant', function($filter, ContactService, $modal, contactConstant) {
 
     return {
         require: [],
         restrict: 'E',
         transclude: false,
         scope: {
-            singleCustomer: '=singleCustomer',
+            singleContact: '=singleContact',
             allActivity: '=allActivity',
             newLeads: '=newLeads',
-            customersAtRisk: '=customersAtRisk',
+            contactsAtRisk: '=contactsAtRisk',
             currentPage: '=currentPage',
             numPerPage: '=numPerPage'
         },
         templateUrl: '/admin/assets/views/partials/activity.html',
         link: function(scope, element, attrs, controllers) {
-            console.log('singleCustomer ', scope.singleCustomer);
+            console.log('singleContact ', scope.singleContact);
             scope.next = false;
             scope.disablePaging = true;
             scope.main = {
                 page: scope.currentPage,
                 take: scope.numPerPage
             }
-            if (scope.singleCustomer) {
-                scope.customerId = scope.$parent.customerId;
+            if (scope.singleContact) {
+                scope.contactId = scope.$parent.contactId;
                 scope.newActivity = {
-                    contactId: parseInt(scope.customerId),
+                    contactId: parseInt(scope.contactId),
                     start: new Date(),
                     end: new Date()
                 };
@@ -60,17 +60,17 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
 
             scope.addActivityFn = function() {
                 // Reinitializing the time to get current time
-                if(scope.singleCustomer) {
-                    angular.element("#customer_activity_type .error").html("");
-                    angular.element("#customer_activity_type .error").removeClass('has-error');
-                    var activity_type = angular.element("#customer_activity_type input").val();
+                if(scope.singleContact) {
+                    angular.element("#contact_activity_type .error").html("");
+                    angular.element("#contact_activity_type .error").removeClass('has-error');
+                    var activity_type = angular.element("#contact_activity_type input").val();
                     var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
                         label: activity_type
                     });
                     if(!activity_type || !activity_type.trim())
                     {
-                         angular.element("#customer_activity_type .error").html("Activity Type Required");
-                         angular.element("#customer_activity_type .error").addClass('has-error');
+                         angular.element("#contact_activity_type .error").html("Activity Type Required");
+                         angular.element("#contact_activity_type .error").addClass('has-error');
                          return;
                     }
                     if(!activity_hash)
@@ -83,15 +83,15 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                 }
 
                 ContactService.postContactActivity(scope.newActivity, function(activity) {
-                    if(scope.singleCustomer) {
-                        activity.customer = scope.$parent.customer;
+                    if(scope.singleContact) {
+                        activity.contact = scope.$parent.contact;
                     }
                     scope.all_activities.push(activity);
                     scope.all_activities = _.sortBy(scope.all_activities, function(o) {
                         return o.start;
                     }).reverse();
                     scope.newActivity = {
-                        contactId: parseInt(scope.customerId),
+                        contactId: parseInt(scope.contactId),
                         start: new Date(),
                         end: new Date()
                     };
@@ -123,15 +123,15 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     limit: scope.main.take,
                     skip: (scope.main.page - 1) * scope.main.take
                 }
-                if (scope.singleCustomer) {
-                    ContactService.getContactUnreadActivities(scope.customerId, function(activities) {
+                if (scope.singleContact) {
+                    ContactService.getContactUnreadActivities(scope.contactId, function(activities) {
                         scope.unread = activities.length;
                     });
 
-                    ContactService.getContactActivities(scope.customerId, function(activities) {
-                        ContactService.getContact(scope.customerId, function (customer) {
+                    ContactService.getContactActivities(scope.contactId, function(activities) {
+                        ContactService.getContact(scope.contactId, function (contact) {
                             for (var i = 0; i < activities.length; i++) {
-                                activities[i]['customer'] = customer;
+                                activities[i]['contact'] = contact;
                                 activities[i]['activityType'] = activities[i]['activityType'];
                             };
                             scope.activities = activities;
@@ -144,7 +144,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                         })
                     });
                 } else {
-                    if (scope.customersAtRisk) {
+                    if (scope.contactsAtRisk) {
                         queryParams = {
                             limit: scope.main.take,
                             skip: (scope.main.page - 1) * scope.main.take,
@@ -161,10 +161,10 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     ContactService.getAllContactActivitiesWithLimit(queryParams, function(data) {
                         var activites = data.results;
                         for (var i = 0; i < activites.length; i++) {
-                            var customer = _.where(scope.customers, {
+                            var contact = _.where(scope.contacts, {
                                 _id: activites[i].contactId
                             });
-                            activites[i]['customer'] = customer[0];
+                            activites[i]['contact'] = contact[0];
                             activites[i]['activityType'] = activites[i]['activityType'];
                         };
                         scope.total = data.total;
@@ -173,19 +173,19 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
                     });
                 }
             }
-            if (scope.singleCustomer)
+            if (scope.singleContact)
                 scope.loadPage();
             else {
-                if (scope.$parent.customers) {
-                    scope.customers = scope.$parent.customers;
+                if (scope.$parent.contacts) {
+                    scope.contacts = scope.$parent.contacts;
                     ContactService.getAllContactUnreadActivities(function(data) {
                         scope.unread = data.total;
                     });
                     scope.loadPage();
                 } else {
-                    ContactService.getContacts(function(customers) {
-                        scope.$parent.customers = customers;
-                        scope.customers = customers;
+                    ContactService.getContacts(function(contacts) {
+                        scope.$parent.contacts = contacts;
+                        scope.contacts = contacts;
                         ContactService.getAllContactUnreadActivities(function(data) {
                             scope.unread = data.total;
                         });
@@ -197,7 +197,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
             scope.nextPage = function() {
                 scope.disablePaging = true;
                 scope.main.page++;
-                if (!scope.singleCustomer)
+                if (!scope.singleContact)
                     scope.loadPage();
 
             };
@@ -205,7 +205,7 @@ app.directive('customerActivity', ['$filter', 'ContactService', '$modal', 'conta
             scope.previousPage = function() {
                 scope.disablePaging = true;
                 scope.main.page--;
-                if (!scope.singleCustomer)
+                if (!scope.singleContact)
                     scope.loadPage();
             };
             scope.nextPageDisabled = function() {

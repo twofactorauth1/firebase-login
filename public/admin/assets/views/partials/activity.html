@@ -4,7 +4,7 @@
         <ul class="smart-timeline-list">
             <li ng-repeat="activity in activities|orderBy:'start':true">
                 <div class="col-xs-12">
-                    <a href="/admin#/customer/{{activity.customer._id}}" class="smart-timeline-icon"> <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32"> </a>
+                    <a href="/admin#/contact/{{activity.contact._id}}" class="smart-timeline-icon"> <img ng-src="{{ activity.contact.photo ? activity.contact.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32"> </a>
                     <div class="smart-timeline-time">
                         <small>{{activity.start | date:'d MMM, yyyy'}}</small>
                     </div>
@@ -12,9 +12,9 @@
                         <div class="col-xs-12">
                             <p>
                                 <span class="label label-info">CONTACT CREATED</span>
-                                <span ng-if="!activity.customer">[deleted]</span>
-                                <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> signed up for an account.
+                                <span ng-if="!activity.contact">[deleted]</span>
+                                <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span> signed up for an account.
                             </p>
                         </div>
                         <!--   <div class="col-xs-4">
@@ -62,12 +62,12 @@
             </div> -->
     </div>
 </div>
-<div ng-if="customersAtRisk">
+<div ng-if="contactsAtRisk">
     <div class="smart-timeline">
         <ul class="smart-timeline-list">
             <li ng-repeat="activity in activities">
                 <div class="col-xs-12">
-                    <a href="/admin#/customer/{{activity.customer._id}}" class="smart-timeline-icon"> <img ng-src="{{ activity.customer.photo ? activity.customer.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32"> </a>
+                    <a href="/admin#/contact/{{activity.contact._id}}" class="smart-timeline-icon"> <img ng-src="{{ activity.contact.photo ? activity.contact.photo : '/assets/icons/blank-user.jpg' }}" width="32" height="32"> </a>
                     <div class="smart-timeline-time">
                         <small>{{activity.start | date:'d MMM, yyyy'}}</small>
                     </div>
@@ -75,9 +75,9 @@
                         <div class="col-xs-12">
                             <p>
                                 <span class="label label-info">CANCELED ACCOUNT</span> for
-                                <span ng-if="!activity.customer">[deleted]</span>
-                                <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                <span ng-if="!activity.contact">[deleted]</span>
+                                <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                             </p>
                         </div>
                         <!--  <div class="col-xs-4">
@@ -168,46 +168,46 @@
                                 <div ng-switch-when="CONTACT_CREATED">
                                     <p>
                                         <span class="label label-info">CONTACT CREATED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                 </div>
                                 <div ng-switch-when="ACCOUNT_CREATED">
                                     <p>
                                         <span class="label label-info">CONTACT CREATED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
 
                                 </div>
                                 <div ng-switch-when="SUBSCRIBE">
                                     <p>
                                         <span class="label label-success">SUBSCRIBE</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if=! "activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if=! "activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
                                     </p>
                                 </div>
                                 <div ng-switch-when="SUBSCRIBE_CANCEL">
                                     <p>
                                         <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                 </div>
                                 <div ng-switch-when="PAGE_VIEW">
                                     <p>
                                         <span class="label label-default">PAGE VIEW</span>
                                     </p>
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <p ng-if="activity.customer && activity.customer.first">
-                                        {{activity.customer.first.toString()+' '+activity.customer.last.toString()}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-                                    <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
-                                        {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-                                    <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
+                                    <span ng-if="!activity.contact">[deleted]</span>
+                                    <p ng-if="activity.contact && activity.contact.first">
+                                        {{activity.contact.first.toString()+' '+activity.contact.last.toString()}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.contact && !activity.contact.first && activity.contact.details[0].emails[0]">
+                                        {{activity.contact.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.contact && !activity.contact.first && !activity.contact.details[0].emails[0]">
                                         Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
                                 </div>
                                 <div ng-switch-when="CONTACT_FORM">
@@ -223,50 +223,50 @@
                                 <div ng-switch-when="FORM_SUBMISSION">
                                     <p>
                                         <span class="label label-info">FORM SUBMITTED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                 </div>
                                 <div ng-switch-when="EMAIL_DELIVERED">
                                     <p>
                                         <span class="label label-info">EMAIL DELIVERED</span> to
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
 
                                 </div>
                                 <div ng-switch-when="EMAIL_OPENED">
                                     <p>
                                         <span class="label label-info">EMAIL OPENED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     </div>
                                 <div ng-switch-when="EMAIL_CLICKED">
                                     <p>
                                         <span class="label label-info">EMAIL CLICKED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     </div>
                                 <div ng-switch-when="EMAIL_UNSUB">
                                     <p>
                                         <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                    </div>
                                 <div ng-switch-when="SUBSCRIPTION_PAID">
                                     <p>
                                         <span class="label label-info">SUBSCRIPTION PAID</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     </div>
                             </div>
@@ -277,7 +277,7 @@
         </div>
     </div>
 </div> -->
-<div ng-if="singleCustomer && activities">
+<div ng-if="singleContact && activities">
     <div class="panel panel-white no-radius">
         <div class="panel-heading border-bottom">
             <h4 class="panel-title">Activities</h4>
@@ -304,9 +304,9 @@
                         <p>
                             <div ng-switch on="activity.activityType">
                                 <div ng-switch-when="OTHER">
-                                    <p>                                        
+                                    <p>
                                         <span class="label label-default">OTHER</span> {{activity.detail}}
-                                    </p>                                    
+                                    </p>
                                 </div>
                                 <div ng-switch-when="EMAIL">
                                     <p>
@@ -320,9 +320,9 @@
                                 <div ng-switch-when="CONTACT_CREATED">
                                     <p>
                                         <span class="label label-info">CONTACT CREATED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.                                        
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -332,9 +332,9 @@
                                 <div ng-switch-when="ACCOUNT_CREATED">
                                     <p>
                                         <span class="label label-info">CONTACT CREATED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -344,9 +344,9 @@
                                 <div ng-switch-when="SUBSCRIBE">
                                     <p>
                                         <span class="label label-success">SUBSCRIBE</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -355,9 +355,9 @@
                                 <div ng-switch-when="TRIAL_CONVERSION">
                                     <p>
                                         <span class="label label-success">Trial Conversion</span>
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span> subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -366,9 +366,9 @@
                                 <div ng-switch-when="SUBSCRIBE_CANCEL">
                                     <p>
                                         <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -378,12 +378,12 @@
                                     <p>
                                         <span class="label label-default">PAGE VIEW</span>
                                     </p>
-                                    <span ng-if="!activity.customer">[deleted]</span>
-                                    <p ng-if="activity.customer && activity.customer.first">
-                                        {{activity.customer.first.toString()+' '+activity.customer.last.toString()}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-                                    <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
-                                        {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
-                                    <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
+                                    <span ng-if="!activity.contact">[deleted]</span>
+                                    <p ng-if="activity.contact && activity.contact.first">
+                                        {{activity.contact.first.toString()+' '+activity.contact.last.toString()}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.contact && !activity.contact.first && activity.contact.details[0].emails[0]">
+                                        {{activity.contact.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.contact && !activity.contact.first && !activity.contact.details[0].emails[0]">
                                         Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -406,9 +406,9 @@
                                 <div ng-switch-when="FORM_SUBMISSION">
                                     <p>
                                         <span class="label label-info">FORM SUBMITTED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -418,9 +418,9 @@
                                 <div ng-switch-when="EMAIL_DELIVERED">
                                     <p>
                                         <span class="label label-info">EMAIL DELIVERED</span> to
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -430,9 +430,9 @@
                                 <div ng-switch-when="EMAIL_OPENED">
                                     <p>
                                         <span class="label label-info">EMAIL OPENED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -442,9 +442,9 @@
                                 <div ng-switch-when="EMAIL_CLICKED">
                                     <p>
                                         <span class="label label-info">EMAIL CLICKED</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -454,9 +454,9 @@
                                 <div ng-switch-when="EMAIL_UNSUB">
                                     <p>
                                         <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -466,9 +466,9 @@
                                 <div ng-switch-when="SUBSCRIPTION_PAID">
                                     <p>
                                         <span class="label label-info">SUBSCRIPTION PAID</span> for
-                                        <span ng-if="!activity.customer">[deleted]</span>
-                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.contact">[deleted]</span>
+                                        <span ng-if="activity.contact.first">{{activity.contact.first.toString()+' '+activity.contact.last.toString()}}</span>
+                                        <span ng-if="!activity.contact.first">{{activity.contact.details[0].emails[0].email}}</span>.
                                     </p>
                                     <p ng-if="activity.detail">
                                         {{activity.detail}}
@@ -476,11 +476,11 @@
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                 </div>
                                 <div ng-switch-default>
-                                    <p>                                        
-                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}  
-                                    </p>                                    
+                                    <p>
+                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
+                                    </p>
                                 </div>
-                                
+
                             </div>
                         </p>
                     </div>
@@ -496,7 +496,7 @@
     </div>
     <div class="modal-body bg-white" style="max-height:500px;">
         <form role="form">
-            <div class="form-group" id="customer_activity_type">
+            <div class="form-group" id="contact_activity_type">
                 <label for="exampleInputEmail1">Type</label>
                 <autocomplete ng-model="selectedActivityType" data="activityTypes" on-select="updateActivityTypeFn"></autocomplete>
                 <span class="error help-block" />
