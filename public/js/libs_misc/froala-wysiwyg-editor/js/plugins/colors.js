@@ -278,9 +278,9 @@
         editor.commands.applyProperty('background-color', val);
         editor.selection.save();
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-        setTimeout(function() {
-            $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
-        },0)
+
+        $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
+
       }
 
       // Remove background color.
@@ -322,9 +322,7 @@
         editor.commands.applyProperty('color', val);
         editor.selection.save();
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-        setTimeout(function() {
-            $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
-        },0)
+        $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
 
       }
 
@@ -436,8 +434,6 @@
      * init Spectrum.
      */
     function initializeSpectrum(val, current_color) {
-
-        //editor.selection.restore();
         var popup = editor.popups.get('colors.picker');
         popup.find('input:focus').blur();
         var container = val === 'color' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color"),
@@ -519,7 +515,7 @@
             updateHelperLocations();
         }
 
-        function updateUI(val) {
+        function updateUI(val, update) {
 
             updateHelperLocations();
 
@@ -541,15 +537,15 @@
             else {
                 var realHex = realColor.toHexString(),
                     realRgb = realColor.toRgbString();
-                    if(val === 'color')
-                        text(realRgb);
-                    else
-                        background(realRgb);
+                    if(!update){
+                        if(val === 'color')
+                            text(realRgb);
+                        else
+                            background(realRgb);
+                    }
+
                 // Update the replaced elements background color (with actual selected color)
 
-
-
-                if (true) {
                     var rgb = realColor.toRgb();
                     rgb.a = 0;
                     var realAlpha = tinycolor(rgb).toRgbString();
@@ -566,9 +562,6 @@
                         alphaSliderInner.css("background",
                             "linear-gradient(to right, " + realAlpha + ", " + realHex + ")");
                     }
-                }
-
-                //displayColor = realColor.toString(format);
             }
         }
 
@@ -582,11 +575,11 @@
             }, { format: 'rgb' });
         }
 
-        function set(color, ignoreFormatChange) {
+        function set(color, update) {
             if (tinycolor.equals(color, get())) {
                 // Update UI just in case a validation error needs
                 // to be cleared.
-                updateUI(val);
+                updateUI(val, update);
                 return;
             }
 
@@ -603,7 +596,7 @@
                 currentValue = newHsv.v;
                 currentAlpha = newHsv.a;
             }
-            updateUI(val);
+            updateUI(val, update);
         }
 
         function updateHelperLocations() {
@@ -652,8 +645,7 @@
         }
 
         if(current_color){
-            set(current_color);
-            move();
+            set(current_color, true);
         }
         else
         {
