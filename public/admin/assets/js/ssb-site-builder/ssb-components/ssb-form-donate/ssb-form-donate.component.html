@@ -163,10 +163,10 @@
                                 <div class="donate-step thank-you"  ng-show="vm.checkoutModalState == 2">
                                     <!-- <h3 class="donate-step-header center mb20">Payment Choice</h3> -->
                                     <div class="alert alert-danger" ng-show='vm.showPaypalErrorMsg'>Try again with paypal or use Credit Card?</div>
-                                    <div class="payment-panel" g-show='vm.paypalInfo' ng-class='{"col-sm-6": vm.stripeInfo, "col-sm-12": !vm.stripeInfo}'>
+                                    <div class="payment-panel" ng-show='vm.paypalInfo' ng-class='{"col-sm-6": vm.stripeInfo, "col-sm-12": !vm.stripeInfo}'>
                                         <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
                                             <div class="panel-body" ng-click="vm.showPaypalLoading || vm.paypalPayment()" ng-disabled='vm.showPaypalLoading'>
-                                                <img class="img-responsive" src="/images/simple-cart-paypal.png" />
+                                                <img class="img-responsive inline-block" src="/images/simple-cart-paypal.png" />
                                                 <h3 class="StepTitle margin-top-10">Paypal</h3>
                                                 <p class="text-small">
                                                     Checkout with Paypal
@@ -178,7 +178,7 @@
                                     <div class="payment-panel" ng-show='vm.stripeInfo' ng-class='{"col-sm-6": vm.paypalInfo, "col-sm-12": !vm.paypalInfo}'>
                                         <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
                                             <div class="panel-body" ng-click="vm.setCheckoutState(4)">
-                                                <img class="img-responsive" src="/images/simple-cart-stripe.png" />
+                                                <img class="img-responsive inline-block" src="/images/simple-cart-stripe.png" />
                                                 <h3 class="StepTitle margin-top-10">Credit Card</h3>
                                                 <p class="text-small center">
                                                     Checkout with a Credit Card <br>(Powered by Stripe)
