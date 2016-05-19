@@ -646,6 +646,7 @@
 
         if(current_color){
             set(current_color, true);
+            move();
         }
         else
         {
