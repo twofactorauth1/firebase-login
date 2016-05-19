@@ -3,7 +3,8 @@
         <div class="container">
             <p class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
-                <img class="footer-logo" src="/images/footer-logo.png" ng-if="website.settings.footerlink">
+
+                <a ng-if="website.settings.footerlink" href="{{website.settings.footerLinkURL || '//www.indigenous.io'}}"><img class="footer-logo" src="/images/footer-logo.png"></a>
                 <a ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
                 <a ng-if="website.settings.footerlink" href="//www.indigenous.io" rel="nofollow">Powered by  Indigenous</a>
             </p>
