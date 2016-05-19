@@ -161,7 +161,7 @@ main(){
 
 	# Testing?
 
-	if [ "$1 = "master" ]; then
+	if [ "$1" = "master" ]; then
             echo "Put back test dependencies"
             #We have already removed test deps.  Lets put them back.
             npm install
