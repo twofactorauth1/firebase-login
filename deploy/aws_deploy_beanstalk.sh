@@ -112,18 +112,6 @@ main(){
 
 	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
 
-	echo "Waiting for deploy to finish"
-
-	interval=30; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
-
-	echo "Running Selenium"
-
-	#We have already removed test deps.  Lets put them back.
-	npm install
-	npm install selenium-webdriver
-
-	grunt nodeunit:selenium
-
 	# update the asia env if necessary
 	if [ "$1" = "master" ]; then
 	    echo Updating Asia
@@ -170,6 +158,22 @@ main(){
 
         [ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
 	fi
+
+	# Testing?
+
+	if [ "$1 = "master" ]; then
+            echo "Put back test dependencies"
+            #We have already removed test deps.  Lets put them back.
+            npm install
+            npm install selenium-webdriver
+            echo "Waiting for deploy to finish"
+
+            interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+
+            echo "Running Selenium"
+
+            grunt nodeunit:selenium
+        fi
 }
 
 env_check $*

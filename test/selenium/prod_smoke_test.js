@@ -34,7 +34,7 @@ module.exports = {
         testLinks: function(test) {
             console.log('testProd');
 
-            driver.get('http://www.test.indigenous.io');
+            driver.get('https://www.indigenous.io');
             driver.wait(until.elementLocated(By.linkText('BLOG')), 20000);
             var signupLink = driver.isElementPresent(By.linkText('SIGN UP'));
             signupLink.then(function(x){test.ok(x, 'Signup Link not present');});
