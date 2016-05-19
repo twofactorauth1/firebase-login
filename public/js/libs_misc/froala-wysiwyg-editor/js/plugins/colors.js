@@ -65,7 +65,7 @@
             color: ''
         }
     },
-    isIE: !!/msie/i.exec( window.navigator.userAgent )
+    isIE: document.documentMode || /Edge/.test(navigator.userAgent)
   });
 
   a.FroalaEditor.PLUGINS.colors = function (editor) {
@@ -79,6 +79,8 @@
 
     function _showColorsPopup () {
       var $btn = editor.$tb.find('.fr-command[data-cmd="color"]');
+
+
 
       var $popup = editor.popups.get('colors.picker');
       if (!$popup) $popup = _initColorsPopup();
@@ -96,6 +98,15 @@
         editor.selection.save();
 
         editor.popups.show('colors.picker', left, top, $btn.outerHeight());
+        if (editor.opts.isIE)
+        {
+            $(".fr-popup").find(".sp-input").hide();
+            $(".fr-popup").find(".sp-palette-toggle").hide();
+            $(".fr-popup").find(".sp-picker-container").hide();
+        }
+        else{
+            $(".sp-input").show();
+        }
         editor.selection.restore();
         _setInitialColors();
       }
@@ -189,17 +200,9 @@
      colors_html += '<div class="sp-palette-button-container sp-cf"><button type="button" class="sp-palette-toggle fr-command" data-cmd="'+dataToggle+'">less</button></div>';
 
      colors_html += '</div>';
-     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="'+dataChooseColor+'">choose</button></div></div>'
+     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input style="display:none;" class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="'+dataChooseColor+'">choose</button></div></div>'
      colors_html += '</div>';
       return colors_html
-    }
-
-    function rgb2hex(rgb){
-       rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-       return (rgb && rgb.length === 4) ? "#" +
-        ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
     }
 
     /*
