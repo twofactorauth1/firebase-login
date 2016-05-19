@@ -184,7 +184,7 @@ define([], function () {
                 EMAIL: "e"
             },
 
-            customer_activity_types: {
+            contact_activity_types: {
 					PAGE_VIEW: "PAGE_VIEW",
 					SUBSCRIBE: "SUBSCRIBE",
 					CONTACT_CREATED:"CONTACT_CREATED",

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 on_err(){
 	echo "Build error has been detected around:"
@@ -26,11 +26,17 @@ env_check(){
 		export GOOGLE_CLIENT_SECRET="yPiJOniUgxjT94O7M_4tNj_M"
 		export STRIPE_PUBLISHABLE_KEY="pk_live_GFldJIgLoRweE8KmZgHc76df"
 	elif [ "$1" = "develop" ]; then
-		export AWS_DEFAULT_REGION="us-west-2"
-		export ENV_NAME="indigeweb-test-env"
-		export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
+		#export AWS_DEFAULT_REGION="us-west-2"
+		#export ENV_NAME="indigeweb-test-env"
+		#export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
 		export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
 	  	export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
+
+
+	  	export AWS_DEFAULT_REGION="us-west-1"
+        export ENV_NAME="indiwebTestB-env"
+        export APP_NAME="indiweb-test-b"
+        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 	else
 		on_err "No environment specified"
 	fi	
@@ -75,16 +81,6 @@ main(){
 	mv templates/snippets/admin_body_scripts_minimized.jade templates/snippets/admin_body_scripts.jade
 	#fi	
 
-	# rename mainforproduction to main.js
-	#mv public/js/mainforproduction.js public/js/main.js	
-
-	# Compile all handlebars templates
-	#grunt compiletemplates	
-
-	# rename /min to /js directory
-	#mv public/min public/js
-	########################
-	#rm -r public/comps
 
 	echo "Remove as much as possible"
     npm prune --production
@@ -112,7 +108,7 @@ main(){
 	# create a new version and update the environment to use this version
 	aws elasticbeanstalk create-application-version --application-name "${APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
 
-	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done	
+	interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
 	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
 
@@ -138,7 +134,7 @@ main(){
         interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
         [ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
-	elif [ "$1" = "develop" ]; then
+	elif [ "$1" = "developXXX" ]; then
 	    echo "Updating Other"
 	    export AWS_DEFAULT_REGION="us-west-1"
 	    export ENV_NAME="indiwebTestB-env"
@@ -162,6 +158,22 @@ main(){
 
         [ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
 	fi
+
+	# Testing?
+
+	if [ "$1" = "master" ]; then
+            echo "Put back test dependencies"
+            #We have already removed test deps.  Lets put them back.
+            npm install
+            npm install selenium-webdriver
+            echo "Waiting for deploy to finish"
+
+            interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+
+            echo "Running Selenium"
+
+            grunt nodeunit:selenium
+        fi
 }
 
 env_check $*

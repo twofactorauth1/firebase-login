@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
+  app.controller('ContactDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "ContactService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, ContactService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
 
     /*
      * @openModal
@@ -98,20 +98,20 @@
         user_id: $scope.currentUser._id,
         date: date.toISOString()
       };
-      if (!$scope.customer.notes)
-        $scope.customer.notes = [];
-      $scope.customer.notes.push(_noteToPush);
-      $scope.matchUsers($scope.customer);
+      if (!$scope.contact.notes)
+        $scope.contact.notes = [];
+      $scope.contact.notes.push(_noteToPush);
+      $scope.matchUsers($scope.contact);
 
       $scope.newNote.text = '';
 
-      $scope.customer_data = $scope.customer_data || {};
-      $scope.customer_data.tags = $scope.unsetTags();
-      console.log('customer_data:', $scope.customer_data);
-      CustomerService.saveCustomer($scope.customer_data, function (customer) {
-        $scope.customer = customer;
+      $scope.contact_data = $scope.contact_data || {};
+      $scope.contact_data.tags = $scope.unsetTags();
+      console.log('contact_data:', $scope.contact_data);
+      ContactService.saveContact($scope.contact_data, function (contact) {
+        $scope.contact = contact;
         $scope.setTags();
-        $scope.originalCustomer = angular.copy($scope.customer);
+        $scope.originalContact = angular.copy($scope.contact);
         toaster.pop('success', 'Notes Added.');
       });
     };
@@ -123,15 +123,15 @@
 
     UserService.getUsers(function (users) {
       $scope.users = users;
-      $scope.getCustomer();
+      $scope.getContact();
     });
 
     /*
      * @matchUsers
      * match users to the order notes
      */
-    $scope.matchUsers = function (customer) {
-      var notes = customer.notes;
+    $scope.matchUsers = function (contact) {
+      var notes = contact.notes;
       if (notes && notes.length > 0) {
 
         _.each(notes, function (_note) {
@@ -156,34 +156,34 @@
      * push a recently created note to the ui
      */
 
-    $scope.pushLocalNote = function (customer) {
-      customer.notes = $scope.matchUsers(customer);
-      var noteToPush = customer.notes[customer.notes.length - 1];
-      $scope.customer.notes.push(noteToPush);
+    $scope.pushLocalNote = function (contact) {
+      contact.notes = $scope.matchUsers(contact);
+      var noteToPush = contact.notes[contact.notes.length - 1];
+      $scope.contact.notes.push(noteToPush);
     };
 
     /*
-     * @getCustomer
+     * @getContact
      * -
      */
 
-    $scope.getCustomer = function () {
-      console.log('getCustomer >>>');
-      CustomerService.getCustomer($stateParams.contactId, function (customer, error) {
+    $scope.getContact = function () {
+      console.log('getContact >>>');
+      ContactService.getContact($stateParams.contactId, function (contact, error) {
         if(error){
             toaster.pop('warning', error.message);
             if(error.code === 404)
-                $location.path('/customers');
+                $location.path('/contacts');
             return;
         }
-        customer.notes = $scope.matchUsers(customer);
-        $scope.customer = customer;
+        contact.notes = $scope.matchUsers(contact);
+        $scope.contact = contact;
         $scope.setTags();
         $scope.setDefaults();
-        $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
+        $scope.data.fullName = [$scope.contact.first, $scope.contact.middle, $scope.contact.last].join(' ').trim();
         $scope.getMapData();
-        // $scope.contactLabel = CustomerService.contactLabel(customer);
-        // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
+        // $scope.contactLabel = ContactService.contactLabel(contact);
+        // $scope.checkBestEmail = ContactService.checkBestEmail(contact);
       });
     };
 
@@ -211,21 +211,21 @@
      */
 
     $scope.refreshMap = function (fn) {
-      if ($scope.customer.details.length !== 0 && $scope.customer.details[0].addresses && $scope.customer.details[0].addresses.length !== 0) {
-        var formattedAddress = angular.copy($scope.customer.details[0].addresses[0]);
+      if ($scope.contact.details.length !== 0 && $scope.contact.details[0].addresses && $scope.contact.details[0].addresses.length !== 0) {
+        var formattedAddress = angular.copy($scope.contact.details[0].addresses[0]);
         formattedAddress.address2 = '';
         $scope.ip_geo_address = $scope.displayAddressFormat(formattedAddress);
-        $scope.city = $scope.customer.details[0].addresses[0].city;
+        $scope.city = $scope.contact.details[0].addresses[0].city;
         $scope.loadingMap = false;
       }
       var validMapData = false;
-      if ($scope.ip_geo_address && !angular.equals($scope.originalCustomer.details[0].addresses[0], $scope.customer.details[0].addresses[0])) {
-        CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
+      if ($scope.ip_geo_address && !angular.equals($scope.originalContact.details[0].addresses[0], $scope.contact.details[0].addresses[0])) {
+        ContactService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
             $scope.location.lon = parseFloat(data.lon);
-            $scope.customer_data.details[0].addresses[0].lat = $scope.location.lat;
-            $scope.customer_data.details[0].addresses[0].lon = $scope.location.lon;
+            $scope.contact_data.details[0].addresses[0].lat = $scope.location.lat;
+            $scope.contact_data.details[0].addresses[0].lon = $scope.location.lon;
             if ($scope.markers && $scope.markers.mainMarker) {
               $scope.markers.mainMarker.lat = parseFloat(data.lat);
               $scope.markers.mainMarker.lon = parseFloat(data.lon);
@@ -250,29 +250,29 @@
     $scope.getMapData = function () {
       var _firstAddress;
 
-      if ($scope.customer.details[0].addresses.length > -1) {
-        _firstAddress = angular.copy($scope.customer.details[0].addresses[0]);
+      if ($scope.contact.details[0].addresses.length > -1) {
+        _firstAddress = angular.copy($scope.contact.details[0].addresses[0]);
       }
 
-      //customer has no address
+      //contact has no address
       if (!_firstAddress) {
         $scope.loadingMap = false;
-        $scope.originalCustomer = angular.copy($scope.customer);
+        $scope.originalContact = angular.copy($scope.contact);
       } else {
-        //customer has address and lat/lon
+        //contact has address and lat/lon
         if (_firstAddress.lat && _firstAddress.lon) {
-          $scope.originalCustomer = angular.copy($scope.customer);
+          $scope.originalContact = angular.copy($scope.contact);
           $scope.showMap(_firstAddress.lat, _firstAddress.lon);
         } else {
-          //customer has address but no lat/lon
-          //if customer has a session id get data from keen
-          if ($scope.customer.sessionId !== undefined) {
+          //contact has address but no lat/lon
+          //if contact has a session id get data from keen
+          if ($scope.contact.sessionId !== undefined) {
             var keenParams = {
               event_collection: 'session_data',
               filters: [{
                 "property_name": "sessionId",
                 "operator": "eq",
-                "property_value": $scope.customer.sessionId
+                "property_value": $scope.contact.sessionId
               }]
             };
             KeenService.singleExtraction(keenParams, function (data) {
@@ -298,7 +298,7 @@
 
               $scope.localtime = moment().format('h:mm a');
               if ($scope.ip_geo_address) {
-                CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
+                ContactService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
                   if (data.error === undefined) {
                     $scope.location.lat = parseFloat(data.lat);
                     $scope.location.lon = parseFloat(data.lon);
@@ -307,11 +307,11 @@
                   } else {
                     $scope.loadingMap = false;
                   }
-                  $scope.originalCustomer = angular.copy($scope.customer);
+                  $scope.originalContact = angular.copy($scope.contact);
                 });
               } else {
                 $scope.loadingMap = false;
-                $scope.originalCustomer = angular.copy($scope.customer);
+                $scope.originalContact = angular.copy($scope.contact);
               }
             });
           } else {
@@ -322,14 +322,14 @@
                 //save updated lat/lon
                 _firstAddress.lat = parseFloat(data.lat);
                 _firstAddress.lon = parseFloat(data.lon);
-                $scope.customerSaveFn(true);
+                $scope.contactSaveFn(true);
 
                 $scope.showMap(data.lat, data.lon);
               }
-              $scope.originalCustomer = angular.copy($scope.customer);
+              $scope.originalContact = angular.copy($scope.contact);
               $scope.loadingMap = false;
             });
-            $scope.originalCustomer = angular.copy($scope.customer);
+            $scope.originalContact = angular.copy($scope.contact);
           }
 
         }
@@ -337,7 +337,7 @@
     };
 
     $scope.convertAddressToLatLon = function (_address, fn) {
-      CustomerService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
+      ContactService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
         if (data.error === undefined) {
           fn(data);
         } else {
@@ -358,16 +358,16 @@
     };
 
     /*
-     * @customer defaults
+     * @contact defaults
      * -
      */
 
-    $scope.customerId = $stateParams.contactId;
+    $scope.contactId = $stateParams.contactId;
     $scope.modifyAddress = {};
     $scope.saveLoading = false;
     $scope.countries = contactConstant.country_codes;
     $scope.saveContactDisabled = true;
-    $scope.customer = {
+    $scope.contact = {
       _id: null,
       accountId: $$.server.accountId,
       devices: [{
@@ -410,14 +410,14 @@
     $scope.inValidateTags = function()
     {
       var status = false;
-      if(!$scope.customer_data.tags)
+      if(!$scope.contact_data.tags)
         status = true;
-      else if(!$scope.customer_data.tags.length)
+      else if(!$scope.contact_data.tags.length)
         status = true;
       return status;
     }
 
-    $scope.customerSaveFn = function (hideToaster, showAlert, newUrl) {
+    $scope.contactSaveFn = function (hideToaster, showAlert, newUrl) {
       $scope.pageSaving = true;
       $scope.saveLoading = true;
 
@@ -434,8 +434,8 @@
           return;
         }
 
-        // if ($scope.customer_data.details[0].addresses.length > -1) {
-        //   _.each($scope.customer_data.details[0].addresses, function(_address) {
+        // if ($scope.contact_data.details[0].addresses.length > -1) {
+        //   _.each($scope.contact_data.details[0].addresses, function(_address) {
         //     $scope.convertAddressToLatLon(_address, function (data) {
         //       _address.lat = parseFloat(data.lat);
         //       _address.lon = parseFloat(data.lon);
@@ -452,8 +452,8 @@
           }
 
           $scope.errorMapData = false;
-          CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
-            if(!angular.equals($scope.customer_data.details[0].emails[0].email, $scope.originalCustomer.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
+          ContactService.checkDuplicateEmail($scope.contact_data.details[0].emails[0].email, !hideToaster, function (data) {
+            if(!angular.equals($scope.contact_data.details[0].emails[0].email, $scope.originalContact.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.contact_data._id))
             {
               console.log("duplicate email");
               if(!hideToaster)
@@ -470,7 +470,7 @@
                   closeOnCancel: true
                 }, function (isConfirm) {
                   if (isConfirm) {
-                    $scope.saveCustomerChanges(hideToaster, showAlert, newUrl)
+                    $scope.saveContactChanges(hideToaster, showAlert, newUrl)
                   }
                   else{
                     $scope.saveLoading = false;
@@ -482,7 +482,7 @@
             }
             else
             {
-              $scope.saveCustomerChanges(hideToaster, showAlert, newUrl)
+              $scope.saveContactChanges(hideToaster, showAlert, newUrl)
             }
           })
         });
@@ -497,15 +497,15 @@
 
     };
 
-    // Save customer
+    // Save contact
 
-    $scope.saveCustomerChanges =function(hideToaster, showAlert, newUrl){
-        CustomerService.saveCustomer($scope.customer_data, function (customer) {
-          $scope.customer = customer;
+    $scope.saveContactChanges =function(hideToaster, showAlert, newUrl){
+        ContactService.saveContact($scope.contact_data, function (contact) {
+          $scope.contact = contact;
           $scope.setDefaults();
           $scope.setTags();
           $scope.saveLoading = false;
-          $scope.originalCustomer = angular.copy($scope.customer);
+          $scope.originalContact = angular.copy($scope.contact);
           if (!hideToaster) {
             if ($scope.currentState === 'customerAdd') {
               toaster.pop('success', 'Contact Created.');
@@ -528,7 +528,7 @@
 
     $scope.checkContactValidity = function () {
       var fullName = $scope.data.fullName;
-      var email = _.filter($scope.customer.details[0].emails, function (mail) {
+      var email = _.filter($scope.contact.details[0].emails, function (mail) {
         return mail.email !== "";
       });
       if ((angular.isDefined(fullName) && fullName !== "") || email.length > 0) {
@@ -542,7 +542,7 @@
      */
 
     $scope.addDeviceFn = function () {
-      $scope.customer.devices.push({
+      $scope.contact.devices.push({
         _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
         serial: ''
       });
@@ -558,11 +558,11 @@
     };
 
     /*
-     * @customerPhoneTypeSaveFn
+     * @contactPhoneTypeSaveFn
      * -
      */
 
-    $scope.customerPhoneTypeSaveFn = function (index, type) {
+    $scope.contactPhoneTypeSaveFn = function (index, type) {
       var typeLabel = null;
       if (type === 'm') {
         typeLabel = 'mobile';
@@ -573,8 +573,8 @@
       if (type === 'w') {
         typeLabel = 'work';
       }
-      $('#customer-phone-type-' + index).html(typeLabel);
-      $scope.customer.details[0].phones[index].type = type;
+      $('#contact-phone-type-' + index).html(typeLabel);
+      $scope.contact.details[0].phones[index].type = type;
     };
 
     /*
@@ -596,12 +596,12 @@
     };
 
     /*
-     * @customerDeleteFn
+     * @contactDeleteFn
      * -
      */
 
-    $scope.customerDeleteFn = function () {
-      CustomerService.deleteCustomer($scope.customerId, function (customer) {
+    $scope.contactDeleteFn = function () {
+      ContactService.deleteContact($scope.contactId, function (contact) {
         toaster.pop('warning', 'Contact Deleted.');
       });
     };
@@ -612,24 +612,24 @@
      */
 
     $scope.restoreFn = function () {
-      if ($scope.customerId) {
-        if ($scope.customer.type === undefined) {
-          $scope.customer.type = $scope.userPreferences.default_customer_type;
+      if ($scope.contactId) {
+        if ($scope.contact.type === undefined) {
+          $scope.contact.type = $scope.userPreferences.default_customer_type;
         }
-        if ($scope.customer.details[0].addresses.length === 0) {
-          //$scope.customer.details[0].addresses.push({});
-          $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
-          $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
-          $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
-          $scope.customer.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
+        if ($scope.contact.details[0].addresses.length === 0) {
+          //$scope.contact.details[0].addresses.push({});
+          $scope.contact.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
+          $scope.contact.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
+          $scope.contact.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
+          $scope.contact.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
         }
       } else {
-        $scope.customer.type = $scope.userPreferences.default_customer_type;
-        //$scope.customer.details[0].addresses.push({});
-        $scope.customer.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
-        $scope.customer.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
-        $scope.customer.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
-        $scope.customer.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
+        $scope.contact.type = $scope.userPreferences.default_customer_type;
+        //$scope.contact.details[0].addresses.push({});
+        $scope.contact.details[0].addresses[0].city = $scope.userPreferences.default_customer_city;
+        $scope.contact.details[0].addresses[0].state = $scope.userPreferences.default_customer_state;
+        $scope.contact.details[0].addresses[0].country = $scope.userPreferences.default_customer_country;
+        $scope.contact.details[0].addresses[0].zip = $scope.userPreferences.default_customer_zip;
       }
     };
 
@@ -664,22 +664,22 @@
       var nameSplit = newValue.match(/\S+/g);
       if (nameSplit) {
         if (nameSplit.length >= 3) {
-          $scope.customer.first = nameSplit[0];
-          $scope.customer.middle = nameSplit[1];
-          $scope.customer.last = nameSplit[2];
+          $scope.contact.first = nameSplit[0];
+          $scope.contact.middle = nameSplit[1];
+          $scope.contact.last = nameSplit[2];
         } else if (nameSplit.length === 2) {
-          $scope.customer.first = nameSplit[0];
-          $scope.customer.middle = '';
-          $scope.customer.last = nameSplit[1];
+          $scope.contact.first = nameSplit[0];
+          $scope.contact.middle = '';
+          $scope.contact.last = nameSplit[1];
         } else if (nameSplit.length === 1) {
-          $scope.customer.first = nameSplit[0];
-          $scope.customer.middle = '';
-          $scope.customer.last = '';
+          $scope.contact.first = nameSplit[0];
+          $scope.contact.middle = '';
+          $scope.contact.last = '';
         }
       } else {
-        $scope.customer.first = '';
-        $scope.customer.middle = '';
-        $scope.customer.last = '';
+        $scope.contact.first = '';
+        $scope.contact.middle = '';
+        $scope.contact.last = '';
       }
     };
 
@@ -689,7 +689,7 @@
      */
 
     $scope.insertPhoto = function (asset) {
-      $scope.customer.photo = asset.url;
+      $scope.contact.photo = asset.url;
     };
 
     /*
@@ -698,7 +698,7 @@
      */
 
     $scope.removePhoto = function (asset) {
-      $scope.customer.photo = null;
+      $scope.contact.photo = null;
     };
 
     /*
@@ -715,8 +715,8 @@
      * -
      */
 
-    $scope.contactLabel = function (customer) {
-      return CustomerService.contactLabel(customer);
+    $scope.contactLabel = function (contact) {
+      return ContactService.contactLabel(contact);
     };
 
     /*
@@ -725,7 +725,7 @@
      */
 
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkBestEmail(contact);
+      var returnVal = ContactService.checkBestEmail(contact);
       this.email = contact.email;
       return returnVal;
     };
@@ -736,7 +736,7 @@
      */
 
     $scope.checkFacebookId = function (contact) {
-      var returnVal = CustomerService.checkFacebookId(contact);
+      var returnVal = ContactService.checkFacebookId(contact);
       this.facebookId = contact.facebookId;
       return returnVal;
     };
@@ -747,7 +747,7 @@
      */
 
     $scope.checkTwitterId = function (contact) {
-      var returnVal = CustomerService.checkTwitterId(contact);
+      var returnVal = ContactService.checkTwitterId(contact);
       this.twitterId = contact.twitterId;
       return returnVal;
     };
@@ -758,7 +758,7 @@
      */
 
     $scope.checkLinkedInId = function (contact) {
-      var returnVal = CustomerService.checkLinkedInId(contact);
+      var returnVal = ContactService.checkLinkedInId(contact);
       this.linkedInUrl = contact.linkedInUrl;
       this.linkedInId = contact.linkedInId;
       return returnVal;
@@ -770,19 +770,19 @@
      */
 
     $scope.checkAddress = function (contact) {
-      var returnVal = CustomerService.checkAddress(contact);
+      var returnVal = ContactService.checkAddress(contact);
       this.address = contact.address;
       return returnVal;
     };
 
     /*
-     * @customerAddEmailFn
+     * @contactAddEmailFn
      * -
      */
 
     // Add/Remove email adresses
-    $scope.customerAddEmailFn = function () {
-      $scope.customer.details[0].emails.push({
+    $scope.contactAddEmailFn = function () {
+      $scope.contact.details[0].emails.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
         email: ''
       });
@@ -794,7 +794,7 @@
      */
 
     $scope.removeEmail = function (index) {
-      $scope.customer.details[0].emails.splice(index, 1);
+      $scope.contact.details[0].emails.splice(index, 1);
     };
 
     /*
@@ -803,16 +803,16 @@
      */
 
     $scope.showAddEmail = function (email) {
-      return email._id === $scope.customer.details[0].emails[0]._id;
+      return email._id === $scope.contact.details[0].emails[0]._id;
     };
 
     /*
-     * @addCustomerContactFn
+     * @addContactPhoneFn
      * - Add/Remove phone numbers
      */
 
-    $scope.addCustomerContactFn = function () {
-      $scope.customer.details[0].phones.push({
+    $scope.addContactPhoneFn = function () {
+      $scope.contact.details[0].phones.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
         number: '',
         extension: ''
@@ -825,7 +825,7 @@
      */
 
     $scope.removePhone = function (index) {
-      $scope.customer.details[0].phones.splice(index, 1);
+      $scope.contact.details[0].phones.splice(index, 1);
     };
 
     /*
@@ -834,7 +834,7 @@
      */
 
     $scope.showAddPhone = function (phone) {
-      return phone._id === $scope.customer.details[0].phones[0]._id;
+      return phone._id === $scope.contact.details[0].phones[0]._id;
     };
 
     /*
@@ -843,7 +843,7 @@
      */
 
     $scope.removeAddress = function (index) {
-      $scope.customer.details[0].addresses.splice(index, 1);
+      $scope.contact.details[0].addresses.splice(index, 1);
     };
 
     /*
@@ -852,16 +852,16 @@
      */
 
     $scope.showAddAddress = function (address) {
-      return address._id === $scope.customer.details[0].addresses[0]._id;
+      return address._id === $scope.contact.details[0].addresses[0]._id;
     };
 
     /*
-     * @customerAddAddressFn
+     * @contactAddAddressFn
      * -
      */
 
-    $scope.customerAddAddressFn = function () {
-      $scope.customer.details[0].addresses.push({
+    $scope.contactAddAddressFn = function () {
+      $scope.contact.details[0].addresses.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
         address: '',
         address2: '',
@@ -876,7 +876,7 @@
         lat: '',
         lon: ''
       });
-      //$scope.customerAddressWatchFn($scope.customer.details[0].addresses.length - 1);
+      //$scope.contactAddressWatchFn($scope.contact.details[0].addresses.length - 1);
     };
 
     /*
@@ -885,29 +885,29 @@
      */
 
     $scope.setDefaults = function () {
-      // New customer
-      if ($scope.customer.details.length === 0) {
-        $scope.customer.details[0] = {};
+      // New contact
+      if ($scope.contact.details.length === 0) {
+        $scope.contact.details[0] = {};
       }
-      if (!$scope.customer.details[0].emails) {
-        $scope.customer.details[0].emails = [];
+      if (!$scope.contact.details[0].emails) {
+        $scope.contact.details[0].emails = [];
       }
-      if (!$scope.customer.details[0].phones) {
-        $scope.customer.details[0].phones = [];
+      if (!$scope.contact.details[0].phones) {
+        $scope.contact.details[0].phones = [];
       }
-      if (!$scope.customer.details[0].addresses) {
-        $scope.customer.details[0].addresses = [];
+      if (!$scope.contact.details[0].addresses) {
+        $scope.contact.details[0].addresses = [];
       }
 
-      if ($scope.customer.details.length) {
-        if (!$scope.customer.details[0].emails.length) {
-          $scope.customerAddEmailFn();
+      if ($scope.contact.details.length) {
+        if (!$scope.contact.details[0].emails.length) {
+          $scope.contactAddEmailFn();
         }
-        if (!$scope.customer.details[0].phones.length) {
-          $scope.addCustomerContactFn();
+        if (!$scope.contact.details[0].phones.length) {
+          $scope.addContactPhoneFn();
         }
-        if (!$scope.customer.details[0].addresses.length) {
-          $scope.customerAddAddressFn();
+        if (!$scope.contact.details[0].addresses.length) {
+          $scope.contactAddAddressFn();
         }
       }
     };
@@ -936,12 +936,12 @@
      *   - Other (ot)
      */
 
-    if (!$scope.customer.tags) {
-      $scope.customer.tags = {};
+    if (!$scope.contact.tags) {
+      $scope.contact.tags = {};
     };
 
-    CustomerService.getCustomerTags(function(tags){
-      $scope.customerTags = tags;
+    ContactService.getContactTags(function(tags){
+      $scope.contactTags = tags;
     });
 
     /*
@@ -953,8 +953,8 @@
       console.log('setTags >>>');
       var tempTags = [];
       var cutomerTags = [];
-      _.each($scope.customer.tags, function (tag , index) {
-        var matchingTag = _.findWhere($scope.customerTags, {
+      _.each($scope.contact.tags, function (tag , index) {
+        var matchingTag = _.findWhere($scope.contactTags, {
           data: tag
         });
         if(matchingTag)
@@ -970,19 +970,19 @@
           });
         }
       });
-      $scope.myCustomerTags = cutomerTags.join(", ");
-      $scope.customer.tags = tempTags;
-      console.log('$scope.customer.tags >>>', $scope.customer.tags);
+      $scope.myContactTags = cutomerTags.join(", ");
+      $scope.contact.tags = tempTags;
+      console.log('$scope.contact.tags >>>', $scope.contact.tags);
     };
 
     $scope.unsetTags = function() {
       var tempTags = [];
-        $scope.customer_data = angular.copy($scope.customer);
-        _.each($scope.customer_data.tags, function (tag) {
+        $scope.contact_data = angular.copy($scope.contact);
+        _.each($scope.contact_data.tags, function (tag) {
           tempTags.push(tag.data);
         });
         if (tempTags) {
-          $scope.customer_data.tags = _.uniq(tempTags);
+          $scope.contact_data.tags = _.uniq(tempTags);
         }
     };
 
@@ -1017,18 +1017,18 @@
      */
 
     $scope.updateFullName = function () {
-      $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
+      $scope.data.fullName = [$scope.contact.first, $scope.contact.middle, $scope.contact.last].join(' ').trim();
     };
 
     /*
-     * @deleteCustomerFn
+     * @deleteContactFn
      * -
      */
 
-    $scope.deleteCustomerFn = function (customer) {
+    $scope.deleteContactFn = function (contact) {
       SweetAlert.swal({
         title: "Are you sure?",
-        text: "Do you want to delete this customer?",
+        text: "Do you want to delete this contact?",
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
@@ -1038,10 +1038,10 @@
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
-          CustomerService.deleteCustomer(customer._id, function () {
-            toaster.pop('warning', 'Customer Deleted.');
-            $scope.originalCustomer = angular.copy($scope.customer);
-            $state.go('app.customers');
+          ContactService.deleteContact(contact._id, function () {
+            toaster.pop('warning', 'Contact Deleted.');
+            $scope.originalContact = angular.copy($scope.contact);
+            $state.go('app.contacts');
           });
         }
       });
@@ -1061,23 +1061,23 @@
       var isDirty = false;
       if($scope.newNote && $scope.newNote.text)
         isDirty = true;
-      if($scope.originalCustomer && !angular.equals($scope.originalCustomer, $scope.customer))
+      if($scope.originalContact && !angular.equals($scope.originalContact, $scope.contact))
         isDirty = true;
       return isDirty;
     }
     $scope.resetDirty = function(){
-      $scope.originalCustomer = null;
-      $scope.customer = null;
+      $scope.originalContact = null;
+      $scope.contact = null;
     }
 
-    CustomerService.getCustomers(function (customers) {
-      CustomerService.getAllCustomerTags(customers, function(tags){
-        $scope.customerTags = tags;
+    ContactService.getContacts(function (contacts) {
+      ContactService.getAllContactTags(contacts, function(tags){
+        $scope.contactTags = tags;
       });
     });
 
-    $scope.tagToCustomer = function(value) {
-     return CustomerService.tagToCustomer(value);
+    $scope.tagToContact = function(value) {
+     return ContactService.tagToContact(value);
     }
 
     $scope.viewSingleOrder = function(orderId) {

@@ -1,8 +1,8 @@
 'use strict';
 /*global app, Papa*/
-app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'CustomerService', 'userConstant', 'SocialConfigService', 'getCustomers', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, CustomerService, userConstant, SocialConfigService, getCustomers, toaster) {
+app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getContacts', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getContacts, toaster) {
 
-  $scope.getCustomers = getCustomers;
+  $scope.getContacts = getContacts;
   /*
    * @editableOptions
    * - editable options for xeditable in preview customers
@@ -610,25 +610,25 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
     });
 
     $scope.uploadingServerCsv = true;
-    CustomerService.resetCount();
-    CustomerService.importCsvCustomers(customersToAdd, function () {
+    ContactService.resetCount();
+    ContactService.importCsvContacts(customersToAdd, function () {
       console.log('upload started ...', $scope.uploadingServerCsv);
     });
   };
 
   /*
-   * @on:importingCustomers
+   * @on:importingContacts
    * - callback from service to update import progress
    */
 
-  $scope.$on('importingCustomers', function (event, args) {
+  $scope.$on('importingContacts', function (event, args) {
     console.log('on import ', args);
     $scope.serverUploadPercent = Math.round(args.current / args.total * 100);
     if (args.current === args.total) {
       $scope.uploadingComplete = true;
       var _diff = (new Date() - startServerUploadTime) / 1000;
       $scope.endServerUpload = _diff.toFixed(2);
-      $scope.getCustomers();
+      $scope.getContacts();
     }
   });
 
@@ -683,7 +683,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
    * - if file is in accepted types, begin the CSV upload with uploader config
    * - else if file is unknown type, attempt quick parse to check that file could probably be parsed as csv
    * - quick check checks first 5 rows, if they all have same # of columns, probably good data
-   * 
+   *
    */
 
   var acceptedFiletypes = ['text/csv', 'application/vnd.ms-excel', 'application/msexcel', 'application/x-msexcel', 'application/x-ms-excel', 'application/x-excel', 'application/x-dos_ms_excel', 'application/xls', 'application/x-xls', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
@@ -694,7 +694,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
     var parsedLikeCSV = false;
 
     $scope.incorrectFileType = false;
-    
+
     console.log('file type >>> ', files);
 
     if (acceptedFiletypes.indexOf(files[0].type) > -1) {
@@ -730,7 +730,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
       $scope.incorrectFile = files[0];
       $scope.$apply();
     }
-    
+
     function parseUploadedFile() {
       startUpload = new Date();
       $scope.fileName = files[0].name;

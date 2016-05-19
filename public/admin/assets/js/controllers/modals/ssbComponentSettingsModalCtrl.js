@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert) {
+app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'ContactService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, ContactService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert) {
 
   $scope.blog = {};
 
@@ -625,8 +625,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    * @setPageLinkTitle
    * -
    */
-  $scope.setPageLinkTitle = function (url, update, link, oldUrl) {
-    if(!$scope.component.customnav){
+    $scope.setPageLinkTitle = function (url, update, link, oldUrl) {
         var _label = null;
         var _page = _.findWhere($scope.filteredPages, {
             handle: url
@@ -634,17 +633,21 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         if(_page){
           _label =  _page.menuTitle || _page.title;
         }
-
-        if(update){
-          link.label = _label;
-          updateParentPageSettings(link.linkTo.type, url, true, oldUrl);
+        if(!$scope.component.customnav){
+            if(update){
+              link.label = _label;
+              updateParentPageSettings(link.linkTo.type, url, true, oldUrl);
+            }
+            else{
+              $scope.newLink.linkTitle = _label
+            }
         }
         else{
-          $scope.newLink.linkTitle = _label
+            if(!update){
+              $scope.newLink.linkTitle = _label
+            }
         }
-
-      }
-  };
+    };
 
 
   $scope.refreshSlider = function () {
@@ -1029,7 +1032,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         $scope.availableProductTagsString = $scope.availableProductTags.join(",");
       });
 
-      CustomerService.getCustomerTags(function(tags){
+      ContactService.getContactTags(function(tags){
         $scope.customerTags = tags;
       });
 

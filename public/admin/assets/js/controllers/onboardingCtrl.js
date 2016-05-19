@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-    app.controller('OnboardingCtrl', ["$scope", "$window", "toaster", "CustomerService", function ($scope, $window, toaster, CustomerService) {
+    app.controller('OnboardingCtrl', ["$scope", "$window", "toaster", "ContactService", function ($scope, $window, toaster, ContactService) {
         console.log('onboarding');
         console.log('$scope.currentUser ', $scope.currentUser);
         // Someday, we may do some awesome things here to collect or detect traits of the user; f/e their pictures

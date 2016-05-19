@@ -44,6 +44,7 @@
         vm.isAnonymous = false;
         vm.paypalLoginClickFn = paypalLoginClickFn;
         vm.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
+        vm.facebookClientID = ENV.facebookClientID;
         console.log('url:', vm.paypalURL);
 
         vm.fieldClass = fieldClass;
@@ -70,12 +71,13 @@
         vm.percentage = null;
         vm.product = {};
         vm.close = close;
-        vm.parseFBShare = parseFBShare;
-        vm.shareUrl = 'indigenous.io';
+        //vm.parseFBShare = parseFBShare;
+        vm.shareUrl = $location.url;
         vm.getProduct = getProduct;
         vm.getCredentials = getCredentials;
         vm.setInitialCheckoutState = setInitialCheckoutState;
         vm.setDefaultValues = setDefaultValues;
+        vm.checkDateValidityFn = checkDateValidityFn;
 
         vm.nthRow = 'nth-row';
 
@@ -100,6 +102,9 @@
                 if (field.spacing.mb) {
                     styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
                 }
+            }
+            if(field && field.fieldsPerRow){
+                styleString = "min-width:" + Math.floor(100/field.fieldsPerRow) + '%';
             }
             return styleString;
         };
@@ -220,6 +225,14 @@
                 first_name = name_arr[0];
                 if (name_arr.length > 1) {
                     last_name = name_arr[1];
+                }
+            }
+            else{
+                if(vm.formBuilder.FirstName){
+                    first_name = vm.formBuilder.FirstName;
+                }
+                 if(vm.formBuilder.LastName){
+                    last_name = vm.formBuilder.LastName;
                 }
             }
 
@@ -357,6 +370,14 @@
                     last_name = name_arr[1];
                 }
             }
+            else{
+                if(vm.formBuilder.FirstName){
+                    first_name = vm.formBuilder.FirstName;
+                }
+                 if(vm.formBuilder.LastName){
+                    last_name = vm.formBuilder.LastName;
+                }
+            }
 
             var formatted = {
                 fingerprint: fingerprint,
@@ -374,7 +395,8 @@
                 skipWelcomeEmail: skipWelcomeEmail,
                 fromEmail: vm.component.fromEmail,
                 fromName: vm.component.fromName,
-                contact_type: vm.component.tags,
+                contact_type: vm.component.contact_type,
+                tags: vm.component.tags,
                 uniqueEmail: vm.component.uniqueEmail || false,
                 activity: {
                     activityType: 'DONATE_FORM',
@@ -495,7 +517,7 @@
                         if (data.message)
                             failedOrderMessage = data.message;
                         vm.checkoutModalState = 5;
-                        vm.parseFBShare();
+                        //vm.parseFBShare();
                         vm.failedOrderMessage = failedOrderMessage;
                         return;
                     }
@@ -629,9 +651,9 @@
                     // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
                     // cardInput.address_city = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].city : '';
                     // cardInput.address_state = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].state : '';
-                    if (!vm.isAnonymous) {
-                        cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
-                    }
+                    // if (!vm.isAnonymous) {
+                    //     cardInput.address_zip = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].zip : '';
+                    // }
                     // cardInput.address_country = order.customer.details[0].addresses ? order.customer.details[0].addresses[0].country : 'US';
                     // if (order.customer.details[0].addresses.length && order.customer.details[0].addresses[0].address2) {
                     //     cardInput.address_line2 = order.customer.details[0].addresses[0].address2;
@@ -673,7 +695,7 @@
                             return;
                         }
 
-						order.payment_details.card_token = token;
+                        order.payment_details.card_token = token;
                         orderService.createOrder(order, function(data) {
                             if (data && !data._id) {
                                 var failedOrderMessage = "Error in order processing";
@@ -685,7 +707,7 @@
                                 return;
                             }
                             console.log('order, ', order);
-                            vm.parseFBShare();
+                            //vm.parseFBShare();
                             vm.checkoutModalState = 5;
                             // vm.formBuilder = {};
                         });
@@ -721,26 +743,6 @@
             vm.formBuilder = {};
             vm.checkoutModalState = 1;
             vm.getDonations(vm.product._id);
-        }
-
-        function parseFBShare() {
-            vm.shareUrl = $location.url;
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId      : '622171824473460',
-                    xfbml      : true,
-                    version    : 'v2.6'
-                });
-            };
-            $timeout(function() {
-                (function(d, s, id){
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {return;}
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/en_US/sdk.js";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
-            }, 500);
         }
 
         function deleteOrderFn(order) {
@@ -821,10 +823,26 @@
             }
         }
 
+        function checkDateValidityFn() {
+          if (!angular.isDefined(vm.component.productSettings.timePeriod))  {
+            return true;
+          }
+
+          if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
+            return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate));
+          } else if (vm.component.productSettings.timePeriod.startDate) {
+            return moment().isAfter(vm.component.productSettings.timePeriod.startDate);
+          } else if (vm.component.productSettings.timePeriod.endDate) {
+            return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
+          } else {
+            return true;
+          }
+        };
+
         function init(element) {
             vm.element = element;
 
-            vm.parseFBShare();
+            //vm.parseFBShare();
 
             $(vm.element).find('.modal').on('hidden.bs.modal', function () {
                 vm.close();

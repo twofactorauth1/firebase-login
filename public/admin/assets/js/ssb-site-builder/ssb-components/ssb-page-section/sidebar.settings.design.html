@@ -7,7 +7,7 @@
     </div> -->
     <div class="form-group ssb-spectrum-color-picker-small">
         <div class="ssb-spectrum-color-picker-background-container">
-            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
             <i class="fa fa-eyedropper" />
         </div>
         <label>
@@ -71,7 +71,7 @@
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <i class="fa fa-close" ng-click="vm.removeImage(component.components[0])"></i>
+            <i class="fa fa-close hidden" ng-click="vm.removeImage(component.components[0])"></i>
             <img ng-src="{{component.components[0].src}}" ng-model="component.components[0].src" ng-click="vm.addImage(vm.uiState.activeSectionIndex, 0)" class="img-thumbnail">
         </div>
     </div>
@@ -266,7 +266,7 @@
 
             <div ng-if="component.bg.img.overlay" class="form-group ssb-spectrum-color-picker-small">
                 <div class="ssb-spectrum-color-picker-background-container">
-                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
                     <i class="fa fa-eyedropper" />
                 </div>
                 <label for="colorpicker">

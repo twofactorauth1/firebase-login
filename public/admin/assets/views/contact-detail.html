@@ -1,9 +1,9 @@
-<div class="customer-detail" ng-controller="CustomerDetailCtrl">
-<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="customerSaveFn()" save-page-check="!pageSaving"></indig-navprompt>
+<div class="customer-detail" ng-controller="ContactDetailCtrl">
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="contactSaveFn()" save-page-check="!pageSaving"></indig-navprompt>
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">{{ data.fullName || 'No Customer Name'}} </h1>
+                <h1 class="mainTitle">{{ data.fullName || 'No Contact Name'}} </h1>
                 <span class="mainDescription">{{displayCustomerTags()}}</span>
             </div>
         </div>
@@ -23,29 +23,29 @@
                                 <div class="col-md-4">
                                     <div class="user-left">
                                         <div class="center">
-                                            <h4>{{customer.first}} {{customer.last}}</h4>
+                                            <h4>{{contact.first}} {{contact.last}}</h4>
                                             <div class="user-image">
-                                                <img ng-src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
+                                                <img ng-src="{{ contact.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
                                             </div>
-                                            <div class="social-icons block" ng-if="checkTwitterId(customer) || checkFacebookId(customer) || checkGoogleId(customer) || checkLinkedInId(customer)">
+                                            <div class="social-icons block" ng-if="checkTwitterId(contact) || checkFacebookId(contact) || checkGoogleId(contact) || checkLinkedInId(contact)">
                                                 <ul>
-                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips" ng-if="checkTwitterId(customer)">
+                                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips" ng-if="checkTwitterId(contact)">
                                                         <a href="#" target="_blank">
                                                         Twitter
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips" ng-if="checkFacebookId(customer)">
+                                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips" ng-if="checkFacebookId(contact)">
                                                         <a href="#" target="_blank">
                                                         Facebook
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips" ng-if="checkGoogleId(customer)">
+                                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips" ng-if="checkGoogleId(contact)">
                                                         <a href="#" target="_blank">
                                                         Google+
                                                     </a>
                                                     </li>
-                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips" ng-if="checkLinkedInId(customer)">
-                                                        <a href="{{customer.linkedInUrl}}" target="_blank">
+                                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips" ng-if="checkLinkedInId(contact)">
+                                                        <a href="{{contact.linkedInUrl}}" target="_blank">
                                                         LinkedIn
                                                     </a>
                                                     </li>
@@ -73,15 +73,15 @@
                                             <tbody>
                                                 <tr>
                                                     <td>ID:</td>
-                                                    <td>{{customer._id}}</td>
+                                                    <td>{{contact._id}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Tags:</td>
-                                                    <td>{{myCustomerTags}}</td>
+                                                    <td>{{myContactTags}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Gender:</td>
-                                                    <td>{{customer.gender}}</td>
+                                                    <td>{{contact.gender}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -95,7 +95,7 @@
                                                 <tr>
                                                     <td>Email:</td>
                                                     <td>
-                                                        <div ng-repeat="email in customer.details[0].emails | uniq: 'email' track by $index">
+                                                        <div ng-repeat="email in contact.details[0].emails | uniq: 'email' track by $index">
                                                             <a href="mailto:{{email.email}}">{{email.email}}</a>
                                                             <br>
                                                         </div>
@@ -104,7 +104,7 @@
                                                 <tr>
                                                     <td>Phone:</td>
                                                     <td>
-                                                        <div ng-repeat="phone in customer.details[0].phones | uniq: 'number' track by $index">
+                                                        <div ng-repeat="phone in contact.details[0].phones | uniq: 'number' track by $index">
                                                             <a ng-if="phone.number" href="tel:{{phone.number}}">{{phone.number}}</a>
                                                             <span ng-if="phone.extension && !phone.number"> N/A </span>
                                                             <span ng-if="phone.extension"> x{{phone.extension}}</span>
@@ -115,12 +115,12 @@
                                                 <tr>
                                                     <td>Address(es):</td>
                                                     <td>
-                                                        <div ng-repeat="address in customer.details[0].addresses track by $index">
+                                                        <div ng-repeat="address in contact.details[0].addresses track by $index">
                                                             <a href>
                                                                 <span ng-if="address.address">{{address.address}}<br></span>
                                                                 <span ng-if="address.address2">{{address.address2}}<br></span>
                                                                 {{address.city}} {{address.state}} {{address.country}} {{address.zip}}</a>
-                                                            <br/><br ng-if="($index+1 < customer.details[0].addresses.length)"/>
+                                                            <br/><br ng-if="($index+1 < contact.details[0].addresses.length)"/>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -128,7 +128,7 @@
                                                     <td>Website:</td>
                                                     <td>
                                                         <div>
-                                                            <a href="http://{{customer.details[0].websites[0].website}}">{{customer.details[0].websites[0].website}}</a>
+                                                            <a href="http://{{contact.details[0].websites[0].website}}">{{contact.details[0].websites[0].website}}</a>
                                                             <br>
                                                         </div>
                                                     </td>
@@ -137,7 +137,7 @@
                                                     <td>Company:</td>
                                                     <td>
                                                         <div>
-                                                            {{customer.details[0].company}}
+                                                            {{contact.details[0].company}}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -170,8 +170,8 @@
                                         </table>
                                         <div class="btn-group btn-group-justified margin-top-10">
                                             <div class="btn-group">
-                                                <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteCustomerFn(customer)">
-                                                    <span>Delete Customer</span>
+                                                <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteContactFn(contact)">
+                                                    <span>Delete Contact</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -180,13 +180,13 @@
                                 <div class="col-md-8">
                                     <div class="panel panel-white" id="notes">
                                         <div class="panel-heading border-light">
-                                            <h4 class="panel-title">Customer <span class="text-bold">Notes</span></h4>
+                                            <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
                                             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                                         </div>
                                         <div class="panel-wrapper" collapse="notes" ng-init="notes=false">
                                             <div class="panel-body no-padding">
                                                 <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                                                    <li ng-repeat="note in customer.notes">
+                                                    <li ng-repeat="note in contact.notes">
                                                         <div class="col-xs-2">
                                                             <img src="{{note.user_profile_photo ? note.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
                                                         </div>
@@ -207,7 +207,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <customer-activity single-customer="true" current-page="1" num-per-page="10"></customer-activity>
+                                    <contact-activity single-contact="true" current-page="1" num-per-page="10"></contact-activity>
                                     <div class="panel panel-white space20 hidden">
                                         <div class="panel-heading">
                                             <h4 class="panel-title">Recent Tweets</h4>
@@ -228,9 +228,9 @@
                                 </div>
                             </div>
                         </tab>
-                        <tab heading="Edit Customer" active="editActive">
+                        <tab heading="Edit Contact" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading || (form.$invalid && !form.$pristine )"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="contactSaveFn()" ng-disabled="saveLoading || (form.$invalid && !form.$pristine )"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
                             </div>
                             <div class="clearfix"></div>
                             <form action="#" name="form" role="form" id="form">
@@ -244,30 +244,30 @@
                                                 <label class="control-label">
                                                     Email Address
                                                 </label>
-                                                <div class="form-group" ng-if="!customer.details[0].emails">
+                                                <div class="form-group" ng-if="!contact.details[0].emails">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="email" placeholder="Email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
-                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <input type="email" placeholder="Email address" class="form-control" name="email" ng-model="contact.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <i ng-if="showAddEmail(email)" ng-click="contactAddEmailFn()" class="ti-plus"></i>
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
                                                 </div>
-                                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine }" ng-repeat="email in customer.details[0].emails  track by $index">
+                                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine }" ng-repeat="email in contact.details[0].emails  track by $index">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="contact.details[0].emails[$index].email" ng-blur="updateCustomer()">
                                                         <p ng-show="form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
-                                                        <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
+                                                        <i ng-if="showAddEmail(email)" ng-click="contactAddEmailFn()" class="ti-plus"></i>
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div ng-repeat="phone in customer.details[0].phones  track by $index">
+                                            <div ng-repeat="phone in contact.details[0].phones  track by $index">
                                                 <div class="row">
                                                     <div class="col-md-8">
                                                         <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
                                                             <label class="control-label">
                                                                 Phone Number
                                                             </label>
-                                                           <input type="text" placeholder="Phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                           <input type="text" placeholder="Phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="contact.details[0].phones[$index].number" ng-blur="updateCustomer()">
                                                            <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
                                                         </div>
                                                     </div>
@@ -276,13 +276,13 @@
                                                             <label class="control-label">
                                                                 Extension
                                                             </label>
-                                                            <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="customer.details[0].phones[$index].extension" ng-blur="updateCustomer()">
+                                                            <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="contact.details[0].phones[$index].extension" ng-blur="updateCustomer()">
                                                             <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div ng-if="showAddPhone(phone)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="addCustomerContactFn()">Add another phone</div>
+                                                    <div ng-if="showAddPhone(phone)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="addContactPhoneFn()">Add another phone</div>
                                                     <div ng-if="!showAddPhone(phone)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removePhone($index)">Remove phone</div>
                                                 </div>
                                                 <div class="clearfix"></div>
@@ -293,7 +293,7 @@
                                                 </label>
                                                 <div class="form-group">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="text" placeholder="Website URL" class="form-control" name="website" ng-model="customer.details[0].websites[0].website" ng-blur="updateCustomer()">
+                                                        <input type="text" placeholder="Website URL" class="form-control" name="website" ng-model="contact.details[0].websites[0].website" ng-blur="updateCustomer()">
                                                     </span>
                                                 </div>
                                             </div>
@@ -303,11 +303,11 @@
                                                 </label>
                                                 <div class="form-group">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="text" placeholder="Company name" class="form-control" name="company" ng-model="customer.details[0].company" ng-blur="updateCustomer()">
+                                                        <input type="text" placeholder="Company name" class="form-control" name="company" ng-model="contact.details[0].company" ng-blur="updateCustomer()">
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div ng-repeat="address in customer.details[0].addresses  track by $index">
+                                            <div ng-repeat="address in contact.details[0].addresses  track by $index">
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group" ng-class="{'has-error':errorMapData}">
@@ -363,7 +363,7 @@
                                                     </div>
                                                 </div>
                                                 <div>
-                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="customerAddAddressFn()">Add another address</div>
+                                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="contactAddAddressFn()">Add another address</div>
                                                     <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
                                                 </div>
                                                 <div class="clearfix"></div>
@@ -378,7 +378,7 @@
                                                     <div flow-init flow-object="obj.flow">
                                                         <div class="user-image">
                                                             <div class="thumbnail margin-bottom-5">
-                                                                <img ng-src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png">
+                                                                <img ng-src="{{ contact.photo }}" err-src="/admin/assets/images/default-user.png">
                                                             </div>
                                                         </div>
                                                         <div class="user-image-buttons-edit">
@@ -394,15 +394,15 @@
                                                 <small>
                                                     <strong>First:</strong>
                                                     <code>
-                                                        <span id="hint-first">{{customer.first}}</span>
+                                                        <span id="hint-first">{{contact.first}}</span>
                                                     </code>
                                                     <strong>Middle:</strong>
                                                     <code>
-                                                        <span id="hint-middle">{{customer.middle}}</span>
+                                                        <span id="hint-middle">{{contact.middle}}</span>
                                                     </code>
                                                     <strong>Last:</strong>
                                                     <code>
-                                                        <span id="hint-last">{{customer.last}}</span>
+                                                        <span id="hint-last">{{contact.last}}</span>
                                                     </code>
                                                 </small>
                                                 <span class="links cl-effect-1">
@@ -414,26 +414,26 @@
                                             </div>
                                             <div class="form-group" ng-show="showSplitName">
                                                 <label class="">First Name</label>
-                                                <input id="input-first" class="form-control" ng-model="customer.first" placeholder="First name" type="text" ng-change="updateFullName()">
+                                                <input id="input-first" class="form-control" ng-model="contact.first" placeholder="First name" type="text" ng-change="updateFullName()">
                                             </div>
                                             <div class="form-group" ng-show="showSplitName">
                                                 <label class="">Middle Name</label>
-                                                <input id="input-middle" class="form-control" ng-model="customer.middle" placeholder="Middle name" type="text" ng-change="updateFullName()">
+                                                <input id="input-middle" class="form-control" ng-model="contact.middle" placeholder="Middle name" type="text" ng-change="updateFullName()">
                                             </div>
                                             <div class="form-group" ng-show="showSplitName">
                                                 <label class="">Last Name</label>
-                                                <input id="input-last" class="form-control" ng-model="customer.last" placeholder="Last name" type="text" ng-change="updateFullName()">
+                                                <input id="input-last" class="form-control" ng-model="contact.last" placeholder="Last name" type="text" ng-change="updateFullName()">
                                             </div>
                                             <div class="form-group">
                                                 <label class="block">
                                                     Gender
                                                 </label>
                                                 <div class="clip-radio radio-primary">
-                                                    <input type="radio" ng-checked="customer.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="customer.gender">
+                                                    <input type="radio" ng-checked="contact.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="contact.gender">
                                                     <label for="us-female">
                                                         Female
                                                     </label>
-                                                    <input type="radio" ng-checked="customer.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="customer.gender">
+                                                    <input type="radio" ng-checked="contact.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="contact.gender">
                                                     <label for="us-male">
                                                         Male
                                                     </label>
@@ -443,9 +443,9 @@
                                                 <label class="block">
                                                     Tags
                                                 </label>
-                                                <ui-select tagging="tagToCustomer" tagging-match-to-key="label" multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled">
+                                                <ui-select tagging="tagToContact" tagging-match-to-key="label" multiple ng-model="contact.tags" theme="bootstrap" ng-disabled="disabled">
                                                     <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                                                    <ui-select-choices repeat="tag in customerTags | orderBy:'label' | filter:$select.search">
+                                                    <ui-select-choices repeat="tag in contactTags | orderBy:'label' | filter:$select.search">
                                                         {{tag.label}}
                                                     </ui-select-choices>
                                                 </ui-select>

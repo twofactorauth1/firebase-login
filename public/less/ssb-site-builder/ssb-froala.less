@@ -105,7 +105,6 @@ ssb-topbar #ssb-froala-scrollable-container {
     text-align: inherit!important;
     color: inherit;
     overflow: hidden;
-    padding: 4px;
     cursor: text;
 }
 
@@ -654,7 +653,7 @@ body[ng-controller] .fr-popup .fr-input-line textarea {
 body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus,
 body[ng-controller] .fr-popup .fr-input-line textarea:focus {
   border-bottom: solid 2px #ffffff;
-  background-color: inherit!important;
+  background-color: transparent!important;
 }
 body[ng-controller] .fr-popup .fr-input-line input + span,
 body[ng-controller] .fr-popup .fr-input-line textarea + span {
@@ -883,16 +882,7 @@ body[ng-controller] .fr-popup .fr-colors-tabs .fr-colors-tab[data-param1="backgr
   -ms-transition: transform 0.2s ease 0s;
   -o-transition: transform 0.2s ease 0s;
 }
-body[ng-controller] .fr-popup .fr-colors-tabs .fr-colors-tab.fr-selected-tab {
-  color: #ffffff;
-}
-body[ng-controller] .fr-popup .fr-color-set > span.fr-selected-color::after {
-  color: #ffffff;
-}
-body[ng-controller] .fr-popup .fr-color-set > span:hover,
-body[ng-controller] .fr-popup .fr-color-set > span.fr-selected-color {
-  outline: 1px solid #ffffff;
-}
+
 body[ng-controller] .fr-file-upload-layer {
   border: dashed 2px #ffffff;
 }

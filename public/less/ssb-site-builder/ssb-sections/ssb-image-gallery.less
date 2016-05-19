@@ -4,6 +4,12 @@
      * layout-gallery-common
      */
 
+    [image-gallery-component] { //support legacy w/ image-galleries not contained by .ssb-page-section-image-gallery
+        .component-wrap {
+            position: static; //needed for the lightbox effect
+        }
+    }
+
     .ssb-page-section-image-gallery {
         [image-gallery-component] {
             .component-wrap {
@@ -308,7 +314,7 @@
     .ssb-page-section-layout-gallery-v10 {
         [image-gallery-component]
         {
-            padding: 0 !important;
+            padding: 50px 0 !important;
             .img-container{
                 position: relative;
             }
@@ -319,6 +325,7 @@
 
             .slider-nav-thumbnails{
                 bottom: 0;
+                padding-top: 15px;
             }
 
             .slick-dots{
@@ -343,6 +350,11 @@
                     display:none !important;
                 })
             }
+
+            .slick-slider{
+                margin-bottom: 0 !important;
+            }
+
             .image-wrap{
                 .image-gallery{
                     min-height: 396px !important;
@@ -428,6 +440,7 @@
             .slider-nav-thumbnails{
                 bottom: 170px;
                 margin-bottom: -150px;
+                left:50%;
             }
             .slick-dots{
                 z-index: 1;

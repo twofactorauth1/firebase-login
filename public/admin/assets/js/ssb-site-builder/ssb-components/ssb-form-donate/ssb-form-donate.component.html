@@ -26,9 +26,10 @@
                             </div>
                         </div>
                         <div class="center margin-top-30 col-sm-12">
-                            <button ng-disabled="!vm.component.productSettings" ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" data-toggle="modal" data-target="#form-donate-modal-{{vm.component._id}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
+                            <button ng-disabled="!vm.component.productSettings || !vm.checkDateValidityFn()" ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" data-toggle="modal" data-target="#form-donate-modal-{{vm.component._id}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
                                 class="btn btn-form btn-default pull-right btn-block">
-                                <span elem ng-model="vm.component.submitBtn"></span>
+                                <span elem ng-model="vm.component.submitBtn" ng-show='vm.checkDateValidityFn()'></span>
+                                <span ng-hide='vm.checkDateValidityFn()'>Time span expired</span>
                             </button>
                             <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block inline-block">
                                 <span elem ng-model="vm.component.submitBtn"></span>
@@ -43,15 +44,23 @@
                 </div>
 
                 <div ng-if="vm.product._id" class="donate-social-share">
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-via="indigenous_io" data-dnt="true">Tweet</a>
-                    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-
-                    <div
-                        class="fb-share-button"
-                        data-href="{{vm.shareUrl}}"
-                        data-layout="button"
-                        data-mobile-iframe="true">
-                    </div>
+                    <a class="btn btn-xs btn-twitter"
+                           socialshare
+                           socialshare-via="indigenous_io"
+                           socialshare-text="Home"
+                           socialshare-provider="twitter"
+                           socialshare-popup-height="400">
+                           <span class="fa fa-twitter"></span>
+                            Tweet
+                    </a>
+                    <a class="btn btn-xs btn-facebook" href="javascript:void(0)"
+                           socialshare socialshare-url="{{vm.shareUrl}}"
+                           socialshare-provider="facebook"
+                           socialshare-via="{{vm.facebookClientID}}"
+                           socialshare-popup-height="400"
+                           socialshare-redirect-uri="https://www.facebook.com/dialog/return/close">
+                           <span class="fa fa-facebook"></span> Share
+                    </a>
 
                 </div>
 
@@ -154,10 +163,10 @@
                                 <div class="donate-step thank-you"  ng-show="vm.checkoutModalState == 2">
                                     <!-- <h3 class="donate-step-header center mb20">Payment Choice</h3> -->
                                     <div class="alert alert-danger" ng-show='vm.showPaypalErrorMsg'>Try again with paypal or use Credit Card?</div>
-                                    <div class="payment-panel" g-show='vm.paypalInfo' ng-class='{"col-sm-6": vm.stripeInfo, "col-sm-12": !vm.stripeInfo}'>
+                                    <div class="payment-panel" ng-show='vm.paypalInfo' ng-class='{"col-sm-6": vm.stripeInfo, "col-sm-12": !vm.stripeInfo}'>
                                         <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
                                             <div class="panel-body" ng-click="vm.showPaypalLoading || vm.paypalPayment()" ng-disabled='vm.showPaypalLoading'>
-                                                <img class="img-responsive" src="/images/simple-cart-paypal.png" />
+                                                <img class="img-responsive inline-block" src="/images/simple-cart-paypal.png" />
                                                 <h3 class="StepTitle margin-top-10">Paypal</h3>
                                                 <p class="text-small">
                                                     Checkout with Paypal
@@ -169,7 +178,7 @@
                                     <div class="payment-panel" ng-show='vm.stripeInfo' ng-class='{"col-sm-6": vm.paypalInfo, "col-sm-12": !vm.paypalInfo}'>
                                         <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
                                             <div class="panel-body" ng-click="vm.setCheckoutState(4)">
-                                                <img class="img-responsive" src="/images/simple-cart-stripe.png" />
+                                                <img class="img-responsive inline-block" src="/images/simple-cart-stripe.png" />
                                                 <h3 class="StepTitle margin-top-10">Credit Card</h3>
                                                 <p class="text-small center">
                                                     Checkout with a Credit Card <br>(Powered by Stripe)
@@ -249,16 +258,23 @@
                                     </p>
 
                                     <div class="donate-social-share">
-                                        <a href="https://twitter.com/share" class="twitter-share-button" data-via="indigenous_io" data-dnt="true">Tweet</a>
-                                        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-
-                                        <div
-                                            class="fb-share-button"
-                                            data-href="{{vm.shareUrl}}"
-                                            data-layout="button"
-                                            data-mobile-iframe="true">
-                                        </div>
-
+                                        <a class="btn btn-xs btn-twitter"
+                                           socialshare
+                                           socialshare-via="indigenous_io"
+                                           socialshare-text="Home"
+                                           socialshare-provider="twitter"
+                                           socialshare-popup-height="400">
+                                           <span class="fa fa-twitter"></span>
+                                            Tweet
+                                        </a>
+                                        <a class="btn btn-xs btn-facebook" href="javascript:void(0)"
+                                           socialshare socialshare-url="{{vm.shareUrl}}"
+                                           socialshare-provider="facebook"
+                                           socialshare-via="{{vm.facebookClientID}}"
+                                           socialshare-popup-height="400"
+                                           socialshare-redirect-uri="https://www.facebook.com/dialog/return/close">
+                                           <span class="fa fa-facebook"></span> Share
+                                        </a>
                                     </div>
                                 </div>
 

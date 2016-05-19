@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -18,73 +18,73 @@
 
     $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
 
-    $scope.filterCustomerPhotos = function (customers) {
-      _.each(customers, function (customer) {
-        if (customer) {
-          customer.hasPhoto = false;
-          if (customer.photo) {
-            if ($("#customer_photo_" + customer._id).attr("src") === $scope.default_image_url) {
-              customer.hasPhoto = false;
+    $scope.filterContactPhotos = function (contacts) {
+      _.each(contacts, function (contact) {
+        if (contact) {
+          contact.hasPhoto = false;
+          if (contact.photo) {
+            if ($("#contact_photo_" + contact._id).attr("src") === $scope.default_image_url) {
+              contact.hasPhoto = false;
             } else {
-              customer.hasPhoto = true;
+              contact.hasPhoto = true;
             }
           }
         }
       });
     };
 
-    $scope.filterCustomers = function () {
+    $scope.filterContacts = function () {
       $scope.showFilter = !$scope.showFilter;
-      $scope.filterCustomerPhotos($scope.customers);
+      $scope.filterContactPhotos($scope.contacts);
     };
 
     /*
-     * @getCustomers
+     * @getContacts
      * -
      */
 
-    $scope.getCustomers = function () {
-      CustomerService.getCustomers(function (customers) {
-        _.each(customers, function (customer) {
-          customer.bestEmail = $scope.checkBestEmail(customer);
-          customer.hasFacebookId = $scope.checkFacebookId(customer);
-          customer.hasTwitterId = $scope.checkTwitterId(customer);
-          customer.hasLinkedInId = $scope.checkLinkedInId(customer);
-          customer.hasGoogleId = $scope.checkGoogleId(customer);
+    $scope.getContacts = function () {
+      ContactService.getContacts(function (contacts) {
+        _.each(contacts, function (contact) {
+          contact.bestEmail = $scope.checkBestEmail(contact);
+          contact.hasFacebookId = $scope.checkFacebookId(contact);
+          contact.hasTwitterId = $scope.checkTwitterId(contact);
+          contact.hasLinkedInId = $scope.checkLinkedInId(contact);
+          contact.hasGoogleId = $scope.checkGoogleId(contact);
 
-          customer.bestAddress = $scope.displayAddressFormat(customer);
+          contact.bestAddress = $scope.displayAddressFormat(contact);
           var tempTags = [];
           var tagLabel = "";
-          _.each(customer.tags, function (tag) {
-             tagLabel = _.findWhere($scope.customerTags, { data: tag });
+          _.each(contact.tags, function (tag) {
+             tagLabel = _.findWhere($scope.contactTags, { data: tag });
               if(tagLabel)
                 tempTags.push(tagLabel.label);
               else
                 tempTags.push(tag);
           });
           if(tempTags)
-            customer.tempTags = _.uniq(tempTags);
+            contact.tempTags = _.uniq(tempTags);
         });
-        $scope.customers = customers;
-        // In case customer is created from simple form component.
-        if($scope.customers.length > 0){
+        $scope.contacts = contacts;
+        // In case contact is created from simple form component.
+        if($scope.contacts.length > 0){
           $scope.minRequirements = true;
         }
         if ($state.current.sort) {
           $scope.setSortOrder($state.current.sort);
         }
-        $scope.showCustomers = true;
-        CustomerService.getAllCustomerTags(customers, function(tags){
-          $scope.customerTags = tags;
+        $scope.showContacts = true;
+        ContactService.getAllContactTags(contacts, function(tags){
+          $scope.contactTags = tags;
         });
 
       });
     };
 
-    $scope.getCustomers();
+    $scope.getContacts();
 
-    CustomerService.getCustomerTags(function(tags){
-      $scope.customerTags = tags;
+    ContactService.getContactTags(function(tags){
+      $scope.contactTags = tags;
     });
 
     /*
@@ -103,7 +103,7 @@
         return [value.first, value.middle, value.last].join(' ').trim();
       },
       tags: function (value) {
-        return $scope.contactTags(value);
+        return $scope.contactTagsFn(value);
       },
       phone: function (value) {
         if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
@@ -154,8 +154,8 @@
         backdrop: 'static',
         size: 'md',
         resolve: {
-          getCustomers: function () {
-            return $scope.getCustomers;
+          getContacts: function () {
+            return $scope.getContacts;
           }
         }
       };
@@ -224,51 +224,51 @@
       "modified": true
     };
 
-    $scope.contactTags = function (customer) {
-      return CustomerService.contactTags(customer);
+    $scope.contactTagsFn = function (contact) {
+      return ContactService.contactTags(contact);
     };
 
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkBestEmail(contact);
+      var returnVal = ContactService.checkBestEmail(contact);
       this.email = contact.email;
       return returnVal;
     };
 
     $scope.checkFacebookId = function (contact) {
-      var returnVal = CustomerService.checkFacebookId(contact);
+      var returnVal = ContactService.checkFacebookId(contact);
       this.facebookId = contact.facebookId;
       return returnVal;
     };
 
     $scope.checkTwitterId = function (contact) {
-      var returnVal = CustomerService.checkTwitterId(contact);
+      var returnVal = ContactService.checkTwitterId(contact);
       this.twitterId = contact.twitterId;
       return returnVal;
     };
 
     $scope.checkLinkedInId = function (contact) {
-      var returnVal = CustomerService.checkLinkedInId(contact);
+      var returnVal = ContactService.checkLinkedInId(contact);
       this.linkedInUrl = contact.linkedInUrl;
       this.linkedInId = contact.linkedInId;
       return returnVal;
     };
 
     $scope.checkGoogleId = function (contact) {
-      var returnVal = CustomerService.checkGoogleId(contact);
+      var returnVal = ContactService.checkGoogleId(contact);
       this.googleUrl = contact.googleUrl;
       this.googleId = contact.googleId;
       return returnVal;
     };
 
     $scope.checkAddress = function (contact) {
-      var returnVal = CustomerService.checkAddress(contact);
+      var returnVal = ContactService.checkAddress(contact);
       this.address = contact.address;
       return returnVal;
     };
 
-    $scope.displayAddressFormat = function (customer) {
-      if (customer.details.length !== 0 && customer.details[0].addresses && customer.details[0].addresses.length !== 0) {
-        var address = customer.details[0].addresses[0];
+    $scope.displayAddressFormat = function (contact) {
+      if (contact.details.length !== 0 && contact.details[0].addresses && contact.details[0].addresses.length !== 0) {
+        var address = contact.details[0].addresses[0];
         if (address && (address.address || address.address2 || address.city || address.state || address.zip)) {
           //var address = scope.htmlToPlaintext(address);
           var separator = ' ';
@@ -292,10 +292,10 @@
         }
     }
     };
-    $scope.viewSingle = function (customer) {
+    $scope.viewSingle = function (contact) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
-      window.location = '/admin/#/customers/' + customer._id;
+      window.location = '/admin/#/contacts/' + contact._id;
     };
 
     /* 18-Sep Unioned set of tags in system with those needed by Indigenous
@@ -319,19 +319,19 @@
     *   - Admin (ad)
     *   - Other (ot)
     *
-    * - Dumb: This list an that in customerDetailCtrl should be managed centrally (see case 4395)
+    * - Dumb: This list an that in contactDetailCtrl should be managed centrally (see case 4395)
     */
 
-    $scope.customer = {};
-    $scope.customer.tags = {};
+    $scope.contact = {};
+    $scope.contact.tags = {};
 
 
 
-    $scope.tagToCustomer = function(value) {
-     return CustomerService.tagToCustomer(value);
+    $scope.tagToContact = function(value) {
+     return ContactService.tagToContact(value);
     }
 
-    $scope.customerPhotoOptions = [{
+    $scope.contactPhotoOptions = [{
       name: 'Photo',
       value: true
     }, {
@@ -339,68 +339,68 @@
       value: false
     }];
 
-    $scope.customersLimit = 50;
+    $scope.contactsLimit = 50;
 
-    $scope.addCustomers = function () {
-      $scope.customersLimit += 50;
+    $scope.addContacts = function () {
+      $scope.contactsLimit += 50;
     };
 
-    $scope.addCustomer = function () {
+    $scope.addContact = function () {
 
       $scope.saveLoading = true;
       var tempTags = [];
-      _.each($scope.customer.tags, function (tag) {
+      _.each($scope.contact.tags, function (tag) {
         tempTags.push(tag.data);
       });
       if(tempTags)
         tempTags = _.uniq(tempTags);
-      var matchingCustomer = _.findWhere($scope.customers, {
-        bestEmail: $scope.customer.email
+      var matchingContact = _.findWhere($scope.contacts, {
+        bestEmail: $scope.contact.email
       });
-      if(matchingCustomer){
+      if(matchingContact){
         $scope.setDuplicateUser(true);
         $scope.saveLoading = false;
         return;
       }
-      var tempCustomer = {
-        first: $scope.customer.first,
-        middle: $scope.customer.middle,
-        last: $scope.customer.last,
+      var tempContact = {
+        first: $scope.contact.first,
+        middle: $scope.contact.middle,
+        last: $scope.contact.last,
         tags: tempTags
       };
-      if($scope.customer.email){
-        tempCustomer.details = [];
-        tempCustomer.details.push({
+      if($scope.contact.email){
+        tempContact.details = [];
+        tempContact.details.push({
           emails: [{
             _id: CommonService.generateUniqueAlphaNumericShort(),
-            email: $scope.customer.email
+            email: $scope.contact.email
           }]
         })
       }
-      CustomerService.saveCustomer(tempCustomer, function (returnedCustomer) {
+      ContactService.saveContact(tempContact, function (returnedContact) {
         $scope.saveLoading = false;
         $scope.fullName = '';
-        $scope.customer.tags = {};
-        $scope.customer.email = '';
-        $scope.duplicateCustomer = false;
+        $scope.contact.tags = {};
+        $scope.contact.email = '';
+        $scope.duplicateContact = false;
         $scope.closeModal();
 
 
-        returnedCustomer.bestEmail = $scope.checkBestEmail(returnedCustomer);
-        $scope.customers.unshift(returnedCustomer);
-        $scope.incrementCustomerTags(returnedCustomer);
-        toaster.pop('success', 'Customer Successfully Added');
+        returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
+        $scope.contacts.unshift(returnedContact);
+        $scope.incrementContactTags(returnedContact);
+        toaster.pop('success', 'Contact Successfully Added');
         $scope.minRequirements = true;
       });
     };
 
-    $scope.incrementCustomerTags = function (contact) {
-      var customerTags = $scope.customerTags;
+    $scope.incrementContactTags = function (contact) {
+      var contactTags = $scope.contactTags;
       if(contact){
         var contactTags = [];
           if (contact.tags) {
             _.each(contact.tags, function (tag) {
-              var type = _.find(customerTags, function (type) {
+              var type = _.find(contactTags, function (type) {
                 return type.data === tag;
               });
               if (!type) {
@@ -411,12 +411,12 @@
               }
             });
           }
-        $scope.customerTags = _.uniq(customerTags.concat(contactTags), function(w) { return w.label; })
+        $scope.contactTags = _.uniq(contactTags.concat(contactTags), function(w) { return w.label; })
       }
     };
 
     $scope.setDuplicateUser = function(val){
-      $scope.duplicateCustomer = val;
+      $scope.duplicateContact = val;
     }
 
     $scope.$watch('fullName', function (newValue) {
@@ -424,22 +424,22 @@
         var nameSplit = newValue.match(/\S+/g);
         if (nameSplit) {
           if (nameSplit.length >= 3) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = nameSplit[1];
-            $scope.customer.last = nameSplit[2];
+            $scope.contact.first = nameSplit[0];
+            $scope.contact.middle = nameSplit[1];
+            $scope.contact.last = nameSplit[2];
           } else if (nameSplit.length === 2) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = '';
-            $scope.customer.last = nameSplit[1];
+            $scope.contact.first = nameSplit[0];
+            $scope.contact.middle = '';
+            $scope.contact.last = nameSplit[1];
           } else if (nameSplit.length === 1) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = '';
-            $scope.customer.last = '';
+            $scope.contact.first = nameSplit[0];
+            $scope.contact.middle = '';
+            $scope.contact.last = '';
           }
         } else {
-          $scope.customer.first = '';
-          $scope.customer.middle = '';
-          $scope.customer.last = '';
+          $scope.contact.first = '';
+          $scope.contact.middle = '';
+          $scope.contact.last = '';
         }
       }
     }, true);
@@ -449,12 +449,12 @@
     // });
 
     $scope.importFacebookFriends = function () {
-      CustomerService.importFacebookFriends(function (data, success) {
+      ContactService.importFacebookFriends(function (data, success) {
         if (success) {
           $('#import-contacts-modal').modal('hide');
           toaster.pop('success', "Contacts being imported.");
         } else {
-          $window.location.href = "/socialconfig/facebook?redirectTo=" + encodeURIComponent('/admin#/customer');
+          $window.location.href = "/socialconfig/facebook?redirectTo=" + encodeURIComponent('/admin#/contact');
         }
       });
     };
@@ -511,10 +511,10 @@
      * - clear the filter for the status when the red X is clicked
      */
 
-    $scope.filterCustomer = {};
+    $scope.filterContact = {};
 
     $scope.clearFilter = function (event, input, filter) {
-      $scope.filterCustomer[filter] = {};
+      $scope.filterContact[filter] = {};
       $scope.triggerInput(input);
     };
 
@@ -536,7 +536,7 @@
         if ($scope.bulkActionChoice.action.data == 'delete') {
             SweetAlert.swal({
                 title: "Are you sure?",
-                text: "Do you want to delete the filtered customers?",
+                text: "Do you want to delete the filtered contacts?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -547,16 +547,16 @@
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    var selectedCustomers = $scope.selectedCustomersFn();
-                    selectedCustomers.forEach(function(sc, sci) {
-                        CustomerService.deleteCustomer(sc._id, function () {});
-                        $scope.customers.splice(_.findIndex($scope.customers, function(c) {return c._id == sc._id; }), 1);
-                        $scope.displayedCustomers.splice(_.findIndex($scope.displayedCustomers, function(c) {return c._id == sc._id; }), 1);
+                    var selectedContacts = $scope.selectedContactsFn();
+                    selectedContacts.forEach(function(sc, sci) {
+                        ContactService.deleteContact(sc._id, function () {});
+                        $scope.contacts.splice(_.findIndex($scope.contacts, function(c) {return c._id == sc._id; }), 1);
+                        $scope.displayedContacts.splice(_.findIndex($scope.displayedContacts, function(c) {return c._id == sc._id; }), 1);
                     });
                     $scope.bulkActionChoice = null;
                     $scope.bulkActionChoice = {};
                     $scope.clearSelectionFn();
-                    toaster.pop('success', 'Customers Deleted.');
+                    toaster.pop('success', 'Contacts Deleted.');
                 } else {
                  $scope.bulkActionChoice = null;
                  $scope.bulkActionChoice = {};
@@ -570,11 +570,11 @@
         }
 
         if ($scope.bulkActionChoice.action.data == 'export') {
-          CustomerService.exportCsvContacts(_.pluck($scope.selectedCustomersFn(), '_id'));
+          ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
           $scope.bulkActionChoice = null;
           $scope.bulkActionChoice = {};
           $scope.clearSelectionFn();
-          toaster.pop('success', 'Customer export started.');
+          toaster.pop('success', 'Contact export started.');
         }
     };
 
@@ -585,69 +585,69 @@
         } else {
             $scope.selectAllChecked = true;
         }
-        $scope.displayedCustomers.forEach(function(customer, index) {
-            customer.isSelected = $scope.selectAllChecked;
+        $scope.displayedContacts.forEach(function(contact, index) {
+            contact.isSelected = $scope.selectAllChecked;
         });
     };
 
     $scope.clearSelectionFn = function () {
         $scope.selectAllChecked = false;
-        $scope.displayedCustomers.forEach(function(customer, index) {
-            customer.isSelected = $scope.selectAllChecked;
+        $scope.displayedContacts.forEach(function(contact, index) {
+            contact.isSelected = $scope.selectAllChecked;
         });
     };
 
-    $scope.customerSelectClickFn = function ($event, customer) {
+    $scope.contactSelectClickFn = function ($event, contact) {
         $event.stopPropagation();
-        if (customer.isSelected) {
-            customer.isSelected = false;
+        if (contact.isSelected) {
+            contact.isSelected = false;
         } else {
-            customer.isSelected = true;
+            contact.isSelected = true;
         }
     };
 
-    $scope.selectedCustomersFn = function () {
-        return _.filter($scope.displayedCustomers, function(customer) { return customer.isSelected; });
+    $scope.selectedContactsFn = function () {
+        return _.filter($scope.displayedContacts, function(contact) { return contact.isSelected; });
     };
 
     $scope.tagsBulkActionClickFn = function (operation) {
-        var selectedCustomers = $scope.selectedCustomersFn();
+        var selectedContacts = $scope.selectedContactsFn();
         var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
 
-        selectedCustomers.forEach(function(customer, index) {
+        selectedContacts.forEach(function(contact, index) {
             if (operation == 'add') {
                 if ($scope.tagsBulkAction.toReplace) {
-                    customer.tags = tags;
+                    contact.tags = tags;
                 } else {
-                    if (customer.tags) {
-                        customer.tags = customer.tags.concat(tags);
+                    if (contact.tags) {
+                        contact.tags = contact.tags.concat(tags);
                     } else {
-                        customer.tags = tags;
+                        contact.tags = tags;
                     }
                 }
             }
 
             if (operation == 'remove') {
-                customer.tags = _.difference(customer.tags, tags);
+                contact.tags = _.difference(contact.tags, tags);
             }
 
-            CustomerService.saveCustomer(customer, function() {});
+            ContactService.saveContact(contact, function() {});
         });
 
         $scope.tagsBulkAction = {};
         $scope.clearSelectionFn();
         $scope.closeModal();
-        toaster.pop('success', 'Customers tags updated.');
+        toaster.pop('success', 'Contacts tags updated.');
     };
 
     $scope.exportContactsFn = function () {
-      if (_.pluck($scope.selectedCustomersFn().length)) {
-        CustomerService.exportCsvContacts(_.pluck($scope.selectedCustomersFn(), '_id'));
+      if (_.pluck($scope.selectedContactsFn().length)) {
+        ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
       } else {
-        CustomerService.exportCsvContacts(null);
+        ContactService.exportCsvContacts(null);
       }
       $scope.clearSelectionFn();
-      toaster.pop('success', 'Customer export started.');
+      toaster.pop('success', 'Contact export started.');
     };
   }]);
 }(angular));

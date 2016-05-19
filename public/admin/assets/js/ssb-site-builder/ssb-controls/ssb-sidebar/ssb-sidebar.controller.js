@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService', 'toaster', 'ProductService'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'ContactService', 'toaster', 'ProductService'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService, toaster, ProductService) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, ContactService, toaster, ProductService) {
 
     console.info('site-build sidebar directive init...')
 
@@ -1008,7 +1008,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                         SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                             console.log('page saved');
-                            // toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                             vm.state.saveLoading = false;
                             vm.uiState.navigation.loadPage(page._id);
                             SimpleSiteBuilderService.getPages();
@@ -1145,8 +1145,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.element = element;
 
         setupSectionContent();
-        CustomerService.getCustomers(function(customers){
-            CustomerService.getAllCustomerTags(customers,function(tags){
+        ContactService.getContacts(function(customers){
+            ContactService.getAllContactTags(customers,function(tags){
             vm.customerTags = tags;
             });
         })

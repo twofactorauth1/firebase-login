@@ -3,11 +3,11 @@
  */
 
 describe('customer service features', function() {
-    //var CustomerService;
+    //var ContactService;
     var $httpBackend;
 
-    beforeEach(inject(function (/*_CustomerService_, */_$httpBackend_) {
-        //CustomerService = _CustomerService_;
+    beforeEach(inject(function (/*_ContactService_, */_$httpBackend_) {
+        //ContactService = _ContactService_;
         $httpBackend = _$httpBackend_;
     }));
 

@@ -322,6 +322,7 @@ module.exports = {
             var endDateMillis = endDate.getTime();
             var urlAry = [];
             urlAry.push(url);
+            urlAry.push('www.' + url);
             if(accountId === appConfig.mainAccountID) {
                 //this is a hack for local
                 urlAry.push(appConfig.www_url.replace('http://', '').replace(':3000', ''));

@@ -69,10 +69,6 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
           }
         });
         scope.products = _filteredProducts;
-        $timeout(function () {
-          $(window).trigger('resize');
-          console.log("Products loaded");
-        }, 500);
         if (fn) {
           fn();
         }
@@ -146,6 +142,10 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
           }
           var end = begin + numDisplay;
           scope.filteredProducts = scope.products.slice(begin, end);
+          $timeout(function () {
+            $(window).trigger('resize');
+            console.log("Products loaded");
+          }, 0);
         }
       };
 

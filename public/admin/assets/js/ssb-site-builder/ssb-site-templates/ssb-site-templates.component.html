@@ -16,11 +16,12 @@
             </div>
         </div>
     </section>
+
     <section class="ssb-site-template-grid" ng-hide="vm.uiState.loading">
 
         <ul class="list-unstyled">
 
-            <li ng-repeat="template in vm.state.siteTemplates track by $index" ng-click="vm.selectSiteTemplate(template)" class="ssb-site-template-grid-item col-xs-12 col-sm-4">
+            <li ng-repeat="template in vm.state.siteTemplates track by $index" ng-click="vm.selectSiteTemplate(template)" class="ssb-site-template-grid-item col-sm-6 col-lg-4 col-xl-3">
                 <div class="ssb-site-template-grid-item-inner">
 
                     <div class="ssb-site-template-img-container">
@@ -37,6 +38,7 @@
                         <a href class="btn btn-primary btn-o">{{template.name}}</a>
                     </h1>
 
+                </div>
 
             </li>
 

@@ -93,7 +93,7 @@ module.exports = {
                 self.log.error(accountId, null, 'Error getting websites:', err);
                 return fn(err, null);
             } else {
-                self.log.debug(accountId, userId, '<< listWebsites');
+                self.log.debug(accountId, null, '<< listWebsites');
                 return fn(null, list);
             }
         });
@@ -172,7 +172,7 @@ module.exports = {
     createPage: function(accountId, websiteId, templateId, created, fn) {
         var self = this;
         var userId = created.by;
-        self.log.debug(accountId, userId, '>> createPage');
+        self.log.debug(accountId, userId, '>> createPage [' + templateId + ']');
 
         /*
          * 1. Get the website
@@ -237,11 +237,13 @@ module.exports = {
                         sectionDao.getById(section._id, $$.m.ssb.Section, function(err, referencedSection){
                             if(err) {
                                 callback(err);
+                            } else if(!referencedSection){
+                                self.log.warn(accountId, userId, 'No referenced section for [' + section._id + ']', section);
+                                callback();
                             } else {
-                                self.log.debug(accountId, userId, 'referencedSection', referencedSection);
+                                self.log.debug(accountId, userId, 'referencedSection [' + section._id + ']', referencedSection);
                                 var id = $$.u.idutils.generateUUID();
-                                if(referencedSection)
-                                {
+                                if(referencedSection) {
                                     var s = section;
                                     var refId = s._id;
                                     s = referencedSection.toJSON();
@@ -250,8 +252,7 @@ module.exports = {
                                     s.anchor = id;
                                     s.accountId = accountId;
                                     self.log.debug(accountId, userId, 'new dereferenced', s);
-                                }
-                                else{
+                                } else {
                                     section._id = id;
                                     section.anchor = id;
                                     section.accountId = accountId;
@@ -319,15 +320,16 @@ module.exports = {
             function getGlobalSections(website, theme, template, sections, header, footer, cb){
                 var query = {
                     accountId:accountId,
-                    global:true
+                    global:true,
+                    latest:true
                 };
                 sectionDao.findMany(query, $$.m.ssb.Section, function(err, gsections){
                     if(err) {
                         self.log.error(accountId, userId, 'Error finding global sections:', err);
                         cb(err);
                     } else {
-                        var latestSections = self.getLatestSections(gsections);
-                        cb(null, website, theme, template, sections, header, footer, latestSections);
+                        //var latestSections = self.getLatestSections(gsections);
+                        cb(null, website, theme, template, sections, header, footer, gsections);
                     }
                 });
             },
@@ -472,9 +474,11 @@ module.exports = {
         page.set('ssb', true);
 
         //reset all section _id's for duplicate page
+
         if (sections.length) {
             sections = sections.map(function(section) {
                 var id = $$.u.idutils.generateUUID();
+                //TODO: If a section is global, should we do this?
                 section._id = id;
                 section.anchor = id;
                 return section;
@@ -644,7 +648,7 @@ module.exports = {
         var linkList = list.links.filter(function (lnk) {
         return lnk.type === 'link' &&
              lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle
-        })
+        });
         if(linkList){
             _.each(linkList, function(link){
                 var _index = list.links.indexOf(link);
@@ -686,17 +690,6 @@ module.exports = {
         self.log.debug(accountId, null,'>> listPages');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
 
-        /*
-        pageDao.findAndOrder(query, null, $$.m.ssb.Page, 'handle', -1, function(err, pages){
-            if(err) {
-                self.log.error(accountId, null,'error getting pages:', err);
-                return fn(err);
-            } else {
-                self.log.debug(accountId, null,'<< listPages');
-                return fn(null, pages);
-            }
-        });
-        */
         pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
             if(err) {
                 self.log.error(accountId, null,'error getting pages:', err);
@@ -1096,7 +1089,611 @@ module.exports = {
         });
     },
 
-    updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
+    updatePage:function(accountId, pageId, page, modified, homePage, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId,'>> updatePage (' + pageId + ')');
+        var timingLog = $$.g.getLogger('timing');
+        /*
+         * - getExistingPage
+         * - getGlobalSections
+         * - updateOtherPages with added globals
+         * - updateOtherPages with removed globals
+         * - updateSectionVersions
+         * - updatePageVersion
+         * - updateHomePage
+         * - updateLists
+         */
+        page = self.cleanEditorHTML(page);
+        var startTime = moment();
+        var checkTime = moment();
+
+        async.waterfall([
+            function getExistingPage(cb) {
+                timingLog.warn('Start: ' + startTime);
+                pageDao.getPageById(accountId, pageId, function(err, existingPage){
+                    if(err) {
+                        self.log.error(accountId, userId,'Error getting page:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage);
+                    }
+                });
+            },
+            function getGlobalSections(existingPage, cb) {
+                checkTime = moment();
+                timingLog.warn('getGlobalSections: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                var query = {
+                    accountId:accountId,
+                    global:true,
+                    latest:true
+                };
+                sectionDao.findMany(query, $$.m.ssb.Section, function(err, sections){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting global sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, sections);
+                    }
+                });
+            },
+            function getExistingSections(existingPage, globalSections, cb) {
+                checkTime = moment();
+                timingLog.warn('getExistingSections: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                if(existingPage.hasSectionReferences()) {
+                    sectionDao.dereferenceSections(existingPage.get('sections'), function(err, existingSectionAry){
+                        if(err) {
+                            self.log.error(accountId, userId,'Error dereferencing existing sections:', err);
+                            cb(err);
+                        } else {
+                            cb(null, existingPage, globalSections, existingSectionAry);
+                        }
+                    });
+                } else {
+                    cb(null, existingPage, globalSections, existingPage.get('sections'));
+                }
+            },
+
+            function dereferenceSections(existingPage, globalSections, existingSections, cb) {
+                checkTime = moment();
+                timingLog.warn('dereferenceSections: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                var sections = page.get('sections');
+                var dereferencedSections = [];
+
+                _.each(sections, function(section){
+                    //if we are not working with an object for some reason, fix it.
+                    if(!section ||  typeof section.id === 'undefined') {
+                        section = new $$.m.ssb.Section(section);
+                    }
+                    if (section.get('accountId') === 0 || section.get('accountId')=== null) {
+                        var id = $$.u.idutils.generateUUID();
+                        section.set('_id', id);
+                        section.set('anchor', id);
+                    }
+                    section.set('accountId', accountId);
+                    dereferencedSections.push(section);
+
+                });
+                cb(null, existingPage, globalSections, existingSections, dereferencedSections);
+
+            },
+            function updateSectionVersions(existingPage, globalSections, existingSections, dereferencedSections, cb) {
+                checkTime = moment();
+                timingLog.warn('updateSectionVersions: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                /*
+                 * For each section, find corresponding existingSection
+                 */
+                async.eachSeries(dereferencedSections, function(section, callback){
+
+                    var existingSection = _.find(existingSections, function(existingSection) {
+                        if (existingSection && existingSection.id) {
+                            return section.id() === existingSection.id()
+                        } else {
+                            return false
+                        }
+                    });
+
+                    if(existingSection) {
+                        if(!existingSection.equals(section)){
+                            existingSection.set('latest', false);
+                            existingSection.set('_id', section.id() + '_' + section.get('_v'));
+                            var newVersion = (existingSection.get('_v')||0) + 1;
+                            section.set('_v', newVersion);
+                            section.set('latest', true);
+                            section.set('modified', {
+                                date: new Date(),
+                                by: userId
+                            });
+                            //save old and then save new
+                            sectionDao.saveOrUpdate(existingSection, function(err, value){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error updating existing section:', err);
+                                    callback(err);
+                                } else {
+                                    sectionDao.saveOrUpdate(section, function(err, value){
+                                        if(err) {
+                                            self.log.error(accountId, userId, 'Error updating new section:', err);
+                                            callback(err);
+                                        } else {
+                                            callback();
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            self.log.debug('No change on section with id [' + section.id() + ']');
+                            //no change
+                            callback();
+                        }
+
+                    } else {
+                        //this is a new section...
+                        section.set('_v', 0);
+                        section.set('latest', true);
+                        sectionDao.saveOrUpdate(section, function(err, value){
+                            if(err) {
+                                self.log.error(accountId, userId,'Error updating section:', err);
+                                callback(err);
+                            } else {
+                                callback();
+                            }
+                        });
+                    }
+                }, function done(err){
+                    if(err) {
+                        self.log.error(accountId, userId,'Error updating sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, dereferencedSections, globalSections);
+                    }
+                });
+            },
+            function upatePageVersion(existingPage, dereferencedSections, globalSections, cb){
+                checkTime = moment();
+                timingLog.warn('upatePageVersion: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+
+                if(existingPage.get('latest') !==true) {
+                    //we need to get the latest version
+                    var query = {accountId:accountId, latest:true};
+                    query._id = pageId.replace(/_.*/, '');
+
+                    pageDao.findOne(query, $$.m.ssb.Page, function(err, latestPage){
+                        if(err || !latestPage) {
+                            self.log.error(accountId, userId, 'Error finding latest page:', err);
+                            cb(err);
+                        } else {
+                            var currentVersion = latestPage.get('version') || 0;
+                            var newVersion = currentVersion + 1;
+                            latestPage.set('latest', false);
+                            latestPage.set('_id', latestPage.id() + '_' + currentVersion);
+                            pageDao.saveOrUpdate(latestPage, function(err, value){
+                                if(err) {
+                                    self.log.error(accountId, userId,'Error saving existing page with new id:', err);
+                                    cb(err);
+                                } else {
+                                    cb(null, existingPage, dereferencedSections, newVersion, globalSections);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    var currentVersion = existingPage.get('version') || 0;
+                    var newVersion = currentVersion + 1;
+                    existingPage.set('latest', false);
+                    existingPage.set('_id', existingPage.id() + '_' + currentVersion);
+                    pageDao.saveOrUpdate(existingPage, function(err, value){
+                        if(err) {
+                            self.log.error(accountId, userId,'Error saving existing page with new id:', err);
+                            cb(err);
+                        } else {
+                            cb(null, value, dereferencedSections, newVersion,  globalSections);
+                        }
+                    });
+                }
+            },
+            function updateThePage(existingPage, updatedSections, newVersion, globalSections, cb){
+                self.log.info('updateThePage');
+                checkTime = moment();
+                timingLog.warn('updateThePage: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                //var sections = page.get('sections');
+                page.set('modified', modified);
+                var jsonSections = [];
+                _.each(updatedSections, function(section){
+                    jsonSections.push({_id: section.id()});
+                });
+                page.set('sections', jsonSections);
+                page.set('created', existingPage.get('created'));
+                page.set('latest', true);
+                page.set('version', newVersion);
+                pageDao.saveOrUpdate(page, function(err, updatedPage){
+                    if(err) {
+                        self.log.error(accountId, userId,'Error updating page:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, updatedPage, updatedSections, globalSections);
+                    }
+                });
+            },
+
+            function removeDeletedGlobals(existingPage, updatedPage, updatedSections, globalSections, cb) {
+                checkTime = moment();
+                timingLog.warn('removeDeletedGlobals: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                var sectionsToBeDeleted = [];
+
+                _.each(globalSections, function(gSection){
+                    var id = gSection.id();
+                    var foundSection = _.find(updatedSections, function(eSection){
+                        return (eSection.id() === id && eSection.get('global')===true);
+                    });
+                    if(!foundSection) {
+                        sectionsToBeDeleted.push(gSection);
+                    }
+                });
+                if(sectionsToBeDeleted.length > 0) {
+                    self.log.debug('Removing these global sections:', sectionsToBeDeleted);
+                    var idAry = _.map(sectionsToBeDeleted, function(section){return section.id();});
+                    var query = {
+                        accountId:accountId,
+                        latest:true,
+                        'sections._id': {$in:idAry},
+                        _id:{$ne:pageId}
+                    };
+                    self.log.debug('using this query:', query);
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding pages with global sections:', err);
+                            cb(err);
+                        } else {
+                            self.log.debug('Found:', pages);
+                            _.each(pages, function(page){
+                                var sections = [];
+                                _.each(page.get('sections'), function(section){
+                                    var found = _.find(sectionsToBeDeleted, function (delSection){
+                                        return delSection.id() === section._id;
+                                    });
+                                    if(!found) {
+                                        sections.push(section);
+                                    }
+                                });
+                                page.set('sections', sections);
+                            });
+                            pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error removing deleted global sections:', err);
+                                }
+                                cb(err, existingPage, globalSections, updatedSections, updatedPage);
+                            });
+                        }
+                    });
+                } else {
+                    cb(null, existingPage, globalSections, updatedSections, updatedPage);
+                }
+            },
+
+            function addNewGlobals(existingPage, globalSections, updatedSections, updatedPage, cb) {
+                checkTime = moment();
+                timingLog.warn('addNewGlobals: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                var sectionsToBeAdded = [];
+
+                _.each(updatedSections, function(section){
+                    var id = section.id();
+                    var foundSection = _.find(globalSections, function(gSection){
+                        return gSection.id() === id;
+                    });
+                    if(!foundSection && section.get('global')===true) {
+                        sectionsToBeAdded.push(section);
+                    }
+                });
+                if(sectionsToBeAdded.length > 0) {
+                    self.log.debug('Adding these global sections:', sectionsToBeAdded);
+                    var query = {
+                        accountId:accountId,
+                        latest:true,
+                        _id:{$ne:pageId},
+                        handle: {$nin: ['signup', 'single-post', 'blog']}
+                    };
+
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding pages with global sections:', err);
+                            cb(err);
+                        } else {
+                            async.eachSeries(pages, function(page, callback){
+                                sectionDao.dereferenceSections(page.get('sections'), function(err, pageSections){
+                                    if(err) {
+                                       self.log.error(accountId, userId, 'Error dereferencing pageSections:', err);
+                                       callback(err);
+                                    } else {
+                                        _.each(sectionsToBeAdded, function(section){
+                                            var insertAt = 0;
+                                            var numberToRemove = 0;
+                                            if(section.get('globalHeader')===true) {
+                                               //replace existing section with Name==Header
+                                                _.each(pageSections, function(pageSection, index){
+                                                    if(pageSection.get('name') === 'Header') {
+                                                        insertAt = index;
+                                                        numberToRemove = 1;
+                                                    }
+                                                });
+                                                pageSections.splice(insertAt, numberToRemove, section);
+                                            } else if(section.get('globalFooter')===true) {
+                                               //replace existing section with Name==Footer
+                                                _.each(pageSections, function(pageSection, index){
+                                                    if(pageSection.get('name') === 'Footer') {
+                                                        insertAt = index;
+                                                        numberToRemove = 1;
+                                                    }
+                                                });
+                                                pageSections.splice(insertAt, numberToRemove, section);
+                                            } else {
+                                               //put it next to last
+
+                                                var lastSection = pageSections[pageSections.length - 1];
+                                                if(lastSection && lastSection.get('name') === 'Footer'){
+                                                   insertAt = pageSections.length - 1;
+                                                }
+                                                else
+                                                {
+                                                    insertAt = pageSections.length;
+                                                }
+                                                self.log.debug('Inserting at ' + insertAt);
+                                                pageSections.splice(insertAt, 0, section);
+                                            }
+                                        });
+                                        //done with this page
+                                        var jsonSections = [];
+                                        _.each(pageSections, function(section){
+                                            jsonSections.push({_id: section.id()});
+                                        });
+                                        page.set('sections', jsonSections);
+                                        callback();
+                                    }
+
+                                });
+                            }, function(err){
+                                if(err) {
+                                    cb(err);
+                                } else {
+                                    pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
+                                        if(err) {
+                                            self.log.error(accountId, userId, 'Error removing deleted global sections:', err);
+                                        }
+                                        cb(null, existingPage, updatedPage, updatedSections);
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    cb(null, existingPage, updatedPage, updatedSections);
+                }
+            },
+
+            function updateHomePage(existingPage, updatedPage, updatedSections, cb){
+                checkTime = moment();
+                timingLog.warn('setAsHomePage: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
+                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
+                        if (err) {
+                            self.log.error(accountId, userId,'Error getting index page: ' + err);
+                            cb(err);
+                        } else {
+                            self.log.debug(accountId, userId,'<< check for index page');
+                            if(page){
+                                page.set("handle", "index-old-" + new Date().getTime() );
+                                var visibility = page.get("visibility");
+                                visibility.visible = false;
+                                page.set("visibility", visibility );
+                                pageDao.saveOrUpdate(page, function(err, value){
+                                    if (err) {
+                                        self.log.error(accountId, userId,'Error updating page with id [' + page.get("_id") + ']: ' + err);
+                                        cb(err);
+                                    } else {
+                                        self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'), "head-menu", function(err, list) {
+                                            if (err) {
+                                                self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                                                cb(err);
+                                            } else {
+                                                list.links = _(list.links).chain()
+                                                    .map(function(link){
+                                                        if(link.linkTo && link.linkTo.data === "index"){
+                                                            link.linkTo.data = page.get("handle");
+                                                        }
+                                                        return link
+                                                    })
+                                                    .uniq(function(link) {
+                                                        return link.linkTo;
+                                                    })
+                                                    .value();
+                                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                                    if (err) {
+                                                        self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                                        cb(err);
+                                                    } else {
+                                                        updatedPage.set("handle", 'index');
+                                                        pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                                            if(err) {
+                                                                self.log.error(accountId, userId,'Error updating page:', err);
+                                                                cb(err);
+                                                            } else {
+                                                                cb(null, existingPage, updatedPage, updatedSections);
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                self.log.debug(accountId, userId,'<< no index page found');
+                                updatedPage.set("handle", 'index');
+                                pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                    if(err) {
+                                        self.log.error(accountId, userId,'Error updating page:', err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, existingPage, updatedPage, updatedSections);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                else{
+                    cb(null, existingPage, updatedPage, updatedSections);
+                }
+            },
+
+            function listPages(existingPage, updatedPage, updatedSections, cb){
+                checkTime = moment();
+                timingLog.warn('listPages: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+
+                var query = {accountId:accountId, websiteId:updatedPage.get('websiteId'), latest:true};
+                timingLog.warn('>> FindMany');
+                pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                    timingLog.warn('<< FindMany');
+                    if(err) {
+                        self.log.error(accountId, userId,'error getting pages:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, updatedPage, updatedSections, pages);
+                    }
+                });
+            },
+            function updateLists(existingPage, updatedPage, updatedSections, pages, cb){
+                self.log.info('updateLinkList');
+                checkTime = moment();
+                timingLog.warn('updateLinkList: ' + checkTime.diff(startTime));
+                startTime = checkTime;
+                if (updatedPage.get('mainmenu') === false) {
+                    self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                        if (err) {
+                            self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                            cb(err);
+                        } else {
+                            if(list && list.links){
+                                self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), false, function(err, updatedList){
+                                    list = updatedList;
+                                });
+                            }
+                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                if (err) {
+                                    self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                    cb(err);
+                                } else {
+                                    cb(null, updatedPage, updatedSections);
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                        if (err) {
+                            self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                            cb(err);
+                        } else if(!list){
+                            self.log.debug(accountId, userId,'No link lists for this handle.');
+                            cb(null, updatedPage, updatedSections);
+                        } else {
+
+
+                            var pageHandles = pages.map(function(page) {
+                                if (page.mainmenu || page.mainmenu === undefined) {
+                                    return page.get('handle');
+                                }
+                            });
+
+                            var _exists = false;
+                            list.links = _(list.links).chain()
+                                .map(function(link){
+                                    if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
+                                        // check if menu title exists
+                                        var _label = updatedPage.get('menuTitle');
+                                        // check if menu title not exists and page title is changed
+                                        if(!_label){
+                                            _label = updatedPage.get('title');
+                                        }
+                                        link.label = _label;
+                                        link.linkTo.data = updatedPage.get("handle");
+                                        _exists = true;
+                                    }
+                                    else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){
+                                        link.linkTo.page = updatedPage.get("handle");
+                                    }
+                                    return link
+                                })
+                                .uniq(function(link) {
+                                    return link.linkTo;
+                                })
+                                .filter(function(link){
+                                    //only keep pages that exist and are visible in menu
+                                    if(link.linkTo.type === 'section' && link.linkTo.page){
+                                        return _.contains(pageHandles, link.linkTo.page)
+                                    }
+                                    else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
+                                        return _.contains(pageHandles, link.linkTo.data)
+                                    }
+                                    else{
+                                        return true;
+                                    }
+                                })
+                                .value(); //return array value
+
+                            if(!_exists){
+                                var link = {
+                                    label: page.get('menuTitle') || page.get('title'),
+                                    type: "link",
+                                    linkTo: {
+                                        type:"page",
+                                        data:page.get('handle')
+                                    }
+                                };
+                                list.links.push(link);
+                            }
+
+                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                if (err) {
+                                    self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                    cb(err);
+                                } else {
+                                    cb(null, updatedPage, updatedSections);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        ], function done(err, updatedPage, updatedSections){
+            self.log.info('done');
+            checkTime = moment();
+            timingLog.warn('done: ' + checkTime.diff(startTime));
+            startTime = checkTime;
+            if(updatedPage) {
+                var sectionArray = [];
+
+                _.each(updatedSections, function(section){
+                    sectionArray.push(section.toJSON());
+                });
+                updatedPage.set('sections', sectionArray);
+
+            }
+            self.log.debug(accountId, userId,'<< updatePage');
+            fn(err, updatedPage);
+        });
+    },
+
+
+    _updatePage: function(accountId, pageId, page, modified, homePage, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId,'>> updatePage (' + pageId + ')');
         var timingLog = $$.g.getLogger('timing');
@@ -1684,7 +2281,7 @@ module.exports = {
                                                     accountId:accountId,
                                                     _id:{$in:sectionIds},
                                                     name:'Header'
-                                                }
+                                                };
                                                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, existingHeaderSection){
                                                     if(err) {
                                                         self.log.error(accountId, userId,'Error finding global header:', err);
@@ -1993,7 +2590,7 @@ module.exports = {
         var self = this;
         self.log.debug(accountId, null, '>> listSiteTemplates');
 
-        siteTemplateDao.findMany({_id: {$ne:'__counter__'}}, $$.m.ssb.SiteTemplate, function(err, siteTemplates){
+        siteTemplateDao.findMany({_id: {$ne:'__counter__'}, public: true}, $$.m.ssb.SiteTemplate, function(err, siteTemplates){
             if(err) {
                 self.log.error(accountId, null, 'Error listing site templates:', err);
                 return fn(err);
@@ -2018,7 +2615,7 @@ module.exports = {
         });
     },
 
-    setSiteTemplate: function(accountId, siteTemplateId, siteThemeId, websiteId, created, fn) {
+    setSiteTemplate: function(accountId, siteTemplateId, siteThemeId, siteThemeOverrides, websiteId, created, fn) {
         var self = this;
         var userId = created.by;
         self.log.debug(accountId, userId, '>> setSiteTemplate', siteTemplateId);
@@ -2046,6 +2643,7 @@ module.exports = {
 
                 website.set('siteTemplateId', siteTemplateId);
                 website.set('themeId', siteThemeId);
+                website.set('themeOverrides', siteThemeOverrides);
                 website.set('modified', created);
                 websiteDao.saveOrUpdate(website, function(err, updatedWebsite){
                     if(err) {
@@ -2130,11 +2728,19 @@ module.exports = {
                                                         if (page.get('handle') === 'index') {
                                                             indexPageId = pageId;
                                                         }
-
-                                                        self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
-                                                            self.log.debug(accountId, userId, 'updated page using siteTemplate data');
-                                                            callback(err);
+                                                        //deref sections to input to updatePage is consistent
+                                                        sectionDao.dereferenceSections(sectionRefAry, function(err, sectionAry){
+                                                            if(err) {
+                                                                callback(err);
+                                                            } else {
+                                                                page.set('sections', sectionAry);
+                                                                self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
+                                                                    self.log.debug(accountId, userId, 'updated page using siteTemplate data');
+                                                                    callback(err);
+                                                                });
+                                                            }
                                                         });
+
                                                     }
                                                 });
                                             }
@@ -2176,7 +2782,7 @@ module.exports = {
 
             var responseObj = {
                 ok: true
-            }
+            };
 
             if (indexPageId) {
                 responseObj.indexPageId = indexPageId;
@@ -2326,7 +2932,7 @@ module.exports = {
             var arr;
             arr = tmp[sectionId].filter(function(version, index, self){
                 return self.indexOf(version) === index;
-            })
+            });
             arr.sort(function(a, b) {
                 return b - a;
             });

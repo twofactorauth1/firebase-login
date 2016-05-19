@@ -21,7 +21,7 @@ app.constant('formValidations', {
    'phone': /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/,
    'zip': /(^\d{5}$)|(^\d{5}-\d{4}$)/,
    'extension': /^[0-9]*$/,
-   'customerTags': /^[a-z\d\-_\s]+$/i
+   'contactTags': /^[a-z\d\-_\s]+$/i
   });
 
 /*
@@ -105,7 +105,7 @@ app.constant('social', {
 });
 
 app.constant('contactConstant', {
-  customer_activity_types: {
+  contact_activity_types: {
     PAGE_VIEW: "PAGE_VIEW",
     SUBSCRIBE: "SUBSCRIBE",
     CONTACT_CREATED: "CONTACT_CREATED",
@@ -171,7 +171,7 @@ app.constant('contactConstant', {
       data: "OTHER"
     }]
   },
-  customer_tags:{
+  contact_tags:{
     dp:[{
       label: "Admin",
       data: "ad"
@@ -553,8 +553,8 @@ app.constant('JS_REQUIRES', {
     'billingCtrl': 'assets/js/controllers/billingCtrl.js',
     'postsCtrl': 'assets/js/controllers/postsCtrl.js',
     'socialFeedCtrl': 'assets/js/controllers/socialFeedCtrl.js',
-    'customersCtrl': 'assets/js/controllers/customersCtrl.js',
-    'customerDetailCtrl': 'assets/js/controllers/customerDetailCtrl.js',
+    'contactsCtrl': 'assets/js/controllers/contactsCtrl.js',
+    'contactDetailCtrl': 'assets/js/controllers/contactDetailCtrl.js',
     'productsCtrl': 'assets/js/controllers/productsCtrl.js',
     'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',
     'iconsCtrl': 'assets/js/controllers/iconsCtrl.js',
@@ -576,7 +576,7 @@ app.constant('JS_REQUIRES', {
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
-    'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
+    'importContactModalCtrl': 'assets/js/controllers/modals/importContactModalCtrl.js',
     'onboardingCtrl': 'assets/js/controllers/onboardingCtrl.js',
     'DOHYCtrl': 'assets/js/dashboard/dashboard.controller.js',
     // 'DashboardWorkstreamTileComponent': 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.component.js',
@@ -603,7 +603,7 @@ app.constant('JS_REQUIRES', {
     'paymentService': 'assets/js/services/product.js',
     'websiteService': 'assets/js/services/webiste.js',
     'userService': 'assets/js/services/user.js',
-    'customerService': 'assets/js/services/customer.js',
+    'contactService': 'assets/js/services/contact.js',
     'campaignService': 'assets/js/services/campaign.js',
     'toasterService': 'assets/js/services/toaster.js',
     'ImportContactService': 'assets/js/services/import_contacts.js',
@@ -798,7 +798,7 @@ app.constant('JS_REQUIRES', {
     name: 'froala-wysiwyg-editor-plugins',
     files: [
       "../js/libs/froala-wysiwyg-editor/js/plugins/align.min.js",
-      "../js/libs/froala-wysiwyg-editor/js/plugins/colors.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/colors.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/emoticons.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
@@ -815,7 +815,7 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/js/plugins/table.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/url.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/video.min.js",
-      "../js/libs/froala-wysiwyg-editor/css/plugins/colors.css",
+      "../js/libs_misc/froala-wysiwyg-editor/css/plugins/colors.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/emoticons.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/image.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/image_manager.css",

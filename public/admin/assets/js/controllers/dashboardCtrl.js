@@ -1,8 +1,8 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", '$state',
-    function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant, $state) {
+app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", '$state',
+    function ($scope, OrderService, ContactService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant, $state) {
 
     $scope.accountHideDohy = false;
 
@@ -29,7 +29,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
    * - get activity actual name
    */
   $scope.getActivityName = function (activity) {
-    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
       data: activity
     });
     if (activity_hash) {
@@ -81,8 +81,8 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     return days;
   };
 
-  CustomerService.getCustomers(function (customers) {
-    CustomerService.getAllCustomerActivities(function (activities) {
+  ContactService.getContacts(function (customers) {
+    ContactService.getAllContactActivities(function (activities) {
       $scope.activities = activities.results;
       _.each($scope.activities, function (activity) {
         var matchingCustomer = _.findWhere(customers, {
@@ -151,7 +151,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
    * - get customer for the customer widget
    */
   $scope.customerNames = [];
-  CustomerService.getCustomers(function (customers) {
+  ContactService.getContacts(function (customers) {
 
     $scope.customers = customers;
     $scope.customersThisMonth = [];
@@ -317,12 +317,12 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
   $scope.activityTypes = [];
 
-  contactConstant.customer_activity_types.dp.forEach(function (value, index) {
+  contactConstant.contact_activity_types.dp.forEach(function (value, index) {
     $scope.activityTypes.push(value.label);
   });
 
   $scope.updateActivityTypeFn = function (selection) {
-    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
       label: selection
     });
     if (activity_hash) {
@@ -346,7 +346,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     angular.element("#activity_type .error").html("");
     angular.element("#activity_type .error").removeClass('has-error');
     var activity_type = angular.element("#activity_type input").val();
-    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
       label: activity_type
     });
      if(!activity_type || !activity_type.trim()) {
@@ -360,7 +360,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       $scope.newActivity.activityType = activity_hash.data;
     }
 
-    CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
+    ContactService.postContactActivity($scope.newActivity, function (activity) {
       var matchingCustomer = _.findWhere($scope.customers, {
         _id: activity.contactId
       });

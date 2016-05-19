@@ -580,6 +580,7 @@ var copyutil = {
     _convertAccountToSiteTemplate: function(accountId, fn) {
         var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
         var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var accountssCollection = srcMongo.collection('accounts');
         var websitesCollection = srcMongo.collection('websites');
         var pagesCollection = srcMongo.collection('pages');
         var templatesCollection = srcMongo.collection('templates');
@@ -587,26 +588,14 @@ var copyutil = {
         var sitetemplatesCollection = srcMongo.collection('sitetemplates');
         var siteTemplate = {
             "_id" : utils.idutils.generateUUID(),
-            "name" : "Site Template from account:" + accountId,
+            "subdomain": "#SUBDOMAIN#",
+            "name" : "#SUBDOMAIN#",
+            "description" : "Site Template #SUBDOMAIN# from account:" + accountId,
+            "previewUrl" : "https://placeholdit.imgix.net/~text?txtsize=33&txt=#SUBDOMAIN#&w=672&h=383",
             "accountId" : 0,
             "public" : true,
-            "description" : "Site Template from account:" + accountId,
             "siteThemeId" : "565decfdfa7d8f489a489104",
-            "defaultPageTemplates" : [
-                // {
-                //     "type" : "template",
-                //     "pageTemplateId" : "1103202892929",
-                //     "pageHandle" : "index",
-                //     "pageTitle" : "Home"
-                // },
-                // {
-                //     "type" : "template",
-                //     "pageTemplateId" : "110320289292911",
-                //     "pageHandle" : "contact-us",
-                //     "pageTitle" : "Contact Us"
-                // }
-            ],
-            "defaultTheme" : "565decfdfa7d8f489a489104",
+            "defaultPageTemplates" : [],
             "created" : {
                 "date" : new Date().toISOString(),
                 "by" : 0
@@ -614,29 +603,46 @@ var copyutil = {
             "modified" : {
                 "date" : new Date().toISOString(),
                 "by" : 0
-            },
-            "previewUrl" : "https://placeholdit.imgix.net/~text?txtsize=33&txt=Site%20Template%20"+accountId+"&w=672&h=383"
+            }
         }
 
-        // fn();
-
         /*
-         * 1. Get the website object
-         * 2. Update siteTemplate defaultTheme prop with website.themeId
-         * 3. Get the ssb pages on the account
-         * 4. Save all section _ids to sectionMap
-         * 5. Save all sections as new sections with:
+         * 1. Get the account object
+         *      - token replace subdomain
+         * 2. Get the website object
+         * 3. Update siteTemplate siteThemeId prop with website.themeId
+         * 4. Get the ssb pages on the account ({latest:true})
+         * 5. Save all section _ids to sectionMap
+         * 6. Save all sections as new sections with:
          *      - accountId=0
          *      - siteTemplateRef=siteTemplate._id
          *      - enabled=false
          *
-         * 6. Save all new _ids to sectionMap mapped to old ids
-         * 7. Loop through pages, updating section _ids and saving as templates
-         * 8. Update siteTemplate defaultPageTemplates prop with new template _ids, name, handles
-         * 9. Save siteTemplate
+         * 7. Save all new _ids to sectionMap mapped to old ids
+         * 8. Loop through pages, updating section _ids and saving as templates
+         * 9. Update siteTemplate defaultPageTemplates prop with new template _ids, name, handles
+         * 10. Save siteTemplate
          */
 
         async.waterfall([
+            function getAccount(cb) {
+                console.log('getAccount: fetch account by _id');
+                accountssCollection.find({'_id': accountId}).toArray(function(err, account){
+
+                    if (err || !account[0]) {
+                        console.log('Error finding account in test:', err);
+                        return cb(err);
+                    }
+
+                    siteTemplate.subdomain = siteTemplate.name.replace('#SUBDOMAIN#', account[0].subdomain);
+                    siteTemplate.name = siteTemplate.name.replace('#SUBDOMAIN#', account[0].subdomain);
+                    siteTemplate.description = siteTemplate.description.replace('#SUBDOMAIN#', account[0].subdomain);
+                    siteTemplate.previewUrl = siteTemplate.previewUrl.replace('#SUBDOMAIN#', account[0].subdomain);
+
+                    return cb(null);
+
+                });
+            },
             function getWebsite(cb) {
                 console.log('getWebsite: fetch account website');
                 websitesCollection.find({'accountId': accountId}).toArray(function(err, websites){
@@ -646,8 +652,8 @@ var copyutil = {
                         return cb(err);
                     }
 
-                    siteTemplate.defaultTheme = websites[0].themeId;
-                    // siteTemplate.siteThemeId = website.themeId;
+                    siteTemplate.siteThemeId = websites[0].themeId;
+                    siteTemplate.siteThemeOverrides = websites[0].themeOverrides;
 
                     return cb(null, websites[0]);
 
@@ -655,7 +661,7 @@ var copyutil = {
             },
             function getPages(website, cb) {
                 console.log('getPages: fetch account pages and loop through section data');
-                pagesCollection.find({'accountId': accountId, 'ssb': true}).toArray(function(err, pages){
+                pagesCollection.find({'accountId': accountId, 'ssb': true, 'latest': true}).toArray(function(err, pages){
                     if (err) {
                         console.log('Error finding pages:', err);
                         return cb(err);

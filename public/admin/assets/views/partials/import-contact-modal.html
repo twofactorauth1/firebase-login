@@ -1,11 +1,11 @@
-<script type="text/ng-template" id="import-customer-modal">
+<script type="text/ng-template" id="import-contact-modal">
     <div id="import-customer-modal">
         <div class="modal-header">
             <button type="button" class="close" ng-click="closeModal()">
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
-            <h3 class="modal-title">Import Customers</h3>
+            <h3 class="modal-title">Import Contacts</h3>
         </div>
         <div class="modal-body bg-white" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}">
             <div ng-if="!uploadingCsv && csvResults.length <= 0">

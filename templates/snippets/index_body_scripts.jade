@@ -5,11 +5,11 @@ script(src="../js/libs/es5-shim/es5-shim.js")
 script(src="../js/libs/json3/lib/json3.min.js")
 <![endif]-->
 
-script(src="https://maps.googleapis.com/maps/api/js?sensor=false")
+script(src="https://maps.googleapis.com/maps/api/js" async)
 
-script(src="https://js.stripe.com/v2/?tmp")
+script(src="https://js.stripe.com/v2/?tmp" async)
 
-script(src="https://www.paypalobjects.com/js/external/dg.js")
+script(src="https://www.paypalobjects.com/js/external/dg.js" async)
 
 //- START AUTOINCLUDE SECTION
 script(src="../js/libs/jquery/dist/jquery.js")
@@ -53,7 +53,7 @@ script(src="../js/libs/jqcloud2/dist/jqcloud.min.js")
 script(src="../js/libs/angular-jqcloud/angular-jqcloud.js")
 script(src="../js/libs/angularjs-socialshare/dist/angular-socialshare.js")
 script(src="../js/libs/slick-carousel/slick/slick.js")
-script(src="../js/libs/angular-slick/dist/slick.js")
+script(src="../js/libs/angular-slick/dist/slick.min.js")
 script(src="../js/libs/js-video-url-parser/dist/jsVideoUrlParser.min.js")
 script(src="../js/libs/angular-truncate/src/truncate.js")
 script(src="../js/libs/ngmap/build/scripts/ng-map.min.js")
@@ -143,7 +143,7 @@ script(src="scripts/services/paymentService.js")
 script(src="scripts/services/productService.js")
 script(src="scripts/services/userService.js")
 script(src="scripts/services/courseService.js")
-script(src="scripts/services/customerService.js")
+script(src="scripts/services/contactService.js")
 script(src="scripts/services/pageService.js")
 script(src="scripts/services/orderService.js")
 script(src="scripts/services/geocodeService.js")
@@ -167,8 +167,6 @@ script(src="scripts/filters/offset.js")
 script(src="scripts/filters/cleanType.js")
 script(src="scripts/filters/reverse.js")
 script(src="scripts/filters/productTags.js")
-script(src="../js/libs_misc/crypto/hmac-sha256.js")
-script(src="../js/libs_misc/crypto/enc-base64-min.js")
 
 script.
     var tag = document.createElement('script');

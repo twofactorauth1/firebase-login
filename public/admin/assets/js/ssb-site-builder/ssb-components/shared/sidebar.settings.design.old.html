@@ -3,13 +3,13 @@
     <div class="row padding-10">
 
         <div class="form-group ssb-spectrum-color-picker-small"  ng-hide="component.type == 'social-link'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.txtcolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.txtcolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Text <span tooltip-placement="top" tooltip-html-unsafe="Text color of component."><i class="fa fa-info-circle" /></span></label>
         </div>
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-show="component.type == 'navigation'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.activetxtcolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.activetxtcolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Active Text <span tooltip-placement="top" tooltip-html-unsafe="Nav bar Active menu color."><i class="fa fa-info-circle" /></span></label>
         </div>
@@ -23,41 +23,41 @@
         </div>
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'navigation'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.nav.bg"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.nav.bg"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Nav BG <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span></label>
         </div>
 
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'email'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.emailBg"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.emailBg"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Email BG <span tooltip-placement="top" tooltip-html-unsafe="Background color of email."><i class="fa fa-info-circle" /></span></label>
         </div>
 
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-show="component.type == 'navigation'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.nav.hover"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.nav.hover"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Nav Hover <span tooltip-placement="top" tooltip-html-unsafe="Nav bar menu hover color."><i class="fa fa-info-circle" /></span></label>
         </div>
 
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-show="component.type == 'navigation'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.nav.hoverbg"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.nav.hoverbg"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Nav Hover BG <span tooltip-placement="top" tooltip-html-unsafe="Navigation bar on hover BG color."><i class="fa fa-info-circle" /></span></label>
         </div>
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'pricing-tables'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.tblbgcolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.tblbgcolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Pricing Table BG <span tooltip-placement="top" tooltip-html-unsafe="Background color of Pricing table."><i class="fa fa-info-circle" /></span></label>
         </div>
 
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'feature-list'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.blockbgcolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.blockbgcolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Feature Block BG <span tooltip-placement="top" tooltip-html-unsafe="Background color of Feature Block."><i class="fa fa-info-circle" /></span></label>
         </div>
@@ -65,27 +65,27 @@
         <hr ng-show="component.type == 'navigation'" />
 
         <div class="form-group ssb-spectrum-color-picker-small">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Background <span tooltip-placement="top" tooltip-html-unsafe="Background color of component."><i class="fa fa-info-circle" /></span></label>
         </div>
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'blog'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.tagCloud.txtcolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.tagCloud.txtcolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Tags Font <span tooltip-placement="top" tooltip-html-unsafe="Font color of tags."><i class="fa fa-info-circle" /></span></label>
         </div>
 
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'blog'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.tagCloud.txthovercolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.tagCloud.txthovercolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Tags Font Hover <span tooltip-placement="top" tooltip-html-unsafe="Font hover color of tags."><i class="fa fa-info-circle" /></span></label>
         </div>
 
 
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type === 'blog'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.tagCloud.bgcolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.tagCloud.bgcolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Tags Background <span tooltip-placement="top" tooltip-html-unsafe="Background color of tags."><i class="fa fa-info-circle" /></span></label>
         </div>
@@ -97,7 +97,7 @@
 
     <div class="row padding-10" ng-if="component.type == 'contact-us'">
         <div class="form-group ssb-spectrum-color-picker-small">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Box Background <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of Contact Box."><i class="fa fa-info-circle" /></span></label>
         </div>
@@ -110,12 +110,12 @@
     </div>
     <div class="row padding-10" ng-if="component.type == 'simple-form'">
         <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type == 'simple-form'">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.color"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.btn.color"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Button Text <span tooltip-placement="top" tooltip-html-unsafe="Set text color of submit button."><i class="fa fa-info-circle" /></span></label>
         </div>
         <div class="form-group ssb-spectrum-color-picker-small">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.bgcolor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.btn.bgcolor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Button BG <span tooltip-placement="top" tooltip-html-unsafe="Set color of submit button."><i class="fa fa-info-circle" /></span></label>
         </div>
@@ -136,12 +136,12 @@
 
     <div class="row padding-10" ng-if="component.type == 'products'">
         <div class="form-group ssb-spectrum-color-picker-small">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Title Box BG <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of title and description box."><i class="fa fa-info-circle" /></span></label>
         </div>
         <div class="form-group ssb-spectrum-color-picker-small">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.iconColor"></spectrum-colorpicker>
+            <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.iconColor"></spectrum-colorpicker>
             <br />
             <label for="colorpicker">Icon Color <span tooltip-placement="top" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span></label>
         </div>
@@ -240,7 +240,7 @@
             <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
             <div class="pull-right">
                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                <spectrum-colorpicker format="rgba" options="vm.spectrum.options" class="pull-right" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+                <spectrum-colorpicker format="rgb" options="vm.spectrum.options" class="pull-right" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
             </div>
         </div>
         <div ng-if="component.type != 'navigation'" ng-show="component.bg.img.overlay && component.bg.img.show">
@@ -263,7 +263,7 @@
                     <label><strong>Input background</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="background color of input fields"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
-                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.inputBgColor"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.formSettings.inputBgColor"></spectrum-colorpicker>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -271,7 +271,7 @@
                     <label><strong>Input border</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="border color of input fields"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
-                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.inputBorderColor"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.formSettings.inputBorderColor"></spectrum-colorpicker>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -279,7 +279,7 @@
                     <label><strong>Text color</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="text color of entire form"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
-                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.formTextColor"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.formSettings.formTextColor"></spectrum-colorpicker>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -287,7 +287,7 @@
                     <label><strong>Input text color</strong></label>
                     <span tooltip-placement="top" tooltip-html-unsafe="text color of input fields"><i class="fa fa-info-circle" /></span>
                     <div class="col-sm-6 pull-right ssb-spectrum-color-picker">
-                        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.formSettings.inputTextColor"></spectrum-colorpicker>
+                        <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.formSettings.inputTextColor"></spectrum-colorpicker>
                     </div>
                     <div class="clearfix"></div>
                 </div>
