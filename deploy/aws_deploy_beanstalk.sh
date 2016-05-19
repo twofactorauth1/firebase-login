@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 on_err(){
 	echo "Build error has been detected around:"
@@ -118,7 +118,8 @@ main(){
 
 	echo "Running Selenium"
 
-	#We have already removed test deps.  Lets install this one here.
+	#We have already removed test deps.  Lets put them back.
+	npm install
 	npm install selenium-webdriver
 
 	grunt nodeunit:selenium
