@@ -750,7 +750,7 @@
 
                     move(e);
 
-                    //prevent(e);
+                    prevent(e);
                 }
             }
         }
