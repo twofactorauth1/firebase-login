@@ -180,10 +180,13 @@ module.exports = {
                         if(err) {
                             cb(err);
                         } else {
-                            productAry.push(product);
-                            item.sku = product.get('sku');
-                            item.name = product.get('name');
-                            log.debug(accountId, null, 'Product is', product);
+                            if(product){
+                                productAry.push(product);
+                                item.sku = product.get('sku');
+                                item.name = product.get('name');
+                                log.debug(accountId, null, 'Product is', product);
+                            }
+
                             cb();
                         }
                     });
