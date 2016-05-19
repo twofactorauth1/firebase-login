@@ -151,3 +151,15 @@
     background-repeat: no-repeat  !important;
     background-position: center  !important;
 }
+@media (max-width: 1279px) {
+    .fr-color-set.sp-container .sp-picker-container{
+        border:0;
+    }
+    .fr-color-set.sp-container{
+        width: 250px;
+        padding: 10px;
+        overflow: auto;
+    }
+}
+
+
