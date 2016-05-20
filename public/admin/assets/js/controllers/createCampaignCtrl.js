@@ -818,7 +818,7 @@
           }
         }
 
-        //add customers from individual
+        //add contacts from individual
 
         if ($scope.selectedContacts.individuals.indexOf(contact._id) > -1) {
           fullContacts.push(contact);
@@ -828,8 +828,8 @@
       return fullContacts;
     };
 
-     $scope.contactTagsFn = function (customer) {
-       return ContactService.contactTags(customer);
+     $scope.contactTagsFn = function (contact) {
+       return ContactService.contactTags(contact);
      };
 
     /*
@@ -842,9 +842,9 @@
           return (recipient.details[0].emails[0].email).toLowerCase() === email.text;
         }
       });
-      var matchingContact = _.find($scope.contacts, function (customer) {
-        if (customer.details && customer.details[0] && customer.details[0].emails && customer.details[0].emails[0] && customer.details[0].emails[0].email) {
-          return (customer.details[0].emails[0].email).toLowerCase() === email.text;
+      var matchingContact = _.find($scope.contacts, function (contact) {
+        if (contact.details && contact.details[0] && contact.details[0].emails && contact.details[0].emails[0] && contact.details[0].emails[0].email) {
+          return (contact.details[0].emails[0].email).toLowerCase() === email.text;
         }
       });
       if (matchingRecipient || matchingContact) {
@@ -855,28 +855,28 @@
     };
 
     /*
-     * @createCustomerData
-     * - stub out customer data
+     * @createContactData
+     * - stub out contact data
      */
-    $scope.createCustomerData = function (email) {
-      // New customer
-      var customer = {
+    $scope.createContactData = function (email) {
+      // New contact
+      var contact = {
         details: [{
           emails: []
         }]
       };
 
-      customer.details[0].emails.push({
+      contact.details[0].emails.push({
         email: email
       });
-      return customer;
+      return contact;
     };
 
     /*
-     * @checkAndCreateCustomer
-     * - check email addresses entered and create new customer/contact
+     * @checkAndCreateContact
+     * - check email addresses entered and create new contact
      */
-    $scope.checkAndCreateCustomer = function (fn) {
+    $scope.checkAndCreateContact = function (fn) {
       var contactsArr = [];
       var promises = [];
       if ($scope.selectedContacts.newEmails) {
@@ -886,8 +886,8 @@
             email: email.text
           });
           if (!contact) {
-            var tempCustomer = $scope.createCustomerData(email.text);
-            promises.push(ContactService.createContact(tempCustomer));
+            var tempContact = $scope.createContactData(email.text);
+            promises.push(ContactService.createContact(tempContact));
           } else {
             contactsArr.push(contact._id);
           }
@@ -948,7 +948,7 @@
       var actionFn = update ? 'updateCampaign' : 'createCampaign';
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
 
-      $scope.checkAndCreateCustomer(function (createdContactsArr) {
+      $scope.checkAndCreateContact(function (createdContactsArr) {
         $scope.addContacts(createdContactsArr);
         if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
           $scope.emailToSend.campaignId = $scope.newCampaignObj._id;
@@ -1061,8 +1061,8 @@
 
         if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
 
-            ContactService.getContacts(function (customers) {
-                $scope.contacts = customers;
+            ContactService.getContacts(function (contacts) {
+                $scope.contacts = contacts;
                 var tags = _.uniq(_.pluck($scope.newCampaignObj.searchTags.tags, 'data'));
                 recipients.forEach(function(id, index) {
                     var c = _.findWhere($scope.contacts, {_id: id});
@@ -1583,7 +1583,7 @@
 
     /*
      * @getContacts
-     * - get saved customers attached to this campaign
+     * - get saved contacts attached to this campaign
      */
     $scope.selectedContacts.individuals = [];
     $scope.getContacts = function() {
@@ -1591,9 +1591,9 @@
           $scope.originalRecipients = angular.copy(data);
           $scope.recipients = data;
           var individuals = [];
-          _.each(data, function (customer) {
+          _.each(data, function (contact) {
               individuals.push(
-                customer._id
+                contact._id
               )
           })
           $scope.selectedContacts.individuals = individuals;
@@ -1602,32 +1602,32 @@
     };
 
     /*
-     * @getCustomers
-     * - get all customers for this user
+     * @getContacts
+     * - get all contacts for this user
      */
-    $scope.getCustomers = function() {
-      var promise = ContactService.getContacts(function (customers) {
-        var customerWithoutEmails = [];
-        _.each(customers, function (customer) {
-          if (!$scope.checkBestEmail(customer)) {
-            customerWithoutEmails.push(customer);
+    $scope.getContacts = function() {
+      var promise = ContactService.getContacts(function (contacts) {
+        var contactWithoutEmails = [];
+        _.each(contacts, function (contact) {
+          if (!$scope.checkBestEmail(contact)) {
+            contactWithoutEmails.push(contact);
           }
         });
-        customers = _.difference(customers, customerWithoutEmails);
-        $scope.contacts = customers;
-        ContactService.getAllContactTags(customers, function(tags){
+        contacts = _.difference(contacts, contactWithoutEmails);
+        $scope.contacts = contacts;
+        ContactService.getAllContactTags(contacts, function(tags){
           contactTags = tags;
         })
         var _tags = [];
-        $scope.allCustomers = [];
-        _.each(customers, function (customer) {
-          $scope.allCustomers.push({
-            _id: customer._id,
-            first: customer.first
+        $scope.allContacts = [];
+        _.each(contacts, function (contact) {
+          $scope.allContacts.push({
+            _id: contact._id,
+            first: contact.first
           })
-          //customer.fullName = customer.first + " " + customer.last || '';
-          if (customer.tags && customer.tags.length > 0) {
-            _.each(customer.tags, function (tag) {
+          //contact.fullName = contact.first + " " + contact.last || '';
+          if (contact.tags && contact.tags.length > 0) {
+            _.each(contact.tags, function (tag) {
               var tagLabel = _.findWhere(contactTags, { data: tag });
               if(tagLabel)
                 _tags.push(tagLabel.label);
@@ -1657,7 +1657,7 @@
             }
           return returnObj;
         });
-        $scope.customerCounts = x;
+        $scope.contactCounts = x;
       });
 
       return promise;
@@ -1673,7 +1673,7 @@
         if(tagLabel){
           tag = tagLabel.label
         }
-        var tag = _.findWhere($scope.customerCounts, { uniqueTag: tag });
+        var tag = _.findWhere($scope.contactCounts, { uniqueTag: tag });
         if(tag)
           $scope.toggleSelection(tag.matchingTag);
       });
@@ -1774,7 +1774,7 @@
         }).then(function(data) {
           return $scope.getAccount();
         }).then(function(data) {
-          return $scope.getCustomers();
+          return $scope.getContacts();
         }).then(function(data) {
           return $scope.getContacts();
         }).then(function(data) {
@@ -1784,7 +1784,7 @@
         $scope.setEditable();
         $scope.getEmails();
         $scope.getAccount();
-        $scope.getCustomers();
+        $scope.getContacts();
       }
 
     })();

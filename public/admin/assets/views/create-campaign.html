@@ -399,7 +399,7 @@
                                                 <div class="panel-body no-padding">
                                                     <tabset>
                                                         <tab heading="by Tag">
-                                                            <div class="checkbox clip-check check-primary" ng-repeat="count in customerCounts track by $index">
+                                                            <div class="checkbox clip-check check-primary" ng-repeat="count in contactCounts track by $index">
                                                                 <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="toggleSelection(count.matchingTag)" ng-checked="tagSelection.indexOf(count.matchingTag) > -1">
                                                                 <label for="checkbox{{count.uniqueTag}}">
                                                                     <span class="badge">{{count.numberOfTags}}</span> {{count.matchingTag}}
@@ -409,16 +409,16 @@
                                                         <tab heading="by Contact">
                                                             <label class="text-muted">Select individuals from your contact list</label>
                                                             <div class="well well-sm">
-                                                                <ui-select class="customer-list" multiple ng-model="selectedContacts.individuals" on-select="contactSelected($select)" on-remove="contactRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
+                                                                <ui-select class="contact-list" multiple ng-model="selectedContacts.individuals" on-select="contactSelected($select)" on-remove="contactRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
                                                                     <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
-                                                                    <ui-select-choices repeat="customer._id as customer in contacts | filter:$select.search">
+                                                                    <ui-select-choices repeat="contact._id as contact in contacts | filter:$select.search">
                                                                         <span class="pull-left">
-                                                                            <img ng-src="customer.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="customer">
+                                                                            <img ng-src="contact.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="contact">
                                                                         </span>
                                                                         <span class="pull-left" style="line-height: 16px;margin-top: 3px;">
-                                                                            {{customer.first}} {{customer.last}}
+                                                                            {{contact.first}} {{contact.last}}
                                                                             <div class="clearfix"></div>
-                                                                            <small ng-if="customer.details[0].emails[0].email.length > 0">{{customer.details[0].emails[0].email}}</small>
+                                                                            <small ng-if="contact.details[0].emails[0].email.length > 0">{{contact.details[0].emails[0].email}}</small>
                                                                         </span>
                                                                         <div class="clearfix"></div>
                                                                     </ui-select-choices>
@@ -439,7 +439,7 @@
                                         <div class="avatars center">
                                             <ul class="unstyled-list inline-list padding-left-0">
                                                 <li tooltip-placement="top" tooltip-html-unsafe="{{contact.first}} {{contact.last}} <br> {{checkBestEmail(contact)}}" ng-repeat="contact in recipients | limitTo:100">
-                                                    <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="35" height="35">
+                                                    <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="35" height="35">
                                                 </li>
                                             </ul>
                                             <button ng-click="openModal('contacts-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
