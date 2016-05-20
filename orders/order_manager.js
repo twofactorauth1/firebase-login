@@ -262,54 +262,63 @@ module.exports = {
                  *
                  *
                  */
+                var errorMsg = null;
                 _.each(order.get('line_items'), function iterator(item, index){
                     var product = _.find(productAry, function(currentProduct){
                         if(currentProduct.id() === item.product_id) {
                             return true;
                         }
                     });
-                    log.debug(accountId, userId, 'found product ', product);
-                    var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
-                    if(product.get('on_sale') === true) {
-                        var startDate = product.get('sale_date_from', 'day');
-                        var endDate = product.get('sale_date_to', 'day');
-                        var rightNow = new Date();
-                        if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
-                            lineItemSubtotal = item.quantity * product.get('sale_price');
-                            item.sale_price = product.get('sale_price').toFixed(2);
-                            //TODO: Should not need this line.  Receipt template currently needs it.
-                            item.regular_price = product.get('sale_price').toFixed(2);
-                            item.total = lineItemSubtotal.toFixed(2);
+                    if(product) {
+                        log.debug(accountId, userId, 'found product ', product);
+                        var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
+                        if(product.get('on_sale') === true) {
+                            var startDate = product.get('sale_date_from', 'day');
+                            var endDate = product.get('sale_date_to', 'day');
+                            var rightNow = new Date();
+                            if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                                lineItemSubtotal = item.quantity * product.get('sale_price');
+                                item.sale_price = product.get('sale_price').toFixed(2);
+                                //TODO: Should not need this line.  Receipt template currently needs it.
+                                item.regular_price = product.get('sale_price').toFixed(2);
+                                item.total = lineItemSubtotal.toFixed(2);
+                            }
                         }
+                        if(product.get('taxable') === true) {
+                            taxAdded += (lineItemSubtotal * taxPercent);
+                        }
+                        subTotal += lineItemSubtotal;
+                        totalLineItemsQuantity += parseFloat(item.quantity);
+                    } else {
+                        log.error(accountId, userId, 'Could not find product with id: ' + item.product_id);
+                        errorMsg = 'No product found with id:' + item.product_id;
                     }
-                    if(product.get('taxable') === true) {
-                        taxAdded += (lineItemSubtotal * taxPercent);
-                    }
-                    subTotal += lineItemSubtotal;
-                    totalLineItemsQuantity += parseFloat(item.quantity);
                 });
-                log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                if(errorMsg) {
+                    callback(errorMsg);
+                } else {
+                    log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
 
-                 if(order.get('cart_discount')) {
-                     discount += parseFloat(order.get('cart_discount'));
-                     log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
-                 }
+                    if(order.get('cart_discount')) {
+                        discount += parseFloat(order.get('cart_discount'));
+                        log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
+                    }
 
-                 if(order.get('total_discount')) {
-                     discount += parseFloat(order.get('total_discount'));
-                     log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
-                 }
+                    if(order.get('total_discount')) {
+                        discount += parseFloat(order.get('total_discount'));
+                        log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
+                    }
 
-                 totalAmount = (subTotal - discount) + taxAdded;
+                    totalAmount = (subTotal - discount) + taxAdded;
 
 
-                order.set('tax_rate', taxPercent);
-                order.set('subtotal', subTotal.toFixed(2));
-                order.set('total', totalAmount.toFixed(2));
-                log.debug(accountId, userId, 'total is now: ' + order.get('total'));
-                order.set('total_line_items_quantity', totalLineItemsQuantity);
-                callback(null, account, order, productAry);
-
+                    order.set('tax_rate', taxPercent);
+                    order.set('subtotal', subTotal.toFixed(2));
+                    order.set('total', totalAmount.toFixed(2));
+                    log.debug(accountId, userId, 'total is now: ' + order.get('total'));
+                    order.set('total_line_items_quantity', totalLineItemsQuantity);
+                    callback(null, account, order, productAry);
+                }
             },
             //save
             function(account, validatedOrder, productAry, callback){
@@ -846,6 +855,9 @@ module.exports = {
                     productManager.getProduct(item.product_id, function(err, product){
                         if(err) {
                             cb(err);
+                        } else if(!product){
+                            log.debug(accountId, userId, 'Could not find product with ID: ' + item.product_id);
+                            cb('No product found');
                         } else {
                             productAry.push(product);
                             item.sku = product.get('sku');

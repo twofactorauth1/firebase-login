@@ -37,7 +37,7 @@ var dao = {
         self.log.debug(accountId, null, ">> createStripeCustomer");
         var params = {};
         params.email = contact.getPrimaryEmail();
-        params.description = 'Customer for ' + contact.getEmails()[0];
+        params.description = 'Customer for ' + contact.getPrimaryEmail();
         params.metadata = {};
         params.metadata.contactId = contact.get('id');
         params.metadata.accountId_0 = accountId;

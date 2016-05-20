@@ -379,6 +379,16 @@
                 }
             }
 
+            var customFields = _.filter(vm.component.contactInfo, function (x) {
+              return x.custom == true;
+            });
+
+            var extra = [];
+
+            customFields.forEach(function (c, i) {
+              extra.push({name: c.name, label: c.label, value: vm.formBuilder[c.name] || null});
+            });
+
             var formatted = {
                 fingerprint: fingerprint,
                 sessionId: sessionId,
@@ -403,8 +413,10 @@
                     note: vm.formBuilder.Message || "Donate form data.",
                     sessionId: ipCookie("session_cookie").id,
                     contact: vm.formBuilder
-                }
+                },
+                extra: extra
             };
+
             if (vm.formBuilder.email)
                 formatted.details[0].emails.push({
                     email: vm.formBuilder.email

@@ -1,15 +1,21 @@
-<div ng-repeat="section in page.sections" class="fragment">
-    <div ng-if="section.ssb === false">
-        <div ng-repeat="value in section.components" class="fragment">
-            <div data-ng-include=" '../components/component-switch.html' "></div>
-        </div>
+<div
+    ng-repeat="section in page.sections"
+    class="fragment">
+
+    <div
+        ng-if="section.ssb === false"
+        ng-repeat="value in section.components"
+        class="fragment">
+
+        <div data-ng-include=" '../components/component-switch.html' "></div>
+
     </div>
-    <div ng-if="section.ssb===undefined">
-        <ssb-page-section
-                section="section"
-                index="$index"
-                class="ssb-page-section">
-        </ssb-page-section>
-    </div>
+
+    <ssb-page-section
+        ng-if="section.ssb===undefined"
+        section="section"
+        index="$index"
+        class="ssb-page-section">
+    </ssb-page-section>
 
 </div>

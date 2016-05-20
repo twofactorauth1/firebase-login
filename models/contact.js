@@ -131,8 +131,12 @@ var contact = $$.m.ModelBase.extend({
        * }]
        */
       details: [],
-        fingerprint: '',
-        unsubscribed: false
+      fingerprint: '',
+      unsubscribed: false,
+      /**
+      * Extra values coming from form builder or other sources
+      */
+      extra: []
     }
   },
 

@@ -131,12 +131,6 @@ _.extend(api.prototype, baseApi.prototype, {
         // ------------------------------------------------
         app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
 
-        // ------------------------------------------------
-        // Paypal?
-        // ------------------------------------------------
-        //TODO: for testing only.  This can be removed
-        app.get(this.url('paypal'), this.setup.bind(this), this.trytomakeapayment.bind(this));
-
     },
 
     listIndigenousPlans: function(req, resp) {

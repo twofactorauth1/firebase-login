@@ -607,7 +607,9 @@
     };
 
     $scope.selectedContactsFn = function () {
-        return _.filter($scope.displayedContacts, function(contact) { return contact.isSelected; });
+        var exportContacts = _.filter($scope.displayedContacts, function(contact) { return contact.isSelected; });
+        $scope.exportText = exportContacts.length ? "Export Selected " + exportContacts.length : "Export";
+        return exportContacts;
     };
 
     $scope.tagsBulkActionClickFn = function (operation) {

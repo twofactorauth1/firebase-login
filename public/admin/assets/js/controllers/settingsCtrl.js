@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService) {
     $scope.keywords = [];
 
     console.log($location.absUrl().replace('main', 'hey'));
@@ -50,29 +50,20 @@
       }, 0);
     };
 
+    $scope.$watch(function() { return SimpleSiteBuilderService.account; }, function(account){
+       $scope.account = account;
+       $scope.originalAccount = angular.copy(account);
+       if (!account.commerceSettings) {
+            account.commerceSettings = {
+              taxes: true,
+              taxbased: '',
+              taxnexus: ''
+            };
+        }
+    });
 
 
-    /*
-     * @AccountService
-     * get account obj
-     */
-
-    AccountService.getAccount(function (account) {
-      $scope.account = account;
-      $scope.originalAccount = angular.copy(account);
-      if (!account.commerceSettings) {
-        account.commerceSettings = {
-          taxes: true,
-          taxbased: '',
-          taxnexus: ''
-        };
-      }
-        /*
-       * @getWebsite
-       * get website obj for SEO tab and keywords
-       */
-      WebsiteService.getWebsite(function (website) {
-        // Website Title/Description #4223
+    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         var _defaults = false;
         $scope.website = website;
         $scope.keywords = website.seo.keywords;
@@ -91,12 +82,20 @@
         }
         if(_defaults){
           $scope.saveLoading = true;
-          WebsiteService.updateWebsite($scope.website, function () {
+          SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
             $scope.saveLoading = false;
           });
         }
-      });
     });
+
+
+
+    /*
+     * @AccountService
+     * get account obj
+     */
+
+
 
     /*
      * @saveSettings
@@ -133,7 +132,7 @@
           if (mainAccount) {
             mainAccount.showhide.blog = $scope.account.showhide.blog;
           }
-          WebsiteService.updateWebsite($scope.website, function () {
+          SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
             $scope.saveLoading = false;
             toaster.pop('success', " Website Settings saved.");
           });

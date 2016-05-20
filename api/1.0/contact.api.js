@@ -238,7 +238,18 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(resp);
                 } else {
                     contactDao.findMany(query, $$.m.Contact, function(err, contacts){
-                        var csv = "first,middle,last,email,created,type,tags\n";
+                        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags'];
+                        var extras = _.pluck(_.pluck(contacts, 'attributes'), 'extra');
+                        var extraHeaders = [];
+
+                        _.each(extras, function (extra) {
+                          extraHeaders = extraHeaders.concat(_.pluck(extra, 'label'));
+                        });
+
+                        extraHeaders = _.uniq(extraHeaders);
+
+                        var csv = headers.concat(extraHeaders).join(',') + '\n';
+
                         _.each(contacts, function(contact){
                             var tags = _.map(contact.get('tags'), function (x) {
                               var tag = _.findWhere($$.constants.contact.contact_types.dp, {data: x});
@@ -254,7 +265,19 @@ _.extend(api.prototype, baseApi.prototype, {
                             csv += contact.getPrimaryEmail() + ',';
                             csv += contact.get('created').date + ',';
                             csv += contact.get('type') + ',';
-                            csv += tags.join(' | ') + '\n';
+                            csv += tags.join(' | ') + ',';
+
+                            _.each(extraHeaders, function (header) {
+                                var extraField = _.findWhere(contact.get('extra'), {label: header});
+
+                                if (extraField) {
+                                  csv += extraField.value + ',';
+                                } else {
+                                  csv += 'null' + ',';
+                                }
+                            });
+
+                            csv += '\n';
                         });
                         self.log.debug('<< exportCsvContacts');
                         resp.set('Content-Type', 'text/csv');
