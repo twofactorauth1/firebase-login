@@ -1150,11 +1150,12 @@
          */
         function getFontFamilyOptions() {
             return {
-                "'Arial',Helvetica,sans-serif":"Arial",
+                "'Arial',Helvetica,sans-serif": "Arial",
                 "'Droid Serif',serif": 'Droid Serif',
-                "'Georgia',serif":"Georgia",
+                "'Georgia',serif": "Georgia",
                 "'Helvetica Neue', Helvetica, Arial, sans-serif": "Helvetica Neue",
-                "'Impact',Charcoal,sans-serif":"Impact",
+                "'Impact',Charcoal,sans-serif": "Impact",
+                "'Indie Flower', cursive": 'Indie Flower',
                 "'Lato',sans-serif": 'Lato',
                 "'Lora',serif": 'Lora',
                 "'Merriweather',serif": 'Merriweather',
@@ -1162,17 +1163,22 @@
                 "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
                 "'Open Sans',sans-serif": 'Open Sans',
                 "'Oswald',sans-serif": 'Oswald',
+                "'Pacifico',cursive" : 'Pacifico',
+                "'Parisienne', cursive": 'Parisienne',
                 "'Playfair Display',serif": 'Playfair Display',
+                "'Petit Formal Script', cursive": 'Petit Formal Script',
                 "'Quattrocento',serif": 'Quattrocento',
                 "'Quicksand',sans-serif": 'Quicksand',
                 "'Raleway',sans-serif": 'Raleway',
                 "'Roboto Condensed',sans-serif": 'Roboto Condensed',
                 "'Roboto Slab',serif": 'Roboto Slab',
                 "'Roboto',sans-serif": 'Roboto',
-                "'Tahoma',Geneva,sans-serif":"Tahoma",
-                "'Times New Roman',Times,serif":"Times New Roman",
+                "'Satisfy', cursive": 'Satisfy',
+                "'Shadows Into Light Two', cursive": 'Shadows Into Light Two',
+                "'Tahoma',Geneva,sans-serif": "Tahoma",
+                "'Times New Roman',Times,serif": "Times New Roman",
                 "'Ubuntu',sans-serif": 'Ubuntu',
-                "'Verdana',Geneva,sans-serif":"Verdana"
+                "'Verdana',Geneva,sans-serif": "Verdana"
             }
         }
 
