@@ -1348,6 +1348,7 @@
             if (duplicateSection.components.length) {
                 duplicateSection.components.forEach(function(component) {
                     component._id = ssbService.getTempUUID();
+                    component.anchor = component._id;
                 });
             }
 
