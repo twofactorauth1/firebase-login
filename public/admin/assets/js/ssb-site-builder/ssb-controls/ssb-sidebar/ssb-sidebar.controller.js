@@ -524,12 +524,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     function setActiveSection(index) {
       vm.uiState.showSectionPanel = false;
-      SimpleSiteBuilderService.setActiveSection(index);
-      if (vm.state.page.sections[index].visibility) {
-        vm.uiState.showSectionPanel = true;
-        vm.scrollToActiveSection();
-      }
-
+        $timeout(function() {
+          SimpleSiteBuilderService.setActiveSection(index);
+          if (vm.state.page.sections[index].visibility) {
+            vm.uiState.showSectionPanel = true;
+            vm.scrollToActiveSection();
+          }
+        })
     }
 
     function addBackground(sectionIndex, componentIndex) {
