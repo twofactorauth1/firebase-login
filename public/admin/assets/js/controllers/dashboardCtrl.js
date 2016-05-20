@@ -81,14 +81,14 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
     return days;
   };
 
-  ContactService.getContacts(function (customers) {
+  ContactService.getContacts(function (contacts) {
     ContactService.getAllContactActivities(function (activities) {
       $scope.activities = activities.results;
       _.each($scope.activities, function (activity) {
-        var matchingCustomer = _.findWhere(customers, {
+        var matchingContacts = _.findWhere(contacts, {
           _id: activity.contactId
         });
-        activity.customer = matchingCustomer;
+        activity.contact = matchingContacts;
       });
     });
   });
@@ -135,45 +135,45 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
   };
 
   /*
-   * @lastCustomerDate
-   * - get the last customer date that was created
+   * @lastContactDate
+   * - get the last contact date that was created
    */
 
-  $scope.lastCustomerDate = function () {
-    if ($scope.customersThisMonth && $scope.customersThisMonth[$scope.customersThisMonth.length - 1] && $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created) {
-      return $scope.customersThisMonth[$scope.customersThisMonth.length - 1].created.date;
+  $scope.lastContactDate = function () {
+    if ($scope.contactsThisMonth && $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1] && $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1].created) {
+      return $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1].created.date;
     }
 
   };
 
   /*
-   * @getCustomers
-   * - get customer for the customer widget
+   * @getContacts
+   * - get contact for the contact widget
    */
-  $scope.customerNames = [];
-  ContactService.getContacts(function (customers) {
+  $scope.contactNames = [];
+  ContactService.getContacts(function (contacts) {
 
-    $scope.customers = customers;
-    $scope.customersThisMonth = [];
+    $scope.contacts = contacts;
+    $scope.contactsThisMonth = [];
     var tempData = [];
     _.each($scope.getDaysThisMonth(), function (day) {
-      var thisDaysCustomers = 0;
-      _.each(customers, function (customer) {
-        if (customer.created.date) {
-          if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
-            $scope.customersThisMonth.push(customer);
-            thisDaysCustomers = thisDaysCustomers + 1;
+      var thisDaysContacts = 0;
+      _.each(contacts, function (contact) {
+        if (contact.created.date) {
+          if ($scope.isSameDateAs(new Date(contact.created.date), new Date(day))) {
+            $scope.contactsThisMonth.push(contact);
+            thisDaysContacts = thisDaysContacts + 1;
           }
         }
 
       });
-      tempData.push(thisDaysCustomers);
+      tempData.push(thisDaysContacts);
     });
-    _.each(customers, function (customer) {
-      if(customer.first || customer.last)
-        $scope.customerNames.push(customer.first + ' ' + customer.last);
+    _.each(contacts, function (contact) {
+      if(contact.first || contact.last)
+        $scope.contactNames.push(contact.first + ' ' + contact.last);
     });
-    $scope.analyticsCustomers = tempData;
+    $scope.analyticsContacts = tempData;
   });
 
   /*
@@ -183,7 +183,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
 
   $scope.getCustomerLeads = function () {
     var customerLeads = [];
-    _.each($scope.customersThisMonth, function (customer) {
+    _.each($scope.contactsThisMonth, function (customer) {
       if (customer.tags && customer.tags.length > 0) {
         if (customer.tags.indexOf('ld') > -1) {
           customerLeads.push(customer);
@@ -332,7 +332,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
 
   $scope.updateCustomerNameFn = function (selection) {
     var firstLast = selection.split(' ');
-    var customerHash = _.findWhere($scope.customers, {
+    var customerHash = _.findWhere($scope.contacts, {
       first: firstLast[0],
       last: firstLast[1]
     });
@@ -361,7 +361,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
     }
 
     ContactService.postContactActivity($scope.newActivity, function (activity) {
-      var matchingCustomer = _.findWhere($scope.customers, {
+      var matchingCustomer = _.findWhere($scope.contacts, {
         _id: activity.contactId
       });
       activity.customer = matchingCustomer;
