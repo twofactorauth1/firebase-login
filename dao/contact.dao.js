@@ -879,8 +879,12 @@ var dao = {
                     });
                 } else {
                     //this contact already exists.  Let's merge in new data.
-                    self.log.warn('Merging contact with id: ' + existingContact.id());
-                    var merged =  _.defaults(existingContact, contact);
+                    var existingId = existingContact.id();
+                    self.log.warn('Merging contact with id: ' + existingId);
+                    self.log.warn('Here is what we have:', contact);
+                    var merged =  _.extend(existingContact, contact);
+                    merged.set('_id', existingId);
+                    self.log.warn('Here is what we have now:', merged);
                     //union details, notes, siteActivity
                     merged.set('details', _.union(existingContact.get('details'), contact.get('details')));
                     merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
