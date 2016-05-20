@@ -16,7 +16,7 @@
     /*
      * Setup some initial wizard state
      */
-    var customerTags = userConstant.contact_types.dp;
+    var contactTags = userConstant.contact_types.dp;
     var nextStep = function () {
       $scope.currentStep++;
     };
@@ -56,7 +56,7 @@
     $scope.emails = [];
 
     ContactService.getContactTags(function(tags){
-      $scope.customerTags = tags;
+      $scope.contactTags = tags;
     });
 
     $scope.formatDate = function (date) {
@@ -103,7 +103,7 @@
 
     $scope.ismeridian = true;
 
-    $scope.selectedCustomers = {
+    $scope.selectedContacts = {
       individuals: []
     };
 
@@ -120,7 +120,7 @@
       name: ''
     };
 
-    $scope.selectedCustomers.newEmails = [];
+    $scope.selectedContacts.newEmails = [];
 
     $scope.isEditable = false;
 
@@ -666,10 +666,10 @@
     }
 
     /*
-     * @customerSelected
+     * @contactSelected
      * - callback for contact tag click added from dropdown list
      */
-    $scope.customerSelected = function (select) {
+    $scope.contactSelected = function (select) {
       var selected = select.selected[select.selected.length - 1];
       var removalIndex = _.indexOf($scope.recipientsToRemove, selected._id);
       var existingContact = _.find($scope.recipients, function (recipient) {
@@ -690,10 +690,10 @@
     };
 
     /*
-     * @customerRemoved
+     * @contactRemoved
      * - callback for contact tag click on [X] button
      */
-    $scope.customerRemoved = function (select, selected) {
+    $scope.contactRemoved = function (select, selected) {
       var existingContactIndex;
       var contact = _.findWhere($scope.recipients, {
         _id: selected._id
@@ -708,7 +708,7 @@
          var tempTags = [];
          var tagLabel = "";
          _.each(contact.tags, function (tag) {
-              tagLabel = _.findWhere(customerTags, { data: tag });
+              tagLabel = _.findWhere(contactTags, { data: tag });
               if(tagLabel)
                 tempTags.push(tagLabel.label);
               else
@@ -734,7 +734,7 @@
      * - check for valid email addresses entered
      */
     // $scope.manualEmailsEntered = function () {
-    //   var splits = $scope.selectedCustomers.newEmails.split(',');
+    //   var splits = $scope.selectedContacts.newEmails.split(',');
     //   var validatedEmails = [];
     //   _.each(splits, function (split) {
     //     var nospaces = split.replace(' ', '');
@@ -758,8 +758,8 @@
      * @eliminateDuplicate
      * -
      */
-    $scope.eliminateDuplicate = function (customer) {
-      return $scope.selectedCustomers.individuals.indexOf(customer._id) > -1;
+    $scope.eliminateDuplicate = function (contact) {
+      return $scope.selectedContacts.individuals.indexOf(contact._id) > -1;
     };
 
     /*
@@ -769,7 +769,7 @@
     $scope.getSelectedTags = function () {
       var tags = [];
       _.each($scope.tagSelection, function (fullTag) {
-        var matchingTag = _.find(customerTags, function (matchTag) {
+        var matchingTag = _.find(contactTags, function (matchTag) {
           return matchTag.label === fullTag;
         });
         if (matchingTag) {
@@ -793,14 +793,14 @@
       //get the tags that have been selected
       var tags = $scope.getSelectedTags();
 
-      //loop through customers and add if one of the tags matches
+      //loop through contacts and add if one of the tags matches
 
-      _.each($scope.customers, function (customer) {
-        if (customer.tags && customer.tags.length > 0) {
+      _.each($scope.contacts, function (contact) {
+        if (contact.tags && contact.tags.length > 0) {
           var tempTags = [];
           var tagLabel = "";
-          _.each(customer.tags, function (tag) {
-              tagLabel = _.findWhere(customerTags, { data: tag });
+          _.each(contact.tags, function (tag) {
+              tagLabel = _.findWhere(contactTags, { data: tag });
               if(tagLabel)
                 tempTags.push(tagLabel.label);
               else
@@ -808,27 +808,27 @@
           });
           var tagExists = _.intersection(tempTags, tags);
           if (tagExists.length > 0) {
-            if (!$scope.eliminateDuplicate(customer))
-              fullContacts.push(customer);
+            if (!$scope.eliminateDuplicate(contact))
+              fullContacts.push(contact);
           }
         } else {
           if (tags.indexOf('No Tag') > -1) {
-            if (!$scope.eliminateDuplicate(customer))
-              fullContacts.push(customer);
+            if (!$scope.eliminateDuplicate(contact))
+              fullContacts.push(contact);
           }
         }
 
         //add customers from individual
 
-        if ($scope.selectedCustomers.individuals.indexOf(customer._id) > -1) {
-          fullContacts.push(customer);
+        if ($scope.selectedContacts.individuals.indexOf(contact._id) > -1) {
+          fullContacts.push(contact);
         }
       });
 
       return fullContacts;
     };
 
-     $scope.contactTags = function (customer) {
+     $scope.contactTagsFn = function (customer) {
        return ContactService.contactTags(customer);
      };
 
@@ -842,7 +842,7 @@
           return (recipient.details[0].emails[0].email).toLowerCase() === email.text;
         }
       });
-      var matchingContact = _.find($scope.customers, function (customer) {
+      var matchingContact = _.find($scope.contacts, function (customer) {
         if (customer.details && customer.details[0] && customer.details[0].emails && customer.details[0].emails[0] && customer.details[0].emails[0].email) {
           return (customer.details[0].emails[0].email).toLowerCase() === email.text;
         }
@@ -879,10 +879,10 @@
     $scope.checkAndCreateCustomer = function (fn) {
       var contactsArr = [];
       var promises = [];
-      if ($scope.selectedCustomers.newEmails) {
-        var _emails = $scope.selectedCustomers.newEmails;
+      if ($scope.selectedContacts.newEmails) {
+        var _emails = $scope.selectedContacts.newEmails;
         _.each(_emails, function (email) {
-          var contact = _.findWhere($scope.customers, {
+          var contact = _.findWhere($scope.contacts, {
             email: email.text
           });
           if (!contact) {
@@ -1062,10 +1062,10 @@
         if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
 
             ContactService.getContacts(function (customers) {
-                $scope.customers = customers;
+                $scope.contacts = customers;
                 var tags = _.uniq(_.pluck($scope.newCampaignObj.searchTags.tags, 'data'));
                 recipients.forEach(function(id, index) {
-                    var c = _.findWhere($scope.customers, {_id: id});
+                    var c = _.findWhere($scope.contacts, {_id: id});
                     if (c) {
                         if ($scope.newCampaignObj.searchTags.operation == 'add') {
                             if (c.tags) {
@@ -1180,7 +1180,7 @@
      */
     $scope.checkNewRecipients = function () {
       var returnValue = false;
-      if ($scope.selectedCustomers.newEmails && $scope.selectedCustomers.newEmails.length)
+      if ($scope.selectedContacts.newEmails && $scope.selectedContacts.newEmails.length)
         returnValue = true;
       return returnValue;
     };
@@ -1585,7 +1585,7 @@
      * @getContacts
      * - get saved customers attached to this campaign
      */
-    $scope.selectedCustomers.individuals = [];
+    $scope.selectedContacts.individuals = [];
     $scope.getContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
           $scope.originalRecipients = angular.copy(data);
@@ -1596,7 +1596,7 @@
                 customer._id
               )
           })
-          $scope.selectedCustomers.individuals = individuals;
+          $scope.selectedContacts.individuals = individuals;
       });
       return promise;
     };
@@ -1614,9 +1614,9 @@
           }
         });
         customers = _.difference(customers, customerWithoutEmails);
-        $scope.customers = customers;
+        $scope.contacts = customers;
         ContactService.getAllContactTags(customers, function(tags){
-          customerTags = tags;
+          contactTags = tags;
         })
         var _tags = [];
         $scope.allCustomers = [];
@@ -1628,7 +1628,7 @@
           //customer.fullName = customer.first + " " + customer.last || '';
           if (customer.tags && customer.tags.length > 0) {
             _.each(customer.tags, function (tag) {
-              var tagLabel = _.findWhere(customerTags, { data: tag });
+              var tagLabel = _.findWhere(contactTags, { data: tag });
               if(tagLabel)
                 _tags.push(tagLabel.label);
               else
@@ -1647,7 +1647,7 @@
                 uniqueTag: tag[0],
                 numberOfTags: tag.length
             };
-            var matchingTagObj = _.find(customerTags, function (matchTag) {
+            var matchingTagObj = _.find(contactTags, function (matchTag) {
                 return matchTag.label === tag[0];
             });
             if(matchingTagObj) {
@@ -1669,7 +1669,7 @@
      */
     $scope.loadSavedTags = function() {
       _.each($scope.newCampaignObj.contactTags, function(tag) {
-        var tagLabel = _.findWhere(customerTags, { data: tag });
+        var tagLabel = _.findWhere(contactTags, { data: tag });
         if(tagLabel){
           tag = tagLabel.label
         }
@@ -1691,7 +1691,7 @@
       return (
         ($scope.originalCampaignObj && !angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
         ($scope.originalRecipients && $scope.originalRecipients.length && !angular.equals($scope.originalRecipients, $scope.recipients)) ||
-        ($scope.selectedCustomers && $scope.selectedCustomers.newEmails && !angular.equals([], $scope.selectedCustomers.newEmails)) ||
+        ($scope.selectedContacts && $scope.selectedContacts.newEmails && !angular.equals([], $scope.selectedContacts.newEmails)) ||
         ($scope.originalEmailToSend && !angular.equals($scope.originalEmailToSend, $scope.emailToSend)) ||
         ($scope.delivery.originalDate && !angular.equals($scope.delivery.originalDate, $scope.delivery.date))
       )
@@ -1733,8 +1733,8 @@
         $scope.originalEmailToSend = null;
         $scope.delivery.originalDate = null;
         $scope.originalRecipients = null;
-        if($scope.selectedCustomers){
-          $scope.selectedCustomers.newEmails = null;
+        if($scope.selectedContacts){
+          $scope.selectedContacts.newEmails = null;
         }
     }
 
@@ -1751,7 +1751,7 @@
       }
     }
 
-    $scope.tagToCustomer = function(value) {
+    $scope.tagToContact = function(value) {
      return ContactService.tagToContact(value);
     };
 
