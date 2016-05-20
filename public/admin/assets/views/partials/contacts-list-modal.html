@@ -1,11 +1,11 @@
-<script type="text/ng-template" id="customers-list-modal">
+<script type="text/ng-template" id="contacts-list-modal">
     <div class="modal-header">
         <button type="button" class="close" ng-click="closeModal()">&times;</button>
         <h4 class="modal-title">Customer List</h4>
     </div>
-    
+
     <div class="modal-body bg-white no-padding" style="max-height:500px;overflow:auto">
-        <div st-table="recipients" st-safe-src="recipients">       
+        <div st-table="recipients" st-safe-src="recipients">
             <div class="container-fluid padding-top-0 padding-bottom-0">
                 <div class="panel panel-transparent row margin-bottom-0">
                     <div class="panel-body no-padding">
@@ -14,7 +14,7 @@
                                 <tr>
                                     <th class="center" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                     <th  ng-class="{'column-width': tableView == 'grid'}">Name</th>
-                                   
+
                                     <th  ng-class="{'column-width': tableView == 'grid'}">Tags</th>
                                     <th  ng-class="{'column-width': tableView == 'grid'}">Email</th>
                                     <th  ng-class="{'column-width': tableView == 'grid'}">Address</th>
@@ -22,20 +22,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr ng-repeat="customer in recipients track by $index">
+                                <tr ng-repeat="contact in recipients track by $index">
                                     <td class="center" >
-                                        <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
+                                        <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail screenshot" alt="image">
                                     </td>
-                                    <td><strong>First Name: </strong> <span ng-if="customer.first || customer.last" ng-text-truncate="customer.first + ' ' + customer.last || ''" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first && !customer.last">--</span></td>
-                                    <td><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
-                                    <td class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.details[0].emails[0].email"><span ng-text-truncate="customer.details[0].emails[0].email" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
-                                        </span><span ng-if="!customer.details[0].emails[0].email">--</span></td>
+                                    <td><strong>First Name: </strong> <span ng-if="contact.first || contact.last" ng-text-truncate="contact.first + ' ' + contact.last || ''" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first && !contact.last">--</span></td>
+                                    <td><strong>Tags: </strong>{{contactTagsFn(contact) || '--'}}</td>
+                                    <td class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.details[0].emails[0].email"><span ng-text-truncate="contact.details[0].emails[0].email" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
+                                        </span><span ng-if="!contact.details[0].emails[0].email">--</span></td>
                                     <td><strong>Address: </strong>
-                                        <span ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state" ng-text-truncate="customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
-                                        <span ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
-                                        <span ng-if="!customer.details[0].addresses[0]">--</span>
+                                        <span ng-if="contact.details[0].addresses[0].city && contact.details[0].addresses[0].state" ng-text-truncate="contact.details[0].addresses[0].city+', '+contact.details[0].addresses[0].state" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
+                                        <span ng-if="contact.details[0].addresses[0].address && !contact.details[0].addresses[0].city">{{contact.details[0].addresses[0].address}}</span>
+                                        <span ng-if="!contact.details[0].addresses[0]">--</span>
                                     </td>
-                                    <td ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> {{customer.details[0].phones[0].number || '--'}}</td>
+                                    <td ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> {{contact.details[0].phones[0].number || '--'}}</td>
                                 </tr>
                             </tbody>
                         </table>
