@@ -68,7 +68,7 @@
     <div ng-switch-when="video">
         <div video-component component="value"></div>
     </div>
-    
+
     <!--
     generic email type deprecated 09/2015 in favor
     of using individual email components.
@@ -114,6 +114,8 @@
     </div>
 
     <div ng-switch-default style="color: red; outline-color: red; padding: 10px">
+        <!--
         ERROR: could not find matching directive for component.type = {{value.type}}
+        -->
     </div>
 </div>
