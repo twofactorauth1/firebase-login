@@ -68,17 +68,10 @@
     };
 
     $scope.changeInvoice = function (invoice, index) {
-      if(invoice)
-      {
-        //console.log('changeInvoice >>> ' + invoice.toJSON());
+      if(invoice) {
         $scope.selectedInvoice = invoice;
-        if(invoice.lines.data.length == 2)
-        {$scope.planInterval = invoice.lines.data[1]["plan"].interval;}
-        else
-        {$scope.planInterval = invoice.lines.data[0]["plan"].interval;}
-        if($scope.planInterval=='' || $scope.planInterval == null || $scope.planInterval === undefined)
-        {
-          $scope.planInterval = invoice.lines.data[1]["plan"].interval;
+        if(invoice.lines.data.length) {
+          $scope.planInterval = _.last(invoice.lines.data).plan.interval;
         }
       }
       $scope.selectedItemIndex = index;
