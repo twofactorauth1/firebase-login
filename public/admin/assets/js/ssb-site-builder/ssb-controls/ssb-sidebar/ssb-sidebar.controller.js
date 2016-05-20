@@ -1148,7 +1148,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         setupSectionContent();
         ContactService.getContacts(function(customers){
             ContactService.getAllContactTags(customers,function(tags){
-            vm.customerTags = tags;
+            vm.contactTags = tags;
             });
         })
 

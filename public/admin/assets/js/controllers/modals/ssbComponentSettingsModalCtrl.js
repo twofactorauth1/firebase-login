@@ -1033,7 +1033,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       });
 
       ContactService.getContactTags(function(tags){
-        $scope.customerTags = tags;
+        $scope.contactTags = tags;
       });
 
       $scope.editComponent();
