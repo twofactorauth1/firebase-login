@@ -335,7 +335,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     function duplicateSection(section, index) {
 
-        var insertAtIndex = (index > 0) ? (index - 1) : index;
+        var insertAtIndex = (index > 0) ? (index + 1) : index;
 
         section = SimpleSiteBuilderService.setTempUUIDForSection(section);
 
