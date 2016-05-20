@@ -19,9 +19,9 @@
                 <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.contacts">
                     <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
-                        <h3 class="StepTitle">Customers</h3>
+                        <h3 class="StepTitle">Contacts</h3>
                         <p class="text-small">
-                            Import or Create Customers Manually
+                            Import or Create Contacts Manually
                         </p>
                     </div>
                 </div>
@@ -70,14 +70,14 @@
                             <div class="panel panel-white no-radius height-200" ng-class="{'load1 csspinner': !analyticsContacts}">
                                 <div class="panel-body padding-20 text-center" ng-if="analyticsContacts">
                                     <div class="space10">
-                                        <h5 class="text-dark no-margin">Customers this Month</h5>
+                                        <h5 class="text-dark no-margin">Contacts this Month</h5>
                                         <h2 class="no-margin">{{contactsThisMonth.length}}</h2>
-                                        <a ng-href="/admin/#/contacts"><span class="badge badge-success margin-top-10" ng-class="{'badge-danger': contactsThisMonth.length == 0, 'badge-success': contactsThisMonth.length > 0}">{{getCustomerLeads()}} Leads</span></a>
+                                        <a ng-href="/admin/#/contacts"><span class="badge badge-success margin-top-10" ng-class="{'badge-danger': contactsThisMonth.length == 0, 'badge-success': contactsThisMonth.length > 0}">{{getContactLeads()}} Leads</span></a>
                                     </div>
                                     <div class="sparkline space10">
                                         <span jq-sparkline ng-model="analyticsContacts" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
                                     </div>
-                                    <span><i class="fa fa-clock-o"></i> Last Customer {{lastContactDate() | timeAgoFilter}}</span>
+                                    <span><i class="fa fa-clock-o"></i> Last Contact {{lastContactDate() | timeAgoFilter}}</span>
                                 </div>
                             </div>
                         </div>
@@ -305,9 +305,9 @@
                 <autocomplete ng-model="selectedActivityType" data="activityTypes" on-select="updateActivityTypeFn"></autocomplete>
                 <span class="error help-block" />
             </div>
-            <div class="form-group" id="customer">
-                <label for="customerLookup">Customer Name</label>
-                <autocomplete ng-model="customer" data="contactNames" on-select="updateCustomerNameFn"></autocomplete>
+            <div class="form-group" id="contact">
+                <label for="contactLookup">Contact Name</label>
+                <autocomplete ng-model="contact" data="contactNames" on-select="updateContactNameFn"></autocomplete>
                 <span class="error help-block" />
             </div>
             <div class="form-group">

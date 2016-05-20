@@ -177,21 +177,21 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
   });
 
   /*
-   * @getCustomerLeads
-   * - get the number of customers that have a lead tag
+   * @getContactLeads
+   * - get the number of contacts that have a lead tag
    */
 
-  $scope.getCustomerLeads = function () {
-    var customerLeads = [];
-    _.each($scope.contactsThisMonth, function (customer) {
-      if (customer.tags && customer.tags.length > 0) {
-        if (customer.tags.indexOf('ld') > -1) {
-          customerLeads.push(customer);
+  $scope.getContactLeads = function () {
+    var contactLeads = [];
+    _.each($scope.contactsThisMonth, function (contact) {
+      if (contact.tags && contact.tags.length > 0) {
+        if (contact.tags.indexOf('ld') > -1) {
+          contactLeads.push(contact);
         }
       }
     });
 
-    return customerLeads.length;
+    return contactLeads.length;
   };
 
   /*
@@ -330,14 +330,14 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
     }
   };
 
-  $scope.updateCustomerNameFn = function (selection) {
+  $scope.updateContactNameFn = function (selection) {
     var firstLast = selection.split(' ');
-    var customerHash = _.findWhere($scope.contacts, {
+    var contactHash = _.findWhere($scope.contacts, {
       first: firstLast[0],
       last: firstLast[1]
     });
-    if (customerHash) {
-      $scope.newActivity.contactId = customerHash._id;
+    if (contactHash) {
+      $scope.newActivity.contactId = contactHash._id;
     }
   };
 
@@ -361,10 +361,10 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "Ch
     }
 
     ContactService.postContactActivity($scope.newActivity, function (activity) {
-      var matchingCustomer = _.findWhere($scope.contacts, {
+      var matchingContact = _.findWhere($scope.contacts, {
         _id: activity.contactId
       });
-      activity.customer = matchingCustomer;
+      activity.contact = matchingContact;
       $scope.activities.push(activity);
       $scope.activities = _.sortBy($scope.activities, function (o) {
         return o.start;
