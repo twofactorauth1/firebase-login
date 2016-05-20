@@ -136,7 +136,7 @@ var contact = $$.m.ModelBase.extend({
       /**
       * Extra values coming from form builder or other sources
       */
-      extra: {}
+      extra: []
     }
   },
 

@@ -383,10 +383,10 @@
               return x.custom == true;
             });
 
-            var extra = {};
+            var extra = [];
 
             customFields.forEach(function (c, i) {
-              extra[c.name] = vm.formBuilder[c.name] || null ;
+              extra.push({name: c.name, label: c.label, value: vm.formBuilder[c.name] || null});
             });
 
             var formatted = {
