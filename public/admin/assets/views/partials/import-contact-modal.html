@@ -1,5 +1,5 @@
 <script type="text/ng-template" id="import-contact-modal">
-    <div id="import-customer-modal">
+    <div id="import-contact-modal">
         <div class="modal-header">
             <button type="button" class="close" ng-click="closeModal()">
                 <span aria-hidden="true">&times;</span>
@@ -87,7 +87,7 @@
                 <div ng-if="errorRows.length > 0">
                     <div class="alert alert-warning alert-dismissible" role="alert" ng-class="{'animated shake': errorRows.length > 0}">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <div><span><strong>Caution:</strong> There are {{errorRows.length}} validation errors for your import. You can fix them manually or we will include them in the customer notes.</span>
+                        <div><span><strong>Caution:</strong> There are {{errorRows.length}} validation errors for your import. You can fix them manually or we will include them in the contact notes.</span>
                             <br> Error Rows: <a ng-click="goToRow(err)" ng-repeat="err in errorRows | orderBy: err" class="margin-right-5"><span class="badge badge-warning">{{err}}</span></a></div>
                         <pre>{{errorRows}}</pre>
                     </div>
@@ -108,7 +108,7 @@
                                 <div class="panel-body">
                                     <p class="text-small margin-bottom-15">Look over the fields we automatically matched.</p>
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns">
+                                        <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in contactColumns">
                                             <div class="form-group" ng-class="{'margin-bottom-0':$last}">
                                                 <label class="col-sm-4 control-label" for="{{column.value}}">
                                                     {{column.name}}
@@ -139,9 +139,9 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <div class="panel panel-white margin-bottom-0 preview-customers" ng-class="{'animated pulse': showPreviewPulse}">
+                            <div class="panel panel-white margin-bottom-0 preview-contacts" ng-class="{'animated pulse': showPreviewPulse}">
                                 <div class="panel-heading border-light panel-primary">
-                                    <h4 class="panel-title">Preview <span class="text-bold">Customers</span></h4>
+                                    <h4 class="panel-title">Preview <span class="text-bold">Contacts</span></h4>
                                     <ul class="panel-heading-tabs border-light">
                                         <li>
                                             <div class="btn-group">
@@ -158,20 +158,20 @@
                                 <div class="panel-body">
                                     <p class="text-small margin-bottom-15">Currently viewing row <span class="text-bold">{{currentRow}} / {{csvResults.length - 1}}</span></p>
                                     <div class="row">
-                                        <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns">
-                                            <div class="form-group" ng-class="{'margin-bottom-0':$last, 'has-error': column.value === 'email' && !validateEmail(previewCustomer[column.value])}">
+                                        <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in contactColumns">
+                                            <div class="form-group" ng-class="{'margin-bottom-0':$last, 'has-error': column.value === 'email' && !validateEmail(previewContact[column.value])}">
                                                 <label class="col-sm-4 control-label">
                                                     {{column.name}}
                                                 </label>
                                                 <div class="col-sm-8 editable-section">
                                                     <div ng-if="column.value === 'email'">
-                                                        <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                        <a href="#" editable-email="previewContact[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewContact[column.value])}">{{ previewContact[column.value] || "empty" }}</a>
                                                     </div>
                                                     <!-- <div ng-if="column.value === 'phone'">
-                                                            <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                            <a href="#" editable-email="previewContact[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewContact[column.value])}">{{ previewContact[column.value] || "empty" }}</a>
                                                         </div> -->
                                                     <div ng-if="column.value != 'email'">
-                                                        <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                        <a href="#" editable-text="previewContact[column.value]" onbeforesave="updateColumn($data, column)">{{ previewContact[column.value] || "empty" }}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -186,13 +186,13 @@
             <div ng-if="uploadingServerCsv" class="center fade-in-right">
                 <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': serverUploadPercent < 100, 'fa-check text-success': serverUploadPercent == 100}"></span>
                 <div ng-if="!uploadingComplete">
-                    <h3 ng-if="serverUploadPercent < 100">Uploading New Customers... <strong>{{serverUploadPercent}}%</strong></h3>
+                    <h3 ng-if="serverUploadPercent < 100">Uploading New Contacts... <strong>{{serverUploadPercent}}%</strong></h3>
                     <progressbar animate="false" class="progress-lg" ng-class="{'active progress-striped': serverUploadPercent < 100}" value="serverUploadPercent" type="success"></progressbar>
                 </div>
                 <span ng-if="uploadingComplete">
                 <h3 ng-if="uploadingComplete">Upload Complete!</h3>
-                <h4>Successfully added {{csvResults.length - 1}} new customers in {{endServerUpload}} sec.</h4>
-                <button class="btn btn-primary btn-o" ng-click="closeModal()">View New Customers</button>
+                <h4>Successfully added {{csvResults.length - 1}} new contacts in {{endServerUpload}} sec.</h4>
+                <button class="btn btn-primary btn-o" ng-click="closeModal()">View New Contacts</button>
                 </span>
             </div>
             <div class="clearfix"></div>
@@ -213,7 +213,7 @@
                     <a class="btn btn-primary pull-left margin-right-10" ng-click="changeFile()"><span class="fa fa-exchange"></span>  Change</a>
                     <div class="pull-left text-left">
                         <h4><strong>File:</strong> <span ng-text-truncate="fileName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></h4>
-                        <span class="help-block margin-bottom-0" style="margin-top:-10px">Uploaded {{csvResults.length - 1}} customers in {{endUpload}}sec</span>
+                        <span class="help-block margin-bottom-0" style="margin-top:-10px">Uploaded {{csvResults.length - 1}} contacts in {{endUpload}}sec</span>
                     </div>
                 </div>
                 <div class="col-xs-4">
