@@ -110,7 +110,6 @@
     "karma-spec-reporter": "0.0.26",
     "pem": "1.8.1",
     "phantomjs": "^2.1.7",
-    "phantomjs-prebuilt": "^2.1.7",
     "stripe-debug": "^2.0.0",
     "supertest": "0.13.0"
   },
