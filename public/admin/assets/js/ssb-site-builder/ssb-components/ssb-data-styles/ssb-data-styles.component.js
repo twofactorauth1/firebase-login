@@ -71,19 +71,23 @@ function ssbDataStyles($timeout) {
                                 }
 
                                 // bind hover and active events to button
-                                element.hover(function(){
-                                    this.style.setProperty( 'background-color', data.hover.bg.color, 'important' );
-                                    this.style.setProperty( 'color', data.hover.txtcolor, 'important' );
+                                if (ssbHoverStyle || ssbActiveStyle) {
 
-                                }, function(){
-                                    this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
-                                    this.style.setProperty( 'color', originalData.txtcolor, 'important' );
-                                });
+                                    element.hover(function(){
+                                        this.style.setProperty( 'background-color', data.hover.bg.color, 'important' );
+                                        this.style.setProperty( 'color', data.hover.txtcolor, 'important' );
 
-                                element.on("mousedown touchstart", function(){
-                                    this.style.setProperty( 'background-color', data.pressed.bg.color, 'important' );
-                                    this.style.setProperty( 'color', data.pressed.txtcolor, 'important' );
-                                })
+                                    }, function(){
+                                        this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                        this.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                                    });
+
+                                    element.on("mousedown touchstart", function(){
+                                        this.style.setProperty( 'background-color', data.pressed.bg.color, 'important' );
+                                        this.style.setProperty( 'color', data.pressed.txtcolor, 'important' );
+                                    })
+
+                                }
 
                             });
 

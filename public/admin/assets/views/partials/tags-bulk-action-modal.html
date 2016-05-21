@@ -12,15 +12,15 @@
                 <label>
                     Tags
                 </label>
-                <ui-select multiple tagging="tagToCustomer" tagging-match-to-key="label" ng-model="tagsBulkAction.tags" theme="bootstrap">
+                <ui-select multiple tagging="tagToContact" tagging-match-to-key="label" ng-model="tagsBulkAction.tags" theme="bootstrap">
                     <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                    <ui-select-choices repeat="tag in customerTags | orderBy:'label' | filter:$select.search">
+                    <ui-select-choices repeat="tag in contactTags | orderBy:'label' | filter:$select.search">
                         {{tag.label}}
                     </ui-select-choices>
                 </ui-select>
             </div>
             <div class="form-group">
-                <label>Number of customers selected: {{(selectedCustomersFn()).length}}</label>
+                <label>Number of contacts selected: {{(selectedContactsFn()).length}}</label>
             </div>
             <div class="form-group">
                 <label><input type="checkbox" ng-model="tagsBulkAction.toReplace">&nbsp;Replace existing tags?</label>

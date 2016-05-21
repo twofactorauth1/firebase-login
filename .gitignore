@@ -44,3 +44,6 @@ public/admin/assets/css/**/*.min.css
 
 
 tmp/1432022004448.png
+public/admin/assets/css/frontend-admin.css.map
+public/admin/assets/css/styles.css.map
+public/admin/assets/css/styles.min.css.map

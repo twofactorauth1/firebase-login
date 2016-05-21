@@ -106,6 +106,7 @@ module.exports = function(grunt) {
                     '../indigeweb/public/css/styles.css': [ 'public/less/frontend.less' ],
                     '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
                     '../indigeweb/public/admin/assets/css/theme.css': [ 'public/less/theme.less' ],
+                    '../indigeweb/public/admin/assets/css/email.css': [ 'public/less/email.less' ],
                     // '../indigeweb/public/admin/assets/css/ssb-site-builder/styles.css': [ 'public/less/ssb-site-builder/frontend/styles.less' ],
                     '../indigeweb/public/css/ssb-site-builder/ssb-themes/ssb-theme-young-soul.css': [ 'public/less/ssb-site-builder/ssb-frontend/ssb-themes/ssb-theme-young-soul.less' ]
                 }
@@ -116,29 +117,6 @@ module.exports = function(grunt) {
             split_style: {
               src: ['../indigeweb/public/css/styles.css'],
               dest: '../indigeweb/public/css'
-            }
-        },
-
-        cssmin: {
-            target: {
-                /*files: [{
-                    expand: true,
-                    cwd: '../indigeweb/public/css',
-                    src: ['*.css', 'style.default_part_1.css', '!*.min.css'],
-                    dest: '../indigeweb/public/css',
-                    ext: '.min.css'
-                }]*/
-                files: [
-                    {
-                        'public/admin/assets/css/styles.min.css': ['public/admin/assets/css/styles.css']
-                    },
-                    {
-                        'public/admin/assets/css/plugins.min.css': ['public/admin/assets/css/plugins.css']
-                    },
-                    {
-                        'public/css/styles.min.css': ['public/css/styles.css']
-                    }
-                ]
             }
         },
 
@@ -468,7 +446,7 @@ module.exports = function(grunt) {
                 processors: [
                     // require('pixrem')(), // add fallbacks for rem units
                     require('autoprefixer')({browsers: 'last 2 versions'}), // add vendor prefixes
-                    require('cssnano')() // minify the result
+                    require('cssnano')({ discardDuplicates: false, safe: true }) // minify the result
                 ]
             },
             dist: {
@@ -614,7 +592,8 @@ module.exports = function(grunt) {
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
 
-    grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'cssmin', 'clean:postbuild']);
+
+    grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
     grunt.registerTask('local', ['less', 'postcss']);
 
     /*

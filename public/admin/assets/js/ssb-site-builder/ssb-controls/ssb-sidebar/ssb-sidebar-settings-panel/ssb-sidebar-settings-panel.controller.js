@@ -27,7 +27,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.moveSection = pVm.moveSection;
     vm.duplicateSection = pVm.duplicateSection;
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
-    vm.customerTags = pVm.customerTags;
+    vm.contactTags = pVm.contactTags;
     vm.constructVideoUrl = pVm.constructVideoUrl;
     vm.donationProductTags = pVm.donationProductTags;
 
@@ -168,7 +168,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
         console.log('setTags >>>');
         if(vm.component && vm.component.tags){
           _.each(vm.component.tags, function (tag , index) {
-            var matchingTag = _.findWhere(vm.customerTags, {
+            var matchingTag = _.findWhere(vm.contactTags, {
               data: tag
             });
             if(matchingTag)
@@ -182,7 +182,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
               });
             }
           });
-          vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
+          vm.contactTags = _.uniq(_customerTags, function(c) { return c.label; })
         }
     }
 
@@ -240,7 +240,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     function init(element) {
         vm.element = element;
-        vm.setTags(vm.customerTags);
+        vm.setTags(vm.contactTags);
     }
 }
 
