@@ -1393,6 +1393,7 @@ module.exports = {
                 });
                 if(sectionsToBeAdded.length > 0) {
                     self.log.debug('Adding these global sections:', sectionsToBeAdded);
+                    //TODO: this query should only match pages that don't already have the sectionsToBeAdded
                     var query = {
                         accountId:accountId,
                         latest:true,
@@ -1433,18 +1434,33 @@ module.exports = {
                                                 });
                                                 pageSections.splice(insertAt, numberToRemove, section);
                                             } else {
-                                               //put it next to last
 
-                                                var lastSection = pageSections[pageSections.length - 1];
-                                                if(lastSection && lastSection.get('name') === 'Footer'){
-                                                   insertAt = pageSections.length - 1;
+                                                var alreadyOnPage = false;
+
+                                                for (var i = 0; i < pageSections.length; i++) {
+                                                    if (pageSections[i].id() === section.id()) {
+                                                        self.log.debug('addNewGlobals: yes, global already on page, do not add again');
+                                                        alreadyOnPage = true;
+                                                        break;
+                                                    }
                                                 }
-                                                else
-                                                {
-                                                    insertAt = pageSections.length;
+
+                                                if (!alreadyOnPage) {
+
+                                                    //put it next to last, if there's a footer
+                                                    var lastSection = pageSections[pageSections.length - 1];
+
+                                                    if (lastSection && lastSection.get('name') === 'Footer'){
+                                                        insertAt = pageSections.length - 1;
+                                                    } else {
+                                                        insertAt = pageSections.length;
+                                                    }
+
+                                                    self.log.debug('Inserting at ' + insertAt);
+
+                                                    pageSections.splice(insertAt, 0, section);
                                                 }
-                                                self.log.debug('Inserting at ' + insertAt);
-                                                pageSections.splice(insertAt, 0, section);
+
                                             }
                                         });
                                         //done with this page
