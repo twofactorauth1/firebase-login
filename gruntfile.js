@@ -200,6 +200,23 @@ module.exports = function(grunt) {
             vendor: {
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/admin_body_scripts.jade'),
                 dest: 'public/admin/assets/js/admin-vendor-indigenous.js'
+            },
+            css: {
+                src: [
+                    'public/js/libs/font-awesome/css/font-awesome.min.css',
+                    'public/js/libs/bootstrap/dist/css/bootstrap.min.css',
+                    'public/js/libs/bootstrap-social/bootstrap-social.css',
+                    'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css',
+                    'public/js/libs/jqcloud2/dist/jqcloud.min.css',
+                    'public/js/libs/angular-wizard/dist/angular-wizard.min.css',
+                    'public/js/libs/animate.css/animate.min.css',
+                    'public/js/libs/slick-carousel/slick/slick.css',
+                    'public/js/libs/slick-carousel/slick/slick-theme.css',
+                    'public/js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css',
+                    'public/js/libs/froala-wysiwyg-editor/css/froala_style.min.css'
+                ],
+                dest:'public/css/vendor.css',
+                nonull:true
             }
         },
 
@@ -594,7 +611,7 @@ module.exports = function(grunt) {
 
 
     grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
-    grunt.registerTask('local', ['less', 'postcss']);
+    grunt.registerTask('local', ['less', 'postcss', 'concat:css']);
 
     /*
      * This task is run by CI.
