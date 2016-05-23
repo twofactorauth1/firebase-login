@@ -78,6 +78,7 @@
         vm.setInitialCheckoutState = setInitialCheckoutState;
         vm.setDefaultValues = setDefaultValues;
         vm.checkDateValidityFn = checkDateValidityFn;
+        vm.formInvalidFn = formInvalidFn;
 
         vm.nthRow = 'nth-row';
 
@@ -729,9 +730,11 @@
         }
 
         function augmentCompletePercentage(percentage) {
-
-            vm.completePercentageStyle = percentage + '%';
-
+            if (percentage > 100) {
+              vm.completePercentageStyle = 100 + '%';
+            } else {
+              vm.completePercentageStyle = percentage + '%';
+            }
         }
 
         function getDonations(id) {
@@ -848,6 +851,16 @@
             return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
           } else {
             return true;
+          }
+        };
+
+        function formInvalidFn(form) {
+          if (!vm.formBuilder.amount) {
+            return true;
+          } else if (!vm.isAnonymous && !form.$valid) {
+            return true;
+          } else {
+            return false;
           }
         };
 
