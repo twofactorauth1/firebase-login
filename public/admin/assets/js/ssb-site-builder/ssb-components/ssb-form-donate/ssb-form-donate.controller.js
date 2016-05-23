@@ -78,6 +78,7 @@
         vm.setInitialCheckoutState = setInitialCheckoutState;
         vm.setDefaultValues = setDefaultValues;
         vm.checkDateValidityFn = checkDateValidityFn;
+        vm.formInvalidFn = formInvalidFn;
 
         vm.nthRow = 'nth-row';
 
@@ -317,6 +318,7 @@
                     if (!vm.component.redirect) {
                         vm.formSuccess = true;
                         vm.formBuilder = {};
+                        $('#donation-card-details').find("input[type=text]").val("");
                         form.$setPristine(true);
 
                         $timeout(function() {
@@ -406,7 +408,7 @@
                 fromEmail: vm.component.fromEmail,
                 fromName: vm.component.fromName,
                 contact_type: vm.component.contact_type,
-                tags: vm.component.tags,
+                tags: vm.product.tags ? _.uniq(_.flatten([vm.product.tags, vm.component.tags])) : _.uniq(vm.component.tags),
                 uniqueEmail: vm.component.uniqueEmail || false,
                 activity: {
                     activityType: 'DONATE_FORM',
@@ -729,9 +731,11 @@
         }
 
         function augmentCompletePercentage(percentage) {
-
-            vm.completePercentageStyle = percentage + '%';
-
+            if (percentage > 100) {
+              vm.completePercentageStyle = 100 + '%';
+            } else {
+              vm.completePercentageStyle = percentage + '%';
+            }
         }
 
         function getDonations(id) {
@@ -755,6 +759,17 @@
             vm.formBuilder = {};
             vm.checkoutModalState = 1;
             vm.getDonations(vm.product._id);
+
+            if (vm.component.redirect) {
+              if (vm.component.redirectType === 'page') {
+                  window.location.href = vm.component.redirectUrl;
+              }
+              if (vm.component.redirectType === 'external') {
+                  window.location.href = 'http://' + vm.component.redirectUrl;
+              }
+            } else {
+              $('#donation-card-details').find("input[type=text]").val("");
+            }
         }
 
         function deleteOrderFn(order) {
@@ -848,6 +863,16 @@
             return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
           } else {
             return true;
+          }
+        };
+
+        function formInvalidFn(form) {
+          if (!vm.formBuilder.amount) {
+            return true;
+          } else if (!vm.isAnonymous && !form.$valid) {
+            return true;
+          } else {
+            return false;
           }
         };
 
