@@ -1179,7 +1179,6 @@ module.exports = {
                     //if we are not working with an object for some reason, fix it.
                     if(!section ||  typeof section.id === 'undefined') {
                         section = new $$.m.ssb.Section(section);
-                        section.set('accountId', accountId);
                     }
 
                     if (section.get('accountId') === 0 || section.get('accountId')=== null) {
