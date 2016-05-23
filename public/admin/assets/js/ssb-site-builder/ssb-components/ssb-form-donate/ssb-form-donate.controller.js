@@ -758,6 +758,15 @@
             vm.formBuilder = {};
             vm.checkoutModalState = 1;
             vm.getDonations(vm.product._id);
+
+            if (vm.component.redirect) {
+              if (vm.component.redirectType === 'page') {
+                  window.location.href = vm.component.redirectUrl;
+              }
+              if (vm.component.redirectType === 'external') {
+                  window.location.href = 'http://' + vm.component.redirectUrl;
+              }
+            }
         }
 
         function deleteOrderFn(order) {
