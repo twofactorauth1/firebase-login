@@ -318,6 +318,7 @@
                     if (!vm.component.redirect) {
                         vm.formSuccess = true;
                         vm.formBuilder = {};
+                        $('#donation-card-details').find("input[type=text]").val("");
                         form.$setPristine(true);
 
                         $timeout(function() {
@@ -766,6 +767,8 @@
               if (vm.component.redirectType === 'external') {
                   window.location.href = 'http://' + vm.component.redirectUrl;
               }
+            } else {
+              $('#donation-card-details').find("input[type=text]").val("");
             }
         }
 
