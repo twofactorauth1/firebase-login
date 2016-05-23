@@ -12,7 +12,7 @@
                     <div class="row" >
                         <div class="col-xs-12 temp settings no-offset-top" data-edit ng-style="{'max-width': calcMaxWidth('contact-panel-{{component._id}}'),
                         'width': component.boxProperties.width ? component.boxProperties.width : '',
-                        'height': component.boxProperties.height ? component.boxProperties.height : '', 'background' : boxColor
+                        'height': component.boxProperties.height ? component.boxProperties.height : '', 'background' : component.boxColor
                         }" tab-active="address" data-id="{{component._id}}" resizable r-directions="['bottom', 'right']">
                             <div >
                             <span class="blocked" ng-bind-html="contactAddress | unsafe"></span>
