@@ -151,6 +151,7 @@ module.exports = {
     groupAdminUserIds: groupAdminUserIDs,
     nonProduction:nonProduction,
     trialLength: 30,
+    internalSubscription:'EVERGREEN',
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {
