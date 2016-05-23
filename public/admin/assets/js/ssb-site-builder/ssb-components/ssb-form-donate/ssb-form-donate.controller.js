@@ -729,9 +729,11 @@
         }
 
         function augmentCompletePercentage(percentage) {
-
-            vm.completePercentageStyle = percentage + '%';
-
+            if (percentage > 100) {
+              vm.completePercentageStyle = 100 + '%';
+            } else {
+              vm.completePercentageStyle = percentage + '%';
+            }
         }
 
         function getDonations(id) {

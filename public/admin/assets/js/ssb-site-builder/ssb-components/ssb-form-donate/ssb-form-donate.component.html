@@ -21,8 +21,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="ssb-form-donate-progress-percentage" ng-class="{ 'on': vm.total }">
+                            <div class="ssb-form-donate-progress-percentage" ng-class="{ 'on': vm.total }" ng-show='vm.percentage <= 100'>
                                 {{vm.percentage}}% raised of ${{vm.component.productSettings.goal}}
+                            </div>
+                            <div class="ssb-form-donate-progress-percentage" ng-class="{ 'on': vm.total }" ng-show='vm.percentage > 100'>
+                                Exceeded by {{vm.percentage - 100}}%
                             </div>
                         </div>
                         <div class="center margin-top-30 col-sm-12">
