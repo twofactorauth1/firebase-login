@@ -58,7 +58,7 @@
                   <label style="margin-top:10px" ng-if="newLink.linkType=='section'" for="link-url">Select Section</label>
                   <select style="text-transform:capitalize" ng-if="newLink.linkType=='section'" placeholder="Select a section" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
                       <option value="" disabled>Select a Section</option>
-                      <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}">{{setLinkTitle(component.type, $index)}}</option>
+                      <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component._id" value="{{component._id}}">{{setLinkTitle(component.type, $index)}}</option>
                   </select>
                   <label ng-if="newLink.linkType=='page'" for="link-url">Select Page</label>
                   <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
@@ -136,9 +136,9 @@
                                       <label style="margin-top:10px" ng-if="linkType[$index]=='section'" for="link-url">Select Section</label>
                                       <label ng-if="linkType[$index]=='page'" for="link-url">Select Page</label>
                                       <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
-                                      <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" ng-change="initializeEditLinks(link.linkTo)" placeholder="Select a section" class="form-control margin-bottom-0">
+                                      <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" ng-change="initializeEditLinks(link.linkTo, false)" placeholder="Select a section" class="form-control margin-bottom-0">
                                           <option value="" disabled>Select a Section</option>
-                                          <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
+                                          <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component._id" value="{{component._id}}" ng-selected="{{link.linkTo.data === (component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                       </select>
                                       <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="setPageLinkTitle(link.linkTo.data, true, link, '{{link.linkTo.data}}')" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                           <option value="" disabled>Select a Page</option>
@@ -218,7 +218,7 @@
                                   <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
                                   <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a section" ng-change="initializeEditLinks(link.linkTo)" class="form-control margin-bottom-0">
                                       <option value="" disabled>Select a Section</option>
-                                      <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
+                                      <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component._id" value="{{component._id}}" ng-selected="{{link.linkTo.data === (component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                   </select>
                                   <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                       <option value="" disabled>Select a Page</option>
