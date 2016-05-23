@@ -289,24 +289,36 @@ module.exports = {
 
                 });
             },
+
             function getGlobalHeader(website, theme, template, sections, cb){
                 var query = {
-                    accountId:accountId,
-                    globalHeader:true
+                   $query: {
+                       accountId:accountId,
+                       globalHeader:true
+                   },
+                   $orderby: {
+                       'modified.date' : -1
+                   }
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
-                    if(err) {
-                        self.log.error(accountId, userId, 'Error finding global header:', err);
-                        cb(err);
-                    } else {
-                        cb(null, website, theme, template, sections, section);
-                    }
+                   if(err) {
+                       self.log.error(accountId, userId, 'Error finding global header:', err);
+                       cb(err);
+                   } else {
+                       cb(null, website, theme, template, sections, section);
+                   }
                 });
             },
+
             function getGlobalFooter(website, theme, template, sections, header, cb){
                 var query = {
+                    $query: {
                     accountId:accountId,
                     globalFooter:true
+                },
+                $orderby: {
+                    'modified.date' : -1
+                }
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
@@ -317,6 +329,7 @@ module.exports = {
                     }
                 });
             },
+
             function getGlobalSections(website, theme, template, sections, header, footer, cb){
                 var query = {
                     accountId:accountId,
