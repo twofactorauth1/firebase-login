@@ -1088,7 +1088,7 @@
                     ssbService.website.themeId = theme._id;
                     ssbService.website.theme = theme;
 
-                    if (keepCurrentOverrides || (ssbService.website.themeOverrides && !angular.isDefined(ssbService.website.themeOverrides.styles))) {
+                    if (keepCurrentOverrides || !ssbService.website.themeOverrides || (ssbService.website.themeOverrides && !angular.isDefined(ssbService.website.themeOverrides.styles))) {
                         $timeout(function() {
                             ssbService.website.themeOverrides = theme;
                         },0);
