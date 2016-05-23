@@ -408,7 +408,7 @@
                 fromEmail: vm.component.fromEmail,
                 fromName: vm.component.fromName,
                 contact_type: vm.component.contact_type,
-                tags: vm.component.tags,
+                tags: vm.product.tags ? _.uniq(_.flatten([vm.product.tags, vm.component.tags])) : _.uniq(vm.component.tags),
                 uniqueEmail: vm.component.uniqueEmail || false,
                 activity: {
                     activityType: 'DONATE_FORM',
