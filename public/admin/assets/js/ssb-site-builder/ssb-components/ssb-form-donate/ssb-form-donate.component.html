@@ -294,7 +294,7 @@
                                 <button type="button" class="btn btn-primary" ng-disabled="formBuilder.$invalid">{{vm.component.modalSettings.submitBtnText}}</button>
                             </div> -->
                             <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 1">
-                                <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="vm.setCheckoutState(2)"> Next <i class="fa fa-chevron-right"></i></button>
+                                <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="vm.setCheckoutState(2)" ng-disabled='vm.formInvalidFn(formBuilder)'> Next <i class="fa fa-chevron-right"></i></button>
                             </div>
                             <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 2">
                                 <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="vm.setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back</button>
