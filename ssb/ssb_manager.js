@@ -1165,14 +1165,12 @@ module.exports = {
                 _.each(sections, function(section){
                     //if we are not working with an object for some reason, fix it.
                     if(!section ||  typeof section.id === 'undefined') {
-                        var sectionId = null;
                         section = new $$.m.ssb.Section(section);
                         section.set('accountId', accountId);
                     }
 
                     if (section.get('accountId') === 0 || section.get('accountId')=== null) {
                         console.log(section);
-                        CRRRRRRR
                         var id = $$.u.idutils.generateUUID();
                         section.set('_id', id);
                         section.set('anchor', id);
