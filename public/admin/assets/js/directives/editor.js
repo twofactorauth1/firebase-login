@@ -53,6 +53,14 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         };
 
+        $rootScope.$on('$destroyFroalaInstances', function (event) {
+            var elem = angular.element(element[0].querySelector('.editable'))[0];
+            if($(elem).data('froala.editor')){
+                var editor = $(elem).data('froala.editor');
+                editor.destroy();
+            }
+        });
+
 
       var elem = angular.element(element[0].querySelector('.editable'))[0];
       var componentId = $(elem).closest('[component]').attr('id');

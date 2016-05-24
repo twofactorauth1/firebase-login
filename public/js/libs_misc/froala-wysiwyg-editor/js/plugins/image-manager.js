@@ -906,7 +906,7 @@
         undo: !0,
         focus: !1,
         callback: function() {
-            this.image.setSize()
+            this.image.setSize();
         }
     })
 });

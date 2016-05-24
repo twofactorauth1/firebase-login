@@ -308,6 +308,7 @@
          * TODO: @sanjeev to document "isSettings" param
          */
 		function savePage(page, isSettings) {
+            $rootScope.$broadcast('$destroyFroalaInstances');
             function success(data) {
                 if(ssbService.pages && ssbService.pages[page.handle] && data.title){
                     ssbService.pages[page.handle].title = data.title;
