@@ -292,33 +292,35 @@ module.exports = {
 
             function getGlobalHeader(website, theme, template, sections, cb){
                 var query = {
-                   $query: {
+                    $query: {
                        accountId:accountId,
-                       globalHeader:true
-                   },
-                   $orderby: {
+                       globalHeader:true,
+                       latest: true
+                    },
+                    $orderby: {
                        'modified.date' : -1
-                   }
+                    }
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
-                   if(err) {
+                    if(err) {
                        self.log.error(accountId, userId, 'Error finding global header:', err);
                        cb(err);
-                   } else {
-                       cb(null, website, theme, template, sections, section);
-                   }
+                    } else {
+                        cb(null, website, theme, template, sections, section);
+                    }
                 });
             },
 
             function getGlobalFooter(website, theme, template, sections, header, cb){
                 var query = {
                     $query: {
-                    accountId:accountId,
-                    globalFooter:true
-                },
-                $orderby: {
-                    'modified.date' : -1
-                }
+                        accountId:accountId,
+                        globalFooter:true,
+                        latest: true
+                    },
+                    $orderby: {
+                        'modified.date' : -1
+                    }
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
@@ -1186,6 +1188,7 @@ module.exports = {
                         var id = $$.u.idutils.generateUUID();
                         section.set('_id', id);
                         section.set('anchor', id);
+
                     }
                     section.set('accountId', accountId);
                     dereferencedSections.push(section);
@@ -1248,6 +1251,10 @@ module.exports = {
                         //this is a new section...
                         section.set('_v', 0);
                         section.set('latest', true);
+                        section.set('modified', {
+                            date: new Date(),
+                            by: userId
+                        });
                         sectionDao.saveOrUpdate(section, function(err, value){
                             if(err) {
                                 self.log.error(accountId, userId,'Error updating section:', err);
@@ -1920,6 +1927,10 @@ module.exports = {
                         }
                     } else {
                         //this is a new section...
+                        section.set('modified', {
+                            date: new Date(),
+                            by: userId
+                        });
                         sectionDao.saveOrUpdate(section, function(err, value){
                             if(err) {
                                 self.log.error(accountId, userId,'Error updating section:', err);
