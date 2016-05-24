@@ -941,3 +941,6 @@ iframe.fr-iframe {
     min-height: 200px;
     padding-top: 75px !important;
 }
+a.fr-command[data-param1='PRE'] {
+    background: inherit !important;
+}
