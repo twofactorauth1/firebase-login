@@ -376,7 +376,7 @@
 
     this.getAllContactTags = function (contacts, fn) {
       var contactTags = contactConstant.contact_tags.dp;
-        var contactTags = [];
+        var extraContactTags = [];
         _.each(contacts, function (contact) {
           if (contact.tags) {
             _.each(contact.tags, function (tag) {
@@ -384,7 +384,7 @@
                 return type.data === tag;
               });
               if (!type) {
-                contactTags.push({
+                extraContactTags.push({
                   label : tag,
                   data : tag
                 })
@@ -392,7 +392,7 @@
             });
           }
         })
-      contactTags = _.uniq(contactTags.concat(contactTags), function(c) { return c.label; })
+      contactTags = _.uniq(contactTags.concat(extraContactTags), function(c) { return c.label; })
       fn(contactTags);
     };
 

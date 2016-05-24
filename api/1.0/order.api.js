@@ -281,14 +281,24 @@ _.extend(api.prototype, baseApi.prototype, {
                 var amount = req.body.amount;
                 var reason = req.body.reason;
                 //var accessToken = self.getAccessToken(req);
-                self.getStripeTokenFromAccount(req, function(err, accessToken){
-                    orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){
-                        self.log.debug(accountId, userId, '<< refundOrder');
-                        self.sendResultOrError(res, err, order, 'Error refunding order');
-                        self.createUserActivity(req, 'REFUND_ORDER', null, {id: orderId}, function(){});
-                    });
+                dao.getById(orderId, $$.m.Order, function (err, order) {
+                  if (err) {
+                    self.sendResultOrError(res, err, order, 'Error finding order for refund');
+                  } else {
+                    var payment_details = order.get('payment_details');
+                    if (payment_details.payKey) {
+                      self.sendResultOrError(res, 'We currently do not support refunding payments from Paypal. Please log into your paypal account and initiate the refund from there.', order, 'Error refunding order');
+                    } else {
+                      self.getStripeTokenFromAccount(req, function(err, accessToken){
+                          orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){
+                              self.log.debug(accountId, userId, '<< refundOrder');
+                              self.sendResultOrError(res, err, order, 'Error refunding order');
+                              self.createUserActivity(req, 'REFUND_ORDER', null, {id: orderId}, function(){});
+                          });
+                      });
+                    }
+                  }
                 });
-
             }
         });
 

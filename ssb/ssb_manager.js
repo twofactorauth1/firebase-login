@@ -289,24 +289,38 @@ module.exports = {
 
                 });
             },
+
             function getGlobalHeader(website, theme, template, sections, cb){
                 var query = {
-                    accountId:accountId,
-                    globalHeader:true
+                    $query: {
+                       accountId:accountId,
+                       globalHeader:true,
+                       latest: true
+                    },
+                    $orderby: {
+                       'modified.date' : -1
+                    }
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
-                        self.log.error(accountId, userId, 'Error finding global header:', err);
-                        cb(err);
+                       self.log.error(accountId, userId, 'Error finding global header:', err);
+                       cb(err);
                     } else {
                         cb(null, website, theme, template, sections, section);
                     }
                 });
             },
+
             function getGlobalFooter(website, theme, template, sections, header, cb){
                 var query = {
-                    accountId:accountId,
-                    globalFooter:true
+                    $query: {
+                        accountId:accountId,
+                        globalFooter:true,
+                        latest: true
+                    },
+                    $orderby: {
+                        'modified.date' : -1
+                    }
                 };
                 sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
@@ -317,6 +331,7 @@ module.exports = {
                     }
                 });
             },
+
             function getGlobalSections(website, theme, template, sections, header, footer, cb){
                 var query = {
                     accountId:accountId,
@@ -329,6 +344,7 @@ module.exports = {
                         cb(err);
                     } else {
                         //var latestSections = self.getLatestSections(gsections);
+
                         cb(null, website, theme, template, sections, header, footer, gsections);
                     }
                 });
@@ -348,7 +364,7 @@ module.exports = {
                            return true;
                        }
                    });
-                   if(gsections){
+                    if(gsections){
                         gsections = _.filter(gsections, function(section){
                             if(section.get('name') !== 'Header') {
                                return true;
@@ -1120,6 +1136,7 @@ module.exports = {
                 });
             },
             function getGlobalSections(existingPage, cb) {
+
                 checkTime = moment();
                 timingLog.warn('getGlobalSections: ' + checkTime.diff(startTime));
                 startTime = checkTime;
@@ -1167,10 +1184,13 @@ module.exports = {
                     if(!section ||  typeof section.id === 'undefined') {
                         section = new $$.m.ssb.Section(section);
                     }
+
                     if (section.get('accountId') === 0 || section.get('accountId')=== null) {
+                        console.log(section);
                         var id = $$.u.idutils.generateUUID();
                         section.set('_id', id);
                         section.set('anchor', id);
+
                     }
                     section.set('accountId', accountId);
                     dereferencedSections.push(section);
@@ -1233,6 +1253,10 @@ module.exports = {
                         //this is a new section...
                         section.set('_v', 0);
                         section.set('latest', true);
+                        section.set('modified', {
+                            date: new Date(),
+                            by: userId
+                        });
                         sectionDao.saveOrUpdate(section, function(err, value){
                             if(err) {
                                 self.log.error(accountId, userId,'Error updating section:', err);
@@ -1381,7 +1405,6 @@ module.exports = {
                 timingLog.warn('addNewGlobals: ' + checkTime.diff(startTime));
                 startTime = checkTime;
                 var sectionsToBeAdded = [];
-
                 _.each(updatedSections, function(section){
                     var id = section.id();
                     var foundSection = _.find(globalSections, function(gSection){
@@ -1905,6 +1928,10 @@ module.exports = {
                         }
                     } else {
                         //this is a new section...
+                        section.set('modified', {
+                            date: new Date(),
+                            by: userId
+                        });
                         sectionDao.saveOrUpdate(section, function(err, value){
                             if(err) {
                                 self.log.error(accountId, userId,'Error updating section:', err);
@@ -2832,6 +2859,56 @@ module.exports = {
                 });
                 sectionDao.saveSectionObjects(dereffedSections, cb);
             },
+
+            function getGlobalSections(sections, cb){
+                var query = {
+                    accountId:accountId,
+                    global:true,
+                    latest:true
+                };
+                sectionDao.findMany(query, $$.m.ssb.Section, function(err, gsections){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding global sections:', err);
+                        cb(err);
+                    } else {
+                        // Filter header
+                        if(gsections){
+                            gsections = _.filter(gsections, function(section){
+                                if(section.get('name') !== 'Header') {
+                                   return true;
+                                }
+                            });
+                        }
+                        // Filter footer
+                        if(gsections){
+                            gsections = _.filter(gsections, function(section){
+                                if(section.get('name') !== 'Footer') {
+                                   return true;
+                                }
+                            });
+                        }
+                        // append global sections
+                        if(gsections){
+                            var insertAt = 0
+                            if(sections.length){
+                                var lastSection = sections[sections.length - 1];
+                                console.log(lastSection)
+                                if (lastSection && lastSection.get('name') === 'Footer'){
+                                    insertAt = sections.length - 1;
+                                } else {
+                                    insertAt = sections.length;
+                                }
+                                self.log.debug('Inserting at ' + insertAt);
+                            }
+                            _.each(gsections, function(section){
+                                sections.splice(insertAt, 0, section);
+                            });
+                        }
+                        cb(null, sections);
+                    }
+                });
+            },
+
             function(savedSections, cb) {
                 var refAry = [];
                 _.each(savedSections, function(section){
@@ -2839,6 +2916,7 @@ module.exports = {
                 });
                 cb(null, refAry);
             }
+
         ], function done(err, sectionRefAry){
             fn(err, sectionRefAry);
         });
