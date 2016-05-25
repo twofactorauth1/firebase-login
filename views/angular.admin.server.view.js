@@ -6,6 +6,7 @@
  */
 
 var BaseView = require('./base.server.view');
+var cmsManager = require('../cms/cms_manager');
 var logger = $$.g.getLogger('angular.admin.server.veiw');
 var segmentioConfig = require('../configs/segmentio.config.js');
 var _req = null;
@@ -71,12 +72,35 @@ _.extend(view.prototype, BaseView.prototype, {
                 //TODO: save this to the user for next time.
             }
             logger.trace('<< show');
-            //console.dir(data);
-            self.resp.render('admin', data);
-            //logger.debug('_cleanUp');
-            self.cleanUp();
-            //logger.debug('cleanUp_');
-            data = self = null;
+
+            cmsManager.listBlogPosts(data.account._id, 50, [$$.m.BlogPost.status.PUBLISHED], function (err, value) {
+
+                if (err) {
+                    console.error('<< angular.admin.server.view: listBlogPosts error ', err);
+                } else {
+                    data.serverProps.posts = JSON.stringify(_.map(value, function(val){ return val.toJSON(); }));
+                }
+
+                cmsManager.getPagesByWebsiteId(data.account.website.websiteId, data.account._id, function(err, value) {
+
+                    if (err) {
+                        console.error('<< angular.admin.server.view: getPagesByWebsiteId error ', err);
+                    } else {
+                        data.serverProps.pages = JSON.stringify(_.map(value, function(val){ return val.toJSON(); }));
+                    }
+
+                    //console.dir(data);
+                    self.resp.render('admin', data);
+                    //logger.debug('_cleanUp');
+                    self.cleanUp();
+                    //logger.debug('cleanUp_');
+                    data = self = null;
+
+                })
+
+            });
+
+
         });
     }
 });

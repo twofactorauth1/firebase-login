@@ -5,4 +5,12 @@
     * Please contact info@indigenous.io for approval or questions.
 
 if(serverProps)
-    script #{setServerProps(serverProps)}
+    script.
+        window.indigenous = window.indigenous || {};
+        window.indigenous.precache = window.indigenous.precache || {};
+        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
+        window.indigenous.precache.siteData.posts = !{serverProps.posts};
+        window.indigenous.precache.siteData.pages = !{serverProps.pages};
+
+    script.
+        #{setServerProps(serverProps)}

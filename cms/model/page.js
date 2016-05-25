@@ -121,7 +121,7 @@ var page = $$.m.ModelBase.extend({
 
             latest:true,
 
-            layout: 'ssb-1-col',
+            layout: 'ssb-layout__1-col',
 
             layoutModifiers: {},
 

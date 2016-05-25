@@ -255,6 +255,14 @@
          */
 		function getPages() {
 
+            var deferred = $q.defer();
+
+            if (!ssbService.pages && window.indigenous.precache.siteData.pages) {
+                ssbService.pages = window.indigenous.precache.siteData.pages;
+                deferred.resolve(ssbService.pages);
+                return ssbRequest(deferred.promise);
+            }
+
 			function success(data) {
 				ssbService.pages = data;
 			}
