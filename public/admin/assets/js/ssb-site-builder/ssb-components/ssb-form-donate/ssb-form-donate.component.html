@@ -30,7 +30,7 @@
                         </div>
                         <div class="center margin-top-30 col-sm-12">
                             <button ng-disabled="!vm.component.productSettings || !vm.checkDateValidityFn()" ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" data-toggle="modal" data-target="#form-donate-modal-{{vm.component._id}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
-                                class="btn btn-form btn-default pull-right btn-block">
+                                class="btn btn-form pull-right btn-block">
                                 <span elem ng-model="vm.component.submitBtn" ng-show='vm.checkDateValidityFn()'></span>
                                 <span ng-hide='vm.checkDateValidityFn()'>Time span expired</span>
                             </button>
