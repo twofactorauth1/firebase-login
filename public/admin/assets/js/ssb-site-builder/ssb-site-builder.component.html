@@ -119,13 +119,16 @@
                     <div class="well empty-page center">
                         <h1>This Page is Empty.</h1>
                         <h4>Add some sections and start editing!</h4>
-                        <button class="ssb-empty-page-add-btn btn btn-info margin-top-15" ng-click="vm.uiState.openSidebarPanel = 'add'">Add Section</button>
+                        <button class="ssb-empty-page-add-btn btn btn-info margin-top-15" ng-click="vm.uiState.openSidebarPanel = 'add'">Add Sections</button>
                     </div>
                     <div class="clearfix mb15"></div>
                 </li>
             </ul>
 
-			<div class="sortable-page-content" ng-sortable="vm.uiState.sortableListPageContentConfig" ng-if="vm.state.page.sections.length">
+			<div
+                class="sortable-page-content"
+                ng-sortable="vm.uiState.sortableListPageContentConfig"
+                ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-1-col-layout' || !vm.state.page.layout)">
 
 				<ssb-page-section
 					ng-repeat="section in vm.state.page.sections"
@@ -139,6 +142,75 @@
 				</ssb-page-section>
 
 			</div>
+
+            <div
+                class="sortable-page-content ssb-layout__header_2-col_footer"
+                ng-sortable="vm.uiState.sortableListPageContentConfig"
+                ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-layout__header_2-col_footer')">
+
+                <div class="ssb-page-layout-row row">
+                    <div class="col-xs-12" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['header'].length }">
+                        <ssb-page-section
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['header']"
+                            section="vm.state.page.sections[sectionIndex]"
+                            index="$index"
+                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            class="ssb-page-section"
+                            state="vm.state"
+                            ui-state="vm.uiState"
+                            ng-if="section.visibility || vm.section.visibility === undefined">
+                        </ssb-page-section>
+                        <h1 ng-if="!vm.state.page.layoutModifiers['header'].length">Add Sections</h1>
+                    </div>
+                </div>
+
+                <div class="ssb-page-layout-row row">
+                    <div class="col-xs-12 col-md-8" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['2-col-1'].length }">
+                        <ssb-page-section
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['2-col-1']"
+                            section="vm.state.page.sections[sectionIndex]"
+                            index="$index"
+                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            class="ssb-page-section"
+                            state="vm.state"
+                            ui-state="vm.uiState"
+                            ng-if="section.visibility || vm.section.visibility === undefined">
+                        </ssb-page-section>
+                        <h1 ng-if="!vm.state.page.layoutModifiers['2-col-1'].length">Add Sections</h1>
+                    </div>
+
+                    <div class="col-xs-12 col-md-4" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['2-col-2'].length }">
+                        <ssb-page-section
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['2-col-2']"
+                            section="vm.state.page.sections[sectionIndex]"
+                            index="$index"
+                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            class="ssb-page-section"
+                            state="vm.state"
+                            ui-state="vm.uiState"
+                            ng-if="section.visibility || vm.section.visibility === undefined">
+                        </ssb-page-section>
+                        <h1 ng-if="!vm.state.page.layoutModifiers['2-col-2'].length">Add Sections</h1>
+                    </div>
+                </div>
+
+                <div class="ssb-page-layout-row row">
+                    <div class="col-xs-12" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['footer'].length }">
+                        <ssb-page-section
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['footer']"
+                            section="vm.state.page.sections[sectionIndex]"
+                            index="$index"
+                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            class="ssb-page-section"
+                            state="vm.state"
+                            ui-state="vm.uiState"
+                            ng-if="section.visibility || vm.section.visibility === undefined">
+                        </ssb-page-section>
+                        <h1 ng-if="!vm.state.page.layoutModifiers['footer'].length">Add Sections</h1>
+                    </div>
+                </div>
+
+            </div>
 
 		</div>
 

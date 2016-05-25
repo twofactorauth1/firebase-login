@@ -1,28 +1,8 @@
 <div class="row padding-10">
-    <div class="form-group add-image" ng-if="!component.src">
-      <div class="btn-wrap">
-        <input id="abi" ng-model="component.src" type="button" class="pull-right btn btn-primary" value="Add Image" ng-click="vm.addImage(vm.uiState.activeSectionIndex, vm.uiState.activeComponentIndex)">
-      </div>
-    </div>
-    <div class="bgimg" id="bgimg" ng-if="component.src">
-      <i class="fa fa-close" ng-click="vm.removeImage(component)"></i>
-      <img ng-src="{{component.src}}" ng-model="component.src" ng-click="vm.addImage(vm.uiState.activeSectionIndex, vm.uiState.activeComponentIndex)" class="img-thumbnail">
-    </div>
-</div>
 
-<div class="row padding-10">
-    <div class="form-group">
-        <label for="ssb-component-image-settings-alt-text-{{vm.uiState.activeSectionIndex}}">
-            <h5>
-                Image Title <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set a descriptive image title for search engines."><i class="fa fa-info-circle" /></span>
-            </h5>
-        </label>
-        <br>
-        <input id="ssb-component-image-settings-alt-text-{{vm.uiState.activeSectionIndex}}" type="text" ng-model="component.alttext">
-    </div>
-</div>
-
-<div class="row padding-10">
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="fa fa-magic display-ib"></i> Style
+    </button>
 
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Size &amp; Padding', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="fa fa-arrows-alt display-ib"></i> Size &amp; Padding
@@ -31,6 +11,5 @@
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Settings', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="fa fa-gear display-ib"></i> Settings
     </button>
-
 
 </div>
