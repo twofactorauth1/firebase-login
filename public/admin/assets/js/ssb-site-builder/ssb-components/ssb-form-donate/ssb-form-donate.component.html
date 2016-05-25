@@ -91,7 +91,7 @@
                                         </button>
                                         <div class="flex-break">
                                             <label class="donation-amount-other-label control-label padding-right-20">Your donation amount:</label>
-                                            <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
+                                            <input type='number' id='form-donate-modal-amount-{{vm.component._id}}' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' min='{{vm.product.donationMinimumAmount || 0}}' max='{{vm.product.donationMaximumAmount || 9999999999}}' />
                                         </div>
                                     </div>
                                     <hr />

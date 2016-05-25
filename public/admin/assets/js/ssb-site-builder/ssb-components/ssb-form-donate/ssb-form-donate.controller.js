@@ -855,6 +855,10 @@
             return true;
           }
 
+          if ($('#form-donate-modal-amount-' + vm.component._id).hasClass('ng-invalid')) {
+            return false;
+          }
+
           if (!vm.component.productSettings.timePeriod.enabled) {
             return true;
           }
