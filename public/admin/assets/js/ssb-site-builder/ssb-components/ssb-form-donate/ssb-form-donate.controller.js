@@ -855,6 +855,10 @@
             return true;
           }
 
+          if (!vm.component.productSettings.timePeriod.enabled) {
+            return true;
+          }
+
           if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
             return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate));
           } else if (vm.component.productSettings.timePeriod.startDate) {
