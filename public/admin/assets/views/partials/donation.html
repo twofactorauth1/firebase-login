@@ -6,17 +6,17 @@
         <div class="panel-body">
             <form name="donationForm">
                 <div class="col-sm-6">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Default Donation Amount</label>
                         <input class="form-control" type="text" placeholder="Default Donation Amount" ng-model="product.donationDefaultAmount">
-                    </div>
+                    </div> -->
                     <div class="form-group" ng-class="{'has-error': donationForm.min_amount.$error.required}">
                         <label>Minimum Donation Amount</label>
-                        <input class="form-control" name="min_amount" type="text" placeholder="Minimum Donation Amount" ng-model="product.donationMinimumAmount" required='true'>
+                        <input class="form-control" name="min_amount" type="text" placeholder="Minimum Donation Amount" ng-model="product.donationMinimumAmount">
                     </div>
                     <div class="form-group" ng-class="{'has-error': donationForm.max_amount.$error.required}">
                         <label>Maximum Donation Amount</label>
-                        <input class="form-control" name="max_amount" type="text" placeholder="Maximum Donation Amount" ng-model="product.donationMaximumAmount" required='true'>
+                        <input class="form-control" name="max_amount" type="text" placeholder="Maximum Donation Amount" ng-model="product.donationMaximumAmount">
                     </div>
                 </div>
                 <div class="col-sm-6">
