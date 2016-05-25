@@ -10,9 +10,10 @@ function ssbBlogPostCardComponent() {
   	controllerAs: 'vm',
   	bindToController: true,
     scope: {
-      ssbEditor: '=',
-      componentClass: '&',
-      component: '='
+        ssbEditor: '=',
+        componentClass: '&',
+        component: '=',
+        post: '=?'
     },
     templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post-card/ssb-blog-post-card.component.html',
     replace: true,

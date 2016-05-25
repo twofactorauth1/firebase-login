@@ -2,6 +2,11 @@
 
     <h1>Blog Post List</h1>
 
+    <ssb-blog-post-card
+        post="post"
+        ng-repeat="post in vm.blog.posts track by $index">
+    </ssb-blog-post-card>
+
 <!--     <div class="title">
         <div elem ng-model="component.title"></div>
     </div>

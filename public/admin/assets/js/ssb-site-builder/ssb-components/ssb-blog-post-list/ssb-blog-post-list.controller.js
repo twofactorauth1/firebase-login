@@ -14,6 +14,12 @@ function ssbBlogPostListComponentController($scope, $attrs, $filter, $transclude
 
   function init(element) {
   	vm.element = element;
+
+    if (!vm.blog) {
+        vm.blog = {};
+        vm.blog.posts = window.indigenous.precache.siteData.posts;
+    }
+
   }
 
 }

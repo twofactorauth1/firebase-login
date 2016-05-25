@@ -1,20 +1,20 @@
 <article>
 
-    <h1>Blog Post Detail</h1>
-
-    <!-- <h1>
-        {{vm.component.post_title}}
+    <h1>
+        {{vm.post.post_title}}
     </h1>
 
-    <img class="img-responsive" ng-src="{{vm.component.featured_image}}" alt="{{(vm.component.post_excerpt) ? vm.component.post_excerpt : ''}}"/>
+    <img class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
 
     <section>
-        {{vm.component.post_content}}
+        {{vm.post.post_content}}
     </section>
 
-    <ul class="post_tags" data-ng-if="blog.post.post_tags">
-        <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
-    </ul> -->
+    <ul class="post_tags" data-ng-if="vm.post.post_tags">
+        <li data-ng-repeat="tag in vm.post.post_tags track by $index">
+            <a href="">{{tag.text ? tag.text:tag}}</a>
+        </li>
+    </ul>
 
 <!--
 {
@@ -43,6 +43,9 @@
     "featured_image" : "//s3.amazonaws.com/indigenous-digital-assets/account_1/100in100_mountains_1459323244395.jpg"
 }
 -->
+
+
+    <script type="application/ld+json"></script>
 
 
 </article>

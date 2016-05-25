@@ -12,7 +12,8 @@ function ssbBlogPostDetailComponent() {
     scope: {
       ssbEditor: '=',
       componentClass: '&',
-      component: '='
+      component: '=',
+      post: '=?'
     },
     templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post-detail/ssb-blog-post-detail.component.html',
     replace: true,
