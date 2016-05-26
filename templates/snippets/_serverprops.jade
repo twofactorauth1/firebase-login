@@ -4,13 +4,19 @@
     * All use or reproduction of any or all of this content must be approved.
     * Please contact info@indigenous.io for approval or questions.
 
-if(serverProps)
+if (serverProps)
     script.
         window.indigenous = window.indigenous || {};
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
+
+if (serverProps.posts)
+    script.
         window.indigenous.precache.siteData.posts = !{serverProps.posts};
+
+if (serverProps.pages)
+    script.
         window.indigenous.precache.siteData.pages = !{serverProps.pages};
 
-    script.
-        #{setServerProps(serverProps)}
+script.
+    #{setServerProps(serverProps)}
