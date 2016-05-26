@@ -177,25 +177,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         componentPanel: {
             loadPanel: function(sectionIndex, componentIndex) {
                 var component = vm.state.page.sections[sectionIndex].components[componentIndex];
-                var name = $filter('cleanType')(component.type).toLowerCase().trim().replace(' ', '-');
-                var sectionPanelLoadConfig = {
-                    name: name,
-                    id: component._id,
-                    componentId: component._id
-                };
-
-                $timeout(function() {
-
-                    SimpleSiteBuilderService.setActiveSection(sectionIndex);
-                    SimpleSiteBuilderService.setActiveComponent(componentIndex);
-
-                    vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
-
-                    if (sectionIndex !== undefined && componentIndex !== undefined) {
-                        vm.uiState.showSectionPanel = true;
-                    }
-
-                });
+                var el = angular.element("#component_"+ component._id);
+                el.find("[data-edit]").trigger("click");
             }
         }
     };
