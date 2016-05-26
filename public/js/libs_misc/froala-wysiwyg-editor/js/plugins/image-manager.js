@@ -664,6 +664,9 @@
             var d = ia.offset().left + ia.width() / 2,
                 e = ia.offset().top + ia.height();
             b.popups.show("image.insert", d, e, ia.outerHeight())
+            c.find(".fr-command.fr-btn").removeClass("fr-active");
+            c.find("[data-cmd='mediaManager']").addClass("fr-active");
+            b.image.showLayer("image-upload-media");
         }
 
         function fa() {
@@ -826,7 +829,7 @@
         focus: !1,
         refreshAfterCallback: !1,
         callback: function() {
-            this.image.replace()
+            this.image.replace();
         }
     }), a.FroalaEditor.DefineIcon("imageRemove", {
         NAME: "trash"

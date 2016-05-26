@@ -39,6 +39,7 @@ ssb-topbar #ssb-froala-scrollable-container {
 .fr-toolbar.fr-inline.fr-desktop {
     transition: opacity .25s ease-in-out;
     max-width: 330px;
+    white-space: inherit;
 
     //topbar positioning
     @media (min-width: @ssb-froala-topbar-min-width) {
@@ -214,7 +215,7 @@ ssb-topbar #ssb-froala-scrollable-container {
         padding: 0!important;
     }
 
-    .fr-popup .fr-input-line input + span {
+    .fr-popup .fr-input-line input + label {
 
     }
 
@@ -231,15 +232,15 @@ ssb-topbar #ssb-froala-scrollable-container {
         min-width: 310px;
     }
 
-    body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
-    body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+    body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + label,
+    body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + label {
         color: #808080!important;
         line-height: 0;
     }
 }
 
-body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
-body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + label,
+body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + label {
     line-height: 1;
 }
 
@@ -298,7 +299,7 @@ body[ng-controller] .fr-popup .fr-buttons {
     color: white;
 }
 
-.fr-popup .fr-checkbox input:checked + span {
+.fr-popup .fr-checkbox input:checked + label {
     background: @indigenous-blue!important;
     border-color: @indigenous-blue!important;
 }
@@ -655,19 +656,19 @@ body[ng-controller] .fr-popup .fr-input-line textarea:focus {
   border-bottom: solid 2px #ffffff;
   background-color: transparent!important;
 }
-body[ng-controller] .fr-popup .fr-input-line input + span,
-body[ng-controller] .fr-popup .fr-input-line textarea + span {
+body[ng-controller] .fr-popup .fr-input-line input + label,
+body[ng-controller] .fr-popup .fr-input-line textarea + label {
   -webkit-transition: color 0.2s ease 0s;
   -moz-transition: color 0.2s ease 0s;
   -ms-transition: color 0.2s ease 0s;
   -o-transition: color 0.2s ease 0s;
 }
-body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty:focus + span,
-body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty:focus + span {
+body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty:focus + label,
+body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty:focus + label {
   color: #ffffff;
 }
-body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
-body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + label,
+body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + label {
   color: #808080;
 }
 body[ng-controller] .fr-popup .fr-buttons {
@@ -715,11 +716,11 @@ body[ng-controller] .fr-popup .fr-checkbox span {
   -ms-transition: background 0.2s ease 0s, border-color 0.2s ease 0s;
   -o-transition: background 0.2s ease 0s, border-color 0.2s ease 0s;
 }
-body[ng-controller] .fr-popup .fr-checkbox input:checked + span {
+body[ng-controller] .fr-popup .fr-checkbox input:checked + label {
   background: #ffffff;
   border-color: #ffffff;
 }
-body[ng-controller] .fr-popup .fr-checkbox input:focus + span {
+body[ng-controller] .fr-popup .fr-checkbox input:focus + label {
   border-color: #ffffff;
 }
 body[ng-controller] .fr-popup.fr-desktop .fr-arrow {
