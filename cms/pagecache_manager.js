@@ -180,10 +180,7 @@ module.exports = {
                 if(page) {
                     pageName = page.get('handle');
                     if(page.get('sections') != null && page.get('sections').length > 0) {
-                        //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
-                        _.each(page.get('sections'), function(section, index){
-                            html = html + '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
-                        });
+                        html = self.buildTemplateMarkup(page);
                     } else {
                         _.each(page.get('components'), function(component, index){
                             var divName = self.getDirectiveNameDivByType(component.type);
@@ -287,10 +284,7 @@ module.exports = {
             function readComponents(webpageData, page, cb) {
                 if(page) {
                     if(page.get('sections') != null && page.get('sections').length > 0) {
-                        //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
-                        _.each(page.get('sections'), function(section, index){
-                            html = html + '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
-                        });
+                        html = self.buildTemplateMarkup(page);
                     } else {
                         _.each(page.get('components'), function(component, index){
                             var divName = self.getDirectiveNameDivByType(component.type);
@@ -396,10 +390,7 @@ module.exports = {
                         function readComponents(webpageData, page, cb) {
                             if(page) {
                                 if(page.get('sections') != null && page.get('sections').length > 0) {
-                                    //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
-                                    _.each(page.get('sections'), function(section, index){
-                                        html = html + '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
-                                    });
+                                    html = self.buildTemplateMarkup(page);
                                 } else {
                                     _.each(page.get('components'), function(component, index){
                                         var divName = self.getDirectiveNameDivByType(component.type);
@@ -472,6 +463,8 @@ module.exports = {
      * Gets the start of an angular component div.  This returns an UNCLOSED div tag... because there might be extra
      * attributes needed (media, control, etc).
      * @param type
+     *
+     * TODO: can be deprecated when Pages feature is deprecated
      */
     getDirectiveNameDivByType: function(type) {
 
@@ -513,5 +506,84 @@ module.exports = {
             return lookup['text-only']();
         }
         return lookup[type]();
+    },
+
+    /**
+     * Builds and returns a string representing the HTML markup for the page
+     * @param page
+     *
+     * TODO: (maybe) isolate and load layout markup where needed. Currently here and:
+     *     - /indigeweb/public/views/main.html
+     *     - /indigeweb/public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html
+     */
+    buildTemplateMarkup: function(page) {
+
+        var self = this;
+        var html = '';
+        var layout = page.get('layout');
+
+        if (layout === 'ssb-layout__header_2-col_footer') {
+
+            /* example layout data
+            {
+                "header" : [0,1],
+                "2-col-1" : [2],
+                "2-col-2" : [3,4,5],
+                "footer" : [6]
+            }
+            */
+
+            var layoutData = page.get('layoutModifiers');
+            var layoutMarkupString =
+                '<div class="ssb-layout__header_2-col_footer">' +
+                    '<div class="ssb-page-layout-row row">' +
+                        '<div class="col-xs-12">' +
+                            '{{header}}' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="ssb-page-layout-row row">' +
+                        '<div class="col-xs-12 col-md-8">' +
+                            '{{2-col-1}}' +
+                        '</div>' +
+                        '<div class="col-xs-12 col-md-4">' +
+                            '{{2-col-2}}' +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="ssb-page-layout-row row">' +
+                        '<div class="col-xs-12">' +
+                            '{{footer}}' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+
+            self.log.debug('buildTemplateMarkup: layoutData', layoutData);
+
+            Object.keys(layoutData).forEach(function(key) {
+
+                var layoutAreaMarkupString = _(layoutData[key]).map(function(index){
+                    return '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+                });
+
+                layoutMarkupString = layoutMarkupString.replace('{{' + key + '}}', layoutAreaMarkupString.join(''));
+
+
+                self.log.debug('buildTemplateMarkup: layoutAreaMarkupString', layoutAreaMarkupString.join(''));
+                self.log.debug('buildTemplateMarkup: updated layoutMarkupString', layoutMarkupString);
+
+            });
+
+            self.log.debug('buildTemplateMarkup: end layoutMarkupString', layoutMarkupString);
+
+            html = layoutMarkupString;
+
+        } else {
+            //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
+            _.each(page.get('sections'), function(section, index){
+                html = html + '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+            });
+        }
+
+        return html;
+
     }
 };

@@ -22,7 +22,7 @@ module.exports = {
     },
 
     preGroup: function(test) {
-        console.log('preGroup');
+        console.log('initializing');
         driver = new webdriver.Builder()
             .forBrowser('firefox')
             .build();
@@ -32,7 +32,7 @@ module.exports = {
     group: {
 
         testLinks: function(test) {
-            console.log('testProd');
+            console.log('testing /index');
 
             driver.get('https://www.indigenous.io');
             driver.wait(until.elementLocated(By.linkText('BLOG')), 20000);
@@ -43,18 +43,73 @@ module.exports = {
             startTrialLink.then(function(x){test.ok(x, 'Start trial link not present');});
 
             driver.findElement(By.linkText('BLOG')).click();
-            driver.wait(until.titleIs('Blog'), 5000);
-            var lastPromise = driver.quit();
+            var lastPromise = driver.wait(until.titleIs('Blog'), 5000);
+
             lastPromise.thenFinally(function(){
                 test.ok(true);
                 test.done();
             });
+        },
+
+        testBlog: function(test) {
+            console.log('testing /blog');
+            var currentUrl = driver.getCurrentUrl();
+            currentUrl.then(function(x){test.equals(x, 'https://www.indigenous.io/blog')});
+            driver.wait(until.elementLocated(By.linkText('READ MORE')));
+            var readMoreLink = driver.isElementPresent(By.linkText('READ MORE'));
+            readMoreLink.then(function(x){
+                test.ok(x, 'Read more link not present');
+            });
+
+            var firstArticle = driver.findElement(By.xpath('//*[@id="main-area"]/article/div[1]/div/h2/a/div'));
+            var articleTitle = null;
+            firstArticle.then(function(webElement){webElement.getText().then(function(txt){articleTitle = txt;})});
+            firstArticle.click();
+
+            //this xpath waits for the publish date to have more than 2 characters in it.
+            //hopefully this means that angular is done loading
+            driver.wait(until.elementLocated(By.xpath('//*[@id="et_pt_blog"]/div[1]/div[1]/span[string-length(text()) > 2]')), 20000);
+
+            var blogTitle = driver.findElement(By.xpath('//*[@id="et_pt_blog"]/div[1]/h1'));
+            blogTitle.then(function(webElement){
+                webElement.getText().then(function(txt){
+                    test.equals(txt, articleTitle);
+                    test.done();
+                });
+            });
+        },
+
+        testSignup: function(test) {
+            console.log('testing /signup');
+            driver.get('https://www.indigenous.io/signup');
+            driver.wait(until.elementLocated(By.id('email')), 20000);
+
+            driver.isElementPresent(By.id('email')).then(function(el){test.ok(el, 'Email signup field missing.');});
+
+            driver.isElementPresent(By.id('password')).then(function(el){test.ok(el, 'Password signup field missing.');});
+
+            driver.isElementPresent(By.id('fullName')).then(function(el){test.ok(el, 'Name signup field missing.');});
+
+            driver.isElementPresent(By.id('business-name')).then(function(el){test.ok(el, 'Business signup field missing.');});
+
+            driver.isElementPresent(By.linkText('CREATE ACCOUNT')).then(
+                function(el){
+                    test.ok(el, 'Signup Button missing.');
+                    test.done();
+                }
+            );
         }
     },
 
     postGroup: function(test) {
-        console.log('postGroup');
-        test.done();
+        console.log('tearing down');
+        //shut down the driver
+        var lastPromise = driver.quit();
+        lastPromise.thenFinally(function() {
+            test.ok(true);
+            test.done();
+        });
+
     }
 
 

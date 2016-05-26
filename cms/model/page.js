@@ -94,6 +94,8 @@ var page = $$.m.ModelBase.extend({
              */
             components: [],
 
+            sections: [],
+
             /**
              * Screenshot of the page.  Updated after an edit.
              */
@@ -116,7 +118,12 @@ var page = $$.m.ModelBase.extend({
              * Version of the page.  Auto incremented.  Cannot be modified externally.
              */
             version:0,
+
             latest:true,
+
+            layout: 'ssb-layout__1-col',
+
+            layoutModifiers: {},
 
             /**
              * Created by data

@@ -255,6 +255,14 @@
          */
 		function getPages() {
 
+            var deferred = $q.defer();
+
+            if (!ssbService.pages && window.indigenous.precache && window.indigenous.precache.siteData.pages) {
+                ssbService.pages = window.indigenous.precache.siteData.pages;
+                deferred.resolve(ssbService.pages);
+                return ssbRequest(deferred.promise);
+            }
+
 			function success(data) {
 				ssbService.pages = data;
 			}
@@ -314,8 +322,9 @@
                 }
                 console.log('SimpleSiteBuilderService requested page settings saved' + data);
             }
-            if(!isSettings)
+            if(!isSettings){
                 page.ssb = true;
+            }
 			return (
 				ssbRequest($http({
 					url: basePageAPIUrlv2 + page._id,
@@ -400,13 +409,13 @@
          * @param {object} data - page data response from server
          */
 		function successPage(data) {
-
 			var page = transformComponentsToSections(data);
-			ssbService.page = page;
-            // Refresh page list with updated page
-            if(ssbService.pages && ssbService.pages[page.handle]){
-                ssbService.pages[page.handle] = page;
-            }
+      console.log("page loaded");
+		  ssbService.page = page;
+          // Refresh page list with updated page
+          if(ssbService.pages && ssbService.pages[page.handle]){
+              ssbService.pages[page.handle] = page;
+          }
 		}
 
         /**
@@ -1544,6 +1553,7 @@
         function revertPage(pageId, versionId, fn) {
 
           function success(data) {
+
             console.log('SimpleSiteBuilderService revertPage: ' + data);
             fn(data);
           }
@@ -1641,7 +1651,7 @@
 			AccountService.getAccount(function(data) {
                 ssbService.account = data;
                 ssbService.setPermissions();
-				ssbService.websiteId = data.website.websiteId;
+				        ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId).then(function(website){
                     ssbService.setupTheme(website);
                 });
