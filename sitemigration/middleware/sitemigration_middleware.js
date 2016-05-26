@@ -19,7 +19,7 @@ module.exports = {
             } else {
                 var found = false;
                 _.each(migration.get('redirects'), function(redirect){
-                    if(redirect.path.toLowerCase() === req.path.toLowerCase()) {
+                    if(!found && redirect.path.toLowerCase() === req.path.toLowerCase()) {
                         log.debug('\n\nredirecting from ' + req.path + ' to ' + redirect.destination + '\n');
                         resp.writeHead (301, {'Location':redirect.destination});
                         resp.end();
