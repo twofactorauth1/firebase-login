@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, $routeParams, $location, ENV, $sce, localStorageService) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', '$modal', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, $routeParams, $location, ENV, $sce, localStorageService, $modal) {
     return {
         require: [],
         scope: {
@@ -116,6 +116,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
             scope.itemClicked = function(item) {
+                console.debug(item);
                 var returnValue = false;
                 if (item && CartDetailsService.items) {
                     var clicked = _.find(CartDetailsService.items, function(product) {
@@ -356,6 +357,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.updateSelectedProduct = function(product) {
                 product.attributes = scope.selectedProductAttributes(product);
                 scope.selectedProduct = product;
+
+                scope.openProductDetailsModal();
             };
 
             /*
@@ -1252,6 +1255,29 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     });
                 }
             }
+
+
+            /*
+            * product details modal
+            * - moved from product component to global template
+            */
+            scope.openProductDetailsModal = function() {
+                $scope.modalInstance = $modal.open({
+                    templateUrl: 'product-details-modal',
+                    keyboard: true,
+                    size: 'lg',
+                    scope: scope
+                });
+            };
+
+            scope.closeProductDetailsModal = function() {
+                $scope.modalInstance.close();
+            };
+
+            scope.close = function() {
+                $scope.modalInstance.close();
+            }
+
 
         },
         controller: function($scope) {

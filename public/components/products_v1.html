@@ -35,12 +35,12 @@
                         </div>
                         <div class="caption" ng-style="{'color':component.txtcolor}">
                             <h4 class="pull-right"><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
-                            <h4 class="title"><a ng-style="{'color':component.txtcolor}" href="#" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)" >{{product.name | characters:28 :true}}</a></h4>
+                            <h4 class="title"><a ng-style="{'color':component.txtcolor}" href="#" ng-click="updateSelectedProduct(product)" >{{product.name | characters:28 :true}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description product-description">{{product.description}}</p>
                         </div>
                         <div class="actions">
-                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
                             <button ng-disabled='product.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="product.type != 'external' && itemClicked(product) != true && !product.hasVariations">
@@ -411,80 +411,6 @@
                     </button>
                     <button class="btn ssb-theme-btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="setCheckoutState(true, 1)"><i class="fa fa-chevron-left"></i> Continue Shopping
                     </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="product-details-modal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"> Product Detail</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="col-sm-6">
-                        <div class="product-img">
-                            <div ng-if="selectedProduct.is_image" class="img-wrap">
-                                <img ng-src="{{selectedProduct.icon}}" class="img-responsive">
-                            </div>
-                            <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">
-                                <i ng-style="{'color':component.iconColor}" class="fa {{selectedProduct.icon}} fa-5x"></i>
-                            </div>
-                            <div ng-if="!selectedProduct.is_image && !selectedProduct.icon" class="img-wrap no-preview">
-                                <h3>No Preview <br> Available</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <tabset class="tabbable">
-                            <tab heading="Details">
-                                <div class="caption">
-                                    <h4 class="title">{{selectedProduct.name}}</h4>
-                                    <h4 ng-if="!selectedProduct.hasVariations">{{selectedProduct.regular_price | currency}}</h4>
-                                    <h4 ng-if="selectedProduct.hasVariations && matchedVariation">{{matchedVariation.regular_price | currency}}</h4>
-
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="attributes form-horizontal">
-                                    <div class="form-group" ng-repeat="attribute in selectedProduct.attributes">
-                                        <label class="col-sm-2 control-label">
-                                            {{attribute.name}}
-                                        </label>
-                                        <div class="col-sm-10">
-                                            <select class="form-control" ng-model="attribute.selected" ng-change="selectChanged($index)">
-                                                <option ng-repeat="value in attribute.values" ng-if="variationAttributeExists(value)" value="{{value}}">{{value}}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="actions">
-                                    <button ng-disabled='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && itemClicked(selectedProduct) != true && matchedVariation">
-                                        <div data-class="btn-text" ng-hide='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
-                                            <span class="fa fa-shopping-cart"></span> Add to Cart
-                                        </div>
-                                        <div data-class="btn-text" ng-show='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
-                                            <span class="fa fa-shopping-cart"></span> Stripe account needed
-                                        </div>
-                                    </button>
-                                    <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external' && itemClicked(selectedProduct) == true && !selectedProduct.hasVariations">
-                                        <div data-class="btn-text">
-                                            <span class="fa fa-check"></span> Added to Cart!
-                                        </div>
-                                    </button>
-                                    <a class="btn ssb-theme-btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external'" target="{{selectedProduct.externalLinkOpenIn}}">
-                                        <div data-class="btn-text">
-                                            <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
-                                        </div>
-                                    </a>
-                                </div>
-                            </tab>
-                            <tab heading="Addtional Information">
-                                <p class="description">{{selectedProduct.description}}</p>
-                            </tab>
-                        </tabset>
-                    </div>
-                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>
