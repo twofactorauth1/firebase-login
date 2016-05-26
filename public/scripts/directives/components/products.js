@@ -116,7 +116,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
             scope.itemClicked = function(item) {
-                console.debug(item);
                 var returnValue = false;
                 if (item && CartDetailsService.items) {
                     var clicked = _.find(CartDetailsService.items, function(product) {
@@ -1262,7 +1261,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             * - moved from product component to global template
             */
             scope.openProductDetailsModal = function() {
-                $scope.modalInstance = $modal.open({
+                scope.modalInstance = $modal.open({
                     templateUrl: 'product-details-modal',
                     keyboard: true,
                     size: 'lg',
@@ -1271,11 +1270,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.closeProductDetailsModal = function() {
-                $scope.modalInstance.close();
+                scope.modalInstance.close();
             };
 
             scope.close = function() {
-                $scope.modalInstance.close();
+                scope.modalInstance.close();
             }
 
 
