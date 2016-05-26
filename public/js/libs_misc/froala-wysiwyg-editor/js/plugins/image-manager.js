@@ -725,8 +725,8 @@
         }
     }, a.FroalaEditor.DefineIcon("insertImage", {
         NAME: "image"
-    }), a.FroalaEditor.RegisterShortcut(80, "insertImage"), a.FroalaEditor.RegisterCommand("insertImage", {
-        title: "Insert Image",
+    }), a.FroalaEditor.RegisterCommand("insertImage", {
+        title: "Insert Image ",
         undo: !1,
         focus: !0,
         refershAfterCallback: !1,
