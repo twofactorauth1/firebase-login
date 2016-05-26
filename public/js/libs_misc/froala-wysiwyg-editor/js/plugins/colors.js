@@ -285,27 +285,23 @@
         $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
         editor.format.applyStyle('background-color', val);
-        editor.selection.save();
+        setTimeout(function(){
+            editor.selection.save();
+        })
+
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
-        editor.selection.restore();
+
       }
 
       // Remove background color.
       else {
         $popup.find('input.sp-input').val("");
-        editor.format.applyStyle('background-color', '#123456');
+        editor.format.applyStyle('background-color', '');
 
-        editor.selection.save();
-        editor.$el.find('span').each(function (index, span) {
-          var $span = $(span);
-          var color = $span.css('background-color');
-
-          if (color === '#123456' || editor.helpers.RGBToHex(color) === '#123456') {
-            $span.replaceWith($span.html());
-          }
-        });
-        editor.selection.restore();
+        setTimeout(function(){
+            editor.selection.save();
+        })
       }
 
       if(init){
@@ -328,26 +324,21 @@
         $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
         editor.format.applyStyle('color', val);
-        editor.selection.save();
+        setTimeout(function(){
+            editor.selection.save();
+        })
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
-        editor.selection.restore();
+
       }
 
       // Remove text color.
       else {
-        editor.format.applyStyle('color', '#123456');
-        $popup.find('input.sp-input').val(val);
-        editor.selection.save();
-        editor.$el.find('span').each(function (index, span) {
-          var $span = $(span);
-          var color = $span.css('color');
-
-          if (color === '#123456' || editor.helpers.RGBToHex(color) === '#123456') {
-            $span.replaceWith($span.html());
-          }
-        });
-        editor.selection.restore();
+        editor.format.applyStyle('color', '');
+        $popup.find('input.sp-input').val("");
+        setTimeout(function(){
+            editor.selection.save();
+        })
       }
       if(init){
             //editor.opts.defaultColors.text.init = false;
@@ -365,33 +356,19 @@
       if(tab === 'text') {
 
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-        editor.format.applyStyle('color', '#123456');
+        editor.format.applyStyle('color', '');
 
-        editor.selection.save();
-        editor.$el.find('span').each(function (index, span) {
-          var $span = $(span);
-          var color = $span.css('color');
-
-          if (color === '#123456' || editor.helpers.RGBToHex(color) === '#123456') {
-            $span.replaceWith($span.html());
-          }
-        });
-        editor.selection.restore();
+        setTimeout(function(){
+            editor.selection.save();
+        })
         initializeSpectrum("color");
       }
       else{
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-        editor.format.applyStyle('background-color', '#123456');
-        editor.selection.save();
-        editor.$el.find('span').each(function (index, span) {
-          var $span = $(span);
-          var color = $span.css('background-color');
-
-          if (color === '#123456' || editor.helpers.RGBToHex(color) === '#123456') {
-            $span.replaceWith($span.html());
-          }
-        });
-        editor.selection.restore();
+        editor.format.applyStyle('background-color', '');
+        setTimeout(function(){
+            editor.selection.save();
+        })
         initializeSpectrum("background-color");
       }
     }
