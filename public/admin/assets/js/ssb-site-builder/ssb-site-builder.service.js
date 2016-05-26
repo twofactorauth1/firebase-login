@@ -257,7 +257,7 @@
 
             var deferred = $q.defer();
 
-            if (!ssbService.pages && window.indigenous.precache.siteData.pages) {
+            if (!ssbService.pages && window.indigenous.precache && window.indigenous.precache.siteData.pages) {
                 ssbService.pages = window.indigenous.precache.siteData.pages;
                 deferred.resolve(ssbService.pages);
                 return ssbRequest(deferred.promise);

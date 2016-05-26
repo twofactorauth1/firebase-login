@@ -287,9 +287,8 @@
         editor.format.applyStyle('background-color', val);
         editor.selection.save();
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-
         $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
-
+        editor.selection.restore();
       }
 
       // Remove background color.
@@ -332,7 +331,7 @@
         editor.selection.save();
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
-
+        editor.selection.restore();
       }
 
       // Remove text color.
