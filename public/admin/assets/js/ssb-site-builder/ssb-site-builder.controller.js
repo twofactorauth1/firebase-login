@@ -30,7 +30,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.checkIfDirty = checkIfDirty;
     vm.resetDirty = resetDirty;
     vm.pageChanged = pageChanged;
-
+    vm.toggleSectionVisiblity = toggleSectionVisiblity
 
     vm.uiState = {
         loading: 0,
@@ -54,6 +54,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         sortableListPageContentConfig: {
             sort: false,
+            filter: '.fr-wrapper',
             group: 'section',
             scroll: true,
             animation: 150,
@@ -94,12 +95,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 var _heightDiff = _height + _top;
                 angular.element(".sortable-page-content").height(_winHeight - _heightDiff);
             },
-            onEnd: function (evt) {
+            onEnd: function (evt, e) {
+                vm.uiState.activeSectionIndex = evt.newIndex;
                 angular.element(".sortable-page-content").removeClass("dragging");
                 angular.element(".sortable-page-content").css('height','auto');
                 $timeout(function() {
                     vm.uiState.sortableListPageContentConfig.disabled = true;
                     vm.uiState.openSidebarPanel = '';
+                    var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
+                    var activeSection = document.querySelector('.ssb-active-section');
+                    if (activeSection) {
+                      scrollContainerEl.scrollTop = activeSection.offsetTop;
+                    }
                 });
             },
             onSort: function (evt) {
@@ -111,7 +118,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     _id: sectionId
                 });
             }
-        }
+        },
+
+        toggleSection: vm.toggleSectionVisiblity
+
 
     };
 
@@ -123,7 +133,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         },
         loadPage: function(pageId) {
             if (pageId && pageId !== vm.state.page._id) {
-                //$rootScope.$broadcast('$destroyFroalaInstances');
                 SimpleSiteBuilderService.getPages();
                 if(!vm.state.pendingWebsiteChanges && !vm.state.pendingPageChanges)
                     vm.uiState.loaded = false;
@@ -164,10 +173,34 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
                 vm.uiState.navigation.sectionPanel.navigationHistory = [];
             }
+        },
+        componentPanel: {
+            loadPanel: function(sectionIndex, componentIndex) {
+                var component = vm.state.page.sections[sectionIndex].components[componentIndex];
+                var name = $filter('cleanType')(component.type).toLowerCase().trim().replace(' ', '-');
+                var sectionPanelLoadConfig = {
+                    name: name,
+                    id: component._id,
+                    componentId: component._id
+                };
+
+                $timeout(function() {
+
+                    SimpleSiteBuilderService.setActiveSection(sectionIndex);
+                    SimpleSiteBuilderService.setActiveComponent(componentIndex);
+
+                    vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+
+                    if (sectionIndex !== undefined && componentIndex !== undefined) {
+                        vm.uiState.showSectionPanel = true;
+                    }
+
+                });
+            }
         }
     };
 
-
+    vm.uiState.componentIcons = SimpleSiteBuilderService.manageComponentIcons;
 
     /**
      * event listeners
@@ -732,6 +765,42 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         });
     }
 
+    function toggleSectionVisiblity(section, global){
+        if (global) {
+            if(section.global === false)
+            {
+                SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Turning off this setting will remove the section from all pages except for this one.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Remove from other pages",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                //Cancel
+                if (!isConfirm) {
+                    section.global = true;
+                }
+            });
+            }
+        } else if(section.global) {
+            if(!section.hiddenOnPages){
+                section.hiddenOnPages = {}
+            }
+            if(section.visibility === false)
+            {
+                section.hiddenOnPages[vm.state.page.handle] = true;
+            }
+            else{
+                delete section.hiddenOnPages[vm.state.page.handle];
+            }
+        }
+
+    }
 
 
     function init(element) {
