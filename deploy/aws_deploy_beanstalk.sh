@@ -83,7 +83,7 @@ main(){
 
 
 	echo "Remove as much as possible"
-    npm prune --production
+    # npm prune --production
 
 	echo Starting zip
 	# zip the application
