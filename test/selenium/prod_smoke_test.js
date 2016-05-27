@@ -54,7 +54,7 @@ module.exports = {
         testBlog: function(test) {
             console.log('testing /blog');
             var currentUrl = driver.getCurrentUrl();
-            currentUrl.then(function(x){test.equals(x, 'https://www.indigenous.io/blog')});
+            currentUrl.then(function(x){test.equals(x, 'https://indigenous.io/blog')});
             driver.wait(until.elementLocated(By.linkText('READ MORE')));
             var readMoreLink = driver.isElementPresent(By.linkText('READ MORE'));
             readMoreLink.then(function(x){
