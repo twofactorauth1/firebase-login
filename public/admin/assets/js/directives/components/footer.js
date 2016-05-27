@@ -24,7 +24,6 @@ app.directive('footerComponent', ['WebsiteService', function (WebsiteService) {
         element.addClass("legacy-footer");
       }
 
-
     }
   };
 }]);
