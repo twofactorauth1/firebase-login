@@ -9,15 +9,15 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="img-container">
         <div ng-if="dataLoaded" class="slider-main slider-main-{{component._id}}" ind-slider='{slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  slidesToScroll:1, autoplay:{{autoplay}},  asNavFor: ".slider-nav-thumbnails-{{component._id}}"}'>
-            <div class="img-row col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}" ng-repeat="image in component.images">
+            <div class="img-row col-sm-12 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}" ng-repeat="image in component.images track by $index">
 
                     <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" style="background-image:url('{{image.url}}');"></div>
 
-                    <div ng-if="isEditing" class="delete-single-image center">
-                        <button ng-click="deleteImageFromGallery($index)" class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
+                    <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromGallery($index)">
+                        <button class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
                     </div>
-                    <div ng-if="isEditing" class="center">
-                        <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
+                    <div ng-if="isEditing" class="center" ng-click="addImageFromMedia(component._id, $index, false)">
+                        <a class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
                     </div>
             </div>
         </div>

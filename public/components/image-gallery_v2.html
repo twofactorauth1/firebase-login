@@ -19,11 +19,11 @@
                             <div class="img-responsive img-gallery-{{$index}} image-gallery center" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" style="background-image:url('{{image.url}}');"></div>
                         </a>
                     </div>
-                    <div ng-if="isEditing" class="delete-single-image center">
-                        <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
+                    <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromGallery($index)">
+                        <button class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
                     </div>
-                    <div ng-if="isEditing" class="center">
-                        <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
+                    <div ng-if="isEditing" class="center" ng-click="addImageFromMedia(component._id, $index, false)">
+                        <a class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
                     </div>
                 </div>
                 <div data-edit class="image-desc col-sm-4 col-xs-12">
