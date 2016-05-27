@@ -54,13 +54,13 @@
                     </div>
                 </div>
                 <div ng-if="isEditing">
-                    <div class="delete-single-testimonial center">
-                        <a ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial">
+                    <div class="delete-single-testimonial center" ng-click="deleteTestimonial($index)">
+                        <a  class="ng-scope btn-delete-single-testimonial">
                             <i class='fa fa-trash'></i>
                         </a>
                     </div>
-                    <div class="add-addtional center">
-                        <a href="" ng-click="addTestimonial($index)">
+                    <div class="add-addtional center" ng-click="addTestimonial($index)">
+                        <a href="">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>

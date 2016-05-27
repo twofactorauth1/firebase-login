@@ -22,13 +22,13 @@
                             <div elem ng-model="feature.subtitle"></div>
                             </div>
                         </div>
-                        <div ng-if="isEditing" class="delete-pricing-table-feature center">
-                            <button ng-click="deletePricingTableFeature(component._id,$index, $parent.$parent.$index)" class="btn-delete-pricing-table-feature">
+                        <div ng-if="isEditing" class="delete-pricing-table-feature center" ng-click="deletePricingTableFeature(component._id,$index, $parent.$parent.$index)">
+                            <button class="btn-delete-pricing-table-feature">
                                 <i class='fa fa-trash'></i>
                             </button>
                         </div>
-                        <div ng-if="isEditing" class="add-addtional-feature center">
-                            <a href="" ng-click="addPricingTableFeature(component._id,$index, $parent.$parent.$index)">
+                        <div ng-if="isEditing" class="add-addtional-feature center" ng-click="addPricingTableFeature(component._id,$index, $parent.$parent.$index)">
+                            <a href="">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </div>
@@ -45,13 +45,13 @@
                     <br/>
                     <br/>
                 </div>
-                <div ng-if="isEditing" class="delete-pricing-table center">
-                    <button ng-click="deletePricingTable(component._id,$index)" class="btn-delete-pricing-table" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this table.">
+                <div ng-if="isEditing" class="delete-pricing-table center"  ng-click="deletePricingTable(component._id,$index)">
+                    <button class="btn-delete-pricing-table" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this table.">
                         <i class='fa fa-trash'></i>
                     </button>
                 </div>
-                <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another table.">
-                    <a href="" ng-click="addPricingTable(component._id,$index)">
+                <div ng-if="isEditing" ng-click="addPricingTable(component._id,$index)" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another table.">
+                    <a href="">
                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
