@@ -60,7 +60,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 var editor = $(elem).data('froala.editor');
                 editor.shared.count = 1;
                 delete editor.shared.$tb;
-                editor.destroy();
+                //editor.destroy();
                 console.log("editor destroy");
             }
         });
