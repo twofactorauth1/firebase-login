@@ -423,17 +423,30 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     return components;
   }
 
-  $scope.initializeEditLinks = function (link, status) {
+  $scope.initializeEditLinks = function (link, status, isSection) {
     if (link.page) {
       if (status) {
         link.data = null;
       }
+      if(isSection)
+        link.ssb = true;
       $scope.linkPage = link.page;
       $scope.currentPage = _.find($scope.filteredPages, function (page) {
         return page.handle === link.page;
       });
     }
   };
+
+
+  $scope.selectedData = function(link, component){
+    if(link && link.linkTo.ssb)
+        return link.linkTo.data === component._id
+    else if(link && component.anchor){
+        return link.linkTo.data === component.anchor
+    }
+    else
+        return link.linkTo.data === component._id
+  }
 
   /*
    * @initializeLinks
@@ -446,7 +459,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       linkUrl: null,
       linkTitle: null,
       linkType: null,
-      linkPage: null
+      linkPage: null,
+      ssb: true
     };
   };
 
@@ -592,7 +606,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               linkTo: {
                 data: $scope.newLink.linkUrl,
                 type: $scope.newLink.linkType,
-                page: $scope.newLink.linkPage
+                page: $scope.newLink.linkPage,
+                ssb: true
               }
             });
             $scope.initializeLinks(false);
@@ -608,7 +623,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               linkTo: {
                 data: $scope.newLink.linkUrl,
                 type: $scope.newLink.linkType,
-                page: $scope.newLink.linkPage
+                page: $scope.newLink.linkPage,
+                ssb: true
               }
             });
             updateParentPageSettings($scope.newLink.linkType, $scope.newLink.linkUrl, true);
@@ -1033,7 +1049,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       });
 
       ContactService.getContactTags(function(tags){
-        $scope.customerTags = tags;
+        $scope.contactTags = tags;
       });
 
       $scope.editComponent();

@@ -5,7 +5,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   $scope.getContacts = getContacts;
   /*
    * @editableOptions
-   * - editable options for xeditable in preview customers
+   * - editable options for xeditable in preview contacts
    */
 
   editableOptions.theme = 'bs3';
@@ -148,7 +148,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
     if (_errorRows.length > 0) {
 
-      var matchingColumn = _.find($scope.customerColumns, function (_col) {
+      var matchingColumn = _.find($scope.contactColumns, function (_col) {
         return _col.value === 'phone';
       });
       if (matchingColumn.errorRows.length > 0) {
@@ -206,12 +206,12 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   };
 
   /*
-   * @customerColumns
+   * @contactColumns
    * - list of main columns with list of known for mapping
    * - ['given name', 'first', 'first name'] -- specific to general
    */
 
-  $scope.customerColumns = [{
+  $scope.contactColumns = [{
     name: 'First Name',
     value: 'first',
     match: '',
@@ -309,7 +309,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
    */
 
   $scope.guessHeaders = function (fn) {
-    _.each($scope.customerColumns, function (_column) {
+    _.each($scope.contactColumns, function (_column) {
       var bestMatch = {
         value: '',
         percent: 0
@@ -355,7 +355,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   $scope.csv = {
     percent: 0
   };
-  $scope.previewCustomer = {};
+  $scope.previewContact = {};
   $scope.currentRow = 1;
   var startServerUploadTime;
   $scope.alerts = [];
@@ -394,11 +394,11 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   $scope.changeFile = function () {
     $scope.csvHeaders = [];
     $scope.csvResults = [];
-    $scope.previewCustomer = {};
+    $scope.previewContact = {};
     $scope.currentRow = 1;
     startUpload = 0;
     $scope.endUpload = 0;
-    _.each($scope.customerColumns, function (_col) {
+    _.each($scope.contactColumns, function (_col) {
       _col.match = '';
       _col.index = '';
     });
@@ -408,7 +408,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   /*
    * @increaseRow
-   * - increase the row and update the preview customer
+   * - increase the row and update the preview contact
    */
 
   $scope.increaseRow = function () {
@@ -420,7 +420,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   /*
    * @decreaseRow
-   * - decrease the row and update the preview customer
+   * - decrease the row and update the preview contact
    */
 
   $scope.decreaseRow = function () {
@@ -432,7 +432,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   /*
    * @goToRow
-   * - decrease the row and update the preview customer
+   * - decrease the row and update the preview contact
    */
 
   $scope.goToRow = function (_row) {
@@ -454,10 +454,10 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
       selected.index = null;
     }
     var _formattedColumns = $scope.formatColumns();
-    _.each($scope.customerColumns, function (_column) {
+    _.each($scope.contactColumns, function (_column) {
       var _colVal = _column.value;
       var _formatIndex = _formattedColumns[_colVal].index;
-      $scope.previewCustomer[_colVal] = $scope.csvResults[$scope.currentRow][_formatIndex];
+      $scope.previewContact[_colVal] = $scope.csvResults[$scope.currentRow][_formatIndex];
     });
   };
 
@@ -472,7 +472,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     $scope.errorRows = _.reject($scope.errorRows, function (d) {
       return d === $scope.currentRow;
     });
-    var matchingColumn = _.find($scope.customerColumns, function (_col) {
+    var matchingColumn = _.find($scope.contactColumns, function (_col) {
       return _col.value === col.value;
     });
     matchingColumn.errorRows = _.reject(matchingColumn.errorRows, function (d) {
@@ -487,7 +487,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   $scope.formatColumns = function () {
     var _formattedColumns = [];
-    _.each($scope.customerColumns, function (_column) {
+    _.each($scope.contactColumns, function (_column) {
       var indexMatch = _.indexOf($scope.csvHeaders, _column.match);
       if (indexMatch >= 0) {
         _column.index = indexMatch;
@@ -498,11 +498,11 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   };
 
   /*
-   * @blankFormattedCustomer
-   * - black formatted customer object for uploading
+   * @blankFormattedContact
+   * - black formatted contact object for uploading
    */
 
-  var blankFormattedCustomer = {
+  var blankFormattedContact = {
     first: '',
     middle: '',
     last: '',
@@ -543,27 +543,27 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
   /*
    * @uploadMatchedCSV
-   * - import the formatted CSV and create customers
+   * - import the formatted CSV and create contacts
    */
 
   $scope.uploadMatchedCSV = function () {
     startServerUploadTime = new Date();
     var _formattedColumns = $scope.formatColumns();
-    var customersToAdd = [];
+    var contactsToAdd = [];
     var partAddress = ['address', 'address2', 'city', 'state', 'zip', 'country', 'lat', 'lon'];
     var nameParts = ['first', 'middle', 'last'];
     var topLevelParts = ['company', 'gender', 'birthday'];
-    var _formattedCustomer = angular.copy(blankFormattedCustomer);
+    var _formattedContact = angular.copy(blankFormattedContact);
     _.each($scope.csvResults, function (_result, i) {
       if (i !== 0) {
 
-        _.each($scope.customerColumns, function (_column) {
+        _.each($scope.contactColumns, function (_column) {
           var _colVal = _column.value;
           var _formatIndex = _formattedColumns[_colVal].index;
           var _csvResult = _result[_formatIndex];
           if (_csvResult) {
             var _formatVal = _formattedColumns[_colVal].value;
-            var _details = _formattedCustomer.details[0];
+            var _details = _formattedContact.details[0];
 
             if (partAddress.indexOf(_colVal) > -1) {
               _details.addresses[0][_colVal] = _csvResult;
@@ -594,24 +594,24 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
             }
 
             if (topLevelParts.indexOf(_colVal) > -1) {
-              _formattedCustomer[_colVal] = _csvResult;
+              _formattedContact[_colVal] = _csvResult;
             }
 
             if (nameParts.indexOf(_colVal) > -1) {
-              _formattedCustomer[_colVal] = _csvResult;
+              _formattedContact[_colVal] = _csvResult;
             }
           }
 
         });
 
-        customersToAdd.push(_formattedCustomer);
-        _formattedCustomer = angular.copy(blankFormattedCustomer);
+        contactsToAdd.push(_formattedContact);
+        _formattedContact = angular.copy(blankFormattedContact);
       }
     });
 
     $scope.uploadingServerCsv = true;
     ContactService.resetCount();
-    ContactService.importCsvContacts(customersToAdd, function () {
+    ContactService.importCsvContacts(contactsToAdd, function () {
       console.log('upload started ...', $scope.uploadingServerCsv);
     });
   };
@@ -654,7 +654,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
 
     if (_errorRows.length > 0) {
 
-      var matchingColumn = _.find($scope.customerColumns, function (_col) {
+      var matchingColumn = _.find($scope.contactColumns, function (_col) {
         return _col.value === 'email';
       });
       if (matchingColumn.errorRows.length > 0) {

@@ -168,6 +168,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 previousPanel = hist[hist.length - 1];
 
                 vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
+
+                if(previousPanel && !previousPanel.id){
+                    hideAllControls();
+                    angular.element(".ssb-active-section").addClass("ssb-active-edit-control");
+                }
+
             },
             reset: function() {
                 vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
@@ -193,6 +199,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                     if (sectionIndex !== undefined && componentIndex !== undefined) {
                         vm.uiState.showSectionPanel = true;
+                        var el = angular.element("#component_"+ component._id);
+                        hideAllControls();
+
+                        $timeout(function() {
+                            if(el.find("[data-edit]").length === 1){
+                                el.find("[data-edit]").addClass("ssb-active-component");
+                            }
+                            else{
+                                el.find(".ssb-edit-control-component-area").first().next("[data-edit]").addClass("ssb-active-component");
+                            }
+                        }, 100);
+
                     }
 
                 });
@@ -206,6 +224,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * event listeners
      */
     $rootScope.$on('$stateChangeStart', function (event) {
+        $rootScope.$broadcast('$destroyFroalaInstances');
         $rootScope.app.layout.isMinimalAdminChrome =  false;
         $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
     });
@@ -230,6 +249,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
+        $rootScope.$broadcast('$destroyFroalaInstances');
         vm.state.pendingPageChanges = false;
         vm.state.page = page;
         vm.state.originalPage = null;
@@ -614,6 +634,24 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
 
     }
+
+                function hideAllControls() {
+
+                    //hide editable-title's and borders
+                    angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+
+                    //hide all edit-controls
+                    angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
+                    angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
+
+                    //components
+                    angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
+
+                    //btns
+                    angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
+                    angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
+
+                }
 
     /**
      * Inspect changes beyond simple angular.equals

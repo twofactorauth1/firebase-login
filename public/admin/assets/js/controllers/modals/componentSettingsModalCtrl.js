@@ -97,37 +97,37 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
 
-  $scope.getAllCustomerTags = function(){
+  $scope.getAllContactTags = function(){
     ContactService.getContactTags(function(tags){
-      $scope.customerTags = tags;
+      $scope.contactTags = tags;
       $scope.setTags(tags);
     });
-    ContactService.getContacts(function(customers){
-      ContactService.getAllContactTags(customers,function(tags){
-        $scope.customerTags = tags;
+    ContactService.getContacts(function(contacts){
+      ContactService.getAllContactTags(contacts,function(tags){
+        $scope.contactTags = tags;
         $scope.setTags(tags);
       });
     })
   }
 
-  $scope.setTags = function (_customerTags) {
+  $scope.setTags = function (_contactTags) {
     console.log('setTags >>>');
     _.each($scope.componentEditing.tags, function (tag , index) {
-      var matchingTag = _.findWhere($scope.customerTags, {
+      var matchingTag = _.findWhere($scope.contactTags, {
         data: tag
       });
       if(matchingTag)
       {
-        _customerTags.push(matchingTag);
+        _contactTags.push(matchingTag);
       }
       else {
-        _customerTags.push({
+        _contactTags.push({
             data : tag,
             label : tag
         });
       }
     });
-    $scope.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
+    $scope.contactTags = _.uniq(_contactTags, function(c) { return c.label; })
     console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
   };
 
@@ -950,7 +950,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
       if($scope.componentEditing.type === "simple-form")
       {
-        $scope.getAllCustomerTags();
+        $scope.getAllContactTags();
       }
 
       if ($scope.componentEditing.type === 'navigation') {
@@ -1213,7 +1213,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       }
     };
 
-  $scope.tagToCustomer = function(value) {
+  $scope.tagToContact = function(value) {
     return ContactService.tagToContact(value);
   }
 

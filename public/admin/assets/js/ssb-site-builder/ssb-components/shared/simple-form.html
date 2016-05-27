@@ -68,7 +68,7 @@
             </label>
             <ui-select tagging="vm.tagToCustomer" tagging-match-to-key="label" multiple ng-model="component.tags" theme="bootstrap" ng-disabled="disabled">
                 <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
-                <ui-select-choices repeat="tag.data as tag in vm.customerTags | orderBy:'label' | filter:$select.search">
+                <ui-select-choices repeat="tag.data as tag in vm.contactTags | orderBy:'label' | filter:$select.search">
                     {{tag.label}}
                 </ui-select-choices>
             </ui-select>

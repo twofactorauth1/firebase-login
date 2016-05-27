@@ -255,6 +255,14 @@
          */
 		function getPages() {
 
+            var deferred = $q.defer();
+
+            if (!ssbService.pages && window.indigenous.precache && window.indigenous.precache.siteData.pages) {
+                ssbService.pages = window.indigenous.precache.siteData.pages;
+                deferred.resolve(ssbService.pages);
+                return ssbRequest(deferred.promise);
+            }
+
 			function success(data) {
 				ssbService.pages = data;
 			}
@@ -314,8 +322,9 @@
                 }
                 console.log('SimpleSiteBuilderService requested page settings saved' + data);
             }
-            if(!isSettings)
+            if(!isSettings){
                 page.ssb = true;
+            }
 			return (
 				ssbRequest($http({
 					url: basePageAPIUrlv2 + page._id,
@@ -400,13 +409,13 @@
          * @param {object} data - page data response from server
          */
 		function successPage(data) {
-
 			var page = transformComponentsToSections(data);
-			ssbService.page = page;
-            // Refresh page list with updated page
-            if(ssbService.pages && ssbService.pages[page.handle]){
-                ssbService.pages[page.handle] = page;
-            }
+      console.log("page loaded");
+		  ssbService.page = page;
+          // Refresh page list with updated page
+          if(ssbService.pages && ssbService.pages[page.handle]){
+              ssbService.pages[page.handle] = page;
+          }
 		}
 
         /**
@@ -959,7 +968,8 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
+            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
+            var keysToOmitComponent = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
             var newComponents = angular.copy(newSection.components);
 
             var newComponentsOrder =  getComponentSortOrder(newComponents, newSection); // ['componentType1', 'componentType2', ...]
@@ -986,7 +996,7 @@
             delete oldSection.components;
 
             newSection.components = _.map(newComponents, function(c, index) {
-                return $.extend({}, c, _.omit(oldComponents[index], keysToOmit));
+                return $.extend({}, c, _.omit(oldComponents[index], keysToOmitComponent));
             });
 
             if(newSection.componentSortOrder){
@@ -996,7 +1006,7 @@
                 }).value();
             }
 
-            return $.extend({}, newSection, _.omit(oldSection, keysToOmit));
+            return $.extend({}, newSection, _.omit(oldSection, keysToOmitSection));
 
 
 
@@ -1087,7 +1097,7 @@
                     ssbService.website.themeId = theme._id;
                     ssbService.website.theme = theme;
 
-                    if (keepCurrentOverrides || !angular.isDefined(ssbService.website.themeOverrides.styles)) {
+                    if (keepCurrentOverrides || !ssbService.website.themeOverrides || (ssbService.website.themeOverrides && !angular.isDefined(ssbService.website.themeOverrides.styles))) {
                         $timeout(function() {
                             ssbService.website.themeOverrides = theme;
                         },0);
@@ -1543,6 +1553,7 @@
         function revertPage(pageId, versionId, fn) {
 
           function success(data) {
+
             console.log('SimpleSiteBuilderService revertPage: ' + data);
             fn(data);
           }
@@ -1640,7 +1651,7 @@
 			AccountService.getAccount(function(data) {
                 ssbService.account = data;
                 ssbService.setPermissions();
-				ssbService.websiteId = data.website.websiteId;
+				        ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId).then(function(website){
                     ssbService.setupTheme(website);
                 });

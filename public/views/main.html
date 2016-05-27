@@ -1,6 +1,7 @@
 <div
     ng-repeat="section in page.sections"
-    class="fragment">
+    class="fragment"
+    ng-if="!page.layout">
 
     <div
         ng-if="section.ssb === false"
@@ -17,5 +18,56 @@
         index="$index"
         class="ssb-page-section">
     </ssb-page-section>
+
+</div>
+
+
+<div ng-if="page.layout === 'ssb-layout__header_2-col_footer'">
+
+    <div class="ssb-layout__header_2-col_footer">
+
+        <div class="ssb-page-layout-row row">
+            <div class="col-xs-12">
+                <ssb-page-section
+                    ng-repeat="sectionIndex in page.layoutModifiers['header']"
+                    section="page.sections[sectionIndex]"
+                    index="$index"
+                    class="ssb-page-section">
+                </ssb-page-section>
+            </div>
+        </div>
+
+        <div class="ssb-page-layout-row row">
+            <div class="col-xs-12 col-md-8">
+                <ssb-page-section
+                    ng-repeat="sectionIndex in page.layoutModifiers['2-col-1']"
+                    section="page.sections[sectionIndex]"
+                    index="$index"
+                    class="ssb-page-section">
+                </ssb-page-section>
+            </div>
+
+            <div class="col-xs-12 col-md-4">
+                <ssb-page-section
+                    ng-repeat="sectionIndex in page.layoutModifiers['2-col-2']"
+                    section="page.sections[sectionIndex]"
+                    index="$index"
+                    class="ssb-page-section">
+                </ssb-page-section>
+            </div>
+        </div>
+
+        <div class="ssb-page-layout-row row">
+            <div class="col-xs-12">
+                <ssb-page-section
+                    ng-repeat="sectionIndex in page.layoutModifiers['footer']"
+                    section="page.sections[sectionIndex]"
+                    index="$index"
+                    class="ssb-page-section">
+                </ssb-page-section>
+            </div>
+        </div>
+
+    </div>
 
 </div>

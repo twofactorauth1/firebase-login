@@ -198,11 +198,17 @@ var securityManager = {
                 return cb(null, false);
             }
             var billing = account.get('billing');
+            if(self._isEvergreen(billing)) {
+                req.session.subprivs = defaultSubscriptionPrivs;
+                log.trace('<< verifySubscription(evergreen: ' + req.session.accountId + ')');
+                return cb(null, true);
+            }
             if(self._isWithinTrial(billing)) {
                 req.session.subprivs = defaultSubscriptionPrivs;
                 log.trace('<< verifySubscription(freetrial: ' + req.session.accountId + ')');
                 return cb(null, true);
             }
+
             if(!billing.subscriptionId) {
                 log.debug('No subscription found for account: ' + req.session.accountId);
                 return cb(null, false);
@@ -299,6 +305,36 @@ var securityManager = {
         });
     },
 
+    setPlanAndSubOnAccount: function(accountId, subscriptionId, planId, userId, fn) {
+        var self = this;
+        log.debug('>> setPlanAndSubOnAccount');
+        accountDao.addSubscriptionAndPlanToAccount(accountId, subscriptionId, planId, userId, function(err, account){
+            if(err) {
+                log.error('Error adding subscription to account: ' + err);
+                return fn(err, null);
+            }
+            accountDao.removeSubscriptionLockFromAccount(accountId, function(err, value){});
+            var subpriv = new $$.m.SubscriptionPrivilege({
+                accountId: accountId,
+                subscriptionId: planId,
+                activePrivs: defaultSubscriptionPrivs,
+                created: {
+                    date: new Date(),
+                    by: userId
+                }
+            });
+            subscriptionPrivilegeDao.saveOrUpdate(subpriv, function(err, savedSubPriv){
+                if(err) {
+                    log.error('Error saving subscription privileges: ' + err);
+                    return fn(err, null);
+                } else {
+                    log.debug('<< addBillingInfoToAccount');
+                    return fn(null, savedSubPriv);
+                }
+            });
+        });
+    },
+
     addSubscriptionToAccount: function(accountId, subscriptionId, planId, userId, fn){
         var self = this;
         log.debug('>> addSubscriptionToAccount');
@@ -335,6 +371,10 @@ var securityManager = {
 
         var trialDaysRemaining = endDate.diff(moment(), 'days');
         return trialDaysRemaining > 0;
+    },
+
+    _isEvergreen: function(billing) {
+        return billing.subscriptionId === appConfig.internalSubscription;
     }
 
 

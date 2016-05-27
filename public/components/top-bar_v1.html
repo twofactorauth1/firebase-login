@@ -25,27 +25,30 @@
                             <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index)" class="clickable-link social-links" href="" style="z-index:1033;"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
                         </li>
                     </ul>
-                    <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add a social link.">
-                        <a ng-if="isEditing" ng-click="openModal('social-links-modal')" class="clickable-link social-links" data-toggle="modal"><i class="fa fa-plus"></i></a>
+                    <div ng-if="isEditing" ng-click="openModal('social-links-modal')" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add a social link.">
+                        <a ng-if="isEditing" class="clickable-link social-links" data-toggle="modal"><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
                 <ul class="nav navbar-nav navbar-right right-block" data-edit="{ type: 'component' }">
                     <li class="hour-block">
-                        <div class="navbar-text navbar-right"><i ng-if="component.businessHours" class="fa fa-clock-o fa-lg "></i> &nbsp;
-                            <div elem ng-model="component.businessHours"></div>
+                        <div class="navbar-text navbar-right">
+                            <i ng-if="component.businessHours" class="fa fa-clock-o fa-lg "></i> &nbsp;
+                            <div elem ng-model="component.businessHours" class="inline-block"></div>
                         </div>
                     </li>
                     <li class="phone-block">
-                        <div class="navbar-text navbar-right"> <i ng-if="component.phone" class="fa fa-phone fa-lg"></i> &nbsp;
+                        <div class="navbar-text navbar-right">
+                            <i ng-if="component.phone" class="fa fa-phone fa-lg"></i> &nbsp;
                             <div ng-if="isEditing" elem ng-model="component.phone"></div>
                             <a href="tel:{{component.phone}}" ng-if="!isEditing">
-                                <div elem ng-model="component.phone"></div>
+                                <div elem ng-model="component.phone" class="inline-block"></div>
                             </a>
                         </div>
                     </li>
                     <li class="phone-block">
-                        <div class="navbar-text navbar-right"> <i ng-if="component.email" class="fa fa-envelope-o fa-lg"></i> &nbsp;
-                            <div elem ng-model="component.email"></div>
+                        <div class="navbar-text navbar-right">
+                            <i ng-if="component.email" class="fa fa-envelope-o fa-lg"></i> &nbsp;
+                            <div elem ng-model="component.email" class="inline-block"></div>
                         </div>
                     </li>
                 </ul>

@@ -106,6 +106,7 @@ module.exports = function(grunt) {
                     '../indigeweb/public/css/styles.css': [ 'public/less/frontend.less' ],
                     '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
                     '../indigeweb/public/admin/assets/css/theme.css': [ 'public/less/theme.less' ],
+                    '../indigeweb/public/admin/assets/css/email.css': [ 'public/less/email.less' ],
                     // '../indigeweb/public/admin/assets/css/ssb-site-builder/styles.css': [ 'public/less/ssb-site-builder/frontend/styles.less' ],
                     '../indigeweb/public/css/ssb-site-builder/ssb-themes/ssb-theme-young-soul.css': [ 'public/less/ssb-site-builder/ssb-frontend/ssb-themes/ssb-theme-young-soul.less' ]
                 }
@@ -116,29 +117,6 @@ module.exports = function(grunt) {
             split_style: {
               src: ['../indigeweb/public/css/styles.css'],
               dest: '../indigeweb/public/css'
-            }
-        },
-
-        cssmin: {
-            target: {
-                /*files: [{
-                    expand: true,
-                    cwd: '../indigeweb/public/css',
-                    src: ['*.css', 'style.default_part_1.css', '!*.min.css'],
-                    dest: '../indigeweb/public/css',
-                    ext: '.min.css'
-                }]*/
-                files: [
-                    {
-                        'public/admin/assets/css/styles.min.css': ['public/admin/assets/css/styles.css']
-                    },
-                    {
-                        'public/admin/assets/css/plugins.min.css': ['public/admin/assets/css/plugins.css']
-                    },
-                    {
-                        'public/css/styles.min.css': ['public/css/styles.css']
-                    }
-                ]
             }
         },
 
@@ -222,6 +200,23 @@ module.exports = function(grunt) {
             vendor: {
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/admin_body_scripts.jade'),
                 dest: 'public/admin/assets/js/admin-vendor-indigenous.js'
+            },
+            css: {
+                src: [
+                    'public/js/libs/font-awesome/css/font-awesome.min.css',
+                    'public/js/libs/bootstrap/dist/css/bootstrap.min.css',
+                    'public/js/libs/bootstrap-social/bootstrap-social.css',
+                    'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css',
+                    'public/js/libs/jqcloud2/dist/jqcloud.min.css',
+                    'public/js/libs/angular-wizard/dist/angular-wizard.min.css',
+                    'public/js/libs/animate.css/animate.min.css',
+                    'public/js/libs/slick-carousel/slick/slick.css',
+                    'public/js/libs/slick-carousel/slick/slick-theme.css',
+                    'public/js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css',
+                    'public/js/libs/froala-wysiwyg-editor/css/froala_style.min.css'
+                ],
+                dest:'public/css/vendor.css',
+                nonull:true
             }
         },
 
@@ -614,8 +609,9 @@ module.exports = function(grunt) {
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
 
-    grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'cssmin', 'clean:postbuild']);
 
+    grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
+    grunt.registerTask('local', ['less', 'postcss', 'concat:css']);
 
     /*
      * This task is run by CI.

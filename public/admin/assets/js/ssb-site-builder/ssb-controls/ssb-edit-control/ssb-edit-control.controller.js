@@ -269,8 +269,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                     vm.uiState.toggleSection(vm.state.page.sections[index]);
                 }
             });
-        }
-        else{
+        } else {
             SweetAlert.swal({
                 title: "Are you sure?",
                 text: "Do you want to delete this section?",
@@ -283,9 +282,9 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                 closeOnCancel: true
             },
             function (isConfirm) {
-            if (isConfirm) {
-                SimpleSiteBuilderService.removeSectionFromPage(index)
-            }
+                if (isConfirm) {
+                    SimpleSiteBuilderService.removeSectionFromPage(index)
+                }
             });
         }
     }

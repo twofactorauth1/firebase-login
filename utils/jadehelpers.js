@@ -63,7 +63,11 @@ app.locals.setServerProps = function(serverProps) {
     var str =
         "if (typeof indigenous === 'undefined') indigenous = {};" +
         "window.indigenous = window.indigenous || {};" +
-            "window.indigenous.server = window.indigenous.server || {};";
+        "window.indigenous.server = window.indigenous.server || {};";
+
+    //these are separately set on the page in _serverprops.jade, we don't want them as strings here
+    delete serverProps.posts;
+    delete serverProps.pages;
 
     for (var key in serverProps) {
         var value = serverProps[key];

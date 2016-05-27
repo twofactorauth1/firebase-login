@@ -21,13 +21,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="ssb-form-donate-progress-percentage" ng-class="{ 'on': vm.total }">
+                            <div class="ssb-form-donate-progress-percentage" ng-class="{ 'on': vm.total }" ng-show='vm.percentage <= 100'>
                                 {{vm.percentage}}% raised of ${{vm.component.productSettings.goal}}
+                            </div>
+                            <div class="ssb-form-donate-progress-percentage" ng-class="{ 'on': vm.total }" ng-show='vm.percentage > 100'>
+                                Exceeded by {{vm.percentage - 100}}%
                             </div>
                         </div>
                         <div class="center margin-top-30 col-sm-12">
                             <button ng-disabled="!vm.component.productSettings || !vm.checkDateValidityFn()" ng-if="!vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" data-toggle="modal" data-target="#form-donate-modal-{{vm.component._id}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
-                                class="btn btn-form btn-default pull-right btn-block">
+                                class="btn btn-form pull-right btn-block">
                                 <span elem ng-model="vm.component.submitBtn" ng-show='vm.checkDateValidityFn()'></span>
                                 <span ng-hide='vm.checkDateValidityFn()'>Time span expired</span>
                             </button>
@@ -88,7 +91,7 @@
                                         </button>
                                         <div class="flex-break">
                                             <label class="donation-amount-other-label control-label padding-right-20">Your donation amount:</label>
-                                            <input type='text' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' />
+                                            <input type='number' id='form-donate-modal-amount-{{vm.component._id}}' class='donate-other-amount form-control' placeholder="Other amount" ng-model='vm.formBuilder.amount' min='{{vm.product.donationMinimumAmount || 0}}' max='{{vm.product.donationMaximumAmount || 9999999999}}' />
                                         </div>
                                     </div>
                                     <hr />
@@ -291,7 +294,7 @@
                                 <button type="button" class="btn btn-primary" ng-disabled="formBuilder.$invalid">{{vm.component.modalSettings.submitBtnText}}</button>
                             </div> -->
                             <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 1">
-                                <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="vm.setCheckoutState(2)"> Next <i class="fa fa-chevron-right"></i></button>
+                                <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="vm.setCheckoutState(2)" ng-disabled='vm.formInvalidFn(formBuilder)'> Next <i class="fa fa-chevron-right"></i></button>
                             </div>
                             <div class="modal-footer billing-footer" ng-show="vm.checkoutModalState == 2">
                                 <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="vm.setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back</button>

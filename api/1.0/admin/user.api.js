@@ -8,6 +8,7 @@
 var baseApi = require('../../base.api');
 var userManager = require('../../../dao/user.manager');
 var userDao = require('../../../dao/user.dao');
+var appConfig = require('../../../configs/app.config');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -24,6 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/password'), this.isAuthApi.bind(this), this.setUserPassword.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUser.bind(this));
         app.post(this.url('account/:id'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
+        app.post(this.url('account/:id/evergreen'), this.isAuthApi.bind(this), this.convertAccountToInternal.bind(this));
         app.get(this.url('account/:id/users'), this.isAuthApi.bind(this), this.listUsersForAccount.bind(this));
 
         app.post(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.addUserToAccount.bind(this));
@@ -68,6 +70,26 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    convertAccountToInternal: function(req, resp) {
+        var self = this;
+        self.log.debug('>> convertAccountToInternal');
+
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
+                var accountId = parseInt(req.params.id);
+                var subscriptionId = appConfig.internalSubscription;
+                var planId = appConfig.internalSubscription;
+                var userId = self.userId(req);
+                self.sm.setPlanAndSubOnAccount(accountId, subscriptionId, planId, userId, function(err, value){
+                    self.log.debug('<< convertAccountToInternal');
+                    return self.sendResultOrError(resp, err, value, 'Error converting account', null);
+                });
+            }
+        });
     },
 
     createUserForAccount: function(req, resp) {
@@ -166,7 +188,7 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     _isAdmin: function(req, fn) {
         var self = this;
-        if(self.userId(req) === 1) {
+        if(self.userId(req) === 1 || self.userId(req)===4) {
             fn(null, true);
         } else {
             fn(null, false);
