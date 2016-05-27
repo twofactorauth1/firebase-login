@@ -123,7 +123,7 @@ main(){
         aws s3 cp ${APP_NAME}-${APP_VERSION}.zip s3://${S3_BUCKET}/${APP_NAME}-${APP_VERSION}.zip	|| on_err "$_"
         echo "Checking for old revisions to clean up..."
         LIMIT_REVISIONS=100
-        aws elasticbeanstalk describe-application-versions --application-name "${APP_NAME}" --output text \
+        aws elasticbeanstalk describe-application-versions --application-name "${ASIA_APP_NAME}" --output text \
           --query 'ApplicationVersions[*].[VersionLabel,DateCreated,Description]' | \
           grep -vi sample | tail -n +${LIMIT_REVISIONS} | \
           while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${ASIA_APP_NAME}" --version-label "${ver}" --delete-source-bundle; done
@@ -162,18 +162,18 @@ main(){
 	# Testing?
 
 	if [ "$1" = "master" ]; then
-            echo "Put back test dependencies"
-            #We have already removed test deps.  Lets put them back.
-            npm install
-            npm install selenium-webdriver
-            echo "Waiting for deploy to finish"
+        echo "Put back test dependencies"
+        #We have already removed test deps.  Lets put them back.
+        npm install
+        npm install selenium-webdriver
+        echo "Waiting for deploy to finish"
 
-            interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
+        interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
-            echo "Running Selenium"
+        echo "Running Selenium"
 
-            grunt nodeunit:selenium
-        fi
+        grunt nodeunit:selenium
+    fi
 }
 
 env_check $*
