@@ -379,8 +379,9 @@ module.exports = function(grunt) {
                             message: 'Which direction are you copying?', // Question to ask the user, function needs to return a string,
                             default: true, // default value if nothing is entered
                             choices: [
-                                { name: 'From Test to Production', value: true, checked:true},
-                                { name: 'From Production to Test', value: false }
+                                { name: 'From Test to Production', value: 'test2prod' },
+                                { name: 'From Test to Test (new account)', value: 'test2test' },
+                                { name: 'From Production to Test', value: 'prod2test', checked:true }
                                 ]
                             //validate: function(value), // return true if valid, error message if invalid
                             //filter:  function(value){if(value === 'Copy from Production to Test'){ return false} else {return true;}}, // modify the answer
@@ -485,8 +486,10 @@ module.exports = function(grunt) {
         var done = this.async();
         var accountId = parseInt(grunt.config('doCopyAccount.accountId'));
         var isTestToProd = grunt.config('doCopyAccount.testToProd');
-        if(isTestToProd === true) {
+        if (isTestToProd === 'test2prod') {
             dbcopyutil.copyAccountFromTestToProd(accountId, done);
+        } else if (isTestToProd === 'test2test') {
+            dbcopyutil.copyAccountFromTestToTest(accountId, done);
         } else {
             dbcopyutil.copyAccountFromProdToTest(accountId, done);
         }
