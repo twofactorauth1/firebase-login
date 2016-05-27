@@ -51,6 +51,12 @@ var copyutil = {
 
     },
 
+    copyAccountFromProdToProd: function(accountId, cb) {
+        var self = this;
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, true, cb);
+
+    },
+
     convertAccountToSiteTemplate: function(accountId, cb) {
         var self = this;
         self._convertAccountToSiteTemplate(accountId, cb);
