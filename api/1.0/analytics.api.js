@@ -304,6 +304,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     cb(err);
                 });
             }, function(err){
+                if (err) {
+                    self.log.error('Error handleSendgridEvent:', err);
+                }
                 self.log.debug('<< handleSendgridEvent', savedEvents);
             });
         });
@@ -856,7 +859,7 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             sessionEvent.set('subdomain', subdomainObj.subdomain);
         }
-        
+
 
 
         analyticsManager.storeSessionEvent(sessionEvent, function(err){
@@ -874,7 +877,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pageEvent.set('session_id', req.params.id);
         pageEvent.set('server_time', new Date().getTime());
         pageEvent.set('server_time_dt', new Date());
-        
+
         analyticsManager.storePageEvent(pageEvent, function(err){
             if(err) {
                 self.log.error('Error saving page event: ' + err);
