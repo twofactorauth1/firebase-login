@@ -25,6 +25,7 @@
         ssbService.getSite = getSite;
         ssbService.getPage = getPage;
         ssbService.getPages = getPages;
+        ssbService.loadDataFromPage = loadDataFromPage;
         ssbService.getPagesWithSections = getPagesWithSections;
         ssbService.savePage = savePage;
         ssbService.saveWebsite = saveWebsite;
@@ -257,11 +258,14 @@
 
             var deferred = $q.defer();
 
-            if (!ssbService.pages && window.indigenous.precache && window.indigenous.precache.siteData.pages) {
-                ssbService.pages = window.indigenous.precache.siteData.pages;
-                deferred.resolve(ssbService.pages);
-                return ssbRequest(deferred.promise);
-            }
+            // if (!ssbService.pages) {
+            //     var pages = ssbService.loadDataFromPage('script#indigenous-precache-sitedata-pages');
+            //     if (pages.length) {
+            //         ssbService.pages = pages;
+            //         deferred.resolve(ssbService.pages);
+            //         return ssbRequest(deferred.promise);
+            //     }
+            // }
 
 			function success(data) {
 				ssbService.pages = data;
@@ -273,6 +277,31 @@
 
 			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + ssbService.websiteId + '/pages').success(success).error(error));
 		}
+
+        function loadDataFromPage(scriptId) {
+
+            var data = $(scriptId).html();
+
+            var unescapeMap = {
+                "&amp;":"&",
+                "&lt;":"<",
+                "&gt;":">",
+                '&quot;':'"',
+                '&#39;':"'",
+                '&#x2F;':"/",
+                '&apos;': "'"
+            };
+
+            function unescapeHTML(string) {
+                return String(string).replace(/(&amp;|&lt;|&gt;|&quot;|&#39;|&#x2f;|&apos;)/g, function(s) {
+                    return unescapeMap[s] || s;
+                });
+            }
+
+            var parsedData = JSON.parse(unescapeHTML(data));
+
+            return parsedData;
+        }
 
         /**
          * TODO: @sanjeev to document
