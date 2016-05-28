@@ -5,18 +5,17 @@
     * Please contact info@indigenous.io for approval or questions.
 
 if (serverProps)
-    script.
-        window.indigenous = window.indigenous || {};
-        window.indigenous.precache = window.indigenous.precache || {};
-        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
 
     if (serverProps.posts)
-        script.
-            window.indigenous.precache.siteData.posts = !{serverProps.posts};
+
+        script(id="indigenous-precache-sitedata-posts", type="application/json").
+            #{serverProps.posts}
 
     if (serverProps.pages)
-        script.
-            window.indigenous.precache.siteData.pages = !{serverProps.pages};
+
+        script(id="indigenous-precache-sitedata-pages", type="application/json").
+            #{serverProps.pages}
+
 
     script.
         #{setServerProps(serverProps)}
