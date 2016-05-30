@@ -613,13 +613,20 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.imageEditor.editor = editor;
             vm.imageEditor.img = editor.image.get();
         }
+        else{
+            if(!vm.imageEditor.editor.selection.ranges[0]){
+                vm.imageEditor.editor.selection.setAtEnd(vm.imageEditor.editor.$el.get(0));
+                vm.imageEditor.editor.selection.restore();
+            }
+
+        }
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     $scope.$on('initializeEditor', function (event, args) {
-      if(!vm.imageEditor.editor)
-       vm.imageEditor.editor = args.editor;
-       vm.imageEditor.editor.selection.save();
+      if(!vm.imageEditor.editor){
+            vm.imageEditor.editor = args.editor;
+      }
 
     });
 

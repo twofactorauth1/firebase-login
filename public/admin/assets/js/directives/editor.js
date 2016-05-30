@@ -139,10 +139,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                 }).on('froalaEditor.blur', function (e, editor) {
 
-                    editor.selection.save();
                     //hide any currently shown toolbar
                     $('.fr-toolbar').removeClass('ssb-froala-active-editor');
-
+                    editor.selection.save();
                     scope.$emit('blurEditor', { editor: editor, editorImage: editor.image.get() });
 
                 }).on('froalaEditor.popups.hide.image.insert', function(e, editor) {
