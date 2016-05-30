@@ -116,10 +116,11 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                 }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
-                     console.log('toolbar hide');
+                    console.log('toolbar hide');
 
                     if (editor.popups.areVisible()) {
                         //hide any currently shown toolbar
+
                         $('.fr-toolbar').removeClass('ssb-froala-active-editor');
                     }
 

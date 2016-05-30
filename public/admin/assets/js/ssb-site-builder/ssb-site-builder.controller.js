@@ -578,8 +578,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function addFroalaImage(asset) {
 
         $timeout(function() {
-            if(vm.imageEditor.editor)
-                vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+            vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
         }, 0);
 
     };
@@ -610,25 +609,29 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     // Hook froala insert up to our Media Manager
     window.clickandInsertImageButton = function (editor) {
       console.log('clickandInsertImageButton >>> ');
+
         if(editor){
+            vm.showInsert = true;
             vm.imageEditor.editor = editor;
             vm.imageEditor.img = editor.image.get();
         }
-        if(vm.imageEditor && vm.imageEditor.editor){
-            vm.showInsert = true;
-        }
         else{
-            vm.showInsert = false;
+            if(vm.imageEditor && vm.imageEditor.editor){
+                vm.showInsert = true;
+            }
+            else{
+                vm.showInsert = false;
+            }
+            if(!vm.imageEditor.editor.selection.ranges[0]){
+                vm.imageEditor.editor.selection.setAtEnd(vm.imageEditor.editor.$el.get(0));
+                vm.imageEditor.editor.selection.restore();
+            }
         }
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     $scope.$on('focusEditor', function (event, args) {
       vm.imageEditor.editor = args.editor;
-      vm.imageEditor.img = null;
-    });
-    $scope.$on('resetEditor', function (event, args) {
-      vm.imageEditor.editor = null;
       vm.imageEditor.img = null;
     });
     $scope.$on('blurEditor', function (event, args) {
