@@ -238,7 +238,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(resp);
                 } else {
                     contactDao.findMany(query, $$.m.Contact, function(err, contacts){
-                        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags'];
+                        var headers = ['first', 'middle', 'last', 'email', 'created', 'type', 'tags', 'phone', 'website', 'company', 'address'];
                         var extras = _.pluck(_.pluck(contacts, 'attributes'), 'extra');
                         var extraHeaders = [];
 
@@ -266,6 +266,10 @@ _.extend(api.prototype, baseApi.prototype, {
                             csv += contact.get('created').date + ',';
                             csv += contact.get('type') + ',';
                             csv += tags.join(' | ') + ',';
+                            csv += contact.getPrimaryPhone() + ',';
+                            csv += contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website + ',' : ',';
+                            csv += contact.get('details').length && contact.get('details')[0].company ? contact.get('details')[0].company + ',' : ',';
+                            csv += contact.getPrimaryAddress() + ',';
 
                             _.each(extraHeaders, function (header) {
                                 var extraField = _.findWhere(contact.get('extra'), {label: header});
@@ -273,7 +277,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 if (extraField) {
                                   csv += extraField.value + ',';
                                 } else {
-                                  csv += 'null' + ',';
+                                  csv += ',';
                                 }
                             });
 
