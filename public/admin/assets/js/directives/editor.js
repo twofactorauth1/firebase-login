@@ -76,13 +76,12 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
               //topbar positioning
               $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
-              scope.$emit('initializeEditor', { editor: editor });
+              //scope.$emit('initializeEditor', { editor: editor });
               //set initial text
               if (ngModel.$viewValue) {
                 var html = ngModel.$viewValue.replace("<span>", "<span style=''>");
                 editor.html.set(html);
               }
-
               //compile special elements
               scope.compileEditorElements(editor, true);
 
@@ -97,7 +96,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
                     scope.updateFroalaContent(editor);
                 }).on('froalaEditor.toolbar.show', function(e, editor) {
-                    //editor.selection.clear();
+
                     console.log('toolbar show')
 
                     //close sidebar
@@ -117,7 +116,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                 }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
-                    // console.log('toolbar hide');
+                     console.log('toolbar hide');
 
                     if (editor.popups.areVisible()) {
                         //hide any currently shown toolbar
@@ -148,7 +147,11 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     console.log('froalaEditor.popups.hide.image.insert');
                 }).on('froalaEditor.popups.hide.image.edit', function(e, editor) {
                     console.log('froalaEditor.popups.hide.image.edit');
-                });
+                })
+                .on('froalaEditor.popups.show.image.edit', function(e, editor) {
+                    editor.selection.save();
+                    scope.$emit('blurEditor', { editor: editor, editorImage: editor.image.get() });
+                })
 
                 $(elem).froalaEditor('events.on', 'keydown', function (e) {
 

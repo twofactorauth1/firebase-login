@@ -576,8 +576,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function addFroalaImage(asset) {
+
         $timeout(function() {
-            vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+            if(vm.imageEditor.editor)
+                vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
         }, 0);
 
     };
@@ -608,30 +610,26 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     // Hook froala insert up to our Media Manager
     window.clickandInsertImageButton = function (editor) {
       console.log('clickandInsertImageButton >>> ');
-      vm.showInsert = true;
         if(editor){
             vm.imageEditor.editor = editor;
             vm.imageEditor.img = editor.image.get();
         }
+        if(vm.imageEditor && vm.imageEditor.editor){
+            vm.showInsert = true;
+        }
         else{
-            if(!vm.imageEditor.editor.selection.ranges[0]){
-                vm.imageEditor.editor.selection.setAtEnd(vm.imageEditor.editor.$el.get(0));
-                vm.imageEditor.editor.selection.restore();
-            }
-
+            vm.showInsert = false;
         }
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
-    $scope.$on('initializeEditor', function (event, args) {
-      if(!vm.imageEditor.editor){
-            vm.imageEditor.editor = args.editor;
-      }
-
-    });
-
     $scope.$on('focusEditor', function (event, args) {
       vm.imageEditor.editor = args.editor;
+      vm.imageEditor.img = null;
+    });
+    $scope.$on('resetEditor', function (event, args) {
+      vm.imageEditor.editor = null;
+      vm.imageEditor.img = null;
     });
     $scope.$on('blurEditor', function (event, args) {
       if(args.editor)
@@ -661,23 +659,23 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
-                function hideAllControls() {
+    function hideAllControls() {
 
-                    //hide editable-title's and borders
-                    angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+        //hide editable-title's and borders
+        angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
 
-                    //hide all edit-controls
-                    angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
-                    angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
+        //hide all edit-controls
+        angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
+        angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
-                    //components
-                    angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
+        //components
+        angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
 
-                    //btns
-                    angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
-                    angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
+        //btns
+        angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
+        angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
 
-                }
+    }
 
     /**
      * Inspect changes beyond simple angular.equals
