@@ -890,7 +890,9 @@
             //vm.parseFBShare();
 
             $(vm.element).find('.modal').on('hidden.bs.modal', function () {
-                vm.close();
+                if (vm.checkoutModalState == 5) {
+                  vm.close();
+                }
             })
 
             if ($.card) {
