@@ -30,7 +30,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.checkIfDirty = checkIfDirty;
     vm.resetDirty = resetDirty;
     vm.pageChanged = pageChanged;
-    vm.toggleSectionVisiblity = toggleSectionVisiblity
+    vm.toggleSectionVisiblity = toggleSectionVisiblity;
+    vm.isBlogPage = isBlogPage;
 
     vm.uiState = {
         loading: 0,
@@ -120,8 +121,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             }
         },
 
-        toggleSection: vm.toggleSectionVisiblity
+        toggleSection: vm.toggleSectionVisiblity,
 
+        isBlogPage: false
 
     };
 
@@ -253,6 +255,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.pendingPageChanges = false;
         vm.state.page = page;
         vm.state.originalPage = null;
+        vm.uiState.isBlogPage = vm.isBlogPage();
         $timeout(function() {
             vm.state.originalPage = angular.copy(page);
         }, 1000);
@@ -836,6 +839,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             }
         }
 
+    }
+
+    function isBlogPage() {
+        return vm.state.page.handle === 'blog-list' || vm.state.page.handle === 'blog-post'
     }
 
 

@@ -53,6 +53,7 @@
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
         ssbService.removeSectionFromPage = removeSectionFromPage;
+        ssbService.removeSectionFromLayoutArea = removeSectionFromLayoutArea;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
         ssbService.getFontFamilyOptions = getFontFamilyOptions;
         ssbService.deletePage = deletePage;
@@ -977,10 +978,83 @@
          *
          */
 
-        function removeSectionFromPage(index) {
-            ssbService.page.sections.splice(index, 1);
+        function removeSectionFromPage(pageSectionIndex) {
+
+            if (ssbService.page.layout === 'ssb-layout__header_2-col_footer' && ssbService.page.layoutModifiers) {
+                ssbService.removeSectionFromLayoutArea(pageSectionIndex);
+            }
+
+            ssbService.page.sections.splice(pageSectionIndex, 1);
+
             ssbService.setActiveSection(null);
             ssbService.setActiveComponent(null);
+
+        }
+
+        /**
+         * Remove a section from the specific layout area of page
+         * @param {obj} section - section of page to be removed
+         * @param {integer} index - index of page section to be removed
+         *
+         * Note: layoutModifiers for custom layouts look like:
+         *       {
+         *          "header" : [
+         *              0
+         *          ],
+         *          "2-col-1" : [
+         *              1
+         *          ],
+         *          "2-col-2" : [
+         *              2,
+         *              3,
+         *              4,
+         *              5,
+         *              6,
+         *              7
+         *          ],
+         *          "footer" : [
+         *              8
+         *          ]
+         *      }
+         */
+        function removeSectionFromLayoutArea(pageSectionIndex) {
+
+            var decrementProceedingValues = false;
+            var sectionId = ssbService.page.sections[pageSectionIndex]._id;
+            var sectionLayoutName = _.filter(ssbService.page.layoutModifiers._layoutAreas, function(val, index) {
+                return ssbService.page.layoutModifiers[val].indexOf(pageSectionIndex) !== -1
+            })[0];
+            var sectionLayoutIndex = ssbService.page.layoutModifiers[sectionLayoutName].indexOf(pageSectionIndex);
+
+
+            console.debug('sectionLayoutName before:', sectionLayoutName)
+            console.debug('ssbService.page.layoutModifiers[sectionLayoutName]:', ssbService.page.layoutModifiers[sectionLayoutName])
+
+            //remove this section's index value from the layout area array that its in
+            ssbService.page.layoutModifiers[sectionLayoutName].splice(sectionLayoutIndex, 1);
+
+            //decrement all index values that come after the one just removed
+            _.each(ssbService.page.layoutModifiers._layoutAreas, function(layoutName) {
+
+                if (layoutName === sectionLayoutName) {
+                    decrementProceedingValues = true;
+                }
+
+                if (decrementProceedingValues) {
+
+                    console.debug('layoutName before:', layoutName)
+                    console.debug('ssbService.page.layoutModifiers[layoutName]:', ssbService.page.layoutModifiers[layoutName])
+
+                    ssbService.page.layoutModifiers[layoutName] = _.map(ssbService.page.layoutModifiers[layoutName], function(val, index) {
+                        return (val - 1);
+                    });
+
+                    console.debug('layoutName after:', layoutName)
+                    console.debug('ssbService.page.layoutModifiers[layoutName]:', ssbService.page.layoutModifiers[layoutName])
+                }
+
+            });
+
         }
 
         /*

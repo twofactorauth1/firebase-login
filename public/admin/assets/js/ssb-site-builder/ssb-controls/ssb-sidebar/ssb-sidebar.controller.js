@@ -390,7 +390,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             },
             function (isConfirm) {
             if (isConfirm) {
-                SimpleSiteBuilderService.removeSectionFromPage(index)
+                SimpleSiteBuilderService.removeSectionFromPage(index);
             }
             });
         }

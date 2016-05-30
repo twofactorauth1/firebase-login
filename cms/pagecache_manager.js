@@ -536,12 +536,12 @@ module.exports = {
             var layoutData = page.get('layoutModifiers');
             var layoutMarkupString =
                 '<div class="ssb-layout__header_2-col_footer">' +
-                    '<div class="ssb-page-layout-row row">' +
+                    '<div class="ssb-page-layout-row">' +
                         '<div class="col-xs-12">' +
                             '{{header}}' +
                         '</div>' +
                     '</div>' +
-                    '<div class="ssb-page-layout-row row">' +
+                    '<div class="ssb-page-layout-row">' +
                         '<div class="col-xs-12 col-md-8">' +
                             '{{2-col-1}}' +
                         '</div>' +
@@ -549,7 +549,7 @@ module.exports = {
                             '{{2-col-2}}' +
                         '</div>' +
                     '</div>' +
-                    '<div class="ssb-page-layout-row row">' +
+                    '<div class="ssb-page-layout-row">' +
                         '<div class="col-xs-12">' +
                             '{{footer}}' +
                         '</div>' +

@@ -1,0 +1,13 @@
+<div data-edit ng-class="vm.component.type+'-v'+vm.component.version">
+
+    <ul class="list-unstyled">
+        <li>
+            <section
+                ssb-blog-post-card-component
+                post="post"
+                ng-repeat="post in vm.blog.posts track by $index">
+            </section>
+        </li>
+    </ul>
+
+</div>

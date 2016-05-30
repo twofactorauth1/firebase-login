@@ -10,6 +10,8 @@ function ssbEditControl() {
             state: '=',
             uiState: '=',
             sectionIndex: '=',
+            sectionLayoutName: '=?',
+            sectionLayoutIndex: '=?',
             component: '=',
             componentIndex: '=?',
             compiledControlId: '@?'
