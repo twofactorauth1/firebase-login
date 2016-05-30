@@ -246,8 +246,16 @@ var contact = $$.m.ModelBase.extend({
       }
 
       var address = _.findWhere(addresses, {defaultBilling: true}) ? _.findWhere(addresses, {defaultBilling: true}) : addresses[0];
+      var fields = ['address', 'address2', 'city', 'state','zip', 'country', 'countryCode'];
+      var addressValues = [];
 
-      return _.values(_.pick(address, 'address', 'address2', 'city', 'state','zip', 'country', 'countryCode')).join('|');
+      fields.forEach(function(field, index) {
+          if (address[field]) {
+            addressValues.push(address[field]);
+          }
+      });
+
+      return addressValues.join('|');
     },
 
 
