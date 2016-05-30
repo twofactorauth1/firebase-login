@@ -68,15 +68,15 @@
         $scope.website = website;
         $scope.keywords = website.seo.keywords;
         if($scope.website){
-          if(!$scope.website.title && account.business.name){
-            $scope.website.title = angular.copy(account.business.name);
+          if(!$scope.website.title && $scope.account.business.name){
+            $scope.website.title = angular.copy($scope.account.business.name);
             _defaults = true;
           }
           if(!$scope.website.seo){
             $scope.website.seo = {};
           }
-          if(!$scope.website.seo.description && account.business.description){
-            $scope.website.seo.description = angular.copy(account.business.description);
+          if(!$scope.website.seo.description && $scope.account.business.description){
+            $scope.website.seo.description = angular.copy($scope.account.business.description);
             _defaults = true;
           }
         }
@@ -87,14 +87,6 @@
           });
         }
     });
-
-
-
-    /*
-     * @AccountService
-     * get account obj
-     */
-
 
 
     /*
