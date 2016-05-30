@@ -5,9 +5,9 @@
 
     app.factory('SimpleSiteBuilderBlogService', SimpleSiteBuilderBlogService);
 
-    SimpleSiteBuilderBlogService.$inject = ['$rootScope', '$compile', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
+    SimpleSiteBuilderBlogService.$inject = ['$rootScope', '$compile', '$http', '$q', '$timeout', '$modal'];
     /* @ngInject */
-    function SimpleSiteBuilderBlogService($rootScope, $compile, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
+    function SimpleSiteBuilderBlogService($rootScope, $compile, $http, $q, $timeout, $modal) {
         var ssbBlogService = {};
         var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
         var basePageAPIUrl = '/api/1.0/cms/page/';
