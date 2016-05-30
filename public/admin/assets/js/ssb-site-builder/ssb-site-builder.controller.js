@@ -609,10 +609,29 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     window.clickandInsertImageButton = function (editor) {
       console.log('clickandInsertImageButton >>> ');
       vm.showInsert = true;
-      vm.imageEditor.editor = editor;
-      vm.imageEditor.img = editor.image.get();
+        if(editor){
+            vm.imageEditor.editor = editor;
+            vm.imageEditor.img = editor.image.get();
+        }
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
+
+    $scope.$on('initializeEditor', function (event, args) {
+      if(!vm.imageEditor.editor)
+       vm.imageEditor.editor = args.editor;
+       vm.imageEditor.editor.selection.save();
+
+    });
+
+    $scope.$on('focusEditor', function (event, args) {
+      vm.imageEditor.editor = args.editor;
+    });
+    $scope.$on('blurEditor', function (event, args) {
+      if(args.editor)
+       vm.imageEditor.editor = args.editor;
+      if(args.editorImage)
+       vm.imageEditor.img = args.editorImage;
+    });
 
     function pageLinkClick(e) {
       if (!angular.element(this).hasClass("clickable-link")) {
