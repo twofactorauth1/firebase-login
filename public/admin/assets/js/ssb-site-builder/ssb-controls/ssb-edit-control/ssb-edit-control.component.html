@@ -21,7 +21,7 @@
 
     <div
         ng-if="vm.sectionIndex !== 0 && vm.sectionLayoutIndex !== 0"
-        class="ssb-sidebar-item-icon display-ib ti-arrow-up ng-scope"
+        class="ssb-sidebar-item-icon ssb-move-section-up display-ib ti-arrow-up ng-scope"
         ng-click="vm.moveSection('up', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
@@ -31,7 +31,7 @@
 
     <div
         ng-if="vm.sectionIndex !== (vm.state.page.sections.length - 1) && (vm.sectionLayoutIndex !== null && (vm.sectionLayoutIndex !== vm.state.page.layoutModifiers[vm.sectionLayoutName].length - 1))"
-        class="ssb-sidebar-item-icon display-ib ti-arrow-down ng-scope"
+        class="ssb-sidebar-item-icon ssb-move-section-down display-ib ti-arrow-down ng-scope"
         ng-click="vm.moveSection('down', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
@@ -40,7 +40,7 @@
     </div>
 
     <div
-        class="ssb-sidebar-item-icon display-ib ti-files ng-scope"
+        class="ssb-sidebar-item-icon ssb-move-section-duplicate display-ib ti-files ng-scope"
         ng-click="vm.duplicateSection(vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
@@ -50,7 +50,7 @@
 
     <div
         data-test="{{vm.sectionLayoutName}}-{{vm.sectionLayoutIndex}}"
-        class="ssb-sidebar-item-icon fa fa-trash-o display-ib"
+        class="ssb-sidebar-item-icon ssb-move-section-remove fa fa-trash-o display-ib"
         ng-click="vm.removeSectionFromPage(vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"

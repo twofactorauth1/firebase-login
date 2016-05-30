@@ -44,7 +44,7 @@
 <div class="col-xs-12 container-fluid padding-top-10 padding-bottom-10 center ssb-sidebar-item-section-actions">
     <div
         ng-if="vm.uiState.activeSectionIndex !== 0"
-        class="ssb-sidebar-item-icon display-ib ti-arrow-up"
+        class="ssb-sidebar-item-icon ssb-move-section-up display-ib ti-arrow-up"
         ng-click="vm.moveSection('up', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Move section up"
@@ -52,28 +52,28 @@
     </div>
     <div
         ng-if="vm.uiState.activeSectionIndex !== (vm.state.page.sections.length - 1)"
-        class="ssb-sidebar-item-icon display-ib ti-arrow-down"
+        class="ssb-sidebar-item-icon ssb-move-section-down display-ib ti-arrow-down"
         ng-click="vm.moveSection('down', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Move section down"
         tooltip-append-to-body="true">
     </div>
     <div
-        class="ssb-sidebar-item-icon ti-pencil display-ib"
+        class="ssb-sidebar-item-icon ssb-move-section-rename ti-pencil display-ib"
         ng-click="vm.state.editSection = true; vm.editSectionName('edit_section_name')"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Rename section"
         tooltip-append-to-body="true">
     </div>
     <div
-        class="ssb-sidebar-item-icon display-ib ti-eye"
+        class="ssb-sidebar-item-icon ssb-move-section-visibility display-ib ti-eye"
         ng-click="vm.hideSectionFromPage(vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Show/hide section"
         tooltip-append-to-body="true">
     </div>
     <div
-        class="ssb-sidebar-item-icon display-ib ti-files ng-scope"
+        class="ssb-sidebar-item-icon ssb-move-section-duplicate display-ib ti-files ng-scope"
         ng-click="vm.duplicateSection(vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
@@ -81,7 +81,7 @@
         tooltip-append-to-body="true">
     </div>
     <div
-        class="ssb-sidebar-item-icon fa fa-trash-o display-ib"
+        class="ssb-sidebar-item-icon ssb-move-section-remove fa fa-trash-o display-ib"
         ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Remove section"

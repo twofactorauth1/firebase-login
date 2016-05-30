@@ -160,4 +160,19 @@
         pointer-events: none;
     }
 
+    .ssb-layout__header_2-col_footer {
+
+        .ssb-move-section-up ,
+        .ssb-move-section-down,
+        .ssb-move-section-duplicate,
+        .ssb-move-section-remove {
+            display: none!important; //disable these actions on special layout pages (blog-list, blog-page)
+        }
+
+        .ssb-edit-control-active-title {
+            border-radius: @pill-border-radius-right;
+        }
+
+    }
+
 }

@@ -98,7 +98,7 @@
 
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
-<div>
+<div class="ssb-edit-mode">
     <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-	<div id="ssb-main" class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
+	<div id="ssb-main" class="ssb-main custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
 
 
 		<div id="componentloader">
@@ -224,7 +224,7 @@
 
 	</div>
 
-    <ssb-sidebar ng-if="vm.state.page" class="fade-in-left ssb-sidebar" state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar }"></ssb-sidebar>
+    <ssb-sidebar ng-if="vm.state.page" class="fade-in-left ssb-sidebar" state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer' }"></ssb-sidebar>
 
     <ssb-topbar ng-if="vm.state.page" class="fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
 
