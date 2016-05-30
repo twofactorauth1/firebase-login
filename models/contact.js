@@ -247,7 +247,7 @@ var contact = $$.m.ModelBase.extend({
 
       var address = _.findWhere(addresses, {defaultBilling: true}) ? _.findWhere(addresses, {defaultBilling: true}) : addresses[0];
 
-      return _.values(_.pick(address, 'address', 'address2', 'city', 'state','zip', 'country', 'countryCode')).join(',\n');
+      return _.values(_.pick(address, 'address', 'address2', 'city', 'state','zip', 'country', 'countryCode')).join('|');
     },
 
 
