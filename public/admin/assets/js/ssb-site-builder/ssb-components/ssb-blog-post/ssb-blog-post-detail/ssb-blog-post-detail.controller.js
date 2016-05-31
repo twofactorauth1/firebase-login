@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogPostDetailComponentController', ssbBlogPostDetailComponentController);
 
-ssbBlogPostDetailComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
+ssbBlogPostDetailComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$location'];
 /* @ngInject */
-function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclude) {
+function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclude, $location) {
 
     console.info('ssb-blog-post-detail directive init...')
 
@@ -22,10 +22,10 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
     function setJSONLD() {
         var JSONLD = {
             "@context": "http://schema.org",
-            "@type": "NewsArticle",
+            "@type": "BlogPosting",
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "https://google.com/article"
+                "@id": $location.href
             },
             "headline": vm.post.post_title,
             "image": {

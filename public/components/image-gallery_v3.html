@@ -6,12 +6,10 @@
 *
 -->
 
-<div ng-class="component.type+'-v'+component.version">
-
-    <div class="clearfix mb20"></div>
+<div data-edit ng-class="component.type+'-v'+component.version">
 
     <div>
-        <div data-edit ng-cloak class="img-container">
+        <div ng-cloak class="img-container">
             <div class="img-row" ng-repeat="image in component.images">
                 <div class="col-sm-3 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
                     <div class="thumbnail img-height single-image">

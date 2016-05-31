@@ -1,7 +1,8 @@
 <div id="footer" class="footer-container">
     <div class="footer-after section">
         <div class="container">
-            <p class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
+            <p ng-if="component.text === undefined" class="col-xs-12 col-sm-8 copyright">Copyright © {{copyright.year}}. All Rights reserved.</p>
+            <p ng-if="component.text !== undefined" class="col-xs-12 col-sm-8 copyright" elem ng-model="component.text"></p>
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
 
                 <a ng-if="website.settings.footerlink" href="{{!website.settings.footerlink && website.settings.footerLinkText != '' ? website.settings.footerLinkURL : '//www.indigenous.io'}}"><img class="footer-logo" src="/images/footer-logo.png"></a>
@@ -17,5 +18,10 @@
 <style>
 .legacy-footer .footer-after {
     background: {{component.bg.color || '#292929'}};
+}
+.footer-after .ssb-active-component{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: -5px;
 }
 </style>

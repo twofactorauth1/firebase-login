@@ -899,7 +899,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     icon: 'long-arrow-left'
   }];
 
-  $scope.resolutions = [320, 360, 480, 720, 768, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'];
+  $scope.resolutions = [320, 360, 480, 720, 768, 960, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'];
 
   function replaceHtmlTags(text){
     return text ? String(text).replace(/<br \/>/gm, ' ').replace(/<[^>]+>/gm, '') : "";

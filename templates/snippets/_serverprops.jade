@@ -6,5 +6,15 @@
 
 if (serverProps)
 
+    if (serverProps.posts)
+
+        script(id="indigenous-precache-sitedata-posts", type="application/json").
+            #{serverProps.posts}
+
+    //- if (serverProps.pages)
+
+    //-     script(id="indigenous-precache-sitedata-pages", type="application/json").
+    //-         #{serverProps.pages}
+
     script.
         #{setServerProps(serverProps)}

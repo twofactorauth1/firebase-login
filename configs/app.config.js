@@ -98,7 +98,8 @@ var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
 var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
 serverUrl += "app." + process.env.ROOT_HOST;
 var wwwUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
-wwwUrl += "www." + process.env.ROOT_HOST;
+//wwwUrl += "www." + process.env.ROOT_HOST;
+wwwUrl += process.env.ROOT_HOST;
 
 var subdomainSuffix = process.env.ROOT_HOST;
 

@@ -6,12 +6,13 @@
 
     [image-gallery-component] { //support legacy w/ image-galleries not contained by .ssb-page-section-image-gallery
         .component-wrap {
-            position: static; //needed for the lightbox effect
+            position: static !important; //needed for the lightbox effect
         }
     }
 
     .ssb-page-section-image-gallery {
         [image-gallery-component] {
+            position: relative;
             .component-wrap {
                 position: static; //needed for the lightbox effect
             }

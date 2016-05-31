@@ -1,21 +1,21 @@
 (function(){
 
-app.directive('ssbBlogPostCardComponent', ssbBlogPostCardComponent);
+app.directive('ssbBlogPostListComponent', ssbBlogPostListComponent);
 
-function ssbBlogPostCardComponent() {
+function ssbBlogPostListComponent() {
   return {
   	// transclude: true,
   	restrict: 'A',
-  	controller: 'SiteBuilderBlogPostCardComponentController',
+  	controller: 'SiteBuilderBlogPostListComponentController',
   	controllerAs: 'vm',
   	bindToController: true,
     scope: {
         ssbEditor: '=',
         componentClass: '&',
         component: '=',
-        post: '=?'
+        blog: '=?'
     },
-    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post-card/ssb-blog-post-card.component.html',
+    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-list/ssb-blog-post-list.component.html',
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
   		ctrl.init(element);

@@ -15,7 +15,7 @@ function ssbBlogPostDetailComponent() {
       component: '=',
       post: '=?'
     },
-    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post-detail/ssb-blog-post-detail.component.html',
+    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-detail/ssb-blog-post-detail.component.html',
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
   		ctrl.init(element);

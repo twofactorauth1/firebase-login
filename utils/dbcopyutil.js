@@ -33,15 +33,27 @@ var copyutil = {
 
     log: $$.g.getLogger("copyutil"),
 
-    copyAccountFromTestToProd : function(accountId, cb) {
+    //TODO: make this safe!
+    // copyAccountFromTestToProd : function(accountId, cb) {
+    //     var self = this;
+    //     self._copyAccount(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, cb);
+    // },
+
+    copyAccountFromTestToTest : function(accountId, cb) {
         var self = this;
-        self._copyAccount(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, cb);
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, true, cb);
     },
 
     copyAccountFromProdToTest: function(accountId, cb) {
         var self = this;
         //self._copyAccount(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
-        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, null, cb);
+
+    },
+
+    copyAccountFromProdToProd: function(accountId, cb) {
+        var self = this;
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, true, cb);
 
     },
 
@@ -62,7 +74,7 @@ var copyutil = {
     },
 
 
-    _copyAccountWithUpdatedStripeIDs: function(srcAccountId, srcDBUrl, destDBUrl, fn) {
+    _copyAccountWithUpdatedStripeIDs: function(srcAccountId, srcDBUrl, destDBUrl, forceNewAccount, fn) {
         var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
         var destMongo = mongoskin.db(destDBUrl, {safe: true});
 
@@ -154,33 +166,57 @@ var copyutil = {
             },
             function(cb) {
                 var destAccountId = null;
-                //look for account by subdomain.  If exists, use that accountId.  Else use new one.
-                destMongo.collection('accounts').find({subdomain:accountToSave.subdomain}).toArray(function(err, accounts){
-                    if(err) {
-                        console.log('Error finding account in destination mongo:', err);
-                        cb(null);
-                    } else if(accounts && accounts[0]) {
-                        destAccountId = accounts[0]._id;
-                        destMongo.collection('websites').removeById(websiteToSave._id, function(err, value){
-                            cb(null, destAccountId);
-                        });
-                    } else {
-                        destMongo.collection('accounts').findAndModify(
-                            { _id: "__counter__" },
-                            [],
-                            { $inc: { seq: 1 } },
-                            { new: true, upsert: true },
-                            function (err, value) {
-                                if (!err && value != null && value.hasOwnProperty('seq')) {
-                                    cb(null, value.seq);
-                                } else {
-                                    console.log('Error getting nextAccountId:', err);
-                                    cb(null, 99999);
-                                }
+
+                //if forceNewAccount is true, just create a new account
+                if (forceNewAccount) {
+
+                    destMongo.collection('accounts').findAndModify(
+                        { _id: "__counter__" },
+                        [],
+                        { $inc: { seq: 1 } },
+                        { new: true, upsert: true },
+                        function (err, value) {
+                            if (!err && value != null && value.hasOwnProperty('seq')) {
+                                cb(null, value.seq);
+                            } else {
+                                console.log('Error getting nextAccountId:', err);
+                                cb(null, 99999);
                             }
-                        );
-                    }
-                });
+                        }
+                    );
+
+                } else {
+
+                    //else look for account by subdomain.  If exists, use that accountId.  Else use new one.
+                    destMongo.collection('accounts').find({subdomain:accountToSave.subdomain}).toArray(function(err, accounts){
+                        if(err) {
+                            console.log('Error finding account in destination mongo:', err);
+                            cb(null);
+                        } else if(accounts && accounts[0]) {
+                            destAccountId = accounts[0]._id;
+                            destMongo.collection('websites').removeById(websiteToSave._id, function(err, value){
+                                cb(null, destAccountId);
+                            });
+                        } else {
+                            destMongo.collection('accounts').findAndModify(
+                                { _id: "__counter__" },
+                                [],
+                                { $inc: { seq: 1 } },
+                                { new: true, upsert: true },
+                                function (err, value) {
+                                    if (!err && value != null && value.hasOwnProperty('seq')) {
+                                        cb(null, value.seq);
+                                    } else {
+                                        console.log('Error getting nextAccountId:', err);
+                                        cb(null, 99999);
+                                    }
+                                }
+                            );
+                        }
+                    });
+
+                }
+
             },
             function(newAccountId, cb) {
                 console.log('New AccountId:' + newAccountId);
@@ -193,6 +229,13 @@ var copyutil = {
                     credentials.accessToken = STRIPE_ACCESS_TOKEN;
                     credentials.refreshToken = STRIPE_REFRESH_TOKEN;
                 }
+
+                if (forceNewAccount) {
+                    var uniqueDomainSuffix = $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+                    accountToSave.subdomain = accountToSave.subdomain + uniqueDomainSuffix;
+                    console.log('New subdomain:', accountToSave.subdomain);
+                }
+
                 destMongo.collection('accounts').save(accountToSave, function(err, savedAccount){
                    if(err) {
                        console.log('Error saving account:', err);
@@ -205,7 +248,7 @@ var copyutil = {
             },
             function(newAccountId, cb) {
                 websiteToSave.accountId = newAccountId;
-                if(!websiteToSave._id) {
+                if(!websiteToSave._id || forceNewAccount) {
                     websiteToSave._id = utils.idutils.generateUUID();
                     accountToSave.website.websiteId = websiteToSave._id;
                     destMongo.collection('accounts').save(accountToSave, function(err, savedAccount){
@@ -233,6 +276,10 @@ var copyutil = {
                     page.accountId = newAccountId;
                     page.websiteId = newWebsiteId;
 
+                    if (forceNewAccount) {
+                        page._id = utils.idutils.generateUUID();
+                    }
+
                     pagesCollection.save(page, function(err, savedPage){
                         if(err) {
                             console.log('Error saving page: ' + page._id);
@@ -255,6 +302,11 @@ var copyutil = {
                 async.eachSeries(productsToSaveArray, function(product, callback){
                     //product._id = null;
                     product.accountId = newAccountId;
+
+                    if (forceNewAccount) {
+                        product._id = utils.idutils.generateUUID();
+                    }
+
                     productsCollection.save(product, function(err, savedProduct){
                         if(err) {
                             console.log('Error saving product:' + err);
@@ -276,6 +328,11 @@ var copyutil = {
                     post.accountId = newAccountId;
                     post.websiteId = newWebsiteId;
                     post.pageId = blogPageId;
+
+                    if (forceNewAccount) {
+                        post._id = utils.idutils.generateUUID();
+                    }
+
                     postsCollection.save(post, function(err, savedPost){
                         if(err) {
                             console.log('Error saving post:' + err);
@@ -293,6 +350,11 @@ var copyutil = {
                 var sectionsCollection = destMongo.collection('sections');
                 async.eachSeries(sectionsToSaveArray, function(section, callback){
                     section.accountId = newAccountId;
+
+                    if (forceNewAccount) {
+                        section._id = utils.idutils.generateUUID();
+                    }
+
                     sectionsCollection.save(section, function(err, savedSection){
                         if(err) {
                             console.log('Error saving section:' + err);

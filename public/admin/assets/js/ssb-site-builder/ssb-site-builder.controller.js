@@ -30,7 +30,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.checkIfDirty = checkIfDirty;
     vm.resetDirty = resetDirty;
     vm.pageChanged = pageChanged;
-    vm.toggleSectionVisiblity = toggleSectionVisiblity
+    vm.toggleSectionVisiblity = toggleSectionVisiblity;
+    vm.isBlogPage = isBlogPage;
 
     vm.uiState = {
         loading: 0,
@@ -120,8 +121,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             }
         },
 
-        toggleSection: vm.toggleSectionVisiblity
+        toggleSection: vm.toggleSectionVisiblity,
 
+        isBlogPage: false
 
     };
 
@@ -253,6 +255,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.pendingPageChanges = false;
         vm.state.page = page;
         vm.state.originalPage = null;
+        vm.uiState.isBlogPage = vm.isBlogPage();
         $timeout(function() {
             vm.state.originalPage = angular.copy(page);
         }, 1000);
@@ -576,6 +579,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function addFroalaImage(asset) {
+
         $timeout(function() {
             vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
         }, 0);
@@ -608,11 +612,37 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     // Hook froala insert up to our Media Manager
     window.clickandInsertImageButton = function (editor) {
       console.log('clickandInsertImageButton >>> ');
-      vm.showInsert = true;
-      vm.imageEditor.editor = editor;
-      vm.imageEditor.img = editor.image.get();
+
+        if(editor){
+            vm.showInsert = true;
+            vm.imageEditor.editor = editor;
+            vm.imageEditor.img = editor.image.get();
+        }
+        else{
+            if(vm.imageEditor && vm.imageEditor.editor){
+                vm.showInsert = true;
+            }
+            else{
+                vm.showInsert = false;
+            }
+            if(!vm.imageEditor.editor.selection.ranges[0]){
+                vm.imageEditor.editor.selection.setAtEnd(vm.imageEditor.editor.$el.get(0));
+                vm.imageEditor.editor.selection.restore();
+            }
+        }
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
+
+    $scope.$on('focusEditor', function (event, args) {
+      vm.imageEditor.editor = args.editor;
+      vm.imageEditor.img = null;
+    });
+    $scope.$on('activeEditor', function (event, args) {
+      if(args.editor)
+       vm.imageEditor.editor = args.editor;
+      if(args.editorImage)
+       vm.imageEditor.img = args.editorImage;
+    });
 
     function pageLinkClick(e) {
       if (!angular.element(this).hasClass("clickable-link")) {
@@ -635,23 +665,23 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
-                function hideAllControls() {
+    function hideAllControls() {
 
-                    //hide editable-title's and borders
-                    angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
+        //hide editable-title's and borders
+        angular.element('.ssb-edit-wrap, .editable-title, .editable-cover, [data-edit]', '.ssb-main').removeClass('ssb-on');
 
-                    //hide all edit-controls
-                    angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
-                    angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
+        //hide all edit-controls
+        angular.element('.ssb-main').find('.ssb-active-edit-control').removeClass('ssb-active-edit-control');
+        angular.element('.ssb-main').find('.ssb-on').removeClass('ssb-on');
 
-                    //components
-                    angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
+        //components
+        angular.element('.ssb-main').find('.ssb-active-component').removeClass('ssb-active-component');
 
-                    //btns
-                    angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
-                    angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
+        //btns
+        angular.element('.ssb-main').find('.ssb-theme-btn-active-element').removeClass('ssb-theme-btn-active-element');
+        angular.element('.ssb-main').find('.ssb-edit-control-component-btn').removeClass('on');
 
-                }
+    }
 
     /**
      * Inspect changes beyond simple angular.equals
@@ -836,6 +866,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             }
         }
 
+    }
+
+    function isBlogPage() {
+        return vm.state.page.handle === 'blog-list' || vm.state.page.handle === 'blog-post'
     }
 
 

@@ -734,6 +734,8 @@
                     $(doc.body).addClass("sp-dragging");
 
                     move(e);
+                    var $popup = editor.popups.get('colors.picker');
+                    $popup.find("input").addClass("disabled");
 
                     prevent(e);
                 }
@@ -742,6 +744,8 @@
 
         function stop() {
             if (dragging) {
+                var $popup = editor.popups.get('colors.picker');
+                $popup.find("input").removeClass("disabled");
                 $(doc).unbind(duringDragEvents);
                 $(doc.body).removeClass("sp-dragging");
 
@@ -756,9 +760,9 @@
 
 
         $(element).off("touchstart mousedown").on("touchstart mousedown", start);
-        $(element).off("touchend mouseup").on("touchend mouseup", stop);
-        var $popup = editor.popups.get('colors.picker');
-        $popup.on("touchend mouseup", stop);
+        $(element).off("touchend mouseup mouseleave").on("touchend mouseup", stop);
+
+        $(doc).bind("click", stop);
     }
 
     return {

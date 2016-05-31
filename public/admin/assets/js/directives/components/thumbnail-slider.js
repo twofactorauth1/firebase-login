@@ -12,7 +12,7 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', '$rootScope', 
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
-
+      scope.imagesPerPage = 4;
       scope.slider = [];
       var w = angular.element($window);
       var check_if_mobile = mobilecheck();
@@ -36,6 +36,7 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', '$rootScope', 
         if (width < 768 || is_mobile) {
           number_of_arr = 1;
         }
+        scope.imagesPerPage = number_of_arr;
         scope.slider = partition(thumbnail, number_of_arr);
         if (scope.slider.length > 1) {
           scope.displayThumbnailPaging = true;

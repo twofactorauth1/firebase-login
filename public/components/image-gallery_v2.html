@@ -6,12 +6,9 @@
 *
 -->
 
-<div ng-class="component.type+'-v'+component.version">
-
-    <div class="clearfix mb20"></div>
-
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div>
-        <div data-edit ng-cloak>
+        <div ng-cloak>
             <div ng-repeat="image in component.images">
                 <div class="col-sm-8 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
                     <div class="thumbnail img-height single-image">
@@ -26,7 +23,7 @@
                         <a class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
                     </div>
                 </div>
-                <div data-edit class="image-desc col-sm-4 col-xs-12">
+                <div class="image-desc col-sm-4 col-xs-12">
                     <div elem ng-model="image.description"></div>
                 </div>
             </div>

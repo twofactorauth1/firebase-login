@@ -166,8 +166,7 @@
                 <h4 class="ssb-sidebar-sub-heading">
                     Current Page
                 </h4>
-
-                <ul class="list-unstyled ssb-settings-list">
+                <ul class="list-unstyled ssb-settings-list" ng-class="{'disabled': vm.state.originalPage.handle.indexOf('blog-') === 0}">
                     <li>
                         <label>
                             <h5>Title:</h5>
@@ -311,95 +310,101 @@
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'design' }">
 
             <section class="container-fluid">
-                <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
-
                 <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
-                    <div class="form-group">
 
-                        <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true)" theme="bootstrap">
-                          <ui-select-match placeholder="Select a theme">
-                              <small ng-bind-html="$select.selected.name"></small>
-                          </ui-select-match>
-                          <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
-                              <small ng-bind-html="theme.name | highlight: $select.search"></small>
-                          </ui-select-choices>
-                        </ui-select>
+                <h4 ng-if="vm.uiState.isBlogPage" class="ssb-sidebar-sub-heading">Page Layout</h4>
+                <div ng-if="vm.uiState.isBlogPage" class="form-group">
+                    <ui-select ng-model-options="{ debounce: 500 }" ng-model="vm.state.page.layout" theme="bootstrap">
+                        <ui-select-match placeholder="Select a layout">
+                            <small ng-bind-html="$select.selected"></small>
+                        </ui-select-match>
+                        <ui-select-choices repeat="layout in ['ssb-layout__1-col','ssb-layout__header_2-col_footer'] | filter: $select.search track by $index">
+                            <small ng-bind-html="layout | highlight: $select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
 
-                        <div class="row padding-10">
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.bodyBackgroundColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Body Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default body/page background color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
+                <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
+                <div class="form-group">
 
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerBackgroundColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Header Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header background color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
+                    <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true)" theme="bootstrap">
+                      <ui-select-match placeholder="Select a theme">
+                          <small ng-bind-html="$select.selected.name"></small>
+                      </ui-select-match>
+                      <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
+                          <small ng-bind-html="theme.name | highlight: $select.search"></small>
+                      </ui-select-choices>
+                    </ui-select>
+
+                    <div class="row padding-10">
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.bodyBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Body Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default body/page background color for your website."><i class="fa fa-info-circle" /></span></label>
                         </div>
 
-                        <div class="row padding-10">
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerTextColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Header Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header text color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
-
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroTextColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Hero Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero text color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Header Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header background color for your website."><i class="fa fa-info-circle" /></span></label>
                         </div>
 
-                        <div class="row padding-10">
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroBackgroundColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Hero Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero background color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
-
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Button Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default button background color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Header Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header text color for your website."><i class="fa fa-info-circle" /></span></label>
                         </div>
 
-                        <div class="row padding-10">
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryTextColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Text Color (Primary) <span tooltip-placement="top" tooltip-html-unsafe="Override the default text color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
-
-                            <div class="form-group ssb-spectrum-color-picker-large">
-                                <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnTextColor"></spectrum-colorpicker>
-                                <label for="colorpicker">Text Color (Buttons) <span tooltip-placement="top" tooltip-html-unsafe="Override the default button text color color for your website."><i class="fa fa-info-circle" /></span></label>
-                            </div>
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Hero Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero text color for your website."><i class="fa fa-info-circle" /></span></label>
                         </div>
 
-                        <!-- <div class="row padding-10">
-                            Heading Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.headingSize" min="12" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Hero Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero background color for your website."><i class="fa fa-info-circle" /></span></label>
                         </div>
-                        <div class="row padding-10">
-                            Paragraph Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.paragraphSize" min="8" max="100" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
-                        </div>
-                        <div class="row padding-10">
-                            Font Stack (Default):
-                            <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
-                                {{vm.state.website.themeOverrides.defaultFontStack}}
-                            </div>
-                        </div>
-                        <div class="row padding-10">
-                            Font Stack (Heading):
-                            <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
-                                {{vm.state.website.themeOverrides.headingFontStack}}
-                            </div>
-                        </div>
-                        <div class="row padding-10">
-                            Font Stack (Paragraph):
-                            <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
-                                {{vm.state.website.themeOverrides.paragraphFontStack}}
-                            </div>
-                        </div> -->
 
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Button Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default button background color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
 
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Text Color (Primary) <span tooltip-placement="top" tooltip-html-unsafe="Override the default text color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Text Color (Buttons) <span tooltip-placement="top" tooltip-html-unsafe="Override the default button text color color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
                     </div>
+
+                    <!-- <div class="row padding-10">
+                        Heading Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.headingSize" min="12" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
+                    </div>
+                    <div class="row padding-10">
+                        Paragraph Size: <input type="text" string-to-number touchspin="" ng-model="vm.state.website.themeOverrides.styles.paragraphSize" min="8" max="100" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
+                    </div>
+                    <div class="row padding-10">
+                        Font Stack (Default):
+                        <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
+                            {{vm.state.website.themeOverrides.defaultFontStack}}
+                        </div>
+                    </div>
+                    <div class="row padding-10">
+                        Font Stack (Heading):
+                        <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
+                            {{vm.state.website.themeOverrides.headingFontStack}}
+                        </div>
+                    </div>
+                    <div class="row padding-10">
+                        Font Stack (Paragraph):
+                        <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
+                            {{vm.state.website.themeOverrides.paragraphFontStack}}
+                        </div>
+                    </div> -->
+
+
+                </div>
             </section>
 
         </div>

@@ -34,7 +34,7 @@
                                 <span elem ng-model="vm.component.submitBtn" ng-show='vm.checkDateValidityFn()'></span>
                                 <span ng-hide='vm.checkDateValidityFn()'>Time span expired</span>
                             </button>
-                            <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block inline-block">
+                            <div ng-if="vm.isEditing" style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block inline-block editable-donate-btn-form">
                                 <span elem ng-model="vm.component.submitBtn"></span>
                             </div>
                         </div>

@@ -253,7 +253,28 @@ var collator = {
             sessionEvent.set('session_length', collator.secondsThreshold*1000);
             sessionEvent.set('page_depth', 1);
 
-            if (process.env.NODE_ENV !== "testing") {
+<<<            //TODO: create page data for assumed pages:
+            var pageList = [];
+            var domain = '';
+            if(sessionEvent.get('fullEntrance')) {
+                domain = sessionEvent.get('fullEntrance').replace('http://', '').replace('https://', '');
+            }
+            var fakePageEvent = new $$.m.PageEvent({
+                session_id: sessionEvent.id(),
+                start_time: sessionEvent.get('session_start'),
+                end_time: endTime,
+                note:'generated',
+                url: {
+                    domain: domain,
+                    protocol: "",
+                    port: 0,
+                    source: "",
+                    path: "/",
+                    anchor: ""
+                }
+            });
+            pageList.push(fakePageEvent);
+===         if (process.env.NODE_ENV !== "testing") {
                 client.addEvents({
                     "session_data": [sessionEvent]
                 }, function (err, res) {
@@ -266,7 +287,7 @@ var collator = {
             } else {
                 log.info('skipping keen because of testing environment.');
             }
-            
+
             dao.saveOrUpdate(sessionEvent, function(err, value) {
                 if (err) {
                     log.error('Error updating session event: ' + err);

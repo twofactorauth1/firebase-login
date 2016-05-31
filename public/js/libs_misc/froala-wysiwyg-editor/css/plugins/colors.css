@@ -161,5 +161,7 @@
         overflow: auto;
     }
 }
-
+.fr-color-set.sp-container .sp-picker-container .sp-input-container{
+    padding-top: 5px;
+}
 

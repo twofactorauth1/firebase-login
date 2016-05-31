@@ -1,14 +1,31 @@
 <div id="footer" class="footer-container">
     <div class="footer-after section">
         <div class="container">
-            <p class="col-sm-8 copyright hidden-xs"><span class="pull-left">Copyright © {{copyrightYear}} Indigenous Software Inc. All Rights reserved. &nbsp;&nbsp;</span> <a href="https://indigenous.io/legal" class="pull-left">Legal</a><span class="pull-left">&nbsp;|&nbsp;</span><a class="pull-left" href="https://indigenous.io/legal#privacy-policy">Privacy Policy</a></p>
+
+            <p ng-if="component.text === undefined" class="col-sm-8 copyright hidden-xs"><span class="pull-left" style="padding-right: 5px;">Copyright © {{copyrightYear}} Indigenous Software Inc. All Rights reserved.</span> <a href="https://indigenous.io/legal" class="pull-left">Legal</a><span class="pull-left">&nbsp;|&nbsp;</span><a class="pull-left" href="https://indigenous.io/legal#privacy-policy">Privacy Policy</a></p>
+
+
+            <div ng-if="component.text !== undefined"  class="col-sm-8 copyright hidden-xs"><span style="padding-right: 5px;" class="pull-left">
+            <div elem ng-model="component.text"></div>
+            </span> <a href="https://indigenous.io/legal" class="pull-left">Legal</a><span class="pull-left">&nbsp;|&nbsp;</span><a class="pull-left" href="https://indigenous.io/legal#privacy-policy">Privacy Policy</a></div>
+
             <p class="col-sm-4 powered-by">
                 <a href="//www.indigenous.io " rel="nofollow">
                     <img class="footer-logo" src="/images/footer-logo.png">
                 </a>
                 <a href="//www.indigenous.io " rel="nofollow">Powered by Indigenous</a>
             </p>
-            <p class="col-sm-8 copyright visible-xs">Copyright © {{copyrightYear}} Indigenous Software Inc. All Rights reserved.</p>
+            <p class="col-sm-8 copyright visible-xs" elem ng-model="component.text"></p>
         </div>
     </div>
 </div>
+<style>
+.legacy-footer .footer-after {
+    background: {{component.bg.color || '#292929'}};
+}
+.footer-after .ssb-active-component{
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: -5px;
+}
+</style>

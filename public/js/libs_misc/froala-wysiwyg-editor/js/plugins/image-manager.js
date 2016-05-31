@@ -1902,9 +1902,12 @@
       var top = $current_image.offset().top + $current_image.height();
 
       editor.popups.show('image.insert', left, top, $current_image.outerHeight());
-      $popup.find(".fr-command.fr-btn").removeClass("fr-active");
-      $popup.find("[data-cmd='mediaManager']").addClass("fr-active");
-      editor.image.showLayer("image-upload-media");
+      if(!$popup.find("[data-cmd='mediaManager']").hasClass("fr-active")){
+        $popup.find(".fr-command.fr-btn").removeClass("fr-active");
+        $popup.find("[data-cmd='mediaManager']").addClass("fr-active");
+        editor.image.showLayer("image-upload-media");
+      }
+
     }
 
     /**
@@ -2079,7 +2082,7 @@
     title: 'Insert Image',
     undo: true,
     callback: function() {
-      this.$el.find(".fr-marker") && (this.events.disableBlur(), this.selection.restore());
+      this.$el.find(".fr-marker") && (this.events.disableBlur(), this.selection.save());
       clickandInsertImageButton(this);
     }
   })

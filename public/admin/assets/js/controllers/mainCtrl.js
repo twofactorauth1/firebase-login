@@ -188,6 +188,10 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
     });
 
     $scope.openTopBarMediaModal = function () {
+        if($state.current.name === 'app.website.ssbSiteBuilder.editor'){
+            clickandInsertImageButton();
+            return;
+        }
       $scope.modalInstance = $modal.open({
         templateUrl: 'media-modal',
         controller: 'MediaModalCtrl',
