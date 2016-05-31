@@ -229,7 +229,7 @@ var collator = {
     },
 
     _closeSessionWithNoPings: function(sessionEvent, callback){
-        log.debug('closing sessin with no pings');
+        log.debug('closing session with no pings');
         var serverTime = moment();
         var secondsToSubtract = collator.secondsThreshold*2;
         log.debug('secondsToSubtract: ' + secondsToSubtract);
@@ -276,7 +276,8 @@ var collator = {
             pageList.push(fakePageEvent);
             if (process.env.NODE_ENV !== "testing") {
                 client.addEvents({
-                    "session_data": [sessionEvent]
+                    "session_data": [sessionEvent],
+                    "page_data": pageList
                 }, function (err, res) {
                     if (err) {
                         log.error('Error sending data to keen.');
