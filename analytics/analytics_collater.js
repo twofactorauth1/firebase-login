@@ -288,7 +288,7 @@ var collator = {
             } else {
                 log.info('skipping keen because of testing environment.');
             }
-            
+
             dao.saveOrUpdate(sessionEvent, function(err, value) {
                 if (err) {
                     log.error('Error updating session event: ' + err);

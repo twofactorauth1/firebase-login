@@ -1058,7 +1058,6 @@
     };
 
     $scope.updateTagsFn = function (recipients) {
-
         if (angular.isDefined($scope.newCampaignObj.searchTags.tags) && $scope.newCampaignObj.searchTags.tags.length) {
 
             ContactService.getContacts(function (contacts) {
