@@ -253,7 +253,7 @@ var collator = {
             sessionEvent.set('session_length', collator.secondsThreshold*1000);
             sessionEvent.set('page_depth', 1);
 
-<<<            //TODO: create page data for assumed pages:
+            //TODO: create page data for assumed pages:
             var pageList = [];
             var domain = '';
             if(sessionEvent.get('fullEntrance')) {
@@ -274,7 +274,7 @@ var collator = {
                 }
             });
             pageList.push(fakePageEvent);
-===         if (process.env.NODE_ENV !== "testing") {
+            if (process.env.NODE_ENV !== "testing") {
                 client.addEvents({
                     "session_data": [sessionEvent]
                 }, function (err, res) {
