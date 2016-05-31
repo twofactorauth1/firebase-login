@@ -634,7 +634,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.imageEditor.editor = args.editor;
       vm.imageEditor.img = null;
     });
-    $scope.$on('blurEditor', function (event, args) {
+    $scope.$on('activeEditor', function (event, args) {
       if(args.editor)
        vm.imageEditor.editor = args.editor;
       if(args.editorImage)

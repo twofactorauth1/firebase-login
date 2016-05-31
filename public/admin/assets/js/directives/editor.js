@@ -142,16 +142,18 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     //hide any currently shown toolbar
                     $('.fr-toolbar').removeClass('ssb-froala-active-editor');
                     editor.selection.save();
-                    scope.$emit('blurEditor', { editor: editor, editorImage: editor.image.get() });
+                    scope.$emit('activeEditor', { editor: editor, editorImage: editor.image.get() });
 
-                }).on('froalaEditor.popups.hide.image.insert', function(e, editor) {
+                })
+                .on('froalaEditor.popups.hide.image.insert', function(e, editor) {
                     console.log('froalaEditor.popups.hide.image.insert');
                 }).on('froalaEditor.popups.hide.image.edit', function(e, editor) {
                     console.log('froalaEditor.popups.hide.image.edit');
-                })
-                .on('froalaEditor.popups.show.image.edit', function(e, editor) {
+                }).on('froalaEditor.popups.show.image.edit', function(e, editor) {
                     editor.selection.save();
-                    scope.$emit('blurEditor', { editor: editor, editorImage: editor.image.get() });
+                    scope.$emit('activeEditor', { editor: editor, editorImage: editor.image.get() });
+                }).on('froalaEditor.focus', function(e, editor) {
+                    editor.selection.clear();
                 })
 
                 $(elem).froalaEditor('events.on', 'keydown', function (e) {
