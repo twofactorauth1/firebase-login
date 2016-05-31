@@ -25,6 +25,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	vm.formStyle = formStyle;
     vm.addCustomField = addCustomField;
     vm.addPattern = addPattern;
+    vm.checkDuplicateEmail = checkDuplicateEmail;
     vm.formValidations = formValidations;
 
     vm.nthRow = 'nth-row';
@@ -136,9 +137,16 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
         }
     }
 
+    function checkDuplicateEmail(val){
+        if(val.name === "email"){
+            return vm.userExists;
+        }
+    }
+
 
 
 	vm.createUser = function (form) {
+        vm.createUser = false;
 		// Admin check
 		if($scope.$parent.vm.state)
 			return;
