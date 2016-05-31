@@ -232,14 +232,8 @@
         background-image: none;
         height: auto;
         min-height: 0;
-        -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-        -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
         box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-        -webkit-border-radius: 0;
-        -moz-border-radius: 0;
         border-radius: 0;
-        -moz-background-clip: padding;
-        -webkit-background-clip: padding-box;
         background-clip: padding-box;
     }
 
@@ -302,7 +296,7 @@
 
     .editor-group {
         position: absolute;
-        top: 120px;
+        top: 118px;
         width: 100%;
 
         @media (min-width: 768px) {
@@ -344,6 +338,27 @@
             text-transform: capitalize;
         }
 
+        @media (max-width: 768px) {
+            &.tab-content {
+                box-shadow: 0px 10px 10px 0px rgba(0,0,0,.5);
+            }
+
+            .ssb-sidebar-tabbable-inner .tabbable {
+                margin: 0 -15px;
+            }
+
+            .ssb-sidebar-tabbable-inner .nav-tabs {
+                margin-left: -5px;
+                font-size: .85em;
+            }
+
+            .ssb-sidebar-tabbable-inner .tab-pane {
+                padding: 0;
+            }
+        }
+
+
+
     }
 
     .site-editor-group {
@@ -364,13 +379,38 @@
         // padding-left: 18px;
     }
 
-    & > .tab-pane {
-        padding: 0;
+    @media (max-width: 768px) {
+        &.tab-pane {
+            padding-left: 0;
+            padding-right: 0;
+        }
     }
 
     .editable-error.help-block{
         white-space: normal;
         max-width: 300px;
+    }
+}
+
+.ssb-sidebar-panel-inner-container {
+    margin-top: -15px;
+}
+
+.ssb-sidebar-panel-header {
+    box-shadow: 0 5px 5px -1px rgba(0,0,0,.25);
+    margin: 0 -15px 10px;
+
+    @media (min-width: 768px) {
+        box-shadow: none;
+    }
+
+    .ssb-sidebar-sub-heading {
+        font-weight: bold;
+        padding-left: 20px;
+
+        @media (min-width: 768px) {
+            padding-top: 23px;
+        }
     }
 }
 
@@ -393,24 +433,37 @@
     }
 
     .nav {
+
         background: @ssb-chrome-medium-blue-gray-bg-color;
+        max-width: 300px;
+
         @media (max-width: 768px) {
+            position: relative;
+            z-index: 0;
             border-bottom: 0 none;
-            max-width: 300px;
-            margin: 0 auto;
             width: 100%;
+            text-align: center;
+            max-width: 100%;
         }
     }
 
     .nav-tab {
-        width: 70px;
+        display: inline-block;
+        max-width: 70px;
         margin: 0;
-        // height: 45px;
         cursor: pointer;
         text-align: center!important;
-        // margin: 1em 0;
         background: @ssb-chrome-medium-blue-gray-bg-color;
-        padding: 1em;
+        padding: 1em 0;
+        width: 19%;
+        float: none;
+
+        @media (min-width: 768px) {
+            display: block;
+            padding: 1em;
+            width: auto;
+            float: left;
+        }
 
         &:hover {
             color: #48b1cc;
@@ -429,15 +482,17 @@
         // border-bottom: 5px solid #48b1cc;
 
 
-        &:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: -5px;
-            background: white;
-            height: 100%;
-            width: 10px;
-            z-index: 1;
+        @media (min-width: 768px) {
+            &:after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: -5px;
+                background: white;
+                height: 100%;
+                width: 10px;
+                z-index: 1;
+            }
         }
 
     }
@@ -636,9 +691,15 @@
 
 .close-panel {
     position: absolute;
-    top: 2em;
+    top: 18px;
     right: 1em;
     cursor: pointer;
+    padding: 1em;
+    margin: -1em;
+
+    @media (min-width: 768px) {
+        top: 25px;
+    }
 }
 
 .ssb-sidebar-section-panel-scrollable {
