@@ -15,7 +15,9 @@ function ssbPageSection($compile) {
         section: '=',
         index: '=',
         state: '=',
-        uiState: '='
+        uiState: '=',
+        sectionLayoutName: '=?',
+        sectionLayoutIndex: '=?'
     },
     templateUrl: function(element, attrs) {
         var url = '/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html';

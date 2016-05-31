@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogPostCardComponentController', ssbBlogPostCardComponentController);
 
-ssbBlogPostCardComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
+ssbBlogPostCardComponentController.$inject = ['$scope', '$attrs', '$filter', '$location'];
 /* @ngInject */
-function ssbBlogPostCardComponentController($scope, $attrs, $filter, $transclude) {
+function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location) {
 
     console.info('ssb-blog-post-card directive init...')
 
@@ -16,16 +16,16 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $transclude
     vm.setJSONLD = setJSONLD;
 
     function initData() {
-        vm.post = window.indigenous.precache.siteData.posts[0];
+        vm.post = blogService.loadDataFromPage('script#indigenous-precache-sitedata-posts');
     }
 
     function setJSONLD() {
         var JSONLD = {
             "@context": "http://schema.org",
-            "@type": "NewsArticle",
+            "@type": "BlogPosting",
             "mainEntityOfPage": {
                 "@type": "WebPage",
-                "@id": "https://google.com/article"
+                "@id": $location.href
             },
             "headline": vm.post.post_title,
             "image": {

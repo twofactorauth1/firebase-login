@@ -283,7 +283,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    SimpleSiteBuilderService.removeSectionFromPage(index)
+                    SimpleSiteBuilderService.removeSectionFromPage(index);
                 }
             });
         }

@@ -98,7 +98,7 @@
 
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
-<div>
+<div class="ssb-edit-mode">
     <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
@@ -108,7 +108,7 @@
         </div>
     </div>
 
-	<div id="ssb-main" class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
+	<div id="ssb-main" class="ssb-main custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
 
 
 		<div id="componentloader">
@@ -148,13 +148,15 @@
                 ng-sortable="vm.uiState.sortableListPageContentConfig"
                 ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-layout__header_2-col_footer')">
 
-                <div class="ssb-page-layout-row row">
+                <div class="ssb-page-layout-row">
                     <div class="col-xs-12" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['header'].length }">
                         <ssb-page-section
-                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['header']"
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['header'] track by $index"
+                            section-layout-name="'header'"
+                            section-layout-index="$index"
                             section="vm.state.page.sections[sectionIndex]"
-                            index="$index"
-                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            index="sectionIndex"
+                            ng-class="{ 'ssb-active-section': sectionIndex === vm.uiState.activeSectionIndex }"
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
@@ -164,13 +166,15 @@
                     </div>
                 </div>
 
-                <div class="ssb-page-layout-row row">
+                <div class="ssb-page-layout-row">
                     <div class="col-xs-12 col-md-8" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['2-col-1'].length }">
                         <ssb-page-section
-                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['2-col-1']"
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['2-col-1'] track by $index"
+                            section-layout-name="'2-col-1'"
+                            section-layout-index="$index"
                             section="vm.state.page.sections[sectionIndex]"
-                            index="$index"
-                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            index="sectionIndex"
+                            ng-class="{ 'ssb-active-section': sectionIndex === vm.uiState.activeSectionIndex }"
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
@@ -181,10 +185,12 @@
 
                     <div class="col-xs-12 col-md-4" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['2-col-2'].length }">
                         <ssb-page-section
-                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['2-col-2']"
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['2-col-2'] track by $index"
+                            section-layout-name="'2-col-2'"
+                            section-layout-index="$index"
                             section="vm.state.page.sections[sectionIndex]"
-                            index="$index"
-                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            index="sectionIndex"
+                            ng-class="{ 'ssb-active-section': sectionIndex === vm.uiState.activeSectionIndex }"
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
@@ -194,13 +200,15 @@
                     </div>
                 </div>
 
-                <div class="ssb-page-layout-row row">
+                <div class="ssb-page-layout-row">
                     <div class="col-xs-12" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['footer'].length }">
                         <ssb-page-section
-                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['footer']"
+                            ng-repeat="sectionIndex in vm.state.page.layoutModifiers['footer'] track by $index"
+                            section-layout-name="'footer'"
+                            section-layout-index="$index"
                             section="vm.state.page.sections[sectionIndex]"
-                            index="$index"
-                            ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                            index="sectionIndex"
+                            ng-class="{ 'ssb-active-section': sectionIndex === vm.uiState.activeSectionIndex }"
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
@@ -216,7 +224,7 @@
 
 	</div>
 
-    <ssb-sidebar ng-if="vm.state.page" class="fade-in-left ssb-sidebar" state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar }"></ssb-sidebar>
+    <ssb-sidebar ng-if="vm.state.page" class="fade-in-left ssb-sidebar" state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer' }"></ssb-sidebar>
 
     <ssb-topbar ng-if="vm.state.page" class="fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
 
