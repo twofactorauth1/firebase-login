@@ -753,6 +753,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (expiry && expiry.indexOf('/') !== -1) {
                     expiry = expiry.split('/');
                 }
+
                 var exp_month = expiry && expiry[0].trim();
                 var exp_year = '';
                 if (expiry && expiry.length > 1) {

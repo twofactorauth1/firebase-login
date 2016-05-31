@@ -229,7 +229,7 @@ var collator = {
     },
 
     _closeSessionWithNoPings: function(sessionEvent, callback){
-        log.debug('closing session with no pings');
+        log.debug('closing sessin with no pings');
         var serverTime = moment();
         var secondsToSubtract = collator.secondsThreshold*2;
         log.debug('secondsToSubtract: ' + secondsToSubtract);
@@ -253,7 +253,7 @@ var collator = {
             sessionEvent.set('session_length', collator.secondsThreshold*1000);
             sessionEvent.set('page_depth', 1);
 
-            //TODO: create page data for assumed pages:
+<<<            //TODO: create page data for assumed pages:
             var pageList = [];
             var domain = '';
             if(sessionEvent.get('fullEntrance')) {
@@ -274,10 +274,9 @@ var collator = {
                 }
             });
             pageList.push(fakePageEvent);
-            if (process.env.NODE_ENV !== "testing") {
+===         if (process.env.NODE_ENV !== "testing") {
                 client.addEvents({
-                    "session_data": [sessionEvent],
-                    "page_data": pageList
+                    "session_data": [sessionEvent]
                 }, function (err, res) {
                     if (err) {
                         log.error('Error sending data to keen.');
@@ -288,7 +287,7 @@ var collator = {
             } else {
                 log.info('skipping keen because of testing environment.');
             }
-            
+
             dao.saveOrUpdate(sessionEvent, function(err, value) {
                 if (err) {
                     log.error('Error updating session event: ' + err);

@@ -2306,7 +2306,9 @@ module.exports = {
                                         //look through the sections on this page to any whose _id matches the global section
                                         //TODO: match irrespective of version
                                         var exists = _.filter(sections, function(section) { return gsection.get("_id").indexOf(section._id) !== -1; });
+
                                         self.log.debug(accountId, userId,'exists: ' , exists);
+
                                         if(!exists.length){// if the global section does NOT already appear on the page
                                             var globalSection = {_id: gsection.get("_id")};
                                             var globalSectionID = gsection.id();
@@ -2945,7 +2947,9 @@ module.exports = {
                 if (isString && isGoodKey) {
 
                     // $$$ = cheerio.load(value);
+
                     var $$$ = cheerio.load('<div id="temp_wrap"></div>');
+
                     $$$('#temp_wrap').append(value);
                     var $classSelection = $$$(classesToRemove.split(' ').map(function(c) { return '.' + c }).join(', '));
                     var $attrSelection = $$$(attributesToRemove.split(' ').map(function(a) { return '[' + a + ']'; }).join(', '));
