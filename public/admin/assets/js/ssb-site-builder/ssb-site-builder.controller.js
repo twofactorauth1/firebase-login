@@ -311,25 +311,35 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
-    $scope.$watch(function() { return SimpleSiteBuilderService.themes }, function(themes) {
+    var unbindThemesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.themes }, function(themes) {
       vm.state.themes = themes;
+      unbindThemesWatcher();
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
-    $scope.$watch(function() { return SimpleSiteBuilderService.templates }, function(templates) {
+    var unbindTemplatesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.templates }, function(templates) {
       vm.state.templates = templates;
+      unbindTemplatesWatcher();
     }, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.legacyTemplates }, function(templates) {
+    var unbindLegacyTemplatesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.legacyTemplates }, function(templates) {
       vm.state.legacyTemplates = templates;
+      unbindLegacyTemplatesWatcher();
     }, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
+    var unbindPlatformSectionWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
       vm.state.platformSections = sections;
+      unbindPlatformSectionWatcher();
     }, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.userSections }, function(sections) {
+    var unbindUserSectionWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.userSections }, function(sections) {
       vm.state.userSections = sections;
+      unbindUserSectionWatcher();
+    }, true);
+
+    var unbindAccountWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.account }, function(account) {
+      vm.state.account = account;
+      unbindAccountWatcher();
     }, true);
 
 
