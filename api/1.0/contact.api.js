@@ -583,36 +583,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
             } else {
                 console.dir(req.body);
-                self.log.debug('signing up contact with account: ' + value.get('token'));
-                var emailPreferences = value.get('email_preferences');
-                self.log.debug('emailPreferences: ' + emailPreferences);
-                if(emailPreferences.new_contacts === true && !req.body.activity) {
-                    self.log.debug('emailPreferences.new_contacts: ' + emailPreferences.new_contacts);
-                    var accountId = value.id();
-                    var vars = [];
-
-                    var toAddress = value.get('business').emails[0].email;
-                    var toName = '';
-                    emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
-                        self.log.debug('email sent');
-                    });
-
-                }
-                else if(emailPreferences.new_contacts === true && req.body.activity){
-                    var accountEmail = null;
-
-                    if(value && value.get("business") && value.get("business").emails && value.get("business").emails[0] && value.get("business").emails[0].email) {
-                        self.log.debug('user email: ', value.get("business").emails[0].email);
-                        accountEmail = value.get("business").emails[0].email;
-                        self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
-                    } else{
-                        userDao.getUserAccount(value.id(), function(err, user){
-                            accountEmail = user.get("email");
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
-                        })
-                    }
-
-                }
                 //TODO: check if contact exists
                 var query = {};
                 query.accountId = value.id();
@@ -631,12 +601,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 var uniqueEmail = req.body.uniqueEmail;
                 console.log('req.body ', req.body);
 
-                delete req.body.skipWelcomeEmail;
-                delete req.body.fromEmail;
-                delete req.body.fromName;
-                delete req.body.activity;
-                delete req.body.contact_type;
-                delete req.body.uniqueEmail;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
@@ -646,6 +610,43 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(list.length > 0 && uniqueEmail) {
                         return self.wrapError(resp, 409, "This user already exists for this account.");
                     }
+                    self.log.debug('signing up contact with account: ' + value.get('token'));
+                    var emailPreferences = value.get('email_preferences');
+                    self.log.debug('emailPreferences: ' + emailPreferences);
+                    if(emailPreferences.new_contacts === true && !req.body.activity) {
+                        self.log.debug('emailPreferences.new_contacts: ' + emailPreferences.new_contacts);
+                        var accountId = value.id();
+                        var vars = [];
+
+                        var toAddress = value.get('business').emails[0].email;
+                        var toName = '';
+                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
+                            self.log.debug('email sent');
+                        });
+
+                    }
+                    else if(emailPreferences.new_contacts === true && req.body.activity){
+                        var accountEmail = null;
+
+                        if(value && value.get("business") && value.get("business").emails && value.get("business").emails[0] && value.get("business").emails[0].email) {
+                            self.log.debug('user email: ', value.get("business").emails[0].email);
+                            accountEmail = value.get("business").emails[0].email;
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                        } else{
+                            userDao.getUserAccount(value.id(), function(err, user){
+                                accountEmail = user.get("email");
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                            })
+                        }
+
+                    }
+                    delete req.body.skipWelcomeEmail;
+                    delete req.body.fromEmail;
+                    delete req.body.fromName;
+                    delete req.body.activity;
+                    delete req.body.contact_type;
+                    delete req.body.uniqueEmail;
+
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
                     self.log.debug('contact_type ', contact_type);
@@ -887,8 +888,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
 
                 });
-
-
 
             }
         });

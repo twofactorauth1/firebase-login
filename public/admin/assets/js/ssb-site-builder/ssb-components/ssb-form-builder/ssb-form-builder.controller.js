@@ -210,7 +210,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
             sessionId: ipCookie("session_cookie").id,
             contact: vm.formBuilder
           },
-					extra: extra
+		  extra: extra
         };
         if(vm.formBuilder.email)
 	        formatted.details[0].emails.push({
