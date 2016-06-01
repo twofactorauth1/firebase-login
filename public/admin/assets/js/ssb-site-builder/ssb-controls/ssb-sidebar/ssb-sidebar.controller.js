@@ -365,9 +365,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             function (isConfirm) {
                 //Remove from all pages
                 if (isConfirm) {
-                    vm.state.page.sections[index].global = false;
-                    vm.state.page.sections[index].visibility = false;
-                    vm.uiState.toggleSection(vm.state.page.sections[index]);
+                    SimpleSiteBuilderService.removeSectionFromPage(index);
                 }
                 //Hide on this page
                 else if(angular.isDefined(isConfirm) && isConfirm === false){
