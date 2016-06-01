@@ -13,7 +13,8 @@ function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService
     vm.init = init;
     vm.closeBlogPanel = closeBlogPanel;
 
-    vm.blog = SimpleSiteBuilderBlogService.blog;
+    vm.uiState.activePostFilter = 'all';
+
 
     function closeBlogPanel() {
         vm.uiState.openBlogPanel = { name: '', id: '' };
@@ -24,8 +25,12 @@ function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService
 
         vm.element = element;
 
-        if (!vm.blog.posts.length) {
-            vm.blog.posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts');
+        if (!vm.state.blog) {
+            vm.state.blog = SimpleSiteBuilderBlogService.blog;
+        }
+
+        if (!vm.state.blog.posts.length) {
+            vm.state.blog.posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts');
         }
 
     }
