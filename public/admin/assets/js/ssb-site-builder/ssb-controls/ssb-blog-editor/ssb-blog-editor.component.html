@@ -1,0 +1,37 @@
+<section class="ssb-sidebar-panel-inner-container">
+
+    <header class="ssb-sidebar-panel-header">
+
+        <i
+            ng-if="vm.uiState.navigation.blogPanel.navigationHistory.length > 1"
+            class="fa fa-arrow-left"
+            ng-click="vm.uiState.navigation.blogPanel.back();">
+        </i>
+
+        <h4 class="ssb-sidebar-sub-heading">
+            {{vm.uiState.openBlogPanel.name}}
+        </h4>
+
+        <div class="close-panel ti-close"  ng-click="vm.closeBlogPanel()"></div>
+
+    </header>
+
+    <div class="ssb-sidebar-section-panel-loading-background">
+        <div class="center"><br><span class="fa fa-spinner fa-spin"></span><br>Loading menu...</div>
+    </div>
+
+    <div class="ssb-sidebar-section-panel-scrollable">
+
+        <div
+            ng-if="vm.uiState.openBlogPanel.id === 'manage'">
+            <p>content of ... Manage Blog Posts</p>
+        </div>
+
+        <div
+            ng-if="vm.uiState.openBlogPanel.id === 'edit'">
+            <p>content of ... Edit Blog Post</p>
+        </div>
+
+    </div>
+
+</section>
