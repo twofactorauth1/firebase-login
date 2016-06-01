@@ -51,6 +51,10 @@
 
             var data = $(scriptId).html();
 
+            if (!angular.isDefined(data)) {
+                return
+            }
+
             var unescapeMap = {
                 "&amp;":"&",
                 "&lt;":"<",
