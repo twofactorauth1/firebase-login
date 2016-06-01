@@ -27,7 +27,8 @@
         ssbBlogService.getPosts = getPosts;
 
         ssbBlogService.blog = {
-            posts: []
+            posts: [],
+            postFilters: ['all', 'published', 'draft', 'featured']
         };
 
         /**
