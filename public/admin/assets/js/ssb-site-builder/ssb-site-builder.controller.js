@@ -635,10 +635,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             else{
                 vm.showInsert = false;
             }
-            if(!vm.imageEditor.editor.selection.ranges[0]){
-                vm.imageEditor.editor.selection.setAtEnd(vm.imageEditor.editor.$el.get(0));
-                vm.imageEditor.editor.selection.restore();
-            }
         }
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
