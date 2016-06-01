@@ -493,6 +493,8 @@ module.exports = {
 
         if (sections.length) {
             sections = sections.map(function(section) {
+                if(section.global || section.globalHeader || section.globalFooter)
+                    return section;
                 var id = $$.u.idutils.generateUUID();
                 //TODO: If a section is global, should we do this?
                 section._id = id;
