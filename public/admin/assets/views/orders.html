@@ -21,7 +21,7 @@
                                     <div class="form-group">
                                         <div class="col-xs-6 padding-left-0 padding-right-0">
                                             <span class="input-icon">
-                                                <input type="text" st-search placeholder="Search by customers, items, total..." id="form-field-14" class="form-control">
+                                                <input type="text" st-search placeholder="Search by contacts, items, total..." id="form-field-14" class="form-control">
                                                 <i class="ti-search"></i>
                                             </span>
                                         </div>
@@ -118,7 +118,7 @@
                             <tr>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">Order ID</th>
                                 <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="status">Status</th>
-                                <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Customer</th>
+                                <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Contact</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" >(Qty) Items</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}">SKUs</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="total">$ Total</th>
@@ -147,7 +147,7 @@
                                     </ui-select>
                                 </th>
                                 <th class="column-width">
-                                    <input st-search="customer._full" placeholder="Customer" class="form-control" type="search" />
+                                    <input st-search="customer._full" placeholder="Contact" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width">
                                     <input st-search="line_items.name" placeholder="Item Names" class="form-control" type="search" />
