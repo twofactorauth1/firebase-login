@@ -21,8 +21,8 @@ script(type="text/javascript").
                 window.analytics.load('#{segmentIOWriteKey}');
         window.analytics.page('Index', {accountId:#{account._id}});
 
-if (account.website.settings.font_family && account.website.settings.font_family_2) || (typeof account.website.theme !== 'undefined' && typeof account.website.theme.hasCustomFonts !== 'undefined' && account.website.theme.hasCustomFonts === true)
-    script(src="//ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js")
+
+script(src="//ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js")
 
 if account.website.settings.font_family && account.website.settings.font_family_2
     script(type="text/javascript").
@@ -32,18 +32,18 @@ if account.website.settings.font_family && account.website.settings.font_family_
            }
         });
 
-if (typeof account.website.theme !== 'undefined' && typeof account.website.theme.hasCustomFonts !== 'undefined' & account.website.theme.hasCustomFonts === true)
-    script(type="text/javascript").
-        WebFont.load({
-            google: {
-                families: ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two' ]
-            }
-        });
-        window.WebFontConfig = {
-            active: function() {
-                sessionStorage.fonts = true;
-            }
+
+script(type="text/javascript").
+    WebFont.load({
+        google: {
+            families: ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two' ]
         }
+    });
+    window.WebFontConfig = {
+        active: function() {
+            sessionStorage.fonts = true;
+        }
+    }
 
 if (typeof account.website.theme !== 'undefined' && typeof account.website.themeOverrides !== 'undefined')
     style.
