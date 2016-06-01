@@ -217,6 +217,30 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 });
             }
+        },
+        blogPanel: {
+            navigationHistory: [],
+            loadPanel: function(obj, back) {
+
+                if (!back) {
+                    vm.uiState.navigation.blogPanel.navigationHistory.push(obj);
+                }
+
+                vm.uiState.openBlogPanel = obj;
+                console.log(vm.uiState.navigation.blogPanel.navigationHistory);
+
+            },
+            back: function() {
+                var hist = vm.uiState.navigation.blogPanel.navigationHistory;
+                var previousPanel;
+
+                hist.pop();
+
+                previousPanel = hist[hist.length - 1];
+
+                vm.uiState.navigation.blogPanel.loadPanel(previousPanel, true);
+
+            }
         }
     };
 
