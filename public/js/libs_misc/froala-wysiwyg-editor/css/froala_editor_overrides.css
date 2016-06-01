@@ -11,9 +11,6 @@
 a.fr-command[data-param1='PRE'] {
     background: inherit !important;
 }
-.fr-element.fr-view a{
-    color: inherit;
-}
 .fr-toolbar .fr-command.fr-btn, .fr-popup .fr-command.fr-btn{
     width: inherit;
     height: inherit;
