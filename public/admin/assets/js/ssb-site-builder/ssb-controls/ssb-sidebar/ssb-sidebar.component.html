@@ -174,7 +174,7 @@
                     <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
                 </header>
 
-                <ul class="list-unstyled ssb-settings-list" ng-class="{'disabled': vm.state.originalPage.handle.indexOf('blog-') === 0}">
+                <ul class="list-unstyled ssb-settings-list" ng-class="{'disabled': vm.uiState.isBlogPage}">
                     <li>
                         <label>
                             <h5>Title:</h5>
