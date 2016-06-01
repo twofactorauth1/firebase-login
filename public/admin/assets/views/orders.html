@@ -249,7 +249,7 @@
             <label for="form-field-select-1">
                 Customer
             </label>
-            <input type="text" ng-model="newOrder.selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" placeholder="Customer" class="form-control">
+            <input type="text" ng-model="newOrder.selectedCustomer" typeahead="customer as customer for customer in contacts | filter:$viewValue" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" placeholder="Customer" class="form-control">
         </div>
         <div class="form-group">
             <label for="orderStatus">

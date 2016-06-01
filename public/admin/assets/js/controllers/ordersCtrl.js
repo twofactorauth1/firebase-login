@@ -3,7 +3,7 @@
 /*jslint unparam:true*/
 (function (angular) {
   app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "ContactService", "orderConstant", "ProductService", function ($scope, toaster, $modal, $filter, $state, OrderService, ContactService, orderConstant, ProductService) {
-    
+
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
@@ -31,12 +31,12 @@
     };
 
     /*
-     * @getCustomers
-     * get all customers to for customer select
+     * @getContacts
+     * get all contacts to for contact select
      */
 
-    ContactService.getContacts(function (customers) {
-      $scope.customers = customers;
+    ContactService.getContacts(function (contacts) {
+      $scope.contacts = contacts;
     });
 
     /*
@@ -108,7 +108,7 @@
     $scope.formatOrderStatus = function (status) {
       return OrderService.formatOrderStatus(status);
     };
-    
+
     /*
      * @orderStatusOptions
      * - an array of order status types for use in a select
