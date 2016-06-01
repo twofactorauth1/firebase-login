@@ -396,6 +396,35 @@ textarea.autosize {
     margin-bottom: 10px !important;
 }
 
+.checkbox-inline-right {
+    .checkbox-inline;
+
+    margin: 0!important;
+    padding: 5px 0 10px 10px!important;
+    width: 100%;
+    text-transform: capitalize;
+
+    &.clip-check label {
+
+        padding: 0 0 0 20px!important;
+        width: 100%;
+        text-align: left;
+
+        &:before {
+            left: auto;
+            right: 0;
+            margin: 0;
+        }
+
+        &:after {
+            left: auto;
+            right: -4px;
+        }
+
+    }
+
+}
+
 .checkbox-table {
     display: inline-block;
     margin: 2px 0 0 0;
