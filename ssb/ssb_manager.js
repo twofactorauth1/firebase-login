@@ -1399,6 +1399,10 @@ module.exports = {
                                 // update global sections to set global as false
                                 _.each(sectionsToBeDeleted, function(section){
                                     section.set("global", false);
+                                    section.set('modified', {
+                                        date: new Date(),
+                                        by: userId
+                                    });
                                 });
 
                                 sectionDao.batchUpdate(sectionsToBeDeleted, $$.m.ssb.Section, function(err, sectionAry){
