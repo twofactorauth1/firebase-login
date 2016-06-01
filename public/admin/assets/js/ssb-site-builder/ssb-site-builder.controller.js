@@ -23,7 +23,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.closeModal = closeModal;
     vm.insertMedia = insertMedia;
     vm.addFroalaImage = addFroalaImage;
-    vm.imageEditor = {};
+    vm.state.imageEditor = {};
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.addSectionToPage = addSectionToPage;
     vm.legacyComponentMedia = legacyComponentMedia;
@@ -591,7 +591,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function addFroalaImage(asset) {
 
         $timeout(function() {
-            vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+            vm.state.imageEditor.editor.image.insert(asset.url, !1, null, vm.state.imageEditor.img);
         }, 0);
 
     };
@@ -625,11 +625,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         if(editor){
             vm.showInsert = true;
-            vm.imageEditor.editor = editor;
-            vm.imageEditor.img = editor.image.get();
+            vm.state.imageEditor.editor = editor;
+            vm.state.imageEditor.img = editor.image.get();
         }
         else{
-            if(vm.imageEditor && vm.imageEditor.editor){
+            if(vm.state.imageEditor && vm.state.imageEditor.editor){
                 vm.showInsert = true;
             }
             else{
@@ -640,14 +640,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     $scope.$on('focusEditor', function (event, args) {
-      vm.imageEditor.editor = args.editor;
-      vm.imageEditor.img = null;
+      vm.state.imageEditor.editor = args.editor;
+      vm.state.imageEditor.img = null;
     });
     $scope.$on('activeEditor', function (event, args) {
       if(args.editor)
-       vm.imageEditor.editor = args.editor;
+       vm.state.imageEditor.editor = args.editor;
       if(args.editorImage)
-       vm.imageEditor.img = args.editorImage;
+       vm.state.imageEditor.img = args.editorImage;
     });
 
     function pageLinkClick(e) {
