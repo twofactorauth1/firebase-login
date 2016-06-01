@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', 'SimpleSiteBuilderBlogService'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope) {
+function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService) {
 
     console.info('site-builder blog-editor directive init...')
 
