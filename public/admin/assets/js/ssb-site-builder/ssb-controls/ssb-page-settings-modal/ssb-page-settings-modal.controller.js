@@ -196,10 +196,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         }
     }
 
-    function isBlogPage() {
-        return vm.page.handle === 'blog-list' || vm.page.handle === 'blog-post';
-    }
-
     $scope.$watch('vm.page.handle', function(handle){
       if(handle){
         vm.page.handle = $filter('slugify')(handle);
@@ -215,14 +211,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         vm.page = angular.copy(vm.parentVm.state.page);
         vm.originalPage = angular.copy(vm.page);
         vm.loading = false;
-        vm.isBlogPage = isBlogPage();
     }
     else{
         SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
             vm.page = page.data;
             vm.originalPage = angular.copy(vm.page);
             vm.loading = false;
-            vm.isBlogPage = isBlogPage();
         })
     }
 
