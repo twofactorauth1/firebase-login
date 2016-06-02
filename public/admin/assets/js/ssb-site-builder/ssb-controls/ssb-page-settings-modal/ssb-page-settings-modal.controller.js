@@ -12,7 +12,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     vm.setAsHomePage = setAsHomePage;
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
-    vm.isBlogPage = isBlogPage;
 
     function duplicatePage(){
         vm.saveLoading = true;
@@ -198,8 +197,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     }
 
     function isBlogPage() {
-        if(vm && vm.originalPage)
-            return vm.originalPage.handle === 'blog-list' || vm.originalPage.handle === 'blog-post'
+        return vm.page.handle === 'blog-list' || vm.page.handle === 'blog-post';
     }
 
     $scope.$watch('vm.page.handle', function(handle){
@@ -217,12 +215,14 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         vm.page = angular.copy(vm.parentVm.state.page);
         vm.originalPage = angular.copy(vm.page);
         vm.loading = false;
+        vm.isBlogPage = isBlogPage();
     }
     else{
         SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
             vm.page = page.data;
             vm.originalPage = angular.copy(vm.page);
             vm.loading = false;
+            vm.isBlogPage = isBlogPage();
         })
     }
 
