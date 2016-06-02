@@ -1100,6 +1100,7 @@ var emailMessageManager = {
             sender:sendgridParam.from,
             receiver:sendgridParam.to,
             content:sendgridParam.html,
+            subject:sendgridParam.subject,
             sendDate:new Date(),
             deliveredDate:null,
             openedDate:null,
