@@ -265,8 +265,8 @@ app.constant('pageConstant', {
     'forgotpassword': 'forgotpassword',
     'current-user': 'current-user',
     'signup': 'signup',
-    'blog-list', 'blog-list',
-    'blog-post', 'blog-post'
+    'blog-list': 'blog-list',
+    'blog-post': 'blog-post'
   }
 });
 
