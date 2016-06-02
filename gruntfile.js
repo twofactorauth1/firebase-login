@@ -382,7 +382,7 @@ module.exports = function(grunt) {
                                 { name: 'From Test to Production', value: 'test2prod' },
                                 { name: 'From Test to Test (new account)', value: 'test2test' },
                                 { name: 'From Production to Test', value: 'prod2test', checked:true },
-                                { name: 'From Production to Production (new account)', value: 'prod2prod' },
+                                { name: 'From Production to Production (new account)', value: 'prod2prod' }
                                 ]
                             //validate: function(value), // return true if valid, error message if invalid
                             //filter:  function(value){if(value === 'Copy from Production to Test'){ return false} else {return true;}}, // modify the answer

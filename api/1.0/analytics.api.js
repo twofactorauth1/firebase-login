@@ -199,69 +199,128 @@ _.extend(api.prototype, baseApi.prototype, {
             };
 
             if(event.event === 'delivered') {
-                emailMessageManager.markMessageDelivered(event.emailmessageId, event, function(err, value){
-                    if(value) {
-                        savedEvents.push(value);
-                        obj.sender = value.get('sender');
-                        obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
-                        contactActivitiesJSON.push(obj);
-                        if(event.campaignId) {
-                            campaignManager.handleCampaignEmailSentEvent(event.accountId, event.campaignId, event.contactId, function(){
-                                if(err) {
-                                    self.log.error('Error handling email send event:' + err);
-                                    return;
-                                } else {
-                                    self.log.debug('Handled email sent event.');
-                                    return;
+                emailMessageManager.isMessageDelivered(event.emailmessageId, function(err, value){
+                    if(err) {
+                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                        cb();//continue if possible.
+                    } else if(value) {
+                        //this message is already marked as delivered.  Add another event but don't update stats.
+                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                            if(value) {
+                                savedEvents.push(value);
+                            }
+                            cb(err);
+                        });
+                    } else {
+                        emailMessageManager.markMessageDelivered(event.emailmessageId, event, function(err, value){
+                            if(value) {
+                                savedEvents.push(value);
+                                obj.sender = value.get('sender');
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
+                                if(value.get('subject')){
+                                    obj.extraFields = obj.extraFields || [];
+                                    obj.extraFields.push({subject: value.get('subject')});
                                 }
-                            });
-                        }
+                                contactActivitiesJSON.push(obj);
+                                if(event.campaignId) {
+                                    campaignManager.handleCampaignEmailSentEvent(event.accountId, event.campaignId, event.contactId, function(){
+                                        if(err) {
+                                            self.log.error('Error handling email send event:' + err);
+                                            return;
+                                        } else {
+                                            self.log.debug('Handled email sent event.');
+                                            return;
+                                        }
+                                    });
+                                }
+                            }
+                            cb(err);
+                        });
                     }
+                });
 
-                    cb(err);
-                });
             } else if(event.event === 'open') {
-                emailMessageManager.markMessageOpened(event.emailmessageId, event, function(err, value){
-                    if(value) {
-                        savedEvents.push(value);
-                        obj.sender = value.get('sender');
-                        obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
-                        contactActivitiesJSON.push(obj);
-                        if(event.campaignId) {
-                            campaignManager.handleCampaignEmailOpenEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
-                                if(err) {
-                                    self.log.error('Error handling email open event:' + err);
-                                    return;
-                                } else {
-                                    self.log.debug('Handled email open event.');
-                                    return;
+                emailMessageManager.isMessageOpened(event.emailmessageId, function(err, value){
+                    if(err) {
+                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                        cb();//continue if possible.
+                    } else if(value) {
+                        //this message is already marked as opened.  Add another event but don't update stats.
+                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                            if(value) {
+                                savedEvents.push(value);
+                            }
+                            cb(err);
+                        });
+                    } else {
+                        emailMessageManager.markMessageOpened(event.emailmessageId, event, function(err, value){
+                            if(value) {
+                                savedEvents.push(value);
+                                obj.sender = value.get('sender');
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
+                                if(value.get('subject')){
+                                    obj.extraFields = obj.extraFields || [];
+                                    obj.extraFields.push({subject: value.get('subject')});
                                 }
-                            });
-                        }
+                                contactActivitiesJSON.push(obj);
+                                if(event.campaignId) {
+                                    campaignManager.handleCampaignEmailOpenEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling email open event:' + err);
+                                            return;
+                                        } else {
+                                            self.log.debug('Handled email open event.');
+                                            return;
+                                        }
+                                    });
+                                }
+                            }
+                            cb(err);
+                        });
                     }
-                    cb(err);
                 });
+
             } else if(event.event === 'click') {
-                emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value){
-                    if(value) {
-                        savedEvents.push(value);
-                        obj.sender = value.get('sender');
-                        obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
-                        contactActivitiesJSON.push(obj);
-                        if(event.campaignId) {
-                            campaignManager.handleCampaignEmailClickEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
-                                if(err) {
-                                    self.log.error('Error handling email click event:' + err);
-                                    return;
-                                } else {
-                                    self.log.debug('Handled email click event.');
-                                    return;
+                emailMessageManager.isMessageClicked(event.emailmessageId, function(err, value){
+                    if(err) {
+                        self.log.error('Error while processing [' + event.emailmessageId + ']', err);
+                        cb();//continue if possible.
+                    } else if(value) {
+                        //this message is already marked as clicked.  Add another event but don't update stats.
+                        emailMessageManager.addEvent(event.emailmessageId, event, function(err, value){
+                            if(value) {
+                                savedEvents.push(value);
+                            }
+                            cb(err);
+                        });
+                    } else {
+                        emailMessageManager.markMessageClicked(event.emailmessageId, event, function(err, value){
+                            if(value) {
+                                savedEvents.push(value);
+                                obj.sender = value.get('sender');
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
+                                if(value.get('subject')){
+                                    obj.extraFields = obj.extraFields || [];
+                                    obj.extraFields.push({subject: value.get('subject')});
                                 }
-                            });
-                        }
+                                contactActivitiesJSON.push(obj);
+                                if(event.campaignId) {
+                                    campaignManager.handleCampaignEmailClickEvent(event.accountId, event.campaignId, event.contactId, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling email click event:' + err);
+                                            return;
+                                        } else {
+                                            self.log.debug('Handled email click event.');
+                                            return;
+                                        }
+                                    });
+                                }
+                            }
+                            cb(err);
+                        });
                     }
-                    cb(err);
                 });
+
             } else if (event.event === 'unsubscribe') {
                 //TODO: handle unsubscribe
                 cb();
