@@ -235,15 +235,11 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
                 pvm.state.pendingPageChanges = true;
 
-                if (parentEditor.froalaEditor) {
-                    parentEditor.froalaEditor('events.trigger', 'contentChanged');
-                }
+
 
             }
 
-            if (force && parentEditor.froalaEditor) {
-                parentEditor.froalaEditor('events.trigger', 'contentChanged');
-            }
+
 
         }
 

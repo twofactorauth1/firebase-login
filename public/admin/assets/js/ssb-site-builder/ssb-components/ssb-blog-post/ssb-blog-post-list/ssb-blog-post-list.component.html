@@ -1,5 +1,14 @@
 <div data-edit ng-class="vm.component.type+'-v'+vm.component.version">
-
+    <div ng-if="!vm.blog.posts.length" class="ssb-in-context-info">
+        <span class="fa fa-info-circle">You have no published posts.</span>
+    </div>
+    <div class="padding-30">
+        <div ind-slider='{ slidesToShow:1, dots:true, arrows:false, autoplay:true, touchMove:true, draggable:true }'>
+            <div class="img-row col-sm-12 col-xs-12" ng-repeat="post in vm.blog.posts | filter:{ featured: true }">
+                <img class="img-responsive center" src="{{post.featured_image}}"></img>
+            </div>
+        </div>
+    </div>
     <ul class="list-unstyled">
         <li>
             <section
@@ -9,5 +18,4 @@
             </section>
         </li>
     </ul>
-
 </div>
