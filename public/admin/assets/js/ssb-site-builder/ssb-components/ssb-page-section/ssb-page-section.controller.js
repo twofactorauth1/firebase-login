@@ -23,6 +23,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.setupVideoBackground = setupVideoBackground;
     vm.playerObject = {};
     vm.player = {};
+    vm.sectionInitDelayDone = false;
 
 
 
@@ -470,6 +471,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
     function init(element) {
         vm.element = element;
+
+        $timeout(function() {
+            vm.sectionInitDelayDone = true;
+        });
     }
 
 }
