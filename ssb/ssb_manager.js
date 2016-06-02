@@ -493,6 +493,9 @@ module.exports = {
 
         if (sections.length) {
             sections = sections.map(function(section) {
+                // We should not generate new _id for global sections
+                if(section.global || section.globalHeader || section.globalFooter)
+                    return section;
                 var id = $$.u.idutils.generateUUID();
                 //TODO: If a section is global, should we do this?
                 section._id = id;
@@ -1359,6 +1362,7 @@ module.exports = {
                         sectionsToBeDeleted.push(gSection);
                     }
                 });
+
                 if(sectionsToBeDeleted.length > 0) {
                     self.log.debug('Removing these global sections:', sectionsToBeDeleted);
                     var idAry = _.map(sectionsToBeDeleted, function(section){return section.id();});
@@ -1391,7 +1395,25 @@ module.exports = {
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error removing deleted global sections:', err);
                                 }
-                                cb(err, existingPage, globalSections, updatedSections, updatedPage);
+
+                                // update global sections to set global as false
+                                _.each(sectionsToBeDeleted, function(section){
+                                    section.set("global", false);
+                                    section.set('modified', {
+                                        date: new Date(),
+                                        by: userId
+                                    });
+                                });
+
+                                sectionDao.batchUpdate(sectionsToBeDeleted, $$.m.ssb.Section, function(err, sectionAry){
+                                    if(err) {
+                                        self.log.error(accountId, userId, 'Error updating global sections:', err);
+                                        cb(err);
+                                    } else {
+                                        cb(err, existingPage, globalSections, updatedSections, updatedPage);
+                                    }
+                                });
+
                             });
                         }
                     });

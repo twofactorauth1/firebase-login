@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogPostCardComponentController', ssbBlogPostCardComponentController);
 
-ssbBlogPostCardComponentController.$inject = ['$scope', '$attrs', '$filter', '$location'];
+ssbBlogPostCardComponentController.$inject = ['$scope', '$attrs', '$filter', '$location', 'SimpleSiteBuilderBlogService'];
 /* @ngInject */
-function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location) {
+function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, SimpleSiteBuilderBlogService) {
 
     console.info('ssb-blog-post-card directive init...')
 
@@ -16,7 +16,10 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location) 
     vm.setJSONLD = setJSONLD;
 
     function initData() {
-        vm.post = blogService.loadDataFromPage('script#indigenous-precache-sitedata-posts');
+        var posts = SimpleSiteBuilderBlogService.loadDataFromPage('script#indigenous-precache-sitedata-posts');
+        if(posts && posts.length)
+           vm.post = posts[0];
+
     }
 
     function setJSONLD() {
@@ -35,7 +38,7 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location) 
                 // "width": 800
             },
             "datePublished": "2015-02-05T08:00:00+08:00",
-            "dateModified": vm.post.modified.data,
+            "dateModified": vm.post.modified.date,
             "author": {
                 "@type": "Person",
                 "name": vm.post.post_author
@@ -62,7 +65,8 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location) 
             vm.initData();
         }
 
-        vm.setJSONLD();
+        if(vm.post)
+            vm.setJSONLD();
 
     }
 

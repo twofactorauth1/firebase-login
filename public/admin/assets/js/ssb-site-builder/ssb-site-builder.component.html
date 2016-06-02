@@ -224,7 +224,13 @@
 
 	</div>
 
-    <ssb-sidebar ng-if="vm.state.page" class="fade-in-left ssb-sidebar" state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer' }"></ssb-sidebar>
+    <ssb-sidebar
+        ng-if="vm.state.page"
+        class="fade-in-left ssb-sidebar"
+        state="vm.state"
+        ui-state="vm.uiState"
+        ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer' }">
+    </ssb-sidebar>
 
     <ssb-topbar ng-if="vm.state.page" class="fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
 

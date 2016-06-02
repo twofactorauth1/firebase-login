@@ -1,32 +1,41 @@
-<article itemscope="" itemtype="http://schema.org/BlogPosting">
-
-    <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
-
-    <h1 itemprop="name headline">
-        {{vm.post.post_title}}
-    </h1>
-
-    <div class="ssb-blog-byline">
-        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-            <span itemprop="name">
-                <a href="/author/{{blogpost.post_author}}" itemprop="url" rel="author">{{blogpost.post_author}}</a>
-            </span>
-        </span>
-        <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
-            {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
-        </time>
+<article itemscope="" itemtype="http://schema.org/BlogPosting" class="ssb-media">
+    <div ng-if="!vm.post" class="ssb-in-context-info">
+        <span class="fa fa-info-circle">You have no published posts.</span>
     </div>
+    <div ng-if="vm.post">
+        <div class="ssb-media-left">
+            <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
+        </div>
 
-    <section itemprop="articleBody">
-        <p ng-if="vm.post.post_excerpt.length">{{vm.post.post_excerpt}}</p>
-        <p ng-if="!vm.post.post_excerpt.length">
-            <div class="ssb-in-context-info">
-                <span class="fa fa-info-circle">Author a post excerpt to give a summary of the post.</span>
+        <div class="ssb-media-body">
+            <h1 class="media-heading" itemprop="name headline">
+                {{vm.post.post_title}}
+            </h1>
+
+            <div class="ssb-blog-byline">
+                <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                    <span itemprop="name">
+                        <a href="/author/{{blogpost.post_author}}" itemprop="url" rel="author">{{blogpost.post_author}}</a>
+                    </span>
+                </span>
+                <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
+                    {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
+                </time>
             </div>
-        </p>
-    </section>
+
+            <section itemprop="articleBody">
+                <p ng-if="vm.post.post_excerpt.length">{{vm.post.post_excerpt}}</p>
+                <p ng-if="!vm.post.post_excerpt.length">
+                    <div class="ssb-in-context-info">
+                        <i class="fa fa-info-circle"></i>
+                        <span>Author a post excerpt to give a summary of the post.</span>
+                    </div>
+                </p>
+            </section>
+        </div>
+    </div>
 
     <script type="application/ld+json"></script>
 
-
 </article>
+

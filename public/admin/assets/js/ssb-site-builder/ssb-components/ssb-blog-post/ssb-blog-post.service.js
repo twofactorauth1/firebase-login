@@ -27,7 +27,8 @@
         ssbBlogService.getPosts = getPosts;
 
         ssbBlogService.blog = {
-            posts: []
+            posts: [],
+            postFilters: ['all', 'published', 'draft', 'featured']
         };
 
         /**
@@ -50,6 +51,10 @@
         function loadDataFromPage(scriptId) {
 
             var data = $(scriptId).html();
+
+            if (!angular.isDefined(data)) {
+                return
+            }
 
             var unescapeMap = {
                 "&amp;":"&",

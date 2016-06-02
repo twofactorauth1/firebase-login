@@ -737,6 +737,72 @@ var emailMessageManager = {
         });
     },
 
+    isMessageDelivered: function(messageId, fn) {
+        var self = this;
+        self.log.debug('>> isMessageDelivered');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage) {
+            if (err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if (!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                if(emailMessage.get('deliveredDate') !== null) {
+                    self.log.debug('<< isMessageDelivered(true)');
+                    return fn(null, true);
+                } else {
+                    self.log.debug('<< isMessageDelivered(false)');
+                    return fn(null, false);
+                }
+            }
+        });
+    },
+
+    isMessageOpened: function(messageId, fn) {
+        var self = this;
+        self.log.debug('>> isMessageOpened');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage) {
+            if (err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if (!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                if(emailMessage.get('openedDate') !== null) {
+                    self.log.debug('<< isMessageOpened(true)');
+                    return fn(null, true);
+                } else {
+                    self.log.debug('<< isMessageOpened(false)');
+                    return fn(null, false);
+                }
+            }
+        });
+    },
+
+    isMessageClicked: function(messageId, fn) {
+        var self = this;
+        self.log.debug('>> isMessageClicked');
+        dao.findOne({_id:messageId}, $$.m.Emailmessage, function(err, emailMessage) {
+            if (err) {
+                self.log.error('Error finding email message:', err);
+                fn(err);
+            } else if (!emailMessage) {
+                self.log.debug('Cannot find emailMessage with ID:' + messageId);
+                fn();
+            } else {
+                if(emailMessage.get('clickedDate') !== null) {
+                    self.log.debug('<< isMessageClicked(true)');
+                    return fn(null, true);
+                } else {
+                    self.log.debug('<< isMessageClicked(false)');
+                    return fn(null, false);
+                }
+            }
+        });
+    },
+
     addEvent: function(messageId, event, fn) {
         var self = this;
         self.log.debug('>> addEvent');
@@ -1034,6 +1100,7 @@ var emailMessageManager = {
             sender:sendgridParam.from,
             receiver:sendgridParam.to,
             content:sendgridParam.html,
+            subject:sendgridParam.subject,
             sendDate:new Date(),
             deliveredDate:null,
             openedDate:null,

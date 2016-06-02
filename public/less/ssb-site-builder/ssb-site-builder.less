@@ -535,10 +535,29 @@
     }
 }
 
-.ssb-footer-page-settings-modal{
-	ul.page-settings{
-		float: left;
-		li{
+.ssb-page-settings-modal {
+
+    @media screen and (max-width: 400px) {
+        .tabs-left > .nav-tabs > li a{
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
+}
+
+.ssb-footer-page-settings-modal {
+
+    ul.page-settings {
+
+        float: left;
+
+        @media screen and (max-width: 400px) {
+            display: block;
+            width: 100%;
+            clear: both;
+        }
+
+		li {
 			display: inline-block;
 			margin: 0 0 0 10px;
 		}

@@ -23,7 +23,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.closeModal = closeModal;
     vm.insertMedia = insertMedia;
     vm.addFroalaImage = addFroalaImage;
-    vm.imageEditor = {};
+    vm.state.imageEditor = {};
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.addSectionToPage = addSectionToPage;
     vm.legacyComponentMedia = legacyComponentMedia;
@@ -217,6 +217,30 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 });
             }
+        },
+        blogPanel: {
+            navigationHistory: [],
+            loadPanel: function(obj, back) {
+
+                if (!back) {
+                    vm.uiState.navigation.blogPanel.navigationHistory.push(obj);
+                }
+
+                vm.uiState.openBlogPanel = obj;
+                console.log(vm.uiState.navigation.blogPanel.navigationHistory);
+
+            },
+            back: function() {
+                var hist = vm.uiState.navigation.blogPanel.navigationHistory;
+                var previousPanel;
+
+                hist.pop();
+
+                previousPanel = hist[hist.length - 1];
+
+                vm.uiState.navigation.blogPanel.loadPanel(previousPanel, true);
+
+            }
         }
     };
 
@@ -311,25 +335,35 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
-    $scope.$watch(function() { return SimpleSiteBuilderService.themes }, function(themes) {
+    var unbindThemesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.themes }, function(themes) {
       vm.state.themes = themes;
+      unbindThemesWatcher();
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
-    $scope.$watch(function() { return SimpleSiteBuilderService.templates }, function(templates) {
+    var unbindTemplatesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.templates }, function(templates) {
       vm.state.templates = templates;
+      unbindTemplatesWatcher();
     }, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.legacyTemplates }, function(templates) {
+    var unbindLegacyTemplatesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.legacyTemplates }, function(templates) {
       vm.state.legacyTemplates = templates;
+      unbindLegacyTemplatesWatcher();
     }, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
+    var unbindPlatformSectionWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
       vm.state.platformSections = sections;
+      unbindPlatformSectionWatcher();
     }, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.userSections }, function(sections) {
+    var unbindUserSectionWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.userSections }, function(sections) {
       vm.state.userSections = sections;
+      unbindUserSectionWatcher();
+    }, true);
+
+    var unbindAccountWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.account }, function(account) {
+      vm.state.account = account;
+      unbindAccountWatcher();
     }, true);
 
 
@@ -581,7 +615,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function addFroalaImage(asset) {
 
         $timeout(function() {
-            vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+            vm.state.imageEditor.editor.image.insert(asset.url, !1, null, vm.state.imageEditor.img);
         }, 0);
 
     };
@@ -615,33 +649,29 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         if(editor){
             vm.showInsert = true;
-            vm.imageEditor.editor = editor;
-            vm.imageEditor.img = editor.image.get();
+            vm.state.imageEditor.editor = editor;
+            vm.state.imageEditor.img = editor.image.get();
         }
         else{
-            if(vm.imageEditor && vm.imageEditor.editor){
+            if(vm.state.imageEditor && vm.state.imageEditor.editor){
                 vm.showInsert = true;
             }
             else{
                 vm.showInsert = false;
-            }
-            if(!vm.imageEditor.editor.selection.ranges[0]){
-                vm.imageEditor.editor.selection.setAtEnd(vm.imageEditor.editor.$el.get(0));
-                vm.imageEditor.editor.selection.restore();
             }
         }
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     $scope.$on('focusEditor', function (event, args) {
-      vm.imageEditor.editor = args.editor;
-      vm.imageEditor.img = null;
+      vm.state.imageEditor.editor = args.editor;
+      vm.state.imageEditor.img = null;
     });
     $scope.$on('activeEditor', function (event, args) {
       if(args.editor)
-       vm.imageEditor.editor = args.editor;
+       vm.state.imageEditor.editor = args.editor;
       if(args.editorImage)
-       vm.imageEditor.img = args.editorImage;
+       vm.state.imageEditor.img = args.editorImage;
     });
 
     function pageLinkClick(e) {

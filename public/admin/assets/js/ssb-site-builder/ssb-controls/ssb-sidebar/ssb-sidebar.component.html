@@ -5,20 +5,28 @@
         ng-class="{ 'tabs-left': vm.uiState.sidebarOrientation === 'vertical' }">
         <ul class="nav nav-tabs">
 
-            <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'add' }">
-                <div ng-click="vm.uiState.openSidebarPanel = 'add'"><div class="ti-plus display-ib"></div>Add</div>
+            <li ng-click="vm.uiState.openSidebarPanel = 'add'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'add' }">
+                <div><div class="ti-plus display-ib"></div>Add</div>
             </li>
 
-            <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'pages' }">
-                <div ng-click="vm.uiState.openSidebarPanel = 'pages'"><div class="ti-files display-ib"></div>Pages</div>
+            <li ng-click="vm.uiState.openSidebarPanel = 'pages'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'pages' }">
+                <div><div class="ti-files display-ib"></div>Pages</div>
             </li>
 
-            <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'content' }">
-                <div ng-click="vm.uiState.openSidebarPanel = 'content'"><div class="ti-pencil-alt display-ib"></div>Content</div>
+            <li ng-click="vm.uiState.openSidebarPanel = 'content'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'content' }">
+                <div><div class="ti-pencil-alt display-ib"></div>Content</div>
             </li>
 
-            <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
-                <div ng-click="vm.uiState.openSidebarPanel = 'design'"><div class="ti-brush display-ib"></div>Design</div>
+            <li ng-click="vm.uiState.openSidebarPanel = 'design'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
+                <div><div class="ti-brush display-ib"></div>Design</div>
+            </li>
+
+            <li
+                ng-click="vm.uiState.openSidebarPanel = 'blog'; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Blog', id: 'blog' })"
+                ng-if="vm.state.account.showhide.ssbBlog"
+                class="nav-tab"
+                ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'blog' }">
+                <div><div class="ti-comment-alt display-ib"></div>Blog</div>
             </li>
 
         </ul>
@@ -27,13 +35,14 @@
 
     <div ng-if="vm.uiState.openSidebarPanel === 'add'" class="site-editor-group site-editor-group-add editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'add' }">
-            <section>
+           <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        Add Section
+                    </h4>
 
-                <h4 class="ssb-sidebar-sub-heading">
-                    Add Section
-                </h4>
-
-                <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
 
                 <!-- <h4 class="row">
                     <div class="col-xs-10 col-sm-4">
@@ -57,7 +66,7 @@
                     </div>
                 </h4> -->
 
-                <div>
+                <div class="ssb-sidebar-tabbable-inner">
                     <tabset class="tabbable tabs-left margin-bottom-0" ng-class="{'email-sections' : isEmail}">
                         <tab ng-repeat="sectionFilter in vm.sectionFilters">
                             <tab-heading>
@@ -160,13 +169,16 @@
     <div ng-if="vm.uiState.openSidebarPanel === 'pages'" class="site-editor-group site-editor-group-pages editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'pages' }">
 
-            <section>
+            <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        This Page
+                    </h4>
 
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
 
-                <h4 class="ssb-sidebar-sub-heading">
-                    Current Page
-                </h4>
-                <ul class="list-unstyled ssb-settings-list" ng-class="{'disabled': vm.state.originalPage.handle.indexOf('blog-') === 0}">
+                <ul class="list-unstyled ssb-settings-list" ng-class="{'disabled': vm.uiState.isBlogPage}">
                     <li>
                         <label>
                             <h5>Title:</h5>
@@ -179,20 +191,17 @@
                             <span editable-text="vm.state.page.handle" onbeforesave="vm.validateDuplicatePage($data)" e-required e-placeholder="Enter url">{{vm.state.page.handle || 'Enter url'}}</span>
                         </label>
                     </li>
-                    <!-- <li>
+                    <li ng-if="!vm.uiState.isBlogPage">
                         <label>
-                            Page Template:
-                            {{vm.getTemplateById(vm.state.page.templateId)}}
-                            <span>{{vm.getTemplateById(vm.state.page.templateId)[0].name}}</span>
+                            <h5>Visit Published Page:</h5>
+                            <a href="/{{vm.state.page.handle}}">{{vm.state.page.handle}}</a>
                         </label>
-                    </li> -->
+                    </li>
                 </ul>
 
                 <h4 class="ssb-sidebar-sub-heading">
                     <span>All Pages ({{vm.state.pages.length}})</span>
                 </h4>
-
-                <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
 
                 <button ng-click="vm.openModal('ssb-new-page-modal', null, null, null);" class="btn btn-primary">Add Page</button>
 
@@ -246,13 +255,14 @@
     <div ng-if="vm.uiState.openSidebarPanel === 'content'" class="site-editor-group site-editor-group-content editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'content' }">
 
-            <section>
-                <h4 class="ssb-sidebar-sub-heading">
-                    <span>Page Sections ({{vm.state.page.sections.length || 0}})</span>
-                    <!-- <div ng-click="vm.uiState.openSidebarPanel = 'add'" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div> -->
-                </h4>
+            <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        <span>Page Sections ({{vm.state.page.sections.length || 0}})</span>
+                    </h4>
 
-                <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
 
                 <button ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
 
@@ -309,8 +319,14 @@
     <div ng-if="vm.uiState.openSidebarPanel === 'design'" class="site-editor-group site-editor-group-design editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'design' }">
 
-            <section class="container-fluid">
-                <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+            <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        Design
+                    </h4>
+
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
 
                 <h4 ng-if="vm.uiState.isBlogPage" class="ssb-sidebar-sub-heading">Page Layout</h4>
                 <div ng-if="vm.uiState.isBlogPage" class="form-group">
@@ -406,6 +422,76 @@
 
                 </div>
             </section>
+
+        </div>
+    </div>
+
+    <div ng-if="vm.uiState.openSidebarPanel === 'blog'" class="site-editor-group-blog site-editor-group site-editor-group-add editor-group tab-content">
+        <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'blog' }">
+            <section ng-if="vm.uiState.openBlogPanel.id === 'blog'" class="ssb-sidebar-panel-inner-container padding-15">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        Blog
+                    </h4>
+
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
+
+                <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Manage Posts', id: 'manage' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+                    <i class="fa fa-align-justify display-ib"></i> Manage Posts
+                </button>
+
+                <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+                    <i class="fa fa-plus display-ib"></i> New Post
+                </button>
+
+                <h4 class="ssb-sidebar-sub-heading-separator">Blog Pages</h4>
+
+                <ul class="list-unstyled">
+                    <li
+                        ng-if="page.handle === 'blog-list' || page.handle === 'blog-post'"
+                        ng-repeat="page in vm.state.pages track by $index"
+                        ng-class="{ 'active-page': page._id === vm.state.page._id }"
+                        class="ssb-page-section-settings-item">
+                        <div
+                            ng-click="vm.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);"
+                            class="ssb-sidebar-item-icon ti-settings display-ib"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Page Settings">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 display-ib ti-eye"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false"
+                            ng-click="vm.hideFromMenu()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Hide this page from main menu">
+                        </div>
+                        <div
+                            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 display-ib ti-eye"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false"
+                            ng-click="vm.showPageOnMenu()"
+                            tooltip-placement="left"
+                            tooltip-html-unsafe="Show this page on main menu">
+                        </div>
+                        <div class="panel-group">
+                            <div class="ssb-sidebar-sortable-item panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a ng-if="page._id !== vm.state.page._id" href page-id="page._id" ng-click="vm.loadPage(page)"><span tooltip-placement="bottom" tooltip="{{page.title}}">{{page.title | truncate : 60 : '...' : true}}</span></a>
+                                        <a ng-if="page._id === vm.state.page._id" href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)"><span tooltip-placement="bottom" tooltip="{{vm.state.page.title}}">{{vm.state.page.title | truncate : 60 : '...' : true}}</span></a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <ssb-blog-editor
+                state="vm.state"
+                ui-state="vm.uiState"
+                ng-if="vm.uiState.openBlogPanel.id">
+            </ssb-blog-editor>
 
         </div>
     </div>

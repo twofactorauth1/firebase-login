@@ -127,8 +127,10 @@
         var hasStripePlans = productAttrs.hasOwnProperty('stripePlans') && productAttrs.stripePlans.length;
         // var promises = [];
 
-        if (hasStripePlans && productAttrs.stripePlans[0].active) {
-          PaymentService.getIndigenousStripePlan(productAttrs.stripePlans[0].id, function(plan){
+        var activeStripePlan = _.findWhere(productAttrs.stripePlans, {active: true});
+
+        if (hasStripePlans && activeStripePlan) {
+          PaymentService.getIndigenousStripePlan(activeStripePlan.id, function(plan){
             console.log(plan);
             productAttrs.stripePlans[0] = plan; //populate full plan data
             $scope.planlist.list.push(product);

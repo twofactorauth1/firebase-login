@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogPostDetailComponentController', ssbBlogPostDetailComponentController);
 
-ssbBlogPostDetailComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$location'];
+ssbBlogPostDetailComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$location', 'SimpleSiteBuilderBlogService'];
 /* @ngInject */
-function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclude, $location) {
+function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclude, $location, SimpleSiteBuilderBlogService) {
 
     console.info('ssb-blog-post-detail directive init...')
 
@@ -16,7 +16,9 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
     vm.setJSONLD = setJSONLD;
 
     function initData() {
-        vm.post = window.indigenous.precache.siteData.posts[0];
+        var posts = SimpleSiteBuilderBlogService.loadDataFromPage('script#indigenous-precache-sitedata-posts');
+        if(posts && posts.length)
+           vm.post = posts[0];
     }
 
     function setJSONLD() {

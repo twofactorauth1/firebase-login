@@ -1263,7 +1263,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 self.log.debug('topicObj ', topicObj);
                 topicDao.getById(topicId, function(err, topic) {
-                  if (topicObj.attributes.statistics === topic.attributes.statistics) {
+                  if (_.isEqual(topicObj.attributes.statistics, topic.attributes.statistics)) {
                     topicObj.attributes.updated.by = self.userId(req);
                     topicObj.attributes.updated.date = new Date();
                   }
