@@ -19,12 +19,6 @@ ssb-blog-editor {
 
     }
 
-    .ssb-page-section-settings-item {
-        float: left;
-        clear: both;
-        width: 100%;
-    }
-
     .ssb-sidebar-item-icon-left {
         .ssb-sidebar-item-icon;
         right: auto;
@@ -35,8 +29,12 @@ ssb-blog-editor {
         z-index: 0;
     }
 
-    .ssb-blog-post-list {
+    .ssb-blog-post-list > li {
         position: relative;
+        border: 1px solid @lightGrey;
+        border-radius: 2px;
+        padding: 20px 10px 50px;
+        margin: 1em 0;
     }
 
     .ssb-blog-post-list-item {
@@ -49,8 +47,8 @@ ssb-blog-editor {
 
     .ssb-blog-post-toggles {
         position: absolute;
-        top: 5px;
-        right: 5px;
+        top: 10px;
+        right: 10px;
 
         .btn {
             color: @indigenous-blue;
@@ -60,8 +58,20 @@ ssb-blog-editor {
 
     .ssb-blog-post-action-buttons {
         position: absolute;
-        bottom: 5px;
-        right: 5px;
+        bottom: 10px;
+        right: 10px;
+    }
+
+}
+
+
+.ssb-blog-edit-mode {
+    overflow: hidden;
+    max-height: calc(~"100vh - 125px"); //height of header
+
+    .ssb-main {
+        pointer-events: none;
+        opacity: .85;
     }
 
 }

@@ -149,15 +149,19 @@
 
 .ssb-media-default .ssb-media {
 
-    display: flex;
-    align-items: flex-start;
+    @media screen and (min-width: 550px) {
 
-    .ssb-media-left {
-        margin-right: 1em;
-    }
+        display: flex;
+        align-items: flex-start;
 
-    .ssb-media-body {
-        flex: 1;
+        .ssb-media-left {
+            margin-right: 1em;
+        }
+
+        .ssb-media-body {
+            flex: 1;
+        }
+
     }
 
 }

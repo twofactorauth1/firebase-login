@@ -13,7 +13,8 @@ function ssbBlogPostCardComponent() {
         ssbEditor: '=',
         componentClass: '&',
         component: '=',
-        post: '=?'
+        post: '=?',
+        compactView: '=?'
     },
     templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-card/ssb-blog-post-card.component.html',
     replace: true,

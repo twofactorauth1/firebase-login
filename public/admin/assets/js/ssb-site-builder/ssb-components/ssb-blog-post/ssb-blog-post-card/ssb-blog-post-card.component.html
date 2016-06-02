@@ -8,19 +8,26 @@
         </div>
 
         <div class="ssb-media-body">
+
+            <div ng-if="vm.compactView" class="ssb-blog-byline">
+                <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
+                    {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
+                </time>
+            </div>
+
             <h1 class="media-heading" itemprop="name headline">
                 {{vm.post.post_title}}
             </h1>
 
-            <div class="ssb-blog-byline">
-                <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-                    <span itemprop="name">
-                        <a href="/author/{{blogpost.post_author}}" itemprop="url" rel="author">{{blogpost.post_author}}</a>
-                    </span>
-                </span>
+            <div ng-if="!vm.compactView" class="ssb-blog-byline">
                 <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
                     {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
                 </time>
+                <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                    <span itemprop="name">
+                        <a href="/author/{{vm.post.post_author}}" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                    </span>
+                </span>
             </div>
 
             <section itemprop="articleBody">
