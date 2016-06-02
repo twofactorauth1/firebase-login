@@ -1,31 +1,37 @@
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
 
-    <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
-
-    <h1 itemprop="name headline">
-        {{vm.post.post_title}}
-    </h1>
-
-    <div class="ssb-blog-byline">
-        <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-            <span itemprop="name">
-                <a href="/author/{{blogpost.post_author}}" itemprop="url" rel="author">{{blogpost.post_author}}</a>
-            </span>
-        </span>
-        <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
-            {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
-        </time>
+    <div ng-if="!vm.post" class="ssb-in-context-info">
+        <span class="fa fa-info-circle">You have no published posts.</span>
     </div>
 
-    <section itemprop="articleBody">
-        <p>{{vm.post.post_content}}</p>
-    </section>
+    <div ng-if="vm.post">
+        <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
 
-    <ul class="post_tags" data-ng-if="vm.post.post_tags">
-        <li data-ng-repeat="tag in vm.post.post_tags track by $index">
-            <a href="">{{tag.text ? tag.text:tag}}</a>
-        </li>
-    </ul>
+        <h1 itemprop="name headline">
+            {{vm.post.post_title}}
+        </h1>
+
+        <div class="ssb-blog-byline">
+            <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                <span itemprop="name">
+                    <a href="/author/{{blogpost.post_author}}" itemprop="url" rel="author">{{blogpost.post_author}}</a>
+                </span>
+            </span>
+            <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
+                {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
+            </time>
+        </div>
+
+        <section itemprop="articleBody">
+            <p>{{vm.post.post_content}}</p>
+        </section>
+
+        <ul class="post_tags" data-ng-if="vm.post.post_tags">
+            <li data-ng-repeat="tag in vm.post.post_tags track by $index">
+                <a href="">{{tag.text ? tag.text:tag}}</a>
+            </li>
+        </ul>
+    </div>
 
     <script type="application/ld+json"></script>
 
