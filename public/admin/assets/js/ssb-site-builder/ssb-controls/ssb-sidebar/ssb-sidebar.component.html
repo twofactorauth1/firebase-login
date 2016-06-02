@@ -426,7 +426,7 @@
         </div>
     </div>
 
-    <div ng-if="vm.uiState.openSidebarPanel === 'blog'" class="site-editor-group-blog site-editor-group site-editor-group-add editor-group tab-content">
+    <div ng-if="vm.uiState.openSidebarPanel === 'blog'" class="site-editor-group-blog site-editor-group site-editor-group-add editor-group tab-content" ng-class="{ 'full-height': vm.uiState.openBlogPanel.id !== 'blog' }">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'blog' }">
             <section ng-if="vm.uiState.openBlogPanel.id === 'blog'" class="ssb-sidebar-panel-inner-container padding-15">
                 <header class="ssb-sidebar-panel-header">
@@ -437,7 +437,7 @@
                     <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
                 </header>
 
-                <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Manage Posts', id: 'manage' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+                <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Manage Posts', id: 'manage' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                     <i class="fa fa-align-justify display-ib"></i> Manage Posts
                 </button>
 

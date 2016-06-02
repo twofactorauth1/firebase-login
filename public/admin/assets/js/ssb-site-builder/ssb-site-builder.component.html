@@ -98,7 +98,7 @@
 
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
-<div class="ssb-edit-mode">
+<div class="ssb-edit-mode" ng-class="{ 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode }">
     <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
