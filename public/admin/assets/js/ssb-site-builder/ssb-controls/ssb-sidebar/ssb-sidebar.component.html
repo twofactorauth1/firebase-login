@@ -434,7 +434,10 @@
                         Blog
                     </h4>
 
-                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = '';vm.uiState.openBlogPanel = {};"></div>
+                    <div
+                        class="close-panel ti-close"
+                        ng-click="vm.uiState.openSidebarPanel = '';vm.uiState.openBlogPanel = { name: '', id: '' };">
+                    </div>
                 </header>
 
                 <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Manage Posts', id: 'manage' });" class="ssb-sidebar-section-panel-btn btn btn-link">
