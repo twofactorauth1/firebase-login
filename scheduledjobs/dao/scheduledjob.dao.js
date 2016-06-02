@@ -12,7 +12,7 @@ var dao = {
 
     markJobAsExecuting: function(id, fn) {
         var self = this;
-        var query = {_id:id, executing:false};
+        var query = {_id:id, executing:false, runAt:null};
         var sort = null;
         var remove = false;
         var update = {$set:{runAt: new Date(), executing:true}};
