@@ -15,6 +15,27 @@ function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService
 
     vm.uiState.activePostFilter = 'all';
 
+    vm.toggleFeatured = toggleFeatured;
+    vm.togglePublished = togglePublished;
+
+
+    function toggleFeatured(post) {
+        post.featured = !post.featured;
+        SimpleSiteBuilderBlogService.savePost(post).then(function() {
+            console.log('saved post');
+        }).catch(function(error) {
+            console.error('error saving post');
+        });
+    }
+
+    function togglePublished(post) {
+        post.post_status = 'PUBLISHED';
+        SimpleSiteBuilderBlogService.savePost(post).then(function() {
+            console.log('saved post');
+        }).catch(function(error) {
+            console.error('error saving post');
+        });
+    }
 
     function closeBlogPanel() {
         vm.uiState.openBlogPanel = { name: '', id: '' };
