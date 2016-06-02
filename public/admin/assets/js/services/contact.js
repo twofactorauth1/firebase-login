@@ -169,19 +169,14 @@
     };
 
     this.contactTags = function (contact) {
-      var contactTypes = userConstant.contact_types.dp;
+      var contactTags = contactConstant.contact_tags.dp;
+      contactTags = contactTags.concat(userConstant.contact_types.dp);
       var tags = [];
+
       if (contact.tags) {
-        _.each(contact.tags, function (tag) {
-          var type = _.find(contactTypes, function (type) {
-            return type.data === tag;
-          });
-          if (type) {
-            tags.push(type.label);
-          }
-          else{
-            tags.push(tag);
-          }
+        tags = _.map(contact.tags, function(tag) {
+          var type = _.findWhere(contactTags, {data: tag});
+          return type ? type.label : tag;
         });
       }
       return tags.join(', ');
