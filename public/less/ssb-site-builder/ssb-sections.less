@@ -147,7 +147,7 @@
     position: relative;
 }
 
-.ssb-media {
+.ssb-media-default .ssb-media {
 
     display: flex;
     align-items: flex-start;
@@ -158,6 +158,15 @@
 
     .ssb-media-body {
         flex: 1;
+    }
+
+}
+
+.ssb-media-stacked .ssb-media {
+    display: block;
+
+    .ssb-media-left {
+        // margin-right: 1em;
     }
 
 }

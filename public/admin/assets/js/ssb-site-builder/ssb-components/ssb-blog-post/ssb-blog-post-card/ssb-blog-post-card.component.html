@@ -1,8 +1,8 @@
-<article itemscope="" itemtype="http://schema.org/BlogPosting" class="ssb-media">
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
     <div ng-if="!vm.post" class="ssb-in-context-info">
         <span class="fa fa-info-circle">You have no published posts.</span>
     </div>
-    <div ng-if="vm.post">
+    <div ng-if="vm.post" class="ssb-media">
         <div class="ssb-media-left">
             <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
         </div>
