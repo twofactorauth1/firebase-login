@@ -1756,7 +1756,7 @@ module.exports = {
             'line_items.product_id': productId
         };
         dao.findMany(query, $$.m.Order, function(err, orders){
-            log.debug(accountId, userId, '<< listOrdersByProduct ', orders);
+            log.debug(accountId, userId, '<< listOrdersByProduct ');
             if(err) {
                 log.error(accountId, userId, 'Error listing orders: ', err);
                 return fn(err, null);
