@@ -198,7 +198,8 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     }
 
     function isBlogPage() {
-        return vm.page.handle === 'blog-list' || vm.page.handle === 'blog-post'
+        if(vm && vm.originalPage)
+            return vm.originalPage.handle === 'blog-list' || vm.originalPage.handle === 'blog-post'
     }
 
     $scope.$watch('vm.page.handle', function(handle){

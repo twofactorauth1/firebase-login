@@ -21,7 +21,7 @@
                         <div class="mb10"></div>
                         <div class="form-group">
                             <label>Title:</label>
-                            <input ng-disabled="vm.isBlogPage" class="form-control input-lg" type="text" ng-model="vm.page.title">
+                            <input ng-disabled="vm.isBlogPage()" class="form-control input-lg" type="text" ng-model="vm.page.title">
                         </div>
                         <div class="form-group">
                             <label>Menu Title:</label>
@@ -81,7 +81,7 @@
                         <div class="mb10"></div>
                         <div class="form-group">
                             <label>Title:</label>
-                            <input ng-disabled="vm.isBlogPage" class="form-control input-lg" type="text" ng-model="vm.page.title">
+                            <input ng-disabled="vm.isBlogPage()" class="form-control input-lg" type="text" ng-model="vm.page.title">
                         </div>
                         <div class="form-group">
                             <label>Description:</label>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group" ng-class="{'has-error': vm.inValidPageHandle}">
                             <label>Url:</label>
-                            <input ng-disabled="vm.isBlogPage" class="form-control input-lg" type="text" ng-model="vm.page.handle">
+                            <input ng-disabled="vm.isBlogPage()" class="form-control input-lg" type="text" ng-model="vm.page.handle">
                             <span class="help-block" ng-if="vm.inValidPageHandle">{{vm.inValidPageHandle}}</span>
                         </div>
                         <div class="form-group">
