@@ -914,7 +914,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function isBlogEditMode() {
-        return vm.uiState.openBlogPanel.id === 'manage' || vm.uiState.openBlogPanel.id === 'edit';
+        return angular.isDefined(vm.uiState.openBlogPanel.id) && vm.uiState.openSidebarPanel === 'blog';
     }
 
     function init(element) {
