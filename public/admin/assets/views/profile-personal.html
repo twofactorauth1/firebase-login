@@ -185,7 +185,9 @@
                                                 </div>
                                                 <div ng-switch-when="EMAIL_DELIVERED">
                                                     <p>
-                                                        <span class="label label-info">EMAIL DELIVERED</span> to
+                                                        <span class="label label-info">EMAIL DELIVERED</span>
+                                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" to</span>
+                                                        <span ng-if='!activity.extraFields[0].subject'>to</span>
                                                         <span ng-if="!activity.customer">[deleted]</span>
                                                         <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
@@ -194,7 +196,9 @@
                                                 </div>
                                                 <div ng-switch-when="EMAIL_OPENED">
                                                     <p>
-                                                        <span class="label label-info">EMAIL OPENED</span> for
+                                                        <span class="label label-info">EMAIL OPENED</span>
+                                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
+                                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
                                                         <span ng-if="!activity.customer">[deleted]</span>
                                                         <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
@@ -203,7 +207,9 @@
                                                 </div>
                                                 <div ng-switch-when="EMAIL_CLICKED">
                                                     <p>
-                                                        <span class="label label-info">EMAIL CLICKED</span> for
+                                                        <span class="label label-info">EMAIL CLICKED</span>
+                                                        <span ng-if='activity.extraFields[0].subject'>with subject "{{activity.extraFields[0].subject}}" by</span>
+                                                        <span ng-if='!activity.extraFields[0].subject'>by</span>
                                                         <span ng-if="!activity.customer">[deleted]</span>
                                                         <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
