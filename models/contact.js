@@ -230,7 +230,8 @@ var contact = $$.m.ModelBase.extend({
       }
 
       var phone = _.findWhere(phones, {default: true}) ? _.findWhere(phones, {default: true}) : phones[0];
-      phone = phone.extension ? phone.extension + '-' + phone.number : phone.number;
+      if(phone)
+        phone = phone.extension ? phone.extension + '-' + phone.number : phone.number;
       return phone;
     },
 
@@ -250,7 +251,7 @@ var contact = $$.m.ModelBase.extend({
       var addressValues = [];
 
       fields.forEach(function(field, index) {
-          if (address[field]) {
+          if (address && address[field]) {
             addressValues.push(address[field]);
           }
       });
