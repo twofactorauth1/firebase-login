@@ -260,7 +260,7 @@
          */
         $scope.navToCustomer = function (cust) {
             if ($stateParams.orderId) {
-                var cust_url = '/customers/' + cust._id;
+                var cust_url = '/contacts/' + cust._id;
                 $location.url(cust_url).search({
                     order: "true",
                     id: $scope.order._id
