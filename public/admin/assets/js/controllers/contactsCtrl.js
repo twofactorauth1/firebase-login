@@ -487,6 +487,7 @@
           toaster.pop('success', "Contacts import initiated.");
           SocialConfigService.importGoogleContact(value.id, function () {
             $scope.closeModal();
+            $scope.getContacts();
             toaster.pop('success', "Contacts import complete.");
           });
         }
