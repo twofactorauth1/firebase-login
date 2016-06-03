@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -548,15 +548,23 @@
               function (isConfirm) {
                 if (isConfirm) {
                     var selectedContacts = $scope.selectedContactsFn();
+                    var contactPromises = [];
+
                     selectedContacts.forEach(function(sc, sci) {
-                        ContactService.deleteContact(sc._id, function () {});
-                        $scope.contacts.splice(_.findIndex($scope.contacts, function(c) {return c._id == sc._id; }), 1);
-                        $scope.displayedContacts.splice(_.findIndex($scope.displayedContacts, function(c) {return c._id == sc._id; }), 1);
+                        contactPromises.push(ContactService.deleteContactPromise(sc._id));
                     });
-                    $scope.bulkActionChoice = null;
-                    $scope.bulkActionChoice = {};
-                    $scope.clearSelectionFn();
-                    toaster.pop('success', 'Contacts Deleted.');
+
+                    $q.all(contactPromises)
+                      .then(function(results) {
+                        selectedContacts.forEach(function(sc, sci) {
+                            $scope.contacts.splice(_.findIndex($scope.contacts, function(c) {return c._id == sc._id; }), 1);
+                            $scope.displayedContacts.splice(_.findIndex($scope.displayedContacts, function(c) {return c._id == sc._id; }), 1);
+                        });
+                        $scope.bulkActionChoice = null;
+                        $scope.bulkActionChoice = {};
+                        $scope.clearSelectionFn();
+                        toaster.pop('success', 'Contacts Deleted.');
+                      });
                 } else {
                  $scope.bulkActionChoice = null;
                  $scope.bulkActionChoice = {};

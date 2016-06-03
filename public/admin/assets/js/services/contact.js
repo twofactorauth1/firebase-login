@@ -73,6 +73,21 @@
         });
     };
 
+    this.deleteContactPromise = function (id) {
+      var contacts = this.getCache().get('contacts');
+      if (contacts) {
+        contacts.forEach(function (value, index) {
+          if (value._id === id) {
+            contacts.splice(index, 1);
+          }
+        });
+        this.getCache().put('contacts', contacts);
+      }
+
+      var apiUrl = baseUrl + ['contact', id].join('/');
+      return $http.delete(apiUrl);
+    };
+
     this.postContact = function (cache, contact, fn) {
       var contacts = cache.get('contacts');
 
