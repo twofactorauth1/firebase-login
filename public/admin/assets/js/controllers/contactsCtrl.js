@@ -633,6 +633,7 @@
                 contact.tags = _.difference(contact.tags, tags);
             }
 
+            contact.tags = _.uniq(contact.tags);
             ContactService.saveContact(contact, function() {});
         });
 
