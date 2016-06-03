@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -295,7 +295,7 @@
     $scope.viewSingle = function (contact) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
-      $window.location = '/admin/#/contacts/' + contact._id;
+      $location.path('/contacts/' + contact._id);
     };
 
     /* 18-Sep Unioned set of tags in system with those needed by Indigenous

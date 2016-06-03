@@ -76,7 +76,7 @@
     {
       if($stateParams.orderId)
       {
-        $window.location = '/admin/#/commerce/orders/' + $stateParams.orderId;
+        $location.path('/commerce/orders/' + $stateParams.orderId);
       }
       else
       {

@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie) {
+    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", "$location", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie, $location) {
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
         $scope.showPages = 15;
@@ -79,7 +79,7 @@
         };
 
         $scope.viewSingleProduct = function (product) {
-            $window.location = '/admin/#/commerce/products/' + product._id;
+            $location.path('/commerce/products/' + product._id);
         };
 
         $scope.formatStatus = function (status) {

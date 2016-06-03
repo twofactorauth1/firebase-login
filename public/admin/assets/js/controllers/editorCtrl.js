@@ -1166,7 +1166,7 @@
             toaster.pop('success', "Topic Deleted", "The " + title + " topic was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              $window.location = '/admin/#/support/manage-topics';
+              $location.url('/support/manage-topics');
             }, 500);
           });
         } else {
@@ -1606,7 +1606,7 @@
             $scope.closeModal();
             resetSitebuilderPages();
             $timeout(function () {
-              $window.location = '/admin/#/website/pages';
+              $location.url('/website/pages');
             }, 500);
           });
         } else {
@@ -1642,7 +1642,7 @@
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              $window.location = '/admin/#/emails';
+              $location.url('/emails');
             }, 500);
           });
         } else {
@@ -1679,7 +1679,7 @@
               toaster.pop('success', "Post Deleted", "The " + title + " post was deleted successfully.");
               $scope.closeModal();
               $timeout(function () {
-                $window.location = '/admin/#/website/posts';
+                $location.url('/website/posts');
               }, 500);
             });
 
