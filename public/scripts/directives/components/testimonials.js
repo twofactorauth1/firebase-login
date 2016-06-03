@@ -4,10 +4,10 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       component: '='
     },
     templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs, ctrl) {      
+    link: function (scope, element, attrs, ctrl) {
     	$(document).ready(function () {
           $timeout(function () {
-            scope.$apply(function () {              
+            scope.$apply(function () {
               if(!scope.component.slider)
               {
                 scope.component.slider = {
@@ -18,10 +18,11 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
               scope.draggable = true;
               scope.autoplay = scope.component.slider.autoPlay;
               scope.dataLoaded = true;
+              scope.accessibility = true;
             });
           },0);
       });
     }
   }
 }]);
-  
+
