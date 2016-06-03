@@ -623,6 +623,7 @@
     $scope.tagsBulkActionClickFn = function (operation) {
         var selectedContacts = $scope.selectedContactsFn();
         var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
+        var contactPromises = [];
 
         selectedContacts.forEach(function(contact, index) {
             if (operation == 'add') {
@@ -642,13 +643,17 @@
             }
 
             contact.tags = _.uniq(contact.tags);
-            ContactService.saveContact(contact, function() {});
+            contactPromises.push(ContactService.putContactPromise(contact));
         });
 
-        $scope.tagsBulkAction = {};
-        $scope.clearSelectionFn();
-        $scope.closeModal();
-        toaster.pop('success', 'Contacts tags updated.');
+        $q.all(contactPromises)
+          .then(function(results) {
+            console.log(results);
+            $scope.tagsBulkAction = {};
+            $scope.clearSelectionFn();
+            $scope.closeModal();
+            toaster.pop('success', 'Contacts tags updated.');
+          });
     };
 
     $scope.exportContactsFn = function () {
