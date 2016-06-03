@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'ContactService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, ContactService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert) {
+app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'ContactService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', '$window', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, ContactService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert, $window) {
 
   $scope.blog = {};
 
@@ -89,7 +89,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     }
     $scope.components[clickedIndex] = $scope.originalComponent;
     $timeout(function () {
-      $(window).trigger('resize');
+      angular.element($window).trigger('resize');
     }, 0);
     $scope.closeModal();
   };
@@ -677,7 +677,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     $scope.$parent.vm.pendingChanges = true;
     $scope.isDirty.dirty = true;
     $timeout(function () {
-      $(window).trigger('resize');
+      angular.element($window).trigger('resize');
     }, 0);
   };
 
@@ -685,7 +685,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     $scope.$parent.vm.pendingChanges = true;
     $scope.isDirty.dirty = true;
     $timeout(function () {
-      $(window).trigger('resize');
+      angular.element($window).trigger('resize');
     }, 0);
   };
 
@@ -711,7 +711,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     $scope.$parent.vm.pendingChanges = true;
     $scope.isDirty.dirty = true;
     $timeout(function () {
-      $(window).trigger('resize');
+      angular.element($window).trigger('resize');
     }, 0);
   };
 

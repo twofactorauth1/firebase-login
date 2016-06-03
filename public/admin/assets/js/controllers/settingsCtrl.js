@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window) {
     $scope.keywords = [];
 
     console.log($location.absUrl().replace('main', 'hey'));
@@ -118,7 +118,7 @@
         } else {
           if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
             var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
-            window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
+            $window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
           }
           var mainAccount = AccountService.getMainAccount();
           if (mainAccount) {

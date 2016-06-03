@@ -2,7 +2,7 @@
 /*global app, moment, angular*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", function ($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService) {
+  app.controller('SocialFeedCtrl', ["$scope", "$log", "$q", "toaster", "$modal", "$filter", "$location", "WebsiteService", "UserService", "SocialConfigService", "$timeout", function ($scope, $log, $q, toaster, $modal, $filter, $location, WebsiteService, UserService, SocialConfigService, $timeout) {
 
     /*
      * initialize all state in the controller, like a constructor.
@@ -140,7 +140,7 @@
         }
       });
       //wait a few seconds to ensure everything is loaded
-      setTimeout(function () {
+      $timeout(function () {
         $scope.$apply(function(){
           $scope.isLoaded = true;
         });
@@ -778,7 +778,7 @@
     };
     $scope.sortFeed = function (type) {
       $scope.orderByAttribute = type.data;
-      setTimeout(function () {
+      $timeout(function () {
         $('#mcontainer').masonry();
       }, 1000);
     };
@@ -786,7 +786,7 @@
 
     angular.element(".sidebar-toggler").click(function(){
       if($scope && $scope.$state && $scope.$state.current && $scope.$state.current.name === "app.marketing.socialfeed"){
-        setTimeout(function () {
+        $timeout(function () {
           if($('#mcontainer'))
             $('#mcontainer').masonry();
           $scope.sortFeed({label: "Most Recent", data: "date"});

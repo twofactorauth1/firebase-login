@@ -2,7 +2,7 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", function ($scope, $modal, UserService, ChartAnalyticsService) {
+  app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout) {
 
     $scope.analyticsOverviewConfig = {};
     $scope.timeonSiteConfig = {};
@@ -79,7 +79,7 @@
 
     $scope.runAnalyticsReports = function () {
       ChartAnalyticsService.runPagedReports($scope.date, $scope.analyticsAccount, function (data) {
-        $scope.formattedTopPages = _.reject(data.formattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});        
+        $scope.formattedTopPages = _.reject(data.formattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});
         $scope.pagedformattedTopPages = _.reject(data.pagedformattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});
       });
 
@@ -352,7 +352,7 @@
 
     $scope.renderAnalyticsCharts = function () {
       if ($("#visitor_locations").length) {
-        setTimeout(function () {
+        $timeout(function () {
           var location_data = angular.copy($scope.locationData);
           ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all']);
         }, 100);

@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "ContactService", "orderConstant", "ProductService", function ($scope, toaster, $modal, $filter, $state, OrderService, ContactService, orderConstant, ProductService) {
+  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "ContactService", "orderConstant", "ProductService", "$window", function ($scope, toaster, $modal, $filter, $state, OrderService, ContactService, orderConstant, ProductService, $window) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -183,9 +183,9 @@
 
     $scope.viewSingle = function (order) {
       if (order) {
-        window.location = '/admin/#/commerce/orders/' + order._id;
+        $window.location = '/admin/#/commerce/orders/' + order._id;
       } else {
-        window.location = '/admin/#/commerce/orders/neworder';
+        $window.location = '/admin/#/commerce/orders/neworder';
       }
     };
 

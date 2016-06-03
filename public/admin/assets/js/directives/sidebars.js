@@ -46,7 +46,7 @@ function ($document, $rootScope) {
                     if (id == attrs.id) {
 
                         if (active) {
-                            setTimeout(function () {
+                            $timeout(function () {
                                 $document.on('click tap', closeOnOuterClicks);
                             }, 300);
                         } else {
@@ -190,7 +190,7 @@ function ($window, $rootScope, $timeout, mq, DashboardService) {
                                 wrapLeave();
                         });
 
-                        setTimeout(function () {
+                        $timeout(function () {
 
                             if (!wrap.is(':empty')) {
                                 $(document).on('click tap', wrapLeave);
@@ -217,7 +217,7 @@ function ($window, $rootScope, $timeout, mq, DashboardService) {
                 .$on('$locationChangeSuccess',
                     function () {
                         var newPath;
-                        newPath = window.location.hash;
+                        newPath = $window.location.hash;
 
                         scope.userHasNavigated(newPath);
 

@@ -920,7 +920,7 @@
       $scope.navigateOnSave = function() {
         $timeout(function() {
           $scope.resetDirty();
-          window.location = '/admin/#/marketing/campaigns';
+          $window.location = '/admin/#/marketing/campaigns';
         }, 750);
       };
       if ($scope.newCampaignObj._id) {
@@ -1405,7 +1405,7 @@
           $scope.navigateOnSave = function() {
             $timeout(function() {
               $scope.resetDirty();
-              window.location = '/admin/#/marketing/campaigns';
+              $window.location = '/admin/#/marketing/campaigns';
             }, 750);
           };
           if ($scope.validateStep($scope.currentStep + 1, true)) {
@@ -1442,7 +1442,7 @@
             toaster.pop('success', "Campaign Deleted", "The " + $scope.newCampaignObj.name + " campaign was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/marketing/campaigns';
+              $window.location = '/admin/#/marketing/campaigns';
             }, 500)
           });
         } else {

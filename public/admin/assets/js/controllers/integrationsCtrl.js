@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", "$location", "$state", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster, $location, $state) {
+  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", "$location", "$state", "$window", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster, $location, $state, $window) {
 
     /*
      * Global Variables
@@ -126,7 +126,7 @@
      * redirect users to social network and setting up a temporary cookie
      */
 
-    $scope.currentHost = window.location.host;
+    $scope.currentHost = $window.location.host;
     $scope.redirectUrl = '/admin/account/integrations';
 
     $scope.socailRedirect = function (socialAccount, type) {
@@ -181,7 +181,7 @@
         //return;
           _redirectUrl = '/admin/#/support/help-topics?title=adding-paypal-as-an-payment-option'
       }
-      window.location = _redirectUrl;
+      $window.location = _redirectUrl;
     };
 
   }]);
