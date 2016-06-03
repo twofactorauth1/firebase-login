@@ -53,7 +53,7 @@ module.exports = {
 
         testBlog: function(test) {
             console.log('testing /blog');
-            driver.wait(until.elementLocated(By.xpath('//*[@id="jzms_word_0"]')), 20000);
+            driver.wait(until.elementLocated(By.xpath('//*[@id="blog-sidebar"]/div[3]/div/span')), 20000);
             var currentUrl = driver.getCurrentUrl();
             currentUrl.then(function(x){test.equals(x, 'https://indigenous.io/blog')});
             driver.wait(until.elementLocated(By.linkText('READ MORE')));
