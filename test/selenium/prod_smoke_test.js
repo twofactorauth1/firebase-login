@@ -53,6 +53,7 @@ module.exports = {
 
         testBlog: function(test) {
             console.log('testing /blog');
+            driver.wait(until.elementLocated(By.xpath('//*[@id="blog-sidebar"]/div[3]/div/span')), 20000);
             var currentUrl = driver.getCurrentUrl();
             currentUrl.then(function(x){test.equals(x, 'https://indigenous.io/blog')});
             driver.wait(until.elementLocated(By.linkText('READ MORE')));
@@ -68,7 +69,7 @@ module.exports = {
 
             //this xpath waits for the publish date to have more than 2 characters in it.
             //hopefully this means that angular is done loading
-            driver.wait(until.elementLocated(By.xpath('//*[@id="et_pt_blog"]/div[1]/div[1]/span[string-length(text()) > 2]')), 20000);
+            driver.wait(until.elementLocated(By.xpath('//*[@id="et_pt_blog"]/div[1]/div[1]/span[string-length(text()) > 2]')), 25000);
 
             var blogTitle = driver.findElement(By.xpath('//*[@id="et_pt_blog"]/div[1]/h1'));
             blogTitle.then(function(webElement){

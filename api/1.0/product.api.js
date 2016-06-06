@@ -31,11 +31,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteProduct.bind(this));
         app.get(this.url('type/:type'), this.isAuthApi.bind(this), this.getProductsByType.bind(this));
         app.get(this.url(':id/orders'), this.setup.bind(this), this.getProductOrders.bind(this));
-
         app.get(this.url('tax/:postcode'), this.setup.bind(this), this.getTax.bind(this));
-
-
-
+        app.post(this.url(':id/clone'), this.isAuthAndSubscribedApi.bind(this), this.cloneProduct.bind(this));
     },
 
     createProduct: function(req, res) {
@@ -123,7 +120,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 sortValue[field] = parseInt(sortDirections[index]);
             });
         }
-        
+
         var accountId = parseInt(self.currentAccountId(req));
         productManager.listProducts(accountId, limit, skip, sortValue, function(err, list){
             self.log.debug('<< listProducts');
@@ -266,6 +263,26 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
                 results.results = list;
                 self.sendResultOrError(resp, err, results, 'Error listing orders by product');
+            }
+        });
+    },
+
+    cloneProduct: function(req, res) {
+        var self = this;
+        self.log.debug('>> cloneProduct');
+        var productId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_PRODUCT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                productManager.cloneProduct(userId, productId, function(err, clone){
+                    self.log.debug('<< cloneProduct');
+                    self.sendResultOrError(res, err, clone, 'Error cloning product');
+                    self.createUserActivity(req, 'CLONE_PRODUCT', null, {id: clone.id()}, function(){});
+                });
             }
         });
     }
