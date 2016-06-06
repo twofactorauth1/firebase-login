@@ -124,5 +124,13 @@
                 });
         };
 
+        this.cloneProduct = function (id, fn) {
+          var apiUrl = baseUrl + ['products', id, 'clone'].join('/');
+          $http.post(apiUrl)
+            .success(function (data) {
+              fn(data);
+            });
+        };
+
     }]);
 })(angular);

@@ -1171,6 +1171,18 @@
       });
     }
 
+    $scope.cloneLoading = false;
+
+    $scope.cloneProductFn = function () {
+      $scope.cloneLoading = true;
+
+      ProductService.cloneProduct($scope.product._id, function (clone) {
+        toaster.pop('success', 'Product Cloned.');
+        $scope.cloneLoading = false;
+        $state.go('app.commerce.productsingle', {productId: clone._id});
+      });
+    };
+
     $scope.init = (function(){
       $scope.getProduct().then(function(data) {
         return $scope.getEmails();
