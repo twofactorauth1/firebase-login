@@ -369,14 +369,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     var unbindAccountWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.account }, function(account) {
         vm.state.account = account;
         unbindAccountWatcher();
+    }, true);
 
-        if (vm.state.account.showhide.blog && vm.state.account.showhide.ssbBlog) {
-            $scope.$watch(function() { return vm.uiState.openBlogPanel }, function() {
-                vm.uiState.isBlogEditMode = vm.isBlogEditMode();
-                console.debug('vm.uiState.isBlogEditMode', vm.uiState.isBlogEditMode);
-            }, true);
-        }
-
+    var unbindOpenSidebarPanel = $scope.$watch(function() { return vm.uiState.openSidebarPanel }, function(account) {
+        vm.uiState.isBlogEditMode = vm.isBlogEditMode();
     }, true);
 
 
