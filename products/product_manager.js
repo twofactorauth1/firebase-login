@@ -142,5 +142,25 @@ module.exports = {
                 fn(null, list);
             }
         });
+    },
+
+    cloneProduct: function(userId, productId, fn) {
+        var self = this;
+        log.debug('>> cloneProduct');
+        productDao.getById(productId, $$.m.Product, function(err, product) {
+            if(err) {
+                log.error('Error getting product: ' + err);
+                fn(err, null);
+            } else {
+                product.set('_id', null);
+                product.set('name', product.get('name') + '_CLONE');
+                product.set('created', {date: new Date(), by: userId});
+                product.set('modified', {date: new Date(), by: userId});
+                productDao.saveOrUpdate(product, function(err, product) {
+                  log.debug('<< cloneProduct');
+                  fn(null, product);
+                });
+            }
+        });
     }
 };
