@@ -65,7 +65,11 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                         $("#card_number .error").html("Card Number Required");
                         $("#card_number").addClass('has-error');
                         $("#card_number .glyphicon").addClass('glyphicon-remove');
-                    } else if (card_number.length > 16) {
+                    } else if (card_number.length < 16) {
+                      $("#card_number .error").html("Card Number Invalid");
+                      $("#card_number").addClass('has-error');
+                      $("#card_number .glyphicon").addClass('glyphicon-remove');
+                    } else if (card_number.length >= 16) {
                         $("#card_number .error").html("");
                         $("#card_number").removeClass('has-error').addClass('has-success');
                         $("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
