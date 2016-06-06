@@ -461,7 +461,7 @@
                                         </td>
                                         <td class="center">
                                             <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
-                                            <span ng-if="item.discount && item.discount > 0"><s>{{totalWithDiscount(item.total, item.discount) | currency}}</s> {{item.total | currency}}</span>
+                                            <span ng-if="item.discount && item.discount > 0"><s>{{item.product.sale_price && item.product.on_sale ? item.product.sale_price : item.product.regular_price | currency}}</s> {{(item.total - item.discount) | currency}}</span>
                                         </td>
                                         <td class="center" ng-hide='isDonationOrderFn()'>
                                             <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>
