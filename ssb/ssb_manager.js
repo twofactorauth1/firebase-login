@@ -357,6 +357,8 @@ module.exports = {
 
                 var pageHandle = slug(template.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
                 var pageTitle = template.get('name');
+                var layout = template.get('layout');
+                var layoutModifiers = template.get('layoutModifiers');
                 var jsonSections = [];
                 if(header) {
                     jsonSections.push(header.toReference());
@@ -424,6 +426,8 @@ module.exports = {
                     templateId: templateId,
                     created: created,
                     modified:created,
+                    layout: layout,
+                    layoutModifiers: layoutModifiers,
                     ssb:true
                 });
                 pageDao.saveOrUpdate(page, function(err, value){

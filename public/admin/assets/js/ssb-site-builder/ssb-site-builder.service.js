@@ -1185,7 +1185,7 @@
                 return angular.isDefined(window.WebFont);
             }, function(newValue, oldValue) {
                 if (newValue) {
-                    var defaultFamilies = ["Roboto", "Oswald", "Montserrat", "Open+Sans+Condensed"];
+                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two'];
                     if (theme.name && theme.hasCustomFonts) {
                       var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
                       if(defaultFamilies.indexOf(_fontStack) === -1)
