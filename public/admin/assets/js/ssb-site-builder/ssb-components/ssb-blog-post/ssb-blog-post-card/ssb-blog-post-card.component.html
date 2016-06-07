@@ -1,26 +1,33 @@
-<article itemscope="" itemtype="http://schema.org/BlogPosting" class="ssb-media">
+<article itemscope="" itemtype="http://schema.org/BlogPosting">
     <div ng-if="!vm.post" class="ssb-in-context-info">
         <span class="fa fa-info-circle">You have no published posts.</span>
     </div>
-    <div ng-if="vm.post">
+    <div ng-if="vm.post" class="ssb-media">
         <div class="ssb-media-left">
             <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
         </div>
 
         <div class="ssb-media-body">
+
+            <div ng-if="vm.compactView" class="ssb-blog-byline">
+                <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
+                    {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
+                </time>
+            </div>
+
             <h1 class="media-heading" itemprop="name headline">
                 {{vm.post.post_title}}
             </h1>
 
-            <div class="ssb-blog-byline">
-                <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-                    <span itemprop="name">
-                        <a href="/author/{{blogpost.post_author}}" itemprop="url" rel="author">{{blogpost.post_author}}</a>
-                    </span>
-                </span>
+            <div ng-if="!vm.compactView" class="ssb-blog-byline">
                 <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
                     {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
                 </time>
+                <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                    <span itemprop="name">
+                        <a href="/author/{{vm.post.post_author}}" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                    </span>
+                </span>
             </div>
 
             <section itemprop="articleBody">

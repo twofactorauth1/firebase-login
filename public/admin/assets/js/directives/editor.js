@@ -1,7 +1,7 @@
 // 'use strict'; <--- DO NOT USE! CKEDITOR FAILS (https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/65)
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
-app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService) {
+app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window) {
   return {
     require: '?ngModel',
     replace: true,
@@ -159,9 +159,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 $(elem).froalaEditor('events.on', 'keydown', function (e) {
 
                     // if enter key is pressed inside of button
-                    if (e.which === 13 && $(window.getSelection().focusNode).parents('.ssb-theme-btn').length) {
+                    if (e.which === 13 && $($window.getSelection().focusNode).parents('.ssb-theme-btn').length) {
                         // prevent it if cursor is in the middle of the button
-                        if (window.getSelection().focusOffset !== 0 && window.getSelection().focusOffset !== window.getSelection().focusNode.length) {
+                        if ($window.getSelection().focusOffset !== 0 && $window.getSelection().focusOffset !== $window.getSelection().focusNode.length) {
                             e.preventDefault();
                             return false
                         }

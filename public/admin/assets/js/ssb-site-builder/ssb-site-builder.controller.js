@@ -32,6 +32,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.pageChanged = pageChanged;
     vm.toggleSectionVisiblity = toggleSectionVisiblity;
     vm.isBlogPage = isBlogPage;
+    vm.isBlogEditMode = isBlogEditMode;
 
     vm.uiState = {
         loading: 0,
@@ -123,7 +124,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         toggleSection: vm.toggleSectionVisiblity,
 
-        isBlogPage: false
+        openBlogPanel: {},
+
+        isBlogPage: false,
+
+        isBlogEditMode: false
 
     };
 
@@ -362,11 +367,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     var unbindAccountWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.account }, function(account) {
-      vm.state.account = account;
-      unbindAccountWatcher();
+        vm.state.account = account;
+        unbindAccountWatcher();
     }, true);
 
-
+    var unbindOpenSidebarPanel = $scope.$watch(function() { return vm.uiState.openSidebarPanel }, function(account) {
+        vm.uiState.isBlogEditMode = vm.isBlogEditMode();
+    }, true);
 
 
     function checkIfDirty() {
@@ -899,9 +906,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function isBlogPage() {
-        return vm.state.page.handle === 'blog-list' || vm.state.page.handle === 'blog-post'
+        return vm.state.page.handle === 'blog-list' || vm.state.page.handle === 'blog-post';
     }
 
+    function isBlogEditMode() {
+        return angular.isDefined(vm.uiState.openBlogPanel.id) && vm.uiState.openSidebarPanel === 'blog';
+    }
 
     function init(element) {
 

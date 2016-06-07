@@ -105,7 +105,9 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
                 }
             });
             var match = _.findWhere(childComponents, { 'type': section.type, 'version': parseInt(section.version, 10) });
-
+            if(!match)
+                // check without parsing the version
+                match = _.findWhere(childComponents, { 'type': section.type, 'version': section.version });
             //match type
             selected = angular.isObject(match);
 

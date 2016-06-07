@@ -142,7 +142,7 @@
                     $scope.selectedCustomer = _.find($scope.customers, function (customer) {
                         return customer._id === $scope.order.customer_id;
                     });
-                    //$scope.calculateTotals(); - Don't (re)calculate when authoritative detail is in DB.
+                    $scope.calculateTotals();
                     $scope.compareAddress();
                 } else {
                     $scope.order = {
@@ -260,7 +260,7 @@
          */
         $scope.navToCustomer = function (cust) {
             if ($stateParams.orderId) {
-                var cust_url = '/customers/' + cust._id;
+                var cust_url = '/contacts/' + cust._id;
                 $location.url(cust_url).search({
                     order: "true",
                     id: $scope.order._id

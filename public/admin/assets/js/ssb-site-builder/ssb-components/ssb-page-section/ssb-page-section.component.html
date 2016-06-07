@@ -21,7 +21,7 @@
     </div>
 
     <div
-        ng-if="vm.section.bg.img && vm.section.bg.img.url && vm.section.bg.img.show && vm.section.bg.img.parallax"
+        ng-if="vm.sectionInitDelayDone && vm.section.bg.img && vm.section.bg.img.url && vm.section.bg.img.show && vm.section.bg.img.parallax"
         {{vm.section.bg.img.parallax ? parallax-background : ""}}
         class="bg {{vm.sectionBGClass(vm.section)}}"
         ng-attr-parallax-ratio="{{vm.section.bg.img.parallax ? '0.4' : '1'}}"

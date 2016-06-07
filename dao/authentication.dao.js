@@ -750,6 +750,9 @@ var dao = {
         if(!billing.subscriptionId || billing.subscriptionId.indexOf('sub_') ===0) {
             return true;
         }
+        if(billing.subscriptionId === appConfig.internalSubscription) {
+            return true;
+        }
         var trialDays = billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
         var endDate = moment(billing.signupDate).add(trialDays, 'days');
 

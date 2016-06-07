@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window) {
     $scope.keywords = [];
 
     console.log($location.absUrl().replace('main', 'hey'));
@@ -51,41 +51,47 @@
     };
 
     $scope.$watch(function() { return SimpleSiteBuilderService.account; }, function(account){
-       $scope.account = account;
-       $scope.originalAccount = angular.copy(account);
-       if (!account.commerceSettings) {
-            account.commerceSettings = {
-              taxes: true,
-              taxbased: '',
-              taxnexus: ''
-            };
+        if(account){
+            $scope.account = account;
+                $scope.originalAccount = angular.copy(account);
+                if (!account.commerceSettings) {
+                    account.commerceSettings = {
+                    taxes: true,
+                    taxbased: '',
+                    taxnexus: ''
+                };
+            }
         }
+
     });
 
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
-        var _defaults = false;
-        $scope.website = website;
-        $scope.keywords = website.seo.keywords;
-        if($scope.website){
-          if(!$scope.website.title && $scope.account.business.name){
-            $scope.website.title = angular.copy($scope.account.business.name);
-            _defaults = true;
-          }
-          if(!$scope.website.seo){
-            $scope.website.seo = {};
-          }
-          if(!$scope.website.seo.description && $scope.account.business.description){
-            $scope.website.seo.description = angular.copy($scope.account.business.description);
-            _defaults = true;
-          }
+        if(website){
+            var _defaults = false;
+            $scope.website = website;
+            $scope.keywords = website.seo.keywords;
+            if($scope.website){
+              if(!$scope.website.title && $scope.account.business.name){
+                $scope.website.title = angular.copy($scope.account.business.name);
+                _defaults = true;
+              }
+              if(!$scope.website.seo){
+                $scope.website.seo = {};
+              }
+              if(!$scope.website.seo.description && $scope.account.business.description){
+                $scope.website.seo.description = angular.copy($scope.account.business.description);
+                _defaults = true;
+              }
+            }
+            if(_defaults){
+              $scope.saveLoading = true;
+              SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
+                $scope.saveLoading = false;
+              });
+            }
         }
-        if(_defaults){
-          $scope.saveLoading = true;
-          SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
-            $scope.saveLoading = false;
-          });
-        }
+
     });
 
 
@@ -118,7 +124,7 @@
         } else {
           if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
             var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
-            window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
+            $window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
           }
           var mainAccount = AccountService.getMainAccount();
           if (mainAccount) {

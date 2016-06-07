@@ -11,20 +11,11 @@
         var ssbBlogService = {};
         var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
         var basePageAPIUrl = '/api/1.0/cms/page/';
-        var baseComponentAPIUrl = '/api/1.0/cms/component/';
-        var baseTemplateAPIUrl = '/api/1.0/cms/template/';
-        var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
-        var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
-        var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
-        var baseSiteTemplateAPIUrlv2 = '/api/2.0/cms/sitetemplates/';
-        var baseThemesAPIUrlv2 = '/api/2.0/cms/themes/';
-        var baseSectionAPIUrlv2 = '/api/2.0/cms/sections/';
-        var baseComponentAPIUrlv2 = '/api/2.0/cms/components/';
-        var basePagesWebsiteAPIUrl = '/api/2.0/cms/website/';
 
         ssbBlogService.loadDataFromPage = loadDataFromPage;
         ssbBlogService.getPost = getPost;
         ssbBlogService.getPosts = getPosts;
+        ssbBlogService.savePost = savePost;
 
         ssbBlogService.blog = {
             posts: [],
@@ -40,12 +31,34 @@
          */
         function ssbBlogRequest(fn) {
             ssbBlogService.loading.value = ssbBlogService.loading.value + 1;
-            console.info('service | loading +1 : ' + ssbBlogService.loading.value);
+            console.info('blog service | loading +1 : ' + ssbBlogService.loading.value);
             fn.finally(function() {
                 ssbBlogService.loading.value = ssbBlogService.loading.value - 1;
-                console.info('service | loading -1 : ' + ssbBlogService.loading.value);
+                console.info('blog service | loading -1 : ' + ssbBlogService.loading.value);
             })
             return fn;
+        }
+
+        function savePost(post) {
+
+            function success(data) {
+                var post = _.findWhere(ssbBlogService.blog.posts, {
+                    _id: data._id
+                });
+                post = data;
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderBlogService savePost error: ', JSON.stringify(error));
+            }
+            //624b61d8-d093-4cc3-bcc0-3f06fc2d162f/blog/3f5e1f03-4075-4638-936c-8fe78e60e057
+            return (
+                ssbBlogRequest($http({
+                    url: basePageAPIUrl + '/blog/' + page._id,
+                    method: 'POST',
+                    data: angular.toJson(post)
+                }).success(success).error(error))
+            )
         }
 
         function loadDataFromPage(scriptId) {

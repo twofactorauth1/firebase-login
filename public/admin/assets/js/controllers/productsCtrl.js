@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie) {
+    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", "$location", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie, $location) {
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
         $scope.showPages = 15;
@@ -79,7 +79,7 @@
         };
 
         $scope.viewSingleProduct = function (product) {
-            window.location = '/admin/#/commerce/products/' + product._id;
+            $location.path('/commerce/products/' + product._id);
         };
 
         $scope.formatStatus = function (status) {
@@ -132,7 +132,7 @@
         };
 
         $scope.resizeGrid = function (filtered) {
-            setTimeout(function () {
+            $timeout(function () {
                 if (!$scope.inserted) {
                     $scope.inserted = true;
                     if ($("tr.product-item").length) {
@@ -164,7 +164,7 @@
          * redirect users to social network and setting up a temporary cookie
          */
 
-        $scope.currentHost = window.location.host;
+        $scope.currentHost = $window.location.host;
         $scope.redirectUrl = '/admin/commerce/products';
 
         $scope.socailRedirect = function (socialAccount) {
@@ -202,7 +202,7 @@
                 _redirectUrl = '/admin/#/support/help-topics?title=adding-paypal-as-an-payment-option'
             }
 
-            window.location = _redirectUrl;
+            $window.location = _redirectUrl;
         };
 
         $scope.sortFn = function (field) {

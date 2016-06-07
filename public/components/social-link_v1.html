@@ -1,5 +1,5 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div class="social-link" ng-if="loadSocialLinks" data-edit>
+    <div class="social-link no-offset-top" ng-if="loadSocialLinks" data-edit>
         <ul ng-sortable="sortableConfig">
             <li ng-repeat="network in component.networks track by $index">
                     <a ng-if="!isEditing" href="{{getUrl(network.url)}}" class="btn btn-social-icon btn-lg btn-{{network.name}}" target="_blank"><i class="fa fa-{{network.icon}}"></i></a>

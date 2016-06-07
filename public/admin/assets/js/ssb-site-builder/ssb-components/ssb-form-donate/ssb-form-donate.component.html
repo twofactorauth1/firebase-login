@@ -99,15 +99,15 @@
                                         <fieldset ng-disabled="vm.isAnonymous">
                                             <div class="form-donate-layout-cart" ng-switch="vm.component.layout">
                                                 <div ng-switch-when="1" class="donate-flex-container form-layout-1 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                                         <label class="control-label">{{val.label || val.type}}</label>
                                                         <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
                                                         <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
                                                     </div>
                                                 </div>
                                                 <div ng-switch-when="2" class="flex-container form-layout-2 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
-                                                        <label class="col-sm-2 control-label">{{val.label || val.type}}</label>
+                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                        <label class="col-sm-10 control-label">{{val.label || val.type}}</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" ng-if="val.name !== 'message'" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
                                                             <textarea ng-if="val.name === 'message'" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)"></textarea>
@@ -116,7 +116,7 @@
                                                 </div>
                                                 <div ng-switch-when="3" class="flex-container form-layout-3 col-sm-12 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                                     <div class="col-sm-6">
-                                                        <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                        <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                                             <input placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
                                                         </div>
                                                     </div>
@@ -128,7 +128,7 @@
                                                     </div>
                                                 </div>
                                                 <div ng-switch-when="4" class="flex-container form-layout-4 input-fields {{vm.nthRow}}" style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
-                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
+                                                    <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                                         <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
                                                         <textarea ng-if="val.name === 'message'" placeholder="{{val.label || val.type}}" class="form-control input-lg" name="message" rows="5" ng-model="vm.formBuilder[val.name]" style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional'
                                                             ng-pattern="vm.addPattern(val)"></textarea>

@@ -636,6 +636,7 @@ app.constant('JS_REQUIRES', {
     'cleanType': 'assets/js/filters/cleanType.js',
     'filterPages': 'assets/js/filters/filterPages.js',
     'sortListPages': 'assets/js/filters/sortListPages.js',
+    'productTableFilter': 'assets/js/filters/productTableFilter.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js'

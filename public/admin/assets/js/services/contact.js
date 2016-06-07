@@ -2,7 +2,7 @@
 /*global app, Keen, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-  app.service('ContactService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations) {
+  app.service('ContactService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', '$q', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations, $q) {
     var baseUrl = '/api/1.0/';
 
     this.getCache = function () {
@@ -73,6 +73,21 @@
         });
     };
 
+    this.deleteContactPromise = function (id) {
+      var contacts = this.getCache().get('contacts');
+      if (contacts) {
+        contacts.forEach(function (value, index) {
+          if (value._id === id) {
+            contacts.splice(index, 1);
+          }
+        });
+        this.getCache().put('contacts', contacts);
+      }
+
+      var apiUrl = baseUrl + ['contact', id].join('/');
+      return $http.delete(apiUrl);
+    };
+
     this.postContact = function (cache, contact, fn) {
       var contacts = cache.get('contacts');
 
@@ -103,6 +118,32 @@
           }
           fn(data);
         });
+    };
+
+    this.putContactPromise = function (contact) {
+      var self = this;
+      var cache = self.getCache();
+      var deferred = $q.defer();
+      var contacts = cache.get('contacts');
+      var apiUrl = baseUrl + ['contact'].join('/');
+
+      $http.put(apiUrl, contact)
+        .success(function (data) {
+          if (contacts) {
+            contacts.forEach(function (value, index) {
+              if (value._id === contact._id) {
+                contacts[index] = contact;
+              }
+            });
+            cache.put('contacts', contacts);
+          }
+          deferred.resolve(data);
+        })
+        .error(function (data) {
+          deferred.reject(data);
+        });
+
+      return deferred.promise;
     };
 
     this.saveContact = function (contact, fn) {
@@ -169,19 +210,14 @@
     };
 
     this.contactTags = function (contact) {
-      var contactTypes = userConstant.contact_types.dp;
+      var contactTags = contactConstant.contact_tags.dp;
+      contactTags = contactTags.concat(userConstant.contact_types.dp);
       var tags = [];
+
       if (contact.tags) {
-        _.each(contact.tags, function (tag) {
-          var type = _.find(contactTypes, function (type) {
-            return type.data === tag;
-          });
-          if (type) {
-            tags.push(type.label);
-          }
-          else{
-            tags.push(tag);
-          }
+        tags = _.map(contact.tags, function(tag) {
+          var type = _.findWhere(contactTags, {data: tag});
+          return type ? type.label : tag;
         });
       }
       return tags.join(', ');

@@ -170,7 +170,7 @@
           $timeout(function () {
             $scope.ckeditorLoaded = true;
             //$scope.setUnderbnavMargin();
-            $(window).trigger('resize');
+            angular.element($window).trigger('resize');
           }, 500);
         }
       });
@@ -205,7 +205,7 @@
         $scope.scrollToComponent(index - 1);
       }
       $timeout(function () {
-        $(window).trigger('resize');
+        angular.element($window).trigger('resize');
       }, 0)
     };
 
@@ -258,10 +258,10 @@
               if($scope.duplicate)
                 $location.path(redirect_url);
               else
-                window.location = redirect_url;
+                $window.location = redirect_url;
             }, 500);
         if (reload) {
-          window.location.reload();
+          $window.location.reload();
         }
       }
     }
@@ -274,9 +274,9 @@
     if(redirect_url){
       if(show_alert)
         SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-          window.location = redirect_url;
+          $window.location = redirect_url;
       if (reload) {
-        window.location.reload();
+        $window.location.reload();
       }
       }
     }
@@ -479,14 +479,14 @@
         handle = "blog/" + handle;
       }
       if (handle !== 'index') {
-        _url = 'http://' + window.location.host + '/' + handle;
+        _url = 'http://' + $window.location.host + '/' + handle;
       } else {
-        _url = 'http://' + window.location.host + '/';
+        _url = 'http://' + $window.location.host + '/';
       }
       if ($scope.account.domain) {
         _url = $scope.account.domain + '/' + handle;
       }
-      window.open(_url, '_blank');
+      $window.open(_url, '_blank');
     };
 
     //disable delete redirect
@@ -701,8 +701,8 @@
      * -
      */
 
-    window.calculateWindowHeight = function () {
-      var scrollTop = angular.element(window.document).scrollTop();
+    $window.calculateWindowHeight = function () {
+      var scrollTop = angular.element($window.document).scrollTop();
       return scrollTop;
     };
 
@@ -762,7 +762,7 @@
      * -
      */
 
-    window.clickandInsertImageButton = function (editor) {
+    $window.clickandInsertImageButton = function (editor) {
       console.log('clickandInsertImageButton >>> ');
       $scope.clickImageButton(editor, false);
     };
@@ -772,7 +772,7 @@
      * -
      */
 
-    window.clickImageButton = function (btn) {
+    $window.clickImageButton = function (btn) {
       console.log('clickImageButton >>> ');
       var urlInput = $(btn).closest('td').prev('td').find('input');
       $scope.clickImageButton(urlInput, true);
@@ -972,7 +972,7 @@
         if ($scope.componentEditing.bg.img) {
           $scope.componentEditing.bg.img.url = asset.url;
           $timeout(function () {
-            $(window).trigger('resize');
+            angular.window.trigger('resize');
           }, 0);
           return;
         }
@@ -1166,7 +1166,7 @@
             toaster.pop('success', "Topic Deleted", "The " + title + " topic was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/support/manage-topics';
+              $location.url('/support/manage-topics');
             }, 500);
           });
         } else {
@@ -1606,7 +1606,7 @@
             $scope.closeModal();
             resetSitebuilderPages();
             $timeout(function () {
-              window.location = '/admin/#/website/pages';
+              $location.url('/website/pages');
             }, 500);
           });
         } else {
@@ -1642,7 +1642,7 @@
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/emails';
+              $location.url('/emails');
             }, 500);
           });
         } else {
@@ -1679,7 +1679,7 @@
               toaster.pop('success', "Post Deleted", "The " + title + " post was deleted successfully.");
               $scope.closeModal();
               $timeout(function () {
-                window.location = '/admin/#/website/posts';
+                $location.url('/website/posts');
               }, 500);
             });
 
@@ -1715,7 +1715,7 @@
             toaster.pop('success', "Component Deleted", "The " + _type + " component was deleted successfully.");
             $timeout(function () {
               $scope.scrollToComponent(index);
-              $(window).trigger('resize');
+              angular.element($window).trigger('resize');
             }, 1000);
           };
         });
@@ -1795,8 +1795,8 @@
     });
 
     function resetEditorPosition(){
-      var x = window.scrollX
-      var y = window.scrollY
+      var x = $window.scrollX
+      var y = $window.scrollY
       $window.scrollTo(0, 0);
       $timeout(function() {
         $window.scrollTo(x, y);

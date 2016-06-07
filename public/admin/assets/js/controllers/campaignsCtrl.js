@@ -3,9 +3,9 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", function ($scope, $timeout, $location, toaster, $filter, $modal,   CampaignService) {
+  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", "$window", function ($scope, $timeout, $location, toaster, $filter, $modal, CampaignService, $window) {
 
-    $scope.Math = window.Math;
+    $scope.Math = $window.Math;
     // $route.reload();
 
     /*
@@ -31,7 +31,8 @@
     $scope.viewSingle = function (campaign) {
       // var tableState = $scope.getSortOrder();
       // $state.current.sort = tableState.sort;
-      window.location = '/admin/#/marketing/campaigns/' + campaign._id;
+
+      $location.path('/marketing/campaigns/' + campaign._id);
     };
 
   }]);

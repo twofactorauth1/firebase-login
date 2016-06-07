@@ -2082,8 +2082,14 @@
     title: 'Insert Image',
     undo: true,
     callback: function() {
-      this.$el.find(".fr-marker") && (this.events.disableBlur(), this.selection.save());
+      var ed = this;
+      this.$el.find(".fr-marker") && (this.events.disableBlur());
+      this.selection.save()
       clickandInsertImageButton(this);
+      setTimeout(function(){
+        ed.selection.restore();
+      }, 0)
+
     }
   })
 

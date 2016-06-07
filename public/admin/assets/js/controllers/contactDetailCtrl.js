@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ContactDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "ContactService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, ContactService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
+  app.controller('ContactDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "ContactService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', '$window', '$timeout', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, ContactService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant, $window, $timeout) {
 
     /*
      * @openModal
@@ -76,11 +76,11 @@
     {
       if($stateParams.orderId)
       {
-        window.location = '/admin/#/commerce/orders/' + $stateParams.orderId;
+        $location.path('/commerce/orders/' + $stateParams.orderId);
       }
       else
       {
-        window.history.back();
+        $window.history.back();
       }
 
     };
@@ -189,7 +189,7 @@
 
     $scope.resizeMap = function () {
       $scope.loadingMap = true;
-      setTimeout(function () {
+      $timeout(function () {
         $scope.loadingMap = false;
       }, 500);
     };
@@ -516,7 +516,7 @@
           $scope.pageSaving = false;
           if(showAlert){
             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-            window.location = newUrl;
+            $window.location = newUrl;
           }
         });
     }
@@ -645,7 +645,7 @@
         return;
       }
       $scope.savePreferencesFnWait = true;
-      setTimeout(function () {
+      $timeout(function () {
         UserService.updateUserPreferences($scope.userPreferences, true, function (preferences) {
           console.log('preferences ', preferences);
         });
@@ -1049,7 +1049,7 @@
 
 
     $scope.$back = function() {
-        window.history.back();
+        $window.history.back();
     };
 
     $scope.formatOrderStatus = function (status) {

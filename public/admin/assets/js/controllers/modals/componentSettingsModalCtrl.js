@@ -581,7 +581,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.componentEditing.linkLists.forEach(function (value) {
         if (value.handle === "head-menu") {
           value.links.splice(index, 1);
-          setTimeout(function () {
+          $timeout(function () {
               $scope.$apply(function () {
                 $scope.updateLinkList();
               })
@@ -592,7 +592,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.website.linkLists.forEach(function (value) {
         if (value.handle === "head-menu") {
           value.links.splice(index, 1);
-          setTimeout(function () {
+          $timeout(function () {
               $scope.$apply(function () {
                 $scope.updateLinkList();
               })
@@ -697,7 +697,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       }
 
     }
-    setTimeout(function () {
+    $timeout(function () {
         $scope.$apply(function () {
           $scope.updateLinkList();
         })

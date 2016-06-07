@@ -20,6 +20,9 @@
                             <!-- <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-receipt ng-click-active pull-right">
                                 <span>Duplicate</span>
                             </button> -->
+                            <button type="button" ng-click="cloneProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="cloneLoading">
+                              <span><i ng-class="{'fa fa-spin fa-spinner':cloneLoading}"></i> Clone</span>
+                            </button>
                             <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="saveLoading || (product.on_sale && productDetail.$invalid && !productDetail.$pristine )">
                                 <span><i ng-class="{'fa fa-spin fa-spinner':saveLoading}"></i> Save</span>
                             </button>

@@ -22,6 +22,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
         }
 
         scope.autoplay = false;
+        scope.accessibility = false;
 
         scope.$parent.$watchGroup(['ckeditorLoaded', 'vm.uiState.loaded'], function (newValue, oldValue) {
             if (newValue[0] || newValue[1]) {

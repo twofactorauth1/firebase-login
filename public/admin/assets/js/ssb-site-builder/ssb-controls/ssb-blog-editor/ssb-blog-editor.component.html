@@ -1,6 +1,6 @@
 <section ng-show="vm.uiState.openBlogPanel.id !== 'blog'" class="ssb-sidebar-panel-inner-container">
 
-    <header class="ssb-sidebar-panel-header margin-bottom-15">
+    <header class="ssb-sidebar-panel-header margin-bottom-0">
 
         <h4 class="ssb-sidebar-sub-heading">
 
@@ -24,7 +24,8 @@
     <div class="ssb-sidebar-section-panel-scrollable">
 
         <div
-            ng-if="vm.uiState.openBlogPanel.id === 'manage'">
+            ng-if="vm.uiState.openBlogPanel.id === 'manage'"
+            class="margin-top-10">
 
             <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })" class="btn btn-primary">
                 <i class="fa fa-plus display-ib"></i> New Post
@@ -55,24 +56,52 @@
                 </li>
             </ul>
 
-            <h5 class="ssb-sidebar-sub-heading">Posts</h5>
+            <h4 class="ssb-sidebar-sub-heading text-bold padding-left-0">Posts</h4>
 
             <ul class="ssb-blog-post-list list-unstyled">
-                <li>
+                <li ng-repeat="post in vm.state.blog.posts | filter:vm.filter track by $index" class="ssb-media-default">
                     <section
                         ssb-blog-post-card-component
                         post="post"
-                        ng-repeat="post in vm.state.blog.posts track by $index">
+                        compact-view="true">
                     </section>
                     <section class="ssb-blog-post-list-item">
                         <div class="ssb-blog-post-toggles">
-                            <i class="fa fa-star"></i>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
+
+                                <button
+                                    type="button"
+                                    class="btn btn-default"
+                                    tooltip-placement="top"
+                                    tooltip-append-to-body="true"
+                                    tooltip-html-unsafe="{{post.post_status}}"
+                                    ng-click="vm.togglePublished(post)">
+
+                                    <i ng-if="post.post_status === 'PUBLISHED'" class="fa fa-file"></i>
+                                    <i ng-if="post.post_status !== 'PUBLISHED'" class="fa fa-file-o"></i>
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn btn-default"
+                                    tooltip-placement="top"
+                                    tooltip-append-to-body="true"
+                                    tooltip-html-unsafe="Toggle Featured"
+                                    ng-click="vm.toggleFeatured(post)">
+
+                                    <i ng-if="post.featured" class="fa fa-star"></i>
+                                    <i ng-if="!post.featured" class="fa fa-star-o"></i>
+
+                                </button>
+
+                            </div>
                         </div>
                         <div class="ssb-blog-post-action-buttons">
-                            <button class="btn btn-default"><i class="fa fa-trash"></i><span class="sr-only">Duplicate</span></button>
-                            <button class="btn btn-default"><i class="fa fa-trash"></i><span class="sr-only">View</span></button>
+                            <button class="btn btn-default"><i class="fa fa-copy"></i><span class="sr-only">Duplicate</span></button>
+                            <button class="btn btn-default"><i class="fa fa-television"></i><span class="sr-only">View</span></button>
                             <button class="btn btn-default"><i class="fa fa-trash"></i><span class="sr-only">Delete</span></button>
-                            <button class="btn btn-primary"><i class="fa fa-trash"></i><span> Edit</span></button>
+                            <button class="btn btn-primary"><i class="fa fa-pencil-square-o"></i><span> Edit</span></button>
                         </div>
                     </section>
                 </li>

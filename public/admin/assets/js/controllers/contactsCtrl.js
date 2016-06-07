@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
+  app.controller('ContactsCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "ContactService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', "$location", "$q", function ($scope, $state, toaster, $modal, $window, ContactService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert, $location, $q) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -295,7 +295,7 @@
     $scope.viewSingle = function (contact) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
-      window.location = '/admin/#/contacts/' + contact._id;
+      $location.path('/contacts/' + contact._id);
     };
 
     /* 18-Sep Unioned set of tags in system with those needed by Indigenous
@@ -487,6 +487,7 @@
           toaster.pop('success', "Contacts import initiated.");
           SocialConfigService.importGoogleContact(value.id, function () {
             $scope.closeModal();
+            $scope.getContacts();
             toaster.pop('success', "Contacts import complete.");
           });
         }
@@ -548,15 +549,23 @@
               function (isConfirm) {
                 if (isConfirm) {
                     var selectedContacts = $scope.selectedContactsFn();
+                    var contactPromises = [];
+
                     selectedContacts.forEach(function(sc, sci) {
-                        ContactService.deleteContact(sc._id, function () {});
-                        $scope.contacts.splice(_.findIndex($scope.contacts, function(c) {return c._id == sc._id; }), 1);
-                        $scope.displayedContacts.splice(_.findIndex($scope.displayedContacts, function(c) {return c._id == sc._id; }), 1);
+                        contactPromises.push(ContactService.deleteContactPromise(sc._id));
                     });
-                    $scope.bulkActionChoice = null;
-                    $scope.bulkActionChoice = {};
-                    $scope.clearSelectionFn();
-                    toaster.pop('success', 'Contacts Deleted.');
+
+                    $q.all(contactPromises)
+                      .then(function(results) {
+                        selectedContacts.forEach(function(sc, sci) {
+                            $scope.contacts.splice(_.findIndex($scope.contacts, function(c) {return c._id == sc._id; }), 1);
+                            $scope.displayedContacts.splice(_.findIndex($scope.displayedContacts, function(c) {return c._id == sc._id; }), 1);
+                        });
+                        $scope.bulkActionChoice = null;
+                        $scope.bulkActionChoice = {};
+                        $scope.clearSelectionFn();
+                        toaster.pop('success', 'Contacts Deleted.');
+                      });
                 } else {
                  $scope.bulkActionChoice = null;
                  $scope.bulkActionChoice = {};
@@ -615,6 +624,7 @@
     $scope.tagsBulkActionClickFn = function (operation) {
         var selectedContacts = $scope.selectedContactsFn();
         var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
+        var contactPromises = [];
 
         selectedContacts.forEach(function(contact, index) {
             if (operation == 'add') {
@@ -633,13 +643,18 @@
                 contact.tags = _.difference(contact.tags, tags);
             }
 
-            ContactService.saveContact(contact, function() {});
+            contact.tags = _.uniq(contact.tags);
+            contactPromises.push(ContactService.putContactPromise(contact));
         });
 
-        $scope.tagsBulkAction = {};
-        $scope.clearSelectionFn();
-        $scope.closeModal();
-        toaster.pop('success', 'Contacts tags updated.');
+        $q.all(contactPromises)
+          .then(function(results) {
+            console.log(results);
+            $scope.tagsBulkAction = {};
+            $scope.clearSelectionFn();
+            $scope.closeModal();
+            toaster.pop('success', 'Contacts tags updated.');
+          });
     };
 
     $scope.exportContactsFn = function () {

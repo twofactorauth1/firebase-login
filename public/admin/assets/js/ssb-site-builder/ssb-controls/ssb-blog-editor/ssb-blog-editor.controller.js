@@ -15,6 +15,53 @@ function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService
 
     vm.uiState.activePostFilter = 'all';
 
+    vm.toggleFeatured = toggleFeatured;
+    vm.togglePublished = togglePublished;
+    vm.filter = filter;
+
+    function filter(item) {
+
+        var filter = false;
+
+        //['','all','published','draft','featured']
+
+        if (vm.uiState.activePostFilter === 'all' || vm.uiState.activePostFilter === '') {
+            filter = true;
+        }
+
+        if (vm.uiState.activePostFilter === 'published') {
+            filter = item.post_status.toLowerCase() === 'published';
+        }
+
+        if (vm.uiState.activePostFilter === 'draft') {
+            filter = item.post_status.toLowerCase() === 'draft';
+        }
+
+        if (vm.uiState.activePostFilter === 'featured') {
+            filter = item.featured;
+        }
+
+        return filter;
+
+    }
+
+    function toggleFeatured(post) {
+        post.featured = !post.featured;
+        SimpleSiteBuilderBlogService.savePost(post).then(function() {
+            console.log('saved post');
+        }).catch(function(error) {
+            console.error('error saving post');
+        });
+    }
+
+    function togglePublished(post) {
+        post.post_status = 'PUBLISHED';
+        SimpleSiteBuilderBlogService.savePost(post).then(function() {
+            console.log('saved post');
+        }).catch(function(error) {
+            console.error('error saving post');
+        });
+    }
 
     function closeBlogPanel() {
         vm.uiState.openBlogPanel = { name: '', id: '' };
