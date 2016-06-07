@@ -92,13 +92,8 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
                     left = 0;
                 }
 
-                if (editElTop - topbarHeight < 30 && top < 0) {
+                if (editElTop - topbarHeight < 30 && top < 20) {
                     top = 20;
-                    left = left + 36;
-                }
-                // Handled case when element is at right position
-                if(left > 100){
-                    top = top + 30;
                     left = left + 36;
                 }
 
