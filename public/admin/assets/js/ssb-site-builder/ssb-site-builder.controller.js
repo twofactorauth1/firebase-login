@@ -33,6 +33,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.toggleSectionVisiblity = toggleSectionVisiblity;
     vm.isBlogPage = isBlogPage;
     vm.isBlogEditMode = isBlogEditMode;
+    vm.isBlogEditWritingMode = isBlogEditWritingMode;
 
     vm.uiState = {
         loading: 0,
@@ -128,7 +129,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isBlogPage: false,
 
-        isBlogEditMode: false
+        isBlogEditMode: false,
+
+        isBlogEditWritingMode: false
 
     };
 
@@ -371,8 +374,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         unbindAccountWatcher();
     }, true);
 
-    var unbindOpenSidebarPanel = $scope.$watch(function() { return vm.uiState.openSidebarPanel }, function(account) {
+    var unbindOpenSidebarPanel = $scope.$watch(function() { return vm.uiState.openSidebarPanel }, function() {
         vm.uiState.isBlogEditMode = vm.isBlogEditMode();
+    }, true);
+
+    var unbindOpenSidebarPanel = $scope.$watch(function() { return vm.uiState.openBlogPanel }, function() {
+        vm.uiState.isBlogEditWritingMode = vm.isBlogEditWritingMode();
     }, true);
 
 
@@ -911,6 +918,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function isBlogEditMode() {
         return angular.isDefined(vm.uiState.openBlogPanel.id) && vm.uiState.openSidebarPanel === 'blog';
+    }
+
+    function isBlogEditWritingMode() {
+        return angular.isDefined(vm.uiState.openBlogPanel.id) && vm.uiState.openSidebarPanel === 'blog' && vm.uiState.openBlogPanel.id === 'edit';
     }
 
     function init(element) {

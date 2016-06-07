@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', 'SimpleSiteBuilderBlogService'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$timeout', 'SimpleSiteBuilderBlogService'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService) {
+function ssbSiteBuilderBlogEditorController($scope, $timeout, SimpleSiteBuilderBlogService) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -14,10 +14,20 @@ function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService
     vm.closeBlogPanel = closeBlogPanel;
 
     vm.uiState.activePostFilter = 'all';
+    vm.uiState.froalaEditorActive = false;
 
     vm.toggleFeatured = toggleFeatured;
     vm.togglePublished = togglePublished;
     vm.filter = filter;
+    vm.activateFroalaToolbar = activateFroalaToolbar;
+
+
+    $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
+        if (id === 'edit' && !vm.uiState.froalaEditorActive) {
+            $timeout(vm.activateFroalaToolbar);
+        }
+    }, true);
+
 
     function filter(item) {
 
@@ -66,6 +76,26 @@ function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService
     function closeBlogPanel() {
         vm.uiState.openBlogPanel = { name: '', id: '' };
         vm.uiState.openSidebarPanel = '';
+    }
+
+    function activateFroalaToolbar() {
+        $(vm.element).find('.ssb-blog-editor-post-title, .ssb-blog-editor-post-body')
+            .on('froalaEditor.initialized', function(e, editor) {
+
+              //topbar positioning
+              // $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
+              //scope.$emit('initializeEditor', { editor: editor });
+              //set initial text
+              // if (ngModel.$viewValue) {
+              //   var html = ngModel.$viewValue.replace("<span>", "<span style=''>");
+              //   editor.html.set(html);
+              // }
+              //compile special elements
+              // scope.compileEditorElements(editor, true);
+
+            }).froalaEditor($.FroalaEditor.config);
+
+            vm.froalaEditorActive = true;
     }
 
     function init(element) {
