@@ -14,6 +14,7 @@ var appConfig = require('../configs/app.config');
 var async = require('async');
 var cmsDao = require('../cms/dao/cms.dao');
 var pageDao = require('../ssb/dao/page.dao');
+var ssbManager = require('../ssb/ssb_manager');
 
 var s3Client = knox.createClient({
     key:s3config.AWS_ACCESS_KEY,
@@ -332,14 +333,16 @@ module.exports = {
 
     getOrCreateS3Template: function(accountId, pageName, update, resp) {
         var self = this;
+        self.log.debug(accountId, null, '>> getOrCreateS3Template(' + accountId + ',' + pageName + ',' + update + ')');
         var environmentName = 'prod';
         if(appConfig.nonProduction === true) {
             environmentName = 'test';
         }
         var path = environmentName + '/acct_' + accountId + '/' + pageName;
         s3Client.get(path).on('response', function(res){
-            if(res.statusCode === 200 && update !==true) {
+            if(res.statusCode === 200 && !update) {
                 //pipe it
+                self.log.debug('piping');
                 resp.setHeader('Content-Length', res.headers['content-length'])
                 resp.setHeader('Content-Type', res.headers['content-type'])
 
@@ -350,6 +353,7 @@ module.exports = {
 
                 res.pipe(resp);
             } else {
+                self.log.debug('building');
                 var html = '';
                 async.waterfall([
                         function getWebpageData(cb) {
@@ -363,7 +367,7 @@ module.exports = {
                             });
                         },
                         function getPage(webpageData, cb) {
-                            cmsDao.getLatestPageForWebsite(webpageData.website._id, pageName, accountId, function(err, page){
+                            ssbManager.getPublishedPage(accountId, webpageData.website._id, pageName, function(err, page){
                                 if(err) {
                                     self.log.error('Error getting latest page for website:', err);
                                     cb(err);

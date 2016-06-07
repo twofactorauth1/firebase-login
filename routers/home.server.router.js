@@ -21,6 +21,7 @@ var sitemigration_middleware = require('../sitemigration/middleware/sitemigratio
 var userManager = require('../dao/user.manager');
 var accountDao = require('../dao/account.dao');
 var pageCacheManager = require('../cms/pagecache_manager');
+var BlogView = require('../views/blog.server.view');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -35,7 +36,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         //send all routes to index and let the app router to navigate to the appropriate view
         app.get("/index", this.setup.bind(this), this.optimizedIndex.bind(this));
-        app.get("/blog", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/blog", this.setup.bind(this), this.renderBlogPage.bind(this));
         app.get("/blog/*", this.setup.bind(this), this.optimizedIndex.bind(this));
         app.get("/tag/*", this.setup.bind(this), this.optimizedIndex.bind(this));
         app.get("/category/*", this.setup.bind(this), this.optimizedIndex.bind(this));
@@ -437,6 +438,46 @@ _.extend(router.prototype, BaseRouter.prototype, {
         new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
 
         self.log.debug('<< optimizedIndex');
+    },
+
+    renderBlogPage: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        self.log.debug(accountId, null, '>> renderBlogPage');
+        //account.showhide.ssbBlog
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                resp.status(500);
+                resp.render('500.html', {title: '500: File Not Found'});
+                return;
+            } else {
+                var showHide = account.get('showhide');
+                if(showHide && showHide.ssbBlog && showHide.ssbBlog===true) {
+                    //TODO: This is where the magic happens
+                    new BlogView(req, resp).renderBlogPage(accountId);
+                    self.log.debug(accountId, null, '<< renderBlogPage');
+
+
+
+                } else {
+                    //treat as legacy blog
+                    if(accountId === 'new') {//we are on the signup page
+                        accountId = appConfig.mainAccountID;
+                    }
+                    var pageName = req.params.page || 'blog';
+                    self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
+
+                    new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+                    self.log.debug('<< optimizedIndex');
+                }
+            }
+        });
+
+    },
+
+    renderBlogPost: function(req, resp) {
+
     },
 
     getOrCreateTemplate: function(req, resp) {
