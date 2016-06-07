@@ -9,10 +9,12 @@ var pageDao = require('./dao/page.dao');
 var sectionDao = require('./dao/section.dao');
 var componentDao = require('./dao/component.dao');
 var siteTemplateDao = require('./dao/sitetemplate.dao');
+
 var async = require('async');
 var slug = require('slug');
 var constants = require('./constants');
 var cheerio = require('cheerio');
+var accountDao = require('../dao/account.dao');
 //TODO: update pageCacheManager for life in an SB-only world
 var pageCacheManager = require('../cms/pagecache_manager');
 
@@ -754,6 +756,36 @@ module.exports = {
                 });
                 self.log.debug(accountId, null,'<< listPublishedPages');
                 return fn(err, pages);
+            }
+        });
+    },
+
+    getPublishedPage: function(accountId, websiteId, handle, fn) {
+        var self = this;
+        self.log.debug(accountId, null,'>> getPublishedPage');
+        var query = {accountId:accountId, websiteId:websiteId, handle:handle, latest:true};
+        self.log.debug('query:', query);
+        pageDao.findPublishedPages(query, function(err, pages){
+            if(err || !pages) {
+                self.log.error(accountId, null,'Error getting published pages:', err);
+                return fn(err);
+            } else {
+                //handle legacy pages without sections
+                _.each(pages, function(page){
+                    if(page.get('sections') === null || page.get('sections').length===0) {
+                        var section = {};
+                        var sections = [];
+                        section.components = page.get('components');
+                        section.ssb = false;
+                        sections.push(section);
+                        page.set('sections', sections);
+                    }
+                });
+                if(pages.length !== 1) {
+                    self.log.warn(accountId, null, 'Expected 1 page but got:', pages);
+                }
+                self.log.debug(accountId, null,'<< getPublishedPage');
+                return fn(err, pages[0]);
             }
         });
     },
@@ -3067,6 +3099,56 @@ module.exports = {
         });
 
         return latest;
+    },
+
+    /**
+     * This was copied from cmsDao in order to help deprecate that class
+     * @param accountId
+     * @param pageName
+     * @param fn
+     */
+    getDataForWebpage: function(accountId, pageName, fn){
+        var self = this;
+        self.log.debug(accountId, null, '>> getDataForWebpage');
+        //assume index for now
+        accountDao.getAccountByID(accountId, function(err, value){
+            if(err) {
+                self.log.error('error getting account by id: ' + err);
+                return fn(err, null);
+            } else if(value == null) {
+                self.log.error('could not find account with id: ' + accountId);
+                return fn('Could not find account with id: ' + accountId, null);
+            }
+            var obj = value.toJSON('public');
+            websiteDao.getWebsiteById(accountId, obj.website.websiteId, function(err, website){
+                if (website.get('themeId')) {
+                    var themeId = website.get('themeId').valueOf();
+                    self.log.debug('>> getThemeById');
+                    themeDao.getThemeById(themeId, function(err, theme) {
+                        if(err || !theme) {
+                            self.log.error('Error getting theme, err:', err);
+                            self.log.error('Error getting theme, themeId:', themeId);
+                            return fn(err, obj);
+                        } else {
+                            self.log.debug('<< getThemeById');
+                            if (theme) {
+                                website.set('theme', theme.toJSON('public'));
+                            } else {
+                                website.set('theme', {});
+                            }
+                            obj.website = website.toJSON('public');
+                            self.log.debug('<< getDataForWebpage');
+                            return fn(null, obj);
+                        }
+                    });
+                } else {
+                    obj.website = website.toJSON('public');
+                    self.log.debug('<< getDataForWebpage');
+                    return fn(null, obj);
+                }
+            });
+
+        });
     }
 
 };
