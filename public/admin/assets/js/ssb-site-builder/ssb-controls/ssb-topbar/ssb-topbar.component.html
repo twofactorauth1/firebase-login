@@ -1,7 +1,9 @@
 <div class="ssb-topbar-inner">
 
     <div class="pull-left">
+
         <ui-select
+            ng-if="vm.uiState.openBlogPanel.id !== 'edit'"
             ng-init="vm.uiState.selectedPage = vm.state.page"
             ng-model="vm.uiState.selectedPage"
             ng-change="vm.loadPage($select.selected);"
@@ -18,12 +20,45 @@
             </ui-select-choices>
 
         </ui-select>
+
+        <div
+            class="ssb-blog-post-back"
+            ng-if="vm.uiState.openBlogPanel.id === 'edit' && vm.uiState.navigation.blogPanel.navigationHistory.length > 1"
+            ng-click="vm.uiState.navigation.blogPanel.back();">
+            <i
+                class="fa fa-arrow-left"
+                tooltip-placement="bottom"
+                tooltip-append-to-body="true"
+                tooltip="Back">
+            </i>
+            <!-- <span>Back</span> -->
+        </div>
+
     </div>
 
     <div id="ssb-froala-scrollable-container"></div>
 
     <div class="pull-right text-right">
-        <ssb-action-buttons class="ssb-control-bar" save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" state="vm.state" revert-action='vm.revertPage(versionId)' publish-action="vm.publishPage()"></ssb-action-buttons>
+
+        <ssb-action-buttons
+            ng-if="vm.uiState.openBlogPanel.id !== 'edit'"
+            class="ssb-control-bar"
+            save-action="vm.savePage()"
+            cancel-action="vm.cancelPendingEdits()"
+            state="vm.state"
+            revert-action='vm.revertPage(versionId)'
+            publish-action="vm.publishPage()">
+        </ssb-action-buttons>
+
+        <div
+            ng-if="vm.uiState.openBlogPanel.id === 'edit' && vm.uiState.navigation.blogPanel.navigationHistory.length > 1"
+            class="close-panel fa fa-close"
+            ng-click="vm.closeBlogPanel()"
+            tooltip-placement="bottom"
+            tooltip-append-to-body="true"
+            tooltip="Close">
+        </div>
+
     </div>
 
 </div>

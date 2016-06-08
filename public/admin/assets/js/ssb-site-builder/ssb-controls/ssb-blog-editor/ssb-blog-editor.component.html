@@ -13,7 +13,7 @@
             {{vm.uiState.openBlogPanel.name}}
         </h4>
 
-        <div class="close-panel ti-close"  ng-click="vm.closeBlogPanel()"></div>
+        <div class="close-panel ti-close" ng-click="vm.closeBlogPanel()"></div>
 
     </header>
 
@@ -98,10 +98,18 @@
                             </div>
                         </div>
                         <div class="ssb-blog-post-action-buttons">
-                            <button class="btn btn-default"><i class="fa fa-copy"></i><span class="sr-only">Duplicate</span></button>
-                            <button class="btn btn-default"><i class="fa fa-television"></i><span class="sr-only">View</span></button>
-                            <button class="btn btn-default"><i class="fa fa-trash"></i><span class="sr-only">Delete</span></button>
-                            <button class="btn btn-primary"><i class="fa fa-pencil-square-o"></i><span> Edit</span></button>
+                            <button class="btn btn-default" ng-click="vm.duplicatePost(post)">
+                                <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
+                            </button>
+                            <button class="btn btn-default" ng-click="vm.previewPost(post)">
+                                <i class="fa fa-television"></i><span class="sr-only">Preview</span>
+                            </button>
+                            <button class="btn btn-default" ng-click="vm.deletePost(post)">
+                                <i class="fa fa-trash"></i><span class="sr-only">Delete</span>
+                            </button>
+                            <button class="btn btn-primary" ng-click="vm.editPost(post)">
+                                <i class="fa fa-pencil-square-o"></i><span> Edit</span>
+                            </button>
                         </div>
                     </section>
                 </li>
@@ -111,8 +119,90 @@
         </div>
 
         <div
-            ng-if="vm.uiState.openBlogPanel.id === 'edit'">
-            <p>content of ... Edit Blog Post</p>
+            ng-if="vm.uiState.openBlogPanel.id === 'edit'"
+            class="row">
+
+            <div class="ssb-blog-editor col-md-6">
+
+                <h3 class="ssb-blog-editor-post-title" ng-bind-html="vm.state.post.post_title | unsafe" placeholder="Title"></h3>
+
+                <p class="ssb-blog-editor-post-body" ng-bind-html="vm.state.post.post_content | unsafe" placeholder="Tell your story..."></p>
+
+            </div>
+
+            <div class="ssb-blog-editor-controls col-md-6">
+
+                <span class="text-u">Status:</span>
+                <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
+
+                <div class="btn-group btn-group-sm block clearfix" role="group" aria-label="Post Status">
+
+                    <button
+                        type="button"
+                        class="btn btn-default"
+                        tooltip-placement="top"
+                        tooltip-append-to-body="true"
+                        tooltip-html-unsafe="{{vm.state.post.post_status}}"
+                        ng-click="vm.togglePublished(vm.state.post)">
+
+                        <i ng-if="vm.state.post.post_status === 'PUBLISHED'" class="fa fa-file"></i>
+                        <i ng-if="vm.state.post.post_status !== 'PUBLISHED'" class="fa fa-file-o"></i>
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-default"
+                        tooltip-placement="top"
+                        tooltip-append-to-body="true"
+                        tooltip-html-unsafe="Toggle Featured"
+                        ng-click="vm.toggleFeatured(vm.state.post)">
+
+                        <i ng-if="vm.state.post.featured" class="fa fa-star"></i>
+                        <i ng-if="!vm.state.post.featured" class="fa fa-star-o"></i>
+
+                    </button>
+
+                </div>
+
+                <button
+                    class="btn btn-default block"
+                    ng-click="vm.savePost(vm.state.post)"
+                    tooltip-placement="top"
+                    tooltip="Save">
+                    <i class="fa fa-save"></i><span class="sr-only">Save</span>
+                </button>
+
+                <button
+                    class="btn btn-default block"
+                    ng-click="vm.publishPost(vm.state.post)"
+                    tooltip-placement="top"
+                    tooltip="Publish">
+                    <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
+                </button>
+
+                <button
+                    class="btn btn-default block"
+                    ng-click="vm.previewPost(vm.state.post)"
+                    tooltip-placement="top"
+                    tooltip="Preview">
+                    <i class="fa fa-television"></i><span class="sr-only">Preview</span>
+                </button>
+
+                <!-- TODO: Date picker, maps to vm.post.publish_date -->
+                <div class="block">Date</div>
+
+                <!-- TODO: Author name, defaults to account first name + last name or business name, maps to vm.post.post_author -->
+                <div class="block">Author</div>
+
+                <!-- TODO: Tag picker, maps to vm.state.post.post_tags array -->
+                <div class="block">Tags</div>
+
+                <!-- TODO: Featured image upload, maps to vm.state.posts.featured_image -->
+                <div class="block">Featured Image</div>
+
+            </div>
+
         </div>
 
     </div>
