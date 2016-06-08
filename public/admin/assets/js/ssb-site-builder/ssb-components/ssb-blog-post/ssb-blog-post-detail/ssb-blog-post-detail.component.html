@@ -8,7 +8,7 @@
         <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
 
         <h1 itemprop="name headline">
-            {{vm.post.post_title}}
+            {{vm.post.display_title || vm.post.post_title}}
         </h1>
 
         <div class="ssb-blog-byline">
