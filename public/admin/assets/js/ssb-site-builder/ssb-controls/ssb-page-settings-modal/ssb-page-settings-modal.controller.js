@@ -185,7 +185,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
       )
     }
 
-    function validateDuplicatePage(pageHandle) {
+    function validateDuplicatePage(pageHandle, old_handle) {
 
         var _page = vm.parentVm.state.originalPages.filter(function(page){return page.handle.toLowerCase() === pageHandle.toLowerCase()})[0]
 
@@ -194,12 +194,24 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
             return "Page handle cannot be a system route.";
         }
+        // update hiddenOnPages object for updated handle
+        else{
+            if(old_handle && old_handle !== pageHandle){
+                _.each(vm.page.sections, function (section, index) {
+                    if(section.hiddenOnPages && section.hiddenOnPages[old_handle]){
+                        delete section.hiddenOnPages[old_handle];
+                        section.hiddenOnPages[pageHandle] = true;
+                    }
+                })
+            }
+
+        }
     }
 
-    $scope.$watch('vm.page.handle', function(handle){
+    $scope.$watch('vm.page.handle', function(handle, old_handle){
       if(handle){
         vm.page.handle = $filter('slugify')(handle);
-        vm.inValidPageHandle = validateDuplicatePage(handle);
+        vm.inValidPageHandle = validateDuplicatePage(handle, old_handle);
       }
       else{
         vm.inValidPageHandle = null;
