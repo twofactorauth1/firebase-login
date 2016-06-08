@@ -381,6 +381,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             angular.element('#intercom-container').hide();
         } else {
             angular.element('#intercom-container').show();
+            vm.uiState.openBlogPanel = {};
         }
 
     }, true);
