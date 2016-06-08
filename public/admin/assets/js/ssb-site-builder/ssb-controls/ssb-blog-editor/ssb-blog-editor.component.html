@@ -120,17 +120,17 @@
 
         <div
             ng-if="vm.uiState.openBlogPanel.id === 'edit'"
-            class="row">
+            class="ssb-blog-editor-scrollable-container row">
 
-            <div class="ssb-blog-editor col-md-6">
+            <div class="ssb-blog-editor">
 
-                <h3 class="ssb-blog-editor-post-title" ng-bind-html="vm.state.post.post_title | unsafe" placeholder="Title"></h3>
+                <h3 class="ssb-blog-editor-post-title" elem ssb-blog-editor="true" ng-model="vm.state.post.post_title"></h3>
 
-                <p class="ssb-blog-editor-post-body" ng-bind-html="vm.state.post.post_content | unsafe" placeholder="Tell your story..."></p>
+                <p class="ssb-blog-editor-post-body" elem ssb-blog-editor="true" ng-model="vm.state.post.post_content"></p>
 
             </div>
 
-            <div class="ssb-blog-editor-controls col-md-6">
+            <div class="ssb-blog-editor-controls">
 
                 <span class="text-u">Status:</span>
                 <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
