@@ -69,7 +69,7 @@
                         <div class="ssb-blog-post-toggles">
                             <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
 
-                                <button ng-if="vm.postExists()"
+                                <button
                                     type="button"
                                     class="btn btn-default"
                                     tooltip-placement="top"
@@ -82,7 +82,7 @@
 
                                 </button>
 
-                                <button ng-if="vm.postExists()"
+                                <button
                                     type="button"
                                     class="btn btn-default"
                                     tooltip-placement="top"
@@ -137,7 +137,8 @@
 
                 <div class="btn-group btn-group-sm block clearfix" role="group" aria-label="Post Status">
 
-                    <button ng-if="vm.postExists()"
+                    <button
+                        ng-disabled="vm.postExists()"
                         type="button"
                         class="btn btn-default"
                         tooltip-placement="top"
@@ -151,7 +152,8 @@
                     </button>
 
                     <button
-                        type="button" ng-if="vm.postExists()"
+                        ng-disabled="vm.postExists()"
+                        type="button"
                         class="btn btn-default"
                         tooltip-placement="top"
                         tooltip-append-to-body="true"
@@ -173,7 +175,8 @@
                     <i class="fa fa-save"></i><span class="sr-only">Save</span>
                 </button>
 
-                <button ng-if="vm.postExists()"
+                <button
+                    ng-disabled="vm.postExists()"="vm.postExists()"="vm.postExists()"
                     class="btn btn-default block"
                     ng-click="vm.publishPost(vm.state.post)"
                     tooltip-placement="top"
@@ -181,7 +184,8 @@
                     <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
                 </button>
 
-                <button ng-if="vm.postExists()"
+                <button
+                    ng-disabled="vm.postExists()"
                     class="btn btn-default block"
                     ng-click="vm.previewPost(vm.state.post)"
                     tooltip-placement="top"
