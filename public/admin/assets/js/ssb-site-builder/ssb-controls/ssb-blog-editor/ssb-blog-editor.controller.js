@@ -131,25 +131,10 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
                 $('.ssb-froala-blog-editor').removeClass('ssb-froala-active-editor');
 
-            })
-            .on('froalaEditor.contentChanged', function(e, editor) {
-                    updateFroalaContent(editor);
-            })
+            });
 
         vm.froalaEditorActive = true;
 
-    }
-
-    function updateFroalaContent(editor) {
-        //$timeout(function() {
-
-            if(editor.$el.closest(".ssb-blog-editor-post-title").length){
-                vm.state.post.post_title = editor.html.get();
-            }
-            if(editor.$el.closest(".ssb-blog-editor-post-body").length){
-                vm.state.post.post_content = editor.html.get();
-            }
-       //}, 0);
     }
 
     function destroyFroalaBlogInstances(event) {
