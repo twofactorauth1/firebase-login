@@ -14,7 +14,7 @@ var appConfig = require('../configs/app.config');
 var async = require('async');
 var cmsDao = require('../cms/dao/cms.dao');
 var pageDao = require('../ssb/dao/page.dao');
-var ssbManager = require('../ssb/ssb_manager');
+//var ssbManager = require('../ssb/ssb_manager');
 
 var s3Client = knox.createClient({
     key:s3config.AWS_ACCESS_KEY,
@@ -367,7 +367,7 @@ module.exports = {
                             });
                         },
                         function getPage(webpageData, cb) {
-                            ssbManager.getPublishedPage(accountId, webpageData.website._id, pageName, function(err, page){
+                            cmsDao.getLatestPageForWebsite(webpageData.website._id, pageName, accountId, function(err, page){
                                 if(err) {
                                     self.log.error('Error getting latest page for website:', err);
                                     cb(err);
