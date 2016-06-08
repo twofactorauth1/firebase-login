@@ -9,6 +9,7 @@ var pageDao = require('./dao/page.dao');
 var sectionDao = require('./dao/section.dao');
 var componentDao = require('./dao/component.dao');
 var siteTemplateDao = require('./dao/sitetemplate.dao');
+var blogPostDao = require('../cms/dao/blogpost.dao.js');
 
 var async = require('async');
 var slug = require('slug');
@@ -3152,6 +3153,55 @@ module.exports = {
                 }
             });
 
+        });
+    },
+
+    createBlogPost: function(accountId, blogPost, fn) {
+        var self = this;
+        self.log.debug('>> createBlogPost');
+        if (blogPost.featured_image) {
+          blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
+        }
+
+        if(!blogPost.get("post_url")){
+            blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
+        }
+        blogPostDao.createPost(blogPost, function(err, savedPost){
+            if(err) {
+                self.log.error('Error creating post: ' + err);
+                return fn(err, null);
+            } else {
+                return fn(err, savedPost);
+            }
+        });
+    },
+
+    updateBlogPost: function(accountId, blogPost, fn) {
+        var self = this;
+        if (blogPost.featured_image) {
+          blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
+        }
+        console.dir('blogPost '+JSON.stringify(blogPost));
+        blogPostDao.saveOrUpdate(blogPost, function(err, savedPost){
+            if(err) {
+                self.log.error('Error creating post: ' + err);
+                return fn(err, null);
+            } else {
+                return fn(err, savedPost);
+            }
+        });
+    },
+
+    deleteBlogPost: function(accountId, postId, fn) {
+        var self = this;
+        self.log.debug('>> deleteBlogPost');
+        blogPostDao.removeById(postId, $$.m.BlogPost, function(err, value){
+            if(err) {
+                self.log.error('Error creating post: ' + err);
+                return fn(err, null);
+            } else {
+                fn(null, value);
+            }
         });
     }
 

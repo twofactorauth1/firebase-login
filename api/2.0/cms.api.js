@@ -88,6 +88,11 @@ _.extend(api.prototype, baseApi.prototype, {
         //LEGACY SUPPORT
         app.get(this.url('website/:id/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
         app.get(this.url('website/:id/pages'), this.setup.bind(this), this.listPagesWithSections.bind(this));//get pages
+
+        // ssb blog posts
+        app.post(this.url('blog/post'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
+        app.put(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
+        app.delete(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
     },
 
     noop: function(req, resp) {
@@ -603,6 +608,93 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< getPageVersions');
             self.sendResultOrError(resp, err, revertedPage, "Error reverting page");
             self.createUserActivity(req, 'REVERT_PAGE', null, {pageId: pageId}, function(){});
+        });
+    },
+
+    //BLOG POSTS
+    createBlogPost: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> createBlogPost');
+        var blog=req.body;
+
+        var blogPost = new $$.m.BlogPost(blog);
+
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                blogPost.set('accountId', accountId);
+                blogPost.attributes.modified.date = new Date();
+                blogPost.attributes.created.date = new Date();
+                if(!blogPost.attributes.publish_date)
+                    blogPost.attributes.publish_date = moment().format('MM/DD/YYYY');
+                self.log.debug('<< Publish Date is' + blogPost.attributes.publish_date);
+                ssbManager.createBlogPost(accountId, blogPost, function (err, value) {
+                    self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
+                    self.sendResultOrError(res, err, value, "Error creating Blog Post");
+                    self.createUserActivity(req, 'CREATE_BLOGPOST', null, null, function(){});
+                    self = null;
+                });
+            }
+        });
+
+
+    },
+    updateBlogPost: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> updateBlogPost');
+        var blogPost = new $$.m.BlogPost(req.body);
+        var postId = req.params.postId;
+        var accountId = parseInt(self.accountId(req));
+
+        blogPost.set('accountId', accountId);
+        blogPost.set('_id', postId);
+
+        console.dir(req.body);
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                blogPost.set('accountId', accountId);
+                blogPost.set('_id', postId);
+                blogPost.attributes.modified.date = new Date();
+                console.dir(req.body);
+
+                ssbManager.updateBlogPost(accountId, blogPost, function (err, value) {
+                    self.log.debug('<< updateBlogPost');
+                    self.sendResultOrError(res, err, value, "Error updating Blog Post");
+                    self.createUserActivity(req, 'UPDATE_BLOGPOST', null, null, function(){});
+                    self = null;
+                });
+            }
+        });
+
+    },
+
+    deleteBlogPost: function(req, res) {
+        var self = this;
+        self.log.debug('>> deleteBlogPost');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var blogPostId = req.params.postId;
+                self.log.debug('deleting post with id: ' + blogPostId);
+
+                ssbManager.deleteBlogPost(accountId, blogPostId, function (err, value) {
+                    self.log.debug('<< deleteBlogPost');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting Blog Post");
+                    self.createUserActivity(req, 'DELETE_BLOGPOST', null, null, function(){});
+                    self = null;
+                });
+            }
         });
     }
 

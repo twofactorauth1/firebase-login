@@ -27,6 +27,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.previewPost = previewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
+    vm.savePost = savePost;
+    vm.postExists = postExists;
 
     vm.state.post = {
         post_title: 'Title',
@@ -129,10 +131,25 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
                 $('.ssb-froala-blog-editor').removeClass('ssb-froala-active-editor');
 
-            });
+            })
+            .on('froalaEditor.contentChanged', function(e, editor) {
+                    updateFroalaContent(editor);
+            })
 
         vm.froalaEditorActive = true;
 
+    }
+
+    function updateFroalaContent(editor) {
+        //$timeout(function() {
+
+            if(editor.$el.closest(".ssb-blog-editor-post-title").length){
+                vm.state.post.post_title = editor.html.get();
+            }
+            if(editor.$el.closest(".ssb-blog-editor-post-body").length){
+                vm.state.post.post_content = editor.html.get();
+            }
+       //}, 0);
     }
 
     function destroyFroalaBlogInstances(event) {
@@ -174,7 +191,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
         SweetAlert.swal({
             title: "Are you sure?",
-            text: "Do you want to delete this page?",
+            text: "Do you want to delete this post?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -197,6 +214,21 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function editPost(post) {
         vm.state.post = post;
         vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
+    }
+
+    function savePost(post){
+        post.websiteId = vm.state.website._id;
+        SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
+            console.log('post saved');
+            vm.state.post = savedPost.data;
+        }).catch(function(error) {
+            console.error('error saving post');
+        });
+    }
+
+
+    function postExists(){
+        return vm.state.post && vm.state.post._id;
     }
 
 
