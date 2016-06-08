@@ -2,8 +2,8 @@
 /**
   * A set of directives for left and right sidebar.
 */
-app.directive('sidebar', ['$document', '$rootScope',
-function ($document, $rootScope) {
+app.directive('sidebar', ['$document', '$rootScope', '$timeout',
+function ($document, $rootScope, $timeout) {
     return {
         replace: false,
         restrict: "C",
