@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -31,6 +31,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.newPost = newPost;
     vm.savePost = savePost;
     vm.postExists = postExists;
+    vm.setFeaturedImage = setFeaturedImage;
 
     vm.state.post = defaultPost();
 
@@ -162,6 +163,13 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function postExists(){
         return vm.state.post && vm.state.post._id;
     }
+
+    function setFeaturedImage(post) {
+        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update, fields).result.then(function(){
+           debugger;
+        })
+    }
+
 
 
     function init(element) {
