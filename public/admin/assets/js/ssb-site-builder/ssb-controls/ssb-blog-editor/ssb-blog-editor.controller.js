@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -28,20 +28,25 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.previewPost = previewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
+    vm.newPost = newPost;
     vm.savePost = savePost;
     vm.postExists = postExists;
 
-    vm.state.post = {
-        post_title: 'Title',
-        post_content: 'Tell your story...',
-    };
-
+    vm.state.post = defaultPost();
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
             // $timeout(vm.activateFroalaToolbar);
         }
     }, true);
+
+
+    function defaultPost(){
+        return {
+            post_title: 'Title',
+            post_content: 'Tell your story...',
+        };
+    }
 
 
     function filter(item) {
@@ -92,8 +97,10 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
         SimpleSiteBuilderBlogService.duplicatePost(post).then(function() {
             console.log('duplicated post');
+            toaster.pop('success', 'Duplicate Post Created', 'The post was created successfully.');
         }).catch(function(error) {
             console.error('error duplicating post');
+            toaster.pop('error', 'Error', 'Error creating duplicate post. Please try again.');
         });
 
     }
@@ -119,8 +126,10 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             if (isConfirm) {
                 SimpleSiteBuilderBlogService.deletePost(post).then(function() {
                     console.log('deleted post');
+                    toaster.pop('success', 'Post Deleted', 'The post was deleted successfully.');
                 }).catch(function(error) {
                     console.error('error deleting post');
+                    toaster.pop('error', 'Error', 'Error deleting post. Please try again.');
                 });
             }
         });
@@ -132,13 +141,20 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
     }
 
+    function newPost() {
+        vm.state.post = defaultPost();
+        vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
+    }
+
     function savePost(post){
         post.websiteId = vm.state.website._id;
         SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
+            toaster.pop('success', 'Post Saved', 'The post was saved successfully.');
         }).catch(function(error) {
             console.error('error saving post');
+            toaster.pop('error', 'Error', 'Error updating post. Please try again.');
         });
     }
 
