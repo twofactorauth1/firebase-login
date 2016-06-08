@@ -17,6 +17,8 @@ var cheerio = require('cheerio');
 var accountDao = require('../dao/account.dao');
 //TODO: update pageCacheManager for life in an SB-only world
 var pageCacheManager = require('../cms/pagecache_manager');
+//TODO: blogpostdao?!?  Seriously?!?
+var blogPostDao = require('../cms/dao/blogpost.dao');
 
 var PLATFORM_ID = 0;
 
@@ -792,6 +794,13 @@ module.exports = {
                 return fn(err, pages[0]);
             }
         });
+    },
+
+    getPublishedPosts: function(accountId, statusAry, limit, fn){
+        var _statusAry = statusAry || [$$.m.BlogPost.status.PUBLISHED];
+        var _limit = limit || 100;
+        blogPostDao.findManyWithLimit({'accountId':accountId, post_status: {'$in': _statusAry}}, _limit, $$.m.BlogPost, fn);
+
     },
 
     listPagesWithSections: function(accountId, websiteId, fn) {
