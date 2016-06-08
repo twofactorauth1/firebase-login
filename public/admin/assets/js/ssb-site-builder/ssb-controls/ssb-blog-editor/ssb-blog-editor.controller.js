@@ -11,6 +11,9 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     var vm = this;
 
     vm.init = init;
+    vm.ssbEditor = true;
+    vm.ssbBlogEditor = true;
+
     vm.closeBlogPanel = closeBlogPanel;
 
     vm.uiState.activePostFilter = 'all';
@@ -21,12 +24,11 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.toggleFeatured = toggleFeatured;
     vm.togglePublished = togglePublished;
     vm.filter = filter;
-    vm.activateFroalaToolbar = activateFroalaToolbar;
-    vm.destroyFroalaBlogInstances = destroyFroalaBlogInstances;
     vm.duplicatePost = duplicatePost;
     vm.previewPost = previewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
+    vm.savePost = savePost;
 
     vm.state.post = {
         post_title: 'Title',
@@ -36,11 +38,9 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
-            $timeout(vm.activateFroalaToolbar);
+            // $timeout(vm.activateFroalaToolbar);
         }
     }, true);
-
-    $rootScope.$on('$destroyFroalaBlogInstances', vm.destroyFroalaBlogInstances);
 
 
     function filter(item) {
@@ -71,88 +71,20 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     function toggleFeatured(post) {
         post.featured = !post.featured;
-        SimpleSiteBuilderBlogService.savePost(post).then(function() {
-            console.log('saved post');
-        }).catch(function(error) {
-            console.error('error saving post');
-        });
+        vm.savePost(post);
     }
 
     function togglePublished(post) {
-        post.post_status = 'PUBLISHED';
-        SimpleSiteBuilderBlogService.savePost(post).then(function() {
-            console.log('saved post');
-        }).catch(function(error) {
-            console.error('error saving post');
-        });
+        post.post_status = post.post_status !== 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
+        vm.savePost(post);
     }
 
     function closeBlogPanel() {
-        $rootScope.$broadcast('$destroyFroalaBlogInstances');
+        $rootScope.$broadcast('$destroyFroalaInstances');
         $timeout(function() {
             vm.uiState.openBlogPanel = { name: '', id: '' };
             vm.uiState.openSidebarPanel = '';
         }, 500);
-    }
-
-    function activateFroalaToolbar() {
-
-        //car customize from default froala config settings here...
-        var froalaBlogConfig = angular.extend($.FroalaEditor.config, {});
-        // delete froalaBlogConfig['scrollableContainer'];
-
-        vm.editableElements = $(vm.element).find(vm.editableElementSelectors)
-
-            .on('froalaEditor.initialized', function(e, editor) {
-
-                //topbar positioning
-                $('.fr-toolbar.fr-inline.fr-desktop:first')
-                    .addClass('ssb-froala-first-editor ssb-froala-blog-editor');
-
-            }).froalaEditor(froalaBlogConfig)
-
-            .on('froalaEditor.toolbar.show', function(e, editor) {
-
-                //hide any currently shown toolbar
-                $('.fr-toolbar').removeClass('ssb-froala-active-editor');
-
-                //move toolbar to highest z-index
-                editor.$tb.addClass('ssb-froala-active-editor');
-
-                //editor.selection.clear();
-                $scope.$emit('focusEditor', { editor: editor });
-            })
-
-            .on('froalaEditor.toolbar.hide', function(e, editor) {
-
-                console.log('blog toolbar hide');
-
-                $('.ssb-froala-blog-editor').removeClass('ssb-froala-active-editor');
-
-            });
-
-        vm.froalaEditorActive = true;
-
-    }
-
-    function destroyFroalaBlogInstances(event) {
-
-        $timeout(function() {
-
-            for (var i = 0; i < vm.editableElements.length; i++) {
-                var el = vm.editableElements[i];
-                if($(el).data('froala.editor')) {
-                    var editor = $(el).data('froala.editor');
-                    editor.shared.count = 1;
-                    delete editor.shared.$tb;
-                    console.log("blog editor destroyed");
-                }
-            }
-
-            vm.editableElements = [];
-
-        });
-
     }
 
     function duplicatePost(post) {
@@ -197,6 +129,14 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function editPost(post) {
         vm.state.post = post;
         vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
+    }
+
+    function savePost(post) {
+        SimpleSiteBuilderBlogService.savePost(post).then(function() {
+            console.log('saved post');
+        }).catch(function(error) {
+            console.error('error saving post');
+        });
     }
 
 
