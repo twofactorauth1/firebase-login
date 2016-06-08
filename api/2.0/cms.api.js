@@ -93,6 +93,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('blog/post'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
         app.put(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
+        app.post(this.url('blog/duplicate/post'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePost.bind(this));
     },
 
     noop: function(req, resp) {
@@ -618,6 +619,8 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createBlogPost');
         var blog=req.body;
 
+        var userId = self.userId(req);
+
         var blogPost = new $$.m.BlogPost(blog);
 
         var accountId = parseInt(self.accountId(req));
@@ -627,8 +630,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(res);
             } else {
                 blogPost.set('accountId', accountId);
-                blogPost.attributes.modified.date = new Date();
-                blogPost.attributes.created.date = new Date();
+                var created = {date: new Date(), by:self.userId(req)};
+                blogPost.set('created', created);
+                blogPost.set('modified', created);
                 if(!blogPost.attributes.publish_date)
                     blogPost.attributes.publish_date = moment().format('MM/DD/YYYY');
                 self.log.debug('<< Publish Date is' + blogPost.attributes.publish_date);
@@ -654,6 +658,9 @@ _.extend(api.prototype, baseApi.prototype, {
         blogPost.set('accountId', accountId);
         blogPost.set('_id', postId);
 
+        var userId = self.userId(req);
+
+
         console.dir(req.body);
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
@@ -662,7 +669,8 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 blogPost.set('accountId', accountId);
                 blogPost.set('_id', postId);
-                blogPost.attributes.modified.date = new Date();
+                var modified = {date: new Date(), by:self.userId(req)};
+                blogPost.set('modified', modified);
                 console.dir(req.body);
 
                 ssbManager.updateBlogPost(accountId, blogPost, function (err, value) {
@@ -696,6 +704,33 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    createDuplicatePost: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> createDuplicatePage');
+        var blog = req.body;
+        // Delete _id of the existing post;
+        delete blog._id;
+        var blogPost = new $$.m.BlogPost(blog);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var created = {date: new Date(), by:self.userId(req)};
+                blogPost.set('accountId', accountId);
+                blogPost.set('created', created);
+                blogPost.set('modified', created);
+                ssbManager.createDuplicatePost(accountId, blogPost, function(err, post){
+                    self.log.debug(accountId, userId, '<< createDuplicatePost');
+                    self.sendResultOrError(resp, err, post, "Error creating post");
+                    self.createUserActivity(req, 'CREATE_BLOGPOST', null, {postId: post._id}, function(){});
+                });
+            }
+        });
+
     }
 
 });

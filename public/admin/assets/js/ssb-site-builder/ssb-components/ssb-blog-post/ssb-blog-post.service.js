@@ -18,6 +18,7 @@
         ssbBlogService.getPosts = getPosts;
         ssbBlogService.savePost = savePost;
         ssbBlogService.deletePost = deletePost;
+        ssbBlogService.duplicatePost= duplicatePost;
 
         ssbBlogService.blog = {
             posts: [],
@@ -74,6 +75,26 @@
                     }).success(success).error(error))
                 )
             }
+
+        }
+
+        function duplicatePost(post) {
+
+            function success(data) {
+                ssbBlogService.blog.posts.push(data);
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderBlogService duplicatePost error: ', JSON.stringify(error));
+            }
+
+            return (
+                ssbBlogRequest($http({
+                    url: baseBlogAPIUrl + '/duplicate/post/',
+                    method: 'POST',
+                    data: angular.toJson(post)
+                }).success(success).error(error))
+            )
 
         }
 

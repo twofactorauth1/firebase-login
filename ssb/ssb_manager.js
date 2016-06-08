@@ -3176,6 +3176,22 @@ module.exports = {
         });
     },
 
+    createDuplicatePost: function(accountId, blogPost, fn) {
+        var self = this;
+        self.log.debug('>> createDuplicatePost');
+        blogPost.set('post_title', blogPost.get('post_title') + ' (copy)');
+        blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
+
+        blogPostDao.createPost(blogPost, function(err, savedPost){
+            if(err) {
+                self.log.error('Error creating post: ' + err);
+                return fn(err, null);
+            } else {
+                return fn(err, savedPost);
+            }
+        });
+    },
+
     updateBlogPost: function(accountId, blogPost, fn) {
         var self = this;
         if (blogPost.featured_image) {

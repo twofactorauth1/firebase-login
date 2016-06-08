@@ -314,6 +314,7 @@ module.exports = {
 
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
+                    order.set('total_tax', taxAdded.toFixed(2));
                     order.set('total', totalAmount.toFixed(2));
                     log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                     order.set('total_line_items_quantity', totalLineItemsQuantity);
@@ -1555,6 +1556,7 @@ module.exports = {
 
                         order.set('tax_rate', taxPercent);
                         order.set('subtotal', subTotal.toFixed(2));
+                        order.set('total_tax', taxAdded.toFixed(2));
                         order.set('total', totalAmount.toFixed(2));
                         log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                         order.set('total_line_items_quantity', totalLineItemsQuantity);
