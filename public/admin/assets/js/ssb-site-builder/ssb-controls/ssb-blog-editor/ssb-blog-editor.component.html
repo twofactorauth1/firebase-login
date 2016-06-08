@@ -135,10 +135,10 @@
                 <span class="text-u">Status:</span>
                 <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
 
-                <div class="btn-group btn-group-sm block clearfix" role="group" aria-label="Post Status">
+                <div class="btn-group btn-group-sm row block clearfix" role="group" aria-label="Post Status">
 
                     <button
-                        ng-disabled="vm.postExists()"
+                        ng-disabled="!vm.postExists()"
                         type="button"
                         class="btn btn-default"
                         tooltip-placement="top"
@@ -152,13 +152,13 @@
                     </button>
 
                     <button
-                        ng-disabled="vm.postExists()"
+                        ng-disabled="!vm.postExists()"
                         type="button"
                         class="btn btn-default"
+                        ng-click="vm.toggleFeatured(vm.state.post)"
                         tooltip-placement="top"
                         tooltip-append-to-body="true"
-                        tooltip-html-unsafe="Toggle Featured"
-                        ng-click="vm.toggleFeatured(vm.state.post)">
+                        tooltip-html-unsafe="Toggle Featured">
 
                         <i ng-if="vm.state.post.featured" class="fa fa-star"></i>
                         <i ng-if="!vm.state.post.featured" class="fa fa-star-o"></i>
@@ -168,42 +168,69 @@
                 </div>
 
                 <button
-                    class="btn btn-default block"
+                    class="btn btn-default row block"
                     ng-click="vm.savePost(vm.state.post)"
                     tooltip-placement="top"
+                    tooltip-append-to-body="true"
                     tooltip="Save">
                     <i class="fa fa-save"></i><span class="sr-only">Save</span>
                 </button>
 
                 <button
-                    ng-disabled="vm.postExists()"="vm.postExists()"="vm.postExists()"
-                    class="btn btn-default block"
+                    ng-disabled="!vm.postExists()"
+                    class="btn btn-default row block"
                     ng-click="vm.publishPost(vm.state.post)"
                     tooltip-placement="top"
+                    tooltip-append-to-body="true"
                     tooltip="Publish">
                     <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
                 </button>
 
                 <button
                     ng-disabled="vm.postExists()"
-                    class="btn btn-default block"
+                    class="btn btn-default row block"
                     ng-click="vm.previewPost(vm.state.post)"
                     tooltip-placement="top"
+                    tooltip-append-to-body="true"
                     tooltip="Preview">
                     <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                 </button>
 
                 <!-- TODO: Date picker, maps to vm.post.publish_date -->
-                <div class="block">Date</div>
+                <div class="row block ssb-blog-editor-controls-date">
+                    <div class="col-md-6">
+                        Date
+                    </div>
+                </div>
 
-                <!-- TODO: Author name, defaults to account first name + last name or business name, maps to vm.post.post_author -->
-                <div class="block">Author</div>
+                <!-- TODO: Author name, editable, populate account first name + last name or business name, maps to vm.post.post_author -->
+                <div class="row block ssb-blog-editor-controls-author">
+                    <div class="col-md-6">
+                        Author
+                    </div>
+                </div>
 
                 <!-- TODO: Tag picker, maps to vm.state.post.post_tags array -->
-                <div class="block">Tags</div>
+                <div class="row block ssb-blog-editor-tags">
+                    <div class="col-md-6">
+                        <h4 class="text-u">Tags</h4>
+                    </div>
+                </div>
 
-                <!-- TODO: Featured image upload, maps to vm.state.posts.featured_image -->
-                <div class="block">Featured Image</div>
+                <div class="row block ssb-blog-editor-featured-image">
+                    <div class="col-md-6">
+                        <h4 class="text-u">Featured Image</h4>
+                        <div class="center" ng-click="vm.setFeaturedImage(vm.state.post);">
+                            <div ng-if="vm.state.post.featured_image">
+                                <img ng-src="{{vm.state.post.featured_image}}" />
+                            </div>
+                            <div ng-if="!vm.state.post.featured_image">
+                                <i class="fa fa-image"></i>
+                                <span>No Featured Image</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
 
