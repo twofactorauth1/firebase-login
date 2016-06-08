@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$timeout', 'SimpleSiteBuilderBlogService'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, $timeout, SimpleSiteBuilderBlogService) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -15,11 +15,23 @@ function ssbSiteBuilderBlogEditorController($scope, $timeout, SimpleSiteBuilderB
 
     vm.uiState.activePostFilter = 'all';
     vm.uiState.froalaEditorActive = false;
+    vm.editableElementSelectors = '.ssb-blog-editor-post-title, .ssb-blog-editor-post-body';
+    vm.editableElements = [];
 
     vm.toggleFeatured = toggleFeatured;
     vm.togglePublished = togglePublished;
     vm.filter = filter;
     vm.activateFroalaToolbar = activateFroalaToolbar;
+    vm.destroyFroalaBlogInstances = destroyFroalaBlogInstances;
+    vm.duplicatePost = duplicatePost;
+    vm.previewPost = previewPost;
+    vm.deletePost = deletePost;
+    vm.editPost = editPost;
+
+    vm.state.post = {
+        post_title: 'Title',
+        post_content: 'Tell your story...',
+    };
 
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
@@ -27,6 +39,8 @@ function ssbSiteBuilderBlogEditorController($scope, $timeout, SimpleSiteBuilderB
             $timeout(vm.activateFroalaToolbar);
         }
     }, true);
+
+    $rootScope.$on('$destroyFroalaBlogInstances', vm.destroyFroalaBlogInstances);
 
 
     function filter(item) {
@@ -74,29 +88,118 @@ function ssbSiteBuilderBlogEditorController($scope, $timeout, SimpleSiteBuilderB
     }
 
     function closeBlogPanel() {
-        vm.uiState.openBlogPanel = { name: '', id: '' };
-        vm.uiState.openSidebarPanel = '';
+        $rootScope.$broadcast('$destroyFroalaBlogInstances');
+        $timeout(function() {
+            vm.uiState.openBlogPanel = { name: '', id: '' };
+            vm.uiState.openSidebarPanel = '';
+        }, 500);
     }
 
     function activateFroalaToolbar() {
-        $(vm.element).find('.ssb-blog-editor-post-title, .ssb-blog-editor-post-body')
+
+        //car customize from default froala config settings here...
+        var froalaBlogConfig = angular.extend($.FroalaEditor.config, {});
+        // delete froalaBlogConfig['scrollableContainer'];
+
+        vm.editableElements = $(vm.element).find(vm.editableElementSelectors)
+
             .on('froalaEditor.initialized', function(e, editor) {
 
-              //topbar positioning
-              // $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
-              //scope.$emit('initializeEditor', { editor: editor });
-              //set initial text
-              // if (ngModel.$viewValue) {
-              //   var html = ngModel.$viewValue.replace("<span>", "<span style=''>");
-              //   editor.html.set(html);
-              // }
-              //compile special elements
-              // scope.compileEditorElements(editor, true);
+                //topbar positioning
+                $('.fr-toolbar.fr-inline.fr-desktop:first')
+                    .addClass('ssb-froala-first-editor ssb-froala-blog-editor');
 
-            }).froalaEditor($.FroalaEditor.config);
+            }).froalaEditor(froalaBlogConfig)
 
-            vm.froalaEditorActive = true;
+            .on('froalaEditor.toolbar.show', function(e, editor) {
+
+                //hide any currently shown toolbar
+                $('.fr-toolbar').removeClass('ssb-froala-active-editor');
+
+                //move toolbar to highest z-index
+                editor.$tb.addClass('ssb-froala-active-editor');
+
+                //editor.selection.clear();
+                $scope.$emit('focusEditor', { editor: editor });
+            })
+
+            .on('froalaEditor.toolbar.hide', function(e, editor) {
+
+                console.log('blog toolbar hide');
+
+                $('.ssb-froala-blog-editor').removeClass('ssb-froala-active-editor');
+
+            });
+
+        vm.froalaEditorActive = true;
+
     }
+
+    function destroyFroalaBlogInstances(event) {
+
+        $timeout(function() {
+
+            for (var i = 0; i < vm.editableElements.length; i++) {
+                var el = vm.editableElements[i];
+                if($(el).data('froala.editor')) {
+                    var editor = $(el).data('froala.editor');
+                    editor.shared.count = 1;
+                    delete editor.shared.$tb;
+                    console.log("blog editor destroyed");
+                }
+            }
+
+            vm.editableElements = [];
+
+        });
+
+    }
+
+    function duplicatePost(post) {
+
+        SimpleSiteBuilderBlogService.duplicatePost(post).then(function() {
+            console.log('duplicated post');
+        }).catch(function(error) {
+            console.error('error duplicating post');
+        });
+
+    }
+
+    function previewPost(post) {
+        // TODO: open new window for preview
+        // URL: '/preview/blog/' + post.post_url
+    }
+
+    function deletePost(post) {
+
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "Do you want to delete this page?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+                SimpleSiteBuilderBlogService.deletePost(post).then(function() {
+                    console.log('deleted post');
+                }).catch(function(error) {
+                    console.error('error deleting post');
+                });
+            }
+        });
+
+    }
+
+    function editPost(post) {
+        vm.state.post = post;
+        vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
+    }
+
+
 
     function init(element) {
 
