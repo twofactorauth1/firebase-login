@@ -27,7 +27,7 @@
             ng-if="vm.uiState.openBlogPanel.id === 'manage'"
             class="margin-top-10">
 
-            <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })" class="btn btn-primary">
+            <button ng-click="vm.newPost()" class="btn btn-primary">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
@@ -69,7 +69,7 @@
                         <div class="ssb-blog-post-toggles">
                             <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
 
-                                <button
+                                <button ng-if="vm.postExists()"
                                     type="button"
                                     class="btn btn-default"
                                     tooltip-placement="top"
@@ -82,7 +82,7 @@
 
                                 </button>
 
-                                <button
+                                <button ng-if="vm.postExists()"
                                     type="button"
                                     class="btn btn-default"
                                     tooltip-placement="top"
@@ -120,24 +120,24 @@
 
         <div
             ng-if="vm.uiState.openBlogPanel.id === 'edit'"
-            class="row">
+            class="ssb-blog-editor-scrollable-container row">
 
-            <div class="ssb-blog-editor col-md-6">
+            <div class="ssb-blog-editor">
 
-                <h3 class="ssb-blog-editor-post-title" ng-bind-html="vm.state.post.post_title | unsafe" placeholder="Title"></h3>
+                <h3 class="ssb-blog-editor-post-title" elem ssb-blog-editor="true" ng-model="vm.state.post.post_title"></h3>
 
-                <p class="ssb-blog-editor-post-body" ng-bind-html="vm.state.post.post_content | unsafe" placeholder="Tell your story..."></p>
+                <p class="ssb-blog-editor-post-body" elem ssb-blog-editor="true" ng-model="vm.state.post.post_content"></p>
 
             </div>
 
-            <div class="ssb-blog-editor-controls col-md-6">
+            <div class="ssb-blog-editor-controls">
 
                 <span class="text-u">Status:</span>
                 <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
 
                 <div class="btn-group btn-group-sm block clearfix" role="group" aria-label="Post Status">
 
-                    <button
+                    <button ng-if="vm.postExists()"
                         type="button"
                         class="btn btn-default"
                         tooltip-placement="top"
@@ -151,7 +151,7 @@
                     </button>
 
                     <button
-                        type="button"
+                        type="button" ng-if="vm.postExists()"
                         class="btn btn-default"
                         tooltip-placement="top"
                         tooltip-append-to-body="true"
@@ -173,7 +173,7 @@
                     <i class="fa fa-save"></i><span class="sr-only">Save</span>
                 </button>
 
-                <button
+                <button ng-if="vm.postExists()"
                     class="btn btn-default block"
                     ng-click="vm.publishPost(vm.state.post)"
                     tooltip-placement="top"
@@ -181,7 +181,7 @@
                     <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
                 </button>
 
-                <button
+                <button ng-if="vm.postExists()"
                     class="btn btn-default block"
                     ng-click="vm.previewPost(vm.state.post)"
                     tooltip-placement="top"

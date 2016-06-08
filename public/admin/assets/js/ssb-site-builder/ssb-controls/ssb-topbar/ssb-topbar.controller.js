@@ -205,7 +205,7 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
     }
 
     function closeBlogPanel() {
-        $rootScope.$broadcast('$destroyFroalaBlogInstances');
+        $rootScope.$broadcast('$destroyFroalaInstances');
         $timeout(function() {
             vm.uiState.openBlogPanel = { name: '', id: '' };
             vm.uiState.openSidebarPanel = '';

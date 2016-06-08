@@ -74,6 +74,12 @@ ssb-blog-editor {
         opacity: .85;
     }
 
+    .ssb-sidebar-inner .editor-group {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .ssb-sidebar-section-panel-scrollable {
         min-height: calc(~"100vh - 250px");
         max-height: none;
@@ -195,11 +201,28 @@ ssb-blog-editor {
 
     }
 
+    .ssb-blog-editor-scrollable-container {
+        @media screen and (min-width: 768px) {
+            .flex-container;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-flow: row wrap;
+        }
+    }
+
+    .ssb-blog-editor-controls,
+    .ssb-blog-editor {
+        @media screen and (min-width: 768px) {
+            min-height: calc(~"100vh - 110px");
+        }
+    }
+
     .ssb-blog-editor {
 
         padding: 40px 15px;
 
         @media screen and (min-width: 768px) {
+            flex: 1 1 200px;
             padding: 40px 25px;
         }
 
@@ -211,6 +234,7 @@ ssb-blog-editor {
         background: @lightGrey;
 
         @media screen and (min-width: 768px) {
+            flex: 1;
             padding: 40px 25px;
         }
 
