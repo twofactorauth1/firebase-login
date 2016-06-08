@@ -29,6 +29,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.deletePost = deletePost;
     vm.editPost = editPost;
     vm.savePost = savePost;
+    vm.postExists = postExists;
 
     vm.state.post = {
         post_title: 'Title',
@@ -106,7 +107,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
         SweetAlert.swal({
             title: "Are you sure?",
-            text: "Do you want to delete this page?",
+            text: "Do you want to delete this post?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -131,14 +132,19 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
     }
 
-    function savePost(post) {
-        SimpleSiteBuilderBlogService.savePost(post).then(function() {
-            console.log('saved post');
+    function savePost(post){
+        post.websiteId = vm.state.website._id;
+        SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
+            console.log('post saved');
+            vm.state.post = savedPost.data;
         }).catch(function(error) {
             console.error('error saving post');
         });
     }
 
+    function postExists(){
+        return vm.state.post && vm.state.post._id;
+    }
 
 
     function init(element) {
