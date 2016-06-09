@@ -220,6 +220,7 @@
                 <div class="row block ssb-blog-editor-featured-image">
                     <div class="col-md-6">
                         <h4 class="text-u">Featured Image</h4>
+                        <i ng-if="vm.state.post.featured_image" class="fa fa-close" ng-click="vm.removeFeaturedImage(vm.state.post);"></i>
                         <div class="center" ng-click="vm.setFeaturedImage(vm.state.post);">
                             <div ng-if="vm.state.post.featured_image">
                                 <img ng-src="{{vm.state.post.featured_image}}" />
@@ -229,6 +230,7 @@
                                 <span>No Featured Image</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
 

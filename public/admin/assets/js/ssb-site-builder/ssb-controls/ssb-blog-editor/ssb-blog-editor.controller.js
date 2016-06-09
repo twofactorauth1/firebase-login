@@ -32,7 +32,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.savePost = savePost;
     vm.postExists = postExists;
     vm.setFeaturedImage = setFeaturedImage;
-
+    vm.removeFeaturedImage = removeFeaturedImage;
     vm.state.post = defaultPost();
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
@@ -168,10 +168,13 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
             if(SimpleSiteBuilderService.asset){
                 post.featured_image = SimpleSiteBuilderService.asset.url;
-                vm.savePost(post);
                 SimpleSiteBuilderService.asset = null;
             }
         })
+    }
+
+    function removeFeaturedImage(post) {
+        post.featured_image = null;
     }
 
     function init(element) {
