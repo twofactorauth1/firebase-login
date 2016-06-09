@@ -168,6 +168,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
             if(SimpleSiteBuilderService.asset){
                 post.featured_image = SimpleSiteBuilderService.asset.url;
+                vm.savePost(post);
                 SimpleSiteBuilderService.asset = null;
             }
         })
