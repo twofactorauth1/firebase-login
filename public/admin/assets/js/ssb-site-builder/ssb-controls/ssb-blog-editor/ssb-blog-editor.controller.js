@@ -136,14 +136,14 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function savePost(post){
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
-        //post.post_url = slugifyHandle(post.display_title);
+        post.post_url = slugifyHandle(post.display_title);
         SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
             toaster.pop('success', 'Post Saved', 'The post was saved successfully.');
         }).catch(function(error) {
-            console.error('error saving post');
-            toaster.pop('error', 'Error', 'Error updating post. Please try again.');
+            toaster.pop('error', 'Error', error.data ? error.data.message : "Error updating post. Please try again.");
+            //angular.element('<div>' + post.post_title + '</div>').focus();
         });
     }
 
