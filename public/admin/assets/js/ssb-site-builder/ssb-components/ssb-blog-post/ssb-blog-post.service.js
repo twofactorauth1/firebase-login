@@ -45,19 +45,24 @@
         function savePost(post) {
 
             function success(data) {
+
                 var post = _.findWhere(ssbBlogService.blog.posts, {
                     _id: data._id
                 });
-                if(post)
+
+                if (post) {
                     post = data;
-                else
+                } else {
                     ssbBlogService.blog.posts.push(data);
+                }
+
             }
 
             function error(error) {
                 console.error('SimpleSiteBuilderBlogService savePost error: ', JSON.stringify(error));
             }
-            if(post._id){
+
+            if(post._id) {
                 return (
                     ssbBlogRequest($http({
                         url: baseBlogAPIUrl + '/post/' + post._id,
@@ -65,8 +70,7 @@
                         data: angular.toJson(post)
                     }).success(success).error(error))
                 )
-            }
-            else{
+            } else {
                 return (
                     ssbBlogRequest($http({
                         url: baseBlogAPIUrl + '/post/',
@@ -108,6 +112,7 @@
             function error(error) {
                 console.error('SimpleSiteBuilderBlogService deletePost error: ', JSON.stringify(error));
             }
+
             return (
                 ssbBlogRequest($http({
                     url: baseBlogAPIUrl + '/post/' + post._id,
