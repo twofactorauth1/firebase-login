@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$modal'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$filter'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $modal) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $filter) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -136,6 +136,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function savePost(post){
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
+        //post.post_url = slugifyHandle(post.display_title);
         SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
@@ -148,6 +149,10 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     function postExists(){
         return vm.state.post && vm.state.post._id && vm.state.post.post_title;
+    }
+
+    function slugifyHandle(title){
+       return $filter('slugify')(title);
     }
 
     function setFeaturedImage(post) {

@@ -187,7 +187,7 @@
                 </button>
 
                 <button
-                    ng-disabled="vm.postExists()"
+                    ng-disabled="!vm.postExists()"
                     class="btn btn-default row block"
                     ng-click="vm.previewPost(vm.state.post)"
                     tooltip-placement="top"
