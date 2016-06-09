@@ -136,7 +136,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function savePost(post){
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
-        post.post_url = slugifyHandle(post.display_title);
+        post.post_url = slugifyHandle(angular.element('<div>' + post.post_title + '</div>').text().trim());
         SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
