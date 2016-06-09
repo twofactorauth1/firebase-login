@@ -2,22 +2,44 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', 'SimpleSiteBuilderBlogService'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$filter'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $filter) {
 
     console.info('site-builder blog-editor directive init...')
 
     var vm = this;
 
     vm.init = init;
+    vm.ssbEditor = true;
+    vm.ssbBlogEditor = true;
+
     vm.closeBlogPanel = closeBlogPanel;
 
     vm.uiState.activePostFilter = 'all';
+    vm.uiState.froalaEditorActive = false;
+    vm.editableElementSelectors = '.ssb-blog-editor-post-title, .ssb-blog-editor-post-body';
+    vm.editableElements = [];
 
     vm.toggleFeatured = toggleFeatured;
     vm.togglePublished = togglePublished;
     vm.filter = filter;
+    vm.duplicatePost = duplicatePost;
+    vm.previewPost = previewPost;
+    vm.deletePost = deletePost;
+    vm.editPost = editPost;
+    vm.savePost = savePost;
+    vm.postExists = postExists;
+    vm.setFeaturedImage = setFeaturedImage;
+    vm.removeFeaturedImage = removeFeaturedImage;
+
+
+    $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
+        if (id === 'edit' && !vm.uiState.froalaEditorActive) {
+            // $timeout(vm.activateFroalaToolbar);
+        }
+    }, true);
+
 
     function filter(item) {
 
@@ -47,25 +69,103 @@ function ssbSiteBuilderBlogEditorController($scope, SimpleSiteBuilderBlogService
 
     function toggleFeatured(post) {
         post.featured = !post.featured;
-        SimpleSiteBuilderBlogService.savePost(post).then(function() {
-            console.log('saved post');
-        }).catch(function(error) {
-            console.error('error saving post');
-        });
+        vm.savePost(post);
     }
 
     function togglePublished(post) {
-        post.post_status = 'PUBLISHED';
-        SimpleSiteBuilderBlogService.savePost(post).then(function() {
-            console.log('saved post');
-        }).catch(function(error) {
-            console.error('error saving post');
-        });
+        post.post_status = post.post_status !== 'PUBLISHED' ? 'PUBLISHED' : 'DRAFT';
+        vm.savePost(post);
     }
 
     function closeBlogPanel() {
-        vm.uiState.openBlogPanel = { name: '', id: '' };
-        vm.uiState.openSidebarPanel = '';
+        $rootScope.$broadcast('$destroyFroalaInstances');
+        $timeout(function() {
+            vm.uiState.openBlogPanel = { name: '', id: '' };
+            vm.uiState.openSidebarPanel = '';
+        }, 500);
+    }
+
+    function duplicatePost(post) {
+
+        SimpleSiteBuilderBlogService.duplicatePost(post).then(function() {
+            console.log('duplicated post');
+            toaster.pop('success', 'Duplicate Post Created', 'The post was created successfully.');
+        }).catch(function(error) {
+            console.error('error duplicating post');
+            toaster.pop('error', 'Error', 'Error creating duplicate post. Please try again.');
+        });
+
+    }
+
+    function previewPost(post) {
+        // TODO: open new window for preview
+        // URL: '/preview/blog/' + post.post_url
+    }
+
+    function deletePost(post) {
+
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "Do you want to delete this post?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes",
+            cancelButtonText: "Cancel",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+                SimpleSiteBuilderBlogService.deletePost(post).then(function() {
+                    console.log('deleted post');
+                    toaster.pop('success', 'Post Deleted', 'The post was deleted successfully.');
+                }).catch(function(error) {
+                    console.error('error deleting post');
+                    toaster.pop('error', 'Error', 'Error deleting post. Please try again.');
+                });
+            }
+        });
+
+    }
+
+    function editPost(post) {
+        vm.state.post = post;
+        vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
+    }
+
+    function savePost(post){
+        post.websiteId = vm.state.website._id;
+        post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
+        post.post_url = slugifyHandle(angular.element('<div>' + post.post_title + '</div>').text().trim());
+        SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
+            console.log('post saved');
+            vm.state.post = savedPost.data;
+            toaster.pop('success', 'Post Saved', 'The post was saved successfully.');
+        }).catch(function(error) {
+            toaster.pop('error', 'Error', error.data ? error.data.message : "Error updating post. Please try again.");
+            //angular.element('<div>' + post.post_title + '</div>').focus();
+        });
+    }
+
+    function postExists(){
+        return vm.state.post && vm.state.post._id && vm.state.post.post_title;
+    }
+
+    function slugifyHandle(title){
+       return $filter('slugify')(title);
+    }
+
+    function setFeaturedImage(post) {
+        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
+            if(SimpleSiteBuilderService.asset){
+                post.featured_image = SimpleSiteBuilderService.asset.url;
+                SimpleSiteBuilderService.asset = null;
+            }
+        })
+    }
+
+    function removeFeaturedImage(post) {
+        post.featured_image = null;
     }
 
     function init(element) {

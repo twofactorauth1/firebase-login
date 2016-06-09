@@ -1,0 +1,18 @@
+//-
+    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+extends snippets/blog_layout
+block content
+    div(id="body", class="content", ssb-data-styles, back-animation, style="height: {{contentHeight}}px;")
+        if templateIncludes
+            each tmpl in templateIncludes
+                script(type="text/ng-template" id="#{tmpl.id}")
+                    | !{tmpl.data}
+        if templates
+            script(type="text/ng-template" id="cachedTemplate")
+                | !{templates}
+        div(ng-view, class="page")
+
+        include ../public/scripts/modals/product-details-modal.html

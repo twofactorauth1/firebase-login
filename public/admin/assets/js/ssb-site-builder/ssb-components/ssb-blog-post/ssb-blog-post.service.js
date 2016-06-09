@@ -11,11 +11,14 @@
         var ssbBlogService = {};
         var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
         var basePageAPIUrl = '/api/1.0/cms/page/';
+        var baseBlogAPIUrl = '/api/2.0/cms/blog';
 
         ssbBlogService.loadDataFromPage = loadDataFromPage;
         ssbBlogService.getPost = getPost;
         ssbBlogService.getPosts = getPosts;
         ssbBlogService.savePost = savePost;
+        ssbBlogService.deletePost = deletePost;
+        ssbBlogService.duplicatePost= duplicatePost;
 
         ssbBlogService.blog = {
             posts: [],
@@ -30,11 +33,11 @@
          *
          */
         function ssbBlogRequest(fn) {
-            ssbBlogService.loading.value = ssbBlogService.loading.value + 1;
-            console.info('blog service | loading +1 : ' + ssbBlogService.loading.value);
+            //ssbBlogService.loading.value = ssbBlogService.loading.value + 1;
+            //console.info('blog service | loading +1 : ' + ssbBlogService.loading.value);
             fn.finally(function() {
-                ssbBlogService.loading.value = ssbBlogService.loading.value - 1;
-                console.info('blog service | loading -1 : ' + ssbBlogService.loading.value);
+                //ssbBlogService.loading.value = ssbBlogService.loading.value - 1;
+                //console.info('blog service | loading -1 : ' + ssbBlogService.loading.value);
             })
             return fn;
         }
@@ -42,20 +45,78 @@
         function savePost(post) {
 
             function success(data) {
+
                 var post = _.findWhere(ssbBlogService.blog.posts, {
                     _id: data._id
                 });
-                post = data;
+
+                if (post) {
+                    post = data;
+                } else {
+                    ssbBlogService.blog.posts.push(data);
+                }
+
             }
 
             function error(error) {
                 console.error('SimpleSiteBuilderBlogService savePost error: ', JSON.stringify(error));
             }
-            //624b61d8-d093-4cc3-bcc0-3f06fc2d162f/blog/3f5e1f03-4075-4638-936c-8fe78e60e057
+
+            if(post._id) {
+                return (
+                    ssbBlogRequest($http({
+                        url: baseBlogAPIUrl + '/post/' + post._id,
+                        method: 'PUT',
+                        data: angular.toJson(post)
+                    }).success(success).error(error))
+                )
+            } else {
+                return (
+                    ssbBlogRequest($http({
+                        url: baseBlogAPIUrl + '/post/',
+                        method: 'POST',
+                        data: angular.toJson(post)
+                    }).success(success).error(error))
+                )
+            }
+
+        }
+
+        function duplicatePost(post) {
+
+            function success(data) {
+                ssbBlogService.blog.posts.push(data);
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderBlogService duplicatePost error: ', JSON.stringify(error));
+            }
+
             return (
                 ssbBlogRequest($http({
-                    url: basePageAPIUrl + '/blog/' + page._id,
+                    url: baseBlogAPIUrl + '/duplicate/post/',
                     method: 'POST',
+                    data: angular.toJson(post)
+                }).success(success).error(error))
+            )
+
+        }
+
+        function deletePost(post) {
+            var postId = post._id;
+            function success(data) {
+                console.log("post deleted");
+                ssbBlogService.blog.posts = _.without(ssbBlogService.blog.posts, _.findWhere(ssbBlogService.blog.posts, {_id: postId}));
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderBlogService deletePost error: ', JSON.stringify(error));
+            }
+
+            return (
+                ssbBlogRequest($http({
+                    url: baseBlogAPIUrl + '/post/' + post._id,
+                    method: 'delete',
                     data: angular.toJson(post)
                 }).success(success).error(error))
             )

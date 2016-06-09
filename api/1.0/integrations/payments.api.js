@@ -309,7 +309,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 paymentsManager.createStripeSubscription(customerId, planId, accountId, userId, coupon, setupFee, function(err, sub) {
                     if(err) {
                         invoiceItems.forEach(function(item, index) {
-                            stripeDao.deleteInvoiceItem(item._id, null, function(err, confirmation) {
+                            stripeDao.deleteInvoiceItem(item.id, null, function(err, confirmation) {
                                 if (err) {
                                     self.log.error(accountId, userId, 'Error deleting invoice item: ' + err);
                                 }

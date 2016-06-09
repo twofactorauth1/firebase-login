@@ -74,4 +74,213 @@ ssb-blog-editor {
         opacity: .85;
     }
 
+    .ssb-sidebar-inner .editor-group {
+        overflow: scroll;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .ssb-sidebar-panel-header .ssb-sidebar-sub-heading {
+        padding-left: 15px;
+    }
+
+    .ssb-sidebar-section-panel-scrollable {
+        min-height: calc(~"100vh - 250px");
+        max-height: none;
+    }
+
+}
+
+.ssb-blog-edit-writing-mode {
+
+    .fr-toolbar, .fr-inline {
+        // display: block!important;
+        @media screen and (max-width: 767px) {
+            width: auto;
+            height: auto;
+            line-height: normal;
+        }
+    }
+
+    ssb-topbar {
+
+        .ssb-blog-post-back {
+            padding: 20px 15px;
+            line-height: 1;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .close-panel {
+            top: 18px;
+            font-size: 25px;
+            right: 15px;
+        }
+
+        @media screen and (max-width: 767px) {
+            pointer-events: none;
+            background: transparent;
+            z-index: 1;
+
+            .ssb-topbar-inner {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                // overflow: hidden;
+            }
+
+            .ssb-blog-post-back {
+
+                color: #5B5B60;
+                position: relative;
+                padding: 10px 15px 0 0;
+                width: 45px;
+                pointer-events: auto;
+
+                span {
+                    position: absolute;
+                    top: 0;
+                    left: 25px;
+                    // line-height: 30px;
+                }
+
+            }
+
+            .close-panel {
+                color: #5B5B60;
+                top: 7px;
+                right: 12px;
+                pointer-events: auto;
+            }
+
+        }
+
+        @media screen and (min-width: 768px) {
+            .ssb-topbar-inner > .pull-left,
+            .ssb-topbar-inner>.pull-right {
+                border-right: none;
+            }
+        }
+
+        .ui-select-container {
+            display: none;
+        }
+
+    }
+
+    ssb-sidebar {
+
+        width: 100%;
+
+        .ssb-sidebar-icons {
+            @media screen and (max-width: 767px) {
+                display: none;
+            }
+        }
+
+        .ssb-sidebar-inner .editor-group {
+            @media screen and (max-width: 767px) {
+                top: 0;
+            }
+        }
+
+    }
+
+    .ssb-sidebar-panel-header {
+        display: none;
+    }
+
+    .site-editor-group-blog {
+
+        width: 100%;
+
+        @media screen and (min-width: 768px) {
+            width: calc(~"100% - 70px");
+            max-width: none;
+        }
+
+    }
+
+    .ssb-sidebar-icons .nav-tab:not(.nav-tab-is-active) {
+        opacity: .5
+    }
+
+    .ssb-sidebar-section-panel-scrollable {
+
+        @media screen and (max-width: 767px) {
+            height: calc(~"100vh - 50px");
+        }
+
+    }
+
+    .ssb-blog-editor-scrollable-container {
+        @media screen and (min-width: 768px) {
+            .flex-container;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-flow: row wrap;
+        }
+    }
+
+    .ssb-blog-editor-controls,
+    .ssb-blog-editor {
+        @media screen and (min-width: 768px) {
+            min-height: calc(~"100vh - 110px");
+        }
+    }
+
+    .ssb-blog-editor {
+
+        font-size: 16px;
+        // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        padding: 60px 15px 40px;
+        min-height: calc(~"100vh - 300px");
+
+        @media screen and (min-width: 768px) {
+            flex: 1 1 400px;
+            padding: 40px 25px;
+            min-height: none;
+        }
+
+    }
+
+    .ssb-blog-editor-controls {
+
+        padding: 40px 15px;
+        background: @lightGrey;
+
+        @media screen and (min-width: 768px) {
+            flex: 1;
+            padding: 40px 25px;
+        }
+
+
+        & > .row {
+            margin: 10px 0 20px;
+        }
+
+        .ssb-blog-editor-tags,
+        .ssb-blog-editor-featured-image {
+            h4 {
+                padding-top: 5px;
+                border-top: 1px solid @grey;
+            }
+        }
+
+        .ssb-blog-editor-featured-image {
+            cursor: pointer;
+            .fa-close{
+                position: absolute;
+                right:15px;
+            }
+        }
+
+    }
+
+    .ssb-blog-editor-post-title {
+        margin: 0 0 1em;
+    }
+
 }

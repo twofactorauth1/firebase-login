@@ -50,7 +50,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Contacts';
                 ret.data = [
                     {
-                        analyticDataLabel: 'MTD CUSTOMERS',
+                        analyticDataLabel: 'MTD CONTACTS',
                         analyticDataValue: DashboardService.state.analytics.contacts.total
                     },
                     {
@@ -105,7 +105,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Revenue';
                 ret.data = [
                     {
-                        analyticDataLabel: 'YTD NEW REVENUE',
+                        analyticDataLabel: 'YTD NEW REV.',
                         analyticDataValue: '$' + DashboardService.state.analytics.revenue.YTDTotalAmount
                     },
                     {

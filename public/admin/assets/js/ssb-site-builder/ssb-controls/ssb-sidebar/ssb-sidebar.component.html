@@ -194,7 +194,7 @@
                     <li ng-if="!vm.uiState.isBlogPage">
                         <label>
                             <h5>Visit Published Page:</h5>
-                            <a href="/{{vm.state.page.handle}}">{{vm.state.page.handle}}</a>
+                            <a href="/{{vm.state.page.handle}}" target="_blank">{{vm.state.page.handle}}</a>
                         </label>
                     </li>
                 </ul>
@@ -443,8 +443,7 @@
                 <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Manage Posts', id: 'manage' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                     <i class="fa fa-align-justify display-ib"></i> Manage Posts
                 </button>
-
-                <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+                <button ng-click="vm.state.post = vm.uiState.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                     <i class="fa fa-plus display-ib"></i> New Post
                 </button>
 

@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderTopbarController', ssbSiteBuilderTopbarController);
 
-ssbSiteBuilderTopbarController.$inject = ['$scope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', '$location', 'SweetAlert', 'toaster'];
+ssbSiteBuilderTopbarController.$inject = ['$scope', '$rootScope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', '$location', 'SweetAlert', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, SimpleSiteBuilderService, $modal, $location, SweetAlert, toaster) {
+function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $filter, SimpleSiteBuilderService, $modal, $location, SweetAlert, toaster) {
 
     console.info('site-build topbar directive init...')
 
@@ -17,6 +17,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     vm.revertPage = revertPage;
     vm.publishPage = publishPage;
     vm.hideActiveToolTips = hideActiveToolTips;
+    vm.closeBlogPanel = closeBlogPanel;
 
     function loadPage(page) {
         if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
@@ -201,6 +202,14 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
 
     function hideActiveToolTips() {
         angular.element('.tooltip').remove();
+    }
+
+    function closeBlogPanel() {
+        $rootScope.$broadcast('$destroyFroalaInstances');
+        $timeout(function() {
+            vm.uiState.openBlogPanel = { name: '', id: '' };
+            vm.uiState.openSidebarPanel = '';
+        }, 500);
     }
 
 

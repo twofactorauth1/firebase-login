@@ -73,7 +73,9 @@ _.extend(view.prototype, BaseView.prototype, {
             }
             logger.trace('<< show');
 
-            cmsManager.listBlogPosts(data.account._id, 50, [$$.m.BlogPost.status.PUBLISHED], function (err, value) {
+            var statusArray = [$$.m.BlogPost.status.PRIVATE,$$.m.BlogPost.status.DRAFT,$$.m.BlogPost.status.FUTURE,$$.m.BlogPost.status.PUBLISHED];
+
+            cmsManager.listBlogPosts(data.account._id, 50, statusArray, function (err, value) {
 
                 if (err) {
                     console.error('<< angular.admin.server.view: listBlogPosts error ', err);

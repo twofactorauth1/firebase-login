@@ -995,6 +995,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
             return "Page handle cannot be a system route.";
         }
+        // update hiddenOnPages object for updated handle
+        else{
+            _.each(vm.state.page.sections, function (section, index) {
+                if(section.hiddenOnPages && section.hiddenOnPages[vm.state.page.handle]){
+                    delete section.hiddenOnPages[vm.state.page.handle];
+                    section.hiddenOnPages[pageHandle] = true;
+                }
+            })
+        }
     }
 
     function loadPage(page) {

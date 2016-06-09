@@ -43,7 +43,9 @@ var express = require('express')
     , appConfig = require('./configs/app.config')
     , mongoConfig = require('./configs/mongodb.config')
     , MongoStore = require('connect-mongo-store')(express)
-    , mongoStore = new MongoStore(mongoConfig.MONGODB_CONNECT)
+    , mongoskin = require('mongoskin')
+    , mongodb = mongoskin.db(mongoConfig.MONGODB_CONNECT, {safe: true})
+    , mongoStore = new MongoStore(mongodb)
     , consolidate = require('consolidate')
     , busboy = require('connect-busboy');
 

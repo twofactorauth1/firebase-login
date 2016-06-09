@@ -1,0 +1,69 @@
+//-
+    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+
+doctype html
+//if lt IE 7
+    html(class="no-js ie6 oldie", lang="en")
+//if IE 7
+    html(class="no-js ie7 oldie", lang="en")
+//if IE 8
+    html(class="no-js ie8 oldie", lang="en")
+// [if gt IE 8] <!
+html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main", ng-init='init(\''+account.website._id+'\')', ng-class="{'hideIntercom': hideIntercom}")
+    // <![endif]
+    head
+        block head
+            //- override this to include a different head section (e.g. requirehead.jade)
+            block headattributes
+                include index_head_styles
+                include index_head_scripts
+            title(data-ng-bind='pageTitle()')
+            meta(charset="utf-8")
+            meta(name="viewport", content="width=device-width, initial-scale=1.0")
+            meta(name="description", content=seo.description)
+            meta(name="keywords", content=seo.keywords)
+            meta(name="author", content=author)
+            meta(name="fragment" content="!")
+            meta(property='og:type', content=og.type)
+            meta(property='og:title', content=og.title)
+            if og.image
+                meta(property='og:image', content=og.image)
+            base(href="/")
+            if account.website.settings.favicon
+                link(rel="shortcut icon", href=account.website.settings.favicon)
+            else
+                link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico')
+            if canonicalUrl
+                link(rel="canonical", href=canonicalUrl)
+            if account.website.metatags
+                each meta in account.website.metatags
+                    meta(name=meta.name content=meta.value)
+            if account.website.settings.https == true
+                script(type="text/javascript").
+                    if(window.location.protocol != 'https:') {
+                      location.href = location.href.replace("http://", "https://");
+                    }
+            if components
+                script(type="text/javascript").
+                    var components = !{components};
+                    window.indigenous = window.indigenous || {};
+                    window.indigenous.precache = window.indigenous.precache || {};
+                    window.indigenous.precache.pages = {components:components};
+
+        //- script.
+        //-     var test = !{JSON.stringify(account.website)};
+
+    body(data-styles, class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), ng-cloak)
+        block body_content
+            div(id='fb-root')
+            div(id='toolbar')
+        block content
+        block footer_scripts
+            if !includeEditor
+                script(type="text/javascript").
+                    window.analytics.identify({accountId:#{account._id}});
+        block body_scripts
+            include index_body_scripts
