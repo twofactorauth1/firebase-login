@@ -167,7 +167,7 @@
 
                 </div>
 
-                <button
+                <button ng-disabled="!vm.state.post.post_title"
                     class="btn btn-default row block"
                     ng-click="vm.savePost(vm.state.post)"
                     tooltip-placement="top"
