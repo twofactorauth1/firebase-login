@@ -28,26 +28,17 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.previewPost = previewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
-    vm.newPost = newPost;
     vm.savePost = savePost;
     vm.postExists = postExists;
     vm.setFeaturedImage = setFeaturedImage;
     vm.removeFeaturedImage = removeFeaturedImage;
-    vm.state.post = defaultPost();
+
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
             // $timeout(vm.activateFroalaToolbar);
         }
     }, true);
-
-
-    function defaultPost(){
-        return {
-            post_title: 'Title',
-            post_content: 'Tell your story...',
-        };
-    }
 
 
     function filter(item) {
@@ -142,11 +133,6 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
     }
 
-    function newPost() {
-        vm.state.post = defaultPost();
-        vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
-    }
-
     function savePost(post){
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
@@ -161,7 +147,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function postExists(){
-        return vm.state.post && vm.state.post._id;
+        return vm.state.post && vm.state.post._id && vm.state.post.post_title;
     }
 
     function setFeaturedImage(post) {
