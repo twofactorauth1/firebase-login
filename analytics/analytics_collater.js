@@ -47,7 +47,7 @@ var collator = {
             if(list != null && list.length > 0) {
                 log.info('processing ' + list.length + ' session events');
                 //_.each(list,  self._processSessionEvent, self);
-                async.each(list, collator._processSessionEventWithCallback.bind(self), function(err){
+                async.eachSeries(list, collator._processSessionEventWithCallback.bind(self), function(err){
                     if(err) {
                         log.error('error processing session events.');
                         if(cb) {
