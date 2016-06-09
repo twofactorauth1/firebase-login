@@ -3166,21 +3166,39 @@ module.exports = {
         if(!blogPost.get("post_url")){
             blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
         }
-        blogPostDao.createPost(blogPost, function(err, savedPost){
+        var query = {
+            accountId: accountId,
+            websiteId: blogPost.get("websiteId"),
+            post_url: blogPost.get("post_url")
+        }
+        blogPostDao.exists(query, $$.m.BlogPost, function(err, value){
             if(err) {
-                self.log.error('Error creating post: ' + err);
+                self.log.error(accountId, userId, 'Error getting post:', err);
                 return fn(err, null);
             } else {
-                return fn(err, savedPost);
+                if(value === true){
+                    return fn("Post already exists", null);
+                }
+                else{
+                    blogPostDao.createPost(blogPost, function(err, savedPost){
+                        if(err) {
+                            self.log.error('Error creating post: ' + err);
+                            return fn(err, null);
+                        } else {
+                            return fn(err, savedPost);
+                        }
+                    });
+                }
             }
         });
+
     },
 
     createDuplicatePost: function(accountId, blogPost, fn) {
         var self = this;
         self.log.debug('>> createDuplicatePost');
         blogPost.set('post_title', blogPost.get('post_title') + ' (copy)');
-        blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
+        blogPost.set("post_url", blogPost.get('post_url') + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true));
 
         blogPostDao.createPost(blogPost, function(err, savedPost){
             if(err) {
@@ -3198,14 +3216,33 @@ module.exports = {
           blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
         }
         console.dir('blogPost '+JSON.stringify(blogPost));
-        blogPostDao.saveOrUpdate(blogPost, function(err, savedPost){
+        var query = {
+            accountId: accountId,
+            websiteId: blogPost.get("websiteId"),
+            post_url: blogPost.get("post_url"),
+            _id : { $ne: blogPost.id() }
+        }
+        blogPostDao.exists(query, $$.m.BlogPost, function(err, value){
             if(err) {
-                self.log.error('Error creating post: ' + err);
+                self.log.error(accountId, userId, 'Error getting post:', err);
                 return fn(err, null);
             } else {
-                return fn(err, savedPost);
+                if(value === true){
+                    return fn("Post already exists", null);
+                }
+                else{
+                    blogPostDao.saveOrUpdate(blogPost, function(err, savedPost){
+                        if(err) {
+                            self.log.error('Error creating post: ' + err);
+                            return fn(err, null);
+                        } else {
+                            return fn(err, savedPost);
+                        }
+                    });
+                }
             }
         });
+
     },
 
     deleteBlogPost: function(accountId, postId, fn) {

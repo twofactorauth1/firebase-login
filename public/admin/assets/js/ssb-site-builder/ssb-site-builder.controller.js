@@ -131,7 +131,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isBlogEditMode: false,
 
-        isBlogEditWritingMode: false
+        isBlogEditWritingMode: false,
+
+        defaultPost: {
+            post_title: 'Title',
+            post_content: 'Tell your story...'
+        }
 
     };
 

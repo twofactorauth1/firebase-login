@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$filter'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $filter) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -28,25 +28,17 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.previewPost = previewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
-    vm.newPost = newPost;
     vm.savePost = savePost;
     vm.postExists = postExists;
+    vm.setFeaturedImage = setFeaturedImage;
+    vm.removeFeaturedImage = removeFeaturedImage;
 
-    vm.state.post = defaultPost();
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
             // $timeout(vm.activateFroalaToolbar);
         }
     }, true);
-
-
-    function defaultPost(){
-        return {
-            post_title: 'Title',
-            post_content: 'Tell your story...',
-        };
-    }
 
 
     function filter(item) {
@@ -141,28 +133,40 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
     }
 
-    function newPost() {
-        vm.state.post = defaultPost();
-        vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
-    }
-
     function savePost(post){
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
+        post.post_url = slugifyHandle(angular.element('<div>' + post.post_title + '</div>').text().trim());
         SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
             toaster.pop('success', 'Post Saved', 'The post was saved successfully.');
         }).catch(function(error) {
-            console.error('error saving post');
-            toaster.pop('error', 'Error', 'Error updating post. Please try again.');
+            toaster.pop('error', 'Error', error.data ? error.data.message : "Error updating post. Please try again.");
+            //angular.element('<div>' + post.post_title + '</div>').focus();
         });
     }
 
     function postExists(){
-        return vm.state.post && vm.state.post._id;
+        return vm.state.post && vm.state.post._id && vm.state.post.post_title;
     }
 
+    function slugifyHandle(title){
+       return $filter('slugify')(title);
+    }
+
+    function setFeaturedImage(post) {
+        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
+            if(SimpleSiteBuilderService.asset){
+                post.featured_image = SimpleSiteBuilderService.asset.url;
+                SimpleSiteBuilderService.asset = null;
+            }
+        })
+    }
+
+    function removeFeaturedImage(post) {
+        post.featured_image = null;
+    }
 
     function init(element) {
 
