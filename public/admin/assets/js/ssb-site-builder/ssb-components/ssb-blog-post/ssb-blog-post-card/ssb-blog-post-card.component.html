@@ -20,10 +20,12 @@
             </h1>
 
             <div ng-if="!vm.compactView" class="ssb-blog-byline">
+                <i class="fa fa-calendar"></i>
                 <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
                     {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
                 </time>
                 <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                    <i class="fa fa-user"></i>
                     <span itemprop="name">
                         <a href="/author/{{vm.post.post_author}}" itemprop="url" rel="author">{{vm.post.post_author}}</a>
                     </span>
@@ -32,12 +34,7 @@
 
             <section itemprop="articleBody">
                 <p ng-if="vm.post.post_excerpt.length">{{vm.post.post_excerpt}}</p>
-                <p ng-if="!vm.post.post_excerpt.length">
-                    <div class="ssb-in-context-info">
-                        <i class="fa fa-info-circle"></i>
-                        <span>Author a post excerpt to give a summary of the post.</span>
-                    </div>
-                </p>
+                <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}">READ MORE <i class="fa fa-long-arrow-right"></i></a>
             </section>
         </div>
     </div>
