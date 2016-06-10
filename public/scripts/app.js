@@ -83,7 +83,7 @@ var mainApp = angular
                         return '<div data-ng-include="\'blog.html\'"></div>';
                     } else {
                         var s = '<div data-ng-include="';
-                        s += " '/template/" + urlattr.name.toLowerCase();
+                        s += " '/template/blog";
                         if(urlattr.cachebuster) {
                             s+='?cachebuster=' + urlattr.cachebuster;
                         }
