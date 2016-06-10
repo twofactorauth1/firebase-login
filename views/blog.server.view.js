@@ -29,7 +29,7 @@ _.extend(view.prototype, BaseView.prototype, {
         var self = this;
         self.log.debug(accountId, null, '>> renderBlogPage');
         var data = {ssbBlog:true};
-        var handle = 'blog';
+        var handle = 'blog-list';
         async.waterfall([
             function getWebpageData(cb){
                 ssbManager.getDataForWebpage(accountId, handle, function(err, value){
