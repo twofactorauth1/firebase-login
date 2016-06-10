@@ -195,8 +195,7 @@
                         <label>
                             <h5>Visit Published Page:</h5>
                             <a ng-if="!vm.uiState.isBlogPage" href="/{{vm.state.page.handle}}" target="_blank">/{{vm.state.page.handle}}</a>
-                            <a ng-if="vm.state.page.handle === 'blog-list'" href="/blog" target="_blank">/blog</a>
-                            <a ng-if="vm.state.page.handle === 'blog-post'" href="/blog" target="_blank">/blog</a>
+                            <a ng-if="vm.state.page.handle === 'blog-list' || vm.state.page.handle === 'blog-post'" href="/blog" target="_blank">/blog</a>
                         </label>
                     </li>
                 </ul>
