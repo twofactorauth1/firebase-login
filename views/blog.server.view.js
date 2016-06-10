@@ -11,8 +11,12 @@ var segmentioConfig = require('../configs/segmentio.config.js');
 var fs = require('fs');
 var async = require('async');
 var ssbManager = require('../ssb/ssb_manager');
+var ngParser = require('../utils/ngparser');
+var jsonldbuilder = require('../utils/jsonldbuilder');
+var _req;
 
 var view = function (req, resp, options) {
+    this._req = req;
     this.init.apply(this, arguments);
 };
 
@@ -24,7 +28,7 @@ _.extend(view.prototype, BaseView.prototype, {
     renderBlogPage: function(accountId) {
         var self = this;
         self.log.debug(accountId, null, '>> renderBlogPage');
-        var data = {};
+        var data = {ssbBlog:true};
         var handle = 'blog';
         async.waterfall([
             function getWebpageData(cb){
@@ -96,7 +100,13 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
             },
 
-            function addBlogTemplate(webpageData, page, cb) {
+            function getBlogPosts(webpageData, page, cb) {
+                ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){
+                    cb(err, webpageData, page, posts)
+                });
+            },
+
+            function addBlogTemplate(webpageData, page, posts, cb) {
                 /*
                  * Need to wrap this:
                  * <div class="ssb-layout__header_2-col_footer">
@@ -159,46 +169,77 @@ _.extend(view.prototype, BaseView.prototype, {
                     });
 
                     template += '</div></div><div class="ssb-page-layout-row"><div class="col-xs-12 col-md-8">';
-
+                    var blogPostIndex = 0;
                     _.each(page.get('layoutModifiers')['2-col-1'], function(idx){
-                        template += '<ssb-page-section section="sections_' + idx + '" index="' + index + '" class="ssb-page-section" sectionData="{data:1}"></ssb-page-section>';
+                        if(sections[idx].filter === 'blog') {
+                            blogPostIndex = idx;
+                            //sections[idx].components[0].posts = posts;
+                            //sections[idx].components[0].blog = {posts: posts};
+                            self.log.debug('posts:', sections[idx].components[0]);
+                        }
                         index++;
                     });
+                    fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-list/ssb-blog-post-list.component.html', 'utf-8', function(err, html){
+                        if(err) {
+                            self.log.error('Error reading post-list:', err);
+                            cb(err);
+                        } else {
+                            fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-card/ssb-blog-post-card.component.html', 'utf-8', function (err, cardHtml) {
+                                if(err) {
+                                    self.log.error('Error reading post-card:', err);
+                                    cb(err);
+                                } else {
+                                    var substitutions = [{name:'ssb-blog-post-card-component', value:cardHtml, prefix:'vm'}];
+                                    var jsonPosts = [];
+                                    _.each(posts, function(post){jsonPosts.push(post.toJSON())});
+                                    var context = {
+                                        vm: {
+                                            component: sections[blogPostIndex].components[0],
+                                            blog: {
+                                                posts: jsonPosts
+                                            }
+                                        }
 
-                    template +='</div><div class="col-xs-12 col-md-4">';
+                                    };
+                                    self.log.debug('context:', context);
+                                    ngParser.parseHtml(html, context, substitutions, function(err, value){
+                                        template += value;
+                                        template +='</div><div class="col-xs-12 col-md-4">';
 
-                    _.each(page.get('layoutModifiers')['2-col-2'], function(idx){
-                        template += '<ssb-page-section section="sections_' + idx + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
-                        index++;
+                                        _.each(page.get('layoutModifiers')['2-col-2'], function(idx){
+                                            template += '<ssb-page-section section="sections_' + idx + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+                                            index++;
+                                        });
+
+                                        template += '</div></div><div class="ssb-page-layout-row"><div class="col-xs-12">';
+
+                                        _.each(page.get('layoutModifiers')['footer'], function(idx){
+                                            template += '<ssb-page-section section="sections_' + idx + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+                                            index++;
+                                        });
+
+                                        template +='</div></div></div>';
+                                        self.log.debug('template:', template);
+                                        data.templateIncludes.push({
+                                            id:'blog.html',
+                                            data:template
+                                        });
+                                        cb(null, webpageData, page, posts);
+                                    });
+                                }
+                            });
+                        }
                     });
-
-                    template += '</div></div><div class="ssb-page-layout-row"><div class="col-xs-12">';
-
-                    _.each(page.get('layoutModifiers')['footer'], function(idx){
-                        template += '<ssb-page-section section="sections_' + idx + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
-                        index++;
-                    });
-
-                    template +='</div></div></div>';
-                    self.log.debug('template:', template);
-                    data.templateIncludes.push({
-                        id:'blog.html',
-                        data:template
-                    });
-
                 } else {
                     data.templateIncludes.push({
                         id: 'blog.html',
                         data: '<ssb-page-section section="sections_0" index="0" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_1" index="1" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_2" index="2" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_3" index="3" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_4" index="4" class="ssb-page-section"></ssb-page-section>'
                     });
+                    cb(null, webpageData, page, posts);
                 }
-
-
-
-                cb(null, webpageData, page);
             },
 
-            function prepareForRender(value, page, cb) {
+            function prepareForRender(value, page, posts, cb) {
                 var pageHolder = {};
                 pageHolder[page.get('handle')] = page.toJSON('frontend');
 
@@ -252,43 +293,25 @@ _.extend(view.prototype, BaseView.prototype, {
                     self.log.warn('Website Settings is null for account ' + accountId);
                     data.account.website.settings = {};
                 }
+                var jsonldHolder = [];
 
-                var blogUrlParts = [];
-                if (self.req.params.length) {
-                    blogUrlParts = self.req.params[0].split('/');
-                }
-                if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
-                    cmsDao.getBlogPostForWebsite(accountId, blogUrlParts[1], function (err, post) {
-                        if (post) {
-                            data.og.type = 'article';
-                            data.og.title = post.attributes.post_title;
-                            data.og.image = post.attributes.featured_image;
-                            if (data.og.image && data.og.image.indexOf("//") === 0) {
-                                data.og.image = "http:" + data.og.image;
-                            }
-                        }
-                        app.render('blog', data, function (err, html) {
-                            if (err) {
-                                self.log.error('Error during render: ' + err);
-                            }
+                _.each(posts, function(post){
+                    var url = self._req.originalUrl;
+                    var orgName = value.business.name;
+                    var logoUrl = value.business.logo;
+                    jsonldHolder.push(jsonldbuilder.buildForBlogPost(post, url, orgName, logoUrl));
+                });
+                data.jsonld = JSON.stringify(jsonldHolder);
+                app.render('blog', data, function (err, html) {
+                    if (err) {
+                        self.log.error('Error during render: ' + err);
+                    }
 
-                            self.resp.send(html);
-                            self.cleanUp();
-                            self = data = value = null;
-                        });
-                    });
-                } else {
-                    app.render('blog', data, function (err, html) {
-                        if (err) {
-                            self.log.error('Error during render: ' + err);
-                        }
-
-                        self.resp.send(html);
-                        self.cleanUp();
-                        self.log.debug('<< renderBlogPage');
-                        self = data = value = null;
-                    });
-                }
+                    self.resp.send(html);
+                    self.cleanUp();
+                    self.log.debug('<< renderBlogPage');
+                    self = data = value = null;
+                });
             }
         ], function done(err){
             self.log.error('Error in render:', err);

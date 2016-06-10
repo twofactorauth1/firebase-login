@@ -77,6 +77,24 @@ var mainApp = angular
                 templateUrl: '../views/404.html',
                 controller: 'NotFoundCtrl as notfound'
             })
+            .when('/blog', {
+                template: function(urlattr) {
+                    if(window.indigenous.ssbBlog === true) {
+                        return '<div data-ng-include="\'blog.html\'"></div>';
+                    } else {
+                        var s = '<div data-ng-include="';
+                        s += " '/template/" + urlattr.name.toLowerCase();
+                        if(urlattr.cachebuster) {
+                            s+='?cachebuster=' + urlattr.cachebuster;
+                        }
+                        s+= "'";
+                        s += ' "></div>';
+                        return s;
+                    }
+
+                },
+                controller: 'CacheCtrl as cacheCtrl'
+            })
             .when('/:name', {
                 template: function(urlattr) {
 

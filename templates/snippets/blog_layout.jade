@@ -53,6 +53,16 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     window.indigenous.precache = window.indigenous.precache || {};
                     window.indigenous.precache.pages = {components:components};
 
+            script(type="text/javascript").
+                //we know this is an ssbBlog
+                window.indigenous = window.indigenous || {};
+                window.indigenous.ssbBlog = true;
+
+            if jsonld
+                script(type="application/ld+json").
+                    !{jsonld};
+
+
         //- script.
         //-     var test = !{JSON.stringify(account.website)};
 
