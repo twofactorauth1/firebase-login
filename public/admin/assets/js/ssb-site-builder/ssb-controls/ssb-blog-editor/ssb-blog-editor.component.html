@@ -21,8 +21,8 @@
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
-            <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Manage Blog Pages', id: 'manage' });" class="ssb-sidebar-section-panel-btn btn btn-link">
-                <i class="fa fa-align-justify display-ib"></i> Manage Blog Pages
+            <button ng-click="vm.uiState.navigation.blogPanel.loadPanel({ name: 'Manage Blog Templates', id: 'manage' });" class="ssb-sidebar-section-panel-btn btn btn-link">
+                <i class="fa fa-align-justify display-ib"></i> Manage Blog Templates
             </button>
 
 
@@ -203,7 +203,7 @@
 
             <div class="ssb-blog-editor">
 
-                <input type="text" class="ssb-blog-editor-post-title" ng-model="vm.state.post.post_title" placeholder="Title" />
+                <input autocomplete="false" type="text" class="ssb-blog-editor-post-title" ng-model="vm.state.post.post_title" placeholder="Title" />
 
                 <p
                     class="ssb-blog-editor-post-body"
@@ -223,21 +223,16 @@
                         <span class="text-u">Status:</span>
                         <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
 
-                        <div class="btn-group btn-group-sm row block clearfix" role="group" aria-label="Post Status">
+                        <div class="btn-group btn-group-lg row block clearfix" role="group" aria-label="Post Status">
 
-                            <!-- <button
-                                ng-disabled="!vm.postExists()"
-                                type="button"
+                            <button ng-disabled="!vm.state.post.post_title"
                                 class="btn btn-default"
+                                ng-click="vm.savePost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
-                                tooltip-html-unsafe="{{vm.state.post.post_status}}"
-                                ng-click="vm.togglePublished(vm.state.post)">
-
-                                <i ng-if="vm.state.post.post_status === 'PUBLISHED'" class="fa fa-file"></i>
-                                <i ng-if="vm.state.post.post_status !== 'PUBLISHED'" class="fa fa-file-o"></i>
-
-                            </button> -->
+                                tooltip="Save">
+                                <i class="fa fa-save"></i><span class="sr-only">Save</span>
+                            </button>
 
                             <button
                                 ng-disabled="!vm.postExists()"
@@ -253,36 +248,29 @@
 
                             </button>
 
+                            <button
+                                ng-disabled="!vm.postExists()"
+                                class="btn btn-default"
+                                ng-click="vm.publishPost(vm.state.post)"
+                                tooltip-placement="top"
+                                tooltip-append-to-body="true"
+                                tooltip="Publish">
+                                <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
+                            </button>
+
+                            <button
+                                ng-disabled="!vm.postExists()"
+                                class="btn btn-default"
+                                ng-click="vm.previewPost(vm.state.post)"
+                                tooltip-placement="top"
+                                tooltip-append-to-body="true"
+                                tooltip="Preview">
+                                <i class="fa fa-television"></i><span class="sr-only">Preview</span>
+                            </button>
+
+
                         </div>
 
-                        <button ng-disabled="!vm.state.post.post_title"
-                            class="btn btn-default row block"
-                            ng-click="vm.savePost(vm.state.post)"
-                            tooltip-placement="top"
-                            tooltip-append-to-body="true"
-                            tooltip="Save">
-                            <i class="fa fa-save"></i><span class="sr-only">Save</span>
-                        </button>
-
-                        <button
-                            ng-disabled="!vm.postExists()"
-                            class="btn btn-default row block"
-                            ng-click="vm.publishPost(vm.state.post)"
-                            tooltip-placement="top"
-                            tooltip-append-to-body="true"
-                            tooltip="Publish">
-                            <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
-                        </button>
-
-                        <button
-                            ng-disabled="!vm.postExists()"
-                            class="btn btn-default row block"
-                            ng-click="vm.previewPost(vm.state.post)"
-                            tooltip-placement="top"
-                            tooltip-append-to-body="true"
-                            tooltip="Preview">
-                            <i class="fa fa-television"></i><span class="sr-only">Preview</span>
-                        </button>
 
                         <!-- TODO: Date picker, maps to vm.post.publish_date -->
                         <div class="row block ssb-blog-editor-controls-date">
@@ -307,7 +295,7 @@
                                     <img ng-src="{{vm.state.post.featured_image}}" />
                                 </div>
                                 <div ng-if="!vm.state.post.featured_image">
-                                    <i class="full-width fa fa-image"></i>
+                                    <i class="fa fa-image"></i>
                                     <span>No Featured Image</span>
                                 </div>
                             </div>
