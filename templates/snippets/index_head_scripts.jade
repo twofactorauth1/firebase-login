@@ -97,6 +97,16 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor}!important;
         }
 
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn.btn-link, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn.btn-link:hover {
+            background-color: transparent;
+            border-color: transparent;
+            color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn.btn-link:hover, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn.btn-link:active, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn.btn-link:focus {
+            background-color: transparent;
+        }
+
         .ssb-theme-young-soul .navbar-toggle .icon-bar {
             /*background-color: #{account.website.themeOverrides.styles.primaryBtnTextColor};*/
         }
