@@ -48,8 +48,13 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
             path = 'single-post';
         }
 
-        if (path === 'blog' || path === '/blog' || path.indexOf("tag/") > -1 || path.indexOf("category/") > -1 || path.indexOf("author/") > -1) {
-            path = 'blog';
+        if (path === 'blog' || path === '/blog' || path==='blog-list' || path === '/blog-list' || path.indexOf("tag/") > -1 || path.indexOf("category/") > -1 || path.indexOf("author/") > -1) {
+            if(window.indigenous.ssbBlog === true) {
+                path = 'blog-list';
+            } else {
+                path = 'blog';
+            }
+
         }
 
         if (path.indexOf('/') === 0) {
