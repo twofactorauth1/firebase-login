@@ -81,7 +81,7 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
 
       scope.$watch('component.numtodisplay', function (newValue, oldValue) {
         if (newValue !== oldValue) {
-          scope.component.numtodisplay = newValue;
+          scope.component.numtodisplay = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
           filterProducts(scope.originalProducts, function () {
             scope.pageChanged(1);
           });
