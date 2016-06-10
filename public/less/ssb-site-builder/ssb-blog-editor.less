@@ -37,7 +37,7 @@ ssb-blog-editor {
         position: relative;
         border: 1px solid @lightGrey;
         border-radius: 2px;
-        padding: 20px 10px 50px;
+        padding: 25px 10px 50px;
         margin: 1em 0;
     }
 
@@ -241,6 +241,7 @@ ssb-blog-editor {
         // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         padding: 60px 15px 40px;
         min-height: calc(~"100vh - 300px");
+        overflow: hidden;
 
         @media screen and (min-width: 768px) {
             flex: 1 1 300px;
@@ -264,7 +265,16 @@ ssb-blog-editor {
             padding: 40px 25px;
         }
 
+        @media screen and (min-width: 960px) {
+            flex: 0 0 400px;
+        }
+
         .ssb-blog-editor-controls-inner {
+
+            @media screen and (min-width: 768px) {
+                position: relative;
+                width: 400px;
+            }
 
             .ssb-blog-editor-controls-inner-fixed > .row {
                 margin: 10px 0 20px;
@@ -272,8 +282,9 @@ ssb-blog-editor {
 
             .ssb-blog-editor-controls-inner-fixed {
 
-                @media screen and (min-width: 768px) {
+                @media screen and (min-width: 960px) {
                     position: fixed;
+                    width: calc(400px - 50px);
                 }
             }
 
@@ -297,6 +308,7 @@ ssb-blog-editor {
             }
 
             .fa-image {
+                width: 100%;
                 font-size: 80px;
             }
         }
