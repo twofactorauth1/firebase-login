@@ -3168,6 +3168,8 @@ module.exports = {
     createBlogPost: function(accountId, blogPost, fn) {
         var self = this;
         self.log.debug('>> createBlogPost');
+
+        //TODO: what's the intent here? would have to be blogPost.get('featured_image')
         if (blogPost.featured_image) {
           blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
         }
@@ -3175,6 +3177,9 @@ module.exports = {
         if(!blogPost.get("post_url")){
             blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
         }
+
+        blogPost.post_excerpt = self.getBlogPostExcerpt(blogPost.post_content);
+
         var query = {
             accountId: accountId,
             websiteId: blogPost.get("websiteId"),
@@ -3186,7 +3191,7 @@ module.exports = {
                 return fn(err, null);
             } else {
                 if(value === true){
-                    return fn("Post already exists", null);
+                    return fn("A post with this title already exists", null);
                 }
                 else{
                     blogPostDao.createPost(blogPost, function(err, savedPost){
@@ -3221,10 +3226,15 @@ module.exports = {
 
     updateBlogPost: function(accountId, blogPost, fn) {
         var self = this;
+
+        //TODO: what's the intent here? would have to be blogPost.get('featured_image')
         if (blogPost.featured_image) {
           blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
         }
-        console.dir('blogPost '+JSON.stringify(blogPost));
+
+        blogPost.set('post_excerpt', self.getBlogPostExcerpt(blogPost.get('post_content')));
+
+        // console.dir('blogPost '+JSON.stringify(blogPost));
         var query = {
             accountId: accountId,
             websiteId: blogPost.get("websiteId"),
@@ -3265,6 +3275,51 @@ module.exports = {
                 fn(null, value);
             }
         });
+    },
+
+    /*
+     * Create a post_excerpt based on post_content
+     *
+     * - Look for '<!-- more -->' as token for cut off point
+     * - If not present, cut off at 250 chars, try to be neat about spaces and punctuation
+     */
+    getBlogPostExcerpt: function (content) {
+        var $$$ = cheerio.load('<div id="temp_wrap">' + content + '</div>');
+        var excerpt = $$$('#temp_wrap').text();
+        var maxLength = 250;
+
+        var indexOfMoreToken = excerpt.lastIndexOf('<!-- more -->');
+
+        if (indexOfMoreToken !== -1) {
+            return excerpt.substr(0, indexOfMoreToken);
+        }
+
+        excerpt = excerpt.substr(0, maxLength);
+
+        //get last space and last of various punctuation
+        var lastIndexOfSpace = excerpt.lastIndexOf(" ");
+        var lastIndexOfPeriod = excerpt.lastIndexOf(".");
+        var lastIndexOfExclamation= excerpt.lastIndexOf("!");
+        var lastIndexOfQuestionMark = excerpt.lastIndexOf("?");
+
+        // console.log('excerpt', excerpt);
+        console.log('lastIndexOfSpace:', lastIndexOfSpace);
+        console.log('lastIndexOfPeriod:', lastIndexOfPeriod);
+        console.log('lastIndexOfExclamation:', lastIndexOfExclamation);
+        console.log('lastIndexOfQuestionMark:', lastIndexOfQuestionMark);
+
+        //get largest of indexes
+        var lastIndexCutOff = Math.max.apply(Math, [lastIndexOfSpace, lastIndexOfPeriod, lastIndexOfExclamation, lastIndexOfQuestionMark]);
+
+        //re-trim if we are in the middle of a word
+        excerpt = excerpt.substr(0, Math.min(excerpt.length, lastIndexCutOff + 1))
+
+        //if we've cut off at a space, trim by 1 and add ellipses
+        if (lastIndexCutOff === lastIndexOfSpace) {
+            excerpt = excerpt.substring(0, excerpt.length - 1) + '...';
+        }
+
+        return excerpt;
     }
 
 };
