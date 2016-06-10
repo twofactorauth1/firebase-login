@@ -7,7 +7,9 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         },
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
-            scope.newAccount = {};
+            scope.newAccount = {
+                email: ''
+            };
             scope.emailValidation = formValidations.email;
             scope.havingNetworkIssue = false;
 

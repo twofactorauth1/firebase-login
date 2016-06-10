@@ -86,7 +86,7 @@ defaultWorkstreams[1] = {
         {
             "_id" : 6,
             "name" : "Add contacts",
-            "link" : "/admin/#/customers",
+            "link" : "/admin/#/contacts",
             "helpText" : "Import contacts or create them individually.",
             "complete" : false,
             "optional" : false,

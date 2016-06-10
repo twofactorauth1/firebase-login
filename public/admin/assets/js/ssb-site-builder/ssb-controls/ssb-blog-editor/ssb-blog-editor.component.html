@@ -27,7 +27,7 @@
             ng-if="vm.uiState.openBlogPanel.id === 'manage'"
             class="margin-top-10">
 
-            <button ng-click="vm.newPost()" class="btn btn-primary">
+            <button ng-click="vm.state.post = vm.uiState.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })" class="btn btn-primary">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
@@ -167,7 +167,7 @@
 
                 </div>
 
-                <button
+                <button ng-disabled="!vm.state.post.post_title"
                     class="btn btn-default row block"
                     ng-click="vm.savePost(vm.state.post)"
                     tooltip-placement="top"
@@ -187,7 +187,7 @@
                 </button>
 
                 <button
-                    ng-disabled="vm.postExists()"
+                    ng-disabled="!vm.postExists()"
                     class="btn btn-default row block"
                     ng-click="vm.previewPost(vm.state.post)"
                     tooltip-placement="top"
@@ -220,6 +220,7 @@
                 <div class="row block ssb-blog-editor-featured-image">
                     <div class="col-md-6">
                         <h4 class="text-u">Featured Image</h4>
+                        <i ng-if="vm.state.post.featured_image" class="fa fa-close" ng-click="vm.removeFeaturedImage(vm.state.post);"></i>
                         <div class="center" ng-click="vm.setFeaturedImage(vm.state.post);">
                             <div ng-if="vm.state.post.featured_image">
                                 <img ng-src="{{vm.state.post.featured_image}}" />
@@ -229,6 +230,7 @@
                                 <span>No Featured Image</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
 

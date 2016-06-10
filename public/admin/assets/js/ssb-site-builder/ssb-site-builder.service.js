@@ -1313,6 +1313,7 @@
          */
         function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update, fields) {
             console.log('openModal >>> ', modal, controller, index);
+            ssbService.asset = undefined;
             var _modal = {
                 templateUrl: modal,
                 keyboard: false,
@@ -1327,8 +1328,11 @@
                     },
                     insertMedia: function () {
                         return function(asset) {
-
-                            ssbService.setMediaForComponent(asset, component, componentItemIndex, update, fields);
+                            if(component)
+                              ssbService.setMediaForComponent(asset, component, componentItemIndex, update, fields);
+                            else{
+                                ssbService.asset = asset;
+                            }
 
                         }
                     },
@@ -1492,6 +1496,10 @@
                     })
                 }
             });
+
+            if (ssbService.account.showhide.ssbFeatureFixedElements) {
+                ssbService.permissions.ssbFeatureFixedElements = true;
+            }
 
         }
 

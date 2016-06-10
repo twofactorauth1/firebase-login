@@ -175,6 +175,24 @@
 
 }
 
+.ssb-fixed, .ssb-fixed-clone-element {
+    position: fixed;
+    z-index: 5;
+
+    .container.inner-page {
+        padding: 10px!important;
+    }
+
+}
+
+.ssb-fixed-clone-element {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+
 @import "ssb-sections/ssb-header.less";
 @import "ssb-sections/ssb-hero.less";
 // @import "ssb-sections/ssb-hero-responsive-text.less";
