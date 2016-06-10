@@ -11,6 +11,11 @@ var jsonldbuilder = {
     log: $$.g.getLogger('jsonldbuilder'),
 
     buildForBlogPost: function(post, url, orgName, logoUrl) {
+        if(logoUrl.indexOf('//') === 0) {
+            logoUrl = 'http:' + logoUrl;
+        } else {
+            this.log('index:' + logoUrl.indexOf('//'));
+        }
         var JSONLD = {
             "@context": "http://schema.org",
             "@type": "BlogPosting",
@@ -19,12 +24,7 @@ var jsonldbuilder = {
                 "@id": url
             },
             "headline": post.get('post_title'),
-            "image": {
-                "@type": "ImageObject",
-                "url": post.get('featured_image')
-                // "height": 800,
-                // "width": 800
-            },
+
             "datePublished": post.get('publish_date'),
             "dateModified": post.get('modified').date,
             "author": {
@@ -43,7 +43,14 @@ var jsonldbuilder = {
             },
             "description": post.get('post_excerpt')
         };
-
+        if(post.get('featured_image')) {
+            JSONLD.image = {
+                "@type": "ImageObject",
+                    "url": post.get('featured_image'),
+                    "height": 800,
+                    "width": 800
+            };
+        }
         return JSONLD;
     }
 

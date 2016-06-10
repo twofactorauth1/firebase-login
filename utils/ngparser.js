@@ -28,7 +28,7 @@ var ngparser = {
                 if(!skipStack.peek()) {
                     //stack is empty
                     if(attribs['ng-if']) {
-                        console.log('ng-if?', attribs['ng-if']);
+                        //console.log('ng-if?', attribs['ng-if']);
                         var attribPath = attribs['ng-if'];
                         var contextValue = self._evaluateNGIF(context, attribPath);
                         if(!contextValue) {
@@ -39,7 +39,7 @@ var ngparser = {
                         }
                     }
                     if(attribs['ng-repeat']) {
-                        console.log('ng-repeat?', attribs['ng-repeat']);
+                        //console.log('ng-repeat?', attribs['ng-repeat']);
                         //skipStack.push(name);
                         //delete(attribs['ng-repeat']);
                         /*
@@ -79,7 +79,7 @@ var ngparser = {
                             });
 
                         }
-                        console.log('data:', data);
+                        //console.log('data:', data);
                         delete(attribs['ng-repeat']);
                         //check if we need to replace any html substitutions (ie sub-directives)
 
@@ -98,7 +98,7 @@ var ngparser = {
                             var tmpOutput = sub.value.replace(new RegExp(sub.prefix + '.' + alias, 'g'), alias);
                             skipStack.push({state:'REPEAT', tag:name, tmpContext:data, tmpOutput:tmpOutput, alias:alias, repeatStackSize:1});
                         } else {
-                            console.log('replace is false');
+                            //console.log('replace is false');
                             var tmpOutput = '<' + name + ' ';
                             _.each(_.keys(attribs), function(key){
                                 tmpOutput += key + '=\"' + attribs[key] + '\" ';
@@ -111,7 +111,7 @@ var ngparser = {
                     }
 
                     if(attribs['ng-src']) {
-                        console.log('ng-src', attribs['ng-src']);
+                        //console.log('ng-src', attribs['ng-src']);
                         attribs.src = attribs['ng-src'];
                         delete attribs['ng-src'];
                     }
@@ -171,7 +171,7 @@ var ngparser = {
                     var repeatState = skipStack.pop();
                     repeatState.repeatStackSize--;
                     if(repeatState.repeatStackSize === 0) {
-                        console.log('done repeating...');
+                        //console.log('done repeating...');
                         repeatState.tmpOutput += '</' + tagname + '>';
                         //right here we want to recursively parse tmpOutput with tmpContext
 
@@ -186,7 +186,7 @@ var ngparser = {
                         });
 
                     } else {
-                        console.log('still repeating...');
+                        //console.log('still repeating...');
                         repeatState.tmpOutput += '</' + tagname + '>';
                         skipStack.push(repeatState);
                     }
