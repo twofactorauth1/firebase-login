@@ -11,11 +11,9 @@ var jsonldbuilder = {
     log: $$.g.getLogger('jsonldbuilder'),
 
     buildForBlogPost: function(post, url, orgName, logoUrl) {
-        if(logoUrl.indexOf('//') === 0) {
+        if(logoUrl && logoUrl.indexOf('//') === 0) {
             logoUrl = 'http:' + logoUrl;
-        } else {
-            this.log('index:' + logoUrl.indexOf('//'));
-        }
+        } 
         var JSONLD = {
             "@context": "http://schema.org",
             "@type": "BlogPosting",
