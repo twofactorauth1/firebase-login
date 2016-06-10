@@ -16,7 +16,7 @@
             </div>
 
             <h1 class="media-heading" itemprop="name headline">
-                {{vm.post.display_title || vm.post.post_title}}
+                <a href="/blog/{{vm.post.post_url}}">{{vm.post.display_title || vm.post.post_title}}</a>
             </h1>
 
             <div ng-if="!vm.compactView" class="ssb-blog-byline">

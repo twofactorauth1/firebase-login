@@ -33,6 +33,11 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.setFeaturedImage = setFeaturedImage;
     vm.removeFeaturedImage = removeFeaturedImage;
 
+    vm.defaultPost = {
+        post_title: '',
+        post_content: 'Tell your story...'
+    };
+
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
@@ -158,7 +163,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function setFeaturedImage(post) {
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
             if(SimpleSiteBuilderService.asset){
-                post.featured_image = SimpleSiteBuilderService.asset.url;
+                vm.state.post.featured_image = SimpleSiteBuilderService.asset.url;
                 SimpleSiteBuilderService.asset = null;
             }
         })
