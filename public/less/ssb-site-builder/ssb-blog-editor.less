@@ -15,6 +15,10 @@ ssb-blog-editor {
         // background: blue;
     }
 
+    .fa-arrow-left {
+        cursor: pointer;
+    }
+
     .ssb-page-section-settings-item .ssb-sidebar-item-icon {
 
     }
@@ -219,7 +223,7 @@ ssb-blog-editor {
         @media screen and (min-width: 768px) {
             .flex-container;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items: stretch;
             flex-flow: row wrap;
         }
     }
@@ -256,10 +260,18 @@ ssb-blog-editor {
             padding: 40px 25px;
         }
 
+        .ssb-blog-editor-controls-inner {
 
-        & > .row {
-            margin: 10px 0 20px;
+            & > .row {
+                margin: 10px 0 20px;
+            }
+
+            @media screen and (min-width: 768px) {
+                position: fixed;
+            }
+
         }
+
 
         .ssb-blog-editor-tags,
         .ssb-blog-editor-featured-image {
@@ -281,6 +293,11 @@ ssb-blog-editor {
 
     .ssb-blog-editor-post-title {
         margin: 0 0 1em;
+        padding: 1em 0;
+        border-width: 0 0 1px;
+        font-weight: bold;
+        font-size: 24px;
+        width: 100%;
     }
 
 }
