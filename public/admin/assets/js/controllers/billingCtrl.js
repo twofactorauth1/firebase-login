@@ -122,27 +122,25 @@
 
     //get plans
     ProductService.getIndigenousProducts(function (products) {
-      products.forEach(function (product) {
-        if (product.product_attributes.hasOwnProperty('stripePlans') && product.product_attributes.stripePlans.length) {
-            var activeStripePlans = _.filter(product.product_attributes.stripePlans, function (p) {
-               return p.active == true; 
-            });
-        } else {
-            var activeStripePlans = [];
-        }
-          
-        if (activeStripePlans.length) {
-            activeStripePlans.forEach(function(plan, index) {
-                PaymentService.getIndigenousStripePlan(plan.id, function(stripePlan) {
-                    console.log(stripePlan);
-                    product.product_attributes.stripePlans[index] = stripePlan; //populate full plan data
-                });
-            });
+      products.forEach(function (product){
+        var productAttrs = product.product_attributes;
+        var hasStripePlans = productAttrs.hasOwnProperty('stripePlans') && productAttrs.stripePlans.length;
+        // var promises = [];
+
+        var activeStripePlan = _.findWhere(productAttrs.stripePlans, {active: true});
+
+        if (hasStripePlans && activeStripePlan) {
+          PaymentService.getIndigenousStripePlan(activeStripePlan.id, function(plan){
+            console.log(plan);
+            productAttrs.stripePlans[0] = plan; //populate full plan data
             $scope.planlist.list.push(product);
+          });
         } else {
             $scope.addOns.list.push(product);
         }
+
       });
+
       $scope.getAccountData();
 
     });
@@ -341,7 +339,7 @@
         if (account.billing.stripeCustomerId) {
           PaymentService.getUpcomingInvoice(account.billing.stripeCustomerId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;
-            $scope.planInterval = upcomingInvoice.lines.data[0].plan ? upcomingInvoice.lines.data[0].plan.interval : 0;
+            $scope.planInterval = upcomingInvoice.lines.data[0].plan.interval;
             console.log("upcoming invoice");
             console.log(upcomingInvoice);
           });
