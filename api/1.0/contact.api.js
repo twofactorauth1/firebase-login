@@ -267,7 +267,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             csv += contact.get('type') + ',';
                             csv += tags.join(' | ') + ',';
                             csv += contact.getPrimaryPhone() + ',';
-                            csv += contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website + ',' : ',';
+                            csv += contact.get('details').length && contact.get('details')[0].websites && contact.get('details')[0].websites[0] && contact.get('details')[0].websites[0].website ? contact.get('details')[0].websites[0].website + ',' : ',';
                             csv += contact.get('details').length && contact.get('details')[0].company ? contact.get('details')[0].company + ',' : ',';
                             csv += contact.getPrimaryAddress() + ',';
 
