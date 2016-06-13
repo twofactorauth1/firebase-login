@@ -174,6 +174,11 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function setFeaturedImage(post) {
+        if(!post)
+        {
+            return;
+            console.log("no post");
+        }
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
             if(SimpleSiteBuilderService.asset){
                 vm.state.post.featured_image = SimpleSiteBuilderService.asset.url;
