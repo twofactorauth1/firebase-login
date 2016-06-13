@@ -118,7 +118,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                         }
                     }
                 }, 3000);
-            })
+            });
 
             /**
              *   temp support SB global header style on blog pages

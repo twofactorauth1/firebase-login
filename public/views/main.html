@@ -1,7 +1,7 @@
 <div
     ng-repeat="section in page.sections"
     class="fragment"
-    ng-if="!page.layout">
+    ng-if="!page.layout || page.layout === 'ssb-layout__1-col'">
 
     <div
         ng-if="section.ssb === false"

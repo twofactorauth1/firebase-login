@@ -881,6 +881,7 @@ var dao = {
                     //this contact already exists.  Let's merge in new data.
                     var existingId = existingContact.id();
                     self.log.warn('Merging contact with id: ' + existingId);
+                    contact.set('created', existingContact.get('created'));
                     self.log.warn('Here is what we have:', contact);
                     var merged =  _.extend(existingContact, contact);
                     merged.set('_id', existingId);

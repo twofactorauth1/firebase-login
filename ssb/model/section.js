@@ -115,11 +115,14 @@ var section = $$.m.ModelBase.extend({
     },
 
     equals:function(other) {
-        var idEquals = this.id() === other.id();
-        var componentsEquals = _.isEqual(this.get('components'), other.get('components'));
-        var bgEquals = _.isEqual(this.get('bg'), other.get('bg'));
-        var spacingEquals = _.isEqual(this.get('spacing'), other.get('spacing'));
-        var fieldNames = ['anchor',
+        var idEqual = this.id() === other.id();
+        var componentsEqual = _.isEqual(this.get('components'), other.get('components'));
+        var bgEqual = _.isEqual(this.get('bg'), other.get('bg'));
+        var spacingEqual = _.isEqual(this.get('spacing'), other.get('spacing'));
+        var layoutEqual = _.isEqual(this.get('layoutModifiers'), other.get('layoutModifiers'));
+        var hiddenEqual = _.isEqual(this.get('hiddenOnPages'), other.get('hiddenOnPages'));
+        var fieldNames = [
+            'anchor',
             'accountId',
             'layout',
             'name',
@@ -135,14 +138,15 @@ var section = $$.m.ModelBase.extend({
             'globalHeader',
             'globalFooter',
             'canAddComponents',
-            'version',
             'txtcolor',
-            'visibility'];
+            'version',
+            'visibility'
+        ];
         var self = this;
         var fieldsEqual = _.every(fieldNames, function(fieldName){
             return self.get(fieldName) === other.get(fieldName);
         });
-        return idEquals && componentsEquals && bgEquals && spacingEquals && fieldsEqual;
+        return idEqual && componentsEqual && bgEqual && spacingEqual && fieldsEqual && layoutEqual && hiddenEqual;
     }
 
 

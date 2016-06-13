@@ -23,12 +23,12 @@
         </label>
         <switch ng-model="component.visibility" ng-change="vm.uiState.toggleSection(component)" class="pull-right"></switch>
     </div>
-    <div class="form-group" ng-if="component.title === 'Header' || component.layoutModifiers" style="opacity: .5; pointer-events:none;">
+    <div class="form-group" ng-if="vm.state.permissions.ssbFeatureFixedElements">
         <label>
             Scrolls with page
             <span
                 tooltip-placement="bottom"
-                tooltip-html-unsafe="Also known as fixed or sticky, this makes the header stay visible at the top of the page even if the page is scrolled."
+                tooltip-html-unsafe="Also known as fixed or sticky, this makes a section stay visible at the top of the page even if the page is scrolled. This setting is only active in preview or published pages."
                 tooltip-append-to-body="true">
                 <i class="fa fa-info-circle" />
             </span>

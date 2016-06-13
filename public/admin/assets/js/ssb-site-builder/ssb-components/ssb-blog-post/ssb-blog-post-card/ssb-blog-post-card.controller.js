@@ -33,7 +33,7 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
             "headline": vm.post.post_title,
             "image": {
                 "@type": "ImageObject",
-                "url": vm.post.featured_image,
+                "url": vm.post.featured_image
                 // "height": 800,
                 // "width": 800
             },

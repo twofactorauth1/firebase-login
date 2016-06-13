@@ -4,8 +4,7 @@
     <div class="form-group">
         <label># of Products per Page</label>
         <div>
-            <select class="form-control" ng-model="component.numtodisplay" ng-change="saveComponent()" ng-options="status.value as status.name for status in numberOfProductOptions">
-            </select>
+            <input type='number' class='form-control' ng-model="component.numtodisplay" ng-change="saveComponent()" min='0' />
         </div>
     </div>
 </div>

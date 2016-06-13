@@ -228,6 +228,8 @@ var collator = {
         });
     },
 
+
+    //TODO: Check for page events before closing.
     _closeSessionWithNoPings: function(sessionEvent, callback){
         log.debug('closing session with no pings');
         var serverTime = moment();

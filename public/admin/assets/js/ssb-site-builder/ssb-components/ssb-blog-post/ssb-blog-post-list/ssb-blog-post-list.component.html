@@ -5,7 +5,7 @@
     <div class="padding-30">
         <div ind-slider='{ slidesToShow:1, dots:true, arrows:false, autoplay:true, touchMove:true, draggable:true }'>
             <div class="img-row col-sm-12 col-xs-12" ng-repeat="post in vm.blog.posts | filter:{ featured: true }">
-                <img class="img-responsive center" src="{{post.featured_image}}"></img>
+                <img class="img-responsive center" ng-src="{{post.featured_image}}"></img>
             </div>
         </div>
     </div>

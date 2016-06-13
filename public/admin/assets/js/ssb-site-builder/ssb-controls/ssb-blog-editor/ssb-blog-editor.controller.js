@@ -28,10 +28,18 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.previewPost = previewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
+    vm.publishPost = publishPost;
+    vm.retractPost = retractPost;
     vm.savePost = savePost;
     vm.postExists = postExists;
     vm.setFeaturedImage = setFeaturedImage;
     vm.removeFeaturedImage = removeFeaturedImage;
+    vm.handleSaveErrors = handleSaveErrors;
+
+    vm.defaultPost = {
+        post_title: '',
+        post_content: 'Tell your story...'
+    };
 
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
@@ -133,6 +141,16 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' })
     }
 
+    function publishPost(post) {
+        post.post_status = 'PUBLISHED';
+        vm.savePost(post);
+    }
+
+    function retractPost(post) {
+        post.post_status = 'DRAFT';
+        vm.savePost(post);
+    }
+
     function savePost(post){
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
@@ -143,7 +161,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             toaster.pop('success', 'Post Saved', 'The post was saved successfully.');
         }).catch(function(error) {
             toaster.pop('error', 'Error', error.data ? error.data.message : "Error updating post. Please try again.");
-            //angular.element('<div>' + post.post_title + '</div>').focus();
+            vm.handleSaveErrors(error);
         });
     }
 
@@ -156,9 +174,14 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function setFeaturedImage(post) {
+        if(!post)
+        {
+            return;
+            console.log("no post");
+        }
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
             if(SimpleSiteBuilderService.asset){
-                post.featured_image = SimpleSiteBuilderService.asset.url;
+                vm.state.post.featured_image = SimpleSiteBuilderService.asset.url;
                 SimpleSiteBuilderService.asset = null;
             }
         })
@@ -166,6 +189,12 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     function removeFeaturedImage(post) {
         post.featured_image = null;
+    }
+
+    function handleSaveErrors(error) {
+        if (error.data && error.data.message === 'A post with this title already exists') {
+            angular.element('input.ssb-blog-editor-post-title').focus();
+        }
     }
 
     function init(element) {

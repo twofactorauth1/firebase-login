@@ -1,10 +1,10 @@
-(function() {
+(function () {
 
     app.controller('SiteBuilderFormDonateComponentController', ssbFormDonateComponentController);
 
-    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', '$interval', 'ENV'];
+    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', '$interval', 'ENV', '$modal'];
     /* @ngInject */
-    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, $interval, ENV) {
+    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, $interval, ENV, $modal) {
 
         console.info('ssb-form-donate directive init...')
 
@@ -79,6 +79,8 @@
         vm.setDefaultValues = setDefaultValues;
         vm.checkDateValidityFn = checkDateValidityFn;
         vm.formInvalidFn = formInvalidFn;
+        vm.openModalFn = openModalFn;
+        vm.closeModalFn = closeModalFn;
 
         vm.nthRow = 'nth-row';
 
@@ -104,8 +106,8 @@
                     styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
                 }
             }
-            if(field && field.fieldsPerRow){
-                styleString = "min-width:" + Math.floor(100/field.fieldsPerRow) + '%';
+            if (field && field.fieldsPerRow) {
+                styleString = "min-width:" + Math.floor(100 / field.fieldsPerRow) + '%';
             }
             return styleString;
         };
@@ -191,7 +193,7 @@
 
 
 
-        vm.createUser = function(form) {
+        vm.createUser = function (form) {
             // Admin check
             if ($scope.$parent.vm.state)
                 return;
@@ -227,12 +229,11 @@
                 if (name_arr.length > 1) {
                     last_name = name_arr[1];
                 }
-            }
-            else{
-                if(vm.formBuilder.FirstName){
+            } else {
+                if (vm.formBuilder.FirstName) {
                     first_name = vm.formBuilder.FirstName;
                 }
-                 if(vm.formBuilder.LastName){
+                if (vm.formBuilder.LastName) {
                     last_name = vm.formBuilder.LastName;
                 }
             }
@@ -284,12 +285,12 @@
             }
 
             //create contact
-            userService.addContact(formatted, function(data, err) {
+            userService.addContact(formatted, function (data, err) {
                 if (err && err.code === 409) {
                     vm.userExists = true;
                 } else if (err && err.code !== 409) {
                     vm.formError = true;
-                    $timeout(function() {
+                    $timeout(function () {
                         vm.formError = false;
                     }, 5000);
                 } else if (data) {
@@ -321,7 +322,7 @@
                         $('#donation-card-details').find("input[type=text]").val("");
                         form.$setPristine(true);
 
-                        $timeout(function() {
+                        $timeout(function () {
                             vm.formSuccess = false;
                         }, 3000);
                     } else {
@@ -371,24 +372,27 @@
                 if (name_arr.length > 1) {
                     last_name = name_arr[1];
                 }
-            }
-            else{
-                if(vm.formBuilder.FirstName){
+            } else {
+                if (vm.formBuilder.FirstName) {
                     first_name = vm.formBuilder.FirstName;
                 }
-                 if(vm.formBuilder.LastName){
+                if (vm.formBuilder.LastName) {
                     last_name = vm.formBuilder.LastName;
                 }
             }
 
             var customFields = _.filter(vm.component.contactInfo, function (x) {
-              return x.custom == true;
+                return x.custom == true;
             });
 
             var extra = [];
 
             customFields.forEach(function (c, i) {
-              extra.push({name: c.name, label: c.label, value: vm.formBuilder[c.name] || null});
+                extra.push({
+                    name: c.name,
+                    label: c.label,
+                    value: vm.formBuilder[c.name] || null
+                });
             });
 
             var formatted = {
@@ -522,7 +526,7 @@
                 var orderService = $injector.get('orderService');
                 var order = _formattedOrder();
 
-                orderService.createPaypalOrder(order, function(data) {
+                orderService.createPaypalOrder(order, function (data) {
                     vm.order = data;
                     vm.showPaypalLoading = false;
                     if (data && !data._id) {
@@ -549,41 +553,41 @@
                 expType: null
             });
             dgFlow.startFlow($location.absUrl());
-            $('#form-donate-modal-' + vm.component._id).modal('hide');
+            vm.closeModalFn();
         }
 
         function checkCardNumber() {
             vm.failedOrderMessage = "";
-            var card_number = $(vm.element).find('#donation-card-details #number').val();
+            var card_number = $('.donation-v1 #number').val();
             if (!card_number) {
-                $(vm.element).find("#donation-card-details #card_number .error").html("Card Number Required");
-                $(vm.element).find("#donation-card-details #card_number").addClass('has-error');
-                $(vm.element).find("#donation-card-details #card_number .glyphicon").addClass('glyphicon-remove');
+                $(".donation-v1 #card_number .error").html("Card Number Required");
+                $(".donation-v1 #card_number").addClass('has-error');
+                $(".donation-v1 #card_number .glyphicon").addClass('glyphicon-remove');
             } else {
-                $(vm.element).find("#donation-card-details #card_number .error").html("");
-                $(vm.element).find("#donation-card-details #card_number").removeClass('has-error').addClass('has-success');
+                $(".donation-v1 #card_number .error").html("");
+                $(".donation-v1 #card_number").removeClass('has-error').addClass('has-success');
                 $(vm.element).find("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             }
         };
 
         function checkCardName() {
             vm.failedOrderMessage = "";
-            var name = $(vm.element).find('#donation-card-details #card_name #name').val();
+            var name = $('.donation-v1 #card_name #name').val();
             if (!name) {
-                $(vm.element).find("#donation-card-details #card_name .error").html("Card Name Required");
-                $(vm.element).find("#donation-card-details #card_name").addClass('has-error');
-                $(vm.element).find("#donation-card-details #card_name .glyphicon").addClass('glyphicon-remove');
+                $(".donation-v1 #card_name .error").html("Card Name Required");
+                $(".donation-v1 #card_name").addClass('has-error');
+                $(".donation-v1 #card_name .glyphicon").addClass('glyphicon-remove');
             } else {
-                $(vm.element).find("#donation-card-details #card_name .error").html("");
-                $(vm.element).find("#donation-card-details #card_name").removeClass('has-error').addClass('has-success');
-                $(vm.element).find("#donation-card-details #card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                $(".donation-v1 #card_name .error").html("");
+                $(".donation-v1 #card_name").removeClass('has-error').addClass('has-success');
+                $(".donation-v1 #card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             }
 
         };
 
         function checkCardExpiry() {
             vm.failedOrderMessage = "";
-            var expiry = $(vm.element).find('#donation-card-details #expiry').val();
+            var expiry = $('.donation-v1 #expiry').val();
             var card_expiry = expiry.split("/");
             var exp_month = card_expiry[0].trim();
             var exp_year;
@@ -593,32 +597,32 @@
 
             if (!expiry || !exp_month || !exp_year) {
                 if (!expiry) {
-                    $(vm.element).find("#donation-card-details #card_expiry .error").html("Expiry Required");
+                    $(".donation-v1 #card_expiry .error").html("Expiry Required");
                 } else if (!exp_month) {
-                    $(vm.element).find("#donation-card-details #card_expiry .error").html("Expiry Month Required");
+                    $(".donation-v1 #card_expiry .error").html("Expiry Month Required");
                 } else if (!exp_year) {
-                    $(vm.element).find("#donation-card-details #card_expiry .error").html("Expiry Year Required");
+                    $(".donation-v1 #card_expiry .error").html("Expiry Year Required");
                 }
-                $(vm.element).find("#donation-card-details #card_expiry").addClass('has-error');
-                $(vm.element).find("#donation-card-details #card_expiry .glyphicon").addClass('glyphicon-remove');
+                $(".donation-v1 #card_expiry").addClass('has-error');
+                $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
             } else {
-                $(vm.element).find("#donation-card-details #card_expiry .error").html("");
-                $(vm.element).find("#donation-card-details #card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                $(vm.element).find("#donation-card-details #card_expiry").removeClass('has-error').addClass('has-success');
+                $(".donation-v1 #card_expiry .error").html("");
+                $(".donation-v1 #card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                $(".donation-v1 #card_expiry").removeClass('has-error').addClass('has-success');
             }
         };
 
         function checkCardCvv() {
             vm.failedOrderMessage = "";
-            var card_cvc = $(vm.element).find('#donation-card-details #cvc').val();
+            var card_cvc = $('.donation-v1 #cvc').val();
             if (!card_cvc) {
-                $(vm.element).find("#donation-card-details #card_cvc .error").html("CVC Required");
-                $(vm.element).find("#donation-card-details #card_cvc").addClass('has-error');
-                $(vm.element).find("#donation-card-details #card_cvc .glyphicon").addClass('glyphicon-remove');
+                $(".donation-v1 #card_cvc .error").html("CVC Required");
+                $(".donation-v1 #card_cvc").addClass('has-error');
+                $(".donation-v1 #card_cvc .glyphicon").addClass('glyphicon-remove');
             } else {
-                $(vm.element).find("#donation-card-details #card_cvc .error").html("");
-                $(vm.element).find("#donation-card-details #card_cvc").removeClass('has-error').addClass('has-success');
-                $(vm.element).find("#donation-card-details #card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                $(".donation-v1 #card_cvc .error").html("");
+                $(".donation-v1 #card_cvc").removeClass('has-error').addClass('has-success');
+                $(".donation-v1 #card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
             }
         };
 
@@ -627,16 +631,16 @@
                 vm.failedOrderMessage = "";
                 vm.checkoutModalState = 6;
 
-                var expiry = $(vm.element).find('#donation-card-details #expiry').val().split("/");
+                var expiry = $('.donation-v1 #expiry').val().split("/");
                 var exp_month = expiry[0].trim();
                 var exp_year = "";
                 if (expiry.length > 1) {
                     exp_year = expiry[1].trim();
                 }
                 var cardInput = {
-                    name: $(vm.element).find('#donation-card-details #card_name #name').val(),
-                    number: $(vm.element).find('#donation-card-details #number').val(),
-                    cvc: $(vm.element).find('#donation-card-details #cvc').val(),
+                    name: $('.donation-v1 #card_name #name').val(),
+                    number: $('.donation-v1 #number').val(),
+                    cvc: $('.donation-v1 #cvc').val(),
                     exp_month: exp_month,
                     exp_year: exp_year
                         //TODO: add the following:
@@ -676,33 +680,33 @@
 
                 if ($injector.has('paymentService')) {
                     var paymentService = $injector.get('paymentService');
-                    paymentService.getStripeCardToken(cardInput, function(token, error) {
+                    paymentService.getStripeCardToken(cardInput, function (token, error) {
                         if (error) {
                             switch (error.param) {
                                 case "number":
-                                    $(vm.element).find("#donation-card-details #card_number .error").html(error.message);
-                                    $(vm.element).find("#donation-card-details #card_number").addClass('has-error');
-                                    $(vm.element).find("#donation-card-details #card_number .glyphicon").addClass('glyphicon-remove');
+                                    $(".donation-v1 #card_number .error").html(error.message);
+                                    $(".donation-v1 #card_number").addClass('has-error');
+                                    $(".donation-v1 #card_number .glyphicon").addClass('glyphicon-remove');
                                     break;
                                 case "exp_month":
-                                    $(vm.element).find("#donation-card-details #card_expiry .error").html(error.message);
-                                    $(vm.element).find("#donation-card-details #card_expiry").addClass('has-error');
-                                    $(vm.element).find("#donation-card-details #card_expiry .glyphicon").addClass('glyphicon-remove');
+                                    $(".donation-v1 #card_expiry .error").html(error.message);
+                                    $(".donation-v1 #card_expiry").addClass('has-error');
+                                    $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
                                     break;
                                 case "exp_year":
-                                    $(vm.element).find("#donation-card-details #card_expiry .error").html(error.message);
-                                    $(vm.element).find("#donation-card-details #card_expiry").addClass('has-error');
-                                    $(vm.element).find("#donation-card-details #card_expiry .glyphicon").addClass('glyphicon-remove');
+                                    $(".donation-v1 #card_expiry .error").html(error.message);
+                                    $(".donation-v1 #card_expiry").addClass('has-error');
+                                    $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
                                     break;
                                 case "cvc":
-                                    $(vm.element).find("#donation-card-details #card_cvc .error").html(error.message);
-                                    $(vm.element).find("#donation-card-details #card_cvc").addClass('has-error');
-                                    $(vm.element).find("#donation-card-details #card_cvc .glyphicon").addClass('glyphicon-remove');
+                                    $(".donation-v1 #card_cvc .error").html(error.message);
+                                    $(".donation-v1 #card_cvc").addClass('has-error');
+                                    $(".donation-v1 #card_cvc .glyphicon").addClass('glyphicon-remove');
                                     break;
                                 case "name":
-                                    $(vm.element).find("#donation-card-details #card_name .error").html(error.message);
-                                    $(vm.element).find("#donation-card-details #card_name").addClass('has-error');
-                                    $(vm.element).find("#donation-card-details #card_name .glyphicon").addClass('glyphicon-remove');
+                                    $(".donation-v1 #card_name .error").html(error.message);
+                                    $(".donation-v1 #card_name").addClass('has-error');
+                                    $(".donation-v1 #card_name .glyphicon").addClass('glyphicon-remove');
 
                             }
                             vm.checkoutModalState = 4;
@@ -710,7 +714,7 @@
                         }
 
                         order.payment_details.card_token = token;
-                        orderService.createOrder(order, function(data) {
+                        orderService.createOrder(order, function (data) {
                             if (data && !data._id) {
                                 var failedOrderMessage = "Error in order processing";
                                 console.log(failedOrderMessage);
@@ -732,15 +736,15 @@
 
         function augmentCompletePercentage(percentage) {
             if (percentage > 100) {
-              vm.completePercentageStyle = 100 + '%';
+                vm.completePercentageStyle = 100 + '%';
             } else {
-              vm.completePercentageStyle = percentage + '%';
+                vm.completePercentageStyle = percentage + '%';
             }
         }
 
         function getDonations(id) {
             if (vm.component.productSettings.goal) {
-                productService.getAllOrdersForProduct(id, function(data) {
+                productService.getAllOrdersForProduct(id, function (data) {
                     if (data.total) {
                         var percentage = data.total / vm.component.productSettings.goal * 100;
                         vm.augmentCompletePercentage(percentage);
@@ -761,33 +765,33 @@
             vm.getDonations(vm.product._id);
 
             if (vm.component.redirect) {
-              if (vm.component.redirectType === 'page') {
-                  window.location.href = vm.component.redirectUrl;
-              }
-              if (vm.component.redirectType === 'external') {
-                  window.location.href = 'http://' + vm.component.redirectUrl;
-              }
+                if (vm.component.redirectType === 'page') {
+                    window.location.href = vm.component.redirectUrl;
+                }
+                if (vm.component.redirectType === 'external') {
+                    window.location.href = 'http://' + vm.component.redirectUrl;
+                }
             } else {
-              $('#donation-card-details').find("input[type=text]").val("");
+                $('#donation-card-details').find("input[type=text]").val("");
             }
         }
 
         function deleteOrderFn(order) {
             if ($injector.has('orderService')) {
-              var orderService = $injector.get('orderService');
-              orderService.deletePaypalOrder(order, function (data) {
-                if (data.deleted) {
-                  $('#form-donate-modal-' + vm.component._id).modal('hide');
-                  vm.checkoutModalState = 1;
-                }
-              });
+                var orderService = $injector.get('orderService');
+                orderService.deletePaypalOrder(order, function (data) {
+                    if (data.deleted) {
+                        vm.closeModalFn();
+                        vm.checkoutModalState = 1;
+                    }
+                });
             }
         };
 
         function getProduct() {
             if (productService) {
                 if (vm.component.productSettings.product) {
-                    productService.getProduct(vm.component.productSettings.product.data, function(product) {
+                    productService.getProduct(vm.component.productSettings.product.data, function (product) {
                         vm.product = product;
                         vm.getDonations(vm.product._id);
                     });
@@ -806,12 +810,12 @@
         function getCredentials() {
             if ($injector.has('accountService')) {
                 var accountService = $injector.get('accountService');
-                accountService(function(err, account) {
+                accountService(function (err, account) {
                     vm.account = account;
                     vm.paypalInfo = null;
                     vm.stripeInfo = null;
 
-                    account.credentials.forEach(function(cred, index) {
+                    account.credentials.forEach(function (cred, index) {
                         if (cred.type == 'stripe') {
                             vm.stripeInfo = cred;
                         }
@@ -825,13 +829,13 @@
         function setInitialCheckoutState() {
             if ($routeParams && $routeParams.state && $routeParams.comp == 'donation') {
                 vm.checkoutModalState = parseInt($routeParams.state);
-                $timeout(function() {
-                    $('#form-donate-modal-' + vm.component._id).modal('show');
+                $timeout(function () {
+                    vm.openModalFn();
                 }, 1000);
                 if (vm.checkoutModalState == 5 && orderCookieData) {
                     if ($injector.has('orderService')) {
                         var orderService = $injector.get('orderService');
-                        orderService.setOrderPaid(orderCookieData, function(data) {
+                        orderService.setOrderPaid(orderCookieData, function (data) {
                             if (data && !data._id) {
                                 var failedOrderMessage = "Error in order processing";
                                 console.log(failedOrderMessage);
@@ -851,37 +855,51 @@
         }
 
         function checkDateValidityFn() {
-          if (!angular.isDefined(vm.component.productSettings.timePeriod))  {
-            return true;
-          }
+            if (!angular.isDefined(vm.component.productSettings.timePeriod)) {
+                return true;
+            }
 
-          if ($('#form-donate-modal-amount-' + vm.component._id).hasClass('ng-invalid')) {
-            return false;
-          }
+            if ($('#form-donate-modal-amount-' + vm.component._id).hasClass('ng-invalid')) {
+                return false;
+            }
 
-          if (!vm.component.productSettings.timePeriod.enabled) {
-            return true;
-          }
+            if (!vm.component.productSettings.timePeriod.enabled) {
+                return true;
+            }
 
-          if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
-            return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate));
-          } else if (vm.component.productSettings.timePeriod.startDate) {
-            return moment().isAfter(vm.component.productSettings.timePeriod.startDate);
-          } else if (vm.component.productSettings.timePeriod.endDate) {
-            return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
-          } else {
-            return true;
-          }
+            if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
+                return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate));
+            } else if (vm.component.productSettings.timePeriod.startDate) {
+                return moment().isAfter(vm.component.productSettings.timePeriod.startDate);
+            } else if (vm.component.productSettings.timePeriod.endDate) {
+                return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
+            } else {
+                return true;
+            }
         };
 
         function formInvalidFn(form) {
-          if (!vm.formBuilder.amount) {
-            return true;
-          } else if (!vm.isAnonymous && !form.$valid) {
-            return true;
-          } else {
-            return false;
-          }
+            if (!vm.formBuilder.amount) {
+                return true;
+            } else if (!vm.isAnonymous && !form.$valid) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        function openModalFn() {
+            vm.modalInstance = $modal.open({
+                templateUrl: 'donation-modal',
+                keyboard: true,
+                size: 'lg',
+                scope: $scope
+            });
+        };
+        
+        function closeModalFn() {
+            vm.close();
+            vm.modalInstance.close();
         };
 
         function init(element) {
@@ -891,17 +909,17 @@
 
             $(vm.element).find('.modal').on('hidden.bs.modal', function () {
                 if (vm.checkoutModalState == 5) {
-                  vm.close();
+                    vm.close();
                 }
             })
 
             if ($.card) {
-                vm.card = $(vm.element).find('#donation-card-details').card({
+                vm.card = $('.modal').card({
                     container: $(vm.element).find('.card-wrapper')
                 });
             }
 
-            $scope.$watch('vm.component.productSettings.product', function(val) {
+            $scope.$watch('vm.component.productSettings.product', function (val) {
                 if (val) {
                     vm.getProduct();
                 }
