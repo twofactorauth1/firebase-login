@@ -206,7 +206,6 @@ module.exports = function(grunt) {
                     'public/js/libs/font-awesome/css/font-awesome.min.css',
                     'public/js/libs/bootstrap/dist/css/bootstrap.min.css',
                     'public/js/libs/bootstrap-social/bootstrap-social.css',
-                    'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css',
                     'public/js/libs/jqcloud2/dist/jqcloud.min.css',
                     'public/js/libs/angular-wizard/dist/angular-wizard.min.css',
                     'public/js/libs/animate.css/animate.min.css',
