@@ -219,6 +219,7 @@
         .slick-slider {
             width: 100% !important;
             .slick-slide{
+                display: none !important;
                 min-height:360px;
                 div.img.blank-img{
                     padding-top: 10px;
@@ -226,6 +227,10 @@
                         padding: 5px;
                     }
                 }
+            }
+            .slick-slide.slick-current.slick-active{
+                left:0 !important;
+                display:block !important;
             }
         }
 
