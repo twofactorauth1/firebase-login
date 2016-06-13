@@ -58,7 +58,7 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
       scope.$watch('plan', function() {
         var plan = scope.plan;
         if (plan && plan.product_attributes.stripePlans.length) {
-          var priceString = plan.product_attributes.stripePlans[0].amount.toString();
+          var priceString = plan.product_attributes.stripePlans[0].amount ? plan.product_attributes.stripePlans[0].amount.toString() : '0';
           var priceStringLength = priceString.length;
           scope.priceDollars = priceString.slice(0, priceStringLength - 2);
           scope.priceCents = priceString.slice(priceStringLength - 2, priceStringLength);
