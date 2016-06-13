@@ -94,7 +94,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         _filteredProducts.push(product);
                     }
                 });
-                scope.products = _filteredProducts;
+                var activeProducts = _.without(_filteredProducts, _.findWhere(_filteredProducts, {type : "DONATION"}));
+                scope.products = activeProducts;
                 if (fn) {
                     fn();
                 }
