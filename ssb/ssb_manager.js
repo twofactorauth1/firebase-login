@@ -3247,7 +3247,7 @@ module.exports = {
                 return fn(err, null);
             } else {
                 if(value === true){
-                    return fn("Post already exists", null);
+                    return fn("A post with this title already exists", null);
                 }
                 else{
                     blogPostDao.saveOrUpdate(blogPost, function(err, savedPost){
