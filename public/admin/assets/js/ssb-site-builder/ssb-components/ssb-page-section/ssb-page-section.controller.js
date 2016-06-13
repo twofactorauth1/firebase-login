@@ -24,6 +24,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.playerObject = {};
     vm.player = {};
     vm.sectionInitDelayDone = false;
+    vm.setFixedPosition = setFixedPosition;
 
 
 
@@ -69,6 +70,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 if (section.layoutModifiers.fixed) {
 
                     classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
+                    classString += ' ssb-fixed';
 
                 }
 
@@ -254,11 +256,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
         }
 
-
-        // if (vm.uiState && index === vm.uiState.activeComponentIndex) {
-        //   classString += ' ssb-active-component ';
-        // }
-
         return classString;
 
     }
@@ -357,23 +354,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     }
 
 
-    function setFixedPosition(state) {
-
-        var mainEl = vm.element.parents('.ssb-main:first');
-        var elementHeight = vm.element.height();
-
-        if (state === 'on') {
-
-            mainEl.css({
-                'padding-top': elementHeight
-            });
-
-        } else {
-            mainEl.css({
-                'padding-top': ''
-            });
-        }
-
+    function setFixedPosition() {
+        var dup = vm.element.clone();
+        dup.addClass('ssb-fixed-clone-element');
+        dup.attr('id', 'clone_of_' + vm.section._id);
+        dup.insertAfter(vm.element);
     }
 
     function sectionHasFooter(section) {
@@ -475,6 +460,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         $timeout(function() {
             vm.sectionInitDelayDone = true;
         });
+
+        if (!vm.uiState && vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
+            $timeout(function() {
+                vm.setFixedPosition();
+            }, 1000);
+        }
+
     }
 
 }

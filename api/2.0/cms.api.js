@@ -661,7 +661,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
 
 
-        console.dir(req.body);
+        // console.dir(req.body);
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -671,7 +671,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 blogPost.set('_id', postId);
                 var modified = {date: new Date(), by:self.userId(req)};
                 blogPost.set('modified', modified);
-                console.dir(req.body);
+                // console.dir(req.body);
 
                 ssbManager.updateBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< updateBlogPost');

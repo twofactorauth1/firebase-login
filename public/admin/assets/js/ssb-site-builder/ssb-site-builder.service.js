@@ -1497,6 +1497,10 @@
                 }
             });
 
+            if (ssbService.account.showhide.ssbFeatureFixedElements) {
+                ssbService.permissions.ssbFeatureFixedElements = true;
+            }
+
         }
 
         function addCompiledElement(componentId, editorId, elementId, el) {

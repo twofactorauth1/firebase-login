@@ -68,7 +68,8 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
             _filteredProducts.push(product);
           }
         });
-        scope.products = _filteredProducts;
+        var activeProducts = _.without(_filteredProducts, _.findWhere(_filteredProducts, {type : "DONATION"}));
+        scope.products = activeProducts;
         if (fn) {
           fn();
         }
@@ -81,7 +82,7 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
 
       scope.$watch('component.numtodisplay', function (newValue, oldValue) {
         if (newValue !== oldValue) {
-          scope.component.numtodisplay = newValue;
+          scope.component.numtodisplay = parseInt(newValue) > 0 ? parseInt(newValue) : 0;
           filterProducts(scope.originalProducts, function () {
             scope.pageChanged(1);
           });

@@ -13,7 +13,7 @@
                     'col-xs-12 col-sm-4 col-sm-offset-4': filteredProducts.length == 1,
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
-                }" ng-repeat="product in filteredProducts" ng-hide='product.type == "DONATION"'>
+                }" ng-repeat="product in filteredProducts">
                 <div class="product">
                     <div class="thumbnail">
                         <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
