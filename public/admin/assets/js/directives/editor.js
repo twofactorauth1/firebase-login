@@ -90,7 +90,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             elem = element[0];
         }
 
-        if (scope.$parent.ssbEditor || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
+        if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
             $(function() {
               $timeout(function() {
                 $(elem).on('froalaEditor.initialized', function(e, editor) {
