@@ -94,6 +94,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
         app.post(this.url('blog/duplicate/post'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePost.bind(this));
+
+        app.post(this.url('websites/:id/updateBlogPages'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPages.bind(this));
+
     },
 
     noop: function(req, resp) {
@@ -727,6 +730,25 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< createDuplicatePost');
                     self.sendResultOrError(resp, err, post, "Error creating post");
                     self.createUserActivity(req, 'CREATE_BLOGPOST', null, {postId: post._id}, function(){});
+                });
+            }
+        });
+
+    },
+
+    updateBlogPages: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateBlogPages');
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.updateBlogPages(accountId, userId, function(err, account){
+                    self.log.debug(accountId, userId, '<< updateBlogPages');
+                    self.sendResultOrError(resp, err, account, "Error updating blog pages");
                 });
             }
         });

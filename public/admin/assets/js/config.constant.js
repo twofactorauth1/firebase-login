@@ -252,7 +252,7 @@ app.constant('pageConstant', {
     SINGLEPOST: 'single-post',
   },
   inValidPageHandles:{
-     'home': 'home',
+    'home': 'home',
     'login': 'login',
     'logout': 'logout',
     'admin': 'admin',

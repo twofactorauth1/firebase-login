@@ -17,7 +17,7 @@
 
         <div class="margin-top-10">
 
-            <button ng-click="vm.state.post = vm.uiState.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <button ng-click="vm.state.post = vm.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
@@ -55,7 +55,7 @@
             <h4 class="ssb-sidebar-sub-heading text-bold padding-left-0">Posts</h4>
 
             <ul class="ssb-blog-post-list list-unstyled">
-                <li ng-repeat="post in vm.state.blog.posts | filter:vm.filter track by $index" class="ssb-media-default">
+                <li ng-repeat="post in vm.state.blog.posts | filter:vm.filter | orderBy:'-modified.date' track by $index" class="ssb-media-default">
                     <section
                         ssb-blog-post-card-component
                         post="post"
@@ -272,19 +272,22 @@
                         </div>
 
 
-                        <!-- TODO: Date picker, maps to vm.post.publish_date -->
+                        <!-- TODO: Date picker, maps to vm.state.post.publish_date -->
                         <div class="row block ssb-blog-editor-controls-date">
                             Date
+                            <indi-datepicker ng-model="vm.state.post.publish_date" readOnly="true" popup="MM/dd/yyyy"></indi-datepicker>
                         </div>
 
                         <!-- TODO: Author name, editable, populate account first name + last name or business name, maps to vm.post.post_author -->
                         <div class="row block ssb-blog-editor-controls-author">
                             Author
+                            <input type="text" ng-model="vm.state.post.post_author" class="form-control" placeholder="Author" />
                         </div>
 
                         <!-- TODO: Tag picker, maps to vm.state.post.post_tags array -->
                         <div class="row block ssb-blog-editor-tags">
                             <h4 class="text-u">Tags</h4>
+                            <tags-input min-length="1" ng-model="vm.state.post.post_tags"></tags-input>
                         </div>
 
                         <div class="row block ssb-blog-editor-featured-image">

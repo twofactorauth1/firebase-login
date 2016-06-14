@@ -804,6 +804,15 @@ module.exports = {
 
     },
 
+    getPublishedPost: function(accountId, postName, fn) {
+        var query = {
+            accountId: accountId,
+            post_status:'PUBLISHED',
+            post_url:postName
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+    },
+
     listPagesWithSections: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug(accountId, null,'>> listPagesWithSections');
@@ -3041,7 +3050,7 @@ module.exports = {
                         htmlString = $$$('#temp_wrap').html();
 
                         if (htmlString.length) {
-                            obj[key] = htmlString;
+                            obj[key] = htmlString.replace(/[^ -~]+/g, "");
                         }
                     }
 
@@ -3320,6 +3329,136 @@ module.exports = {
         }
 
         return excerpt;
+    },
+
+    updateBlogPages: function(accountId, userId, fn) {
+        var self = this;
+        // console.dir('blogPost '+JSON.stringify(blogPost));
+
+        accountDao.getAccountByID(accountId, function(err, value){
+            if(err) {
+                self.log.error('error getting account by id: ' + err);
+                return fn(err, null);
+            } else if(value == null) {
+                self.log.error('could not find account with id: ' + accountId);
+                return fn('Could not find account with id: ' + accountId, null);
+            }
+            var _status = value.get("showhide").blog;
+            async.waterfall([
+                // function getBlogPage(cb){
+                //     var query = {
+                //         accountId:accountId,
+                //         latest:true,
+                //         handle: 'blog'
+                //     };
+
+                //     pageDao.findOne(query, $$.m.ssb.Page, function(err, page){
+                //         if(err) {
+                //             self.log.error(accountId, userId, 'Error finding website:', err);
+                //             cb(err);
+                //         } else {
+                //             cb(null, page);
+                //         }
+                //     })
+                // },
+                // function addRemoveLinkToNav(cb){
+                //     self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
+                //         if(err) {
+                //             self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
+                //             cb(err);
+                //         } else {
+                //             var link={
+                //                 label: page.get('menuTitle') || page.get('title'),
+                //                 type: "link",
+                //                 linkTo: {
+                //                     type:"page",
+                //                     data:page.get('handle')
+                //                 }
+                //             };
+
+                //             list.links.push(link);
+                //             self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
+                //                 if(err) {
+                //                     self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
+                //                     cb(err);
+                //                 } else {
+                //                     self.log.debug(accountId, userId, '<< createPage');
+                //                     cb();
+                //                 }
+                //             });
+                //         }
+                //     });
+                // },
+                function publishBlogPages(cb){
+                    var query = {
+                        accountId:accountId,
+                        latest:true,
+                        handle: {$in: ['blog-post', 'blog-list']}
+                    };
+
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding website:', err);
+                            cb(err);
+                        } else {
+                            if(pages && pages.length){
+                                async.eachSeries(pages, function(page, callback){
+                                    page.set('published', {date:new Date(), by: userId});
+                                    if(_status){
+                                        pageDao.savePublishedPage(page, function(err, publishedPage){
+                                            if(err) {
+                                                self.log.error(accountId, userId,'Error publishing page:', err);
+                                                cb(err);
+                                            } else {
+                                                pageCacheManager.updateS3Template(accountId, null, page.id(), function(err, value){
+                                                    if (err) {
+                                                        self.log.error(accountId, userId,'Error on s3 template update in savePage:', err);
+                                                    }
+                                                });
+                                                callback();
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        pageDao.removePublishedPage(accountId, page.id(), function(err){
+                                            if(err) {
+                                                self.log.error(accountId, userId,'Error publishing page:', err);
+                                                cb(err);
+                                            }
+                                            else{
+                                                callback();
+                                            }
+                                        });
+                                    }
+
+                                }, function(err){
+                                    if(err) {
+                                        self.log.error(accountId, userId, "Error getting template's referenced sections:", err);
+                                        cb(err);
+                                    }
+                                    cb();
+                                });
+
+                            }
+                            else{
+                                cb();
+                            }
+                        }
+                    })
+
+                }
+
+
+            ], function done(err){
+                if(err) {
+                    fn(err, null);
+                } else {
+                    self.log.debug(accountId, userId, '<< updateBlogPages');
+                    fn(null, value);
+                }
+            });
+        })
+
     }
 
 };
