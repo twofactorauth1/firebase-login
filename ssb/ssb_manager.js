@@ -804,6 +804,15 @@ module.exports = {
 
     },
 
+    getPublishedPost: function(accountId, postName, fn) {
+        var query = {
+            accountId: accountId,
+            post_status:'PUBLISHED',
+            post_url:postName
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+    },
+
     listPagesWithSections: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug(accountId, null,'>> listPagesWithSections');
