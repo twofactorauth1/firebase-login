@@ -74,11 +74,13 @@
         ssbService.getPageVersions = getPageVersions;
         ssbService.publishPage = publishPage;
         ssbService.revertPage = revertPage;
+        ssbService.updateBlogPages = updateBlogPages;
         ssbService.permissions = {};
         ssbService.compiledElements = {};
         ssbService.compiledElementEditControls = {};
         ssbService.detectIENotEdge = detectIENotEdge;
         ssbService.isIENotEdge = ssbService.detectIENotEdge();
+
 
         /**
          * This represents the category sorting for the add content panel
@@ -1703,6 +1705,23 @@
           )
         }
 
+        function updateBlogPages() {
+
+          function success(data) {
+            console.log('SimpleSiteBuilderService updateBlogPages: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService updateBlogPages error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: baseWebsiteAPIUrlv2 + [ssbService.websiteId, 'updateBlogPages'].join('/'),
+              method: 'POST',
+            }).success(success).error(error))
+          )
+        }
         /**
          * detect IE
          * returns version of IE or false, if browser is not Internet Explorer
@@ -1752,10 +1771,6 @@
             // other browser
             return false;
         }
-
-
-
-
 
 		(function init() {
 

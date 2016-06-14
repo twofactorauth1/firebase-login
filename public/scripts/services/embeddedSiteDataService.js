@@ -41,7 +41,12 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
         }
 
         if (path.indexOf("blog/") > -1) {
-            path = 'single-post';
+            if(window.indigenous.ssbBlog === true) {
+                path = 'blog-post';
+            } else {
+                path = 'single-post';
+            }
+
         }
 
         if (path.indexOf("post/") > -1) {

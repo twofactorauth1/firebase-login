@@ -238,7 +238,7 @@
                         <div class="form-group">
                             <label>Enable Blog</label>
                             <span tooltip-placement="bottom" tooltip-html-unsafe="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
-                            <switch ng-model="account.showhide.blog" class="pull-right"></switch>
+                            <switch ng-model="account.showhide.blog" ng-change="toggleEnableBlog(account.showhide.blog)" class="pull-right"></switch>
                         </div>
                         <div class="clearfix"></div>
                     </form>

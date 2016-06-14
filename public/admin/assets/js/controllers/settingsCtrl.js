@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window', 'SweetAlert', 'pageConstant', function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window, SweetAlert, pageConstant) {
     $scope.keywords = [];
 
     console.log($location.absUrl().replace('main', 'hey'));
@@ -117,26 +117,57 @@
           return;
       }
 
-      AccountService.updateAccount($scope.account, function (data, error) {
-        if (error) {
-          $scope.saveLoading = false;
-          toaster.pop('error', error.message);
-        } else {
-          if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
-            var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
-            $window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
-          }
-          var mainAccount = AccountService.getMainAccount();
-          if (mainAccount) {
-            mainAccount.showhide.blog = $scope.account.showhide.blog;
-          }
-          SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
-            $scope.saveLoading = false;
-            toaster.pop('success', " Website Settings saved.");
-          });
-        }
+        AccountService.updateAccount($scope.account, function (data, error) {
+            if (error) {
+                $scope.saveLoading = false;
+                toaster.pop('error', error.message);
+            } else {
+                var _links = [];
+                $scope.website.linkLists.forEach(function (value, index) {
+                    if (value.handle === "head-menu") {
+                        _links = value.links;
+                    }
+                })
 
-      });
+                var _blogIndex = _.findIndex(_links, function(link) { return link.linkTo.data === pageConstant.page_handles.BLOG })
+
+                // Add blog link to nav
+                if($scope.account.showhide.blog){
+                    if(_blogIndex === -1){
+                        _links.push({
+                            label: pageConstant.page_handles.BLOG,
+                            type: "link",
+                            linkTo: {
+                            data: pageConstant.page_handles.BLOG,
+                            type: "page"
+                            }
+                        });
+                    }
+
+                }
+                // Remove Blog Link From nav
+                else{
+                    if(_blogIndex > -1)
+                        _links.splice(_blogIndex, 1);
+                }
+
+                SimpleSiteBuilderService.updateBlogPages().then(function(response){
+                    SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
+                        $scope.saveLoading = false;
+                        toaster.pop('success', " Website Settings saved.");
+                        if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
+                            var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
+                            $window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
+                        }
+                        var mainAccount = AccountService.getMainAccount();
+                        if (mainAccount) {
+                            mainAccount.showhide.blog = $scope.account.showhide.blog;
+                        }
+                    });
+                });
+            }
+
+        });
     };
 
     /*
@@ -290,6 +321,31 @@
     $scope.showAddMeta = function (index) {
       return index === 0;
     };
+
+    $scope.toggleEnableBlog = function(status){
+        if(!status){
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Your blog and posts will no longer be accessible",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+
+                }
+                else{
+                    $scope.account.showhide.blog = !status
+                }
+            });
+        }
+
+    }
 
 
   }]);

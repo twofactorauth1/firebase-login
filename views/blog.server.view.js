@@ -324,6 +324,184 @@ _.extend(view.prototype, BaseView.prototype, {
         });
     },
 
+    renderBlogPost: function(accountId, postName) {
+        var self = this;
+        self.log.debug(accountId, null, '>> renderBlogPost');
+        var data = {ssbBlog:true};
+        var handle = 'blog-post';
+
+        async.waterfall([
+            function getWebpageData(cb){
+                ssbManager.getDataForWebpage(accountId, handle, function(err, value){
+                    if(err) {
+                        self.log.error('Error getting data for website:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function getPublishedPage(webpageData, cb) {
+                ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, page);
+                });
+            },
+            function readComponents(webpageData, page, cb) {
+                data.templates = '';
+                if(page) {
+                    data.templateIncludes = [];
+                    data.templateIncludes[0] = {id:'/components/component-wrap.html'};
+                    fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
+                        data.templateIncludes[0].data = html;
+                        var components = [];
+                        _.each(page.get('sections'), function(section){
+                            if(section) {
+                                components = components.concat(section.components);
+                            }
+                        });
+
+                        var map = {};
+                        async.eachSeries(components, function(component, cb){
+                            if(component) {
+                                var obj = {};
+                                obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                                if(map[obj.id]) {
+                                    cb(null);
+                                } else {
+                                    fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                        obj.data = html;
+                                        data.templateIncludes.push(obj);
+                                        map[obj.id] = obj;
+                                        cb();
+                                    });
+                                }
+                            } else {
+                                cb();
+                            }
+
+                        }, function done(err){
+                            cb(null, webpageData, page);
+                        });
+
+
+                    });
+                } else {
+                    cb('Could not find ' + handle);
+                }
+
+            },
+
+            function addSSBSection(webpageData, page, cb){
+                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
+                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
+                    ssbSectionTemplate.data = html;
+                    data.templateIncludes.push(ssbSectionTemplate);
+                    cb(null, webpageData, page);
+                });
+            },
+
+            function getBlogPost(webpageData, page, cb) {
+                ssbManager.getPublishedPost(accountId, postName, function(err, post){
+                    cb(err, webpageData, page, post);
+                });
+
+            },
+
+            function addBlogTemplate(webpageData, page, post, cb) {
+                //assuming single column layout
+
+                data.templateIncludes.push({
+                    id: 'blogpost.html',
+                    data: '<ssb-page-section section="sections_0" index="0" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_1" index="1" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_2" index="2" class="ssb-page-section"></ssb-page-section>'
+                });
+                cb(null, webpageData, page, post);
+
+            },
+
+            function prepareForRender(value, page, post, cb) {
+                var pageHolder = {};
+                pageHolder[page.get('handle')] = page.toJSON('frontend');
+
+
+                data.pages = pageHolder;
+                data.account = value;
+                data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
+                data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
+                data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+                value.website = value.website || {};
+                if(pageHolder[handle]) {
+                    data.title = pageHolder[handle].title || value.website.title;
+                } else {
+                    data.title = value.website.title;
+                }
+
+                data.author = 'Indigenous';//TODO: wut?
+                data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+                data.website = value.website || {};
+                if(pageHolder[handle] && pageHolder[handle].seo) {
+                    data.seo = {
+                        description: pageHolder[handle].seo.description || value.website.seo.description,
+                        keywords: ''
+                    };
+                } else {
+                    data.seo = {
+                        description: value.website.seo.description,
+                        keywords: ''
+                    };
+                }
+
+
+                if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
+                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
+                } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
+                    data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
+                }
+
+
+                data.og = {
+                    type: 'website',
+                    title: (pageHolder[handle] || {}).title || value.website.title,
+                    image: value.website.settings.favicon
+                };
+                if (data.og.image && data.og.image.indexOf('//') === 0) {
+                    data.og.image = 'http:' + data.og.image;
+                }
+                data.includeEditor = false;
+
+                if (!data.account.website.settings) {
+                    self.log.warn('Website Settings is null for account ' + accountId);
+                    data.account.website.settings = {};
+                }
+                var jsonldHolder = [];
+
+                var url = self._req.originalUrl;
+                var orgName = value.business.name;
+                var logoUrl = value.business.logo;
+                jsonldHolder.push(jsonldbuilder.buildForBlogPost(post, url, orgName, logoUrl));
+
+                data.jsonld = JSON.stringify(jsonldHolder);
+                app.render('blog', data, function (err, html) {
+                    if (err) {
+                        self.log.error('Error during render: ' + err);
+                    }
+
+                    self.resp.send(html);
+                    self.cleanUp();
+                    self.log.debug('<< renderBlogPost');
+                    self = data = value = null;
+                });
+            }
+        ], function done(err){
+            self.log.error('Error in render:', err);
+            app.render('404.html', {}, function(err, html){
+                if(err) {
+                    self.log.error('Error during render:', err);
+                }
+                self.resp.status(404).send(html);
+            });
+        });
+    },
+
     renderCachedPage: function (accountId, handle) {
         var data = {},
             self = this;

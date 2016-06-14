@@ -39,9 +39,15 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     vm.defaultPost = {
         post_title: '',
-        post_content: 'Tell your story...'
+        post_content: 'Tell your story...',
+        post_author: getDefualtAuthor()
     };
 
+
+    function getDefualtAuthor(){
+        if(vm.state.account && vm.state.account.business)
+            return vm.state.account.business.name;
+    }
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
