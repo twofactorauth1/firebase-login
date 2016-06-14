@@ -243,10 +243,6 @@
             max-width: 100%!important;
         }
 
-        .testimonials-v2 .testimonial-wrap img {
-            width: 100%;
-        }
-
         .slick-dots {
 
             width: 100%!important;
@@ -293,6 +289,25 @@
                 }
             }
         }
+
+        .slick-slide img {
+
+            with: 100%;
+
+            @media screen and (max-width: 767px) {
+                width: 200%;
+                max-width: none;
+                transform: translateX(-25%);
+            }
+
+        }
+
+        .container.inner-page {
+            @media screen and (max-width: 767px) {
+                padding: 0!important;
+            }
+        }
+
     }
 
 }
