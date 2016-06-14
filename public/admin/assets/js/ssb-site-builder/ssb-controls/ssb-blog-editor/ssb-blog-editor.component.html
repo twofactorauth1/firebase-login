@@ -55,7 +55,7 @@
             <h4 class="ssb-sidebar-sub-heading text-bold padding-left-0">Posts</h4>
 
             <ul class="ssb-blog-post-list list-unstyled">
-                <li ng-repeat="post in vm.state.blog.posts | filter:vm.filter track by $index" class="ssb-media-default">
+                <li ng-repeat="post in vm.state.blog.posts | filter:vm.filter | orderBy:'-modified.date' track by $index" class="ssb-media-default">
                     <section
                         ssb-blog-post-card-component
                         post="post"

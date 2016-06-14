@@ -35,6 +35,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.setFeaturedImage = setFeaturedImage;
     vm.removeFeaturedImage = removeFeaturedImage;
     vm.handleSaveErrors = handleSaveErrors;
+    vm.autoSave = autoSave;
 
     vm.defaultPost = {
         post_title: '',
@@ -53,6 +54,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             // $timeout(vm.activateFroalaToolbar);
         }
     }, true);
+
+    $scope.$watch('vm.state.post', _.debounce(vm.autoSave, 1000), true);
 
 
     function filter(item) {
@@ -157,17 +160,24 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.savePost(post);
     }
 
-    function savePost(post){
+    function savePost(post, suppressToaster){
+        var toast = {};
+        vm.uiState.saveLoading = true;
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
         post.post_url = slugifyHandle(angular.element('<div>' + post.post_title + '</div>').text().trim());
-        SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
+        return SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
-            toaster.pop('success', 'Post Saved', 'The post was saved successfully.');
+            toast = { type: 'success', title: 'Post Saved', message: 'The post was saved successfully.' };
         }).catch(function(error) {
-            toaster.pop('error', 'Error', error.data ? error.data.message : "Error updating post. Please try again.");
+            toast = { type: 'error', title: 'Error', message: (error.data ? error.data.message : 'Error updating post. Please try again.') };
             vm.handleSaveErrors(error);
+        }).finally(function() {
+            vm.uiState.saveLoading = false;
+            if (!suppressToaster) {
+                toaster.pop(toast.type, toast.title, toast.message);
+            }
         });
     }
 
@@ -201,6 +211,27 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         if (error.data && error.data.message === 'A post with this title already exists') {
             angular.element('input.ssb-blog-editor-post-title').focus();
         }
+    }
+
+    function autoSave(newValue, oldValue) {
+        console.debug('autoSave');
+        var compareNewValue = angular.copy(newValue);
+        var compareOldValue = angular.copy(oldValue);
+
+        if (compareNewValue && compareNewValue['modified']) {
+            delete compareNewValue['modified'];
+        }
+
+        if (compareOldValue && compareOldValue['modified']) {
+            delete compareOldValue['modified'];
+        }
+
+        if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
+            if (!angular.equals(compareNewValue, compareOldValue) && !vm.uiState.saveLoading) {
+                vm.savePost(vm.state.post, true);
+            }
+        }
+
     }
 
     function init(element) {
