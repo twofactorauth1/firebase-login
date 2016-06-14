@@ -3041,7 +3041,7 @@ module.exports = {
                         htmlString = $$$('#temp_wrap').html();
 
                         if (htmlString.length) {
-                            obj[key] = htmlString;
+                            obj[key] = htmlString.replace(/[^ -~]+/g, "");
                         }
                     }
 
