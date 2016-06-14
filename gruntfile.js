@@ -301,7 +301,8 @@ module.exports = function(grunt) {
                 browsers: ['PhantomJS'],
                 client: {
                     captureConsole: false
-                }
+                },
+                logLevel: 'DEBUG'
             },
             dev: {
                 singleRun: true
