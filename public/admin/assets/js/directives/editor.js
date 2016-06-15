@@ -138,6 +138,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
                         console.log('toolbar hide');
+                        // hide any image overlay if toolbar is hidden
+                        if(editor.shared && editor.shared.$img_overlay)
+                            editor.shared.$img_overlay.hide();
 
                         if (editor.popups.areVisible()) {
                             //hide any currently shown toolbar
