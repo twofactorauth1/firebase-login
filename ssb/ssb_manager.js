@@ -1761,103 +1761,110 @@ module.exports = {
                 checkTime = moment();
                 timingLog.warn('updateLinkList: ' + checkTime.diff(startTime));
                 startTime = checkTime;
-                if (updatedPage.get('mainmenu') === false) {
-                    self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
-                        if (err) {
-                            self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
-                            cb(err);
-                        } else {
-                            if(list && list.links){
-                                self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), false, function(err, updatedList){
-                                    list = updatedList;
+                // Ensure that blog list and blog-post should never show in nav
+                if(updatedPage.get("handle") === 'blog-post' || updatedPage.get("handle") === 'blog-post'){
+                    cb(null, updatedPage, updatedSections);
+                }
+                else{
+                    if (updatedPage.get('mainmenu') === false) {
+                        self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                            if (err) {
+                                self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                                cb(err);
+                            } else {
+                                if(list && list.links){
+                                    self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), false, function(err, updatedList){
+                                        list = updatedList;
+                                    });
+                                }
+                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                    if (err) {
+                                        self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
                                 });
                             }
-                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
-                                if (err) {
-                                    self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
-                                    cb(err);
-                                } else {
-                                    cb(null, updatedPage, updatedSections);
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
-                        if (err) {
-                            self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
-                            cb(err);
-                        } else if(!list){
-                            self.log.debug(accountId, userId,'No link lists for this handle.');
-                            cb(null, updatedPage, updatedSections);
-                        } else {
+                        });
+                    } else {
+                        self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                            if (err) {
+                                self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                                cb(err);
+                            } else if(!list){
+                                self.log.debug(accountId, userId,'No link lists for this handle.');
+                                cb(null, updatedPage, updatedSections);
+                            } else {
 
 
-                            var pageHandles = pages.map(function(page) {
-                                if (page.mainmenu || page.mainmenu === undefined) {
-                                    return page.get('handle');
-                                }
-                            });
+                                var pageHandles = pages.map(function(page) {
+                                    if (page.mainmenu || page.mainmenu === undefined) {
+                                        return page.get('handle');
+                                    }
+                                });
 
-                            var _exists = false;
-                            list.links = _(list.links).chain()
-                                .map(function(link){
-                                    if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
-                                        // check if menu title exists
-                                        var _label = updatedPage.get('menuTitle');
-                                        // check if menu title not exists and page title is changed
-                                        if(!_label){
-                                            _label = updatedPage.get('title');
+                                var _exists = false;
+                                list.links = _(list.links).chain()
+                                    .map(function(link){
+                                        if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
+                                            // check if menu title exists
+                                            var _label = updatedPage.get('menuTitle');
+                                            // check if menu title not exists and page title is changed
+                                            if(!_label){
+                                                _label = updatedPage.get('title');
+                                            }
+                                            link.label = _label;
+                                            link.linkTo.data = updatedPage.get("handle");
+                                            _exists = true;
                                         }
-                                        link.label = _label;
-                                        link.linkTo.data = updatedPage.get("handle");
-                                        _exists = true;
-                                    }
-                                    else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){
-                                        link.linkTo.page = updatedPage.get("handle");
-                                    }
-                                    return link
-                                })
-                                .uniq(function(link) {
-                                    return link.linkTo;
-                                })
-                                .filter(function(link){
-                                    //only keep pages that exist and are visible in menu
-                                    if(link.linkTo.type === 'section' && link.linkTo.page){
-                                        return _.contains(pageHandles, link.linkTo.page)
-                                    }
-                                    else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
-                                        return _.contains(pageHandles, link.linkTo.data)
-                                    }
-                                    else{
-                                        return true;
-                                    }
-                                })
-                                .value(); //return array value
+                                        else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){
+                                            link.linkTo.page = updatedPage.get("handle");
+                                        }
+                                        return link
+                                    })
+                                    .uniq(function(link) {
+                                        return link.linkTo;
+                                    })
+                                    .filter(function(link){
+                                        //only keep pages that exist and are visible in menu
+                                        if(link.linkTo.type === 'section' && link.linkTo.page){
+                                            return _.contains(pageHandles, link.linkTo.page)
+                                        }
+                                        else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
+                                            return _.contains(pageHandles, link.linkTo.data)
+                                        }
+                                        else{
+                                            return true;
+                                        }
+                                    })
+                                    .value(); //return array value
 
-                            if(!_exists){
-                                var link = {
-                                    label: page.get('menuTitle') || page.get('title'),
-                                    type: "link",
-                                    linkTo: {
-                                        type:"page",
-                                        data:page.get('handle')
-                                    }
-                                };
-                                list.links.push(link);
-                            }
-
-                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
-                                if (err) {
-                                    self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
-                                    cb(err);
-                                } else {
-                                    cb(null, updatedPage, updatedSections);
+                                if(!_exists){
+                                    var link = {
+                                        label: page.get('menuTitle') || page.get('title'),
+                                        type: "link",
+                                        linkTo: {
+                                            type:"page",
+                                            data:page.get('handle')
+                                        }
+                                    };
+                                    list.links.push(link);
                                 }
-                            });
-                        }
-                    });
+
+                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                    if (err) {
+                                        self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
+
             }
         ], function done(err, updatedPage, updatedSections){
             self.log.info('done');
