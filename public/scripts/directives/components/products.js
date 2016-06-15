@@ -12,9 +12,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.showPaypalErrorMsg = false;
             scope.order = null;
             //cookie data fetch
-
-            var cookieKey = 'cart_cookie';
-            var orderCookieKey = 'order_cookie';
+            
+            var cookieKey = 'cart_cookie_' + scope.component._id;
+            var orderCookieKey = 'order_cookie_' + scope.component._id;
             var cookieData = localStorageService.get(cookieKey);
             var orderCookieData = localStorageService.get(orderCookieKey);
 
