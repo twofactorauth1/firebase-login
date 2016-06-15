@@ -237,7 +237,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             pageActions: [],
             start_time: startPageTimer,
             end_time: 0,
-            session_id: ipCookie("session_cookie")["id"],
+            session_id: ipCookie("session_cookie") && ipCookie("session_cookie")["id"],
             entrance: entrance
         };
 
@@ -304,8 +304,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
          var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'ping'].join('/');
         $http.post(apiUrl, _pageProperties).success(function(data, status, headers, config) {
 
-        });   
-    }        
+        });
+    }
     };
 
     this.getGeoSearchAddress = function(addressStr, fn) {

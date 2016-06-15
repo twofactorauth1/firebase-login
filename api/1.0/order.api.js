@@ -287,7 +287,11 @@ _.extend(api.prototype, baseApi.prototype, {
                   } else {
                     var payment_details = order.get('payment_details');
                     if (payment_details.payKey) {
-                      self.sendResultOrError(res, 'We currently do not support refunding payments from Paypal. Please log into your paypal account and initiate the refund from there.', order, 'Error refunding order');
+                      orderManager.refundPaypalOrder(accountId, orderId, note, userId, amount, reason, function(err, order) {
+                          self.log.debug(accountId, userId, '<< refundOrder');
+                          self.sendResultOrError(res, err, order, 'Error refunding order');
+                          self.createUserActivity(req, 'REFUND_PAYPAL_ORDER', null, {id: orderId}, function(){});
+                      });
                     } else {
                       self.getStripeTokenFromAccount(req, function(err, accessToken){
                           orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){

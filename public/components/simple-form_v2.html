@@ -39,7 +39,7 @@
                 <textarea class="form-control input-lg" name="message" placeholder="Message" rows="5" ng-model='user.message'></textarea>
             </div>
             <div class="form-group">
-                <button type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-block ssb-theme-btn" ng-disabled="simpleForm.$invalid">
+                <button type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-block ssb-theme-btn" ng-disabled="simpleForm.$invalid || isBusy">
                     <span elem ng-model="component.submitBtn"></span>
                 </button>
             </div>
