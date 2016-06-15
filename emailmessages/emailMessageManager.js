@@ -66,7 +66,7 @@ var emailMessageManager = {
                     }
 
 
-                    self._safeStoreEmail(params, accountId, userId, function(err, emailmessage){
+                    self._safeStoreEmail(params, accountId, userId, emailId, function(err, emailmessage){
                         //we should not have an err here
                         if(err) {
                             self.log.error('Error storing email (this should not happen):', err);
@@ -128,7 +128,7 @@ var emailMessageManager = {
                             params.bcc = stepSettings.bcc;
                         }
                         params.batchId = campaignId;
-                        self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                        self._safeStoreEmail(params, accountId, null, emailId, function(err, emailmessage){
                             //we should not have an err here
                             if(err) {
                                 self.log.error('Error storing email (this should not happen):', err);
@@ -261,7 +261,7 @@ var emailMessageManager = {
                     params.toname = toName;
                 }
 
-                self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                self._safeStoreEmail(params, accountId, null, emailId, function(err, emailmessage){
                     //we should not have an err here
                     if(err) {
                         self.log.error('Error storing email (this should not happen):', err);
@@ -335,7 +335,7 @@ var emailMessageManager = {
                         params.bcc = bcc;
                     }
 
-                    self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                    self._safeStoreEmail(params, accountId, null, emailId, function(err, emailmessage){
                         //we should not have an err here
                         if(err) {
                             self.log.error('Error storing email (this should not happen):', err);
@@ -404,7 +404,7 @@ var emailMessageManager = {
                             params.toname = toName;
                         }
 
-                        self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                        self._safeStoreEmail(params, accountId, null, null, function(err, emailmessage){
                             //we should not have an err here
                             if(err) {
                                 self.log.error('Error storing email (this should not happen):', err);
@@ -466,7 +466,7 @@ var emailMessageManager = {
                         params.toname = toName;
                     }
 
-                    self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                    self._safeStoreEmail(params, accountId, null, emailId, function(err, emailmessage){
                         //we should not have an err here
                         if(err) {
                             self.log.error('Error storing email (this should not happen):', err);
@@ -529,7 +529,7 @@ var emailMessageManager = {
                             params.toname = toName;
                         }
 
-                        self._safeStoreEmail(params, accountId, null, function(err, emailmessage){
+                        self._safeStoreEmail(params, accountId, null, emailId, function(err, emailmessage){
                             //we should not have an err here
                             if(err) {
                                 self.log.error('Error storing email (this should not happen):', err);
@@ -583,7 +583,7 @@ var emailMessageManager = {
             params.text = text;
         }
 
-        self._safeStoreEmail(params, 0, null, function(err, emailmessage){
+        self._safeStoreEmail(params, 0, null, null, function(err, emailmessage){
             //we should not have an err here
             if(err) {
                 self.log.error('Error storing email (this should not happen):', err);
@@ -1093,7 +1093,7 @@ var emailMessageManager = {
         return htmlContent;
     },
 
-    _safeStoreEmail: function(sendgridParam, accountId, userId, fn) {
+    _safeStoreEmail: function(sendgridParam, accountId, userId, emailId, fn) {
         var emailmessage = new $$.m.Emailmessage({
             accountId: accountId,
             userId:userId,
@@ -1101,6 +1101,7 @@ var emailMessageManager = {
             receiver:sendgridParam.to,
             content:sendgridParam.html,
             subject:sendgridParam.subject,
+            emailId: emailId,
             sendDate:new Date(),
             deliveredDate:null,
             openedDate:null,

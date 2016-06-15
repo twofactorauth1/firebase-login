@@ -19,6 +19,7 @@ var emailmessage = $$.m.ModelBase.extend({
             receiver:null,
             content:null,
             subject:null,
+            emailId:null,
             sendDate:null,
             deliveredDate:null,
             openedDate:null,
