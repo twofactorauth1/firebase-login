@@ -116,7 +116,7 @@
                                             </div>
                                         </div>
                                         <p if="item.description" class="description">
-                                            {{item.description}}
+                                            {{item.description | characters : 150 : true}}
                                         </p>
                                         <div class="col-sm-12 row" ng-if="item.variation">
                                             <ul class="variations">
