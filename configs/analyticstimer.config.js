@@ -11,7 +11,7 @@ var runJob = 'false';
 if(process.env.ANALYTICS_RUN_JOB){
     runJob = process.env.ANALYTICS_RUN_JOB;
 };
-
+var child_process = require('child_process');
 var collater = require('../analytics/analytics_collater');
 
 module.exports = {
@@ -25,7 +25,13 @@ module.exports = {
     startJob: function() {
         var self = this;
         if(runJob =='true') {
-            self.intervalObj = setInterval(collater.findCheckGroupAndSend, analyticsJobMS);
+            self.intervalObj = setInterval(function(){
+                console.log('calling fork');
+                var child = child_process.fork('collater_runner.js', null, {silent:true});
+                console.log('called fork');
+            }, analyticsJobMS);
+
+
         } else {
             console.log('Skipping analytics job');
         }

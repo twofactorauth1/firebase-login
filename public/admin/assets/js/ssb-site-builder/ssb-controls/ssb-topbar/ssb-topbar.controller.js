@@ -182,12 +182,14 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
         if (save.then) {
             save.then(function(response) {
                 SimpleSiteBuilderService.publishPage(vm.state.page._id).then(function (data) {
-                    vm.state.publishLoading = false;
-                    vm.state.page.modified = angular.copy(data.data.modified);
-                    vm.state.page.published = angular.copy(data.data.published);
-                    vm.state.pendingPageChanges = false;
-                    vm.state.pendingWebsiteChanges = false;
-                    toaster.pop('success', 'Page Published', 'The page was published successfully.');
+                    SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                        vm.state.publishLoading = false;
+                        vm.state.page.modified = angular.copy(data.data.modified);
+                        vm.state.page.published = angular.copy(data.data.published);
+                        vm.state.pendingPageChanges = false;
+                        vm.state.pendingWebsiteChanges = false;
+                        toaster.pop('success', 'Page Published', 'The page was published successfully.');
+                    })
                 }).catch(function(err) {
                     vm.state.publishLoading = false;
                     toaster.pop('error', 'Error', 'The page was not published. Please try again.');
