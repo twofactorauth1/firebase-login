@@ -35,7 +35,7 @@
 
     <div ng-if="vm.uiState.openSidebarPanel === 'add'" class="site-editor-group site-editor-group-add editor-group tab-content">
         <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'add' }">
-           <section class="ssb-sidebar-panel-inner-container">
+           <section ng-if="!vm.uiState.isBlogPage" class="ssb-sidebar-panel-inner-container">
                 <header class="ssb-sidebar-panel-header">
                     <h4 class="ssb-sidebar-sub-heading">
                         Add Section
@@ -163,6 +163,9 @@
 
 
             </section>
+
+            <span ng-if="vm.uiState.isBlogPage" tooltip-placement="bottom"
+                tooltip-html-unsafe="Blog pages will soon be fully customizable. Stay tuned."tooltip-append-to-body="true">Blog pages will soon be fully customizable. Stay tuned.</span>
         </div>
     </div>
 
@@ -265,7 +268,10 @@
                     <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
                 </header>
 
-                <button ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
+                <button ng-if="!vm.uiState.isBlogPage" ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
+
+                <button style="opacity: 0.5" ng-if="vm.uiState.isBlogPage" tooltip-placement="top"
+                tooltip-html-unsafe="Blog pages will soon be fully customizable. Stay tuned."tooltip-append-to-body="true" class="btn btn-primary">Add Section</button>
 
                 <ul ng-if="vm.state.page.sections" class="ssb-sidebar-page-sections-list list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
                     <li ng-repeat="section in vm.state.page.sections track by $index" class="ssb-page-section-settings-item ssb-sidebar-move-handle">
