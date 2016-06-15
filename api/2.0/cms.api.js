@@ -96,6 +96,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('blog/duplicate/post'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePost.bind(this));
 
         app.post(this.url('websites/:id/updateBlogPages'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPages.bind(this));
+      
+        app.post(this.url('websites/:id/embed-scripts'), this.isAuthAndSubscribedApi.bind(this), this.updateScriptResource.bind(this));
 
     },
 
@@ -753,6 +755,29 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+  
+    updateScriptResource: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateScriptResource');
+
+        var websiteId = req.params.id;
+        var modifiedWebsite = new $$.m.ssb.Website(req.body);
+        var modified = {date: new Date(), by: userId};
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.updateScriptResource(accountId, websiteId, modified, modifiedWebsite, function(err, website){
+                    self.log.debug(accountId, userId, '<< updateScriptResource');
+                    self.sendResultOrError(resp, err, website, "Error updating script resource");
+                    return self.createUserActivity(req, 'UPDATE_WEBSITE_SCRIPT_RESOURCE', null, {_id:websiteId}, function(){});
+                });
+            }
+        });
     }
 
 });

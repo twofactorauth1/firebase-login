@@ -163,6 +163,10 @@
                         if (mainAccount) {
                             mainAccount.showhide.blog = $scope.account.showhide.blog;
                         }
+                      
+                        if ($scope.account.showhide.userScripts) {
+                          SimpleSiteBuilderService.updateScriptResource($scope.website).then();
+                        }
                     });
                 });
             }

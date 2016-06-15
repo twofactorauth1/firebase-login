@@ -29,6 +29,7 @@
         ssbService.getPagesWithSections = getPagesWithSections;
         ssbService.savePage = savePage;
         ssbService.saveWebsite = saveWebsite;
+        ssbService.updateScriptResource = updateScriptResource;
         ssbService.setActiveSection = setActiveSection;
         ssbService.setActiveComponent = setActiveComponent;
         ssbService.activeSectionIndex = undefined;
@@ -519,6 +520,30 @@
 			return (
 				ssbRequest($http({
 					url: baseWebsiteAPIUrlv2 + website._id,
+					method: 'POST',
+					data: angular.toJson(website)
+				}).success(success).error(error))
+			)
+
+		}
+    
+    /**
+         * Save website script resources to db, update client instance with response from server
+         * @param {object} webite - website data
+         */
+    function updateScriptResource(website) {
+
+			function success(data) {
+				ssbService.website = data;
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService updateScriptResource error: ', JSON.stringify(error));
+			}
+
+			return (
+				ssbRequest($http({
+					url: baseWebsiteAPIUrlv2 + website._id + '/embed-scripts',
 					method: 'POST',
 					data: angular.toJson(website)
 				}).success(success).error(error))

@@ -20,7 +20,7 @@ var accountDao = require('../dao/account.dao');
 var pageCacheManager = require('../cms/pagecache_manager');
 //TODO: blogpostdao?!?  Seriously?!?
 var blogPostDao = require('../cms/dao/blogpost.dao');
-
+var sanitizeHtml = require('sanitize-html');
 var PLATFORM_ID = 0;
 
 module.exports = {
@@ -3536,6 +3536,51 @@ module.exports = {
             });
         })
 
-    }
+    },
+  
+    updateScriptResource: function (accountId, websiteId, modified, modifiedWebsite, fn) {
+        var self = this;
+        var userId = modified.by;
+        var resources = modifiedWebsite.get('resources');
+      
+        resources.userScripts = sanitizeHtml(resources.userScripts, {allowedTags: ['script', 'div', 'iframe', 'noscript', 'a']});
+        modifiedWebsite.set('resources', resources);
+      
+        self.log.debug(accountId, userId, '>> updateScriptResource');
+        websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
+            if(err || !website) {
+                self.log.error(accountId, userId, 'Error finding website:', err);
+                return fn(err, null);
+            } else {
+                modifiedWebsite.set('modified', modified);
+                if(modifiedWebsite.attributes.theme) {
+                    delete modifiedWebsite.attributes.theme;
+                }
 
+                websiteDao.saveOrUpdate(modifiedWebsite, function(err, updatedWebsite){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error updating script resource:', err);
+                        return fn(err, null);
+                    } else {
+                        if(updatedWebsite.get('themeId')) {
+                            themeDao.getThemeById(updatedWebsite.get('themeId'), function (err, theme) {
+                                if (err) {
+                                    self.log.error(accountId, userId, 'Error getting theme:', err);
+                                    return fn(err, null);
+                                } else {
+                                    updatedWebsite.set('theme', theme);
+                                    self.log.debug(accountId, userId, '<< getWebsite');
+                                    return fn(null, updatedWebsite);
+                                }
+                            });
+                        } else {
+                            self.log.debug(accountId, userId, '<< updateScriptResource');
+                            return fn(null, updatedWebsite);
+                        }
+
+                    }
+                });
+            }
+        });
+    }
 };
