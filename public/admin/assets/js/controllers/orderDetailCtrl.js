@@ -729,7 +729,12 @@
                                 SweetAlert.swal(error.status, error.message, "error");
                             } else {
                                 console.log('data ', data);
-                                SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                                if ($scope.order.payment_details.payKey) {
+                                  SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                                  toaster.pop('warning', 'We currently do not support refunding payments from Paypal. Please log into your paypal account and initiate the refund from there.');
+                                } else {
+                                  SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                                }
                                 $scope.order.status = newStatus;
                                 $scope.currentStatus = newStatus;
                             }
