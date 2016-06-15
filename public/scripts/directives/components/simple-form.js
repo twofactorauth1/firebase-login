@@ -10,6 +10,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
       console.log('scope.component ', scope.component);
 
       var _campaignObj = null;
+      scope.isBusy = false;
 
       if (scope.component.campaignId) {
         campaignService.getCampaign(scope.component.campaignId, function(data) {
@@ -112,6 +113,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
       scope.user = {};
       scope.createUser = function (simpleForm) {
         scope.userExists = false;
+        scope.isBusy = true;
         var fingerprint = new Fingerprint().get();
         var sessionId = ipCookie("session_cookie").id;
 
@@ -171,6 +173,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
         //create contact
         userService.addContact(formatted, function (data, err) {
+          scope.isBusy = false;
           if (err && err.code === 409) {
             scope.userExists = true;
           }
