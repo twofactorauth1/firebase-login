@@ -148,7 +148,12 @@ var website = $$.m.ModelBase.extend({
             footer: null,
 
             nav_version: 2,
-
+            /**
+            *Third party resources
+            */
+            resources: {
+              userScripts: ''
+            },
 
             /**
              * Created by data

@@ -83,7 +83,8 @@ var account = $$.m.ModelBase.extend({
             "showhide": {
                 "blog": true,
                 "ssbSiteBuilder": true,
-                "dohy": true
+                "dohy": true,
+                "userScripts": true
             },
             "email_preferences": {
                 new_contacts: true,
