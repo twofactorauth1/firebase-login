@@ -1155,3 +1155,23 @@ a.text-light:hover {
     z-index: 100;
     transform: translateY(-50%);
 }
+
+.sticky {
+  position: sticky;
+}
+
+.sticky.sticky-fixed.is-sticky {
+  position: fixed;
+  top: 0;
+  backface-visibility: hidden;
+}
+
+.sticky.sticky-fixed.is-absolute {
+  position: absolute;
+}
+
+.sticky-wrap {
+    float: left;
+    clear: both;
+    width: 100%;
+}

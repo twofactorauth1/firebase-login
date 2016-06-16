@@ -70,7 +70,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 if (section.layoutModifiers.fixed) {
 
                     classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
-                    classString += ' ssb-fixed';
+                    classString += ' ssb-fixed sticky';
 
                 }
 
@@ -355,10 +355,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
 
     function setFixedPosition() {
-        var dup = vm.element.clone();
-        dup.addClass('ssb-fixed-clone-element');
-        dup.attr('id', 'clone_of_' + vm.section._id);
-        dup.insertAfter(vm.element);
+        // var dup = vm.element.clone();
+        // dup.addClass('ssb-fixed-clone-element');
+        // dup.attr('id', 'clone_of_' + vm.section._id);
+        // dup.insertAfter(vm.element);
+        $timeout(function() {
+            new StickyState(vm.element[0]);
+        }, 2000);
     }
 
     function sectionHasFooter(section) {

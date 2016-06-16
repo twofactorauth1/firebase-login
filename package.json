@@ -68,6 +68,7 @@
         "schedule-drone": "^0.1.0",
         "sendgrid": "^2.0.0",
         "slug": "^0.9.1",
+        "sticky-state": "^1.4.3",
         "stripe": "~2.4.0",
         "superagent": "^1.8.3",
         "temporary": "0.0.8",

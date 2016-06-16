@@ -75,6 +75,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get('/cached/:page', this.frontendSetup.bind(this), this.optimizedIndex.bind(this));
         app.get('/template', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
         app.get('/template/:page', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
+
+        app.get('/scripts/*', this.frontendSetup.bind(this), this.serveNodeModules.bind(this));
         return this;
     },
 
@@ -566,7 +568,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 }
             }
         });
+    },
+
+    serveNodeModules: function(req, resp) {
+        var path = req.path.replace(/\/scripts\//, 'node_modules/');
+        return resp.sendfile(path);
     }
+
 });
 
 
