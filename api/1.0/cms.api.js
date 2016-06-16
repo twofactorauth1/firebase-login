@@ -80,6 +80,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
+        app.get(this.url('email/:id/stats'), this.isAuthAndSubscribedApi.bind(this), this.getEmailStats.bind(this));
         app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
         app.post(this.url('testemail'), this.isAuthAndSubscribedApi.bind(this), this.testEmail.bind(this));
         app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
@@ -835,6 +836,24 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsDao.getEmailById(emailId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Email by Id");
             self = null;
+        });
+    },
+
+    getEmailStats: function(req, resp) {
+        var self = this;
+        var emailId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getEmailStats');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed){
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                emailMessageManager.getEmailStats(accountId, userId, emailId, function(err, value){
+                    self.log.debug(accountId, userId, '<< getEmailStats');
+                    self.sendResultOrError(resp, err, value, "Error getting Email Stats");
+                });
+            }
         });
     },
 
