@@ -3545,7 +3545,6 @@ module.exports = {
         var userScripts = resources.userScripts;
       
         for (var k in userScripts) {
-          userScripts[k].original = userScripts[k].sanitized;
           userScripts[k].sanitized = sanitizeHtml(userScripts[k].original, {
             allowedTags: ['script', 'div', 'iframe', 'noscript', 'a'], 
             allowedAttributes: false
