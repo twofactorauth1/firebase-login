@@ -385,6 +385,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+                data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
                 value.website = value.website || {};
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
