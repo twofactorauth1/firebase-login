@@ -12,7 +12,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.showPaypalErrorMsg = false;
             scope.order = null;
             //cookie data fetch
-            
+
             var cookieKey = 'cart_cookie_' + scope.component._id;
             var orderCookieKey = 'order_cookie_' + scope.component._id;
             var cookieData = localStorageService.get(cookieKey);
@@ -94,7 +94,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         _filteredProducts.push(product);
                     }
                 });
-                var activeProducts = _.without(_filteredProducts, _.findWhere(_filteredProducts, {type : "DONATION"}));
+                var activeProducts =_.filter(_filteredProducts, function(product){ return product.type !== 'DONATION'})
                 scope.products = activeProducts;
                 if (fn) {
                     fn();
