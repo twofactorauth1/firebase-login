@@ -250,6 +250,9 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
                 value.website = value.website || {};
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -429,6 +432,9 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
                 value.website = value.website || {};
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
