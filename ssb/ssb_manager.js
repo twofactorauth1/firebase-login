@@ -3543,7 +3543,12 @@ module.exports = {
         var userId = modified.by;
         var resources = modifiedWebsite.get('resources');
       
-        resources.userScripts = sanitizeHtml(resources.userScripts, {allowedTags: ['script', 'div', 'iframe', 'noscript', 'a']});
+        resources.userScripts = sanitizeHtml(resources.userScripts, {
+          allowedTags: ['script', 'div', 'iframe', 'noscript', 'a'], 
+          allowedAttributes: {
+            script: ['src', 'data-sumo-site-id', 'async']
+          }
+        });
         modifiedWebsite.set('resources', resources);
       
         self.log.debug(accountId, userId, '>> updateScriptResource');
