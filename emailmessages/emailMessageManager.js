@@ -851,6 +851,41 @@ var emailMessageManager = {
         });
     },
 
+    getEmailStats: function(accountId, userId, emailId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getEmailStats');
+        var query = {
+            accountId: accountId,
+            emailId: emailId
+        };
+        dao.findMany(query, $$.m.Emailmessage, function(err, emails){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding email messages:', err);
+                fn(err);
+            } else {
+                var opens = 0;
+                var clicks = 0;
+                var sends = 0;
+                _.each(emails, function(email){
+                    sends++;
+                    if(email.get('openedDate')) {
+                        opens++;
+                    }
+                    if(email.get('clickedDate')) {
+                        clicks++;
+                    }
+                });
+                var resp = {
+                    opens: opens,
+                    clicks: clicks,
+                    sends: sends
+                };
+                self.log.debug(accountId, userId, '<< getEmailStats');
+                fn(null, resp);
+            }
+        });
+    },
+
     _getScheduleUtcDateTimeIsoString: function (daysShift, hoursValue, minutesValue, timezoneOffset) {
         var shiftedUtcDate = moment().utc().hours(hoursValue).minutes(minutesValue).add('minutes', timezoneOffset).add('days', daysShift);
         return shiftedUtcDate.toISOString();
