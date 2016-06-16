@@ -79,7 +79,6 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 // Deleting shared instances
                 if(editor.shared){
                     delete editor.shared.$tb;
-                    delete editor.shared.$_events;
                     delete editor.shared.popup_buttons;
                     delete editor.shared.popups;
                     delete editor.shared.$image_resizer;
