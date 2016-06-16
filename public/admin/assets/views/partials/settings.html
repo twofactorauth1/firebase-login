@@ -255,9 +255,9 @@
                               <switch ng-model="account.showhide.userScripts" class="pull-right"></switch>
                           </div>
                           <div class='form-group' ng-if='account.showhide.userScripts'>
-                            <label>Scripts</label>
-                            <span tooltip-placement="bottom" tooltip-html-unsafe="Add script snippets for your website"><i class="fa fa-info-circle" /></span>
-                            <textarea class='form-control' ng-model='website.resources.userScripts'></textarea>
+                            <label>Global Scripts</label>
+                            <span tooltip-placement="bottom" tooltip-html-unsafe="Add script snippets for your website globally"><i class="fa fa-info-circle" /></span>
+                            <textarea class='form-control' ng-model='website.resources.userScripts.global.sanitized'></textarea>
                           </div>
                           <div class="clearfix"></div>
                       </form>

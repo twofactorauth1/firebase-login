@@ -3542,13 +3542,17 @@ module.exports = {
         var self = this;
         var userId = modified.by;
         var resources = modifiedWebsite.get('resources');
+        var userScripts = resources.userScripts;
       
-        resources.userScripts = sanitizeHtml(resources.userScripts, {
-          allowedTags: ['script', 'div', 'iframe', 'noscript', 'a'], 
-          allowedAttributes: {
-            script: ['src', 'data-sumo-site-id', 'async']
-          }
-        });
+        for (var k in userScripts) {
+          userScripts[k].original = userScripts[k].sanitized;
+          userScripts[k].sanitized = sanitizeHtml(userScripts[k].original, {
+            allowedTags: ['script', 'div', 'iframe', 'noscript', 'a'], 
+            allowedAttributes: false
+          });
+        }
+        
+        resources.userScripts = userScripts;
         modifiedWebsite.set('resources', resources);
       
         self.log.debug(accountId, userId, '>> updateScriptResource');

@@ -152,7 +152,7 @@ var website = $$.m.ModelBase.extend({
             *Third party resources
             */
             resources: {
-              userScripts: ''
+              userScripts: {}
             },
 
             /**
