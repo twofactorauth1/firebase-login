@@ -76,9 +76,16 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             if($(elem).data('froala.editor')){
                 var editor = $(elem).data('froala.editor');
                 editor.shared.count = 1;
-                delete editor.shared.$tb;
-                //editor.destroy();
-                console.log("editor destroy");
+                // Deleting shared instances
+                if(editor.shared){
+                    delete editor.shared.$tb;
+                    delete editor.shared.$_events;
+                    delete editor.shared.popup_buttons;
+                    delete editor.shared.popups;
+                    delete editor.shared.$image_resizer;
+                    delete editor.shared.$img_overlay;
+                    delete editor.shared.$line_breaker;
+                }
             }
         });
 
