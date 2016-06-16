@@ -885,7 +885,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         });
     }
 
-    function toggleSectionVisiblity(section, global){
+    function toggleSectionVisiblity(section, global, hide){
         if (global) {
             if(section.global === false) {
                 SweetAlert.swal({
@@ -913,12 +913,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             if(section.visibility === false)
             {
                 section.hiddenOnPages[vm.state.page.handle] = true;
+                hideAllControls();
             }
             else{
                 delete section.hiddenOnPages[vm.state.page.handle];
             }
         }
-
+        else if(section.visibility === false){
+            hideAllControls();
+        }
     }
 
     function isBlogPage() {

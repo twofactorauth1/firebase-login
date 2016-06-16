@@ -299,14 +299,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             function (isConfirm) {
                 if (isConfirm) {
                     section.visibility = false;
-                    setActiveSection(index);
+                    vm.uiState.activeSectionIndex = undefined;
+                    vm.uiState.activeComponentIndex = undefined;
                     vm.uiState.toggleSection(section);
                 }
             });
 
         } else {
             section.visibility = true;
-            setActiveSection(index);
             vm.uiState.toggleSection(section);
         }
 
