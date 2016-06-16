@@ -176,12 +176,14 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
 
     function saveWebsite() {
       return (
-    	  SimpleSiteBuilderService.getSite(vm.parentVm.state.website._id).then(function (site) {
-    		  vm.parentVm.state.website = site.data;
     		  SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
     			  console.log('website saved');
-    		  });
-    	  })
+            if (vm.parentVm.state.account.showhide.userScripts) {
+              SimpleSiteBuilderService.updateScriptResource(vm.parentVm.state.website).then(function(response) {
+                vm.parentVm.state.website = response.data;
+              });
+            }
+    		  })
       )
     }
 
