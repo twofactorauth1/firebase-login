@@ -97,7 +97,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url('websites/:id/updateBlogPages'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPages.bind(this));
       
-        app.post(this.url('websites/:id/embed-scripts'), this.isAuthAndSubscribedApi.bind(this), this.updateScriptResource.bind(this));
+        app.post(this.url('websites/:id/userScripts'), this.isAuthAndSubscribedApi.bind(this), this.updateScriptResource.bind(this));
 
     },
 

@@ -543,7 +543,7 @@
 
 			return (
 				ssbRequest($http({
-					url: baseWebsiteAPIUrlv2 + website._id + '/embed-scripts',
+					url: baseWebsiteAPIUrlv2 + website._id + '/userScripts',
 					method: 'POST',
 					data: angular.toJson(website)
 				}).success(success).error(error))
