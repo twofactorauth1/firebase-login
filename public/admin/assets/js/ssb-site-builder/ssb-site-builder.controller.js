@@ -816,12 +816,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 diff2 &&
                 angular.isDefined(diff1) &&
                 angular.isDefined(diff1.indexOf) &&
-                diff1.indexOf('data-compiled') === -1 &&
-                diff1.indexOf('ssb-theme-btn') !== -1 &&
+                diff1.indexOf('data-compiled') === -1
                 angular.isDefined(diff2) &&
                 angular.isDefined(diff2.indexOf) &&
-                diff2.indexOf('data-compiled') !== -1 &&
-                diff2.indexOf('ssb-theme-btn') !== -1
+                diff2.indexOf('data-compiled') !== -1
             if(updated && angular.isDefined(diff1) && angular.isDefined(diff2)){
                 updated = angular.equals(diff1, diff2)
             }
@@ -838,11 +836,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 angular.isDefined(diff1) &&
                 angular.isDefined(diff1.indexOf) &&
                 diff1.indexOf('data-compiled') !== -1 &&
-                diff1.indexOf('ssb-theme-btn') !== -1 &&
                 angular.isDefined(diff2) &&
                 angular.isDefined(diff2.indexOf) &&
-                diff2.indexOf('data-compiled') === -1 &&
-                diff2.indexOf('ssb-theme-btn') !== -1
+                diff2.indexOf('data-compiled') === -1
     };
 
     /**
