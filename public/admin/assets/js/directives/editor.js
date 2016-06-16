@@ -135,11 +135,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         //move toolbar to highest z-index
                         editor.$tb.addClass('ssb-froala-active-editor');
 
-                        //editor.selection.clear();
+                        editor.selection.save();
                         scope.$emit('focusEditor', { editor: editor });
-
-                        //hide any edit-control labels
-                        // $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
 
                     }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
