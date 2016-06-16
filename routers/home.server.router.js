@@ -38,6 +38,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/index", this.setup.bind(this), this.optimizedIndex.bind(this));
         app.get("/blog", this.setup.bind(this), this.renderBlogPage.bind(this));
         //app.get("/blog/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get('/blog/feed/rss', this.setup.bind(this), this.blogRSS.bind(this));
         app.get("/blog/:postName", this.setup.bind(this), this.renderBlogPost.bind(this));
         app.get("/tag/*", this.setup.bind(this), this.optimizedIndex.bind(this));
         app.get("/category/*", this.setup.bind(this), this.optimizedIndex.bind(this));
@@ -508,6 +509,12 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 }
             }
         });
+    },
+
+    blogRSS: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+
     },
 
     getOrCreateTemplate: function(req, resp) {
