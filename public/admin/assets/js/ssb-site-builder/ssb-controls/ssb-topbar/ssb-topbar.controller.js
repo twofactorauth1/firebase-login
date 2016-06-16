@@ -13,38 +13,10 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
     vm.init = init;
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
-    vm.loadPage = loadPage;
     vm.revertPage = revertPage;
     vm.publishPage = publishPage;
     vm.hideActiveToolTips = hideActiveToolTips;
     vm.closeBlogPanel = closeBlogPanel;
-
-    function loadPage(page) {
-        if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
-            vm.state.saveLoading = true;
-            vm.state.pendingWebsiteChanges = false;
-            vm.state.pendingPageChanges = false;
-            saveWebsite().then(function(){
-                return (
-                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
-                            console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                            vm.state.saveLoading = false;
-                            vm.uiState.navigation.loadPage(page._id);
-                            SimpleSiteBuilderService.getPages();
-                        })
-                    }).catch(function(err) {
-                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                        vm.state.saveLoading = false;
-                    })
-                )
-            })
-        } else {
-            vm.uiState.navigation.loadPage(page._id);
-            SimpleSiteBuilderService.getPages();
-        }
-    };
 
     //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {

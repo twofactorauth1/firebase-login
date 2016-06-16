@@ -34,7 +34,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isBlogPage = isBlogPage;
     vm.isBlogEditMode = isBlogEditMode;
     vm.isBlogEditWritingMode = isBlogEditWritingMode;
-
+    vm.saveAndLoadPage = saveAndLoadPage;
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -131,7 +131,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isBlogEditMode: false,
 
-        isBlogEditWritingMode: false
+        isBlogEditWritingMode: false,
+
+        saveAndLoadPage: vm.saveAndLoadPage
 
     };
 
@@ -930,6 +932,33 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function isBlogEditWritingMode() {
         return angular.isDefined(vm.uiState.openBlogPanel.id) && vm.uiState.openSidebarPanel === 'blog' && vm.uiState.openBlogPanel.id === 'edit';
     }
+
+    function saveAndLoadPage(page) {
+        if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
+            vm.state.saveLoading = true;
+            vm.state.pendingWebsiteChanges = false;
+            vm.state.pendingPageChanges = false;
+            saveWebsite().then(function(){
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                            vm.uiState.navigation.loadPage(page._id);
+                            SimpleSiteBuilderService.getPages();
+                        })
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
+                    })
+                )
+            })
+        } else {
+            vm.uiState.navigation.loadPage(page._id);
+            SimpleSiteBuilderService.getPages();
+        }
+    };
 
     function init(element) {
 
