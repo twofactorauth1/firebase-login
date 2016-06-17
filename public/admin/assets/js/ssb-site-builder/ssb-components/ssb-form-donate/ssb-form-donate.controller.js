@@ -2,9 +2,9 @@
 
     app.controller('SiteBuilderFormDonateComponentController', ssbFormDonateComponentController);
 
-    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', '$interval', 'ENV', '$modal', '$timeout'];
+    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', '$interval', 'ENV', '$modal'];
     /* @ngInject */
-    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, $interval, ENV, $modal, $timeout) {
+    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, $interval, ENV, $modal) {
 
         console.info('ssb-form-donate directive init...')
 
