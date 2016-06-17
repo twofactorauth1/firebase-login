@@ -31,7 +31,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.publishPost = publishPost;
     vm.retractPost = retractPost;
     vm.savePost = savePost;
-    vm.postExists = postExists;
+    vm.isValidPost = isValidPost;
     vm.setFeaturedImage = setFeaturedImage;
     vm.removeFeaturedImage = removeFeaturedImage;
     vm.handleSaveErrors = handleSaveErrors;
@@ -183,8 +183,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         });
     }
 
-    function postExists(){
-        return vm.state.post && vm.state.post._id && vm.state.post.post_title;
+    function isValidPost(){
+        return vm.state.post && vm.state.post.post_title;
     }
 
     function slugifyHandle(title){

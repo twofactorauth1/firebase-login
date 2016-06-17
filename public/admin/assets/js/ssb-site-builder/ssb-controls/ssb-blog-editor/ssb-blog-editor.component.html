@@ -205,7 +205,7 @@
 
                         <div class="btn-group btn-group-lg row block clearfix" role="group" aria-label="Post Status">
 
-                            <button ng-disabled="!vm.state.post.post_title"
+                            <button ng-disabled="!vm.isValidPost()"
                                 class="btn btn-default"
                                 ng-click="vm.savePost(vm.state.post)"
                                 tooltip-placement="top"
@@ -215,7 +215,7 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.postExists()"
+                                ng-disabled="!vm.isValidPost()"
                                 type="button"
                                 class="btn btn-default"
                                 ng-click="vm.toggleFeatured(vm.state.post)"
@@ -229,7 +229,7 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.postExists()"
+                                ng-disabled="!vm.isValidPost()"
                                 class="btn btn-default"
                                 ng-click="vm.publishPost(vm.state.post)"
                                 tooltip-placement="top"
@@ -239,7 +239,7 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.postExists() || true"
+                                ng-disabled="!vm.isValidPost() || true"
                                 class="btn btn-default"
                                 ng-click="vm.previewPost(vm.state.post)"
                                 tooltip-placement="top"
