@@ -97,7 +97,7 @@
                             <button class="btn btn-default" ng-click="vm.duplicatePost(post)">
                                 <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
                             </button>
-                            <button class="btn btn-default" ng-click="vm.previewPost(post)">
+                            <button ng-disabled="true" class="btn btn-default" ng-click="vm.previewPost(post)">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                             </button>
                             <button class="btn btn-default" ng-click="vm.deletePost(post)">
@@ -239,7 +239,7 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.postExists()"
+                                ng-disabled="!vm.postExists() || true"
                                 class="btn btn-default"
                                 ng-click="vm.previewPost(vm.state.post)"
                                 tooltip-placement="top"
