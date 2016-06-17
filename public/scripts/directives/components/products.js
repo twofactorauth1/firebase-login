@@ -1242,19 +1242,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.setupCardForm = function() {
-                if ($.card) {
-                    var cart = $(element).find('.modal#cart-checkout-modal');
-
-                    if (!cart.length) {
-                        cart = $('.modal#cart-checkout-modal');
-                    }
-
-                    cart.each(function() {
-                        $(this).card({
-                            container: $(this).find('.card-wrapper')
-                        });
-                    });
-                }
+                $('#product-card-details-' + scope.component._id).card({
+                    container: '#card-wrapper-' + scope.component._id
+                });
             }
 
 

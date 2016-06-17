@@ -2,9 +2,9 @@
 
     app.controller('SiteBuilderFormDonateComponentController', ssbFormDonateComponentController);
 
-    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', '$interval', 'ENV', '$modal'];
+    ssbFormDonateComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$sce', '$location', '$interval', 'ENV', '$modal', '$timeout'];
     /* @ngInject */
-    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, $interval, ENV, $modal) {
+    function ssbFormDonateComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $sce, $location, $interval, ENV, $modal, $timeout) {
 
         console.info('ssb-form-donate directive init...')
 
@@ -895,6 +895,13 @@
                 size: 'lg',
                 scope: $scope
             });
+            
+            $timeout(function () {  
+              $('#donation-card-details-' + vm.component._id).card({
+                container: '#card-wrapper-' + vm.component._id
+              });
+              console.log('card setup');
+            }, 200);
         };
         
         function closeModalFn() {
@@ -912,12 +919,6 @@
                     vm.close();
                 }
             })
-
-            if ($.card) {
-                vm.card = $('.modal').card({
-                    container: $(vm.element).find('.card-wrapper')
-                });
-            }
 
             $scope.$watch('vm.component.productSettings.product', function (val) {
                 if (val) {
