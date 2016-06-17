@@ -10,7 +10,7 @@
         </header>
         <div ng-if="filteredProducts.length" masonry load-images="false" reload-on-resize reload-on-show class="tab-pane active" id="{{productSection['product-section-id']}}">
             <div class="masonry-brick" data-class="product-section-id" ng-class="{
-                    'col-xs-12 col-sm-4 col-sm-offset-4': filteredProducts.length == 1,
+                    'col-xs-12 col-sm-10 col-sm-offset-1': filteredProducts.length == 1,
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
                 }" ng-repeat="product in filteredProducts">
