@@ -46,12 +46,12 @@
 
             function success(data) {
 
-                var post = _.findWhere(ssbBlogService.blog.posts, {
+                var index = _.findIndex(ssbBlogService.blog.posts, {
                     _id: data._id
                 });
 
-                if (post) {
-                    post = data;
+                if (index > -1) {
+                    ssbBlogService.blog.posts[index] = data;
                 } else {
                     ssbBlogService.blog.posts.push(data);
                 }

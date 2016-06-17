@@ -3264,7 +3264,7 @@ module.exports = {
             blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
         }
 
-        blogPost.post_excerpt = self.getBlogPostExcerpt(blogPost.post_content);
+        blogPost.set('post_excerpt', self.getBlogPostExcerpt(blogPost.get('post_content')));
 
         var query = {
             accountId: accountId,
@@ -3537,23 +3537,23 @@ module.exports = {
         })
 
     },
-  
+
     updateScriptResource: function (accountId, websiteId, modified, modifiedWebsite, fn) {
         var self = this;
         var userId = modified.by;
         var resources = modifiedWebsite.get('resources');
         var userScripts = resources.userScripts;
-      
+
         for (var k in userScripts) {
           userScripts[k].sanitized = sanitizeHtml(userScripts[k].original, {
-            allowedTags: ['script', 'div', 'iframe', 'noscript', 'a'], 
+            allowedTags: ['script', 'div', 'iframe', 'noscript', 'a'],
             allowedAttributes: false
           });
         }
-        
+
         resources.userScripts = userScripts;
         modifiedWebsite.set('resources', resources);
-      
+
         self.log.debug(accountId, userId, '>> updateScriptResource');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err || !website) {
