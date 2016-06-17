@@ -16,6 +16,7 @@
                                 'Button Text' +
                              '</a>';
 
+            this.selection.restore();
             this.html.insert(buttonHTML);
             this.undo.saveStep();
         },
