@@ -184,7 +184,10 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website = value.website || {};
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
-              
+
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
 
                 if(pageHolder[handle]) {
@@ -388,12 +391,13 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
 
+
+                value.website = value.website || {};
                 value.website.resources = value.website.resources || {};
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
 
-                value.website = value.website || {};
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
