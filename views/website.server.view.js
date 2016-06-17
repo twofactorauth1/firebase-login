@@ -184,6 +184,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website = value.website || {};
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+              
+                data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
