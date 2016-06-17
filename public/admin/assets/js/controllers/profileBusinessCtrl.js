@@ -2,17 +2,20 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations) {
+  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", "SimpleSiteBuilderService", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations, SimpleSiteBuilderService) {
 
     $scope.isValid = true;
     $scope.hours = hoursConstant;
     $scope.formValidations = formValidations;
     //account API call for object population
     //account API call for object population
-    AccountService.getAccount(function (account) {
-      $scope.account = account;
-      $scope.setDefaults();
-      $scope.actualAccount = angular.copy($scope.account);
+
+    $scope.$watch(function() { return SimpleSiteBuilderService.account; }, function(account){
+        if(account){
+            $scope.account = account;
+            $scope.setDefaults();
+            $scope.actualAccount = angular.copy($scope.account);
+        }
     });
 
     //user API call for object population
@@ -353,6 +356,7 @@
       return isDirty;
     }
     $scope.resetDirty = function(){
+      angular.copy($scope.actualAccount, SimpleSiteBuilderService.account);
       $scope.actualAccount = null;
       $scope.account = null;
     }
