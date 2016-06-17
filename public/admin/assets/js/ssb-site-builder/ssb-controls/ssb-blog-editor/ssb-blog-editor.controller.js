@@ -55,7 +55,9 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         }
     }, true);
 
-    $scope.$watch('vm.state.post', _.debounce(vm.autoSave, 1000), true);
+    // Disabling auto blog save
+
+    //$scope.$watch('vm.state.post', _.debounce(vm.autoSave, 1000), true);
 
 
     function filter(item) {
