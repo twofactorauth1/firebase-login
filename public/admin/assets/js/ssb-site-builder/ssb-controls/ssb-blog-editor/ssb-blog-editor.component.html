@@ -200,13 +200,13 @@
                 <div class="ssb-blog-editor-controls-inner">
                     <div class="ssb-blog-editor-controls-inner-fixed">
 
-                        <span class="text-u">Status:</span>
+                        <h4 class="text-u inline">Status:</h4>
                         <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
 
-                        <div class="btn-group btn-group-lg row block clearfix" role="group" aria-label="Post Status">
+                        <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
 
                             <button ng-disabled="!vm.isValidPost()"
-                                class="btn btn-default"
+                                class="btn btn-primary"
                                 ng-click="vm.savePost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
@@ -217,7 +217,7 @@
                             <button
                                 ng-disabled="!vm.isValidPost()"
                                 type="button"
-                                class="btn btn-default"
+                                class="btn btn-primary"
                                 ng-click="vm.toggleFeatured(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
@@ -230,7 +230,7 @@
 
                             <button
                                 ng-disabled="!vm.isValidPost()"
-                                class="btn btn-default"
+                                class="btn btn-primary"
                                 ng-click="vm.publishPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
@@ -239,8 +239,8 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.isValidPost() || true"
-                                class="btn btn-default"
+                                ng-disabled="!vm.isValidPost()"
+                                class="btn btn-primary"
                                 ng-click="vm.previewPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
@@ -251,21 +251,15 @@
 
                         </div>
 
-
-                        <!-- TODO: Date picker, maps to vm.state.post.publish_date -->
                         <div class="row block ssb-blog-editor-controls-date">
-                            Date
-                            <indi-datepicker ng-model="vm.state.post.publish_date" readOnly="true" popup="MM/dd/yyyy"></indi-datepicker>
+                            <indi-datepicker ng-model="vm.state.post.publish_date" popup="MM/dd/yyyy"></indi-datepicker>
                         </div>
 
-                        <!-- TODO: Author name, editable, populate account first name + last name or business name, maps to vm.post.post_author -->
                         <div class="row block ssb-blog-editor-controls-author">
-                            Author
-                            <input type="text" ng-model="vm.state.post.post_author" class="form-control" placeholder="Author" />
+                            <input type="text" ng-model="vm.state.post.post_author" class="form-control" placeholder="Author's Name" />
                         </div>
 
-                        <!-- TODO: Tag picker, maps to vm.state.post.post_tags array -->
-                        <div class="row block ssb-blog-editor-tags">
+                        <div class="row block ssb-blog-editor-controls-tags">
                             <h4 class="text-u">Tags</h4>
                             <tags-input min-length="1" ng-model="vm.state.post.post_tags"></tags-input>
                         </div>
@@ -277,7 +271,7 @@
                                 <div ng-if="vm.state.post.featured_image">
                                     <img ng-src="{{vm.state.post.featured_image}}" />
                                 </div>
-                                <div ng-if="!vm.state.post.featured_image">
+                                <div class="ssb-no-image" ng-if="!vm.state.post.featured_image">
                                     <i class="fa fa-image"></i>
                                     <span>No Featured Image</span>
                                 </div>
