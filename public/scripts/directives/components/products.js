@@ -1243,7 +1243,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 size: 'lg',
                 scope: scope,
                 backdrop: 'static',
-                dismiss: function () {
+                closed: function () {
                   if (scope.checkoutModalState == 5) {
                     scope.checkoutModalState = 1;
                   } 
