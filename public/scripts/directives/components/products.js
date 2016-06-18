@@ -342,7 +342,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.checkoutModalState = 6;
                     } else if (scope.stripeInfo) {
                         scope.checkoutModalState = 3;
-                        scope.setupCardForm();
                     } else if (scope.paypalInfo) {
                         scope.checkoutModalState = 6;
                     }
@@ -1188,7 +1187,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 if ($routeParams.state && $routeParams.comp == 'products') {
                     scope.checkoutModalState = parseInt($routeParams.state);
-                    $('#cart-checkout-modal').appendTo('body').modal('show');
+                    scope.showModalFn();
                     if (scope.checkoutModalState == 5 && orderCookieData) {
                         OrderService.setOrderPaid(orderCookieData, function(data) {
                             if (data && !data._id) {
@@ -1225,27 +1224,39 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.paypalLoginClickFn = function () {
                 var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
                 dgFlow.startFlow($location.absUrl());
-                $('#cart-checkout-modal').modal('hide');
+                scope.close();
             };
 
             scope.deleteOrderFn = function (order) {
                 OrderService.deletePaypalOrder(order, function (data) {
                     if (data.deleted) {
-                        $('#cart-checkout-modal').modal('hide');
+                        scope.close();
                         scope.checkoutModalState = 1;
                     }
                 });
             };
 
             scope.showModalFn = function () {
-              var cartModal = $('#cart-checkout-modal').appendTo('body').modal('show');
-            };
-
-            scope.setupCardForm = function() {
+              scope.modalInstance = $modal.open({
+                templateUrl: 'product-cart-modal',
+                keyboard: true,
+                size: 'lg',
+                scope: scope,
+                backdrop: 'static',
+                dismiss: function () {
+                  if (scope.checkoutModalState == 5) {
+                    scope.checkoutModalState = 1;
+                  } 
+                }
+              });
+              
+              $timeout(function () {
                 $('#product-card-details-' + scope.component._id).card({
                     container: '#card-wrapper-' + scope.component._id
                 });
-            }
+                console.log('card setup');
+              }, 200);
+            };
 
 
             /*
@@ -1285,7 +1296,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
                 $scope.checkoutModalState = state;
-                $scope.setupCardForm();
             };
         }
     };
