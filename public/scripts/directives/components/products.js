@@ -1242,14 +1242,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 keyboard: true,
                 size: 'lg',
                 scope: scope,
-                backdrop: 'static',
-                closed: function () {
-                  if (scope.checkoutModalState == 5) {
-                    scope.checkoutModalState = 1;
-                  } 
-                }
+                backdrop: 'static'
               });
-              
+                
               $timeout(function () {
                 $('#product-card-details-' + scope.component._id).card({
                     container: '#card-wrapper-' + scope.component._id
@@ -1278,9 +1273,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.close = function() {
                 scope.modalInstance.close();
+                if (scope.checkoutModalState == 5) {
+                  scope.checkoutModalState = 1;
+                }
             }
-
-
+            
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie';
