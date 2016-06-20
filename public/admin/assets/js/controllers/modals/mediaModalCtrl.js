@@ -372,4 +372,15 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     insertMedia();
     $scope.closeModal();
   }
+
+  $scope.m.onAssetUpdateCallback = function (asset) {
+    var originalAsset = angular.copy(asset);
+    originalAsset.checked = false;
+    AssetsService.updateAsset(originalAsset, function (data, status) {
+      if (status == 200) {
+        ToasterService.show('success', 'Asset updated.');
+      }
+    });
+  };
+
 }]);

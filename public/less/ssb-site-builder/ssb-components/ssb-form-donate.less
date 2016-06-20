@@ -2,13 +2,32 @@
     //
 }
 
+.donate-social-share {
+    margin: 25px 15px;
+    text-align: center;
+    vertical-align: middle;
+
+    .twitter-share-button, .facebook-share-button {
+        vertical-align: top;
+    }
+
+    .fa-facebook{
+        background: white;
+        color: #2d4373;
+        padding: 2px;
+        padding-bottom: 0;
+    }
+}
+
 [ssb-form-donate-component] {
 
-    /**
-     * Modal styles
-     */
 
 
+}
+/**
+ * Modal styles
+ */
+.donation-modal{
     .modal {
         color: #444444;
     }
@@ -97,25 +116,12 @@
         right: 13px;
     }
 
-    .donate-social-share {
-        margin: 25px 15px;
-        text-align: center;
-        vertical-align: middle;
 
-        .twitter-share-button, .facebook-share-button {
-            vertical-align: top;
-        }
-
-        .fa-facebook{
-            background: white;
-            color: #2d4373;
-            padding: 2px;
-            padding-bottom: 0;
-        }
-
-    }
 
 }
+
+
+
 
 .form-donate-layout {
     position: relative;
@@ -127,6 +133,7 @@
     border-color: #e5e5e5;
     border-bottom-width: 10px;
     max-width: 250px;
+    margin-top: 10px;
 
     &:before {
         content: '';

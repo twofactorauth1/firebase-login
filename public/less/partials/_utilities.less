@@ -212,6 +212,10 @@
     padding-bottom: 30px !important;
 }
 
+.padding-bottom-50 {
+    padding-bottom: 30px !important;
+}
+
 .padding-top-0 {
     padding-top: 0px !important;
 }
@@ -237,6 +241,10 @@
 }
 
 .padding-top-30 {
+    padding-top: 30px !important;
+}
+
+.padding-top-50 {
     padding-top: 30px !important;
 }
 
@@ -1114,7 +1122,36 @@ a.text-light:hover {
     overflow: auto;
 }
 
+.overflow-hidden {
+    overflow: hidden;
+}
+
 .modal-overflow-content { /* <- this could be deprecated when modal layout is more flexible */
     max-height: 400px;
     overflow: auto;
+}
+
+.aspect-ratio {
+    height: 0; position: relative;
+}
+
+.aspect-ratio--16x9 {
+    padding-bottom: 56.25%;
+}
+
+.aspect-ratio--4x3 {
+    padding-bottom: 75%;
+}
+
+.aspect-ratio--8x5 {
+    padding-bottom: 62.5%;
+}
+
+.aspect-ratio--object-center {
+    left: 0;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    z-index: 100;
+    transform: translateY(-50%);
 }

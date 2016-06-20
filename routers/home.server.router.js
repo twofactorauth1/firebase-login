@@ -37,7 +37,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
         //send all routes to index and let the app router to navigate to the appropriate view
         app.get("/index", this.setup.bind(this), this.optimizedIndex.bind(this));
         app.get("/blog", this.setup.bind(this), this.renderBlogPage.bind(this));
-        app.get("/blog/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        //app.get("/blog/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get('/blog/feed/rss', this.setup.bind(this), this.blogRSS.bind(this));
+        app.get("/blog/:postName", this.setup.bind(this), this.renderBlogPost.bind(this));
         app.get("/tag/*", this.setup.bind(this), this.optimizedIndex.bind(this));
         app.get("/category/*", this.setup.bind(this), this.optimizedIndex.bind(this));
         app.get("/author/*", this.setup.bind(this), this.optimizedIndex.bind(this));
@@ -477,6 +479,41 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     renderBlogPost: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        var postName = req.params.postName;
+        self.log.debug(accountId, null, '>> renderBlogPost[' + postName + ']');
+        //account.showhide.ssbBlog
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                resp.status(500);
+                resp.render('500.html', {title: '500: File Not Found'});
+                return;
+            } else {
+                var showHide = account.get('showhide');
+                if(showHide && showHide.ssbBlog && showHide.ssbBlog===true) {
+                    new BlogView(req, resp).renderBlogPost(accountId, postName);
+                    self.log.debug(accountId, null, '<< renderBlogPost');
+
+                } else {
+                    //treat as legacy blog
+                    if(accountId === 'new') {//we are on the signup page
+                        accountId = appConfig.mainAccountID;
+                    }
+                    var pageName = req.params.page || 'blog';
+                    self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
+
+                    new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+                    self.log.debug('<< optimizedIndex');
+                }
+            }
+        });
+    },
+
+    blogRSS: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
 
     },
 

@@ -1259,7 +1259,45 @@ module.exports = {
         });
 
     },
-
+  
+  /**
+     * This method marks an order refunded and attempts to return charges using paypal.
+     * @param orderId
+     * @param note
+     * @param userId
+     * @param amount
+     * @param accessToken
+     * @param reason (duplicate|fraudulent|requested_by_customer)
+     * @param fn
+     * @param accountId
+     */
+    refundPaypalOrder: function (accountId, orderId, note, userId, amount, reason, fn) {
+      dao.getById(orderId, function (err, order) {
+        if (err) {
+          log.error(accountId, userId, 'Error getting order: ' + err);
+          return fn(err, null);
+        }
+        
+        order.set('note', order.get('note') + '\n' + note);
+        order.set('status', $$.m.Order.status.REFUNDED);
+        order.set('updated_at', new Date());
+        var modified = {
+            date: new Date(),
+            by: userId
+        };
+        order.set('modified', modified);
+        
+        dao.saveOrUpdate(order, function(err, updatedOrder) {
+            if (err) {
+                log.error(accountId, userId, 'Error updating order: ' + err);
+                return fn(err, null);
+            }
+            log.debug(accountId, userId, '<< refundOrder');
+            return fn(null, updatedOrder);
+        });
+      });
+    },
+  
     /**
      * This method marks an order on_hold without making any other changes to the order.
      * @param orderId

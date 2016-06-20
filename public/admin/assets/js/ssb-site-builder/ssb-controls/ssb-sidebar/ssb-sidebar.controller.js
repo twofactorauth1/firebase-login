@@ -60,7 +60,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
     vm.validateDuplicatePage = validateDuplicatePage;
-    vm.loadPage = loadPage;
     vm.constructVideoUrl = constructVideoUrl;
     vm.closeSectionPanel = closeSectionPanel;
     vm.initializeMapSlider = initializeMapSlider;
@@ -300,14 +299,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             function (isConfirm) {
                 if (isConfirm) {
                     section.visibility = false;
-                    setActiveSection(index);
+                    vm.uiState.activeSectionIndex = undefined;
+                    vm.uiState.activeComponentIndex = undefined;
                     vm.uiState.toggleSection(section);
                 }
             });
 
         } else {
             section.visibility = true;
-            setActiveSection(index);
             vm.uiState.toggleSection(section);
         }
 
@@ -1005,33 +1004,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             })
         }
     }
-
-    function loadPage(page) {
-        if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
-            vm.state.saveLoading = true;
-            vm.state.pendingWebsiteChanges = false;
-            vm.state.pendingPageChanges = false;
-            saveWebsite().then(function(){
-                return (
-                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
-                            console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                            vm.state.saveLoading = false;
-                            vm.uiState.navigation.loadPage(page._id);
-                            SimpleSiteBuilderService.getPages();
-                        })
-                    }).catch(function(err) {
-                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                        vm.state.saveLoading = false;
-                    })
-                )
-            })
-        } else {
-            vm.uiState.navigation.loadPage(page._id);
-            SimpleSiteBuilderService.getPages();
-        }
-    };
 
     $scope.$watch('vm.state.page.handle', function(handle, oldHandle){
         if(handle && !angular.equals(oldHandle, handle)){

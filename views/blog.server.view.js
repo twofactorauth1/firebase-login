@@ -109,9 +109,9 @@ _.extend(view.prototype, BaseView.prototype, {
             function addBlogTemplate(webpageData, page, posts, cb) {
                 /*
                  * Need to wrap this:
-                 * <div class="ssb-layout__header_2-col_footer">
+                 * <div class="ssb-layout__header_2-col_footer ssb-page-blog-list">
 
-                 <div class="ssb-page-layout-row">
+                 <div class="ssb-page-layout-row-header ssb-page-layout-row">
                  <div class="col-xs-12">
                  <ssb-page-section
                  ng-repeat="sectionIndex in page.layoutModifiers['header']"
@@ -122,7 +122,7 @@ _.extend(view.prototype, BaseView.prototype, {
                  </div>
                  </div>
 
-                 <div class="ssb-page-layout-row">
+                 <div class="ssb-page-layout-row-2-col ssb-page-layout-row">
                  <div class="col-xs-12 col-md-8">
                  <ssb-page-section
                  ng-repeat="sectionIndex in page.layoutModifiers['2-col-1']"
@@ -142,7 +142,7 @@ _.extend(view.prototype, BaseView.prototype, {
                  </div>
                  </div>
 
-                 <div class="ssb-page-layout-row">
+                 <div class="ssb-page-layout-row-footer ssb-page-layout-row">
                  <div class="col-xs-12">
                  <ssb-page-section
                  ng-repeat="sectionIndex in page.layoutModifiers['footer']"
@@ -157,8 +157,8 @@ _.extend(view.prototype, BaseView.prototype, {
                  */
                 if(page.get('layout') === 'ssb-layout__header_2-col_footer') {
                     var sections = page.get('sections');
-                    var template = '<div class="ssb-layout__header_2-col_footer">';
-                    template += '<div class="ssb-page-layout-row">';
+                    var template = '<div class="ssb-layout__header_2-col_footer ssb-page-blog-list">';
+                    template += '<div class="ssb-page-layout-row-header ssb-page-layout-row">';
                     template += '<div class="col-xs-12">';
                     var index = 0;
                     //<ssb-page-section ng-repeat="sectionIndex in page.layoutModifiers['header']" section="page.sections[sectionIndex]"
@@ -168,7 +168,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         index++;
                     });
 
-                    template += '</div></div><div class="ssb-page-layout-row"><div class="col-xs-12 col-md-8">';
+                    template += '</div></div><div class="ssb-page-layout-row-2-col ssb-page-layout-row"><div class="col-xs-12 col-md-8">';
                     var blogPostIndex = 0;
                     _.each(page.get('layoutModifiers')['2-col-1'], function(idx){
                         if(sections[idx].filter === 'blog') {
@@ -211,7 +211,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                             index++;
                                         });
 
-                                        template += '</div></div><div class="ssb-page-layout-row"><div class="col-xs-12">';
+                                        template += '</div></div><div class="ssb-page-layout-row-footer ssb-page-layout-row"><div class="col-xs-12">';
 
                                         _.each(page.get('layoutModifiers')['footer'], function(idx){
                                             template += '<ssb-page-section section="sections_' + idx + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
@@ -250,6 +250,9 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
                 value.website = value.website || {};
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -310,6 +313,241 @@ _.extend(view.prototype, BaseView.prototype, {
                     self.resp.send(html);
                     self.cleanUp();
                     self.log.debug('<< renderBlogPage');
+                    self = data = value = null;
+                });
+            }
+        ], function done(err){
+            self.log.error('Error in render:', err);
+            app.render('404.html', {}, function(err, html){
+                if(err) {
+                    self.log.error('Error during render:', err);
+                }
+                self.resp.status(404).send(html);
+            });
+        });
+    },
+
+    renderBlogPost: function(accountId, postName) {
+        var self = this;
+        self.log.debug(accountId, null, '>> renderBlogPost');
+        var data = {ssbBlog:true};
+        var handle = 'blog-post';
+
+        async.waterfall([
+            function getWebpageData(cb){
+                ssbManager.getDataForWebpage(accountId, handle, function(err, value){
+                    if(err) {
+                        self.log.error('Error getting data for website:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function getPublishedPage(webpageData, cb) {
+                ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, page);
+                });
+            },
+            function readComponents(webpageData, page, cb) {
+                data.templates = '';
+                if(page) {
+                    data.templateIncludes = [];
+                    data.templateIncludes[0] = {id:'/components/component-wrap.html'};
+                    fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
+                        data.templateIncludes[0].data = html;
+                        var components = [];
+                        _.each(page.get('sections'), function(section){
+                            if(section) {
+                                components = components.concat(section.components);
+                            }
+                        });
+
+                        var map = {};
+                        async.eachSeries(components, function(component, cb){
+                            if(component) {
+                                var obj = {};
+                                obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                                if(map[obj.id]) {
+                                    cb(null);
+                                } else {
+                                    fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                        obj.data = html;
+                                        data.templateIncludes.push(obj);
+                                        map[obj.id] = obj;
+                                        cb();
+                                    });
+                                }
+                            } else {
+                                cb();
+                            }
+
+                        }, function done(err){
+                            cb(null, webpageData, page);
+                        });
+
+
+                    });
+                } else {
+                    cb('Could not find ' + handle);
+                }
+
+            },
+
+            function addSSBSection(webpageData, page, cb){
+                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
+                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
+                    ssbSectionTemplate.data = html;
+                    data.templateIncludes.push(ssbSectionTemplate);
+                    cb(null, webpageData, page);
+                });
+            },
+
+            function getBlogPost(webpageData, page, cb) {
+                ssbManager.getPublishedPost(accountId, postName, function(err, post){
+                    cb(err, webpageData, page, post);
+                });
+
+            },
+
+            function addBlogTemplate(webpageData, page, post, cb) {
+                //assuming single column layout
+                var sections = page.get('sections');
+                var templateSectionArray = [];
+                var blogPostIndex = 0;
+
+                _.each(sections, function(section, index) {
+                    // if (section.filter === 'blog') {
+                    //     blogPostIndex = index;
+                    // } else {
+                        templateSectionArray.push('<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>');
+                    // }
+                });
+
+                data.templateIncludes.push({
+                    id: 'blogpost.html',
+                    data: templateSectionArray.join('')
+                });
+
+                // if (blogPostIndex !== 0) {
+                //     // fs.readFile('/public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf-8', function (err, sectionHtml) {
+                //         fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-detail/ssb-blog-post-detail.component.html', 'utf-8', function (err, detailHtml) {
+                //             if(err) {
+                //                 self.log.error('Error reading post-detail:', err);
+                //                 cb(err);
+                //             } else {
+                //                 var detailHtml =
+                //                     '<section>' +
+                //                         detailHtml +
+                //                     '</section>';
+                //                 // var substitutions = [{name:'ssb-component-loader', value:detailHtml, prefix:'vm'}];
+                //                 var substitutions = [];
+                //                 var context = {
+                //                     vm: {
+                //                         component: sections[blogPostIndex],
+                //                         post: post.toJSON()
+                //                     }
+                //                 };
+
+                //                 // ngParser.parseHtml(sectionHtml, context, substitutions, function(err, value){
+                //                 ngParser.parseHtml(detailHtml, context, substitutions, function(err, value){
+
+                //                     var parsedHtml = value;
+
+                //                     templateSectionArray.splice(blogPostIndex, 0, parsedHtml);
+
+                //                     self.log.debug('template:', templateSectionArray.join(''));
+
+                //                     data.templateIncludes.push({
+                //                         id: 'blogpost.html',
+                //                         data: templateSectionArray.join('')
+                //                     });
+
+                //                     cb(null, webpageData, page, post);
+                //                 });
+                //             }
+                //         });
+                //     // });
+                // } else {
+                    cb(null, webpageData, page, post);
+                // }
+
+            },
+
+            function prepareForRender(value, page, post, cb) {
+                var pageHolder = {};
+                pageHolder[page.get('handle')] = page.toJSON('frontend');
+
+
+                data.pages = pageHolder;
+                data.post = post;
+                data.account = value;
+                data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
+                data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
+                data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+                value.website = value.website || {};
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                if(pageHolder[handle]) {
+                    data.title = pageHolder[handle].title || value.website.title;
+                } else {
+                    data.title = value.website.title;
+                }
+
+                data.author = 'Indigenous';//TODO: wut?
+                data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+                data.website = value.website || {};
+                if(pageHolder[handle] && pageHolder[handle].seo) {
+                    data.seo = {
+                        description: pageHolder[handle].seo.description || value.website.seo.description,
+                        keywords: ''
+                    };
+                } else {
+                    data.seo = {
+                        description: value.website.seo.description,
+                        keywords: ''
+                    };
+                }
+
+
+                if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
+                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
+                } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
+                    data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
+                }
+
+
+                data.og = {
+                    type: 'website',
+                    title: (pageHolder[handle] || {}).title || value.website.title,
+                    image: value.website.settings.favicon
+                };
+                if (data.og.image && data.og.image.indexOf('//') === 0) {
+                    data.og.image = 'http:' + data.og.image;
+                }
+                data.includeEditor = false;
+
+                if (!data.account.website.settings) {
+                    self.log.warn('Website Settings is null for account ' + accountId);
+                    data.account.website.settings = {};
+                }
+                var jsonldHolder = [];
+
+                var url = self._req.originalUrl;
+                var orgName = value.business.name;
+                var logoUrl = value.business.logo;
+                jsonldHolder.push(jsonldbuilder.buildForBlogPost(post, url, orgName, logoUrl));
+
+                data.jsonld = JSON.stringify(jsonldHolder);
+                app.render('blog', data, function (err, html) {
+                    if (err) {
+                        self.log.error('Error during render: ' + err);
+                    }
+
+                    self.resp.send(html);
+                    self.cleanUp();
+                    self.log.debug('<< renderBlogPost');
                     self = data = value = null;
                 });
             }

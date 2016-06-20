@@ -76,9 +76,15 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             if($(elem).data('froala.editor')){
                 var editor = $(elem).data('froala.editor');
                 editor.shared.count = 1;
-                delete editor.shared.$tb;
-                //editor.destroy();
-                console.log("editor destroy");
+                // Deleting shared instances
+                if(editor.shared){
+                    delete editor.shared.$tb;
+                    delete editor.shared.popup_buttons;
+                    delete editor.shared.popups;
+                    delete editor.shared.$image_resizer;
+                    delete editor.shared.$img_overlay;
+                    delete editor.shared.$line_breaker;
+                }
             }
         });
 
@@ -129,15 +135,15 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         //move toolbar to highest z-index
                         editor.$tb.addClass('ssb-froala-active-editor');
 
-                        //editor.selection.clear();
+                        //editor.selection.save();
                         scope.$emit('focusEditor', { editor: editor });
-
-                        //hide any edit-control labels
-                        // $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
 
                     }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
                         console.log('toolbar hide');
+                        // hide any image overlay if toolbar is hidden
+                        if(editor.shared && editor.shared.$img_overlay)
+                            editor.shared.$img_overlay.hide();
 
                         if (editor.popups.areVisible()) {
                             //hide any currently shown toolbar
@@ -158,7 +164,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                             scope.compileEditorElements(editor, true);
                         }
 
-                    }).on('froalaEditor.blur', function (e, editor) {
+                    }).on('froalaEditor.focus', function (e, editor) {
+                       editor.selection.save();
+                    })
+                    .on('froalaEditor.blur', function (e, editor) {
 
                         //hide any currently shown toolbar
                         $('.fr-toolbar').removeClass('ssb-froala-active-editor');

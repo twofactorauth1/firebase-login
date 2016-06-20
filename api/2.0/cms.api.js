@@ -94,6 +94,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
         app.post(this.url('blog/duplicate/post'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePost.bind(this));
+
+        app.post(this.url('websites/:id/updateBlogPages'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPages.bind(this));
+      
+        app.post(this.url('websites/:id/userScripts'), this.isAuthAndSubscribedApi.bind(this), this.updateScriptResource.bind(this));
+
     },
 
     noop: function(req, resp) {
@@ -731,6 +736,48 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    updateBlogPages: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateBlogPages');
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.updateBlogPages(accountId, userId, function(err, account){
+                    self.log.debug(accountId, userId, '<< updateBlogPages');
+                    self.sendResultOrError(resp, err, account, "Error updating blog pages");
+                });
+            }
+        });
+
+    },
+  
+    updateScriptResource: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateScriptResource');
+
+        var websiteId = req.params.id;
+        var modifiedWebsite = new $$.m.ssb.Website(req.body);
+        var modified = {date: new Date(), by: userId};
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.updateScriptResource(accountId, websiteId, modified, modifiedWebsite, function(err, website){
+                    self.log.debug(accountId, userId, '<< updateScriptResource');
+                    self.sendResultOrError(resp, err, website, "Error updating script resource");
+                    return self.createUserActivity(req, 'UPDATE_WEBSITE_SCRIPT_RESOURCE', null, {_id:websiteId}, function(){});
+                });
+            }
+        });
     }
 
 });

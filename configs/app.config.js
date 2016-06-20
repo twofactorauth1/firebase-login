@@ -79,7 +79,7 @@ process.env.GLOBAL_SUBDOMAINS = "www,app";
  * If none are present, production is assumed.
  */
 if(process.env.GLOBAL_ENVIRONMENTS == null) {
-    process.env.GLOBAL_ENVIRONMENTS = "test,prod,asia,other";
+    process.env.GLOBAL_ENVIRONMENTS = "test,prod,asia,other,angular";
 }
 
 

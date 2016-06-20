@@ -760,6 +760,7 @@ var copyutil = {
             function saveNewSections(website, pages, sectionMap, cb) {
                 console.log('saveNewSections: save sections as platform sections accountId=0 and save new _id to sectionMap');
 
+                var visibleSections = {};
                 async.each(Object.keys(sectionMap),
                     function(id, _cb){
 
@@ -770,30 +771,34 @@ var copyutil = {
                                 return _cb(err);
                             }
 
-                            sectionData = section[0];
+                            if(section[0].visibility){
+                                sectionData = section[0];
 
-                            sectionMap[id] = utils.idutils.generateUUID(); //map new _id to old _id
-                            sectionData._id = sectionMap[id]; //set to new _id
-                            sectionData.accountId = 0;
-                            sectionData.siteTemplateRef = siteTemplate._id;
-                            sectionData.enabled = false;
+                                visibleSections[id] = utils.idutils.generateUUID(); //map new _id to old _id
 
-                            sectionsCollection.save(sectionData, function(err, savedSection){
-                                return _cb(err);
-                            });
+                                sectionData._id = visibleSections[id]; //set to new _id
+                                sectionData.accountId = 0;
+                                sectionData.siteTemplateRef = siteTemplate._id;
+                                sectionData.enabled = false;
+                                // Ensure that no global section for accountId 0
+                                section[0].global = false;
+
+                                sectionsCollection.save(sectionData, function(err, savedSection){
+                                    return _cb(err);
+                                });
+                            }
+                            else{
+                                return _cb();
+                            }
 
                         });
-
-
                     },
                     function(err){
                         if (err) {
                             console.log('Error saving new sections:', err);
                             return cb(err);
                         }
-
-                        return cb(null, website, pages, sectionMap);
-
+                        return cb(null, website, pages, visibleSections);
                     }
                 );
 
@@ -812,12 +817,17 @@ var copyutil = {
 
                         delete page.websiteId;
 
+                        console.log(page.sections);
+
                         page.sections = _(page.sections).map(function(section) {
                             // console.log('old section _id: ' + section._id);
                             // console.log('new section _id: ' + sectionMap[section._id]);
                             section._id = sectionMap[section._id];
                             return section;
                         })
+
+                        page.sections =  _.reject(page.sections, function(section){ return !section._id });
+
 
                         templatesCollection.save(page, function(err, savedTemplate){
                             if (err) {

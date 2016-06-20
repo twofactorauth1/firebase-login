@@ -68,7 +68,7 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
             _filteredProducts.push(product);
           }
         });
-        var activeProducts = _.without(_filteredProducts, _.findWhere(_filteredProducts, {type : "DONATION"}));
+        var activeProducts =_.filter(_filteredProducts, function(product){ return product.type !== 'DONATION'})
         scope.products = activeProducts;
         if (fn) {
           fn();

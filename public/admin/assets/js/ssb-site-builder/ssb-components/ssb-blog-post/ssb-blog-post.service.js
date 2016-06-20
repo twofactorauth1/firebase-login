@@ -46,12 +46,12 @@
 
             function success(data) {
 
-                var post = _.findWhere(ssbBlogService.blog.posts, {
+                var index = _.findIndex(ssbBlogService.blog.posts, {
                     _id: data._id
                 });
 
-                if (post) {
-                    post = data;
+                if (index > -1) {
+                    ssbBlogService.blog.posts[index] = data;
                 } else {
                     ssbBlogService.blog.posts.push(data);
                 }
@@ -62,7 +62,7 @@
                 console.error('SimpleSiteBuilderBlogService savePost error: ', JSON.stringify(error));
             }
 
-            if(post._id) {
+            if (post._id) {
                 return (
                     ssbBlogRequest($http({
                         url: baseBlogAPIUrl + '/post/' + post._id,
@@ -156,7 +156,7 @@
 
         }
 
-        function getPost() {
+        function getPost(pageId, id) {
 
         }
 

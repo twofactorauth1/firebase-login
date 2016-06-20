@@ -28,5 +28,16 @@
           fn(data, status);
         });
     };
+    
+    this.updateAsset = function (asset, fn) {
+      var apiUrl = baseUrl + ['assets', asset._id].join('/');
+      $http.post(apiUrl, asset)
+        .error(function (data, status) {
+          fn(data, status);
+        })
+        .success(function (data, status) {
+          fn(data, status);
+        });
+    };
   }]);
 }(angular));

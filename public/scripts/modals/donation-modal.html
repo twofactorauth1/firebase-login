@@ -1,5 +1,5 @@
 <script type="text/ng-template" id="donation-modal">
-    <div class='donation-v1'>
+    <div class='donation-v1 donation-modal'>
         <div class="modal-header">
             <button type="button" class="close" ng-click='vm.closeModalFn()' aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel">
@@ -117,7 +117,7 @@
                 <div class="clearfix" style="margin-bottom:30px"></div>
             </div>
 
-            <div class="donate-step thank-you" ng-if="vm.checkoutModalState == 3">
+            <div class="donate-step thank-you" ng-show="vm.checkoutModalState == 3">
                 <!-- <h3 class="donate-step-header center mb20">Paypal Payment</h3> -->
                 <form action="{{vm.paypalURL}}" target="_self" class="center standard">
                     <!-- <label for="buy">Buy Now:</label> -->
@@ -130,10 +130,10 @@
             <div class="donate-step payment" ng-show="vm.checkoutModalState == 4">
                 <div class="col-sm-12 col-xs-12 information">
                     <div class="clearfix"></div>
-                    <div class="card-wrapper"></div>
+                    <div id="card-wrapper-{{vm.component._id}}"></div>
                     <div class="clearfix margin-bottom-30"></div>
                     <div class="active col-xs-12">
-                        <form id="donation-card-details" name="donation-card-details" action="">
+                        <form id="donation-card-details-{{vm.component._id}}" name="donation-card-details" action="">
                             <div class="row">
                                 <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
                                     <input placeholder="Card number" ng-blur="vm.checkCardNumber()" type="text" name="number" id="number" class="form-control">
@@ -195,7 +195,7 @@
                 </div>
             </div>
 
-            <div class="donate-step processing" ng-if="vm.checkoutModalState == 6">
+            <div class="donate-step processing" ng-show="vm.checkoutModalState == 6">
                 <h3 class="center donate-step-header mb20">Donation Processing...</h3>
                 <div class="text-center padding-20">
                     <span class="fa fa-spinner fa-spin fa-4x"></span>

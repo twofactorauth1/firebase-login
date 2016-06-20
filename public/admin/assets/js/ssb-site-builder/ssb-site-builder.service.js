@@ -29,6 +29,7 @@
         ssbService.getPagesWithSections = getPagesWithSections;
         ssbService.savePage = savePage;
         ssbService.saveWebsite = saveWebsite;
+        ssbService.updateScriptResource = updateScriptResource;
         ssbService.setActiveSection = setActiveSection;
         ssbService.setActiveComponent = setActiveComponent;
         ssbService.activeSectionIndex = undefined;
@@ -74,11 +75,15 @@
         ssbService.getPageVersions = getPageVersions;
         ssbService.publishPage = publishPage;
         ssbService.revertPage = revertPage;
+        ssbService.updateBlogPages = updateBlogPages;
         ssbService.permissions = {};
         ssbService.compiledElements = {};
         ssbService.compiledElementEditControls = {};
         ssbService.detectIENotEdge = detectIENotEdge;
         ssbService.isIENotEdge = ssbService.detectIENotEdge();
+        ssbService.getBlogListPage = getBlogListPage;
+        ssbService.getBlogPostPage = getBlogPostPage;
+
 
         /**
          * This represents the category sorting for the add content panel
@@ -517,6 +522,30 @@
 			return (
 				ssbRequest($http({
 					url: baseWebsiteAPIUrlv2 + website._id,
+					method: 'POST',
+					data: angular.toJson(website)
+				}).success(success).error(error))
+			)
+
+		}
+
+    /**
+         * Save website script resources to db, update client instance with response from server
+         * @param {object} webite - website data
+         */
+    function updateScriptResource(website) {
+
+			function success(data) {
+				ssbService.website = data;
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService updateScriptResource error: ', JSON.stringify(error));
+			}
+
+			return (
+				ssbRequest($http({
+					url: baseWebsiteAPIUrlv2 + website._id + '/userScripts',
 					method: 'POST',
 					data: angular.toJson(website)
 				}).success(success).error(error))
@@ -1703,6 +1732,23 @@
           )
         }
 
+        function updateBlogPages() {
+
+          function success(data) {
+            console.log('SimpleSiteBuilderService updateBlogPages: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService updateBlogPages error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: baseWebsiteAPIUrlv2 + [ssbService.websiteId, 'updateBlogPages'].join('/'),
+              method: 'POST',
+            }).success(success).error(error))
+          )
+        }
         /**
          * detect IE
          * returns version of IE or false, if browser is not Internet Explorer
@@ -1753,9 +1799,17 @@
             return false;
         }
 
+        function getBlogListPage() {
+            return _.where(ssbService.pages, {
+                handle: 'blog-list'
+            });
+        }
 
-
-
+        function getBlogPostPage() {
+            return _.where(ssbService.pages, {
+                handle: 'blog-post'
+            });
+        }
 
 		(function init() {
 

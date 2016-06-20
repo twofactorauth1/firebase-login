@@ -1,7 +1,8 @@
 <div
     ng-repeat="section in page.sections"
     class="fragment"
-    ng-if="!page.layout || page.layout === 'ssb-layout__1-col'">
+    ng-if="!page.layout || page.layout === 'ssb-layout__1-col'"
+    ng-class="{ 'ssb-page-blog-post': page.handle === 'blog-post' }">
 
     <div
         ng-if="section.ssb === false"
@@ -22,11 +23,13 @@
 </div>
 
 
-<div ng-if="page.layout === 'ssb-layout__header_2-col_footer'">
+<div
+    ng-if="page.layout === 'ssb-layout__header_2-col_footer'"
+    ng-class="{ 'ssb-page-blog-list': page.handle === 'blog-list' }">
 
     <div class="ssb-layout__header_2-col_footer">
 
-        <div class="ssb-page-layout-row">
+        <div class="ssb-page-layout-row-header ssb-page-layout-row">
             <div class="col-xs-12">
                 <ssb-page-section
                     ng-repeat="sectionIndex in page.layoutModifiers['header']"
@@ -37,7 +40,7 @@
             </div>
         </div>
 
-        <div class="ssb-page-layout-row">
+        <div class="ssb-page-layout-row-2-col ssb-page-layout-row">
             <div class="col-xs-12 col-md-8">
                 <ssb-page-section
                     ng-repeat="sectionIndex in page.layoutModifiers['2-col-1']"
@@ -57,7 +60,7 @@
             </div>
         </div>
 
-        <div class="ssb-page-layout-row">
+        <div class="ssb-page-layout-row-footer ssb-page-layout-row">
             <div class="col-xs-12">
                 <ssb-page-section
                     ng-repeat="sectionIndex in page.layoutModifiers['footer']"

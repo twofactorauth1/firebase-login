@@ -13,8 +13,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.order = null;
             //cookie data fetch
 
-            var cookieKey = 'cart_cookie';
-            var orderCookieKey = 'order_cookie';
+            var cookieKey = 'cart_cookie_' + scope.component._id;
+            var orderCookieKey = 'order_cookie_' + scope.component._id;
             var cookieData = localStorageService.get(cookieKey);
             var orderCookieData = localStorageService.get(orderCookieKey);
 
@@ -94,7 +94,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         _filteredProducts.push(product);
                     }
                 });
-                var activeProducts = _.without(_filteredProducts, _.findWhere(_filteredProducts, {type : "DONATION"}));
+                var activeProducts =_.filter(_filteredProducts, function(product){ return product.type !== 'DONATION'})
                 scope.products = activeProducts;
                 if (fn) {
                     fn();
@@ -342,7 +342,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.checkoutModalState = 6;
                     } else if (scope.stripeInfo) {
                         scope.checkoutModalState = 3;
-                        scope.setupCardForm();
                     } else if (scope.paypalInfo) {
                         scope.checkoutModalState = 6;
                     }
@@ -968,6 +967,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         CartDetailsService.totalTax = 0;
                         CartDetailsService.total = 0;
                         localStorageService.remove(cookieKey);
+                        cookieData = {
+                          products: []
+                        };
+                        cookieProcessFn();
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
                 });
@@ -1184,11 +1187,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 if (cookieData.contactInfo) {
                     scope.newContact = cookieData.contactInfo;
+                } else {
+                  scope.newContact = {};
                 }
 
                 if ($routeParams.state && $routeParams.comp == 'products') {
                     scope.checkoutModalState = parseInt($routeParams.state);
-                    $('#cart-checkout-modal').appendTo('body').modal('show');
+                    scope.showModalFn();
                     if (scope.checkoutModalState == 5 && orderCookieData) {
                         OrderService.setOrderPaid(orderCookieData, function(data) {
                             if (data && !data._id) {
@@ -1225,37 +1230,34 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.paypalLoginClickFn = function () {
                 var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
                 dgFlow.startFlow($location.absUrl());
-                $('#cart-checkout-modal').modal('hide');
+                scope.close();
             };
 
             scope.deleteOrderFn = function (order) {
                 OrderService.deletePaypalOrder(order, function (data) {
                     if (data.deleted) {
-                        $('#cart-checkout-modal').modal('hide');
+                        scope.close();
                         scope.checkoutModalState = 1;
                     }
                 });
             };
 
             scope.showModalFn = function () {
-              var cartModal = $('#cart-checkout-modal').appendTo('body').modal('show');
+              scope.modalInstance = $modal.open({
+                templateUrl: 'product-cart-modal',
+                keyboard: true,
+                size: 'lg',
+                scope: scope,
+                backdrop: 'static'
+              });
+                
+              $timeout(function () {
+                $('#product-card-details-' + scope.component._id).card({
+                    container: '#card-wrapper-' + scope.component._id
+                });
+                console.log('card setup');
+              }, 200);
             };
-
-            scope.setupCardForm = function() {
-                if ($.card) {
-                    var cart = $(element).find('.modal#cart-checkout-modal');
-
-                    if (!cart.length) {
-                        cart = $('.modal#cart-checkout-modal');
-                    }
-
-                    cart.each(function() {
-                        $(this).card({
-                            container: $(this).find('.card-wrapper')
-                        });
-                    });
-                }
-            }
 
 
             /*
@@ -1277,9 +1279,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.close = function() {
                 scope.modalInstance.close();
+                if (scope.checkoutModalState == 5) {
+                  scope.checkoutModalState = 1;
+                }
             }
-
-
+            
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie';
@@ -1295,7 +1299,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
                 $scope.checkoutModalState = state;
-                $scope.setupCardForm();
             };
         }
     };

@@ -453,7 +453,7 @@
 
           $scope.errorMapData = false;
           ContactService.checkDuplicateEmail($scope.contact_data.details[0].emails[0].email, !hideToaster, function (data) {
-            if(!angular.equals($scope.contact_data.details[0].emails[0].email, $scope.originalContact.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.contact_data._id))
+            if($scope.originalContact && !angular.equals($scope.contact_data.details[0].emails[0].email, $scope.originalContact.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.contact_data._id))
             {
               console.log("duplicate email");
               if(!hideToaster)

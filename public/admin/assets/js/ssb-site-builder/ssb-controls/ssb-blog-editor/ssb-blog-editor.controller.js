@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$filter'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$filter', '$window'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $filter) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $filter, $window) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -20,33 +20,47 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.uiState.froalaEditorActive = false;
     vm.editableElementSelectors = '.ssb-blog-editor-post-title, .ssb-blog-editor-post-body';
     vm.editableElements = [];
+    vm.blogListPageTemplate = SimpleSiteBuilderService.getBlogListPage();
+    vm.blogPostPageTemplate = SimpleSiteBuilderService.getBlogPostPage();
 
     vm.toggleFeatured = toggleFeatured;
     vm.togglePublished = togglePublished;
     vm.filter = filter;
     vm.duplicatePost = duplicatePost;
-    vm.previewPost = previewPost;
+    // vm.previewPost = previewPost;
+    vm.viewPost = viewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
     vm.publishPost = publishPost;
     vm.retractPost = retractPost;
     vm.savePost = savePost;
-    vm.postExists = postExists;
+    vm.isValidPost = isValidPost;
     vm.setFeaturedImage = setFeaturedImage;
     vm.removeFeaturedImage = removeFeaturedImage;
     vm.handleSaveErrors = handleSaveErrors;
+    vm.autoSave = autoSave;
 
     vm.defaultPost = {
         post_title: '',
-        post_content: 'Tell your story...'
+        post_content: 'Tell your story...',
+        post_author: getDefualtAuthor()
     };
 
+
+    function getDefualtAuthor(){
+        if(vm.state.account && vm.state.account.business)
+            return vm.state.account.business.name;
+    }
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
             // $timeout(vm.activateFroalaToolbar);
         }
     }, true);
+
+    // Disabling auto blog save
+
+    //$scope.$watch('vm.state.post', _.debounce(vm.autoSave, 1000), true);
 
 
     function filter(item) {
@@ -105,9 +119,12 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     }
 
-    function previewPost(post) {
-        // TODO: open new window for preview
-        // URL: '/preview/blog/' + post.post_url
+    function viewPost(post) {
+        if (vm.blogPostPageTemplate[0]) {
+            var previewWindow = $window.open();
+            previewWindow.opener = null;
+            previewWindow.location = '/preview/' + vm.blogPostPageTemplate[0]._id + '/' + post._id;
+        }
     }
 
     function deletePost(post) {
@@ -151,22 +168,29 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.savePost(post);
     }
 
-    function savePost(post){
+    function savePost(post, suppressToaster){
+        var toast = {};
+        vm.uiState.saveLoading = true;
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
         post.post_url = slugifyHandle(angular.element('<div>' + post.post_title + '</div>').text().trim());
-        SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
+        return SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
-            toaster.pop('success', 'Post Saved', 'The post was saved successfully.');
+            toast = { type: 'success', title: 'Post Saved', message: 'The post was saved successfully.' };
         }).catch(function(error) {
-            toaster.pop('error', 'Error', error.data ? error.data.message : "Error updating post. Please try again.");
+            toast = { type: 'error', title: 'Error', message: (error.data ? error.data.message : 'Error updating post. Please try again.') };
             vm.handleSaveErrors(error);
+        }).finally(function() {
+            vm.uiState.saveLoading = false;
+            if (!suppressToaster) {
+                toaster.pop(toast.type, toast.title, toast.message);
+            }
         });
     }
 
-    function postExists(){
-        return vm.state.post && vm.state.post._id && vm.state.post.post_title;
+    function isValidPost(){
+        return vm.state.post && vm.state.post.post_title;
     }
 
     function slugifyHandle(title){
@@ -195,6 +219,27 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         if (error.data && error.data.message === 'A post with this title already exists') {
             angular.element('input.ssb-blog-editor-post-title').focus();
         }
+    }
+
+    function autoSave(newValue, oldValue) {
+        console.debug('autoSave');
+        var compareNewValue = angular.copy(newValue);
+        var compareOldValue = angular.copy(oldValue);
+
+        if (compareNewValue && compareNewValue['modified']) {
+            delete compareNewValue['modified'];
+        }
+
+        if (compareOldValue && compareOldValue['modified']) {
+            delete compareOldValue['modified'];
+        }
+
+        if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
+            if (!angular.equals(compareNewValue, compareOldValue) && !vm.uiState.saveLoading) {
+                vm.savePost(vm.state.post, true);
+            }
+        }
+
     }
 
     function init(element) {

@@ -192,7 +192,10 @@
             var _subtotalTaxable = 0;
 
             _.each($scope.order.line_items, function (line_item) {
-                var item_price = line_item.product.sale_price && line_item.product.on_sale ? line_item.product.sale_price : line_item.product.regular_price;
+                if (!line_item.product) {
+                  return;
+                }
+                var item_price = line_item.product.on_sale && line_item.product.sale_price ? line_item.product.sale_price : line_item.product.regular_price;
                 if (line_item.quantity) {
                     line_item.total = item_price * line_item.quantity;
                 }
@@ -729,7 +732,12 @@
                                 SweetAlert.swal(error.status, error.message, "error");
                             } else {
                                 console.log('data ', data);
-                                SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                                if ($scope.order.payment_details.payKey) {
+                                  SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                                  toaster.pop('warning', 'We currently do not support refunding payments from Paypal. Please log into your paypal account and initiate the refund from there.');
+                                } else {
+                                  SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                                }
                                 $scope.order.status = newStatus;
                                 $scope.currentStatus = newStatus;
                             }

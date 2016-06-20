@@ -6,7 +6,7 @@
  */
 
 var mongoBaseDao = require('./base.dao.mongo');
-var utils = requirejs("utils/commonutils");
+var utils = require("../utils/commonutils");
 
 var baseDao = function () {
 

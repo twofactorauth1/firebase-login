@@ -992,6 +992,13 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               allPages.splice(_index, 1);
             }
           }
+
+          // Suppress blog post and blog list pages
+
+          allPages = allPages.filter(function(page) {
+            return page.handle !== 'blog-list' && page.handle !== 'blog-post'
+          })
+
           $scope.allPages = angular.copy(allPages);
           $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
           _.each($scope.filteredPages, function (page) {

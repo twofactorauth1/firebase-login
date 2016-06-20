@@ -98,7 +98,7 @@
 
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
-<div class="ssb-edit-mode" ng-class="{ 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode, 'ssb-blog-edit-writing-mode': vm.uiState.isBlogEditWritingMode }">
+<div class="ssb-edit-mode" ng-class="{ 'ssb-page-blog-list': vm.state.page.handle === 'blog-list', 'ssb-page-blog-post': vm.state.page.handle === 'blog-post', 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode, 'ssb-blog-edit-writing-mode': vm.uiState.isBlogEditWritingMode }">
     <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
@@ -148,7 +148,7 @@
                 ng-sortable="vm.uiState.sortableListPageContentConfig"
                 ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-layout__header_2-col_footer')">
 
-                <div class="ssb-page-layout-row">
+                <div class="ssb-page-layout-row-header ssb-page-layout-row">
                     <div class="col-xs-12" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['header'].length }">
                         <ssb-page-section
                             ng-repeat="sectionIndex in vm.state.page.layoutModifiers['header'] track by $index"
@@ -166,7 +166,7 @@
                     </div>
                 </div>
 
-                <div class="ssb-page-layout-row">
+                <div class="ssb-page-layout-row-2-col ssb-page-layout-row">
                     <div class="col-xs-12 col-md-8" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['2-col-1'].length }">
                         <ssb-page-section
                             ng-repeat="sectionIndex in vm.state.page.layoutModifiers['2-col-1'] track by $index"
@@ -200,7 +200,7 @@
                     </div>
                 </div>
 
-                <div class="ssb-page-layout-row">
+                <div class="ssb-page-layout-row-footer ssb-page-layout-row">
                     <div class="col-xs-12" ng-class="{ 'ssb-empty-layout-area': !vm.state.page.layoutModifiers['footer'].length }">
                         <ssb-page-section
                             ng-repeat="sectionIndex in vm.state.page.layoutModifiers['footer'] track by $index"

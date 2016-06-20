@@ -90,7 +90,7 @@
         function fieldClass(field) {
             var classString = 'col-sm-12';
 
-            if (vm.component.formSettings && vm.component.formSettings.fieldsPerRow) {
+            if (vm.component.formSettings && vm.component.formSettings.fieldsPerRow > 0) {
                 classString = "col-sm-" + Math.floor(12 / vm.component.formSettings.fieldsPerRow);
                 if (vm.component.formSettings.spacing && vm.component.formSettings.spacing.pr)
                     vm.nthRow = 'nth-row' + vm.component.formSettings.fieldsPerRow;
@@ -895,8 +895,15 @@
                 size: 'lg',
                 scope: $scope
             });
+
+            $timeout(function () {
+              $('#donation-card-details-' + vm.component._id).card({
+                container: '#card-wrapper-' + vm.component._id
+              });
+              console.log('card setup');
+            }, 200);
         };
-        
+
         function closeModalFn() {
             vm.close();
             vm.modalInstance.close();
@@ -912,12 +919,6 @@
                     vm.close();
                 }
             })
-
-            if ($.card) {
-                vm.card = $('.modal').card({
-                    container: $(vm.element).find('.card-wrapper')
-                });
-            }
 
             $scope.$watch('vm.component.productSettings.product', function (val) {
                 if (val) {

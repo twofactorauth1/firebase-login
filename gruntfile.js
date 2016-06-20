@@ -298,10 +298,11 @@ module.exports = function(grunt) {
             },
             unit: {
                 singleRun: true,
-                browsers: ['PhantomJS'],
+                browsers: ['Chrome'],
                 client: {
                     captureConsole: false
-                }
+                },
+                logLevel: 'DEBUG'
             },
             dev: {
                 singleRun: true

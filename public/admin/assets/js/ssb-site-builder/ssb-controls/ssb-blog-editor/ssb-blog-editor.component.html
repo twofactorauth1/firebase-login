@@ -17,7 +17,7 @@
 
         <div class="margin-top-10">
 
-            <button ng-click="vm.state.post = vm.uiState.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <button ng-click="vm.state.post = vm.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
@@ -55,7 +55,7 @@
             <h4 class="ssb-sidebar-sub-heading text-bold padding-left-0">Posts</h4>
 
             <ul class="ssb-blog-post-list list-unstyled">
-                <li ng-repeat="post in vm.state.blog.posts | filter:vm.filter track by $index" class="ssb-media-default">
+                <li ng-repeat="post in vm.state.blog.posts | filter:vm.filter | orderBy:'-modified.date' track by $index" class="ssb-media-default">
                     <section
                         ssb-blog-post-card-component
                         post="post"
@@ -64,19 +64,6 @@
                     <section class="ssb-blog-post-list-item">
                         <div class="ssb-blog-post-toggles">
                             <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
-
-                                <!-- <button
-                                    type="button"
-                                    class="btn btn-default"
-                                    tooltip-placement="top"
-                                    tooltip-append-to-body="true"
-                                    tooltip-html-unsafe="{{post.post_status}}"
-                                    ng-click="vm.togglePublished(post)">
-
-                                    <i ng-if="post.post_status === 'PUBLISHED'" class="fa fa-file"></i>
-                                    <i ng-if="post.post_status !== 'PUBLISHED'" class="fa fa-file-o"></i>
-
-                                </button> -->
 
                                 <button
                                     type="button"
@@ -97,7 +84,7 @@
                             <button class="btn btn-default" ng-click="vm.duplicatePost(post)">
                                 <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
                             </button>
-                            <button class="btn btn-default" ng-click="vm.previewPost(post)">
+                            <button class="btn btn-default" ng-click="vm.viewPost(post)">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                             </button>
                             <button class="btn btn-default" ng-click="vm.deletePost(post)">
@@ -156,37 +143,17 @@
 
             <h4 class="ssb-sidebar-sub-heading-separator margin-top-10 padding-left-15">Blog Pages</h4>
 
-            <ul class="list-unstyled">
+            <ul class="list-unstyled site-editor-group-pages">
                 <li
                     ng-if="page.handle === 'blog-list' || page.handle === 'blog-post'"
                     ng-repeat="page in vm.state.pages track by $index"
                     ng-class="{ 'active-page': page._id === vm.state.page._id }"
                     class="ssb-page-section-settings-item">
-                    <div
-                        ng-click="vm.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);"
-                        class="ssb-sidebar-item-icon ti-settings display-ib"
-                        tooltip-placement="left"
-                        tooltip-html-unsafe="Page Settings">
-                    </div>
-                    <div
-                        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 display-ib ti-eye"
-                        ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false"
-                        ng-click="vm.hideFromMenu()"
-                        tooltip-placement="left"
-                        tooltip-html-unsafe="Hide this page from main menu">
-                    </div>
-                    <div
-                        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 display-ib ti-eye"
-                        ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false"
-                        ng-click="vm.showPageOnMenu()"
-                        tooltip-placement="left"
-                        tooltip-html-unsafe="Show this page on main menu">
-                    </div>
                     <div class="panel-group">
                         <div class="ssb-sidebar-sortable-item panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a ng-if="page._id !== vm.state.page._id" href page-id="page._id" ng-click="vm.loadPage(page)"><span tooltip-placement="bottom" tooltip="{{page.title}}">{{page.title | truncate : 60 : '...' : true}}</span></a>
+                                    <a ng-if="page._id !== vm.state.page._id" href page-id="page._id" ng-click="vm.uiState.saveAndLoadPage(page)"><span tooltip-placement="bottom" tooltip="{{page.title}}">{{page.title | truncate : 60 : '...' : true}}</span></a>
                                     <a ng-if="page._id === vm.state.page._id" href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)"><span tooltip-placement="bottom" tooltip="{{vm.state.page.title}}">{{vm.state.page.title | truncate : 60 : '...' : true}}</span></a>
                                 </h4>
                             </div>
@@ -220,13 +187,13 @@
                 <div class="ssb-blog-editor-controls-inner">
                     <div class="ssb-blog-editor-controls-inner-fixed">
 
-                        <span class="text-u">Status:</span>
+                        <h4 class="text-u inline no-border">Status:</h4>
                         <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
 
-                        <div class="btn-group btn-group-lg row block clearfix" role="group" aria-label="Post Status">
+                        <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
 
-                            <button ng-disabled="!vm.state.post.post_title"
-                                class="btn btn-default"
+                            <button ng-disabled="!vm.isValidPost()"
+                                class="btn btn-primary"
                                 ng-click="vm.savePost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
@@ -235,9 +202,9 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.postExists()"
+                                ng-disabled="!vm.isValidPost()"
                                 type="button"
-                                class="btn btn-default"
+                                class="btn btn-primary"
                                 ng-click="vm.toggleFeatured(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
@@ -249,8 +216,8 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.postExists()"
-                                class="btn btn-default"
+                                ng-disabled="!vm.isValidPost()"
+                                class="btn btn-primary"
                                 ng-click="vm.publishPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
@@ -259,9 +226,9 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.postExists()"
-                                class="btn btn-default"
-                                ng-click="vm.previewPost(vm.state.post)"
+                                ng-disabled="!vm.isValidPost()"
+                                class="btn btn-primary"
+                                ng-click="vm.viewPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Preview">
@@ -271,20 +238,17 @@
 
                         </div>
 
-
-                        <!-- TODO: Date picker, maps to vm.post.publish_date -->
                         <div class="row block ssb-blog-editor-controls-date">
-                            Date
+                            <indi-datepicker ng-model="vm.state.post.publish_date" popup="MM/dd/yyyy"></indi-datepicker>
                         </div>
 
-                        <!-- TODO: Author name, editable, populate account first name + last name or business name, maps to vm.post.post_author -->
                         <div class="row block ssb-blog-editor-controls-author">
-                            Author
+                            <input type="text" ng-model="vm.state.post.post_author" class="form-control" placeholder="Author's Name" />
                         </div>
 
-                        <!-- TODO: Tag picker, maps to vm.state.post.post_tags array -->
-                        <div class="row block ssb-blog-editor-tags">
+                        <div class="row block ssb-blog-editor-controls-tags">
                             <h4 class="text-u">Tags</h4>
+                            <tags-input min-length="1" ng-model="vm.state.post.post_tags"></tags-input>
                         </div>
 
                         <div class="row block ssb-blog-editor-featured-image">
@@ -294,7 +258,7 @@
                                 <div ng-if="vm.state.post.featured_image">
                                     <img ng-src="{{vm.state.post.featured_image}}" />
                                 </div>
-                                <div ng-if="!vm.state.post.featured_image">
+                                <div class="ssb-no-image" ng-if="!vm.state.post.featured_image">
                                     <i class="fa fa-image"></i>
                                     <span>No Featured Image</span>
                                 </div>

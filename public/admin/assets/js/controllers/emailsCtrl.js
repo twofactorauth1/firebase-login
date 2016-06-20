@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", "formValidations", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService, formValidations) {
+  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", "formValidations", '$q', function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService, formValidations, $q) {
 
     $scope.setDefaults = function () {
       $scope.newEmail = {
@@ -21,6 +21,17 @@
       $timeout(function () {
         $scope.$apply(function () {
           $scope.emails = angular.copy(emails);
+          var statPromises = [];
+          $scope.emails.forEach(function(email, index) {
+            statPromises.push(WebsiteService.getEmailStatsPromise(email._id));
+          });
+          
+          $q.all(statPromises)
+            .then(function(results) {
+              results.forEach(function(result, index) {
+                $scope.emails[index].stats = result.data;
+              });
+            });
         });
       });
     });

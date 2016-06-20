@@ -800,6 +800,11 @@
       }
       return false;
     }
+    
+    this.getEmailStatsPromise = function (emailId) {
+      var apiUrl = baseUrl + ['cms', 'email', emailId, 'stats'].join('/');
+      return $http.get(apiUrl);
+    };
 
 
   });

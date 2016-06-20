@@ -179,11 +179,16 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
 
                 data.pages = pageHolder;
-                self.log.debug('pageHolder:', pageHolder);
+                // self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
                 value.website = value.website || {};
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
 
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
@@ -233,6 +238,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 if (self.req.params.length) {
                     blogUrlParts = self.req.params[0].split('/');
                 }
+
                 if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
                     cmsDao.getBlogPostForWebsite(accountId, blogUrlParts[1], function (err, post) {
                         if (post) {
@@ -251,6 +257,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             self.resp.send(html);
                             self.cleanUp();
                             self = data = value = null;
+                            cb();
                         });
                     });
                 } else {
@@ -258,11 +265,11 @@ _.extend(view.prototype, BaseView.prototype, {
                         if (err) {
                             self.log.error('Error during render: ' + err);
                         }
-
                         self.resp.send(html);
                         self.cleanUp();
                         self.log.debug('<< renderPreviewPage');
                         self = data = value = null;
+                        cb();
                     });
                 }
             }
@@ -281,7 +288,7 @@ _.extend(view.prototype, BaseView.prototype, {
         var data = {},
             self = this;
         self.log.debug('>> renderCachedPage');
-
+        debugger;
         async.waterfall([
             function getWebpageData(cb) {
                 cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
@@ -385,7 +392,14 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
                 data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+
+
                 value.website = value.website || {};
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                data.userScripts = value.website.resources.userScripts[handle] ? value.website.resources.userScripts[handle].sanitized : '';
+
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {

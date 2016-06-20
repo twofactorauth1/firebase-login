@@ -37,6 +37,13 @@ env_check(){
         export ENV_NAME="indiwebTestB-env"
         export APP_NAME="indiweb-test-b"
         export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
+    elif [ "$1" = "angular-upgrade" ]; then
+        export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
+        export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
+        export AWS_DEFAULT_REGION="us-west-1"
+        export ENV_NAME="indiwebTestAngular-env"
+        export APP_NAME="indiweb-test-b"
+        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 	else
 		on_err "No environment specified"
 	fi	
@@ -64,6 +71,13 @@ main(){
 	    export APP_DESCRIPTION="Test Build"
 	    echo $APP_DESCRIPTION
 	    cp public/robots-test.txt public/robots.txt
+	elif [ "$1" = "angular-upgrade" ]; then
+        echo "Generating constants for development."
+    	grunt ngconstant:development || on_err "$_"
+    	cp public/admin/assets/js/config.js public/js/scripts/config.js
+    	export APP_DESCRIPTION="Test Build"
+    	echo $APP_DESCRIPTION
+    	cp public/robots-test.txt public/robots.txt
 	else
 		echo "No environment specified.  No constants"
 	fi
