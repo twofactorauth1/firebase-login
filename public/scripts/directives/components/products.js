@@ -967,6 +967,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         CartDetailsService.totalTax = 0;
                         CartDetailsService.total = 0;
                         localStorageService.remove(cookieKey);
+                        cookieData = {
+                          products: []
+                        };
+                        cookieProcessFn();
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
                 });
@@ -1183,6 +1187,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 if (cookieData.contactInfo) {
                     scope.newContact = cookieData.contactInfo;
+                } else {
+                  scope.newContact = {};
                 }
 
                 if ($routeParams.state && $routeParams.comp == 'products') {
