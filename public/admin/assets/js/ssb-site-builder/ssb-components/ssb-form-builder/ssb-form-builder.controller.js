@@ -36,7 +36,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	function fieldClass(field){
 		var classString = 'col-sm-12';
 
-		if(vm.component.formSettings && vm.component.formSettings.fieldsPerRow){
+		if(vm.component.formSettings && vm.component.formSettings.fieldsPerRow > 0){
 		classString = "col-sm-" + Math.floor(12/vm.component.formSettings.fieldsPerRow);
 		if(vm.component.formSettings.spacing && vm.component.formSettings.spacing.pr)
 			vm.nthRow = 'nth-row' + vm.component.formSettings.fieldsPerRow;
@@ -146,7 +146,6 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 
 
 	vm.createUser = function (form) {
-        vm.createUser = false;
 		// Admin check
 		if($scope.$parent.vm.state)
 			return;

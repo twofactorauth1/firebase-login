@@ -297,9 +297,10 @@
       // Remove background color.
       else {
         $popup.find('input.sp-input').val("");
-        editor.format.applyStyle('background-color', '');
+        editor.format.removeStyle('background-color');
 
         setTimeout(function(){
+            editor.events.trigger("contentChanged");
             editor.selection.save();
         })
       }
@@ -334,9 +335,10 @@
 
       // Remove text color.
       else {
-        editor.format.applyStyle('color', '');
+        editor.format.removeStyle('color');
         $popup.find('input.sp-input').val("");
         setTimeout(function(){
+            editor.events.trigger("contentChanged");
             editor.selection.save();
         })
       }
@@ -356,17 +358,19 @@
       if(tab === 'text') {
 
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-        editor.format.applyStyle('color', '');
+        editor.format.removeStyle('color');
 
         setTimeout(function(){
+            editor.events.trigger("contentChanged");
             editor.selection.save();
         })
         initializeSpectrum("color");
       }
       else{
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-        editor.format.applyStyle('background-color', '');
+        editor.format.removeStyle('background-color');
         setTimeout(function(){
+            editor.events.trigger("contentChanged");
             editor.selection.save();
         })
         initializeSpectrum("background-color");

@@ -29,7 +29,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
       scope.fieldClass = function(field){
         var classString = 'col-sm-12';
 
-        if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
+        if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow > 0){
           classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);
           if(scope.component.formSettings.spacing && scope.component.formSettings.spacing.pr)
             scope.nthRow = 'nth-row' + scope.component.formSettings.fieldsPerRow;
