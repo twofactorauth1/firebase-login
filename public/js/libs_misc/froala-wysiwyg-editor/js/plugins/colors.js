@@ -299,13 +299,15 @@
         var val_hex =  editor.helpers.RGBToHex(val);
         if(editor.opts.isButton)
 
-            editor.opts.button[0].style.setProperty('background-color', val, 'important');
+            editor.opts.button.css('background-color', val);
 
         else
             editor.format.applyStyle('background-color', val);
         setTimeout(function(){
             editor.selection.save();
         })
+
+        editor.events.trigger("bgColorChange", [val]);
 
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
@@ -317,9 +319,11 @@
         $popup.find('input.sp-input').val("");
 
         if(editor.opts.isButton)
-            editor.opts.button[0].style.setProperty('background-color', "", 'important');
+            editor.opts.button.css('background-color', "");
         else
             editor.format.removeStyle('background-color');
+
+        editor.events.trigger("bgColorChange", []);
 
         setTimeout(function(){
             editor.events.trigger("contentChanged");
@@ -349,9 +353,11 @@
         var val_hex =  editor.helpers.RGBToHex(val);
 
         if(editor.opts.isButton)
-            editor.opts.button[0].style.setProperty('color', val, 'important');
+            editor.opts.button.css('color', val);
         else
             editor.format.applyStyle('color', val);
+
+        editor.events.trigger("txtColorChange", [val]);
 
         setTimeout(function(){
             editor.selection.save();
@@ -364,9 +370,10 @@
       // Remove text color.
       else {
         if(editor.opts.isButton)
-            editor.opts.button[0].style.setProperty('color', "", 'important');
+            editor.opts.button.css('color', "");
         else
             editor.format.removeStyle('color');
+        editor.events.trigger("bgColorChange", []);
 
         $popup.find('input.sp-input').val("");
         setTimeout(function(){
@@ -392,11 +399,11 @@
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
 
         if(editor.opts.isButton)
-            editor.opts.button[0].style.setProperty('color', "", 'important');
+            editor.opts.button.css('color', "");
         else
             editor.format.removeStyle('color');
 
-
+        editor.events.trigger("txtColorChange", []);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
             editor.selection.save();
@@ -407,9 +414,10 @@
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
 
         if(editor.opts.isButton)
-            editor.opts.button[0].style.setProperty('background-color', "", 'important');
+            editor.opts.button.css('background-color', "");
         else
             editor.format.removeStyle('background-color');
+        editor.events.trigger("bgColorChange", [val]);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
             editor.selection.save();
