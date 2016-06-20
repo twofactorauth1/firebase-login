@@ -8,7 +8,7 @@ mainApp.factory('previewPagesService', ['$http', '$location', '$cacheFactory', f
             $http.get('/api/1.0/cms/page/' + pageId + '/blog/' + postId, {
                 cache: true
             }).success(function (post) {
-                window.indigenous.precache.post = post;
+                window.indigenous.precache.siteData.post = post;
             }).error(function(err) {
                 console.error('previewPagesService setPostData error: ', JSON.stringify(err));
             })
@@ -20,7 +20,7 @@ mainApp.factory('previewPagesService', ['$http', '$location', '$cacheFactory', f
             $http.get('api/1.0/cms/blog', {
                 cache: true
             }).success(function (posts) {
-                window.indigenous.precache.posts = posts;
+                window.indigenous.precache.siteData.posts = posts;
                 cb(null, page);
             }).error(function(err) {
                 console.error('previewPagesService setPostsData error: ', JSON.stringify(err));

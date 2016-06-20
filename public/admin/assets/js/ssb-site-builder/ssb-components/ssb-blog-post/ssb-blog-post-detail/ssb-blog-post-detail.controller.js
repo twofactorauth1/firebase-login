@@ -14,8 +14,8 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
     vm.initData = initData;
 
     function initData() {
-        var posts = window.indigenous.precache.posts;
-        var post = window.indigenous.precache.post;
+        var posts = window.indigenous.precache.siteData.posts;
+        var post = window.indigenous.precache.siteData.post;
         if (post) {
             vm.post = post;
         } else if (posts) {

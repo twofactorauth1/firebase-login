@@ -417,55 +417,60 @@ _.extend(view.prototype, BaseView.prototype, {
                 var blogPostIndex = 0;
 
                 _.each(sections, function(section, index) {
-                    if (section.filter === 'blog') {
-                        blogPostIndex = index;
-                    } else {
+                    // if (section.filter === 'blog') {
+                    //     blogPostIndex = index;
+                    // } else {
                         templateSectionArray.push('<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>');
-                    }
+                    // }
                 });
 
-                if (blogPostIndex !== 0) {
-                    // fs.readFile('/public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf-8', function (err, sectionHtml) {
-                        fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-detail/ssb-blog-post-detail.component.html', 'utf-8', function (err, detailHtml) {
-                            if(err) {
-                                self.log.error('Error reading post-detail:', err);
-                                cb(err);
-                            } else {
-                                var detailHtml =
-                                    '<section>' +
-                                        detailHtml +
-                                    '</section>';
-                                // var substitutions = [{name:'ssb-component-loader', value:detailHtml, prefix:'vm'}];
-                                var substitutions = [];
-                                var context = {
-                                    vm: {
-                                        component: sections[blogPostIndex],
-                                        post: post.toJSON()
-                                    }
-                                };
+                data.templateIncludes.push({
+                    id: 'blogpost.html',
+                    data: templateSectionArray.join('')
+                });
 
-                                // ngParser.parseHtml(sectionHtml, context, substitutions, function(err, value){
-                                ngParser.parseHtml(detailHtml, context, substitutions, function(err, value){
+                // if (blogPostIndex !== 0) {
+                //     // fs.readFile('/public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf-8', function (err, sectionHtml) {
+                //         fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-detail/ssb-blog-post-detail.component.html', 'utf-8', function (err, detailHtml) {
+                //             if(err) {
+                //                 self.log.error('Error reading post-detail:', err);
+                //                 cb(err);
+                //             } else {
+                //                 var detailHtml =
+                //                     '<section>' +
+                //                         detailHtml +
+                //                     '</section>';
+                //                 // var substitutions = [{name:'ssb-component-loader', value:detailHtml, prefix:'vm'}];
+                //                 var substitutions = [];
+                //                 var context = {
+                //                     vm: {
+                //                         component: sections[blogPostIndex],
+                //                         post: post.toJSON()
+                //                     }
+                //                 };
 
-                                    var parsedHtml = value;
+                //                 // ngParser.parseHtml(sectionHtml, context, substitutions, function(err, value){
+                //                 ngParser.parseHtml(detailHtml, context, substitutions, function(err, value){
 
-                                    templateSectionArray.splice(blogPostIndex, 0, parsedHtml);
+                //                     var parsedHtml = value;
 
-                                    self.log.debug('template:', templateSectionArray.join(''));
+                //                     templateSectionArray.splice(blogPostIndex, 0, parsedHtml);
 
-                                    data.templateIncludes.push({
-                                        id: 'blogpost.html',
-                                        data: templateSectionArray.join('')
-                                    });
+                //                     self.log.debug('template:', templateSectionArray.join(''));
 
-                                    cb(null, webpageData, page, post);
-                                });
-                            }
-                        });
-                    // });
-                } else {
+                //                     data.templateIncludes.push({
+                //                         id: 'blogpost.html',
+                //                         data: templateSectionArray.join('')
+                //                     });
+
+                //                     cb(null, webpageData, page, post);
+                //                 });
+                //             }
+                //         });
+                //     // });
+                // } else {
                     cb(null, webpageData, page, post);
-                }
+                // }
 
             },
 
@@ -475,6 +480,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
 
                 data.pages = pageHolder;
+                data.post = post;
                 data.account = value;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
