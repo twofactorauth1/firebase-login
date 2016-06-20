@@ -258,9 +258,15 @@
     function _setInitialColors () {
       var $element = $(editor.selection.element());
         // Check initial colors means txt color and bg color
+        if(editor.opts.isButton){
+            editor.opts.defaultColors.background.color = editor.opts.button.css('background-color');
+            editor.opts.defaultColors.text.color = editor.opts.button.css('color');
+        }
+        else{
+            editor.opts.defaultColors.background.color = $element.css('background-color');
+            editor.opts.defaultColors.text.color = $element.css('color');
+        }
 
-        editor.opts.defaultColors.background.color = $element.css('background-color');
-        editor.opts.defaultColors.text.color = $element.css('color');
     }
 
     /*

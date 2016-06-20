@@ -184,6 +184,18 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         scope.$emit('activeEditor', { editor: editor, editorImage: editor.image.get() });
                     }).on('froalaEditor.focus', function(e, editor) {
                         editor.selection.clear();
+                    }).on('froalaEditor.popups.hide.colors.picker', function(e, editor) {
+                        if(editor.opts.isButton){
+                            var btnElement = editor.opts.button.scope().vm.elementData;
+                            if(!btnElement.bg){
+                                btnElement.bg = {};
+                            }
+
+                            var bgColor = editor.opts.button.css('background-color');
+                            var txtColor = editor.opts.button.css('color');
+                            editor.opts.button.scope().vm.elementData.bg.color = bgColor;
+                            editor.opts.button.scope().vm.elementData.txtcolor = txtColor;
+                        }
                     })
 
                     $(elem).froalaEditor('events.on', 'keydown', function (e) {
