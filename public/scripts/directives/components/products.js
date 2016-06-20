@@ -1187,6 +1187,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 if (cookieData.contactInfo) {
                     scope.newContact = cookieData.contactInfo;
+                } else {
+                  scope.newContact = {};
                 }
 
                 if ($routeParams.state && $routeParams.comp == 'products') {
