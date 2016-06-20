@@ -967,6 +967,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         CartDetailsService.totalTax = 0;
                         CartDetailsService.total = 0;
                         localStorageService.remove(cookieKey);
+                        cookieData = {
+                          products: []
+                        };
+                        cookieProcessFn();
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
                 });
