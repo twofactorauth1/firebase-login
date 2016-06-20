@@ -204,13 +204,13 @@
                                         {{order.customer.first}} {{order.customer.last}} {{order.customer._id ? '('+order.customer._id+')' : ''}}
                                     </span>
                                 </td>
-                                <td class="hidden-xs"><strong>(Qty) Items: </strong>
+                                <td class="hidden-xs" ng-hide='tableView == "grid"'><strong>(Qty) Items: </strong>
                                     <span ng-repeat="item in order.line_items track by $index"> 
                                         <span>{{item.quantity ? '('+item.quantity+')' : '(1)'}}</span>
                                         {{item.name}}<br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>SKUs: </strong>
+                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}" ng-hide='tableView == "grid"'><strong>SKUs: </strong>
                                     <span ng-repeat="item in order.line_items track by $index">
                                         <span>{{item.product.sku ? item.product.sku : ' '}}</span>
                                         <br ng-if="($index+1 < order.line_items.length)" />
