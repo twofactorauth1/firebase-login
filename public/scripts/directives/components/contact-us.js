@@ -56,7 +56,8 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
               }, 3000);
             }
             else{
-              geocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
+              if (scope.contactAddress) {
+                geocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
                 if (data.lat && data.lon) {
                   scope.component.location.lat = data.lat;
                   scope.component.location.lon = data.lon;
@@ -64,7 +65,8 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
                     scope.reloadMap();
                   }, 500);
                 }
-              });
+              }); 
+              }
             }
           });
         }
