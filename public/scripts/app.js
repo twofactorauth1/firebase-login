@@ -135,6 +135,10 @@ var mainApp = angular
                 controller: 'PreviewCtrl as previewCtrl',
                 templateUrl: '../views/main.html'
             })
+            .when('/preview/:pageId/:postId', {
+                controller: 'PreviewCtrl as previewCtrl',
+                templateUrl: '../views/main.html'
+            })
             .otherwise({
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'

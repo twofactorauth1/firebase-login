@@ -3,7 +3,6 @@
 mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService', '$window', '$location', '$document', '$timeout',
     function ($scope, $rootScope, previewPagesService, $window, $location, $document, $timeout) {
         $scope.isEditing = false;
-        $scope.blog_post = null;
 
         console.log('preview ctrl');
 

@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogEditorController', ssbSiteBuilderBlogEditorController);
 
-ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$filter'];
+ssbSiteBuilderBlogEditorController.$inject = ['$scope', '$rootScope', '$timeout', 'SimpleSiteBuilderBlogService', 'SweetAlert', 'toaster', 'SimpleSiteBuilderService', '$filter', '$window'];
 /* @ngInject */
-function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $filter) {
+function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, SimpleSiteBuilderBlogService, SweetAlert, toaster, SimpleSiteBuilderService, $filter, $window) {
 
     console.info('site-builder blog-editor directive init...')
 
@@ -20,12 +20,15 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.uiState.froalaEditorActive = false;
     vm.editableElementSelectors = '.ssb-blog-editor-post-title, .ssb-blog-editor-post-body';
     vm.editableElements = [];
+    vm.blogListPageTemplate = SimpleSiteBuilderService.getBlogListPage();
+    vm.blogPostPageTemplate = SimpleSiteBuilderService.getBlogPostPage();
 
     vm.toggleFeatured = toggleFeatured;
     vm.togglePublished = togglePublished;
     vm.filter = filter;
     vm.duplicatePost = duplicatePost;
-    vm.previewPost = previewPost;
+    // vm.previewPost = previewPost;
+    vm.viewPost = viewPost;
     vm.deletePost = deletePost;
     vm.editPost = editPost;
     vm.publishPost = publishPost;
@@ -116,9 +119,12 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     }
 
-    function previewPost(post) {
-        // TODO: open new window for preview
-        // URL: '/preview/blog/' + post.post_url
+    function viewPost(post) {
+        if (vm.blogPostPageTemplate[0]) {
+            var previewWindow = $window.open();
+            previewWindow.opener = null;
+            previewWindow.location = '/preview/' + vm.blogPostPageTemplate[0]._id + '/' + post._id;
+        }
     }
 
     function deletePost(post) {

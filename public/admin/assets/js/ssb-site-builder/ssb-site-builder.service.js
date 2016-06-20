@@ -81,6 +81,8 @@
         ssbService.compiledElementEditControls = {};
         ssbService.detectIENotEdge = detectIENotEdge;
         ssbService.isIENotEdge = ssbService.detectIENotEdge();
+        ssbService.getBlogListPage = getBlogListPage;
+        ssbService.getBlogPostPage = getBlogPostPage;
 
 
         /**
@@ -526,7 +528,7 @@
 			)
 
 		}
-    
+
     /**
          * Save website script resources to db, update client instance with response from server
          * @param {object} webite - website data
@@ -1795,6 +1797,18 @@
 
             // other browser
             return false;
+        }
+
+        function getBlogListPage() {
+            return _.where(ssbService.pages, {
+                handle: 'blog-list'
+            });
+        }
+
+        function getBlogPostPage() {
+            return _.where(ssbService.pages, {
+                handle: 'blog-post'
+            });
         }
 
 		(function init() {

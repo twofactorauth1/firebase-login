@@ -109,9 +109,9 @@ _.extend(view.prototype, BaseView.prototype, {
             function addBlogTemplate(webpageData, page, posts, cb) {
                 /*
                  * Need to wrap this:
-                 * <div class="ssb-layout__header_2-col_footer">
+                 * <div class="ssb-layout__header_2-col_footer ssb-page-blog-list">
 
-                 <div class="ssb-page-layout-row">
+                 <div class="ssb-page-layout-row-header ssb-page-layout-row">
                  <div class="col-xs-12">
                  <ssb-page-section
                  ng-repeat="sectionIndex in page.layoutModifiers['header']"
@@ -122,7 +122,7 @@ _.extend(view.prototype, BaseView.prototype, {
                  </div>
                  </div>
 
-                 <div class="ssb-page-layout-row">
+                 <div class="ssb-page-layout-row-2-col ssb-page-layout-row">
                  <div class="col-xs-12 col-md-8">
                  <ssb-page-section
                  ng-repeat="sectionIndex in page.layoutModifiers['2-col-1']"
@@ -142,7 +142,7 @@ _.extend(view.prototype, BaseView.prototype, {
                  </div>
                  </div>
 
-                 <div class="ssb-page-layout-row">
+                 <div class="ssb-page-layout-row-footer ssb-page-layout-row">
                  <div class="col-xs-12">
                  <ssb-page-section
                  ng-repeat="sectionIndex in page.layoutModifiers['footer']"
@@ -157,8 +157,8 @@ _.extend(view.prototype, BaseView.prototype, {
                  */
                 if(page.get('layout') === 'ssb-layout__header_2-col_footer') {
                     var sections = page.get('sections');
-                    var template = '<div class="ssb-layout__header_2-col_footer">';
-                    template += '<div class="ssb-page-layout-row">';
+                    var template = '<div class="ssb-layout__header_2-col_footer ssb-page-blog-list">';
+                    template += '<div class="ssb-page-layout-row-header ssb-page-layout-row">';
                     template += '<div class="col-xs-12">';
                     var index = 0;
                     //<ssb-page-section ng-repeat="sectionIndex in page.layoutModifiers['header']" section="page.sections[sectionIndex]"
@@ -168,7 +168,7 @@ _.extend(view.prototype, BaseView.prototype, {
                         index++;
                     });
 
-                    template += '</div></div><div class="ssb-page-layout-row"><div class="col-xs-12 col-md-8">';
+                    template += '</div></div><div class="ssb-page-layout-row-2-col ssb-page-layout-row"><div class="col-xs-12 col-md-8">';
                     var blogPostIndex = 0;
                     _.each(page.get('layoutModifiers')['2-col-1'], function(idx){
                         if(sections[idx].filter === 'blog') {
@@ -211,7 +211,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                             index++;
                                         });
 
-                                        template += '</div></div><div class="ssb-page-layout-row"><div class="col-xs-12">';
+                                        template += '</div></div><div class="ssb-page-layout-row-footer ssb-page-layout-row"><div class="col-xs-12">';
 
                                         _.each(page.get('layoutModifiers')['footer'], function(idx){
                                             template += '<ssb-page-section section="sections_' + idx + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
@@ -412,12 +412,60 @@ _.extend(view.prototype, BaseView.prototype, {
 
             function addBlogTemplate(webpageData, page, post, cb) {
                 //assuming single column layout
+                var sections = page.get('sections');
+                var templateSectionArray = [];
+                var blogPostIndex = 0;
 
-                data.templateIncludes.push({
-                    id: 'blogpost.html',
-                    data: '<ssb-page-section section="sections_0" index="0" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_1" index="1" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_2" index="2" class="ssb-page-section"></ssb-page-section>'
+                _.each(sections, function(section, index) {
+                    if (section.filter === 'blog') {
+                        blogPostIndex = index;
+                    } else {
+                        templateSectionArray.push('<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>');
+                    }
                 });
-                cb(null, webpageData, page, post);
+
+                if (blogPostIndex !== 0) {
+                    // fs.readFile('/public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf-8', function (err, sectionHtml) {
+                        fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-detail/ssb-blog-post-detail.component.html', 'utf-8', function (err, detailHtml) {
+                            if(err) {
+                                self.log.error('Error reading post-detail:', err);
+                                cb(err);
+                            } else {
+                                var detailHtml =
+                                    '<section>' +
+                                        detailHtml +
+                                    '</section>';
+                                // var substitutions = [{name:'ssb-component-loader', value:detailHtml, prefix:'vm'}];
+                                var substitutions = [];
+                                var context = {
+                                    vm: {
+                                        component: sections[blogPostIndex],
+                                        post: post.toJSON()
+                                    }
+                                };
+
+                                // ngParser.parseHtml(sectionHtml, context, substitutions, function(err, value){
+                                ngParser.parseHtml(detailHtml, context, substitutions, function(err, value){
+
+                                    var parsedHtml = value;
+
+                                    templateSectionArray.splice(blogPostIndex, 0, parsedHtml);
+
+                                    self.log.debug('template:', templateSectionArray.join(''));
+
+                                    data.templateIncludes.push({
+                                        id: 'blogpost.html',
+                                        data: templateSectionArray.join('')
+                                    });
+
+                                    cb(null, webpageData, page, post);
+                                });
+                            }
+                        });
+                    // });
+                } else {
+                    cb(null, webpageData, page, post);
+                }
 
             },
 

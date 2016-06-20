@@ -65,19 +65,6 @@
                         <div class="ssb-blog-post-toggles">
                             <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
 
-                                <!-- <button
-                                    type="button"
-                                    class="btn btn-default"
-                                    tooltip-placement="top"
-                                    tooltip-append-to-body="true"
-                                    tooltip-html-unsafe="{{post.post_status}}"
-                                    ng-click="vm.togglePublished(post)">
-
-                                    <i ng-if="post.post_status === 'PUBLISHED'" class="fa fa-file"></i>
-                                    <i ng-if="post.post_status !== 'PUBLISHED'" class="fa fa-file-o"></i>
-
-                                </button> -->
-
                                 <button
                                     type="button"
                                     class="btn btn-default"
@@ -97,7 +84,7 @@
                             <button class="btn btn-default" ng-click="vm.duplicatePost(post)">
                                 <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
                             </button>
-                            <button ng-disabled="true" class="btn btn-default" ng-click="vm.previewPost(post)">
+                            <button class="btn btn-default" ng-click="vm.viewPost(post)">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                             </button>
                             <button class="btn btn-default" ng-click="vm.deletePost(post)">
@@ -200,7 +187,7 @@
                 <div class="ssb-blog-editor-controls-inner">
                     <div class="ssb-blog-editor-controls-inner-fixed">
 
-                        <h4 class="text-u inline">Status:</h4>
+                        <h4 class="text-u inline no-border">Status:</h4>
                         <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
 
                         <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
@@ -241,7 +228,7 @@
                             <button
                                 ng-disabled="!vm.isValidPost()"
                                 class="btn btn-primary"
-                                ng-click="vm.previewPost(vm.state.post)"
+                                ng-click="vm.viewPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Preview">

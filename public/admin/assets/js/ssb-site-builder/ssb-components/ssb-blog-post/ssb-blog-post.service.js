@@ -62,7 +62,7 @@
                 console.error('SimpleSiteBuilderBlogService savePost error: ', JSON.stringify(error));
             }
 
-            if(post._id) {
+            if (post._id) {
                 return (
                     ssbBlogRequest($http({
                         url: baseBlogAPIUrl + '/post/' + post._id,
@@ -156,7 +156,7 @@
 
         }
 
-        function getPost() {
+        function getPost(pageId, id) {
 
         }
 
