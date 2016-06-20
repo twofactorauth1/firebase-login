@@ -65,7 +65,8 @@
             color: ''
         }
     },
-    isIE: document.documentMode || /Edge/.test(navigator.userAgent)
+    isIE: document.documentMode || /Edge/.test(navigator.userAgent),
+    isButton: false
   });
 
   a.FroalaEditor.PLUGINS.colors = function (editor) {
@@ -107,6 +108,7 @@
         else{
             $(".sp-input").show();
         }
+
         editor.selection.restore();
         _setInitialColors();
       }
@@ -218,6 +220,11 @@
       var $popup = editor.popups.get('colors.picker');
       var $element = $(editor.selection.element());
 
+        editor.opts.isButton = $element.hasClass("ssb-theme-btn");
+        if(editor.opts.isButton){
+            editor.opts.button = $element;
+        }
+
       // The color css property.
       var color_type;
       if (tab == 'background') {
@@ -284,7 +291,12 @@
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
-        editor.format.applyStyle('background-color', val);
+        if(editor.opts.isButton)
+
+            editor.opts.button[0].style.setProperty('background-color', val, 'important');
+
+        else
+            editor.format.applyStyle('background-color', val);
         setTimeout(function(){
             editor.selection.save();
         })
@@ -297,7 +309,11 @@
       // Remove background color.
       else {
         $popup.find('input.sp-input').val("");
-        editor.format.removeStyle('background-color');
+
+        if(editor.opts.isButton)
+            editor.opts.button[0].style.setProperty('background-color', "", 'important');
+        else
+            editor.format.removeStyle('background-color');
 
         setTimeout(function(){
             editor.events.trigger("contentChanged");
@@ -323,8 +339,14 @@
       // Set text color.
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
+
         var val_hex =  editor.helpers.RGBToHex(val);
-        editor.format.applyStyle('color', val);
+
+        if(editor.opts.isButton)
+            editor.opts.button[0].style.setProperty('color', val, 'important');
+        else
+            editor.format.applyStyle('color', val);
+
         setTimeout(function(){
             editor.selection.save();
         })
@@ -335,7 +357,11 @@
 
       // Remove text color.
       else {
-        editor.format.removeStyle('color');
+        if(editor.opts.isButton)
+            editor.opts.button[0].style.setProperty('color', "", 'important');
+        else
+            editor.format.removeStyle('color');
+
         $popup.find('input.sp-input').val("");
         setTimeout(function(){
             editor.events.trigger("contentChanged");
@@ -358,7 +384,12 @@
       if(tab === 'text') {
 
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-        editor.format.removeStyle('color');
+
+        if(editor.opts.isButton)
+            editor.opts.button[0].style.setProperty('color', "", 'important');
+        else
+            editor.format.removeStyle('color');
+
 
         setTimeout(function(){
             editor.events.trigger("contentChanged");
@@ -368,7 +399,11 @@
       }
       else{
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-        editor.format.removeStyle('background-color');
+
+        if(editor.opts.isButton)
+            editor.opts.button[0].style.setProperty('background-color', "", 'important');
+        else
+            editor.format.removeStyle('background-color');
         setTimeout(function(){
             editor.events.trigger("contentChanged");
             editor.selection.save();
