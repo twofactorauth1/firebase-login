@@ -146,7 +146,6 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 
 
 	vm.createUser = function (form) {
-        vm.createUser = false;
 		// Admin check
 		if($scope.$parent.vm.state)
 			return;
