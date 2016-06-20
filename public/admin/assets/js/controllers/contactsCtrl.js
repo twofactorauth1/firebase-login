@@ -395,9 +395,8 @@
     };
 
     $scope.incrementContactTags = function (contact) {
-      var contactTags = $scope.contactTags;
+      var contactTags = $scope.contactTags || [];
       if(contact){
-        var contactTags = [];
           if (contact.tags) {
             _.each(contact.tags, function (tag) {
               var type = _.find(contactTags, function (type) {
