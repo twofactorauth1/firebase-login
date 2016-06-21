@@ -405,9 +405,12 @@ _.extend(view.prototype, BaseView.prototype, {
 
             function getBlogPost(webpageData, page, cb) {
                 ssbManager.getPublishedPost(accountId, postName, function(err, post){
-                    cb(err, webpageData, page, post);
+                    if (!post) {
+                        cb('Could not find post with handle: ' + postName);
+                    } else {
+                        cb(err, webpageData, page, post);
+                    }
                 });
-
             },
 
             function addBlogTemplate(webpageData, page, post, cb) {
