@@ -52,6 +52,9 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     window.indigenous = window.indigenous || {};
                     window.indigenous.precache = window.indigenous.precache || {};
                     window.indigenous.precache.pages = {components:components};
+            if account.showhide.ssbBlog
+                script(type="text/javascript").
+                    window.indigenous.ssbBlog = #{account.showhide.ssbBlog};
 
         //- script.
         //-     var test = !{JSON.stringify(account.website)};
