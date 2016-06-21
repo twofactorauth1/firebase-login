@@ -800,8 +800,20 @@ module.exports = {
     getPublishedPosts: function(accountId, statusAry, limit, fn){
         var _statusAry = statusAry || [$$.m.BlogPost.status.PUBLISHED];
         var _limit = limit || 100;
-        blogPostDao.findManyWithLimit({'accountId':accountId, post_status: {'$in': _statusAry}}, _limit, $$.m.BlogPost, fn);
-
+        //blogPostDao.findManyWithLimit({'accountId':accountId, post_status: {'$in': _statusAry}}, _limit, $$.m.BlogPost, fn);
+        var query = {
+            'accountId':accountId,
+            post_status: {'$in': _statusAry}
+        };
+        blogPostDao.findWithFieldsLimitOrderAndTotal(query, 0, _limit, 'created_date', null, $$.m.BlogPost, -1, function(err, posts){
+            if(err) {
+                console.log('Error finding posts:', err);
+                fn(err);
+            } else {
+                console.log('We found these posts:', posts.results);
+                fn(null, posts.results);
+            }
+        });
     },
 
     getPublishedPost: function(accountId, postName, fn) {
