@@ -10,6 +10,7 @@ var RSS = require('rss');
 var async = require('async');
 var accountDao = require('../dao/account.dao');
 var ssbManager = require('../ssb/ssb_manager');
+var appConfig = require('../configs/app.config');
 
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
@@ -53,7 +54,10 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function buildTheFeed(account, blogPage, posts, cb) {
                 var image_url = null;
-                var blogUrl = self.req.originalUrl.replace('/feed/rss', '');
+                //console.log('originalURL:', self.req.originalUrl);
+                var url = appConfig.getServerUrl(account.get("subdomain"), account.get("customDomain")) + self.req.originalUrl;
+                //console.log('Url', url);
+                var blogUrl = url.replace('/feed/rss', '');
                 if(account.get('business')) {
                     var business = account.get('business');
                     if(business.logo) {
@@ -64,7 +68,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 var feedOptions = {
                     title: blogPage.get('title'),
                     description: blogPage.get('description'),
-                    feed_url: self.req.originalUrl,
+                    feed_url: url,
                     site_url: blogUrl,
 
                     //docs: 'http://example.com/rss/docs.html',
