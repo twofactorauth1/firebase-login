@@ -1,3 +1,9 @@
+.ssb-page-blog-list .ssb-page-layout-row-2-col {
+    @media screen and (max-width: 991px) {
+        max-width: 500px;
+    }
+}
+
 .ssb-blog-featured-slider,
 .ssb-blog-post-list {
     a {
@@ -7,9 +13,15 @@
 
 .ssb-blog-featured-slider {
 
+    @media screen and (max-width: 991px) {
+        margin-top: 30px;
+    }
+
     .slick-slide {
         position: relative;
-        height: 309px;
+        @media screen and (min-width: 992px) {
+            height: 309px;
+        }
     }
 
     .slick-slider {
@@ -22,9 +34,11 @@
     }
 
     .ssb-media .img-responsive {
-        position: absolute;
-        width: 100%;
-        top: 0;
+        @media screen and (min-width: 992px) {
+            position: absolute;
+            width: 100%;
+            top: 0;
+        }
     }
 
     .media-heading .ssb-theme-btn {
@@ -68,41 +82,50 @@
     }
 }
 
-.ssb-blog-post-list {
+.ssb-blog-post-list.ssb-media-stacked {
 
-    .ssb-media-stacked {
+    article {
+        margin-top: 50px;
+        border: 1px solid #dadada;
 
-        article {
-            margin-top: 50px;
-            border: 1px solid #dadada;
+        .ssb-media-left {
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            position: relative;
 
-            .ssb-media-left {
-                padding-bottom: 56.25%;
-                height: 0;
-                overflow: hidden;
-                position: relative;
-
-                img {
-                    position: absolute;
-                    top: 50%;
-                    left: 0;
-                    width: 100%;
-                    z-index: 100;
-                    transform: translateY(-50%);
-                }
+            img {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 100%;
+                z-index: 100;
+                transform: translateY(-50%);
             }
+        }
 
-            .ssb-media-body {
-                margin: 20px;
+        .ssb-media-body {
+            margin: 20px;
+        }
+
+        .ssb-media-body .media-heading {
+            margin-bottom: 0;
+
+            .ssb-theme-btn {
+                padding: 0;
+                white-space: normal;
+                font-size: 24px;
+                line-height: 1.1;
+                text-align: left;
             }
+        }
 
-            .ssb-blog-post-body {
-                margin-bottom: 30px;
-            }
-
+        .ssb-blog-post-body {
+            margin-bottom: 30px;
         }
 
     }
+
 }
 
 [class*='col-'] .ssb-section-type-simple-form:first-of-type {
