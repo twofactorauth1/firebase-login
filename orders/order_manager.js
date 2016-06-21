@@ -280,7 +280,7 @@ module.exports = {
                                 lineItemSubtotal = item.quantity * product.get('sale_price');
                                 item.sale_price = product.get('sale_price').toFixed(2);
                                 //TODO: Should not need this line.  Receipt template currently needs it.
-                                item.regular_price = product.get('sale_price').toFixed(2);
+                                item.regular_price = product.get('regular_price').toFixed(2);
                                 item.total = lineItemSubtotal.toFixed(2);
                             }
                         }
@@ -954,7 +954,7 @@ module.exports = {
                             lineItemSubtotal = item.quantity * product.get('sale_price');
                             item.sale_price = product.get('sale_price').toFixed(2);
                             //TODO: Should not need this line.  Receipt template currently needs it.
-                            item.regular_price = product.get('sale_price').toFixed(2);
+                            item.regular_price = product.get('regular_price').toFixed(2);
                             item.total = lineItemSubtotal.toFixed(2);
                         }
                     }
@@ -1567,7 +1567,7 @@ module.exports = {
                                     lineItemSubtotal = item.quantity * product.get('sale_price');
                                     item.sale_price = product.get('sale_price').toFixed(2);
                                     //TODO: Should not need this line.  Receipt template currently needs it.
-                                    item.regular_price = product.get('sale_price').toFixed(2);
+                                    item.regular_price = product.get('regular_price').toFixed(2);
                                     item.total = lineItemSubtotal.toFixed(2);
                                 }
                             }

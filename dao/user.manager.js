@@ -249,15 +249,15 @@ module.exports = {
      */
     createUser: function(accountId, username, password, email, roleAry, callingUser, fn) {
         var self = this;
-        log.debug('>> createUser');
-
+        log.debug(accountId, callingUser, '>> createUser');
+        username = username.toLowerCase();
         async.waterfall([
             function stepZero(callback){
-                log.debug('Checking if user exists');
+                log.debug(accountId, callingUser, 'Checking if user exists');
                 //check for an existing user
                 dao.usernameExists(username, function(err, exists){
                     if(err) {
-                        log.error('Error checking that username exists', err);
+                        log.error(accountId, callingUser, 'Error checking that username exists', err);
                         callback(err);
                     } else {
                         if(exists === true) {
@@ -269,7 +269,7 @@ module.exports = {
                 });
             },
             function stepOne(callback){
-                log.debug('Creating user');
+                log.debug(accountId, callingUser, 'Creating user');
                 var user = new $$.m.User({
                     username:username,
                     email:email,
@@ -282,7 +282,7 @@ module.exports = {
                 });
                 user.encryptPasswordAsync(password, function(err, hash){
                     if(err) {
-                        log.error('Error encrypting password: ' + err);
+                        log.error(accountId, callingUser, 'Error encrypting password: ' + err);
                         callback(err);
                     } else {
                         callback(null, hash, user);
@@ -290,12 +290,12 @@ module.exports = {
                 });
             },
             function stepTwo(hash, user, callback){
-                log.debug('Storing encrypted password');
+                log.debug(accountId, callingUser, 'Storing encrypted password');
                 user.createOrUpdateLocalCredentials(hash);
                 user.createUserAccount(accountId, username, hash, roleAry);
                 dao.saveOrUpdate(user, function(err, savedUser){
                     if(err) {
-                        log.error('Error saving user:', err);
+                        log.error(accountId, callingUser, 'Error saving user:', err);
                         callback(err);
                     } else {
                         callback(null, savedUser);
@@ -303,10 +303,10 @@ module.exports = {
                 });
             },
             function stepThree(user, callback) {
-                log.debug('Initializing user security.');
+                log.debug(accountId, callingUser, 'Initializing user security.');
                 securityManager.initializeUserPrivileges(user.id(), username, roleAry, accountId, function(err, value) {
                     if (err) {
-                        log.error('Error initializing user privileges for userID: ' + user.id());
+                        log.error(accountId, callingUser, 'Error initializing user privileges for userID: ' + user.id());
                         callback(err);
                     } else {
                         callback(null, user);
@@ -314,6 +314,7 @@ module.exports = {
                 });
             }
         ], function(err, user){
+            log.debug(accountId, callingUser, '<< createUser');
             if(err) {
                 return fn(err, null);
             } else {
