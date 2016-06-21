@@ -5,7 +5,9 @@
     <div ng-if="vm.post" class="ssb-media">
 
         <div ng-if="vm.post.featured_image" class="ssb-media-left">
-            <img itemprop="thumbnailUrl" class="img-responsive blog-post-image" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
+            <a href="/blog/{{vm.post.post_url}}">
+                <img itemprop="thumbnailUrl" class="img-responsive blog-post-image" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
+            </a>
         </div>
 
         <div class="ssb-media-body">
@@ -17,7 +19,7 @@
             </div>
 
             <h1 class="media-heading" itemprop="name headline">
-                <a href="/blog/{{vm.post.post_url}}">{{vm.post.display_title || vm.post.post_title}}</a>
+                <a class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}">{{vm.post.display_title || vm.post.post_title}}</a>
             </h1>
 
             <div ng-if="!vm.compactView" class="ssb-blog-byline">
@@ -28,7 +30,7 @@
                 <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
                     <i class="fa fa-user"></i>
                     <span itemprop="name">
-                        <a href="/author/{{vm.post.post_author}}" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                        <a class="btn btn-link ssb-theme-btn" href="/author/{{vm.post.post_author}}" itemprop="url" rel="author">{{vm.post.post_author}}</a>
                     </span>
                 </span>
             </div>

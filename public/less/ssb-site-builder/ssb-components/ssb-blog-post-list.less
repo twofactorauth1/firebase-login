@@ -1,3 +1,10 @@
+.ssb-blog-featured-slider,
+.ssb-blog-post-list {
+    a {
+        color: #444;
+    }
+}
+
 .ssb-blog-featured-slider {
 
     .slick-slide {
@@ -49,27 +56,33 @@
 }
 
 .ssb-blog-post-list {
-    article {
-        padding-top: 50px;
 
-        .ssb-media-left {
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            position: relative;
+    .ssb-media-stacked {
 
-            img {
-                position: absolute;
-                top: 50%;
-                left: 0;
-                width: 100%;
-                z-index: 100;
-                transform: translateY(-50%);
+        article {
+            margin-top: 50px;
+            border: 1px solid #dadada;
+
+            .ssb-media-left {
+                padding-bottom: 56.25%;
+                height: 0;
+                overflow: hidden;
+                position: relative;
+
+                img {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    width: 100%;
+                    z-index: 100;
+                    transform: translateY(-50%);
+                }
             }
-        }
 
-        .ssb-media-body {
-            margin: 20px;
+            .ssb-media-body {
+                margin: 20px;
+            }
+
         }
 
     }

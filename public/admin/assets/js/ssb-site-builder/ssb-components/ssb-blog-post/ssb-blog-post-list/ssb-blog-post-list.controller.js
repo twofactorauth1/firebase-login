@@ -16,7 +16,7 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService) {
     vm.blog = SimpleSiteBuilderBlogService.blog;
 
     function initData() {
-        var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.posts;
+        var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
         if (posts) {
             vm.blog.posts = posts;
         }
