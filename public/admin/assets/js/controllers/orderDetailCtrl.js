@@ -138,6 +138,7 @@
 
                     order.locked = true; // TODO: remove this when server sends 'locked' property
                     $scope.order = order;
+                    console.info('order >>>', order);
                     $scope.eliminateUsedProducts();
                     $scope.selectedCustomer = _.find($scope.customers, function (customer) {
                         return customer._id === $scope.order.customer_id;
@@ -195,7 +196,7 @@
                 if (!line_item.product) {
                   return;
                 }
-                var item_price = line_item.product.on_sale && line_item.product.sale_price ? line_item.product.sale_price : line_item.product.regular_price;
+                var item_price = line_item.sale_price || line_item.regular_price;
                 if (line_item.quantity) {
                     line_item.total = item_price * line_item.quantity;
                 }
@@ -211,7 +212,7 @@
                     _subtotalTaxable += parseFloat(item_price) * parseFloat(line_item.quantity);
                 }
             });
-
+            
             $scope.order.subtotal = _subtotal;
             $scope.order.total_discount = _discount;
             if (_discount) {
