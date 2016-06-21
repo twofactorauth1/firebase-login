@@ -17,8 +17,7 @@
     }
 
     .ssb-blog-byline,
-    .ssb-blog-post-body,
-    .ssb-theme-btn {
+    .ssb-blog-post-body {
         display: none;
     }
 
@@ -26,6 +25,20 @@
         position: absolute;
         width: 100%;
         top: 0;
+    }
+
+    .media-heading .ssb-theme-btn {
+
+        background-color: rgba(0,0,0,.4)!important;
+        color: #fff!important;
+        font-weight: bold;
+        padding: 5px;
+        font-size: 24px;
+        white-space: normal;
+
+        &:hover:before {
+            background-color: transparent!important;
+        }
     }
 
     .ssb-media-body {
@@ -81,6 +94,10 @@
 
             .ssb-media-body {
                 margin: 20px;
+            }
+
+            .ssb-blog-post-body {
+                margin-bottom: 30px;
             }
 
         }
