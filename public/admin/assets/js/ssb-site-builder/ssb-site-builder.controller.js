@@ -338,10 +338,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
       //filter blog pages and coming soon
       if(pages){
-        vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" || page.handle === "signup" });
+        vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post"
+            || page.handle === "coming-soon" || page.handle === "signup" || page.handle === 'blog-list'
+            || page.handle === 'blog-post' });
       }
-      if(vm.state.website)
-        sortPageList();
+      if(vm.state.website) {
+          sortPageList();
+      }
+
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change

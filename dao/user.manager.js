@@ -16,6 +16,7 @@ var appConfig = require('../configs/app.config');
 var analyticsManager = require('../analytics/analytics_manager');
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var workstreamManager = require('../workstream/workstream_manager');
+var ssbManager = require('../ssb/ssb_manager');
 
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var notificationConfig = require('../configs/notification.config');
@@ -445,14 +446,26 @@ module.exports = {
                             log.error('Error creating default page for account: ' + err);
                             fn(err, null);
                         } else {
-                            callback(null, accountId, user);
+                            callback(null, accountId, websiteId, user);
                         }
                     });
                 } else {
                     log.debug('Skipping default page creation');
-                    callback(null, accountId, user);
+                    callback(null, accountId, websiteId, user);
                 }
 
+            },
+            function addBlogPages(accountId, websiteId, user, callback) {
+                log.debug(accountId, user.id(), 'creating blog pages');
+                //TODO: call ssbManager to create blog pages
+                ssbManager.addBlogPages(accountId, websiteId, user.id(), function(err, blogPages){
+                    if(err) {
+                        self.log.error(accountId, user.id(), 'Error adding blog pages:', err);
+                        callback(err);
+                    } else {
+                        callback(null, accountId, user);
+                    }
+                });
             },
             function stepEight(accountId, user, callback){
                 log.debug('Updating email notifications');

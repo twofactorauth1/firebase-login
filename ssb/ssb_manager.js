@@ -2993,7 +2993,7 @@ module.exports = {
     _copySectionsForAccount: function(sectionRefAry, accountId, fn) {
         var self = this;
         /*
-         * 1. Deferenece the sections
+         * 1. Dereference the sections
          * 2. Change accountId
          * 3. Change ID and Anchor
          * 4. Save
@@ -3590,5 +3590,53 @@ module.exports = {
                 });
             }
         });
+    },
+
+    addBlogPages: function(accountId, websiteId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> addBlogPages');
+        async.waterfall([
+            function getTemplates(cb) {
+                templateDao.findMany({handle:{$in:['blog-list', 'blog-post']}}, $$.m.ssb.Template, function(err, templates){
+                    cb(err, templates);
+                });
+            },
+            function copySections(templates, cb) {
+                var pageAry = [];
+                async.each(templates, function(template, callback){
+                    template.set('accountId', accountId);
+                    template.set('websiteId', websiteId);
+                    template.set('_id', null);
+                    self._copySectionsForAccount(template.get('sections'), accountId, function(err, sections){
+                        template.set('sections', sections);
+                        var page = new $$.m.ssb.Page(template.toJSON());
+                        pageAry.push(page);
+                        callback(err);
+                    });
+                }, function(err){
+                    cb(err, pageAry);
+                });
+            },
+            function saveToAccount(pages, cb){
+                var savedPages = [];
+                async.eachSeries(pages, function(page, callback){
+                    pageDao.saveOrUpdate(page, function(err, savedPage){
+                        savedPages.push(savedPage);
+                        callback(err);
+                    });
+                }, function(err){
+                    cb(err, savedPages)
+                });
+            }
+        ], function done(err, savedPages){
+            if(err) {
+                self.log.error(accountId, userId, 'Error adding blog pages:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< addBlogPages');
+                fn(null, savedPages);
+            }
+        });
+
     }
 };
