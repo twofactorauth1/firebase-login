@@ -208,7 +208,7 @@
                 }
                 _subtotal += parseFloat(item_price) * parseFloat(line_item.quantity);
                 _total += parseFloat(item_price) * parseFloat(line_item.quantity);
-                if (line_item.product.taxable) {
+                if (line_item.taxable) {
                     _subtotalTaxable += parseFloat(item_price) * parseFloat(line_item.quantity);
                 }
             });
@@ -226,7 +226,7 @@
                 $scope.order.total_tax = 0;
             }
 
-            $scope.order.total = (_subtotal - _discount);
+            $scope.order.total = ((_subtotal + $scope.order.total_tax) - _discount);
         };
 
         /*
