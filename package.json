@@ -63,6 +63,7 @@
     "prerender-node": "^1.2.1",
     "request": "^2.34.0",
     "requirejs": "2.1.10",
+    "rss": "^1.2.1",
     "sanitize-html": "^1.11.4",
     "schedule-drone": "^0.1.0",
     "sendgrid": "^2.0.0",

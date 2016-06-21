@@ -1,8 +1,27 @@
+.ssb-page-blog-list .ssb-page-layout-row-2-col {
+    @media screen and (max-width: 991px) {
+        max-width: 500px;
+    }
+}
+
+.ssb-blog-featured-slider,
+.ssb-blog-post-list {
+    a {
+        color: #444;
+    }
+}
+
 .ssb-blog-featured-slider {
+
+    @media screen and (max-width: 991px) {
+        margin-top: 30px;
+    }
 
     .slick-slide {
         position: relative;
-        height: 309px;
+        @media screen and (min-width: 992px) {
+            height: 309px;
+        }
     }
 
     .slick-slider {
@@ -10,15 +29,30 @@
     }
 
     .ssb-blog-byline,
-    .ssb-blog-post-body,
-    .ssb-theme-btn {
+    .ssb-blog-post-body {
         display: none;
     }
 
     .ssb-media .img-responsive {
-        position: absolute;
-        width: 100%;
-        top: 0;
+        @media screen and (min-width: 992px) {
+            position: absolute;
+            width: 100%;
+            top: 0;
+        }
+    }
+
+    .media-heading .ssb-theme-btn {
+
+        background-color: rgba(0,0,0,.4)!important;
+        color: #fff!important;
+        font-weight: bold;
+        padding: 5px;
+        font-size: 24px;
+        white-space: normal;
+
+        &:hover:before {
+            background-color: transparent!important;
+        }
     }
 
     .ssb-media-body {
@@ -48,9 +82,11 @@
     }
 }
 
-.ssb-blog-post-list {
+.ssb-blog-post-list.ssb-media-stacked {
+
     article {
-        padding-top: 50px;
+        margin-top: 50px;
+        border: 1px solid #dadada;
 
         .ssb-media-left {
             padding-bottom: 56.25%;
@@ -72,7 +108,24 @@
             margin: 20px;
         }
 
+        .ssb-media-body .media-heading {
+            margin-bottom: 0;
+
+            .ssb-theme-btn {
+                padding: 0;
+                white-space: normal;
+                font-size: 24px;
+                line-height: 1.1;
+                text-align: left;
+            }
+        }
+
+        .ssb-blog-post-body {
+            margin-bottom: 30px;
+        }
+
     }
+
 }
 
 [class*='col-'] .ssb-section-type-simple-form:first-of-type {

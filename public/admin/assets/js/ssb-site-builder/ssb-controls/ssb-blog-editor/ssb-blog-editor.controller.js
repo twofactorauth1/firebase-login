@@ -242,6 +242,13 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     }
 
+    function pageLinkClick(e) {
+      if (!angular.element(this).hasClass("clickable-link")) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }
+
     function init(element) {
 
         vm.element = element;
@@ -253,6 +260,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         if (!vm.state.blog.posts.length) {
             vm.state.blog.posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts');
         }
+
+        angular.element(".ssb-sidebar-section-panel-scrollable").on("click", "article a", pageLinkClick);
 
     }
 }

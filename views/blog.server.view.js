@@ -41,12 +41,17 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 });
             },
-            function getPublishedPage(webpageData, cb) {
-                ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
-                    cb(err, webpageData, page);
+            function getAllPages(webpageData, cb) {
+                ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, allPages){
+                    cb(err, webpageData, allPages);
                 });
             },
-            function readComponents(webpageData, page, cb) {
+            function getPublishedPage(webpageData, allPages, cb) {
+                ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, allPages, page);
+                });
+            },
+            function readComponents(webpageData, allPages, page, cb) {
                 data.templates = '';
                 if(page) {
                     data.templateIncludes = [];
@@ -80,7 +85,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            cb(null, webpageData, page);
+                            cb(null, webpageData, allPages, page);
                         });
 
 
@@ -91,22 +96,22 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
-            function addSSBSection(webpageData, page, cb){
+            function addSSBSection(webpageData, allPages, page, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
                     ssbSectionTemplate.data = html;
                     data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, page);
+                    cb(null, webpageData, allPages, page);
                 });
             },
 
-            function getBlogPosts(webpageData, page, cb) {
+            function getBlogPosts(webpageData, allPages, page, cb) {
                 ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){
-                    cb(err, webpageData, page, posts)
+                    cb(err, webpageData, allPages, page, posts)
                 });
             },
 
-            function addBlogTemplate(webpageData, page, posts, cb) {
+            function addBlogTemplate(webpageData, allPages, page, posts, cb) {
                 /*
                  * Need to wrap this:
                  * <div class="ssb-layout__header_2-col_footer ssb-page-blog-list">
@@ -224,7 +229,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                             id:'blog.html',
                                             data:template
                                         });
-                                        cb(null, webpageData, page, posts);
+                                        cb(null, webpageData, allPages, page, posts);
                                     });
                                 }
                             });
@@ -235,14 +240,15 @@ _.extend(view.prototype, BaseView.prototype, {
                         id: 'blog.html',
                         data: '<ssb-page-section section="sections_0" index="0" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_1" index="1" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_2" index="2" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_3" index="3" class="ssb-page-section"></ssb-page-section><ssb-page-section section="sections_4" index="4" class="ssb-page-section"></ssb-page-section>'
                     });
-                    cb(null, webpageData, page, posts);
+                    cb(null, webpageData, allPages, page, posts);
                 }
             },
 
-            function prepareForRender(value, page, posts, cb) {
+            function prepareForRender(value, allPages, page, posts, cb) {
                 var pageHolder = {};
-                pageHolder[page.get('handle')] = page.toJSON('frontend');
-
+                _.each(allPages, function(page){
+                    pageHolder[page.get('handle')] = page.toJSON('frontend');
+                });
 
                 data.pages = pageHolder;
                 data.account = value;
@@ -344,12 +350,17 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
                 });
             },
-            function getPublishedPage(webpageData, cb) {
-                ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
-                    cb(err, webpageData, page);
+            function getAllPages(webpageData, cb) {
+                ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, allPages){
+                    cb(err, webpageData, allPages);
                 });
             },
-            function readComponents(webpageData, page, cb) {
+            function getPublishedPage(webpageData, allPages, cb) {
+                ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, allPages, page);
+                });
+            },
+            function readComponents(webpageData, allPages, page, cb) {
                 data.templates = '';
                 if(page) {
                     data.templateIncludes = [];
@@ -383,7 +394,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             }
 
                         }, function done(err){
-                            cb(null, webpageData, page);
+                            cb(null, webpageData, allPages, page);
                         });
 
 
@@ -394,34 +405,33 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
-            function addSSBSection(webpageData, page, cb){
+            function addSSBSection(webpageData, allPages, page, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
                     ssbSectionTemplate.data = html;
                     data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, page);
+                    cb(null, webpageData, allPages, page);
                 });
             },
 
-            function getBlogPost(webpageData, page, cb) {
+            function getBlogPost(webpageData, allPages, page, cb) {
                 ssbManager.getPublishedPost(accountId, postName, function(err, post){
-                    cb(err, webpageData, page, post);
+                    if (!post) {
+                        cb('Could not find post with handle: ' + postName);
+                    } else {
+                        cb(err, webpageData, allPages, page, post);
+                    }
                 });
-
             },
 
-            function addBlogTemplate(webpageData, page, post, cb) {
+            function addBlogTemplate(webpageData, allPages, page, post, cb) {
                 //assuming single column layout
                 var sections = page.get('sections');
                 var templateSectionArray = [];
                 var blogPostIndex = 0;
 
                 _.each(sections, function(section, index) {
-                    // if (section.filter === 'blog') {
-                    //     blogPostIndex = index;
-                    // } else {
-                        templateSectionArray.push('<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>');
-                    // }
+                    templateSectionArray.push('<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>');
                 });
 
                 data.templateIncludes.push({
@@ -429,55 +439,15 @@ _.extend(view.prototype, BaseView.prototype, {
                     data: templateSectionArray.join('')
                 });
 
-                // if (blogPostIndex !== 0) {
-                //     // fs.readFile('/public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf-8', function (err, sectionHtml) {
-                //         fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-detail/ssb-blog-post-detail.component.html', 'utf-8', function (err, detailHtml) {
-                //             if(err) {
-                //                 self.log.error('Error reading post-detail:', err);
-                //                 cb(err);
-                //             } else {
-                //                 var detailHtml =
-                //                     '<section>' +
-                //                         detailHtml +
-                //                     '</section>';
-                //                 // var substitutions = [{name:'ssb-component-loader', value:detailHtml, prefix:'vm'}];
-                //                 var substitutions = [];
-                //                 var context = {
-                //                     vm: {
-                //                         component: sections[blogPostIndex],
-                //                         post: post.toJSON()
-                //                     }
-                //                 };
-
-                //                 // ngParser.parseHtml(sectionHtml, context, substitutions, function(err, value){
-                //                 ngParser.parseHtml(detailHtml, context, substitutions, function(err, value){
-
-                //                     var parsedHtml = value;
-
-                //                     templateSectionArray.splice(blogPostIndex, 0, parsedHtml);
-
-                //                     self.log.debug('template:', templateSectionArray.join(''));
-
-                //                     data.templateIncludes.push({
-                //                         id: 'blogpost.html',
-                //                         data: templateSectionArray.join('')
-                //                     });
-
-                //                     cb(null, webpageData, page, post);
-                //                 });
-                //             }
-                //         });
-                //     // });
-                // } else {
-                    cb(null, webpageData, page, post);
-                // }
+                cb(null, webpageData, allPages, page, post);
 
             },
 
-            function prepareForRender(value, page, post, cb) {
+            function prepareForRender(value, allPages, page, post, cb) {
                 var pageHolder = {};
-                pageHolder[page.get('handle')] = page.toJSON('frontend');
-
+                _.each(allPages, function(page){
+                    pageHolder[page.get('handle')] = page.toJSON('frontend');
+                });
 
                 data.pages = pageHolder;
                 data.post = post;

@@ -22,6 +22,7 @@ var userManager = require('../dao/user.manager');
 var accountDao = require('../dao/account.dao');
 var pageCacheManager = require('../cms/pagecache_manager');
 var BlogView = require('../views/blog.server.view');
+var RSSView = require('../views/rss.server.view');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -514,7 +515,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
     blogRSS: function(req, resp) {
         var self = this;
         var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
-
+        self.log.debug(accountId, null, '>> blogRSS');
+        new RSSView(req, resp).renderBlogFeed(accountId);
+        self.log.debug(accountId, null, '<< blogRSS');
     },
 
     getOrCreateTemplate: function(req, resp) {

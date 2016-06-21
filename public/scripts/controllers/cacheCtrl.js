@@ -126,7 +126,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
              */
             try {
 
-                if ($location.path().toLowerCase().indexOf('blog') !== -1) {
+                if (!indigenous.ssbBlog && $location.path().toLowerCase().indexOf('blog') !== -1) {
 
                     _(indigenous.precache.siteData.pages).chain().each(function(value, key, object) {
 
@@ -156,7 +156,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                 }
 
             } catch(e) {
-                debugger;
+                console.error(e);
             }
 
         }

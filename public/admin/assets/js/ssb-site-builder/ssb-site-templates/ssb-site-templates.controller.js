@@ -29,7 +29,8 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
         var pages = values[0];
         if(pages)
         {
-            pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" || page.handle === "signup" });
+            pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post"
+                || page.handle === "coming-soon" || page.handle === "signup" || page.handle === 'blog-list' || page.handle === 'blog-post'});
         }
         var website = values[1];
 

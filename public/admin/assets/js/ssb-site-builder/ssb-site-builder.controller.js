@@ -337,11 +337,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.pages = angular.copy(pages);
 
       //filter blog pages and coming soon
-      if(pages){
-        vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" || page.handle === "signup" });
+      if (pages) {
+        vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post"
+            || page.handle === "coming-soon" || page.handle === "signup"
+        });
       }
-      if(vm.state.website)
-        sortPageList();
+      if(vm.state.website) {
+          sortPageList();
+      }
+
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
