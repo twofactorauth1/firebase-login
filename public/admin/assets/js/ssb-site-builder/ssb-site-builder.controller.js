@@ -337,10 +337,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.pages = angular.copy(pages);
 
       //filter blog pages and coming soon
-      if(pages){
+      if (pages) {
         vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post"
-            || page.handle === "coming-soon" || page.handle === "signup" || page.handle === 'blog-list'
-            || page.handle === 'blog-post' });
+            || page.handle === "coming-soon" || page.handle === "signup"
+        });
       }
       if(vm.state.website) {
           sortPageList();
