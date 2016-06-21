@@ -412,6 +412,8 @@
                 "product_id": selected._id,
                 "quantity": 1,
                 "regular_price": selected.regular_price,
+                "sale_price": selected.on_sale ? selected.sale_price : null,
+                "taxable": selected.taxable || false,
                 "sku": selected.sku,
                 "total": selected.regular_price,
                 "name": selected.name,
