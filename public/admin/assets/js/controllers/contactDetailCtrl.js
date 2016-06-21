@@ -337,14 +337,18 @@
     };
 
     $scope.convertAddressToLatLon = function (_address, fn) {
-      ContactService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
-        if (data.error === undefined) {
-          fn(data);
-        } else {
-          console.warn(data.error);
-          fn();
-        }
-      });
+      if ($scope.displayAddressFormat(_address)) {
+        ContactService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
+          if (data.error === undefined) {
+            fn(data);
+          } else {
+            console.warn(data.error);
+            fn();
+          }
+        });
+      } else {
+        fn();
+      }
     };
 
     $scope.showMap = function (_lat, _lon) {
