@@ -113,13 +113,13 @@
             <i
                 ng-if="vm.uiState.navigation.blogPanel.navigationHistory.length > 1"
                 class="fa fa-arrow-left"
-                ng-click="vm.savePost();vm.uiState.navigation.blogPanel.back();">
+                ng-click="vm.backBlogPanel()">
             </i>
 
             {{vm.uiState.openBlogPanel.name}}
         </h4>
 
-        <div class="close-panel ti-close" ng-click="vm.savePost();vm.closeBlogPanel()"></div>
+        <div class="close-panel ti-close" ng-click="vm.closeBlogPanel()"></div>
 
     </header>
 

@@ -15,6 +15,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.ssbBlogEditor = true;
 
     vm.closeBlogPanel = closeBlogPanel;
+    vm.backBlogPanel = backBlogPanel;
 
     vm.state.pendingBlogChanges = vm.state.pendingBlogChanges || false;
 
@@ -125,11 +126,17 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function closeBlogPanel() {
-        $rootScope.$broadcast('$destroyFroalaInstances');
-        $timeout(function() {
-            vm.uiState.openBlogPanel = { name: '', id: '' };
-            vm.uiState.openSidebarPanel = '';
-        }, 500);
+        vm.savePost().then(function() {
+            $rootScope.$broadcast('$destroyFroalaInstances');
+            $timeout(function() {
+                vm.uiState.openBlogPanel = { name: '', id: '' };
+                vm.uiState.openSidebarPanel = '';
+            }, 500);
+        });
+    }
+
+    function backBlogPanel() {
+        vm.savePost().then(vm.uiState.navigation.blogPanel.back);
     }
 
     function duplicatePost(post) {
@@ -276,22 +283,25 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     function checkPendingChanges(newValue, oldValue) {
         console.debug('check pending blog changes');
-        var compareNewValue = angular.copy(newValue);
-        var compareOldValue = angular.copy(oldValue);
 
-        if (compareNewValue && compareNewValue['modified']) {
-            delete compareNewValue['modified'];
-        }
+        if (newValue && newValue._id && (newValue._id === oldValue._id)) {
+            var compareNewValue = angular.copy(newValue);
+            var compareOldValue = angular.copy(oldValue);
 
-        if (compareOldValue && compareOldValue['modified']) {
-            delete compareOldValue['modified'];
-        }
+            if (compareNewValue && compareNewValue['modified']) {
+                delete compareNewValue['modified'];
+            }
 
-        if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
-            if (!angular.equals(compareNewValue, compareOldValue)) {
-                vm.state.pendingBlogChanges = true;
-            } else {
-                vm.state.pendingBlogChanges = false;
+            if (compareOldValue && compareOldValue['modified']) {
+                delete compareOldValue['modified'];
+            }
+
+            if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
+                if (!angular.equals(compareNewValue, compareOldValue)) {
+                    vm.state.pendingBlogChanges = true;
+                } else {
+                    vm.state.pendingBlogChanges = false;
+                }
             }
         }
 

@@ -1099,7 +1099,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         angular.element('.ssb-main').on('eqResize', pageResize);
 
-        angular.element($window).on('beforeunload', vm.checkPageNavigation);
+        // angular.element($window).on('beforeunload', vm.checkPageNavigation);
 
         setupBreakpoints();
 
