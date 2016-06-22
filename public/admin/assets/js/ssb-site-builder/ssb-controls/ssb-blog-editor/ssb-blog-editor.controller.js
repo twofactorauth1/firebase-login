@@ -140,7 +140,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function duplicatePost(post) {
-
+        post.post_status = 'DRAFT';
+        post.published_date = null;
         SimpleSiteBuilderBlogService.duplicatePost(post).then(function() {
             console.log('duplicated post');
             toaster.pop('success', 'Duplicate Post Created', 'The post was created successfully.');

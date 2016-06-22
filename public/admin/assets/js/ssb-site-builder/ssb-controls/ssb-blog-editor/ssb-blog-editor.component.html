@@ -200,8 +200,13 @@
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Save">
-                                <i ng-if="!vm.uiState.saveLoading" class="fa fa-save"></i><span class="sr-only">Save</span>
-                                <i ng-if="vm.uiState.saveLoading" class="fa fa-spin"></i><span class="sr-only">Saving</span>
+
+                                <i ng-if="!vm.uiState.saveLoading" class="fa fa-save"></i>
+                                <span ng-if="!vm.uiState.saveLoading" class="sr-only">Save</span>
+
+                                <i ng-hide="!vm.uiState.saveLoading" ng-if="vm.uiState.saveLoading" class="fa fa-spinner fa-spin"></i>
+                                <span ng-if="vm.uiState.saveLoading" class="sr-only">Saving</span>
+
                             </button>
 
                             <button
@@ -220,23 +225,23 @@
 
                             <button
                                 ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
-                                ng-show="vm.state.post.post_status !== 'PUBLISHED'"
-                                class="btn btn-primary"
-                                ng-click="vm.publishPost(vm.state.post)"
-                                tooltip-placement="top"
-                                tooltip-append-to-body="true"
-                                tooltip="Publish">
-                                <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
-                            </button>
-
-                            <button
-                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.viewPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Preview">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
+                            </button>
+
+                            <button
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
+                                ng-if="vm.state.post.post_status !== 'PUBLISHED'"
+                                class="btn btn-primary"
+                                ng-click="vm.publishPost(vm.state.post)"
+                                tooltip-placement="top"
+                                tooltip-append-to-body="true"
+                                tooltip="Publish">
+                                <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
                             </button>
 
 
