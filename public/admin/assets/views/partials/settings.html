@@ -15,16 +15,16 @@
                     <div class="panel-body padding-top-0 padding-bottom-0">
                         <ul class="list-unstyled cl-effect-1" style="line-height:25px">
                             <li>
-                                <a ng-click="viewSettings('website', 'SEO')">SEO</a>
+                                <a class="text-dark" ng-click="viewSettings('website', 'SEO')">SEO</a>
                             </li>
                             <li>
-                                <a ng-click="viewSettings('website', 'Domain')">Domain</a>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Domain')">Domain</a>
                             </li>
                             <li>
-                                <a ng-click="viewSettings('website', 'Blog')">Blog</a>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Blog')">Blog</a>
                             </li>
                             <li ng-if='account.showhide.userScripts'>
-                                <a ng-click="viewSettings('website', 'Scripts')">Scripts</a>
+                                <a class="text-dark" ng-click="viewSettings('website', 'Scripts')">Scripts</a>
                             </li>
                         </ul>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="panel-body padding-top-0 padding-bottom-0">
                         <ul class="list-unstyled cl-effect-1" style="line-height:25px">
                             <li>
-                                <a ng-click="viewSettings('customers', 'Membership')">Membership</a>
+                                <a class="text-dark" ng-click="viewSettings('customers', 'Membership')">Membership</a>
                             </li>
                         </ul>
                     </div>
@@ -58,11 +58,11 @@
                     <div class="panel-body padding-top-0 padding-bottom-0">
                         <ul class="list-unstyled cl-effect-1" style="line-height:25px">
                             <li>
-                                <a ng-click="viewSettings('commerce', 'Taxes')">Taxes</a>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'Taxes')">Taxes</a>
                             </li>
 
                             <li>
-                                <a ng-click="viewSettings('commerce', 'PayPal')">PayPal</a>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'PayPal')">PayPal</a>
                             </li>
 
                         </ul>
@@ -80,13 +80,13 @@
                     <div class="panel-body padding-top-0 padding-bottom-0">
                         <ul class="list-unstyled cl-effect-1" style="line-height:25px">
                             <li>
-                                <a ng-click="navigateTo('app.account.profilebusiness', $event)">Business Profile</a>
+                                <a class="text-dark" ng-click="navigateTo('app.account.profilebusiness', $event)">Business Profile</a>
                             </li>
                             <li>
-                                <a ng-click="navigateTo('app.account.billing', $event)">Billing</a>
+                                <a class="text-dark" ng-click="navigateTo('app.account.billing', $event)">Billing</a>
                             </li>
                             <li>
-                                <a ng-click="navigateTo('app.account.integrations', $event)">Integrations</a>
+                                <a class="text-dark" ng-click="navigateTo('app.account.integrations', $event)">Integrations</a>
                             </li>
                         </ul>
                     </div>
@@ -103,7 +103,7 @@
                     <div class="panel-body padding-top-0 padding-bottom-0">
                         <ul class="list-unstyled cl-effect-1" style="line-height:25px">
                             <li>
-                                <a ng-click="viewSettings('emails', 'Notifications')">Notifications</a>
+                                <a class="text-dark" ng-click="viewSettings('emails', 'Notifications')">Notifications</a>
                             </li>
                         </ul>
                     </div>
@@ -144,8 +144,8 @@
                             <div class="form-group margin-bottom-10">
                                 <p class="margin-top-10">You indigenous.io subdomain is <span class="text-bold">{{originalAccount.subdomain}}.indigenous.io</span>
                                     <span class="cl-effect-1">
-                                        <a ng-click="modifysub.show=true" ng-hide="modifysub.show">Modify</a>
-                                        <a ng-click="revertSubdomain()" ng-show="modifysub.show">Cancel</a>
+                                        <a class="text-dark" ng-click="modifysub.show=true" ng-hide="modifysub.show">Modify</a>
+                                        <a class="text-dark" ng-click="revertSubdomain()" ng-show="modifysub.show">Cancel</a>
                                     </span>
                                 </p>
                                 <div ng-if="modifysub.show">
@@ -162,7 +162,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <span class="help-block"><a href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
+                                <span class="help-block"><a class="text-dark" href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
                             </div>
                             <div class="form-group">
                                 <!-- <label>Footer Link</label> -->
