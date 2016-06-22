@@ -19,7 +19,12 @@
             </div>
 
             <h1 class="media-heading" itemprop="name headline">
-                <a class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}">{{vm.post.display_title || vm.post.post_title}}</a>
+                <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}">
+                    {{vm.post.display_title || vm.post.post_title}}
+                </a>
+                <a ng-if="vm.compactView" class="btn btn-link" href="/blog/{{vm.post.post_url}}">
+                    {{vm.post.display_title || vm.post.post_title}}
+                </a>
             </h1>
 
             <div ng-if="!vm.compactView" class="ssb-blog-byline">
@@ -36,7 +41,7 @@
             </div>
 
             <section class="ssb-blog-post-body" itemprop="articleBody">
-                <p ng-if="vm.post.post_excerpt.length">{{vm.post.post_excerpt}}</p>
+                <p ng-if="vm.post.post_excerpt.length" ng-bind-html="vm.post.post_excerpt | unsafe">{{vm.post.post_excerpt}}</p>
                 <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}">READ MORE <i class="fa fa-long-arrow-right"></i></a>
             </section>
         </div>
