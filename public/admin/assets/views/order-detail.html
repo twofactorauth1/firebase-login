@@ -608,7 +608,7 @@
                 <div class="col-xs-9">
                     <h4>{{selectedProduct.name || 'No Product Name'}}</h4>
                     <p>{{selectedProduct.description}}</p>
-                    <p class="text-bold"> {{selectedProduct.sale_price && selectedProduct.on_sale ? selectedProduct.sale_price : selectedProduct.regular_price  | currency}}</p>
+                    <p class="text-bold"> {{checkOnSaleFn(selectedProduct) ? selectedProduct.sale_price : selectedProduct.regular_price  | currency}}</p>
                 </div>
                 <div class="clearfix"></div>
             </div>
