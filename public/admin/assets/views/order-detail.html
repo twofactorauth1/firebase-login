@@ -589,7 +589,7 @@
                     </div>
                     <small class="margin-left-5 text-bold text-large" ng-if="product.name" ng-bind-html="product.name | highlight: $select.search"></small>
                     <small class="margin-left-5 text-bold text-large text-muted" ng-if="!product.name" ng-bind-html="'No Product Name' | highlight: $select.search"></small>
-                    <small class="margin-left-5 text-bold text-large text-muted">(<span ng-if="product.regular_price">${{product.sale_price && product.on_sale ? product.sale_price : product.regular_price}}</span><span ng-if="!product.regular_price">Free</span>)</small>
+                    <small class="margin-left-5 text-bold text-large text-muted">(<span ng-if="product.regular_price">${{checkOnSaleFn(product) ? product.sale_price : product.regular_price}}</span><span ng-if="!product.regular_price">Free</span>)</small>
                 </ui-select-choices>
             </ui-select>
         </div>
