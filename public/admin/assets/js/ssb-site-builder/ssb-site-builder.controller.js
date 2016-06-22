@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster) {
 
     console.info('site-builder directive init...');
 
@@ -36,6 +36,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isBlogEditWritingMode = isBlogEditWritingMode;
     vm.saveAndLoadPage = saveAndLoadPage;
     vm.openPageSettingsModal = openPageSettingsModal;
+    // vm.checkStateNavigation = checkStateNavigation;
+    vm.checkPageNavigation = checkPageNavigation;
+    vm.savePost = savePost;
+
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -264,10 +268,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     /**
      * event listeners
      */
-    $rootScope.$on('$stateChangeStart', function (event) {
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+        // vm.checkStateNavigation(event, toState, toParams, fromState, fromParams, options);
         $rootScope.$broadcast('$destroyFroalaInstances');
         $rootScope.app.layout.isMinimalAdminChrome =  false;
         $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+    });
+
+    $rootScope.$on('$locationChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+        // vm.checkStateNavigation(event, toState, toParams, fromState, fromParams, options);
     });
 
     $rootScope.$on('$ssbUpdateUiState', function (event, uiStateObj) {
@@ -275,12 +284,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         angular.extend(vm.uiState, uiStateObj);
     });
 
+    $scope.$on('$destroy', destroy);
+
 
 
     /**
      * watchers
      */
-    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
+    var unbindWebsiteServiceWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.pendingWebsiteChanges = false;
         vm.state.website = website;
         vm.state.originalWebsite = null;
@@ -289,7 +300,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }, 1000);
     });
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
+    var unbindPageServiceWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
         $rootScope.$broadcast('$destroyFroalaInstances');
         vm.state.pendingPageChanges = false;
         vm.state.page = page;
@@ -300,13 +311,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }, 1000);
     });
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
+    var unbindActiveSectionWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.activeComponentIndex }, updateActiveComponent, true);
+    var unbindActiveComponentWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.activeComponentIndex }, updateActiveComponent, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
+    var unbindLoadingWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
-    $scope.$watch('vm.state.page', _.debounce(function(page) {
+    var unbindPageStateWatcher = $scope.$watch('vm.state.page', _.debounce(function(page) {
         console.time('angular.equals for page');
         if (page && vm.state.originalPage && vm.pageChanged(page, vm.state.originalPage)) {
             console.timeEnd('angular.equals for page');
@@ -321,7 +332,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }, 100), true);
 
-    $scope.$watch('vm.state.website', function(website) {
+    var unbindWebsiteStateWatcher = $scope.$watch('vm.state.website', function(website) {
         if (SimpleSiteBuilderService.websiteLoading && website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
             vm.state.pendingWebsiteChanges = true;
             console.log("Website changed");
@@ -330,13 +341,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }, true);
 
-    $scope.$watch('vm.state.website.linkLists', function(linkLists) {
+    var unbindLinkListsWatcher = $scope.$watch('vm.state.website.linkLists', function(linkLists) {
         if(linkLists){
             sortPageList();
         }
     }, true);
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
+    var unbindPagesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       // To track duplicate pages
       vm.state.originalPages = angular.copy(pages);
       vm.state.pages = angular.copy(pages);
@@ -403,12 +414,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
 
     function checkIfDirty() {
-        return vm.state.pendingWebsiteChanges || vm.state.pendingPageChanges;
+        return vm.state.pendingWebsiteChanges || vm.state.pendingPageChanges || vm.state.pendingBlogChanges;
     }
 
     function resetDirty() {
         vm.state.pendingWebsiteChanges = false;
         vm.state.pendingPageChanges = false;
+        vm.state.pendingBlogChanges = false;
     }
 
     function saveWebsite() {
@@ -497,6 +509,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     })
                 )
             })
+
+
+            if (vm.state.post && vm.state.pendingBlogChanges) {
+                vm.savePost(vm.state.post);
+            }
+
         }
 
     }
@@ -871,8 +889,33 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         return ret;
     };
 
-    function checkNavigation(e) {
-        // debugger;
+    // function checkStateNavigation(event, toState, toParams, fromState, fromParams, options) {
+
+    //     SweetAlert.swal({
+    //         title: "Are you sure?",
+    //         text: "You have unsaved changes. Are you sure you want to leave Site Builder?",
+    //         type: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#DD6B55",
+    //         confirmButtonText: "Yes, leave without saving.",
+    //         cancelButtonText: "Cancel",
+    //         closeOnConfirm: true,
+    //         closeOnCancel: true
+    //     },
+    //     function (isConfirm) {
+    //         if (!isConfirm) {
+    //             event.preventDefault();
+    //         }
+    //     });
+
+    // }
+
+    function checkPageNavigation(event) {
+        if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges || vm.state.pendingBlogChanges) {
+            return "You have unsaved changes. Are you sure you want to leave Site Builder?";
+        } else {
+            return undefined
+        }
     }
 
     function sortPageList(){
@@ -1003,6 +1046,49 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
+    function savePost(post) {
+        return SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
+            console.log('post saved');
+            vm.state.pendingBlogChanges = false;
+        }).error(function(err) {
+            console.error('post save error:', err);
+        })
+    }
+
+    function destroy() {
+
+        console.debug('destroyed main SiteBuilder controller');
+
+        angular.element("body").off("click", ".ssb-page-section a", pageLinkClick);
+
+        angular.element("body").off("click", ".ssb-page-section", pageSectionClick);
+
+        angular.element('.ssb-main').off('eqResize', pageResize);
+
+        angular.element($window).off('beforeunload', vm.checkPageNavigation);
+
+        unbindWebsiteServiceWatcher();
+        unbindPageServiceWatcher();
+        unbindActiveSectionWatcher();
+        unbindActiveComponentWatcher();
+        unbindLoadingWatcher();
+        unbindPageStateWatcher();
+        unbindWebsiteStateWatcher();
+        unbindLinkListsWatcher();
+        unbindPagesWatcher();
+        unbindThemesWatcher();
+        unbindTemplatesWatcher();
+        unbindLegacyTemplatesWatcher();
+        unbindPlatformSectionWatcher();
+        unbindUserSectionWatcher();
+        unbindAccountWatcher();
+        unbindOpenSidebarPanel();
+        unbindOpenSidebarPanel();
+
+    }
+
+
+
     function init(element) {
 
         vm.element = element;
@@ -1013,7 +1099,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         angular.element('.ssb-main').on('eqResize', pageResize);
 
-        angular.element($window).on('beforeunload', checkNavigation);
+        angular.element($window).on('beforeunload', vm.checkPageNavigation);
 
         setupBreakpoints();
 
