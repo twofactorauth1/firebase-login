@@ -57,6 +57,8 @@ angular.module('mainApp').directive("elem", function ($timeout) {
                 .replace(/\[\/script\]/, '</script>');
 
             scope.ngModel = unescapeHTML(modelString);
+        } else if (scope.ngModel.indexOf('&lt;!-- more --&gt;') !== -1) {
+            scope.ngModel = scope.ngModel.replace(/&lt;!-- more --&gt;/, '')
         }
 
 
