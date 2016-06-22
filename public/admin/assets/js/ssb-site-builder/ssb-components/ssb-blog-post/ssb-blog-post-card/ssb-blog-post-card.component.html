@@ -5,7 +5,7 @@
     <div ng-if="vm.post" class="ssb-media">
 
         <div ng-if="vm.post.featured_image" class="ssb-media-left">
-            <a href="/blog/{{vm.post.post_url}}">
+            <a href="/blog/{{vm.post.post_url}}" target="_self">
                 <img itemprop="thumbnailUrl" class="img-responsive blog-post-image" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
             </a>
         </div>
@@ -19,7 +19,7 @@
             </div>
 
             <h1 class="media-heading" itemprop="name headline">
-                <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}">
+                <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}" target="_self">
                     {{vm.post.display_title || vm.post.post_title}}
                 </a>
                 <a ng-if="vm.compactView" class="btn btn-link" href="/blog/{{vm.post.post_url}}">
@@ -35,14 +35,14 @@
                 <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
                     <i class="fa fa-user"></i>
                     <span itemprop="name">
-                        <a class="btn btn-link ssb-theme-btn" href="/author/{{vm.post.post_author}}" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                        <a class="btn btn-link ssb-theme-btn" href="/author/{{vm.post.post_author}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
                     </span>
                 </span>
             </div>
 
             <section class="ssb-blog-post-body" itemprop="articleBody">
                 <p ng-if="vm.post.post_excerpt.length" ng-bind-html="vm.post.post_excerpt | unsafe">{{vm.post.post_excerpt}}</p>
-                <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}">READ MORE <i class="fa fa-long-arrow-right"></i></a>
+                <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}" target="_self">READ MORE <i class="fa fa-long-arrow-right"></i></a>
             </section>
         </div>
     </div>
