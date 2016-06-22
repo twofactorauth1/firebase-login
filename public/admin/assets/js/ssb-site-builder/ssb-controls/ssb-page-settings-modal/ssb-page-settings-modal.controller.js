@@ -12,6 +12,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     vm.setAsHomePage = setAsHomePage;
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
+    vm.isBlogPage = false;
 
     function duplicatePage(){
         vm.saveLoading = true;
@@ -193,7 +194,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
 
         if(_page && _page._id !== vm.page._id) {
             return "Page handles must be unique.";
-        } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
+        } else if (!vm.isBlogPage && SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
             return "Page handle cannot be a system route.";
         }
         // update hiddenOnPages object for updated handle
@@ -220,6 +221,13 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
       }
     });
 
+    $scope.$watch('vm.originalPage', function(page){
+      if(page){
+        vm.isBlogPage = vm.parentVm.uiState.checkIfBlogPage(vm.originalPage);
+        vm.inValidPageHandle = validateDuplicatePage(vm.page.handle);
+      }
+    });
+
     vm.loading = true;
     if(vm.pageId === vm.parentVm.state.page._id){
         vm.page = angular.copy(vm.parentVm.state.page);
@@ -233,5 +241,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
             vm.loading = false;
         })
     }
+
+
 
 }]);
