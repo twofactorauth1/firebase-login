@@ -3320,6 +3320,17 @@ module.exports = {
             blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
         }
 
+        // post_tags should be array
+
+        var post_tags = blogPost.get("post_tags");
+        post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_tags[i] = v.text;
+          }
+        });
+
+        blogPost.set("post_tags", post_tags);
+
         blogPost.set('post_excerpt', self.getBlogPostExcerpt(blogPost.get('post_content')));
 
         var query = {
@@ -3373,6 +3384,17 @@ module.exports = {
         if (blogPost.featured_image) {
           blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
         }
+
+        // post_tags should be array
+
+        var post_tags = blogPost.get("post_tags");
+        post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_tags[i] = v.text;
+          }
+        });
+
+        blogPost.set("post_tags", post_tags);
 
         blogPost.set('post_excerpt', self.getBlogPostExcerpt(blogPost.get('post_content')));
 

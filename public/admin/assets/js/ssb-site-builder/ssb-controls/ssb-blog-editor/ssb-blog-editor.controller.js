@@ -174,16 +174,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         post.websiteId = vm.state.website._id;
         post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
         post.post_url = slugifyHandle(angular.element('<div>' + post.post_title + '</div>').text().trim());
-
-
-        var post_data = angular.copy(post);
-        post_data.post_tags.forEach(function (v, i) {
-          if (v.text) {
-            post_data.post_tags[i] = v.text;
-          }
-        });
-
-        return SimpleSiteBuilderBlogService.savePost(post_data).then(function(savedPost) {
+        return SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
             toast = { type: 'success', title: 'Post Saved', message: 'The post was saved successfully.' };
