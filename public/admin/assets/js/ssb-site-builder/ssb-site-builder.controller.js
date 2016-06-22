@@ -135,7 +135,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         isBlogEditWritingMode: false,
 
         saveAndLoadPage: vm.saveAndLoadPage,
-        openPageSettingsModal: vm.openPageSettingsModal
+
+        openPageSettingsModal: vm.openPageSettingsModal,
+
+        checkIfBlogPage: vm.isBlogPage
 
     };
 
@@ -291,7 +294,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.pendingPageChanges = false;
         vm.state.page = page;
         vm.state.originalPage = null;
-        vm.uiState.isBlogPage = vm.isBlogPage();
+        vm.uiState.isBlogPage = vm.isBlogPage(vm.state.page);
         $timeout(function() {
             vm.state.originalPage = angular.copy(page);
         }, 1000);
@@ -926,8 +929,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }
 
-    function isBlogPage() {
-        return vm.state.page.handle === 'blog-list' || vm.state.page.handle === 'blog-post';
+    function isBlogPage(page) {
+        return page.handle === 'blog-list' || page.handle === 'blog-post';
     }
 
     function isBlogEditMode() {
