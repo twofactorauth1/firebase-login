@@ -16,6 +16,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     vm.closeBlogPanel = closeBlogPanel;
 
+    vm.state.pendingBlogChanges = vm.state.pendingBlogChanges || false;
+
     vm.uiState.activePostFilter = 'all';
     vm.uiState.froalaEditorActive = false;
     vm.editableElementSelectors = '.ssb-blog-editor-post-title, .ssb-blog-editor-post-body';
@@ -39,6 +41,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.removeFeaturedImage = removeFeaturedImage;
     vm.handleSaveErrors = handleSaveErrors;
     vm.autoSave = autoSave;
+    vm.checkPendingChanges = checkPendingChanges;
 
     vm.defaultPost = {
         post_title: '',
@@ -46,22 +49,44 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         post_author: getDefualtAuthor()
     };
 
-
-    function getDefualtAuthor(){
-        if(vm.state.account && vm.state.account.business)
-            return vm.state.account.business.name;
-    }
-
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
             // $timeout(vm.activateFroalaToolbar);
         }
     }, true);
 
-    // Disabling auto blog save
+    $scope.$watch('vm.state.post', _.debounce(vm.checkPendingChanges, 1000), true);
 
-    //$scope.$watch('vm.state.post', _.debounce(vm.autoSave, 1000), true);
+    // $rootScope.$on('$locationChangeStart', vm.checkStateNavigation);
 
+    // function checkStateNavigation(event, toState, toParams, fromState, fromParams, options) {
+
+    //     if (vm.state.pendingBlogChanges) {
+    //         SweetAlert.swal({
+    //             title: "Are you sure?",
+    //             text: "You have unsaved changes. Are you sure you want to leave the Blog Editor?",
+    //             type: "warning",
+    //             showCancelButton: true,
+    //             confirmButtonColor: "#DD6B55",
+    //             confirmButtonText: "Yes, leave without saving.",
+    //             cancelButtonText: "Cancel",
+    //             closeOnConfirm: true,
+    //             closeOnCancel: true
+    //         },
+    //         function (isConfirm) {
+    //             if (!isConfirm) {
+    //                 event.preventDefault();
+    //             }
+    //         });
+    //     }
+
+    // }
+
+    function getDefualtAuthor(){
+        if(vm.state.account && vm.state.account.business) {
+            return vm.state.account.business.name;
+        }
+    }
 
     function filter(item) {
 
@@ -168,7 +193,13 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.savePost(post);
     }
 
-    function savePost(post, suppressToaster){
+    function savePost(post, suppressToaster) {
+        var post = post || vm.state.post;
+
+        if (!post) {
+            return false;
+        }
+
         var toast = {};
         vm.uiState.saveLoading = true;
         post.websiteId = vm.state.website._id;
@@ -177,6 +208,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         return SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
             console.log('post saved');
             vm.state.post = savedPost.data;
+            vm.state.pendingBlogChanges = false;
             toast = { type: 'success', title: 'Post Saved', message: 'The post was saved successfully.' };
         }).catch(function(error) {
             toast = { type: 'error', title: 'Error', message: (error.data ? error.data.message : 'Error updating post. Please try again.') };
@@ -237,6 +269,29 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
             if (!angular.equals(compareNewValue, compareOldValue) && !vm.uiState.saveLoading) {
                 vm.savePost(vm.state.post, true);
+            }
+        }
+
+    }
+
+    function checkPendingChanges(newValue, oldValue) {
+        console.debug('check pending blog changes');
+        var compareNewValue = angular.copy(newValue);
+        var compareOldValue = angular.copy(oldValue);
+
+        if (compareNewValue && compareNewValue['modified']) {
+            delete compareNewValue['modified'];
+        }
+
+        if (compareOldValue && compareOldValue['modified']) {
+            delete compareOldValue['modified'];
+        }
+
+        if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
+            if (!angular.equals(compareNewValue, compareOldValue)) {
+                vm.state.pendingBlogChanges = true;
+            } else {
+                vm.state.pendingBlogChanges = false;
             }
         }
 
