@@ -19,20 +19,15 @@ env_check(){
 	fi	
 
 	if [ "$1" = "master" ]; then
-		export AWS_DEFAULT_REGION="us-west-2"
-		export ENV_NAME="indigeweb-live-env"
-		export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
+		export AWS_DEFAULT_REGION="us-west-1"
+		export ENV_NAME="indigeweb-env-blue"
+		export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 		export GOOGLE_CLIENT_ID="277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com"
 		export GOOGLE_CLIENT_SECRET="yPiJOniUgxjT94O7M_4tNj_M"
 		export STRIPE_PUBLISHABLE_KEY="pk_live_GFldJIgLoRweE8KmZgHc76df"
 	elif [ "$1" = "develop" ]; then
-		#export AWS_DEFAULT_REGION="us-west-2"
-		#export ENV_NAME="indigeweb-test-env"
-		#export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
 		export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
 	  	export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
-
-
 	  	export AWS_DEFAULT_REGION="us-west-1"
         export ENV_NAME="indiwebTestB-env"
         export APP_NAME="indiweb-test-b"
@@ -144,29 +139,6 @@ main(){
 
         # create a new version and update the environment to use this version
         aws elasticbeanstalk create-application-version --application-name "${ASIA_APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
-
-        interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
-
-        [ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
-	elif [ "$1" = "developXXX" ]; then
-	    echo "Updating Other"
-	    export AWS_DEFAULT_REGION="us-west-1"
-	    export ENV_NAME="indiwebTestB-env"
-	    export OTHER_APP_NAME="indiweb-test-b"
-	    export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
-
-	    echo "Uploading to Other"
-        aws s3 cp ${APP_NAME}-${APP_VERSION}.zip s3://${S3_BUCKET}/${APP_NAME}-${APP_VERSION}.zip	|| on_err "$_"
-
-	    echo "Checking for old revisions to clean up..."
-	    LIMIT_REVISIONS=100
-	    aws elasticbeanstalk describe-application-versions --application-name "${OTHER_APP_NAME}" --output text \
-          --query 'ApplicationVersions[*].[VersionLabel,DateCreated,Description]' | \
-          grep -vi sample | tail -n +${LIMIT_REVISIONS} | \
-          while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${OTHER_APP_NAME}" --version-label "${ver}" --delete-source-bundle; done
-
-        # create a new version and update the environment to use this version
-        aws elasticbeanstalk create-application-version --application-name "${OTHER_APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
 
         interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
 
