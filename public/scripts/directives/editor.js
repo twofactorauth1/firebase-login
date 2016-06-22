@@ -33,32 +33,34 @@ angular.module('mainApp').directive("elem", function ($timeout) {
         *
         * Result -> "<script>asdfasdfasdf</script><div class="something">some content</div><script src="whatever.js"></script>"
         */
-        if (scope.ngModel && scope.ngModel.indexOf && scope.ngModel.indexOf('[script') !== -1) {
+        if (scope.ngModel && scope.ngModel.indexOf) {
+            if (scope.ngModel.indexOf('[script') !== -1) {
 
-            var unescapeMap = {
-                "&amp;":"&",
-                "&lt;":"<",
-                "&gt;":">",
-                '&quot;':'"',
-                '&#39;':"'",
-                '&#x2F;':"/",
-                '&apos;': "'"
-            };
+                var unescapeMap = {
+                    "&amp;":"&",
+                    "&lt;":"<",
+                    "&gt;":">",
+                    '&quot;':'"',
+                    '&#39;':"'",
+                    '&#x2F;':"/",
+                    '&apos;': "'"
+                };
 
-            var unescapeHTML = function(string) {
-                return String(string).replace(/(&amp;|&lt;|&gt;|&quot;|&#39;|&#x2f;|&apos;)/g, function(s) {
-                    return unescapeMap[s] || s;
-                });
+                var unescapeHTML = function(string) {
+                    return String(string).replace(/(&amp;|&lt;|&gt;|&quot;|&#39;|&#x2f;|&apos;)/g, function(s) {
+                        return unescapeMap[s] || s;
+                    });
+                }
+
+                var modelString = scope.ngModel.replace(/\[script /g, '<script ')
+                    .replace(/\]\[\/script\]/g, '></script>')
+                    .replace(/\[script\]/, '<script>')
+                    .replace(/\[\/script\]/, '</script>');
+
+                scope.ngModel = unescapeHTML(modelString);
+            } else if (scope.ngModel.indexOf('&lt;!-- more --&gt;') !== -1) {
+                scope.ngModel = scope.ngModel.replace(/&lt;!-- more --&gt;/, '')
             }
-
-            var modelString = scope.ngModel.replace(/\[script /g, '<script ')
-                .replace(/\]\[\/script\]/g, '></script>')
-                .replace(/\[script\]/, '<script>')
-                .replace(/\[\/script\]/, '</script>');
-
-            scope.ngModel = unescapeHTML(modelString);
-        } else if (scope.ngModel.indexOf('&lt;!-- more --&gt;') !== -1) {
-            scope.ngModel = scope.ngModel.replace(/&lt;!-- more --&gt;/, '')
         }
 
 
