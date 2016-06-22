@@ -35,6 +35,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isBlogEditMode = isBlogEditMode;
     vm.isBlogEditWritingMode = isBlogEditWritingMode;
     vm.saveAndLoadPage = saveAndLoadPage;
+    vm.openPageSettingsModal = openPageSettingsModal;
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -133,7 +134,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isBlogEditWritingMode: false,
 
-        saveAndLoadPage: vm.saveAndLoadPage
+        saveAndLoadPage: vm.saveAndLoadPage,
+        openPageSettingsModal: vm.openPageSettingsModal
 
     };
 
@@ -962,6 +964,41 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             SimpleSiteBuilderService.getPages();
         }
     };
+
+    function openPageSettingsModal(modal, controller, index, size, pageId) {
+      console.log('openModal >>> ', modal, controller, index);
+      var _modal = {
+        templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
+        size: 'md',
+        scope: $scope,
+        resolve: {
+            parentVm: function () {
+                return vm;
+            }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller + ' as vm';
+      }
+
+      if (size) {
+        _modal.size = 'lg';
+      }
+
+      _modal.resolve.pageId = function () {
+        return pageId;
+      };
+
+      vm.modalInstance = $modal.open(_modal);
+
+      vm.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+
+    }
 
     function init(element) {
 

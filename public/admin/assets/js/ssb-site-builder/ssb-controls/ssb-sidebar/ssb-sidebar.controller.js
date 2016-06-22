@@ -39,7 +39,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.addBackgroundVideo = addBackgroundVideo;
     vm.addImage = addImage;
     vm.openModal = openModal;
-    vm.openPageSettingsModal = openPageSettingsModal;
     vm.closeModal = closeModal;
     vm.openMediaModal = openMediaModal;
     vm.insertMedia = insertMedia;
@@ -611,42 +610,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       if (size) {
         _modal.size = 'lg';
       }
-
-      vm.modalInstance = $modal.open(_modal);
-
-      vm.modalInstance.result.then(null, function () {
-        angular.element('.sp-container').addClass('sp-hidden');
-      });
-
-    }
-
-
-    function openPageSettingsModal(modal, controller, index, size, pageId) {
-      console.log('openModal >>> ', modal, controller, index);
-      var _modal = {
-        templateUrl: modal,
-        keyboard: false,
-        backdrop: 'static',
-        size: 'md',
-        scope: $scope,
-        resolve: {
-            parentVm: function () {
-                return vm;
-            }
-        }
-      };
-
-      if (controller) {
-        _modal.controller = controller + ' as vm';
-      }
-
-      if (size) {
-        _modal.size = 'lg';
-      }
-
-      _modal.resolve.pageId = function () {
-        return pageId;
-      };
 
       vm.modalInstance = $modal.open(_modal);
 
