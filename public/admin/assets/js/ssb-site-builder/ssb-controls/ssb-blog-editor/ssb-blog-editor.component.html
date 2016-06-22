@@ -113,13 +113,13 @@
             <i
                 ng-if="vm.uiState.navigation.blogPanel.navigationHistory.length > 1"
                 class="fa fa-arrow-left"
-                ng-click="vm.uiState.navigation.blogPanel.back();">
+                ng-click="vm.savePost();vm.uiState.navigation.blogPanel.back();">
             </i>
 
             {{vm.uiState.openBlogPanel.name}}
         </h4>
 
-        <div class="close-panel ti-close" ng-click="vm.closeBlogPanel()"></div>
+        <div class="close-panel ti-close" ng-click="vm.savePost();vm.closeBlogPanel()"></div>
 
     </header>
 
@@ -193,17 +193,19 @@
 
                         <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
 
-                            <button ng-disabled="!vm.isValidPost()"
+                            <button
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.savePost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Save">
-                                <i class="fa fa-save"></i><span class="sr-only">Save</span>
+                                <i ng-if="!vm.uiState.saveLoading" class="fa fa-save"></i><span class="sr-only">Save</span>
+                                <i ng-if="vm.uiState.saveLoading" class="fa fa-spin"></i><span class="sr-only">Saving</span>
                             </button>
 
                             <button
-                                ng-disabled="!vm.isValidPost()"
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 type="button"
                                 class="btn btn-primary"
                                 ng-click="vm.toggleFeatured(vm.state.post)"
@@ -217,7 +219,8 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.isValidPost()"
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
+                                ng-show="vm.state.post.post_status !== 'PUBLISHED'"
                                 class="btn btn-primary"
                                 ng-click="vm.publishPost(vm.state.post)"
                                 tooltip-placement="top"
@@ -227,7 +230,7 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.isValidPost()"
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.viewPost(vm.state.post)"
                                 tooltip-placement="top"
