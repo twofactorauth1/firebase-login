@@ -286,7 +286,7 @@ var dao = {
             userId = null;
         }
         var apiToken = self.delegateStripe(accessToken);
-
+        //TODO: this is wrong!
         stripe.customers.del(stripeCustomerId, apiToken, function(err, confirmation){
             if(err) {
                 fn(err, confirmation);
