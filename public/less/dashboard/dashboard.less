@@ -81,6 +81,30 @@
 
 .workstream-container {
     position: relative;
+    min-height: calc(~"270px * 2");
+
+    // .image__cell {
+    //     transition: all linear 1s;
+    //     background: red;
+    // }
+
+    .image__cell.ng-enter{
+        transition: all linear 1s;
+        opacity: 0;
+        // background: orange;
+    }
+
+    .image__cell.ng-enter-stagger{
+        transition-delay: 4s;
+        transition-duration: 1s;
+        // background: yellow;
+    }
+
+    .image__cell.ng-enter.ng-enter-active{
+        opacity: 1;
+        // background: red;
+    }
+
 }
 
 .workstream-button {
@@ -102,6 +126,10 @@
 
 .workstream-tile-container {
     margin: 0;// 1em;
+
+    .ng-animate & {
+        display: none;
+    }
 
     .workstream-panel-circle {
 
