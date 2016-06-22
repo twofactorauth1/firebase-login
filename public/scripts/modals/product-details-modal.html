@@ -24,7 +24,10 @@
                 <tab heading="Details">
                     <div class="caption">
                         <h4 class="title">{{selectedProduct.name}}</h4>
-                        <h4 ng-if="!selectedProduct.hasVariations">{{selectedProduct.regular_price | currency}}</h4>
+                        <h4 ng-if="!selectedProduct.hasVariations">
+                            <span ng-class="{'strikethrough text-small': selectedProduct.onSaleToday}">{{selectedProduct.regular_price | currency}}</span><span ng-if="selectedProduct.onSaleToday">{{selectedProduct.sale_price | currency}}</span>
+                        </h4>
+
                         <h4 ng-if="selectedProduct.hasVariations && matchedVariation">{{matchedVariation.regular_price | currency}}</h4>
 
                         <div class="clearfix"></div>

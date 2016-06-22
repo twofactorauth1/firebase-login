@@ -450,8 +450,8 @@
                                             <span>{{item.name}}</span>
                                         </td>
                                         <td class="center">
-                                            <span ng-if='!item.sale_price'>{{item.regular_price | currency}}</span>
-                                            <span ng-if='item.sale_price'><s>{{item.regular_price | currency}}</s> {{item.sale_price | currency}}</span>
+                                            <span ng-if='!item.on_sale'>{{item.regular_price | currency}}</span>
+                                            <span ng-if='item.on_sale'><s>{{item.regular_price | currency}}</s> {{item.sale_price | currency}}</span>
                                         </td>
                                         <td class="center">
                                             <span ng-if="!item[$index].editing">{{item.quantity}}</span>
@@ -462,7 +462,7 @@
                                         </td>
                                         <td class="center">
                                             <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
-                                            <span ng-if="item.discount && item.discount > 0"><s>{{(item.sale_price || item.regular_price) | currency}}</s> {{item.total | currency}}</span>
+                                            <span ng-if="item.discount && item.discount > 0"><s>{{(item.on_sale ? item.sale_price : item.regular_price) | currency}}</s> {{item.total | currency}}</span>
                                         </td>
                                         <td class="center" ng-hide='isDonationOrderFn()'>
                                             <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>
@@ -589,7 +589,7 @@
                     </div>
                     <small class="margin-left-5 text-bold text-large" ng-if="product.name" ng-bind-html="product.name | highlight: $select.search"></small>
                     <small class="margin-left-5 text-bold text-large text-muted" ng-if="!product.name" ng-bind-html="'No Product Name' | highlight: $select.search"></small>
-                    <small class="margin-left-5 text-bold text-large text-muted">(<span ng-if="product.regular_price">${{product.sale_price && product.on_sale ? product.sale_price : product.regular_price}}</span><span ng-if="!product.regular_price">Free</span>)</small>
+                    <small class="margin-left-5 text-bold text-large text-muted">(<span ng-if="product.regular_price">${{checkOnSaleFn(product) ? product.sale_price : product.regular_price}}</span><span ng-if="!product.regular_price">Free</span>)</small>
                 </ui-select-choices>
             </ui-select>
         </div>
@@ -608,7 +608,7 @@
                 <div class="col-xs-9">
                     <h4>{{selectedProduct.name || 'No Product Name'}}</h4>
                     <p>{{selectedProduct.description}}</p>
-                    <p class="text-bold"> {{selectedProduct.sale_price && selectedProduct.on_sale ? selectedProduct.sale_price : selectedProduct.regular_price  | currency}}</p>
+                    <p class="text-bold"> {{checkOnSaleFn(selectedProduct) ? selectedProduct.sale_price : selectedProduct.regular_price  | currency}}</p>
                 </div>
                 <div class="clearfix"></div>
             </div>
