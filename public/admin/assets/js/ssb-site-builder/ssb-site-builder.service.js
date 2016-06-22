@@ -3,15 +3,15 @@
 /*jslint unparam:true*/
 (function () {
 
-	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
+    app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$rootScope', '$compile', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
-	/* @ngInject */
-	function SimpleSiteBuilderService($rootScope, $compile, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
-		var ssbService = {};
-		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
-		var basePageAPIUrl = '/api/1.0/cms/page/';
-		var baseComponentAPIUrl = '/api/1.0/cms/component/';
+    SimpleSiteBuilderService.$inject = ['$rootScope', '$compile', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
+    /* @ngInject */
+    function SimpleSiteBuilderService($rootScope, $compile, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
+        var ssbService = {};
+        var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
+        var basePageAPIUrl = '/api/1.0/cms/page/';
+        var baseComponentAPIUrl = '/api/1.0/cms/component/';
         var baseTemplateAPIUrl = '/api/1.0/cms/template/';
         var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
         var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
@@ -212,55 +212,55 @@
          * @returns {function} fn - callback
          *
          */
-		function ssbRequest(fn) {
-			ssbService.loading.value = ssbService.loading.value + 1;
-			console.info('service | loading +1 : ' + ssbService.loading.value);
-			fn.finally(function() {
-				ssbService.loading.value = ssbService.loading.value - 1;
-				console.info('service | loading -1 : ' + ssbService.loading.value);
-			})
-			return fn;
-		}
+        function ssbRequest(fn) {
+            ssbService.loading.value = ssbService.loading.value + 1;
+            console.info('service | loading +1 : ' + ssbService.loading.value);
+            fn.finally(function() {
+                ssbService.loading.value = ssbService.loading.value - 1;
+                console.info('service | loading -1 : ' + ssbService.loading.value);
+            })
+            return fn;
+        }
 
         /**
          * Active section is the section focused for editing
          * @param {integer} sectionIndex - index of section to set active
          */
-		function setActiveSection(sectionIndex) {
-			ssbService.activeSectionIndex = sectionIndex;
-		}
+        function setActiveSection(sectionIndex) {
+            ssbService.activeSectionIndex = sectionIndex;
+        }
 
         /**
          * Active component is the component within a section that is focused for editing
          * @param {integer} componentIndex - index of component to set active
          */
-		function setActiveComponent(componentIndex) {
-			ssbService.activeComponentIndex = componentIndex;
-		}
+        function setActiveComponent(componentIndex) {
+            ssbService.activeComponentIndex = componentIndex;
+        }
 
         /**
          * Get latest website object for this account
          * @param {string} id - website _id
          * @param {boolean} isLoading - if loading this data is in progress
          */
-		function getSite(id) {
+        function getSite(id) {
 
-			function success(data) {
-				ssbService.website = data;
-			}
+            function success(data) {
+                ssbService.website = data;
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService getSite error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService getSite error: ', JSON.stringify(error));
+            }
 
-			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + id).success(success).error(error));
-		}
+            return ssbRequest($http.get(baseWebsiteAPIUrlv2 + id).success(success).error(error));
+        }
 
         /**
          * Get all pages for this account's website
          *
          */
-		function getPages() {
+        function getPages() {
 
             var deferred = $q.defer();
 
@@ -273,16 +273,16 @@
             //     }
             // }
 
-			function success(data) {
-				ssbService.pages = data;
-			}
+            function success(data) {
+                ssbService.pages = data;
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService getPages error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService getPages error: ', JSON.stringify(error));
+            }
 
-			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + ssbService.websiteId + '/pages').success(success).error(error));
-		}
+            return ssbRequest($http.get(baseWebsiteAPIUrlv2 + ssbService.websiteId + '/pages').success(success).error(error));
+        }
 
         function loadDataFromPage(scriptId) {
 
@@ -334,15 +334,15 @@
          * @param {boolean} isSettings - is settings request
          * TODO: @sanjeev to document "isSettings" param
          */
-		function getPage(id, isSettings) {
+        function getPage(id, isSettings) {
             function success(data) {
                 console.log('SimpleSiteBuilderService requested page data' + data);
             }
 
-			return ssbRequest($http.get(basePageAPIUrlv2 + id).success(
+            return ssbRequest($http.get(basePageAPIUrlv2 + id).success(
                 isSettings ? success : successPage)
             .error(errorPage));
-		}
+        }
 
         /**
          * Save page to db, update client instance with response from server
@@ -350,7 +350,7 @@
          * @param {boolean} isSettings - is settings request
          * TODO: @sanjeev to document "isSettings" param
          */
-		function savePage(page, isSettings) {
+        function savePage(page, isSettings) {
             function success(data) {
                 if(ssbService.pages && ssbService.pages[page.handle] && data.title){
                     ssbService.pages[page.handle].title = data.title;
@@ -360,14 +360,14 @@
             if(!isSettings){
                 page.ssb = true;
             }
-			return (
-				ssbRequest($http({
-					url: basePageAPIUrlv2 + page._id,
-					method: 'POST',
-					data: angular.toJson(page)
-				}).success(isSettings ? success : successPage).error(errorPage))
-			)
-		}
+            return (
+                ssbRequest($http({
+                    url: basePageAPIUrlv2 + page._id,
+                    method: 'POST',
+                    data: angular.toJson(page)
+                }).success(isSettings ? success : successPage).error(errorPage))
+            )
+        }
 
         /**
          * Delete page from db, delete client instance
@@ -443,23 +443,23 @@
          * Shared success callback for page API requests
          * @param {object} data - page data response from server
          */
-		function successPage(data) {
-			var page = transformComponentsToSections(data);
+        function successPage(data) {
+            var page = transformComponentsToSections(data);
       console.log("page loaded");
-		  ssbService.page = page;
+          ssbService.page = page;
           // Refresh page list with updated page
           if(ssbService.pages && ssbService.pages[page.handle]){
               ssbService.pages[page.handle] = page;
           }
-		}
+        }
 
         /**
          * Shared error callback for page API requests
          * @param {object} error - error response from server
          */
-		function errorPage(error) {
-			console.error('SimpleSiteBuilderService page error: ', JSON.stringify(error));
-		}
+        function errorPage(error) {
+            console.error('SimpleSiteBuilderService page error: ', JSON.stringify(error));
+        }
 
         /**
          * Transform legacy component objects into section objects with a single component child
@@ -509,25 +509,25 @@
          * Save website to db, update client instance with response from server
          * @param {object} webite - website data
          */
-		function saveWebsite(website) {
+        function saveWebsite(website) {
 
-			function success(data) {
-				ssbService.website = data;
-			}
+            function success(data) {
+                ssbService.website = data;
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService saveWebsite error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService saveWebsite error: ', JSON.stringify(error));
+            }
 
-			return (
-				ssbRequest($http({
-					url: baseWebsiteAPIUrlv2 + website._id,
-					method: 'POST',
-					data: angular.toJson(website)
-				}).success(success).error(error))
-			)
+            return (
+                ssbRequest($http({
+                    url: baseWebsiteAPIUrlv2 + website._id,
+                    method: 'POST',
+                    data: angular.toJson(website)
+                }).success(success).error(error))
+            )
 
-		}
+        }
 
     /**
          * Save website script resources to db, update client instance with response from server
@@ -535,88 +535,88 @@
          */
     function updateScriptResource(website) {
 
-			function success(data) {
-				ssbService.website = data;
-			}
+            function success(data) {
+                ssbService.website = data;
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService updateScriptResource error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService updateScriptResource error: ', JSON.stringify(error));
+            }
 
-			return (
-				ssbRequest($http({
-					url: baseWebsiteAPIUrlv2 + website._id + '/userScripts',
-					method: 'POST',
-					data: angular.toJson(website)
-				}).success(success).error(error))
-			)
+            return (
+                ssbRequest($http({
+                    url: baseWebsiteAPIUrlv2 + website._id + '/userScripts',
+                    method: 'POST',
+                    data: angular.toJson(website)
+                }).success(success).error(error))
+            )
 
-		}
+        }
 
         /**
          * Get component data from server
          * @param {object} component - default component data
          * @param {integer} version - version number of component
          */
-		function getComponent(component, version) {
+        function getComponent(component, version) {
 
             if (!version) {
                 version = 1;
             }
 
-			function success(data) {
-				console.log('SimpleSiteBuilderService requested component: ' + data);
-			}
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested component: ' + data);
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService component error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService component error: ', JSON.stringify(error));
+            }
 
-			return (
-				ssbRequest($http({
-					url: baseComponentAPIUrl + component.type,
-					method: "POST",
-					data: angular.toJson({
-						version: version
-					})
-				}).success(success).error(error))
-			)
+            return (
+                ssbRequest($http({
+                    url: baseComponentAPIUrl + component.type,
+                    method: "POST",
+                    data: angular.toJson({
+                        version: version
+                    })
+                }).success(success).error(error))
+            )
 
-		}
+        }
 
         /**
          * Get section data from server
          * @param {object} section - default section data
          * @param {integer} version - version number of section
          */
-		function getSection(section, version) {
+        function getSection(section, version) {
 
-			var deferred = $q.defer();
+            var deferred = $q.defer();
 
-			if (section.type.indexOf('ssb-') === -1) {
-				getLegacySection(section, section.version).then(function(wrappedLegacyComponent){
-					deferred.resolve(wrappedLegacyComponent);
-				});
-			} else {
+            if (section.type.indexOf('ssb-') === -1) {
+                getLegacySection(section, section.version).then(function(wrappedLegacyComponent){
+                    deferred.resolve(wrappedLegacyComponent);
+                });
+            } else {
                 ssbRequest($http({
                     url: baseSectionAPIUrlv2 + section._id,
                     method: 'GET'
                 }).success(success).error(error));
-			}
+            }
 
-			function success(data) {
+            function success(data) {
                 deferred.resolve(data);
-				console.log('SimpleSiteBuilderService requested section: ' + data);
-			}
+                console.log('SimpleSiteBuilderService requested section: ' + data);
+            }
 
-			function error(error) {
+            function error(error) {
                 deferred.reject(error);
-				console.error('SimpleSiteBuilderService section error: ', JSON.stringify(error));
-			}
+                console.error('SimpleSiteBuilderService section error: ', JSON.stringify(error));
+            }
 
-			return ssbRequest(deferred.promise);
+            return ssbRequest(deferred.promise);
 
-		}
+        }
 
         /**
          * Infer a decent name for a content section
@@ -642,37 +642,37 @@
          * @param {object} section - section data
          * @param {integer} version - version number of section
          */
-		function getLegacySection(section, version) {
-			var sectionDefault = {
-				"layout": "1-col",
-				"txtcolor": undefined,
-				"bg": {
-					"img": {
-						"url": "",
-						"width": null,
-						"height": null,
-						"parallax": false,
-						"blur": false,
-						"overlay": false,
-						"show": false
-					},
-					"color": undefined
-				},
-				"visibility": true,
-				"spacing": {
-					"mt": "0",
-					"ml": "0",
-					"mr": "0",
-					"mb": "0",
-					"pt": "0",
-					"pb": "0",
-					"pl": "0",
-					"pr": "0"
-				}
-			}
+        function getLegacySection(section, version) {
+            var sectionDefault = {
+                "layout": "1-col",
+                "txtcolor": undefined,
+                "bg": {
+                    "img": {
+                        "url": "",
+                        "width": null,
+                        "height": null,
+                        "parallax": false,
+                        "blur": false,
+                        "overlay": false,
+                        "show": false
+                    },
+                    "color": undefined
+                },
+                "visibility": true,
+                "spacing": {
+                    "mt": "0",
+                    "ml": "0",
+                    "mr": "0",
+                    "mb": "0",
+                    "pt": "0",
+                    "pb": "0",
+                    "pl": "0",
+                    "pr": "0"
+                }
+            }
 
-			return getComponent(section, version).then(function(component) {
-				sectionDefault.components = [component.data];
+            return getComponent(section, version).then(function(component) {
+                sectionDefault.components = [component.data];
 
                 sectionDefault.name = sectionName(sectionDefault);
 
@@ -689,31 +689,31 @@
                     }
                 }
 
-				return sectionDefault;
-			});
-		}
+                return sectionDefault;
+            });
+        }
 
         /**
          * Get list of content sections available for adding to a page
          *
          */
-		function getPlatformSections() {
+        function getPlatformSections() {
 
-			function success(data) {
+            function success(data) {
                 ssbService.platformSections = data;
-				console.log('SimpleSiteBuilderService requested getPlatformSections: ' + data);
-			}
+                console.log('SimpleSiteBuilderService requested getPlatformSections: ' + data);
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService getPlatformSections error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService getPlatformSections error: ', JSON.stringify(error));
+            }
 
-			return (ssbRequest($http({
+            return (ssbRequest($http({
                 url: baseSectionAPIUrlv2 + 'platform',
                 method: 'GET'
             }).success(success).error(error)));
 
-		}
+        }
 
         /**
          * Get list of content sections created by current user available for re-using on multiple pages
@@ -741,7 +741,7 @@
          * Get list of components available for adding to a section
          *
          */
-		function getPlatformComponents() {
+        function getPlatformComponents() {
 
             function success(data) {
                 console.log('Success from call to 2.0 get components', data);
@@ -766,22 +766,22 @@
                         method: 'GET'
                     }).success(success).error(error))
                 );
-		}
+        }
 
         /**
          * Get list of themes available for applying to a website
          *
          */
-		function getThemes() {
+        function getThemes() {
 
-			function success(data) {
-				console.log('SimpleSiteBuilderService requested themes: ' + data);
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested themes: ' + data);
                 ssbService.themes = data;
-			}
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService themes error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService themes error: ', JSON.stringify(error));
+            }
 
             return (
                 ssbRequest($http({
@@ -790,30 +790,30 @@
                 }).success(success).error(error))
             )
 
-		}
+        }
 
         /**
          * Check for existing page with given handle
          * @param {string} pageHandle - page handle
          */
-		function checkForDuplicatePage(pageHandle) {
+        function checkForDuplicatePage(pageHandle) {
 
-			function success(data) {
-				console.log('SimpleSiteBuilderService checkForDuplicatePage: ' + data);
-			}
+            function success(data) {
+                console.log('SimpleSiteBuilderService checkForDuplicatePage: ' + data);
+            }
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService checkForDuplicatepage error: ', JSON.stringify(error));
-			}
+            function error(error) {
+                console.error('SimpleSiteBuilderService checkForDuplicatepage error: ', JSON.stringify(error));
+            }
 
-			return (
+            return (
                 ssbRequest($http({
-					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + pageHandle,
-					method: 'GET',
-				}).success(success).error(error))
-			)
+                    url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + pageHandle,
+                    method: 'GET',
+                }).success(success).error(error))
+            )
 
-		}
+        }
 
         /**
          * Get list of page templates
@@ -1127,15 +1127,24 @@
             delete newSection.components;
             delete oldSection.components;
 
-            newSection.components = _.map(newComponents, function(c, index) {
-                return $.extend({}, c, _.omit(oldComponents[index], keysToOmitComponent));
-            });
+
 
             if(newSection.componentSortOrder){
+
+                newSection.components = _.map(newComponents, function(c, index) {
+                    var component = _.findWhere(oldComponents, { type: c.type });
+                    return $.extend({}, c, _.omit(component || oldComponents[index], keysToOmitComponent));
+                });
+
                 // set current sort order
                 newSection.components = _(newSection.components).chain().sortBy(function(section){
                     return componentOrder[section.type] && parseInt(componentOrder[section.type], 10)
                 }).value();
+            }
+            else{
+                newSection.components = _.map(newComponents, function(c, index) {
+                    return $.extend({}, c, _.omit(oldComponents[index], keysToOmitComponent));
+                });
             }
 
             return $.extend({}, newSection, _.omit(oldSection, keysToOmitSection));
@@ -1374,9 +1383,9 @@
                     update: function() {
                         return update;
                     },
-		            isSingleSelect: function () {
-		                return true;
-		            }
+                    isSingleSelect: function () {
+                        return true;
+                    }
                 }
             };
 
@@ -1811,12 +1820,12 @@
             });
         }
 
-		(function init() {
+        (function init() {
 
-			AccountService.getAccount(function(data) {
+            AccountService.getAccount(function(data) {
                 ssbService.account = data;
                 ssbService.setPermissions();
-				        ssbService.websiteId = data.website.websiteId;
+                        ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId).then(function(website){
                     ssbService.setupTheme(website);
                 });
@@ -1824,13 +1833,13 @@
                 ssbService.getTemplates();
                 ssbService.getLegacyTemplates();
                 ssbService.getPlatformSections();
-				//ssbService.getUserSections(); //not yet implemented
-			});
+                //ssbService.getUserSections(); //not yet implemented
+            });
 
-		})();
+        })();
 
 
-		return ssbService;
-	}
+        return ssbService;
+    }
 
 })();
