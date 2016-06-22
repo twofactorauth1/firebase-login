@@ -14,6 +14,7 @@
 
         function init(element) {
             vm.element = element;
+            vm.element.find('#email-froala-editor').froalaEditor($.FroalaEditor.configEmail);
         }
 
 

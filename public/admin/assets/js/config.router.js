@@ -176,7 +176,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/emails/editor/:id',
         template: "<indi-email-builder></indi-email-builder>",
         title: 'Email Editor',
-        icon: 'ti-layout-media-left-alt'
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "/admin/assets/views/campaigns.html",

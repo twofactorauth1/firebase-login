@@ -1,1 +1,40 @@
-Email builder
+<div class="indi-email-builder">
+    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="saveEmail()" save-page-check="!pageSaving"></indig-navprompt>
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">Email Builder</h1>
+                <span class="mainDescription">Fill out details below</span></span>
+            </div>
+        </div>
+    </section>
+
+    <div ng-class="{'load1 csspinner': !dataLoaded}">
+        <!-- end: PAGE TITLE -->
+        <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
+            <div class='row'>
+                <div class="col-sm-4">
+                    <div class='form-group'>
+                        <input class='form-control' type='text' placeholder='Untitled Email' />
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class='pull-right'>
+                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Media</button>
+                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Save</button>
+                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Preview</button>
+                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">One-time email</button>
+                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Create Campaign</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+        <div class="row">
+            <div id="email-froala-scrollable-container"></div>
+            <textarea ng-model="email.html" id="email-froala-editor"></textarea>
+        </div>
+    </div>
+</div>
