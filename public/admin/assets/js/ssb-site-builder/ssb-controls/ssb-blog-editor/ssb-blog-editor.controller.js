@@ -284,7 +284,10 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function checkPendingChanges(newValue, oldValue) {
         console.debug('check pending blog changes');
 
-        if (newValue && newValue._id && (newValue._id === oldValue._id)) {
+        newValue = newValue || {};
+        oldValue = oldValue || {};
+
+        if (angular.equals(newValue._id, oldValue._id)) {
             var compareNewValue = angular.copy(newValue);
             var compareOldValue = angular.copy(oldValue);
 
