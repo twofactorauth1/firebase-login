@@ -408,6 +408,8 @@
           //format variation attributes
           $scope.product = product;
           angular.copy($scope.product, $scope.originalProduct);
+          $scope.product_tags = [];
+          $scope.getProductTags();
           if($scope.product.fulfillment_email){
             $scope.getEmails();
           }
@@ -583,6 +585,7 @@
           });
         });
       }
+      $scope.originalTags = angular.copy($scope.product_tags);
     };
 
     $scope.setProductTags = function () {
@@ -639,15 +642,20 @@
       }
     }
 
+    function checkIfTagsChanged() {
+      return !angular.equals($scope.originalTags, $scope.product_tags);
+    }
+
     $scope.checkIfDirty = function(){
       var isDirty = false;
-      if($scope.originalProduct && !angular.equals($scope.originalProduct, $scope.product))
+      if(($scope.originalProduct && !angular.equals($scope.originalProduct, $scope.product)) || checkIfTagsChanged())
         isDirty = true;
       return isDirty;
     }
     $scope.resetDirty = function(){
       $scope.originalProduct = null;
       $scope.product = null;
+      $scope.originalTags = null;
     }
 
 
