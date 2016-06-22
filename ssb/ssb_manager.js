@@ -1774,7 +1774,7 @@ module.exports = {
                 timingLog.warn('updateLinkList: ' + checkTime.diff(startTime));
                 startTime = checkTime;
                 // Ensure that blog list and blog-post should never show in nav
-                if(updatedPage.get("handle") === 'blog-post' || updatedPage.get("handle") === 'blog-post'){
+                if(updatedPage.get("handle") === 'blog-list' || updatedPage.get("handle") === 'blog-post'){
                     cb(null, updatedPage, updatedSections);
                 }
                 else{
