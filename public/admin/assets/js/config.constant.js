@@ -620,6 +620,7 @@ app.constant('JS_REQUIRES', {
     'geocodeService': 'assets/js/services/geocode.js',
     'dashboardService': 'assets/js/dashboard/dashboard.service.js',
     'simpleSiteBuilderService': 'assets/js/ssb-site-builder/ssb-site-builder.service.js',
+    'emailBuilderService': 'assets/js/indi-email-builder/indi-email-builder.service.js',
     'indiLoginModalService': 'assets/js/indi-login-modal/indi-login-modal.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
