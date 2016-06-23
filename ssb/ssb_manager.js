@@ -1877,6 +1877,43 @@ module.exports = {
                     }
                 }
 
+            },
+            function removeInternalBlogPageLinks(updatedPage, updatedSections, cb){
+
+                self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                    if (err) {
+                        self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                        cb(err);
+                    } else {
+                        if(list && list.links){
+                            var blogListLinks = list.links.filter(function (lnk) {
+                                return lnk.linkTo && lnk.linkTo.data && (lnk.linkTo.data === 'blog-list' || lnk.linkTo.data === 'blog-post')
+                            });
+                            if(blogListLinks){
+                                _.each(blogListLinks, function(link){
+                                    var _index = list.links.indexOf(link);
+                                    if(_index > -1)
+                                        list.links.splice(_index, 1);
+                                });
+
+                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                    if (err) {
+                                        self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
+                                });
+                            }
+                            else{
+                                cb(null, updatedPage, updatedSections);
+                            }
+                        }
+                        else{
+                            cb(null, updatedPage, updatedSections);
+                        }
+                    }
+                });
             }
         ], function done(err, updatedPage, updatedSections){
             self.log.info('done');
