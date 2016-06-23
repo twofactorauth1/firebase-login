@@ -1164,75 +1164,91 @@ module.exports = {
                     cb(err, page);
                 });
             },
-            // Add/Remove blog lonk to nav
+            // Add/Remove blog link to nav if ssbBlog is true
             function updateBlogLink(publishedPage, cb){
-                var query = {
-                    accountId: accountId,
-                    post_status: $$.m.BlogPost.status.PUBLISHED,
-                    websiteId: publishedPage.get("websiteId")
-                }
-
-                blogPostDao.exists(query, $$.m.BlogPost, function(err, value){
-
-                    if(value === true){
-                        // Insert Blog link to navigation
-                        self.getWebsiteLinklistsByHandle(accountId, publishedPage.get('websiteId'),"head-menu",function(err,list){
-                            if(err) {
-                                self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
-                                cb(err);
-                            } else {
-                                var _blogLink =_(list.links).chain().filter(function(link){
-                                    return link.linkTo && link.linkTo.data === "blog"
-                                }).value();
-                                if(!_blogLink.length){
-                                   var link={
-                                        label: "Blog",
-                                        type: "link",
-                                        linkTo: {
-                                            type:"page",
-                                            data:'blog'
-                                        }
-                                    };
-
-                                    list.links.push(link);
-                                    self.updateWebsiteLinklists(accountId, publishedPage.get('websiteId'),"head-menu",list,function(err, linkLists){
-                                        if(err) {
-                                            self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
-                                            cb(err);
-                                        } else {
-                                            cb(null, publishedPage);
-                                        }
-                                    });
-                                }
-                                else{
-                                    cb(null, publishedPage);
-                                }
-                            }
-                        });
+                accountDao.getAccountByID(accountId, function(err, value){
+                    if(err) {
+                        self.log.error('error getting account by id: ' + err);
+                        cb(err);
+                    } else if(value == null) {
+                        self.log.error('could not find account with id: ' + accountId);
+                        cb(err);
                     }
-                    else{
-                        self.getWebsiteLinklistsByHandle(accountId, publishedPage.get('websiteId'), "head-menu", function(err, list) {
-                            if (err) {
-                                self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
-                                cb(err);
-                            } else {
-                                if(list && list.links){
-                                    self.getUpdatedWebsiteLinkList(list, "blog", true, function(err, updatedList){
-                                        list = updatedList;
-                                    })
-                                }
-                                self.updateWebsiteLinklists(accountId, publishedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
-                                    if (err) {
-                                        self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
+                    var _status = value.get("showhide").ssbBlog && value.get("showhide").blog;
+                    if(_status){
+                        var query = {
+                            accountId: accountId,
+                            post_status: $$.m.BlogPost.status.PUBLISHED,
+                            websiteId: publishedPage.get("websiteId")
+                        }
+
+                        blogPostDao.exists(query, $$.m.BlogPost, function(err, value){
+
+                            if(value === true){
+                                // Insert Blog link to navigation
+                                self.getWebsiteLinklistsByHandle(accountId, publishedPage.get('websiteId'),"head-menu",function(err,list){
+                                    if(err) {
+                                        self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
                                         cb(err);
                                     } else {
-                                        cb(null, publishedPage);
+                                        var _blogLink =_(list.links).chain().filter(function(link){
+                                            return link.linkTo && link.linkTo.data === "blog"
+                                        }).value();
+                                        if(!_blogLink.length){
+                                           var link={
+                                                label: "Blog",
+                                                type: "link",
+                                                linkTo: {
+                                                    type:"page",
+                                                    data:'blog'
+                                                }
+                                            };
+
+                                            list.links.push(link);
+                                            self.updateWebsiteLinklists(accountId, publishedPage.get('websiteId'),"head-menu",list,function(err, linkLists){
+                                                if(err) {
+                                                    self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
+                                                    cb(err);
+                                                } else {
+                                                    cb(null, publishedPage);
+                                                }
+                                            });
+                                        }
+                                        else{
+                                            cb(null, publishedPage);
+                                        }
                                     }
                                 });
                             }
-                        });
+                            else{
+                                self.getWebsiteLinklistsByHandle(accountId, publishedPage.get('websiteId'), "head-menu", function(err, list) {
+                                    if (err) {
+                                        self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
+                                        cb(err);
+                                    } else {
+                                        if(list && list.links){
+                                            self.getUpdatedWebsiteLinkList(list, "blog", true, function(err, updatedList){
+                                                list = updatedList;
+                                            })
+                                        }
+                                        self.updateWebsiteLinklists(accountId, publishedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                            if (err) {
+                                                self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
+                                                cb(err);
+                                            } else {
+                                                cb(null, publishedPage);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        })
+                    }
+                    else{
+                        cb(null, publishedPage);
                     }
                 })
+
             }
         ], function done(err, publishedPage){
             if(err) {
