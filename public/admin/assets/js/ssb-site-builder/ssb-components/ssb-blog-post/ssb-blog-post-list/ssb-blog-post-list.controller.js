@@ -25,8 +25,9 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     $scope.$watchCollection('vm.blog.posts', function(newValue) {
         if(newValue)
             $timeout(function () {
+                vm.dataLoaded = true;
                 $scope.$broadcast('$refreshSlickSlider');
-            });
+            }, 500);
 
     })
 

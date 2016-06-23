@@ -4,7 +4,7 @@ app.directive('indSlider',function($timeout){
    link: function(scope,element,attrs) {
      $timeout(function() {
          $(element).slick(scope.$eval(attrs.indSlider));
-     });
+     }, 1000);
 
 
     scope.$on('$refreshSlickSlider', function (event, index) {
