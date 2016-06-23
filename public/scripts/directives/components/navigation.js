@@ -22,7 +22,7 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                 $scope.$emit('getCurrentPage', args);
                 $scope.currentpage = args.currentpage;
                 // Special case for blogs
-                if($scope.currentpage && $scope.currentpage.handle=== 'blog-list'){
+                if($scope.currentpage && $scope.currentpage.handle=== 'blog-list' || $scope.currentpage.handle=== 'blog-post'){
                     $scope.currentpage.handle = 'blog';
                 }
             });
