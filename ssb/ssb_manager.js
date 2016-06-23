@@ -3406,7 +3406,8 @@ module.exports = {
         self.log.debug('>> createDuplicatePost');
         blogPost.set('post_title', blogPost.get('post_title') + ' (copy)');
         blogPost.set("post_url", blogPost.get('post_url') + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true));
-
+        blogPost.set('published_date', null);
+        blogPost.set('post_status', "DRAFT");
         blogPostDao.createPost(blogPost, function(err, savedPost){
             if(err) {
                 self.log.error('Error creating post: ' + err);
