@@ -17,7 +17,7 @@
 
         <div class="margin-top-10">
 
-            <button ng-click="vm.state.post = vm.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <button ng-click="vm.refreshPost(); vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
@@ -133,7 +133,7 @@
             ng-if="vm.uiState.openBlogPanel.id === 'manage'"
             class="margin-top-10">
 
-            <button ng-click="vm.state.post = vm.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <button ng-click="vm.refreshPost(); vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
