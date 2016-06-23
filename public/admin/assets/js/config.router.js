@@ -172,6 +172,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Emails',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('emailsCtrl', 'chartEmailService')
+    }).state('app.emailEditor', {
+        url: '/emails/editor/:id',
+        template: "<indi-email-builder></indi-email-builder>",
+        title: 'Email Editor',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "/admin/assets/views/campaigns.html",

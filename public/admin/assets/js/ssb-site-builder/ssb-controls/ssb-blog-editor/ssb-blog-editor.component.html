@@ -81,13 +81,13 @@
                             </div>
                         </div>
                         <div class="ssb-blog-post-action-buttons">
-                            <button class="btn btn-default" ng-click="vm.duplicatePost(post)">
+                            <button class="btn btn-default" tooltip-placement="bottom" tooltip-html-unsafe="Create duplicate post" ng-click="vm.duplicatePost(post)">
                                 <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
                             </button>
-                            <button class="btn btn-default" ng-click="vm.viewPost(post)">
+                            <button class="btn btn-default" tooltip-placement="bottom" tooltip-html-unsafe="View post" ng-click="vm.viewPost(post)">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                             </button>
-                            <button class="btn btn-default" ng-click="vm.deletePost(post)">
+                            <button class="btn btn-default" tooltip-placement="bottom" tooltip-html-unsafe="Delete post" ng-click="vm.deletePost(post)">
                                 <i class="fa fa-trash"></i><span class="sr-only">Delete</span>
                             </button>
                             <button class="btn btn-primary" ng-click="vm.editPost(post)">
@@ -113,7 +113,7 @@
             <i
                 ng-if="vm.uiState.navigation.blogPanel.navigationHistory.length > 1"
                 class="fa fa-arrow-left"
-                ng-click="vm.uiState.navigation.blogPanel.back();">
+                ng-click="vm.backBlogPanel()">
             </i>
 
             {{vm.uiState.openBlogPanel.name}}
@@ -149,6 +149,7 @@
                     ng-repeat="page in vm.state.pages track by $index"
                     ng-class="{ 'active-page': page._id === vm.state.page._id }"
                     class="ssb-page-section-settings-item">
+                    <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
                     <div class="panel-group">
                         <div class="ssb-sidebar-sortable-item panel panel-default">
                             <div class="panel-heading">
@@ -192,17 +193,24 @@
 
                         <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
 
-                            <button ng-disabled="!vm.isValidPost()"
+                            <button
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.savePost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Save">
-                                <i class="fa fa-save"></i><span class="sr-only">Save</span>
+
+                                <i ng-if="!vm.uiState.saveLoading" class="fa fa-save"></i>
+                                <span ng-if="!vm.uiState.saveLoading" class="sr-only">Save</span>
+
+                                <i ng-hide="!vm.uiState.saveLoading" ng-if="vm.uiState.saveLoading" class="fa fa-spinner fa-spin"></i>
+                                <span ng-if="vm.uiState.saveLoading" class="sr-only">Saving</span>
+
                             </button>
 
                             <button
-                                ng-disabled="!vm.isValidPost()"
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 type="button"
                                 class="btn btn-primary"
                                 ng-click="vm.toggleFeatured(vm.state.post)"
@@ -216,23 +224,24 @@
                             </button>
 
                             <button
-                                ng-disabled="!vm.isValidPost()"
-                                class="btn btn-primary"
-                                ng-click="vm.publishPost(vm.state.post)"
-                                tooltip-placement="top"
-                                tooltip-append-to-body="true"
-                                tooltip="Publish">
-                                <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
-                            </button>
-
-                            <button
-                                ng-disabled="!vm.isValidPost()"
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.viewPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Preview">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
+                            </button>
+
+                            <button
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
+                                ng-if="vm.state.post.post_status !== 'PUBLISHED'"
+                                class="btn btn-primary"
+                                ng-click="vm.publishPost(vm.state.post)"
+                                tooltip-placement="top"
+                                tooltip-append-to-body="true"
+                                tooltip="Publish">
+                                <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
                             </button>
 
 

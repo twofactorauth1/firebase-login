@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderTopbarController', ssbSiteBuilderTopbarController);
 
-ssbSiteBuilderTopbarController.$inject = ['$scope', '$rootScope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', '$location', 'SweetAlert', 'toaster'];
+ssbSiteBuilderTopbarController.$inject = ['$scope', '$rootScope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$modal', '$location', 'SweetAlert', 'toaster', '$q'];
 /* @ngInject */
-function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $filter, SimpleSiteBuilderService, $modal, $location, SweetAlert, toaster) {
+function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $modal, $location, SweetAlert, toaster, $q) {
 
     console.info('site-build topbar directive init...')
 
@@ -17,6 +17,8 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
     vm.publishPage = publishPage;
     vm.hideActiveToolTips = hideActiveToolTips;
     vm.closeBlogPanel = closeBlogPanel;
+    vm.backBlogPanel = backBlogPanel;
+    vm.savePost = savePost;
 
     //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
@@ -179,18 +181,61 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
     }
 
     function closeBlogPanel() {
-        $rootScope.$broadcast('$destroyFroalaInstances');
-        $timeout(function() {
-            vm.uiState.openBlogPanel = { name: '', id: '' };
-            vm.uiState.openSidebarPanel = '';
-        }, 500);
+        vm.savePost().then(function() {
+            $rootScope.$broadcast('$destroyFroalaInstances');
+            $timeout(function() {
+                vm.uiState.openBlogPanel = { name: '', id: '' };
+                vm.uiState.openSidebarPanel = '';
+            }, 500);
+        });
+    }
+
+    function backBlogPanel() {
+        vm.savePost().then(vm.uiState.navigation.blogPanel.back);
+    }
+
+    function savePost(post, suppressToaster) {
+        var post = post || vm.state.post;
+
+        if (!post || !isValidPost()) {
+            return SimpleSiteBuilderService.returnInvalidPost();
+        }
+
+        var toast = {};
+        vm.uiState.saveLoading = true;
+        post.websiteId = vm.state.website._id;
+        post.display_title = angular.element('<div>' + post.post_title + '</div>').text().trim();
+        post.post_url = slugifyHandle(angular.element('<div>' + post.post_title + '</div>').text().trim());
+        return SimpleSiteBuilderBlogService.savePost(post).then(function(savedPost) {
+            console.log('post saved');
+            vm.state.post = savedPost.data;
+            vm.state.pendingBlogChanges = false;
+            toast = { type: 'success', title: 'Post Saved', message: 'The post was saved successfully.' };
+        }).catch(function(error) {
+            toast = { type: 'error', title: 'Error', message: (error.data ? error.data.message : 'Error updating post. Please try again.') };
+            vm.handleSaveErrors(error);
+        }).finally(function() {
+            vm.uiState.saveLoading = false;
+            if (!suppressToaster) {
+                toaster.pop(toast.type, toast.title, toast.message);
+            }
+        });
+    }
+
+    function isValidPost(){
+        return vm.state.post && vm.state.post.post_title;
+    }
+
+    function slugifyHandle(title){
+       return $filter('slugify')(title);
     }
 
 
     function init(element) {
     	vm.element = element;
-        if(!vm.state.page)
+        if (!vm.state.page) {
             vm.state.page = SimpleSiteBuilderService.page;
+        }
     }
 
 }

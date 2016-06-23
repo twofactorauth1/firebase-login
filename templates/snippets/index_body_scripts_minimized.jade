@@ -5,12 +5,6 @@ script(src="../js/libs/json3/lib/json3.min.js")
 script(src="https://maps.googleapis.com/maps/api/js" async)
 script(src="https://js.stripe.com/v2/?tmp" async)
 
-// THIRD PARTY SCRIPT GLOBAL
-!{website.resources.userScripts.global.sanitized}
-
-//THIRD PARTY SCRIPT FOR PAGE
-!{userScripts}
-
 script(src="../js/indigenous.js")
 script(src="../js/ng-indigenous.js")
 if account._id == 6
@@ -174,3 +168,10 @@ script.
 
 if includeEditor
     include _aloha_editor
+
+
+//- THIRD PARTY SCRIPT GLOBAL
+!{website.resources.userScripts.global.sanitized}
+
+//- THIRD PARTY SCRIPT FOR PAGE
+!{userScripts}

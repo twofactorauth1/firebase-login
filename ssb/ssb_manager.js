@@ -1415,6 +1415,7 @@ module.exports = {
                     }
                 });
             },
+
             function upatePageVersion(existingPage, dereferencedSections, globalSections, cb){
                 checkTime = moment();
                 timingLog.warn('upatePageVersion: ' + checkTime.diff(startTime));
@@ -1459,6 +1460,7 @@ module.exports = {
                     });
                 }
             },
+
             function updateThePage(existingPage, updatedSections, newVersion, globalSections, cb){
                 self.log.info('updateThePage');
                 checkTime = moment();
@@ -1507,7 +1509,8 @@ module.exports = {
                         accountId:accountId,
                         latest:true,
                         'sections._id': {$in:idAry},
-                        _id:{$ne:pageId}
+                        _id:{$ne:pageId},
+                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']}
                     };
                     self.log.debug('using this query:', query);
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
@@ -1580,7 +1583,7 @@ module.exports = {
                         accountId:accountId,
                         latest:true,
                         _id:{$ne:pageId},
-                        handle: {$nin: ['signup', 'single-post', 'blog']}
+                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']}
                     };
 
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
@@ -1774,7 +1777,7 @@ module.exports = {
                 timingLog.warn('updateLinkList: ' + checkTime.diff(startTime));
                 startTime = checkTime;
                 // Ensure that blog list and blog-post should never show in nav
-                if(updatedPage.get("handle") === 'blog-post' || updatedPage.get("handle") === 'blog-post'){
+                if(updatedPage.get("handle") === 'blog-list' || updatedPage.get("handle") === 'blog-post'){
                     cb(null, updatedPage, updatedSections);
                 }
                 else{
@@ -1877,6 +1880,43 @@ module.exports = {
                     }
                 }
 
+            },
+            function removeInternalBlogPageLinks(updatedPage, updatedSections, cb){
+
+                self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                    if (err) {
+                        self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                        cb(err);
+                    } else {
+                        if(list && list.links){
+                            var blogListLinks = list.links.filter(function (lnk) {
+                                return lnk.linkTo && lnk.linkTo.data && (lnk.linkTo.data === 'blog-list' || lnk.linkTo.data === 'blog-post')
+                            });
+                            if(blogListLinks){
+                                _.each(blogListLinks, function(link){
+                                    var _index = list.links.indexOf(link);
+                                    if(_index > -1)
+                                        list.links.splice(_index, 1);
+                                });
+
+                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                    if (err) {
+                                        self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
+                                });
+                            }
+                            else{
+                                cb(null, updatedPage, updatedSections);
+                            }
+                        }
+                        else{
+                            cb(null, updatedPage, updatedSections);
+                        }
+                    }
+                });
             }
         ], function done(err, updatedPage, updatedSections){
             self.log.info('done');
@@ -2833,6 +2873,7 @@ module.exports = {
          * 1. Get the website
          * 2. Set the siteTemplateId
          * 3. Create the default pages
+         * 4. Update or Upsert blog page headers
          */
 
         async.waterfall([
@@ -2848,7 +2889,7 @@ module.exports = {
             },
             function setSiteTemplateAndTheme(website, cb){
                 var currentSiteTemplate = website.get('siteTemplateId');
-                var createPages = true;
+                var createPages = true;//WTF?
 
                 website.set('siteTemplateId', siteTemplateId);
                 website.set('themeId', siteThemeId);
@@ -2863,15 +2904,14 @@ module.exports = {
                 });
             },
             function createDefaultPages(website, createPages, cb){
-                if(createPages === true) {
-                    self.log.debug(accountId, userId, 'createDefaultPages', website.get('siteTemplateId'));
-                    self.getSiteTemplate(accountId, website.get('siteTemplateId'), function(err, siteTemplate) {
 
-                        if (err) {
-                            self.log.error(accountId, userId, 'Error getting siteTemplate for website:', err);
-                            return cb(err);
-                        }
-
+                self.log.debug(accountId, userId, 'createDefaultPages', website.get('siteTemplateId'));
+                self.getSiteTemplate(accountId, website.get('siteTemplateId'), function(err, siteTemplate) {
+                    if (err) {
+                        self.log.error(accountId, userId, 'Error getting siteTemplate for website:', err);
+                        cb(err);
+                    } else {
+                        var globalHeader = null;
                         var pagesToCreate = siteTemplate.get('defaultPageTemplates'); //array of template reference objs
                         var indexPageId = undefined;
                         var linkLists = [{
@@ -2942,10 +2982,25 @@ module.exports = {
                                                             if(err) {
                                                                 callback(err);
                                                             } else {
+
                                                                 page.set('sections', sectionAry);
                                                                 self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
                                                                     self.log.debug(accountId, userId, 'updated page using siteTemplate data');
-                                                                    callback(err);
+                                                                    if(!globalHeader) {
+                                                                        //re-deref them, find the header, save it for later.
+                                                                        sectionDao.dereferenceSections(savedPage.get('sections'), function(_err, savedSectionAry){
+                                                                            _.each(savedSectionAry, function(section){
+                                                                                if(section.get('name') === 'Header') {
+                                                                                    globalHeader = section;
+                                                                                }
+                                                                            });
+                                                                            callback(err);
+                                                                        });
+
+                                                                    } else {
+                                                                        callback(err);
+                                                                    }
+
                                                                 });
                                                             }
                                                         });
@@ -2954,7 +3009,7 @@ module.exports = {
                                                 });
                                             }
                                         });
-                                    //else error pageData doesn't have template reference
+                                        //else error pageData doesn't have template reference
                                     } else {
                                         callback("No template referenced in siteTemplate");
                                     }
@@ -2972,18 +3027,47 @@ module.exports = {
                                 } else {
                                     self.log.debug(accountId, userId, 'finished updating website linkList', website.get('linkLists'));
                                     //finally done...
-                                    cb(err, indexPageId);
+                                    cb(err, indexPageId, siteTemplate, globalHeader);
                                 }
                             });
 
                         });
+                    }
+                });
 
-                    });
-                } else {
-                    self.log.debug(accountId, userId, 'Skipping page creation');
-                    cb(null);
-                }
 
+            },
+            function updateBlogPages(indexPageId, siteTemplate, globalHeader, cb) {
+                /*
+                 * Find blog-list and blog-post
+                 * set the first section to be globalHeader.id()
+                 * update
+                 */
+                self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
+                pageDao.findMany({handle: {$in: ['blog-list', 'blog-post']}}, $$.m.ssb.Page, function(err, pages){
+                    if(err || !pages) {
+                        self.log.error('Error finding blog pages:', err);
+                        cb(err);
+                    } else if(pages.length < 2) {
+                        self.log.warn('Need to add 1 or more blog pages.');
+                        //TODO: this
+                        cb(null, indexPageId);
+                    } else {
+                        if(globalHeader) {
+                            async.eachSeries(pages, function(page, callback){
+                                var sections = page.get('sections');
+                                sections[0]._id = globalHeader.id();
+                                pageDao.saveOrUpdate(page, callback);
+                            }, function(err){
+                                cb(err, indexPageId);
+                            });
+                        } else {
+                            self.log.warn('GlobalHeader is null');
+                            cb(er, indexPageId);
+                        }
+
+                    }
+                });
             }
         ], function done(err, indexPageId){
             //Note: [Jack] I added id of index page so we know where to send user when we get the response
@@ -3276,6 +3360,17 @@ module.exports = {
             blogPost.set("post_url", $$.u.idutils.generateUniqueAlphaNumeric(20, true, true));
         }
 
+        // post_tags should be array
+
+        var post_tags = blogPost.get("post_tags");
+        post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_tags[i] = v.text;
+          }
+        });
+
+        blogPost.set("post_tags", post_tags);
+
         blogPost.set('post_excerpt', self.getBlogPostExcerpt(blogPost.get('post_content')));
 
         var query = {
@@ -3329,6 +3424,17 @@ module.exports = {
         if (blogPost.featured_image) {
           blogPost.featured_image = blogPost.featured_image.substr(5, blogPost.featured_image.length);
         }
+
+        // post_tags should be array
+
+        var post_tags = blogPost.get("post_tags");
+        post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_tags[i] = v.text;
+          }
+        });
+
+        blogPost.set("post_tags", post_tags);
 
         blogPost.set('post_excerpt', self.getBlogPostExcerpt(blogPost.get('post_content')));
 

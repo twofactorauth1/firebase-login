@@ -18,9 +18,13 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                 accountService(function (err, account) {
                     $scope.account = account;
                 });
-                var args = {};                
+                var args = {};
                 $scope.$emit('getCurrentPage', args);
                 $scope.currentpage = args.currentpage;
+                // Special case for blogs
+                if($scope.currentpage && ($scope.currentpage.handle=== 'blog-list' || $scope.currentpage.handle=== 'blog-post')){
+                    $scope.currentpage.handle = 'blog';
+                }
             });
 
         }

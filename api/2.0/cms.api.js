@@ -582,7 +582,7 @@ _.extend(api.prototype, baseApi.prototype, {
             by: userId
         };
 
-        self.log.debug('siteThemeId', siteThemeId)
+        self.log.debug(accountId, userId, 'siteThemeId', siteThemeId);
 
         ssbManager.setSiteTemplate(accountId, siteTemplateId, siteThemeId, siteThemeOverrides, websiteId, created, function(err, value){
             self.log.debug(accountId, userId, '<< setSiteTemplate');

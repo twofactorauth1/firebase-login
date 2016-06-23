@@ -62,7 +62,7 @@
                         <a data-ng-show="link.linkTo.type == 'section'" data-ng-if="link.linkTo.page === currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a data-ng-show="link.linkTo.type == 'section'" data-ng-if="link.linkTo.page !== currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-class="{'active': link.linkTo.data === currentpage.handle}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
-                        <a ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-class="{'active': link.linkTo.data === currentpage.handle}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a ng-attr-target="{{link.linkTo.data === 'blog' ? '_self' : undefined || undefined}}" ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-class="{'active': link.linkTo.data === currentpage.handle}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                     </li>
                 </ul>
             </div>
@@ -72,7 +72,7 @@
                         <a data-ng-show="link.linkTo.type == 'section' " data-ng-if="link.linkTo.page === currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a data-ng-show="link.linkTo.type == 'section' " data-ng-if="link.linkTo.page !== currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-class="{'active': link.linkTo.data === currentpage.handle}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
-                        <a  ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-class="{'active': link.linkTo.data === currentpage.handle}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a ng-attr-target="{{link.linkTo.data === 'blog' ? '_self' : undefined || undefined}}" ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" ng-class="{'active': link.linkTo.data === currentpage.handle}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                     </li>
                 </ul>
             </div>

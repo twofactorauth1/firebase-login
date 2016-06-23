@@ -179,4 +179,4 @@ $.FroalaEditor.config = {
     imageManagerScrollOffset: 0,
     dragImage: false,
     pastePlain: true
-}
+};
