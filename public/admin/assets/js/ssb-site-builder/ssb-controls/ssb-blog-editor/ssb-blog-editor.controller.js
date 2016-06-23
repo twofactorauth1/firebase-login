@@ -204,8 +204,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function savePost(post, suppressToaster) {
         var post = post || vm.state.post;
 
-        if (!post) {
-            return false;
+        if (!post || !isValidPost()) {
+            return SimpleSiteBuilderService.returnInvalidPost();
         }
 
         var toast = {};

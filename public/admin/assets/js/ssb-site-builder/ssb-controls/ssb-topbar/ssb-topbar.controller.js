@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderTopbarController', ssbSiteBuilderTopbarController);
 
-ssbSiteBuilderTopbarController.$inject = ['$scope', '$rootScope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$modal', '$location', 'SweetAlert', 'toaster'];
+ssbSiteBuilderTopbarController.$inject = ['$scope', '$rootScope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$modal', '$location', 'SweetAlert', 'toaster', '$q'];
 /* @ngInject */
-function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $modal, $location, SweetAlert, toaster) {
+function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $modal, $location, SweetAlert, toaster, $q) {
 
     console.info('site-build topbar directive init...')
 
@@ -197,8 +197,8 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
     function savePost(post, suppressToaster) {
         var post = post || vm.state.post;
 
-        if (!post) {
-            return false;
+        if (!post || !isValidPost()) {
+            return SimpleSiteBuilderService.returnInvalidPost();
         }
 
         var toast = {};
@@ -220,6 +220,10 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
                 toaster.pop(toast.type, toast.title, toast.message);
             }
         });
+    }
+
+    function isValidPost(){
+        return vm.state.post && vm.state.post.post_title;
     }
 
     function slugifyHandle(title){

@@ -83,6 +83,7 @@
         ssbService.isIENotEdge = ssbService.detectIENotEdge();
         ssbService.getBlogListPage = getBlogListPage;
         ssbService.getBlogPostPage = getBlogPostPage;
+        ssbService.returnInvalidPost = returnInvalidPost;
 
 
         /**
@@ -1818,6 +1819,12 @@
             return _.where(ssbService.pages, {
                 handle: 'blog-post'
             });
+        }
+
+        function returnInvalidPost(){
+            var deferred = $q.defer();
+            deferred.resolve(false);
+            return deferred.promise;
         }
 
         (function init() {
