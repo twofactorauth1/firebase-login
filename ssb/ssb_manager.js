@@ -1580,7 +1580,7 @@ module.exports = {
                         accountId:accountId,
                         latest:true,
                         _id:{$ne:pageId},
-                        handle: {$nin: ['signup', 'single-post', 'blog']}
+                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']}
                     };
 
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
