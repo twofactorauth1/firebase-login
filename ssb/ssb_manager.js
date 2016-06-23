@@ -1415,6 +1415,7 @@ module.exports = {
                     }
                 });
             },
+
             function upatePageVersion(existingPage, dereferencedSections, globalSections, cb){
                 checkTime = moment();
                 timingLog.warn('upatePageVersion: ' + checkTime.diff(startTime));
@@ -1459,6 +1460,7 @@ module.exports = {
                     });
                 }
             },
+
             function updateThePage(existingPage, updatedSections, newVersion, globalSections, cb){
                 self.log.info('updateThePage');
                 checkTime = moment();
@@ -1507,7 +1509,8 @@ module.exports = {
                         accountId:accountId,
                         latest:true,
                         'sections._id': {$in:idAry},
-                        _id:{$ne:pageId}
+                        _id:{$ne:pageId},
+                        handle: {$nin: ['signup', 'single-post', 'blog', 'blog-list', 'blog-post']}
                     };
                     self.log.debug('using this query:', query);
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
