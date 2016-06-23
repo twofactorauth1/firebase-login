@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogPostListComponentController', ssbBlogPostListComponentController);
 
-ssbBlogPostListComponentController.$inject = ['SimpleSiteBuilderBlogService'];
+ssbBlogPostListComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope', '$timeout'];
 /* @ngInject */
-function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService) {
+function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope, $timeout) {
 
     console.info('ssb-blog-post-list directive init...')
 
@@ -21,6 +21,14 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService) {
             vm.blog.posts = posts;
         }
     }
+
+    $scope.$watchCollection('vm.blog.posts', function(newValue) {
+        if(newValue)
+            $timeout(function () {
+                $scope.$broadcast('$refreshSlickSlider');
+            });
+
+    })
 
     function init(element) {
 
