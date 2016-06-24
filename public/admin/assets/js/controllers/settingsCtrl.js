@@ -128,7 +128,7 @@
                 var _blogIndex = _.findIndex(_links, function(link) { return link.linkTo.data === pageConstant.page_handles.BLOG })
 
                 // Add blog link to nav
-                if($scope.account.showhide.blog){
+                if($scope.account.showhide.blog && $scope.account.showhide.ssbBlog){
                     if(_blogIndex === -1){
                         _links.push({
                             label: pageConstant.page_handles.BLOG,
