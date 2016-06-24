@@ -1970,7 +1970,7 @@ module.exports = {
                     } else if(pages.length < 2) {
                         self.log.warn('Need to add 1 or more blog pages.');
                         //TODO: this
-                        cb(null, indexPageId);
+                        cb(err, updatedPage, updatedSections);
                     } else {
                         if(globalHeader) {
                             async.eachSeries(pages, function(page, callback){
