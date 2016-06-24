@@ -1897,6 +1897,7 @@ module.exports = {
                 }
 
             },
+
             function removeInternalBlogPageLinks(updatedPage, updatedSections, cb){
 
                 self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
@@ -1933,7 +1934,61 @@ module.exports = {
                         }
                     }
                 });
+            },
+            // Update blog pages header
+            function getGlobalHeader(updatedPage, updatedSections, cb){
+                var query = {
+                    $query: {
+                       accountId:accountId,
+                       globalHeader:true,
+                       latest: true
+                    },
+                    $orderby: {
+                       'modified.date' : -1
+                    }
+                };
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                       self.log.error(accountId, userId, 'Error finding global header:', err);
+                       cb(err);
+                    } else {
+                        cb(err, updatedPage, updatedSections, section);
+                    }
+                });
+            },
+            function updateBlogPages(updatedPage, updatedSections, globalHeader, cb) {
+                /*
+                 * Find blog-list and blog-post
+                 * set the first section to be globalHeader.id()
+                 * update
+                 */
+                self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
+                pageDao.findMany({handle: {$in: ['blog-list', 'blog-post']}}, $$.m.ssb.Page, function(err, pages){
+                    if(err || !pages) {
+                        self.log.error('Error finding blog pages:', err);
+                        cb(err);
+                    } else if(pages.length < 2) {
+                        self.log.warn('Need to add 1 or more blog pages.');
+                        //TODO: this
+                        cb(err, updatedPage, updatedSections);
+                    } else {
+                        if(globalHeader) {
+                            async.eachSeries(pages, function(page, callback){
+                                var sections = page.get('sections');
+                                sections[0]._id = globalHeader.id();
+                                pageDao.saveOrUpdate(page, callback);
+                            }, function(err){
+                                cb(err, updatedPage, updatedSections);
+                            });
+                        } else {
+                            self.log.warn('GlobalHeader is null');
+                            cb(er, updatedPage, updatedSections);
+                        }
+
+                    }
+                });
             }
+
         ], function done(err, updatedPage, updatedSections){
             self.log.info('done');
             checkTime = moment();
@@ -2919,6 +2974,7 @@ module.exports = {
                     cb(err, updatedWebsite, createPages);
                 });
             },
+
             function createDefaultPages(website, createPages, cb){
 
                 self.log.debug(accountId, userId, 'createDefaultPages', website.get('siteTemplateId'));
@@ -3043,7 +3099,7 @@ module.exports = {
                                 } else {
                                     self.log.debug(accountId, userId, 'finished updating website linkList', website.get('linkLists'));
                                     //finally done...
-                                    cb(err, indexPageId, siteTemplate, globalHeader);
+                                    cb(err, indexPageId, siteTemplate);
                                 }
                             });
 
@@ -3052,6 +3108,26 @@ module.exports = {
                 });
 
 
+            },
+            function getGlobalHeader(indexPageId, siteTemplate, cb){
+                var query = {
+                    $query: {
+                       accountId:accountId,
+                       globalHeader:true,
+                       latest: true
+                    },
+                    $orderby: {
+                       'modified.date' : -1
+                    }
+                };
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                       self.log.error(accountId, userId, 'Error finding global header:', err);
+                       cb(err);
+                    } else {
+                        cb(err, indexPageId, siteTemplate, section);
+                    }
+                });
             },
             function updateBlogPages(indexPageId, siteTemplate, globalHeader, cb) {
                 /*
