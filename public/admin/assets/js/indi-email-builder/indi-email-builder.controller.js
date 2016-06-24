@@ -2,9 +2,9 @@
 
     app.controller('EmailBuilderController', indiEmailBuilderController);
 
-    indiEmailBuilderController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal'];
+    indiEmailBuilderController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document'];
     /* @ngInject */
-    function indiEmailBuilderController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal) {
+    function indiEmailBuilderController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document) {
 
         console.info('email-builder directive init...');
 
@@ -80,7 +80,7 @@
         });
 
         vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
-        
+
         // Iterates through the array of filters and replaces each one with an object containing an
         // upper and lowercase version
         _.each(vm.componentFilters, function (element, index) {
@@ -97,7 +97,7 @@
             'capitalized': 'All',
             'lowercase': 'all'
         });
-        
+
         function openModalFn(modalId) {
             vm.modalInstance = $modal.open({
                 templateUrl: modalId,
@@ -112,9 +112,39 @@
                 vm.modalInstance.close();
             }
         }
-        
-        function addComponentFn(type) {
-            console.log(type);
+
+        function addComponentFn(addedType) {
+            if (vm.dataLoaded) {
+                vm.dataLoaded = false;
+                var componentType = null;
+                if (['email-footer', 'email-header'].indexOf(addedType.type) > -1) {
+                    componentType = _.findWhere($scope.components, {
+                        type: addedType.type
+                    });
+                    if (componentType) {
+                        toaster.pop('error', componentType.type + " component already exists");
+                        vm.dataLoaded = true;
+                        return;
+                    }
+                }
+
+                WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
+                    var componentIndex = $scope.clickedIndex + 1;
+                    if (newComponent) {
+                        vm.closeModalFn();
+                        vm.email.components.splice(componentIndex, 0, newComponent);
+                        $timeout(function () {
+                            var element = document.getElementById(newComponent._id);
+                            if (element) {
+                                $document.scrollToElementAnimated(element, 175, 1000);
+                                $(window).trigger('resize');
+                            }
+                        }, 500);
+                        vm.dataLoaded = true;
+                        toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+                    }
+                });
+            }
         }
 
         function init(element) {
