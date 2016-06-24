@@ -1963,7 +1963,7 @@ module.exports = {
                  * update
                  */
                 self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
-                pageDao.findMany({handle: {$in: ['blog-list', 'blog-post']}}, $$.m.ssb.Page, function(err, pages){
+                pageDao.findMany({handle: {$in: ['blog-list', 'blog-post']}, latest: true}, $$.m.ssb.Page, function(err, pages){
                     if(err || !pages) {
                         self.log.error('Error finding blog pages:', err);
                         cb(err);
