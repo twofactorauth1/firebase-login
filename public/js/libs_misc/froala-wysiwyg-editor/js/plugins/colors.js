@@ -220,10 +220,19 @@
       var $popup = editor.popups.get('colors.picker');
       var $element = $(editor.selection.element());
 
-        editor.opts.isButton = $element.hasClass("ssb-theme-btn");
-        if(editor.opts.isButton){
+        var isButton = $element.hasClass("ssb-theme-btn");
+        if(isButton){
             editor.opts.button = $element;
         }
+        else{
+            isButton = $element.parent().hasClass('ssb-theme-btn');
+            if(isButton){
+                editor.opts.button = $element.parent();
+            }
+        }
+
+        editor.opts.isButton = isButton;
+
 
       // The color css property.
       var color_type;
