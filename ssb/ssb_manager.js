@@ -2919,6 +2919,7 @@ module.exports = {
                     cb(err, updatedWebsite, createPages);
                 });
             },
+
             function createDefaultPages(website, createPages, cb){
 
                 self.log.debug(accountId, userId, 'createDefaultPages', website.get('siteTemplateId'));
@@ -3043,7 +3044,7 @@ module.exports = {
                                 } else {
                                     self.log.debug(accountId, userId, 'finished updating website linkList', website.get('linkLists'));
                                     //finally done...
-                                    cb(err, indexPageId, siteTemplate, globalHeader);
+                                    cb(err, indexPageId, siteTemplate);
                                 }
                             });
 
@@ -3052,6 +3053,26 @@ module.exports = {
                 });
 
 
+            },
+            function getGlobalHeader(indexPageId, siteTemplate, cb){
+                var query = {
+                    $query: {
+                       accountId:accountId,
+                       globalHeader:true,
+                       latest: true
+                    },
+                    $orderby: {
+                       'modified.date' : -1
+                    }
+                };
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                       self.log.error(accountId, userId, 'Error finding global header:', err);
+                       cb(err);
+                    } else {
+                        cb(err, indexPageId, siteTemplate, section);
+                    }
+                });
             },
             function updateBlogPages(indexPageId, siteTemplate, globalHeader, cb) {
                 /*
