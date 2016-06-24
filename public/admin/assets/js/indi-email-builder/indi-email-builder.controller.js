@@ -2,9 +2,9 @@
 
     app.controller('EmailBuilderController', indiEmailBuilderController);
 
-    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', '$stateParams'];
+    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', '$stateParams', '$state', 'toaster'];
     /* @ngInject */
-    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, $stateParams) {
+    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, $stateParams, $state, toaster) {
 
         console.info('email-builder directive init...');
 
@@ -22,8 +22,14 @@
             vm.element.find('#email-froala-editor').froalaEditor(vm.froalaConfig);
             EmailBuilderService.getEmail(vm.emailId)
                     .then(function (res) {
+                        if (!res.data._id) {
+                            toaster.pop('error', 'Email not found');
+                            $state.go('app.emails');
+                        }
                         vm.email = res.data;
                         vm.dataLoaded = true;
+                    }, function (err) {
+                        $state.go('app.emails');
                     });
         }
 
