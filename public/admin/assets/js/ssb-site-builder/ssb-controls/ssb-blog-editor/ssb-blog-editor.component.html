@@ -17,7 +17,7 @@
 
         <div class="margin-top-10">
 
-            <button ng-click="vm.state.post = vm.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <button ng-click="vm.refreshPost(); vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 
@@ -81,13 +81,13 @@
                             </div>
                         </div>
                         <div class="ssb-blog-post-action-buttons">
-                            <button class="btn btn-default" tooltip-placement="bottom" tooltip-html-unsafe="Create duplicate post" ng-click="vm.duplicatePost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="Create duplicate post" ng-click="vm.duplicatePost(post)">
                                 <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
                             </button>
-                            <button class="btn btn-default" tooltip-placement="bottom" tooltip-html-unsafe="View post" ng-click="vm.viewPost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="View post" ng-click="vm.viewPost(post)">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                             </button>
-                            <button class="btn btn-default" tooltip-placement="bottom" tooltip-html-unsafe="Delete post" ng-click="vm.deletePost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="Delete post" ng-click="vm.deletePost(post)">
                                 <i class="fa fa-trash"></i><span class="sr-only">Delete</span>
                             </button>
                             <button class="btn btn-primary" ng-click="vm.editPost(post)">
@@ -133,7 +133,7 @@
             ng-if="vm.uiState.openBlogPanel.id === 'manage'"
             class="margin-top-10">
 
-            <button ng-click="vm.state.post = vm.defaultPost; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <button ng-click="vm.refreshPost(); vm.uiState.navigation.blogPanel.loadPanel({ name: 'Edit Post', id: 'edit' });" class="ssb-sidebar-section-panel-btn btn btn-link">
                 <i class="fa fa-plus display-ib"></i> New Post
             </button>
 

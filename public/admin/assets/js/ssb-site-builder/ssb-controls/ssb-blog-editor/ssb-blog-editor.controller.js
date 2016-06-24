@@ -43,12 +43,17 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.handleSaveErrors = handleSaveErrors;
     vm.autoSave = autoSave;
     vm.checkPendingChanges = checkPendingChanges;
+    vm.refreshPost = refreshPost;
 
     vm.defaultPost = {
         post_title: '',
         post_content: 'Tell your story...',
         post_author: getDefualtAuthor()
     };
+
+    function refreshPost(){
+        vm.state.post = angular.copy(vm.defaultPost);
+    }
 
     $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
         if (id === 'edit' && !vm.uiState.froalaEditorActive) {
@@ -140,8 +145,6 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function duplicatePost(post) {
-        post.post_status = 'DRAFT';
-        post.published_date = null;
         SimpleSiteBuilderBlogService.duplicatePost(post).then(function() {
             console.log('duplicated post');
             toaster.pop('success', 'Duplicate Post Created', 'The post was created successfully.');

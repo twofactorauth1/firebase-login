@@ -50,21 +50,18 @@
       }, 0);
     };
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.account; }, function(account){
-        if(account){
-            $scope.account = account;
-                $scope.originalAccount = angular.copy(account);
-                if (!account.commerceSettings) {
-                    account.commerceSettings = {
-                    taxes: true,
-                    taxbased: '',
-                    taxnexus: ''
-                };
-            }
+
+    AccountService.getAccount(function (account) {
+        $scope.account = account;
+            $scope.originalAccount = angular.copy(account);
+            if (!account.commerceSettings) {
+                account.commerceSettings = {
+                taxes: true,
+                taxbased: '',
+                taxnexus: ''
+            };
         }
-
     });
-
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         if(website){
@@ -93,7 +90,6 @@
         }
 
     });
-
 
     /*
      * @saveSettings
@@ -132,7 +128,7 @@
                 var _blogIndex = _.findIndex(_links, function(link) { return link.linkTo.data === pageConstant.page_handles.BLOG })
 
                 // Add blog link to nav
-                if($scope.account.showhide.blog){
+                if($scope.account.showhide.blog && $scope.account.showhide.ssbBlog){
                     if(_blogIndex === -1){
                         _links.push({
                             label: pageConstant.page_handles.BLOG,
@@ -163,7 +159,7 @@
                         if (mainAccount) {
                             mainAccount.showhide.blog = $scope.account.showhide.blog;
                         }
-                      
+
                         if ($scope.account.showhide.userScripts) {
                           SimpleSiteBuilderService.updateScriptResource($scope.website).then();
                         }
