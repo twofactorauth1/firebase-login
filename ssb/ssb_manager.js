@@ -1962,16 +1962,12 @@ module.exports = {
                  * set the first section to be globalHeader.id()
                  * update
                  */
-
-                //Why do we need this?
-                cb(null, updatedPage, updatedSections);
-                /*
                 self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
-                pageDao.findMany({accountId:accountId, handle: {$in: ['blog-list', 'blog-post']}, latest: true}, $$.m.ssb.Page, function(err, pages){
+                pageDao.findMany({handle: {$in: ['blog-list', 'blog-post']}, latest: true}, $$.m.ssb.Page, function(err, pages){
                     if(err || !pages) {
                         self.log.error('Error finding blog pages:', err);
                         cb(err);
-                    } else if(pages.length != 2) {
+                    } else if(pages.length < 2) {
                         self.log.warn('Need to add 1 or more blog pages.');
                         //TODO: this
                         cb(err, updatedPage, updatedSections);
@@ -1986,12 +1982,11 @@ module.exports = {
                             });
                         } else {
                             self.log.warn('GlobalHeader is null');
-                            cb(err, updatedPage, updatedSections);
+                            cb(er, updatedPage, updatedSections);
                         }
 
                     }
                 });
-                */
             }
 
         ], function done(err, updatedPage, updatedSections){
@@ -2988,6 +2983,7 @@ module.exports = {
                         self.log.error(accountId, userId, 'Error getting siteTemplate for website:', err);
                         cb(err);
                     } else {
+                        var globalHeader = null;
                         var pagesToCreate = siteTemplate.get('defaultPageTemplates'); //array of template reference objs
                         var indexPageId = undefined;
                         var linkLists = [{
@@ -3062,10 +3058,25 @@ module.exports = {
                                                                 page.set('sections', sectionAry);
                                                                 self.updatePage(accountId, pageId, page, created, null, created.by, function(err, savedPage){
                                                                     self.log.debug(accountId, userId, 'updated page using siteTemplate data');
-                                                                    callback(err);
+                                                                    if(!globalHeader) {
+                                                                        //re-deref them, find the header, save it for later.
+                                                                        sectionDao.dereferenceSections(savedPage.get('sections'), function(_err, savedSectionAry){
+                                                                            _.each(savedSectionAry, function(section){
+                                                                                if(section.get('name') === 'Header') {
+                                                                                    globalHeader = section;
+                                                                                }
+                                                                            });
+                                                                            callback(err);
+                                                                        });
+
+                                                                    } else {
+                                                                        callback(err);
+                                                                    }
+
                                                                 });
                                                             }
                                                         });
+
                                                     }
                                                 });
                                             }
@@ -3100,23 +3111,23 @@ module.exports = {
             },
             function getGlobalHeader(indexPageId, siteTemplate, cb){
                 var query = {
-                    accountId:accountId,
-                    globalHeader:true,
-                    latest: true
+                    $query: {
+                       accountId:accountId,
+                       globalHeader:true,
+                       latest: true
+                    },
+                    $orderby: {
+                       'modified.date' : -1
+                    }
                 };
-                sectionDao.findAndOrder(query, null, $$.m.ssb.Section, 'modified.date', -1, function(err, sections){
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
                     if(err) {
-                        self.log.error(accountId, userId, 'Error finding global header:', err);
-                        cb(err);
+                       self.log.error(accountId, userId, 'Error finding global header:', err);
+                       cb(err);
                     } else {
-                        var globalHeader = null;
-                        if(sections && sections[0]) {
-                            globalHeader = sections[0];
-                        }
-                        cb(err, indexPageId, siteTemplate, globalHeader);
+                        cb(err, indexPageId, siteTemplate, section);
                     }
                 });
-
             },
             function updateBlogPages(indexPageId, siteTemplate, globalHeader, cb) {
                 /*
@@ -3125,32 +3136,26 @@ module.exports = {
                  * update
                  */
                 self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
-                pageDao.findMany({accountId:accountId, handle: {$in: ['blog-list', 'blog-post']}}, $$.m.ssb.Page, function(err, pages){
+                pageDao.findMany({handle: {$in: ['blog-list', 'blog-post']}}, $$.m.ssb.Page, function(err, pages){
                     if(err || !pages) {
                         self.log.error('Error finding blog pages:', err);
                         cb(err);
-                    } else if(pages.length !== 2) {
+                    } else if(pages.length < 2) {
                         self.log.warn('Need to add 1 or more blog pages.');
                         //TODO: this
                         cb(null, indexPageId);
                     } else {
                         if(globalHeader) {
-                            async.eachSeries(pages,
-                                function(page, callback){
-                                    var sections = page.get('sections');
-                                    sections[0]._id = globalHeader.id();
-                                    pageDao.saveOrUpdate(page, function(err, savedPage){
-                                        self.log.debug('Saved page:', savedPage);
-                                        callback(err);
-                                    });
-                                }, function(err){
-                                    self.log.debug('Finished saving pages with err:', err);
-                                    cb(err, indexPageId);
-                                }
-                            );
+                            async.eachSeries(pages, function(page, callback){
+                                var sections = page.get('sections');
+                                sections[0]._id = globalHeader.id();
+                                pageDao.saveOrUpdate(page, callback);
+                            }, function(err){
+                                cb(err, indexPageId);
+                            });
                         } else {
                             self.log.warn('GlobalHeader is null');
-                            cb(err, indexPageId);
+                            cb(er, indexPageId);
                         }
 
                     }
@@ -3205,7 +3210,7 @@ module.exports = {
                 };
                 sectionDao.findMany(query, $$.m.ssb.Section, function(err, gsections){
                     if(err) {
-                        self.log.error(accountId, null, 'Error finding global sections:', err);
+                        self.log.error(accountId, userId, 'Error finding global sections:', err);
                         cb(err);
                     } else {
                         // Filter header
@@ -3226,16 +3231,16 @@ module.exports = {
                         }
                         // append global sections
                         if(gsections){
-                            var insertAt = 0;
+                            var insertAt = 0
                             if(sections.length){
                                 var lastSection = sections[sections.length - 1];
-                                self.log.debug(accountId, null, 'lastSection:', lastSection);
+                                console.log(lastSection)
                                 if (lastSection && lastSection.get('name') === 'Footer'){
                                     insertAt = sections.length - 1;
                                 } else {
                                     insertAt = sections.length;
                                 }
-                                self.log.debug(accountId, null, 'Inserting at ' + insertAt);
+                                self.log.debug('Inserting at ' + insertAt);
                             }
                             _.each(gsections, function(section){
                                 sections.splice(insertAt, 0, section);
@@ -3626,52 +3631,8 @@ module.exports = {
                 self.log.error('could not find account with id: ' + accountId);
                 return fn('Could not find account with id: ' + accountId, null);
             }
-            var _status = value.get("showhide").blog;
+            var _status = value.get("showhide").blog && value.get("showhide").ssbBlog;
             async.waterfall([
-                // function getBlogPage(cb){
-                //     var query = {
-                //         accountId:accountId,
-                //         latest:true,
-                //         handle: 'blog'
-                //     };
-
-                //     pageDao.findOne(query, $$.m.ssb.Page, function(err, page){
-                //         if(err) {
-                //             self.log.error(accountId, userId, 'Error finding website:', err);
-                //             cb(err);
-                //         } else {
-                //             cb(null, page);
-                //         }
-                //     })
-                // },
-                // function addRemoveLinkToNav(cb){
-                //     self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
-                //         if(err) {
-                //             self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
-                //             cb(err);
-                //         } else {
-                //             var link={
-                //                 label: page.get('menuTitle') || page.get('title'),
-                //                 type: "link",
-                //                 linkTo: {
-                //                     type:"page",
-                //                     data:page.get('handle')
-                //                 }
-                //             };
-
-                //             list.links.push(link);
-                //             self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
-                //                 if(err) {
-                //                     self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
-                //                     cb(err);
-                //                 } else {
-                //                     self.log.debug(accountId, userId, '<< createPage');
-                //                     cb();
-                //                 }
-                //             });
-                //         }
-                //     });
-                // },
                 function publishBlogPages(cb){
                     var query = {
                         accountId:accountId,
@@ -3686,18 +3647,12 @@ module.exports = {
                         } else {
                             if(pages && pages.length){
                                 async.eachSeries(pages, function(page, callback){
-                                    page.set('published', {date:new Date(), by: userId});
                                     if(_status){
-                                        pageDao.savePublishedPage(page, function(err, publishedPage){
+                                        self.publishPage(accountId, page.id(), userId, function(err, publishedPage){
                                             if(err) {
                                                 self.log.error(accountId, userId,'Error publishing page:', err);
                                                 cb(err);
                                             } else {
-                                                pageCacheManager.updateS3Template(accountId, null, page.id(), function(err, value){
-                                                    if (err) {
-                                                        self.log.error(accountId, userId,'Error on s3 template update in savePage:', err);
-                                                    }
-                                                });
                                                 callback();
                                             }
                                         });
@@ -3728,9 +3683,7 @@ module.exports = {
                             }
                         }
                     })
-
                 }
-
 
             ], function done(err){
                 if(err) {
