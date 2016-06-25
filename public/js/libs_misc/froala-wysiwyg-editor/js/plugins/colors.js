@@ -243,14 +243,20 @@
         color_type = 'color';
       }
 
+      var color = $element.css(color_type);
+      if(editor.opts.isButton){
+        color = editor.opts.button.css(color_type);
+      }
+
       // Remove current color selection.
+
       $popup.find('.fr-' + tab + '-color .fr-select-color').removeClass('fr-selected-color');
 
       // Find the selected color.
       while ($element.get(0) != editor.$el.get(0)) {
         // Transparent or black.
         setTimeout(function() {
-            initializeSpectrum(color_type, color_type == 'color' ? editor.opts.defaultColors.text.color : editor.opts.defaultColors.background.color);
+            initializeSpectrum(color_type, color);
         }, 0)
         if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
           $element = $element.parent();
