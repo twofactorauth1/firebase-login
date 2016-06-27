@@ -619,8 +619,8 @@ module.exports = function(grunt) {
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
 
 
-    grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
-    grunt.registerTask('local', ['less', 'postcss', 'concat:css']);
+    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'postcss', 'ngAnnotate', 'uglify', 'clean:postbuild']);
+    grunt.registerTask('local', ['less', 'concat:css', 'postcss']);
 
     /*
      * This task is run by CI.
