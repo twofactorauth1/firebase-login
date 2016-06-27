@@ -1899,7 +1899,8 @@ module.exports = {
             },
 
             function removeInternalBlogPageLinks(updatedPage, updatedSections, cb){
-
+                checkTime = moment();
+                timingLog.warn('removeInternalBlogPageLinks: ' + checkTime.diff(startTime));
                 self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                     if (err) {
                         self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
@@ -1937,6 +1938,9 @@ module.exports = {
             },
             // Update blog pages header
             function getGlobalHeader(updatedPage, updatedSections, cb){
+                checkTime = moment();
+                timingLog.warn('getGlobalHeader: ' + checkTime.diff(startTime));
+                //TODO: fix this to use the findAndOrder
                 var query = {
                     $query: {
                        accountId:accountId,
@@ -1955,6 +1959,44 @@ module.exports = {
                         cb(err, updatedPage, updatedSections, section);
                     }
                 });
+            },
+            function updateBlogPages(updatedPage, updatedSections, globalHeader, cb) {
+                checkTime = moment();
+                timingLog.warn('updateBlogPages: ' + checkTime.diff(startTime));
+                /*
+                 * Find blog-list and blog-post
+                 * set the first section to be globalHeader.id()
+                 * update
+                 */
+                self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
+                if(globalHeader) {
+                    var query = {
+                        accountId:accountId,
+                        handle: {$in:['blog-list', 'blog-post']},
+                        latest:true
+                    };
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err || !pages) {
+                            self.log.error('Error finding blog pages:', err);
+                            cb(err);
+                        } else if(pages.length < 2) {
+                            self.log.warn('Need to add 1 or more blog pages.');
+                            //TODO: this
+                            cb(err, updatedPage, updatedSections);
+                        } else {
+                            async.eachSeries(pages, function(page, callback){
+                                var sections = page.get('sections');
+                                sections[0]._id = globalHeader.id();
+                                pageDao.saveOrUpdate(page, callback);
+                            }, function(err){
+                                cb(err, updatedPage, updatedSections);
+                            });
+                        }
+                    });
+                } else {
+                    cb(null, updatedPage, updatedSections);
+                }
+
             }
 
         ], function done(err, updatedPage, updatedSections){
