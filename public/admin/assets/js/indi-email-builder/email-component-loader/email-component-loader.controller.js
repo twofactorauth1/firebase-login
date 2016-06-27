@@ -13,13 +13,16 @@
         vm.init = init;
         vm.hoverFn = hoverFn;
         vm.clickFn = clickFn;
+        vm.selector = '#email-component_' + vm.component._id;
 
-        function hoverFn(e) {
-            console.log('Hovered', e);
-        }
-        
+        vm.froalaConfig = angular.copy($.FroalaEditor.config);
+        _.extend(vm.froalaConfig, {toolbarInline: false, scrollableContainer: '#email-froala-scrollable-container', placeholderText: 'Type your email here'});
+
+        function hoverFn(e) {}
+
         function clickFn(e) {
-            console.info('Clicked', e);
+            $('.email-component').froalaEditor('destroy');
+            $(vm.selector).froalaEditor(vm.froalaConfig);
         }
 
         function init(element) {
