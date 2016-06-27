@@ -129,10 +129,9 @@
                 }
 
                 WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
-                    var componentIndex = $scope.clickedIndex + 1;
                     if (newComponent) {
                         vm.closeModalFn();
-                        vm.email.components.splice(componentIndex, 0, newComponent);
+                        vm.email.components.push(newComponent);
                         $timeout(function () {
                             var element = document.getElementById(newComponent._id);
                             if (element) {
