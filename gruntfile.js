@@ -210,7 +210,7 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-wizard/dist/angular-wizard.min.css',
                     'public/js/libs/animate.css/animate.min.css',
                     'public/js/libs/slick-carousel/slick/slick.css',
-                    '/js/libs/slick-carousel/slick/slick-theme.css',
+                    'public/js/libs/slick-carousel/slick/slick-theme.css',
                     'public/js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css',
                     'public/js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
                     'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css'
