@@ -139,6 +139,18 @@
                             <div class="clearfix mb15"></div>
                         </li>
                     </ul>
+
+                    <email-component-loader
+                        ng-if="vm.email.components.length"
+                        ng-repeat="component in vm.email.components track by $index"
+                        component-class="vm.componentClassFn(component, $index)"
+                        component-style="vm.componentStyleFn(component, $index)"
+                        component="component"
+                        website="vm.website"
+                        account="vm.account"
+                        component-index="$index"
+                        >
+                    </email-component-loader>
                 </div>
             </div>
 
