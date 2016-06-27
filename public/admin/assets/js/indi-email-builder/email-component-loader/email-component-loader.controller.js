@@ -16,13 +16,18 @@
         vm.selector = '#email-component_' + vm.component._id;
 
         vm.froalaConfig = angular.copy($.FroalaEditor.config);
-        _.extend(vm.froalaConfig, {toolbarInline: false, scrollableContainer: '#email-froala-scrollable-container', placeholderText: 'Type your email here'});
+//        vm.froalaConfig.scrollableContainer = '#email-froala-scrollable-container';
+        _.extend(vm.froalaConfig, {toolbarInline: false, scrollableContainer: '#email-froala-scrollable-container',  toolbarContainer: '#email-froala-container', placeholderText: 'Type your email here'});
 
         function hoverFn(e) {}
 
         function clickFn(e) {
 //            $('.email-component').froalaEditor('destroy');
-            $(vm.selector).froalaEditor(vm.froalaConfig);
+            e.stopPropagation();
+            if (!$(vm.selector).data('froala.editor')) {
+                $(vm.selector).froalaEditor(vm.froalaConfig);
+                console.info('froala initiated for', vm.selector);
+            }
         }
 
         function init(element) {
