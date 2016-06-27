@@ -95,6 +95,42 @@ var mainApp = angular
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
+            .when('/author/:author', {
+                template: function(urlattr) {
+                    if(window.indigenous.ssbBlog === true) {
+                        return '<div data-ng-include="\'blog.html\'"></div>';
+                    } else {
+                        var s = '<div data-ng-include="';
+                        s += " '/template/blog";
+                        if(urlattr.cachebuster) {
+                            s+='?cachebuster=' + urlattr.cachebuster;
+                        }
+                        s+= "'";
+                        s += ' "></div>';
+                        return s;
+                    }
+
+                },
+                controller: 'CacheCtrl as cacheCtrl'
+            })
+            .when('/tag/:tag', {
+                template: function(urlattr) {
+                    if(window.indigenous.ssbBlog === true) {
+                        return '<div data-ng-include="\'blog.html\'"></div>';
+                    } else {
+                        var s = '<div data-ng-include="';
+                        s += " '/template/blog";
+                        if(urlattr.cachebuster) {
+                            s+='?cachebuster=' + urlattr.cachebuster;
+                        }
+                        s+= "'";
+                        s += ' "></div>';
+                        return s;
+                    }
+
+                },
+                controller: 'CacheCtrl as cacheCtrl'
+            })
             .when('/blog/:postName', {
                 template: function(urlattr) {
                     if(window.indigenous.ssbBlog === true) {
