@@ -1,6 +1,6 @@
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
-    <div ng-if="!vm.post" class="ssb-in-context-info">
-        <span class="fa fa-info-circle">You have no published posts.</span>
+    <div ng-if="!vm.post" class="ssb-in-context-info margin-top-20 padding-30">
+        <span class="fa fa-info-circle"> No published posts were found.</span>
     </div>
     <div ng-if="vm.post" class="ssb-media">
 
@@ -41,7 +41,7 @@
             </div>
 
             <section class="ssb-blog-post-body" itemprop="articleBody">
-                <p ng-if="vm.post.post_excerpt.length" ng-bind-html="vm.post.post_excerpt | unsafe">{{vm.post.post_excerpt}}</p>
+                <p>{{vm.post.post_excerpt}}</p>
                 <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}" target="_self">READ MORE <i class="fa fa-long-arrow-right"></i></a>
             </section>
         </div>

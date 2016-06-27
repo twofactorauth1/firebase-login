@@ -111,8 +111,9 @@
                 </div>
                 <div class="col-sm-8">
                     <div class='pull-right'>
+                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="vm.openModalFn('add-email-component-modal')">Add Component</button>
                         <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Media</button>
-                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Save</button>
+                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click='vm.saveFn()'>Save</button>
                         <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Preview</button>
                         <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">One-time email</button>
                         <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Create Campaign</button>
@@ -121,11 +122,10 @@
             </div>
         </div>
         <div class="row">
+            <div id='email-froala-container'></div>
+            <div id="email-froala-scrollable-container"></div>
         </div>
         <div class="row">
-            <div id="email-froala-scrollable-container"></div>
-            <!--<textarea ng-model="email.html" id="email-froala-editor"></textarea>-->
-
             <div class="email-builder-main custom-fonts email-theme-{{vm.website.theme.name| slugify}}" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.dataLoaded">
                 <div class='components'>
                     <ul ng-if="vm.dataLoaded && !vm.email.components.length" class="list-unstyled margin-bottom-0">
@@ -138,9 +138,23 @@
                             <div class="clearfix mb15"></div>
                         </li>
                     </ul>
+
+                    <email-component-loader
+                        ng-if="vm.email.components.length"
+                        ng-repeat="component in vm.email.components track by $index"
+                        component-class="vm.componentClassFn(component, $index)"
+                        component-style="vm.componentStyleFn(component, $index)"
+                        component="component"
+                        website="vm.website"
+                        account="vm.account"
+                        component-index="$index"
+                        >
+                    </email-component-loader>
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+<div data-ng-include data-src=" 'assets/views/partials/add-email-component-modal.html' " ></div>

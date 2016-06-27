@@ -210,8 +210,10 @@ module.exports = function(grunt) {
                     'public/js/libs/angular-wizard/dist/angular-wizard.min.css',
                     'public/js/libs/animate.css/animate.min.css',
                     'public/js/libs/slick-carousel/slick/slick.css',
+                    'public/js/libs/slick-carousel/slick/slick-theme.css',
                     'public/js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css',
-                    'public/js/libs/froala-wysiwyg-editor/css/froala_style.min.css'
+                    'public/js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
+                    'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css'
                 ],
                 dest:'public/css/vendor.css',
                 nonull:true
@@ -617,8 +619,8 @@ module.exports = function(grunt) {
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
 
 
-    grunt.registerTask('production',['clean:prebuild', 'less', 'postcss', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'clean:postbuild']);
-    grunt.registerTask('local', ['less', 'postcss', 'concat:css']);
+    grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'postcss', 'ngAnnotate', 'uglify', 'clean:postbuild']);
+    grunt.registerTask('local', ['less', 'concat:css', 'postcss']);
 
     /*
      * This task is run by CI.

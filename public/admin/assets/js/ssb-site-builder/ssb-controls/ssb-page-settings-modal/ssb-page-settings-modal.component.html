@@ -27,7 +27,7 @@
                             <label>Menu Title:</label>
                             <input class="form-control input-lg" type="text" ng-model="vm.page.menuTitle">
                         </div>
-                        <div class="form-group" ng-if="!vm.isBlogPage">
+                        <div class="form-group">
                             <div class="checkbox clip-check check-info checkbox-inline">
                                 <input id="checkbox1" type="checkbox" ng-true-value="false" ng-false-value="true" ng-model="vm.page.mainmenu">
                                 <label for="checkbox1">
@@ -35,7 +35,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group"  ng-if="!vm.isBlogPage">
                             <div class="checkbox clip-check check-info checkbox-inline">
                                 <input id="checkbox2" ng-change="vm.setAsHomePage()" type="checkbox" ng-model="vm.page.homePage" checked>
                                 <label for="checkbox2">

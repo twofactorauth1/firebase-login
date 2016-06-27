@@ -203,8 +203,7 @@
 
                                 <i ng-if="!vm.uiState.saveLoading" class="fa fa-save"></i>
                                 <span ng-if="!vm.uiState.saveLoading" class="sr-only">Save</span>
-
-                                <i ng-hide="!vm.uiState.saveLoading" ng-if="vm.uiState.saveLoading" class="fa fa-spinner fa-spin"></i>
+                                <span ng-hide="!vm.uiState.saveLoading" ng-if="vm.uiState.saveLoading"><i class="fa fa-spinner fa-spin"></i></span>
                                 <span ng-if="vm.uiState.saveLoading" class="sr-only">Saving</span>
 
                             </button>

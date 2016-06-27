@@ -17,7 +17,7 @@
      * get all contacts to for contact select
      */
 
-    WebsiteService.getEmails(true, function (emails) {
+    WebsiteService.getEmails(false, function (emails) {
       $timeout(function () {
         $scope.$apply(function () {
           $scope.emails = angular.copy(emails);

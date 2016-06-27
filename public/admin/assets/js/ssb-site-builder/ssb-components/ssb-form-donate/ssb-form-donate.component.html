@@ -1,6 +1,6 @@
 <div class="form-donate-{{vm.component._id}} form-donate-component">
 
-    <div class="col-xs-12 component-body" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}" ng-attr-ng-attr-style="{{vm.formStyle(vm.component.formSettings)}}">
+    <div class="col-xs-12 component-body" ng-class="{'default-font-size': vm.component.formSettings.formTextSize}" ng-attr-style="{{vm.formStyle(vm.component.formSettings)}}">
 
         <div class="inner-page">
             <div data-edit class="row">
@@ -16,7 +16,7 @@
                             <h3 class="ssb-form-donate-progress-total" ng-class="{ 'on': vm.total }">{{vm.total | currency:undefined:0}}</h3>
                             <div class="ssb-form-donate-progress-bar">
                                 <div class="loading-bar">
-                                    <div class="bar" ng-ng-attr-style="{ 'width': vm.completePercentageStyle }">
+                                    <div class="bar" ng-style="{ 'width': vm.completePercentageStyle }">
                                         <div class="peg"></div>
                                     </div>
                                 </div>
@@ -29,12 +29,12 @@
                             </div>
                         </div>
                         <div class="center margin-top-10 col-sm-12">
-                            <button ng-disabled="!vm.component.productSettings || !vm.checkDateValidityFn()" ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-click='vm.openModalFn()' ng-ng-attr-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
+                            <button ng-disabled="!vm.component.productSettings || !vm.checkDateValidityFn()" ng-if="!vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-click='vm.openModalFn()' ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}"
                                 class="btn btn-form pull-right btn-block">
                                 <span elem ng-model="vm.component.submitBtn" ng-show='vm.checkDateValidityFn()'></span>
                                 <span ng-hide='vm.checkDateValidityFn()'>Time span expired</span>
                             </button>
-                            <div ng-if="vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-ng-attr-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block inline-block editable-donate-btn-form">
+                            <div ng-if="vm.isEditing" ng-attr-style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block inline-block editable-donate-btn-form">
                                 <span elem ng-model="vm.component.submitBtn"></span>
                             </div>
                         </div>

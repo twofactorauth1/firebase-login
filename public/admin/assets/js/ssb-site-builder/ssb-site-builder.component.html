@@ -128,7 +128,9 @@
 			<div
                 class="sortable-page-content"
                 ng-sortable="vm.uiState.sortableListPageContentConfig"
-                ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-1-col-layout' || !vm.state.page.layout)">
+                ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-1-col-layout' || !vm.state.page.layout)"
+                ng-class="{'ssb-blog-page': vm.uiState.isBlogPage }"
+                >
 
 				<ssb-page-section
 					ng-repeat="section in vm.state.page.sections"
@@ -229,7 +231,7 @@
         class="fade-in-left ssb-sidebar"
         state="vm.state"
         ui-state="vm.uiState"
-        ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer' }">
+        ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer', 'ssb-blog-page': vm.uiState.isBlogPage }">
     </ssb-sidebar>
 
     <ssb-topbar ng-if="vm.state.page" class="fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
