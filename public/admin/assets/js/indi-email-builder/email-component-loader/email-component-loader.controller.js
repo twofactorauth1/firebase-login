@@ -11,10 +11,15 @@
         var vm = this;
 
         vm.init = init;
-        vm.hover = hover;
+        vm.hoverFn = hoverFn;
+        vm.clickFn = clickFn;
 
-        function hover(e) {
-
+        function hoverFn(e) {
+            console.log('Hovered', e);
+        }
+        
+        function clickFn(e) {
+            console.info('Clicked', e);
         }
 
         function init(element) {
