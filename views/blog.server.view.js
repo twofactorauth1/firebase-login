@@ -495,7 +495,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     data.title = value.website.title;
                 }
 
-                data.author = post.post_author;
+                data.author = data.post.post_author;
                 data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
                 data.website = value.website || {};
                 if(pageHolder[handle] && pageHolder[handle].seo) {
