@@ -106,8 +106,36 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function getBlogPosts(webpageData, allPages, page, cb) {
+
+                var _tag = null;
+                var _author = null;
+                var url_path = self._req.originalUrl;
+                if (url_path.indexOf("tag/") > -1) {
+                    _tag = url_path.replace('/tag/', '');
+                }
+
+                if (url_path.indexOf("author/") > -1) {
+                    _author = url_path.replace('/author/', '');
+                }
+
                 ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){
-                    cb(err, webpageData, allPages, page, posts)
+                    if(_tag || _author){
+                        if(_author){
+                            posts =  posts.filter(function(post){
+                                console.log(post)
+                                return post.get("post_author") === _author
+                            })
+                        }
+                        if(_tag){
+                            posts = posts.filter(function(post){
+                                if (post.get("post_tags")) {
+                                    return post.get("post_tags").indexOf(_tag) > -1;
+                                }
+                            })
+                        }
+                    }
+                    cb(err, webpageData, allPages, page, posts);
+
                 });
             },
 
@@ -160,6 +188,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
                  </div>
                  */
+
+
                 if(page.get('layout') === 'ssb-layout__header_2-col_footer') {
                     var sections = page.get('sections');
                     var template = '<div class="ssb-layout__header_2-col_footer ssb-page-blog-list">';
