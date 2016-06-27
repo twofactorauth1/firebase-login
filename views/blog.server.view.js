@@ -480,7 +480,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
 
                 data.pages = pageHolder;
-                data.post = post;
+                data.post = post.toJSON('frontend');
                 data.account = value;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
@@ -495,7 +495,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     data.title = value.website.title;
                 }
 
-                data.author = 'Indigenous';//TODO: wut?
+                data.author = post.post_author;
                 data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
                 data.website = value.website || {};
                 if(pageHolder[handle] && pageHolder[handle].seo) {
@@ -512,21 +512,18 @@ _.extend(view.prototype, BaseView.prototype, {
 
 
                 if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
-                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
+                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords, "text").join(',');
                 } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
-                    data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
+                    data.seo.keywords = _.pluck(value.website.seo.keywords, "text").join(',');
                 }
 
-
-                data.og = {
-                    type: 'website',
-                    title: (pageHolder[handle] || {}).title || value.website.title,
-                    image: value.website.settings.favicon
-                };
-                if (data.og.image && data.og.image.indexOf('//') === 0) {
-                    data.og.image = 'http:' + data.og.image;
+                if (data.post.post_tags.length) {
+                    var keywords = data.seo.keywords.split(',').slice(0);
+                    keywords.unshift(data.post.post_tags);
+                    data.seo.keywords = keywords.join(',');
                 }
-                data.includeEditor = false;
+
+                data.includeSocial = true;
 
                 if (!data.account.website.settings) {
                     self.log.warn('Website Settings is null for account ' + accountId);

@@ -20,17 +20,42 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             block headattributes
                 include index_head_styles
                 include index_head_scripts
-            title(data-ng-bind='pageTitle()')
+
+            if !post
+                title(data-ng-bind='pageTitle()')
+
             meta(charset="utf-8")
             meta(name="viewport", content="width=device-width, initial-scale=1.0")
             meta(name="description", content=seo.description)
             meta(name="keywords", content=seo.keywords)
             meta(name="author", content=author)
             meta(name="fragment" content="!")
-            meta(property='og:type', content=og.type)
-            meta(property='og:title', content=og.title)
-            if og.image
+
+            if website.title !== 'Default Website Title'
+                meta(property='og:site_name' value=website.title)
+
+            if post && post.post_title
+                title #{post.post_title}
+                meta(property="og:type" content="article")
+                meta(property='og:title' content=post.post_title)
+                meta(property='og:url' content=post.post_url)
+                meta(property='og:image' content=post.featured_image)
+                meta(property='og:image:url' content=post.featured_image)
+                meta(property='og:image:type' content='image/jpeg')
+                meta(property='og:description' content=post.post_excerpt)
+
+                meta(name="twitter:card" content="summary")
+                meta(name="twitter:title" content=post.post_title)
+                meta(name="twitter:description" content=post.post_excerpt)
+
+
+            if og
+                meta(property='og:type', content=og.type)
+                meta(property='og:title', content=og.title)
+
+            if og && og.image
                 meta(property='og:image', content=og.image)
+
             base(href="/")
             if account.website.settings.favicon
                 link(rel="shortcut icon", href=account.website.settings.favicon)
@@ -72,8 +97,9 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             div(id='toolbar')
         block content
         block footer_scripts
-            if !includeEditor
-                script(type="text/javascript").
-                    window.analytics.identify({accountId:#{account._id}});
+            script(type="text/javascript").
+                window.analytics.identify({accountId:#{account._id}});
         block body_scripts
             include index_body_scripts
+            if includeSocial
+                script(async, src="https://lessbuttons.com/script.js?facebook=auto&twitter=auto&linkedin=auto&pinterest=auto&reddit=auto&email=1")
