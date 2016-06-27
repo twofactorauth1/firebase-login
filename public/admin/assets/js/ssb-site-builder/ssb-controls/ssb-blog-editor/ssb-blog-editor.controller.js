@@ -45,6 +45,8 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.checkPendingChanges = checkPendingChanges;
     vm.refreshPost = refreshPost;
 
+    vm.uiState.cleanBlogPanel = cleanBlogPanel;
+
     vm.defaultPost = {
         post_title: '',
         post_content: 'Tell your story...',
@@ -131,17 +133,24 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function closeBlogPanel() {
-        vm.savePost().then(function() {
-            $rootScope.$broadcast('$destroyFroalaInstances');
-            $timeout(function() {
-                vm.uiState.openBlogPanel = { name: '', id: '' };
-                vm.uiState.openSidebarPanel = '';
-            }, 500);
-        });
+        if (vm.state.pendingBlogChanges) {
+            vm.savePost().then(vm.uiState.cleanBlogPanel);
+        } else {
+            vm.uiState.cleanBlogPanel();
+        }
     }
 
     function backBlogPanel() {
         vm.savePost().then(vm.uiState.navigation.blogPanel.back);
+    }
+
+    function cleanBlogPanel() {
+        $rootScope.$broadcast('$destroyFroalaInstances');
+        $timeout(function() {
+            vm.uiState.openBlogPanel = { name: '', id: '' };
+            vm.uiState.openSidebarPanel = '';
+            vm.state.post = null;
+        }, 500);
     }
 
     function duplicatePost(post) {

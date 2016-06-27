@@ -182,9 +182,9 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
 
     function closeBlogPanel() {
         if (vm.state.pendingBlogChanges) {
-            vm.savePost().then(cleanBlogPanel);
+            vm.savePost().then(vm.uiState.cleanBlogPanel);
         } else {
-            cleanBlogPanel();
+            vm.uiState.cleanBlogPanel();
         }
     }
 
@@ -194,14 +194,6 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
         } else {
             vm.uiState.navigation.blogPanel.back();
         }
-    }
-
-    function cleanBlogPanel() {
-        $rootScope.$broadcast('$destroyFroalaInstances');
-        $timeout(function() {
-            vm.uiState.openBlogPanel = { name: '', id: '' };
-            vm.uiState.openSidebarPanel = '';
-        }, 500);
     }
 
     function savePost(post, suppressToaster) {
