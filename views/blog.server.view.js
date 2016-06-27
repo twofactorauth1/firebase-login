@@ -517,10 +517,18 @@ _.extend(view.prototype, BaseView.prototype, {
                     data.seo.keywords = _.pluck(value.website.seo.keywords, "text").join(',');
                 }
 
-                if (data.post.post_tags.length) {
-                    var keywords = data.seo.keywords.split(',').slice(0);
-                    keywords.unshift(data.post.post_tags);
-                    data.seo.keywords = keywords.join(',');
+                if (data.post) {
+
+                    if (data.post.post_tags.length) {
+                        var keywords = data.seo.keywords.split(',').slice(0);
+                        keywords.unshift(data.post.post_tags);
+                        data.seo.keywords = keywords.join(',');
+                    }
+
+                    if (data.post.featured_image && data.post.featured_image.indexOf('//') === 0) {
+                        data.post.featured_image = 'https:' + data.post.featured_image;
+                    }
+
                 }
 
                 data.includeSocial = true;
