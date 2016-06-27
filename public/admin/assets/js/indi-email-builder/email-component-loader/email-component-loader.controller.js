@@ -2,9 +2,9 @@
 
     app.controller('EmailBuilderComponentLoaderController', emailbComponentLoaderController);
 
-    emailbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter'];
+    emailbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$timeout'];
     /* @ngInject */
-    function emailbComponentLoaderController($rootScope, $scope, $attrs, $filter) {
+    function emailbComponentLoaderController($rootScope, $scope, $attrs, $filter, $timeout) {
 
         console.info('component-loader directive init...');
 
@@ -21,7 +21,7 @@
         function hoverFn(e) {}
 
         function clickFn(e) {
-            $('.email-component').froalaEditor('destroy');
+//            $('.email-component').froalaEditor('destroy');
             $(vm.selector).froalaEditor(vm.froalaConfig);
         }
 

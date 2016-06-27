@@ -73,6 +73,7 @@
         vm.addComponentFn = addComponentFn;
         vm.componentClassFn = componentClassFn;
         vm.componentStyleFn = componentStyleFn;
+        vm.saveFn = saveFn;
 
         vm.enabledComponentTypes = _.where(vm.componentTypes, {
             enabled: true
@@ -276,6 +277,11 @@
             }
 
             return styleString;
+        }
+
+        function saveFn() {
+            console.log(vm.email);
+            toaster.pop('success', 'Email saved');
         }
 
         function init(element) {
