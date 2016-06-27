@@ -15,7 +15,7 @@
     </style>
 
     <div
-        ng-if="vm.section.bg && !(vm.section.bg.img && vm.section.bg.img.parallax)"
+        ng-if="vm.section.bg && !(vm.section.bg.img.show && vm.section.bg.img && vm.section.bg.img.parallax)"
         class="bg {{vm.sectionBGClass(vm.section)}}"
         ng-attr-style="{{vm.sectionBGStyle(vm.section)}}">
     </div>
