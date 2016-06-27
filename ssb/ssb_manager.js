@@ -1955,43 +1955,6 @@ module.exports = {
                         cb(err, updatedPage, updatedSections, section);
                     }
                 });
-            },
-            function updateBlogPages(updatedPage, updatedSections, globalHeader, cb) {
-                /*
-                 * Find blog-list and blog-post
-                 * set the first section to be globalHeader.id()
-                 * update
-                 */
-
-                //Why do we need this?
-                cb(null, updatedPage, updatedSections);
-                /*
-                self.log.debug('\n\nupdateBlogPages - globalHeader:', globalHeader);
-                pageDao.findMany({accountId:accountId, handle: {$in: ['blog-list', 'blog-post']}, latest: true}, $$.m.ssb.Page, function(err, pages){
-                    if(err || !pages) {
-                        self.log.error('Error finding blog pages:', err);
-                        cb(err);
-                    } else if(pages.length != 2) {
-                        self.log.warn('Need to add 1 or more blog pages.');
-                        //TODO: this
-                        cb(err, updatedPage, updatedSections);
-                    } else {
-                        if(globalHeader) {
-                            async.eachSeries(pages, function(page, callback){
-                                var sections = page.get('sections');
-                                sections[0]._id = globalHeader.id();
-                                pageDao.saveOrUpdate(page, callback);
-                            }, function(err){
-                                cb(err, updatedPage, updatedSections);
-                            });
-                        } else {
-                            self.log.warn('GlobalHeader is null');
-                            cb(err, updatedPage, updatedSections);
-                        }
-
-                    }
-                });
-                */
             }
 
         ], function done(err, updatedPage, updatedSections){
@@ -3626,52 +3589,8 @@ module.exports = {
                 self.log.error('could not find account with id: ' + accountId);
                 return fn('Could not find account with id: ' + accountId, null);
             }
-            var _status = value.get("showhide").blog;
+            var _status = value.get("showhide").blog && value.get("showhide").ssbBlog;
             async.waterfall([
-                // function getBlogPage(cb){
-                //     var query = {
-                //         accountId:accountId,
-                //         latest:true,
-                //         handle: 'blog'
-                //     };
-
-                //     pageDao.findOne(query, $$.m.ssb.Page, function(err, page){
-                //         if(err) {
-                //             self.log.error(accountId, userId, 'Error finding website:', err);
-                //             cb(err);
-                //         } else {
-                //             cb(null, page);
-                //         }
-                //     })
-                // },
-                // function addRemoveLinkToNav(cb){
-                //     self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
-                //         if(err) {
-                //             self.log.error(accountId, userId, 'Error getting website linklists by handle: ' + err);
-                //             cb(err);
-                //         } else {
-                //             var link={
-                //                 label: page.get('menuTitle') || page.get('title'),
-                //                 type: "link",
-                //                 linkTo: {
-                //                     type:"page",
-                //                     data:page.get('handle')
-                //                 }
-                //             };
-
-                //             list.links.push(link);
-                //             self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
-                //                 if(err) {
-                //                     self.log.error(accountId, userId, 'Error updating website linklists by handle: ' + err);
-                //                     cb(err);
-                //                 } else {
-                //                     self.log.debug(accountId, userId, '<< createPage');
-                //                     cb();
-                //                 }
-                //             });
-                //         }
-                //     });
-                // },
                 function publishBlogPages(cb){
                     var query = {
                         accountId:accountId,
@@ -3686,18 +3605,12 @@ module.exports = {
                         } else {
                             if(pages && pages.length){
                                 async.eachSeries(pages, function(page, callback){
-                                    page.set('published', {date:new Date(), by: userId});
                                     if(_status){
-                                        pageDao.savePublishedPage(page, function(err, publishedPage){
+                                        self.publishPage(accountId, page.id(), userId, function(err, publishedPage){
                                             if(err) {
                                                 self.log.error(accountId, userId,'Error publishing page:', err);
                                                 cb(err);
                                             } else {
-                                                pageCacheManager.updateS3Template(accountId, null, page.id(), function(err, value){
-                                                    if (err) {
-                                                        self.log.error(accountId, userId,'Error on s3 template update in savePage:', err);
-                                                    }
-                                                });
                                                 callback();
                                             }
                                         });
@@ -3728,9 +3641,7 @@ module.exports = {
                             }
                         }
                     })
-
                 }
-
 
             ], function done(err){
                 if(err) {
