@@ -152,19 +152,19 @@
         function componentClassFn(component, index) {
             var classString = 'container-fluid ';
 
-            if (vm.section.layout === 'email-1-col') {
+            if (component.type === 'email-1-col') {
                 // classString += 'col-sm-12 ';
             }
 
-            if (vm.section.layout === 'email-2-col') {
+            if (component.type === 'email-2-col') {
                 classString += ' col-md-6 ';
             }
 
-            if (vm.section.layout === 'email-3-col') {
+            if (component.type === 'email-3-col') {
                 classString += ' col-md-4 ';
             }
 
-            if (vm.section.layout === 'email-4-col') {
+            if (component.type === 'email-4-col') {
                 classString += ' col-md-3';
             }
 
@@ -219,15 +219,15 @@
                 }
 
                 if (component.spacing.ml) {
-                    styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
+                    styleString += component.spacing.ml === 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
                 }
 
                 if (component.spacing.mr) {
-                    styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
+                    styleString += (component.spacing.mr === 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
                 }
 
                 if (component.spacing.mw) {
-                    styleString += (component.spacing.mw == '100%') ?
+                    styleString += (component.spacing.mw === '100%') ?
                             'max-width: ' + component.spacing.mw + ';' :
                             'max-width: ' + component.spacing.mw + 'px;margin:0 auto!important;';
                 }
@@ -302,6 +302,7 @@
                         vm.email = res.data;
                         vm.dataLoaded = true;
                     }, function (err) {
+                        console.error(err);
                         $state.go('app.emails');
                     });
         }
