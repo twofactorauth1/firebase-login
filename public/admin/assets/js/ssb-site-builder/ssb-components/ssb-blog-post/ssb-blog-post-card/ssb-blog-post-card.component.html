@@ -32,10 +32,10 @@
                 <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
                     {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
                 </time>
+                <i class="fa fa-user margin-left-10"></i>
                 <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-                    <i class="fa fa-user"></i>
                     <span itemprop="name">
-                        <a class="btn btn-link ssb-theme-btn" href="/author/{{vm.post.post_author}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                        <a class="btn btn-link ssb-theme-btn padding-top-0" href="/author/{{vm.post.post_author}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
                     </span>
                 </span>
             </div>
