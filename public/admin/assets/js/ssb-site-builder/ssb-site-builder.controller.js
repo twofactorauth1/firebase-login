@@ -382,8 +382,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     var unbindPlatformSectionWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
-      vm.state.platformSections = sections;
-      unbindPlatformSectionWatcher();
+      if(sections){
+        vm.state.platformSections = sections;
+        unbindPlatformSectionWatcher();
+      }
+
     }, true);
 
     var unbindUserSectionWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.userSections }, function(sections) {
