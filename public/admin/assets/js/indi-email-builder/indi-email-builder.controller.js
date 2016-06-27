@@ -279,7 +279,14 @@
         }
 
         function saveFn() {
-            console.log(vm.email);
+            vm.dataLoaded = false;
+            vm.email.components.forEach(function (component, index) {
+                var selector = '#email-component_' + component._id;
+                if ($(selector).data('froala.editor')) {
+                    var html = $(selector).froalaEditor('html.get', true);
+                    vm.email.components[index].text = html;
+                }
+            });
             toaster.pop('success', 'Email saved');
         }
 
