@@ -1,0 +1,7 @@
+<div id='email-component_{{vm.component._id}}' 
+     class='email-component email-{{vm.component.type}} {{vm.componentClass(vm.component)}}' 
+     style='{{vm.componentStyle(vm.component)}}' 
+     ng-mouseenter='vm.hoverFn($event)'
+     ng-click='vm.clickFn($event)'
+    ng-bind-html='vm.component.text'>
+</div>

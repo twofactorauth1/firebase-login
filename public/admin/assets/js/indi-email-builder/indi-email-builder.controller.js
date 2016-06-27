@@ -74,9 +74,6 @@
         vm.componentClassFn = componentClassFn;
         vm.componentStyleFn = componentStyleFn;
 
-        vm.froalaConfig = angular.copy($.FroalaEditor.config);
-        _.extend(vm.froalaConfig, {toolbarInline: false, scrollableContainer: '#email-froala-scrollable-container', placeholderText: 'Type your email here'});
-
         vm.enabledComponentTypes = _.where(vm.componentTypes, {
             enabled: true
         });
@@ -283,7 +280,6 @@
 
         function init(element) {
             vm.element = element;
-            vm.element.find('#email-froala-editor').froalaEditor(vm.froalaConfig);
 
             AccountService.getAccount(function (data) {
                 vm.account = data;
