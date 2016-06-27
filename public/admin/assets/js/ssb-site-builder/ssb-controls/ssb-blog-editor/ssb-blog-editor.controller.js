@@ -304,13 +304,35 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             }
 
             if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
-                if (!angular.equals(compareNewValue, compareOldValue)) {
+                if (!equalPosts(compareNewValue, compareOldValue)) {
                     vm.state.pendingBlogChanges = true;
                 } else {
                     vm.state.pendingBlogChanges = false;
                 }
             }
         }
+
+    }
+
+    function equalPosts(compareNewValue, compareOldValue) {
+
+        var equal = angular.equals(compareNewValue, compareOldValue);
+
+        if (!equal) {
+
+            var deepDiff = DeepDiff(compareNewValue, compareOldValue);
+            var filterIgnoredDiff = deepDiff.filter(function(diff) {
+                var equalPostTags = (diff.lhs && diff.rhs && (diff.lhs.text === diff.rhs || diff.lhs === diff.rhs.text));
+                return equalPostTags;
+            });
+
+            if (deepDiff.length === filterIgnoredDiff.length) {
+                equal = true;
+            }
+
+        }
+
+        return equal;
 
     }
 

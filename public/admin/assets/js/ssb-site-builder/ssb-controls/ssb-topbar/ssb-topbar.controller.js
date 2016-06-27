@@ -182,20 +182,26 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
 
     function closeBlogPanel() {
         if (vm.state.pendingBlogChanges) {
-            vm.savePost().then(function() {
-                $rootScope.$broadcast('$destroyFroalaInstances');
-                $timeout(function() {
-                    vm.uiState.openBlogPanel = { name: '', id: '' };
-                    vm.uiState.openSidebarPanel = '';
-                }, 500);
-            });
+            vm.savePost().then(cleanBlogPanel);
+        } else {
+            cleanBlogPanel();
         }
     }
 
     function backBlogPanel() {
         if (vm.state.pendingBlogChanges) {
             vm.savePost().then(vm.uiState.navigation.blogPanel.back);
+        } else {
+            vm.uiState.navigation.blogPanel.back();
         }
+    }
+
+    function cleanBlogPanel() {
+        $rootScope.$broadcast('$destroyFroalaInstances');
+        $timeout(function() {
+            vm.uiState.openBlogPanel = { name: '', id: '' };
+            vm.uiState.openSidebarPanel = '';
+        }, 500);
     }
 
     function savePost(post, suppressToaster) {
