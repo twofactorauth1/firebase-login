@@ -529,6 +529,8 @@ _.extend(view.prototype, BaseView.prototype, {
                         data.post.featured_image = 'https:' + data.post.featured_image;
                     }
 
+                    data.fullUrl = self._req.protocol + '://' + self._req.host + self._req.originalUrl;
+
                 }
 
                 data.includeSocial = true;
