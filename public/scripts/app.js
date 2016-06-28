@@ -98,7 +98,7 @@ var mainApp = angular
             .when('/author/:author', {
                 template: function(urlattr) {
                     if(window.indigenous.ssbBlog === true) {
-                        return '<div data-ng-include="\'blog.html\'"></div>';
+                        return '<div class="blog-list-author" data-ng-include="\'blog.html\'"></div>';
                     } else {
                         var s = '<div data-ng-include="';
                         s += " '/template/blog";
@@ -116,7 +116,7 @@ var mainApp = angular
             .when('/tag/:tag', {
                 template: function(urlattr) {
                     if(window.indigenous.ssbBlog === true) {
-                        return '<div data-ng-include="\'blog.html\'"></div>';
+                        return '<div class="blog-list-tag" data-ng-include="\'blog.html\'"></div>';
                     } else {
                         var s = '<div data-ng-include="';
                         s += " '/template/blog";
