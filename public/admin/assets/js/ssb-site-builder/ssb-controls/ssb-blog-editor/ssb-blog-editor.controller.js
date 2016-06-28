@@ -216,7 +216,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     function savePost(post, suppressToaster) {
         var post = post || vm.state.post;
 
-        if (!post || !isValidPost()) {
+        if (!post || !isValidPost(post)) {
             return SimpleSiteBuilderService.returnInvalidPost();
         }
 
@@ -241,8 +241,13 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         });
     }
 
-    function isValidPost(){
-        return vm.state.post && vm.state.post.post_title;
+    function isValidPost(post){
+        if(post){
+            return post.post_title;
+        }
+        else{
+            return vm.state.post && vm.state.post.post_title;
+        }
     }
 
     function slugifyHandle(title){
