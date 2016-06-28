@@ -45,6 +45,7 @@ module.exports = {
         self.log.debug('Receiver:', receiver);
         payload.receiverList.receiver.push(receiver);
         self.log.debug('Sending:', payload);
+        self.log.debug('Sandbox?', config.PAYPAL_SANDBOX);
         paypalSdk.pay(payload, function (err, response) {
             if (err) {
                 self.log.error('Error creating payment:', err);
