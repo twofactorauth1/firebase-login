@@ -348,8 +348,6 @@ module.exports = {
                         self.log.error(accountId, userId, 'Error finding global sections:', err);
                         cb(err);
                     } else {
-                        //var latestSections = self.getLatestSections(gsections);
-
                         cb(null, website, theme, template, sections, header, footer, gsections);
                     }
                 });
@@ -1787,16 +1785,25 @@ module.exports = {
                     }
                 });
             },
+
             function updateLists(existingPage, updatedPage, updatedSections, pages, cb){
                 self.log.info('updateLinkList');
                 checkTime = moment();
                 timingLog.warn('updateLinkList: ' + checkTime.diff(startTime));
                 startTime = checkTime;
                 // Ensure that blog list and blog-post should never show in nav
-                if(updatedPage.get("handle") === 'blog-list' || updatedPage.get("handle") === 'blog-post'){
+                if(updatedPage.get("handle") === 'blog-post'){
                     cb(null, updatedPage, updatedSections);
                 }
                 else{
+                    var _existingHandle = existingPage.get("handle");
+                    var _updatedHandle = updatedPage.get("handle");
+                    if(_existingHandle === 'blog-list'){
+                        _existingHandle = 'blog';
+                    }
+                    if(_updatedHandle === 'blog-list'){
+                        _updatedHandle = 'blog';
+                    }
                     if (updatedPage.get('mainmenu') === false) {
                         self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                             if (err) {
@@ -1804,7 +1811,7 @@ module.exports = {
                                 cb(err);
                             } else {
                                 if(list && list.links){
-                                    self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), false, function(err, updatedList){
+                                    self.getUpdatedWebsiteLinkList(list, _existingHandle, false, function(err, updatedList){
                                         list = updatedList;
                                     });
                                 }
@@ -1838,7 +1845,7 @@ module.exports = {
                                 var _exists = false;
                                 list.links = _(list.links).chain()
                                     .map(function(link){
-                                        if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
+                                        if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === _existingHandle){
                                             // check if menu title exists
                                             var _label = updatedPage.get('menuTitle');
                                             // check if menu title not exists and page title is changed
@@ -1846,11 +1853,11 @@ module.exports = {
                                                 _label = updatedPage.get('title');
                                             }
                                             link.label = _label;
-                                            link.linkTo.data = updatedPage.get("handle");
+                                            link.linkTo.data = _updatedHandle;
                                             _exists = true;
                                         }
-                                        else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){
-                                            link.linkTo.page = updatedPage.get("handle");
+                                        else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === _existingHandle){
+                                            link.linkTo.page = _updatedHandle;
                                         }
                                         return link
                                     })
@@ -1877,7 +1884,7 @@ module.exports = {
                                         type: "link",
                                         linkTo: {
                                             type:"page",
-                                            data:page.get('handle')
+                                            data:page.get('handle') === 'blog-list' ? 'blog': page.get('handle')
                                         }
                                     };
                                     list.links.push(link);
@@ -3344,49 +3351,6 @@ module.exports = {
 
         return page;
 
-    },
-
-    getLatestSections: function(sections) {
-        var self = this;
-        var tmp = {};
-        var latest = [];
-        var oldVersionsOnPages = [];
-
-        sections.forEach(function(section) {
-            var sectionIdWithoutVersion = section.id();
-            var lastIndex = section.id().lastIndexOf('_');
-            var version = '';
-            if (lastIndex !== -1) {
-                version = parseInt(section.id().slice(lastIndex+1));
-                sectionIdWithoutVersion = section.id().replace('_' + version, '');
-            }
-            tmp[sectionIdWithoutVersion] = tmp[sectionIdWithoutVersion] || [];
-            tmp[sectionIdWithoutVersion].push(version);
-        });
-
-        Object.keys(tmp).forEach(function(sectionId) {
-            var arr;
-            arr = tmp[sectionId].filter(function(version, index, self){
-                return self.indexOf(version) === index;
-            });
-            arr.sort(function(a, b) {
-                return b - a;
-            });
-            arr.shift();
-            arr.forEach(function(version){
-                if (version === '') {
-                    oldVersionsOnPages.push(sectionId);
-                } else {
-                    oldVersionsOnPages.push(sectionId + '_' + version);
-                }
-            });
-        });
-
-        latest = sections.filter(function(section) {
-            return oldVersionsOnPages.indexOf(section.id()) === -1;
-        });
-
-        return latest;
     },
 
     /**

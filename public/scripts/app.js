@@ -217,12 +217,14 @@ var mainApp = angular
             return $rootScope.title;
         };
 
+
         $rootScope.$on("$routeChangeStart", function (scope, next, current) {
             var self = this;
         });
 
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
-            // $rootScope.transitionState = "active";
+
+            $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
 
             analyticsService.pageStart(function () {
                 var editorIndex = window.location.search.indexOf("editor=true");

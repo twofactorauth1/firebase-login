@@ -13,14 +13,20 @@
 
 .ssb-blog-featured-slider {
 
-    @media screen and (max-width: 991px) {
-        margin-top: 30px;
+    @media screen and (min-width: 991px) {
+        margin-top: 50px;
     }
 
     .slick-slide {
         position: relative;
+        height: 56.25vw;
+        max-height: 309px;
+        background-color: rgba(0,0,0,.4)!important;
+
         @media screen and (min-width: 992px) {
-            height: 309px;
+            height: auto;
+            min-height: 309px;
+            max-height: 500px;
         }
     }
 
@@ -28,17 +34,50 @@
         margin: 0;
     }
 
+    .ssb-media-left {
+        min-height: 56.25vw;
+        max-height: 500px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+
+        @media screen and (min-width: 992px) {
+            min-height: 309px;
+            max-height: 500px;
+        }
+
+        img {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: auto;
+            transform: translateY(-50%);
+        }
+
+    }
+
+    .ssb-media-body {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 0;
+        width: 100%;
+        text-align: center;
+
+        h1 {
+            width: 80%;
+        }
+    }
+
+    .media-heading {
+        display: inline-block;
+    }
+
     .ssb-blog-byline,
     .ssb-blog-post-body {
         display: none;
-    }
-
-    .ssb-media .img-responsive {
-        @media screen and (min-width: 992px) {
-            position: absolute;
-            width: 100%;
-            top: 0;
-        }
     }
 
     .media-heading .ssb-theme-btn {
@@ -55,17 +94,10 @@
         }
     }
 
-    .ssb-media-body {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-    }
-
     .slick-dots{
         z-index: 1;
-        bottom: 50px !important;
         margin: 0 !important;
+
         li button:before{
             opacity: 0.6;
             color: #FFF;
@@ -96,11 +128,10 @@
 
             img {
                 position: absolute;
-                top: 50%;
+                top: 0;
                 left: 0;
                 width: 100%;
                 z-index: 100;
-                transform: translateY(-50%);
             }
         }
 
