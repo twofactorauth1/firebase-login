@@ -36,6 +36,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isBlogEditWritingMode = isBlogEditWritingMode;
     vm.saveAndLoadPage = saveAndLoadPage;
     vm.openPageSettingsModal = openPageSettingsModal;
+    vm.isDuplicateGlobalHeader = isDuplicateGlobalHeader;
     // vm.checkStateNavigation = checkStateNavigation;
     vm.checkPageNavigation = checkPageNavigation;
     vm.savePost = savePost;
@@ -73,6 +74,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 if(vm.uiState.draggedSection)
                     SimpleSiteBuilderService.getSection(vm.uiState.draggedSection, vm.uiState.draggedSection.version || 1).then(function(response) {
                         if (response) {
+                            response = SimpleSiteBuilderService.checkAndSetGlobalHeader(response);
                             vm.state.page.sections[evt.newIndex] = response;
                         }
                     });
@@ -142,7 +144,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         openPageSettingsModal: vm.openPageSettingsModal,
 
-        checkIfBlogPage: vm.isBlogPage
+        checkIfBlogPage: vm.isBlogPage,
+
+        isDuplicateGlobalHeader: false
 
     };
 
@@ -537,9 +541,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.accordion.sections[index] = { components: {} };
             vm.uiState.accordion.sections[index].isOpen = true;
+            vm.uiState.isDuplicateGlobalHeader = SimpleSiteBuilderService.checkDuplicateGlobalHeader(vm.state.page.sections[index]);
         } else {
             vm.uiState.activeSectionIndex = undefined;
             vm.uiState.activeComponentIndex = undefined;
+            vm.uiState.isDuplicateGlobalHeader = false;
         }
 
     }
@@ -1047,6 +1053,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         angular.element('.sp-container').addClass('sp-hidden');
       });
 
+    }
+
+    function isDuplicateGlobalHeader(section){
+        return SimpleSiteBuilderService.checkDuplicateGlobalHeader(section);
     }
 
     function savePost(post) {

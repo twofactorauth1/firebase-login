@@ -84,7 +84,8 @@
         ssbService.getBlogListPage = getBlogListPage;
         ssbService.getBlogPostPage = getBlogPostPage;
         ssbService.returnInvalidPost = returnInvalidPost;
-
+        ssbService.checkAndSetGlobalHeader = checkAndSetGlobalHeader;
+        ssbService.checkDuplicateGlobalHeader = checkDuplicateGlobalHeader;
 
         /**
          * This represents the category sorting for the add content panel
@@ -446,12 +447,12 @@
          */
         function successPage(data) {
             var page = transformComponentsToSections(data);
-      console.log("page loaded");
-          ssbService.page = page;
-          // Refresh page list with updated page
-          if(ssbService.pages && ssbService.pages[page.handle]){
+            console.log("page loaded");
+            ssbService.page = page;
+            // Refresh page list with updated page
+            if(ssbService.pages && ssbService.pages[page.handle]){
               ssbService.pages[page.handle] = page;
-          }
+            }
         }
 
         /**
@@ -953,7 +954,7 @@
             if (!ssbService.page.sections) {
                 ssbService.page.sections = [];
             } else {
-                hasHeader = pageHasHeader(ssbService.pages.sections);
+                //hasHeader = pageHasHeader(ssbService.page.sections);
                 hasFooter = pageHasFooter(ssbService.page.sections);
                 console.debug(hasFooter);
             }
@@ -976,6 +977,7 @@
                             ssbService.setActiveComponent(null);
                         } else {
                             // Set unique _id's for section and component.
+                            response = checkAndSetGlobalHeader(response);
                             var insertSection = ssbService.setTempUUIDForSection(response);
                             ssbService.page.sections.splice(insertAt, 0, insertSection);
                             ssbService.setActiveSection(insertAt);
@@ -989,7 +991,7 @@
                 });
 
             } else {
-
+                section = checkAndSetGlobalHeader(section);
                 ssbService.page.sections.splice(copyAtIndex, 0, section);
                 ssbService.setActiveSection(copyAtIndex);
                 deferred.resolve();
@@ -1154,14 +1156,20 @@
 
         }
 
+        function getGlobalHeaders(sections){
+            return _.filter(sections, function(section){
+                return (section.globalHeader === true || section.title === "Header") && section.global === true
+            })
+        }
+
         /*
          * Determine if page has a header
-         * - TODO: implement if needed
          *
          *
          */
         function pageHasHeader(sections) {
-            return false
+            var match = getGlobalHeaders(sections);
+            return match.length !== 0;
         }
 
         /*
@@ -1185,6 +1193,33 @@
             });
 
             return match.length !== 0
+        }
+
+
+        /*
+         * Determine if section is a header
+         *
+         */
+        function isHeaderSection(section) {
+            return (section.globalHeader === true || section.title === "Header") && section.global === true;
+        }
+
+        function checkAndSetGlobalHeader(section){
+            if(isHeaderSection(section) && pageHasHeader(ssbService.page.sections)){
+                section.global = false;
+            }
+            return section;
+        }
+
+        function checkDuplicateGlobalHeader(section){
+            var _duplicate = false;
+            if(section.globalHeader === true || section.title === "Header"){
+               var globalHeaders = getGlobalHeaders(ssbService.page.sections);
+               if(globalHeaders && globalHeaders.length && globalHeaders.indexOf(section) === -1){
+                    _duplicate = true;
+               }
+            }
+            return _duplicate;
         }
 
         /*
