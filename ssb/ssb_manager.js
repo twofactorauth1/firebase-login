@@ -1797,7 +1797,7 @@ module.exports = {
                 if(updatedPage.get("handle") === 'blog-post'){
                     cb(null, updatedPage, updatedSections);
                 }
-
+                else{
                     var _existingHandle = existingPage.get("handle");
                     var _updatedHandle = updatedPage.get("handle");
                     if(_existingHandle === 'blog-list'){
@@ -1903,6 +1903,7 @@ module.exports = {
                             }
                         });
                     }
+                }
 
             },
 
