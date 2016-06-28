@@ -996,7 +996,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           // Suppress blog post and blog list pages
 
           allPages = allPages.filter(function(page) {
-            return page.handle !== 'blog-list' && page.handle !== 'blog-post'
+            return page.handle !== 'blog-list' && page.handle !== 'blog-post' && page.handle !== 'single-post' && page.handle !== 'coming-soon'
           })
 
           $scope.allPages = angular.copy(allPages);
