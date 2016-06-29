@@ -2,9 +2,9 @@
 
   app.controller('EmailBuilderController', indiEmailBuilderController);
 
-  indiEmailBuilderController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document'];
+  indiEmailBuilderController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window'];
   /* @ngInject */
-  function indiEmailBuilderController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document) {
+  function indiEmailBuilderController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window) {
 
     console.info('email-builder directive init...');
 
@@ -75,6 +75,8 @@
     vm.componentClassFn = componentClassFn;
     vm.componentStyleFn = componentStyleFn;
     vm.saveFn = saveFn;
+    vm.insertMediaFn = insertMediaFn;
+    vm.clickImageButton = clickImageButton;
 
     vm.enabledComponentTypes = _.where(vm.componentTypes, {
       enabled: true
@@ -99,14 +101,75 @@
       'lowercase': 'all'
     });
 
-    function openModalFn(modalId) {
-      vm.modalInstance = $modal.open({
-        templateUrl: modalId,
-        keyboard: true,
-        size: 'lg',
-        scope: $scope
+    function openModalFn(modal, controller, index, size) {
+      console.log('openModal >>> ', modal, controller, index, size);
+      var _modal = {
+        templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
+        size: 'md',
+        scope: $scope,
+        resolve: {
+          components: function () {
+            return vm.email && vm.email.components ? vm.email.components : [];
+          }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller;
+
+        _modal.resolve.contactMap = function () {
+          return {};
+        };
+        _modal.resolve.website = function () {
+          return vm.website;
+        };
+
+        _modal.resolve.showInsert = function () {
+          return true;
+        };
+
+        _modal.resolve.insertMedia = function () {
+          return vm.insertMediaFn;
+        };
+
+        _modal.resolve.openParentModal = function () {
+          return vm.openModalFn;
+        };
+
+        _modal.resolve.accountShowHide = function () {
+          return vm.account.showhide;
+        };
+        _modal.resolve.isEmail = function () {
+          return true;
+        };
+
+        _modal.resolve.isSingleSelect = function () {
+          return true;
+        };
+      }
+
+      if (angular.isDefined(index) && index !== null && index >= 0) {
+        $scope.setEditingComponent(index);
+        _modal.resolve.clickedIndex = function () {
+          return index;
+        };
+
+        _modal.resolve.pageHandle = function () {
+          return $scope.page ? $scope.page.handle : null;
+        };
+      }
+
+      if (size) {
+        _modal.size = size;
+      }
+      vm.modalInstance = $modal.open(_modal);
+      vm.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
       });
     }
+
 
     function closeModalFn() {
       if (vm.modalInstance) {
@@ -287,6 +350,25 @@
           toaster.pop('success', 'Email saved');
         });
     }
+
+    $window.clickandInsertImageButton = function (editor) {
+      console.log('clickandInsertImageButton >>> ');
+      vm.clickImageButton(editor, false);
+    };
+
+    function clickImageButton(editor, edit) {
+      $scope.insertMediaImage = true;
+      $scope.showInsert = true;
+      $scope.inlineInput = editor;
+      $scope.isEditMode = edit;
+      vm.openModalFn('media-modal', 'MediaModalCtrl', null, 'lg');
+    }
+    ;
+
+    function insertMediaFn(asset) {
+      console.log(asset);
+    }
+    ;
 
     function init(element) {
       vm.element = element;
