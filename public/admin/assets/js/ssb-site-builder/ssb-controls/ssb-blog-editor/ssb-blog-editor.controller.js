@@ -57,9 +57,9 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.state.post = angular.copy(vm.defaultPost);
     }
 
-    $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
-        if (id === 'edit' && !vm.uiState.froalaEditorActive) {
-            // $timeout(vm.activateFroalaToolbar);
+    $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], function(id) {
+        if (vm.state.post && vm.state.pendingBlogChanges) {
+            vm.savePost();
         }
     }, true);
 
