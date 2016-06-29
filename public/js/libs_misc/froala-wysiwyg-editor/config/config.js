@@ -208,8 +208,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
     }
 
     if (type === 'ssbEmailEditor') {
-        debugger;
-        //TODO: jaideep to configure email
+        _.extend($.FroalaEditor.config, {toolbarInline: false, scrollableContainer: '#email-froala-scrollable-container',  toolbarContainer: '#email-froala-container', placeholderText: 'Type your email here'});
     }
 
     console.debug('called $.FroalaEditor.build', type);
