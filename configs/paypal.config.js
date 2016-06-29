@@ -27,6 +27,9 @@ var realSig = 'A3B-XY1YH2mVmpxut0JgN3TxM.FrAEkGvbCO9E4HhaLzYxnG-h-3Z84L';
 var realUrl = 'https://www.paypal.com/webapps/adaptivepayment/flow/pay';
 var realApplicationID = 'APP-10L3791004814583C';
 
+
+var prodPaypalCheckoutUrl = 'https://www.paypal.com/webapps/adaptivepayment/flow/pay';
+
 module.exports = {
 
     PAYPAL_CLIENT_ID : paypalClientID,
@@ -36,7 +39,9 @@ module.exports = {
     PAYPAL_API_SIGNATURE : paypalAPISignature,
     PAYPAL_CHECKOUT_URL : paypalCheckoutURL,
     PAYPAL_SANDBOX : paypalIsSandbox,
-    PAYPAL_APP_ID : paypalApplicationID
+    PAYPAL_APP_ID : paypalApplicationID,
+
+    PROD_PAYPAL_CHECKOUT_URL: prodPaypalCheckoutUrl
 
 
 }
