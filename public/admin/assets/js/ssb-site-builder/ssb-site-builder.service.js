@@ -977,8 +977,8 @@
                             ssbService.setActiveComponent(null);
                         } else {
                             // Set unique _id's for section and component.
-                            response = checkAndSetGlobalHeader(response);
-                            var insertSection = ssbService.setTempUUIDForSection(response);
+                            var _section = checkAndSetGlobalHeader(response);
+                            var insertSection = ssbService.setTempUUIDForSection(_section);
                             ssbService.page.sections.splice(insertAt, 0, insertSection);
                             ssbService.setActiveSection(insertAt);
                             ssbService.setActiveComponent(null);
@@ -1215,8 +1215,9 @@
             var _duplicate = false;
             if(section.globalHeader === true || section.title === "Header"){
                var globalHeaders = getGlobalHeaders(ssbService.page.sections);
-               if(globalHeaders && globalHeaders.length && globalHeaders.indexOf(section) === -1){
-                    _duplicate = true;
+               if(globalHeaders && globalHeaders.length){
+                    var _index = _.findIndex(globalHeaders, { _id: section._id });
+                    _duplicate = _index === -1;
                }
             }
             return _duplicate;

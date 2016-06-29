@@ -36,7 +36,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isBlogEditWritingMode = isBlogEditWritingMode;
     vm.saveAndLoadPage = saveAndLoadPage;
     vm.openPageSettingsModal = openPageSettingsModal;
-    vm.isDuplicateGlobalHeader = isDuplicateGlobalHeader;
     // vm.checkStateNavigation = checkStateNavigation;
     vm.checkPageNavigation = checkPageNavigation;
     vm.savePost = savePost;
@@ -1053,10 +1052,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         angular.element('.sp-container').addClass('sp-hidden');
       });
 
-    }
-
-    function isDuplicateGlobalHeader(section){
-        return SimpleSiteBuilderService.checkDuplicateGlobalHeader(section);
     }
 
     function savePost(post) {
