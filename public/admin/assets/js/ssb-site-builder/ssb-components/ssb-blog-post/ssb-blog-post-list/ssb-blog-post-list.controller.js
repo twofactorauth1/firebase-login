@@ -12,26 +12,36 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     vm.init = init;
     vm.initData = initData;
+    vm.hasFeaturedPosts = false;
 
     vm.blog = SimpleSiteBuilderBlogService.blog;
+
+    $scope.$watchCollection('vm.blog.posts', function(newValue) {
+        if (newValue) {
+            $timeout(function () {
+                $scope.$broadcast('$refreshSlickSlider');
+            }, 2000)
+            checkHasFeaturedPosts();
+        }
+    });
 
     function initData() {
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
         if (posts) {
             vm.blog.posts = posts;
+            checkHasFeaturedPosts();
         }
     }
 
-    $scope.$watchCollection('vm.blog.posts', function(newValue) {
-        if(newValue)
-            $timeout(function () {
-                $scope.$broadcast('$refreshSlickSlider');
-            }, 2000)
-    })
+    function checkHasFeaturedPosts() {
+        vm.hasFeaturedPosts = vm.blog.posts.filter(function(post){ return post.featured; }).length;
+    }
 
     function init(element) {
 
     	vm.element = element;
+
+        checkHasFeaturedPosts();
 
         if (!vm.blog.posts.length) {
             vm.initData();
