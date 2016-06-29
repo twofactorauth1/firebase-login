@@ -367,7 +367,7 @@ module.exports = function(grunt) {
                         googleBrowserKey: GOOGLE_CONFIG.PROD_BROWSER_KEY,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
                         facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
-                        paypalCheckoutURL: PAYPAL_CONFIG.PAYPAL_CHECKOUT_URL
+                        paypalCheckoutURL: PAYPAL_CONFIG.PROD_PAYPAL_CHECKOUT_URL
                     }
                 }
             }
