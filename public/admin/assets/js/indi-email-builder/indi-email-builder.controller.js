@@ -11,6 +11,7 @@
         var vm = this;
 
         vm.init = init;
+        
         vm.emailId = $stateParams.id;
         vm.dataLoaded = false;
         vm.account = null;
