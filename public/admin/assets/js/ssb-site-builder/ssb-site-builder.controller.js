@@ -847,17 +847,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * - handles temp IDs for buttons inside Froala editor (button was added)
      */
     function dataIsCompiledAdded(diff1, diff2) {
-            var updated =   diff1 &&
-                diff2 &&
-                angular.isDefined(diff1) &&
-                angular.isDefined(diff1.indexOf) &&
-                diff1.indexOf('data-compiled') === -1
-                angular.isDefined(diff2) &&
-                angular.isDefined(diff2.indexOf) &&
-                diff2.indexOf('data-compiled') !== -1
-            if(updated && angular.isDefined(diff1) && angular.isDefined(diff2)){
+            var updated = false;
+
+            if (diff1 && diff2) {
+                updated = angular.isDefined(diff1) &&
+                        angular.isDefined(diff1.indexOf) &&
+                        diff1.indexOf('data-compiled') === -1
+                        angular.isDefined(diff2) &&
+                        angular.isDefined(diff2.indexOf) &&
+                        diff2.indexOf('data-compiled') !== -1;
+            }
+
+            if (updated && angular.isDefined(diff1) && angular.isDefined(diff2)) {
                 updated = angular.equals(diff1, diff2)
             }
+
             return updated;
     };
 
