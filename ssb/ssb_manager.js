@@ -1948,11 +1948,13 @@ module.exports = {
                 checkTime = moment();
                 timingLog.warn('getGlobalHeader: ' + checkTime.diff(startTime));
                 //TODO: fix this to use the findAndOrder
+                // Ensure it fetches latest globalHeader with global = true
                 var query = {
                     $query: {
                        accountId:accountId,
                        globalHeader:true,
-                       latest: true
+                       latest: true,
+                       global: true
                     },
                     $orderby: {
                        'modified.date' : -1
@@ -1967,6 +1969,7 @@ module.exports = {
                     }
                 });
             },
+
             function updateBlogPages(updatedPage, updatedSections, globalHeader, cb) {
                 checkTime = moment();
                 timingLog.warn('updateBlogPages: ' + checkTime.diff(startTime));

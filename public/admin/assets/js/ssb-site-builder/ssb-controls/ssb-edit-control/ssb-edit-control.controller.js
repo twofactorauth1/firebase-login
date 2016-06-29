@@ -222,13 +222,13 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     function duplicateSection(section, index) {
 
         var sectionsArray = vm.state.page.sections;
-        var insertAtIndex = (index > 0) ? (index - 1) : index;
+        var insertAtIndex = (index >= 0) ? (index + 1) : index;
 
         section = SimpleSiteBuilderService.setTempUUIDForSection(section);
 
         section.accountId = 0;
 
-        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, index).then(function() {
+        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, insertAtIndex).then(function() {
             console.log('duplicateSection -> SimpleSiteBuilderService.addSectionToPage')
         }, function(error) {
             console.error('duplicateSection -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
