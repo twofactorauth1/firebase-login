@@ -17,6 +17,9 @@ var paypalApplicationID = process.env.PAYPAL_APP_ID || 'APP-80W284485P519543T';
 if(!paypalIsSandbox) {
     paypalIsSandbox = true;
 }
+if(paypalIsSandbox === 'false') {
+    paypalIsSandbox = false;
+}
 
 var realUserName = 'paypal_api1.indigenous.io';
 var realPassword = '7ZQUHXA6AHBDZ4E5';
