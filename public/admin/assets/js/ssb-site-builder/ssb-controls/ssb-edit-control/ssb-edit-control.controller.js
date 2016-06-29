@@ -222,7 +222,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     function duplicateSection(section, index) {
 
         var sectionsArray = vm.state.page.sections;
-        var insertAtIndex = (index > 0) ? (index - 1) : index;
+        var insertAtIndex = (index > 0) ? (index + 1) : index;
 
         section = SimpleSiteBuilderService.setTempUUIDForSection(section);
 
