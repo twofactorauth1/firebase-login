@@ -981,33 +981,55 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        */
 
         SimpleSiteBuilderService.getPagesWithSections().then(function(pages){
-          var allPages = pages.data;
-          var account = SimpleSiteBuilderService.account;
-          if (!account.showhide.blog) {
-            var _blogPage = _.findWhere(allPages, {
-              handle: 'blog'
-            });
-            if (_blogPage) {
-              var _index = _.indexOf(allPages, _blogPage);
-              allPages.splice(_index, 1);
-            }
-          }
+            var allPages = pages.data;
+            var account = SimpleSiteBuilderService.account;
 
-          // Suppress blog post and blog list pages
+
+          // Suppress blog post and blog pages
 
           allPages = allPages.filter(function(page) {
-            return page.handle !== 'blog-list' && page.handle !== 'blog-post' && page.handle !== 'single-post' && page.handle !== 'coming-soon'
+            return page.handle !== 'blog-post' && page.handle !== 'single-post' && page.handle !== 'coming-soon'
           })
+            // If account blog is disabled then blog link should be suppressed
 
-          $scope.allPages = angular.copy(allPages);
-          $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
-          _.each($scope.filteredPages, function (page) {
-              page.components = getPageComponents(page);
-          })
-          if($scope.linkPage)
-            $scope.currentPage = _.find($scope.filteredPages, function (page) {
-              return page.handle === $scope.linkPage;
+            var _blogListPage = _.findWhere(allPages, {
+                handle: 'blog-list'
             });
+
+            if (!account.showhide.blog) {
+                allPages = allPages.filter(function(page) {
+                    return page.handle !== 'blog-list' && page.handle !== 'blog'
+                })
+            }
+            // If account blog and ssbBlog are enabled then show 'blog-list' not 'blog'
+            else if(account.showhide.blog && account.showhide.ssbBlog && _blogListPage){
+                allPages = allPages.filter(function(page) {
+                    return page.handle !== 'blog'
+                })
+
+                // Make sure 'blog-list' page points to 'blog'
+
+                _blogListPage.handle = 'blog';
+            }
+            // Make sure 'blog-list' page appear only if ssbBlog is true
+            else if(!account.showhide.ssbBlog){
+                allPages = allPages.filter(function(page) {
+                    return page.handle !== 'blog-list'
+                })
+            }
+
+            $scope.allPages = angular.copy(allPages);
+
+
+
+            $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
+            _.each($scope.filteredPages, function (page) {
+                page.components = getPageComponents(page);
+            })
+            if($scope.linkPage)
+                $scope.currentPage = _.find($scope.filteredPages, function (page) {
+                    return page.handle === $scope.linkPage;
+                });
         })
 
       WebsiteService.getEmails(true, function (emails) {

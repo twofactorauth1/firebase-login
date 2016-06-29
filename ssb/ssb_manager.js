@@ -1826,80 +1826,85 @@ module.exports = {
                             }
                         });
                     } else {
-                        self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
-                            if (err) {
-                                self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
-                                cb(err);
-                            } else if(!list){
-                                self.log.debug(accountId, userId,'No link lists for this handle.');
-                                cb(null, updatedPage, updatedSections);
-                            } else {
+                        accountDao.getAccountByID(accountId, function(err, value){
+                            self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                                if (err) {
+                                    self.log.error(accountId, userId,'Error getting website linklists by handle: ' + err);
+                                    cb(err);
+                                } else if(!list){
+                                    self.log.debug(accountId, userId,'No link lists for this handle.');
+                                    cb(null, updatedPage, updatedSections);
+                                } else {
+                                    var pageHandles = pages.map(function(page) {
+                                        if (page.mainmenu || page.mainmenu === undefined) {
+                                            return page.get('handle');
+                                        }
+                                    });
 
-
-                                var pageHandles = pages.map(function(page) {
-                                    if (page.mainmenu || page.mainmenu === undefined) {
-                                        return page.get('handle');
+                                    var _status = value.get("showhide").ssbBlog;
+                                    if(_status && pageHandles.indexOf("blog") === -1){
+                                        pageHandles.push("blog");
                                     }
-                                });
 
-                                var _exists = false;
-                                list.links = _(list.links).chain()
-                                    .map(function(link){
-                                        if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === _existingHandle){
-                                            // check if menu title exists
-                                            var _label = updatedPage.get('menuTitle');
-                                            // check if menu title not exists and page title is changed
-                                            if(!_label){
-                                                _label = updatedPage.get('title');
+                                    var _exists = false;
+                                    list.links = _(list.links).chain()
+                                        .map(function(link){
+                                            if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === _existingHandle){
+                                                // check if menu title exists
+                                                var _label = updatedPage.get('menuTitle');
+                                                // check if menu title not exists and page title is changed
+                                                if(!_label){
+                                                    _label = updatedPage.get('title');
+                                                }
+                                                link.label = _label;
+                                                link.linkTo.data = _updatedHandle;
+                                                _exists = true;
                                             }
-                                            link.label = _label;
-                                            link.linkTo.data = _updatedHandle;
-                                            _exists = true;
-                                        }
-                                        else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === _existingHandle){
-                                            link.linkTo.page = _updatedHandle;
-                                        }
-                                        return link
-                                    })
-                                    .uniq(function(link) {
-                                        return link.linkTo;
-                                    })
-                                    .filter(function(link){
-                                        //only keep pages that exist and are visible in menu
-                                        if(link.linkTo.type === 'section' && link.linkTo.page){
-                                            return _.contains(pageHandles, link.linkTo.page)
-                                        }
-                                        else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
-                                            return _.contains(pageHandles, link.linkTo.data)
-                                        }
-                                        else{
-                                            return true;
-                                        }
-                                    })
-                                    .value(); //return array value
+                                            else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === _existingHandle){
+                                                link.linkTo.page = _updatedHandle;
+                                            }
+                                            return link
+                                        })
+                                        .uniq(function(link) {
+                                            return link.linkTo;
+                                        })
+                                        .filter(function(link){
+                                            //only keep pages that exist and are visible in menu
+                                            if(link.linkTo.type === 'section' && link.linkTo.page){
+                                                return _.contains(pageHandles, link.linkTo.page)
+                                            }
+                                            else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
+                                                return _.contains(pageHandles, link.linkTo.data)
+                                            }
+                                            else{
+                                                return true;
+                                            }
+                                        })
+                                        .value(); //return array value
 
-                                if(!_exists){
-                                    var link = {
-                                        label: page.get('menuTitle') || page.get('title'),
-                                        type: "link",
-                                        linkTo: {
-                                            type:"page",
-                                            data:page.get('handle') === 'blog-list' ? 'blog': page.get('handle')
-                                        }
-                                    };
-                                    list.links.push(link);
-                                }
-
-                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
-                                    if (err) {
-                                        self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
-                                        cb(err);
-                                    } else {
-                                        cb(null, updatedPage, updatedSections);
+                                    if(!_exists){
+                                        var link = {
+                                            label: page.get('menuTitle') || page.get('title'),
+                                            type: "link",
+                                            linkTo: {
+                                                type:"page",
+                                                data:page.get('handle') === 'blog-list' ? 'blog': page.get('handle')
+                                            }
+                                        };
+                                        list.links.push(link);
                                     }
-                                });
-                            }
-                        });
+
+                                    self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                        if (err) {
+                                            self.log.error(accountId, userId,'Error updating website linklists by handle: ' + err);
+                                            cb(err);
+                                        } else {
+                                            cb(null, updatedPage, updatedSections);
+                                        }
+                                    });
+                                }
+                            });
+                        })
                     }
                 }
 
