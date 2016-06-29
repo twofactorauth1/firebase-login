@@ -1,7 +1,5 @@
-<div id='email-component_{{vm.component._id}}' 
-     class='email-component email-{{vm.component.type}} {{vm.componentClass(vm.component)}}' 
-     style='{{vm.componentStyle(vm.component)}}' 
-     ng-mouseenter='vm.hoverFn($event)'
-     ng-click='vm.clickFn($event)'
-    ng-bind-html='vm.component.text'>
-</div>
+<td style="position:relative;background:#ffffff;">
+    <circular passed-options="circleOptions" passed-index="{{vm.componentIndex}}" passed-component="vm.component" passed-component-length="{{vm.componentCount}}" style="z-index:1087" class="circular"></circular>
+    <div ng-include="'/components/email-component-wrap.html'"></div>
+    <div ng-class="{'zee-blur': !vm.component.visibility}"></div>
+</td>

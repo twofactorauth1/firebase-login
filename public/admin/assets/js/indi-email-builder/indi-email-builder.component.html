@@ -128,31 +128,30 @@
         <div class="row">
             <div class="email-builder-main custom-fonts email-theme-{{vm.website.theme.name| slugify}}" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.dataLoaded">
                 <div class='components'>
-                    <ul ng-if="vm.dataLoaded && !vm.email.components.length" class="list-unstyled margin-bottom-0">
-                        <li>
-                            <div class="well empty-page center">
-                                <h1>This Email is Empty.</h1>
-                                <h4>Add some components and start editing!</h4>
-                                <button class="ssb-empty-page-add-btn btn btn-info margin-top-15" ng-click="vm.openModalFn('email-component-modal')">Add Components</button>
-                            </div>
-                            <div class="clearfix mb15"></div>
-                        </li>
-                    </ul>
-
-                    <email-component-loader
-                        ng-if="vm.email.components.length"
-                        ng-repeat="component in vm.email.components track by $index"
-                        component-class="vm.componentClassFn(component, $index)"
-                        component-style="vm.componentStyleFn(component, $index)"
-                        component="component"
-                        website="vm.website"
-                        account="vm.account"
-                        component-index="$index"
-                        >
-                    </email-component-loader>
+                    <table class="device-width email-body" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                        <tr ng-if="vm.dataLoaded && !vm.email.components.length">
+                            <td>
+                                <div class="well empty-page center">
+                                    <h1>This Email is Empty.</h1>
+                                    <h4>Add some components and start editing!</h4>
+                                    <button class="btn btn-info margin-top-15" ng-click="vm.openModalFn('email-component-modal')">Add Component</button>
+                                </div>
+                                <div class="clearfix mb15"></div>
+                            </td>
+                        </tr>
+                        
+                        <tr ng-if="vm.email.components.length" ng-repeat="component in vm.email.components track by $index" class="fragment show-settings {{component.type}}" style="position:relative;" email-component-loader
+                            component-class="vm.componentClassFn(component, $index)"
+                            component-style="vm.componentStyleFn(component, $index)"
+                            component="component"
+                            website="vm.website"
+                            account="vm.account"
+                            component-index="$index"
+                            component-count="vm.email.components.length"
+                         ></tr>
+                    </table>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
