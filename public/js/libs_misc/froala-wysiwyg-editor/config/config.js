@@ -66,6 +66,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             'undo',
             'redo'
         ];
+
     var spectrumColors = [
             ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
             ["#F47998", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
@@ -78,6 +79,12 @@ $.FroalaEditor.build = _.memoize(function(type) {
             ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6", "#9ACCCB", "#E8E7E7", "#000000", "#FFFFFF", "#50C7E8"],
             ["REMOVE"]
     ];
+
+    var insertToolbarButton = function(buttonArray, newItem, beforeItem) {
+        buttonArray.splice(_.findIndex($.FroalaEditor.config.toolbarButtons, function(item) {
+            return item === beforeItem;
+        }), 0, newItem);
+    };
 
     $.FroalaEditor.config = {
         key: 'qENARBFSTb1G1QJg1RA==',
@@ -194,8 +201,10 @@ $.FroalaEditor.build = _.memoize(function(type) {
 
     if (type === 'ssbBlogEditor') {
         $.FroalaEditor.config.imageStyles['img-full-width'] = 'Full Width';
-        // $.FroalaEditor.config.toolbarButtons
-        // TODO: insert blockquote for blog editor
+        insertToolbarButton($.FroalaEditor.config.toolbarButtons, 'quote', 'insertImage');
+        insertToolbarButton($.FroalaEditor.config.toolbarButtonsMD, 'quote', 'insertImage');
+        insertToolbarButton($.FroalaEditor.config.toolbarButtonsSM, 'quote', 'insertImage');
+        insertToolbarButton($.FroalaEditor.config.toolbarButtonsXS, 'quote', 'insertImage');
     }
 
     if (type === 'ssbEmailEditor') {

@@ -1,4 +1,4 @@
-[ssb-blog-post-detail-component] {
+.ssb-ssb-blog-post-detail {
 
     position: relative;
     // max-width: 700px;
@@ -10,7 +10,7 @@
         margin-right: 15%!important;
     }
 
-    [itemprop="articleBody"] {
+    [itemprop="articleBody"], .fr-element .fr-view {
         margin-top: 30px;
         font-family: Georgia, Cambria, "Times New Roman", Times, serif;
         letter-spacing: .01rem;
@@ -21,12 +21,23 @@
         letter-spacing: -.003em;
     }
 
-    h1, .ssb-blog-byline, #lessbuttons_holder, [itemprop="articleBody"], .post_tags {
+    h1, .ssb-blog-byline, #lessbuttons_holder, [itemprop="articleBody"], .post_tags, .fr-element .fr-view {
         padding-left: 15px;
         padding-right: 15px;
         max-width: 700px;
         margin-left: auto;
         margin-right: auto;
+    }
+
+    blockquote, &[elem] blockquote {
+        color: rgba(0,0,0,.6);
+        font-style: italic;
+        font-size: 28px;
+        // margin-left: -1.75px;
+        line-height: 1.48;
+        letter-spacing: -.014em;
+        border-left: 1px dotted #bfbfbf;
+        padding-left: 1em;
     }
 
     .img-full-width {
