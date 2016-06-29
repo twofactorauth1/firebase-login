@@ -122,7 +122,7 @@ _.extend(view.prototype, BaseView.prototype, {
                     if(_tag || _author){
                         if(_author){
                             posts =  posts.filter(function(post){
-                                console.log(post)
+                                // console.log(post)
                                 return post.get("post_author") === _author
                             })
                         }
@@ -254,7 +254,7 @@ _.extend(view.prototype, BaseView.prototype, {
                                         });
 
                                         template +='</div></div></div>';
-                                        self.log.debug('template:', template);
+                                        // self.log.debug('template:', template);
                                         data.templateIncludes.push({
                                             id:'blog.html',
                                             data:template

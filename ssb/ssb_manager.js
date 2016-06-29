@@ -808,7 +808,7 @@ module.exports = {
                 console.log('Error finding posts:', err);
                 fn(err);
             } else {
-                console.log('We found these posts:', posts.results);
+                // console.log('We found these posts:', posts.results);
                 fn(null, posts.results);
             }
         });
