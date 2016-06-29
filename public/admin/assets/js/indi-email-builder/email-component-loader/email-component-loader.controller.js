@@ -1,39 +1,37 @@
 (function () {
 
-    app.controller('EmailBuilderComponentLoaderController', emailbComponentLoaderController);
+  app.controller('EmailBuilderComponentLoaderController', emailbComponentLoaderController);
 
-    emailbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$timeout'];
-    /* @ngInject */
-    function emailbComponentLoaderController($rootScope, $scope, $attrs, $filter, $timeout) {
+  emailbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$timeout'];
+  /* @ngInject */
+  function emailbComponentLoaderController($rootScope, $scope, $attrs, $filter, $timeout) {
 
-        console.info('component-loader directive init...');
+    console.info('component-loader directive init...');
 
-        var vm = this;
+    var vm = this;
 
-        vm.init = init;
-        vm.hoverFn = hoverFn;
-        vm.clickFn = clickFn;
-        vm.selector = '#email-component_' + vm.component._id;
+    vm.ssbEditor = true;
+    
+    $scope.component = vm.component;
+    $scope.isEditing = true;
+    $scope.website = vm.website;
+    $scope.primaryColor = $scope.website.settings.primary_color;
+    $scope.secondaryColor = $scope.website.settings.secondary_color;
+    $scope.primaryHighlight = $scope.website.settings.primary_highlight;
+    $scope.primaryTextColor = $scope.website.settings.primary_text_color;
+    $scope.primaryFontFamily = $scope.website.settings.font_family;
+    $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
+    $scope.googleFontFamily = $scope.website.settings.google_font_family;
 
-        vm.froalaConfig = angular.copy($.FroalaEditor.config);
-//        vm.froalaConfig.scrollableContainer = '#email-froala-scrollable-container';
-        _.extend(vm.froalaConfig, {toolbarInline: false, scrollableContainer: '#email-froala-scrollable-container',  toolbarContainer: '#email-froala-container', placeholderText: 'Type your email here'});
+    $scope.primaryFontStack = $scope.website.settings.font_family;
+    $scope.secondaryFontStack = $scope.website.settings.font_family_2;
 
-        function hoverFn(e) {}
+    vm.init = init;
 
-        function clickFn(e) {
-//            $('.email-component').froalaEditor('destroy');
-            e.stopPropagation();
-            if (!$(vm.selector).data('froala.editor')) {
-                $(vm.selector).froalaEditor(vm.froalaConfig);
-                console.info('froala initiated for', vm.selector);
-            }
-        }
-
-        function init(element) {
-            vm.element = element;
-        }
-
+    function init(element) {
+      vm.element = element;
     }
+
+  }
 
 })();

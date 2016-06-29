@@ -36,6 +36,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             return blogTemplate
         }
 
+        if (attrs.ssbEmailEditor) {
+            //TODO: jaideep
+        }
+
         return pageTemplate;
 
     },
@@ -72,7 +76,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         $rootScope.$on('$destroyFroalaInstances', function (event) {
             var elem = angular.element(element[0].querySelector('.editable'))[0];
-            //$(elem).froalaEditor($.FroalaEditor.config);
+            //$(elem).froalaEditor($.FroalaEditor.build());
             if($(elem).data('froala.editor')){
                 var editor = $(elem).data('froala.editor');
                 editor.shared.count = 1;
@@ -98,21 +102,36 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
             $(function() {
-              $timeout(function() {
-                $(elem).on('froalaEditor.initialized', function(e, editor) {
 
-                  //topbar positioning
-                  $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
-                  //scope.$emit('initializeEditor', { editor: editor });
-                  //set initial text
-                  if (ngModel.$viewValue) {
-                    var html = ngModel.$viewValue.replace("<span>", "<span style=''>");
-                    editor.html.set(html);
-                  }
-                  //compile special elements
-                  scope.compileEditorElements(editor, true);
+                var froalaConfig = $.FroalaEditor.build(
+                    (function() {
+                        if (attrs.ssbBlogEditor) {
+                            return 'ssbBlogEditor';
+                        } else if (attrs.ssbEmailEditor) {
+                            return 'ssbEmailEditor'
+                        } else {
+                            return
+                        }
+                    })()
+                );
 
-                }).froalaEditor($.FroalaEditor.config)
+                $timeout(function() {
+
+                    $(elem).on('froalaEditor.initialized', function(e, editor) {
+
+                    //topbar positioning
+                    $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
+
+                    //set initial text
+                    if (ngModel.$viewValue) {
+                        var html = ngModel.$viewValue.replace("<span>", "<span style=''>");
+                        editor.html.set(html);
+                    }
+
+                    //compile special elements
+                    scope.compileEditorElements(editor, true);
+
+                }).froalaEditor(froalaConfig)
                     .on('froalaEditor.contentChanged', function(e, editor) {
                         scope.updateFroalaContent(editor);
                         // $(elem).froalaEditor('html.cleanEmptyTags');
@@ -167,8 +186,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.focus', function (e, editor) {
                        editor.selection.save();
                     })
+                    .on('froalaEditor.paste.before', function (e, editor) {
+                        editor.selection.restore();
+                    })
                     .on('froalaEditor.blur', function (e, editor) {
-
                         //hide any currently shown toolbar
                         $('.fr-toolbar').removeClass('ssb-froala-active-editor');
                         editor.selection.save();
@@ -182,8 +203,6 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.popups.show.image.edit', function(e, editor) {
                         editor.selection.save();
                         scope.$emit('activeEditor', { editor: editor, editorImage: editor.image.get() });
-                    }).on('froalaEditor.focus', function(e, editor) {
-                        editor.selection.clear();
                     })
                     .on('froalaEditor.bgColorChange', function(e, editor, val) {
                         if(editor.opts.isButton){

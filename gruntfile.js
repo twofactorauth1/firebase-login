@@ -340,6 +340,7 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
+                        googleBrowserKey: GOOGLE_CONFIG.BROWSER_KEY,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
                         facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
                         paypalCheckoutURL: PAYPAL_CONFIG.PAYPAL_CHECKOUT_URL
@@ -363,6 +364,7 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
+                        googleBrowserKey: GOOGLE_CONFIG.PROD_BROWSER_KEY,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
                         facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
                         paypalCheckoutURL: PAYPAL_CONFIG.PROD_PAYPAL_CHECKOUT_URL
