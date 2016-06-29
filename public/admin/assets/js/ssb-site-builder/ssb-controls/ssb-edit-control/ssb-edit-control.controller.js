@@ -228,7 +228,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
 
         section.accountId = 0;
 
-        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, index).then(function() {
+        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, insertAtIndex).then(function() {
             console.log('duplicateSection -> SimpleSiteBuilderService.addSectionToPage')
         }, function(error) {
             console.error('duplicateSection -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
