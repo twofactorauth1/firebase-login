@@ -348,8 +348,6 @@ module.exports = {
                         self.log.error(accountId, userId, 'Error finding global sections:', err);
                         cb(err);
                     } else {
-                        //var latestSections = self.getLatestSections(gsections);
-
                         cb(null, website, theme, template, sections, header, footer, gsections);
                     }
                 });
@@ -3353,49 +3351,6 @@ module.exports = {
 
         return page;
 
-    },
-
-    getLatestSections: function(sections) {
-        var self = this;
-        var tmp = {};
-        var latest = [];
-        var oldVersionsOnPages = [];
-
-        sections.forEach(function(section) {
-            var sectionIdWithoutVersion = section.id();
-            var lastIndex = section.id().lastIndexOf('_');
-            var version = '';
-            if (lastIndex !== -1) {
-                version = parseInt(section.id().slice(lastIndex+1));
-                sectionIdWithoutVersion = section.id().replace('_' + version, '');
-            }
-            tmp[sectionIdWithoutVersion] = tmp[sectionIdWithoutVersion] || [];
-            tmp[sectionIdWithoutVersion].push(version);
-        });
-
-        Object.keys(tmp).forEach(function(sectionId) {
-            var arr;
-            arr = tmp[sectionId].filter(function(version, index, self){
-                return self.indexOf(version) === index;
-            });
-            arr.sort(function(a, b) {
-                return b - a;
-            });
-            arr.shift();
-            arr.forEach(function(version){
-                if (version === '') {
-                    oldVersionsOnPages.push(sectionId);
-                } else {
-                    oldVersionsOnPages.push(sectionId + '_' + version);
-                }
-            });
-        });
-
-        latest = sections.filter(function(section) {
-            return oldVersionsOnPages.indexOf(section.id()) === -1;
-        });
-
-        return latest;
     },
 
     /**

@@ -1,11 +1,16 @@
-[ssb-blog-post-detail-component] {
+.ssb-ssb-blog-post-detail {
 
     position: relative;
-    max-width: 700px;
-    margin-left: auto!important;
-    margin-right: auto!important;
+    // max-width: 700px;
 
-    & > section[itemprop="articleBody"] {
+    line-height: 1.5;
+
+    @media screen and (min-width: 600px) {
+        margin-left: 15%!important;
+        margin-right: 15%!important;
+    }
+
+    [itemprop="articleBody"], .fr-element .fr-view {
         margin-top: 30px;
         font-family: Georgia, Cambria, "Times New Roman", Times, serif;
         letter-spacing: .01rem;
@@ -14,6 +19,73 @@
         font-size: 21px;
         line-height: 1.58;
         letter-spacing: -.003em;
+    }
+
+    h1, .ssb-blog-byline, #lessbuttons_holder, [itemprop="articleBody"], .post_tags, .fr-element .fr-view {
+        padding-left: 15px;
+        padding-right: 15px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    blockquote, &[elem] blockquote {
+        color: rgba(0,0,0,.6);
+        font-style: italic;
+        font-size: 28px;
+        // margin-left: -1.75px;
+        line-height: 1.48;
+        letter-spacing: -.014em;
+        border-left: 1px dotted #bfbfbf;
+        padding-left: 1em;
+    }
+
+    .img-full-width {
+        position: relative;
+        right: calc(~"50vw - 50%");
+        max-width: none!important;
+        width: 100vw!important;
+    }
+
+    .post_tags li a {
+        font-size: 18px;
+        padding: 0 8px;
+    }
+
+    #lessbuttons_holder {
+
+        margin-top: 10px;
+        margin-bottom: 50px;
+        display: block;
+
+        .lessbuttons_com_button,
+        .lessbuttons_com_otherbutton,
+        .lessbuttons_com_buttons_more {
+            height: 30px;
+            text-align: center;
+        }
+
+        .lessbuttons_com_buttons_more {
+            width: 30px;
+            line-height: 33px;
+        }
+
+        .lessbuttons_com_holder {
+            width: auto;
+            height: auto;
+        }
+
+        .lessbuttons_com_socimg,
+        .lessbuttons_com_othersocimg,
+        .lessbuttons_com_arrow {
+            background: none;
+            height: 25px;
+            line-height: 30px;
+            width: 30px;
+            position: relative;
+            display: inline-block;
+            margin: 0;
+        }
     }
 
 }

@@ -89,10 +89,15 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     !{jsonld};
 
 
-        //- script.
-        //-     var test = !{JSON.stringify(account.website)};
 
-    body(data-styles, class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), ng-cloak)
+    body(
+            data-styles,
+            class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak',
+            class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'),
+            ng-class="{ 'ssb-social-enabled': isSocialEnabled }",
+            ng-cloak
+        )
+
         block body_content
             div(id='fb-root')
             div(id='toolbar')
@@ -103,4 +108,6 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
         block body_scripts
             include index_body_scripts
             if includeSocial
-                script(async, src="https://lessbuttons.com/script.js?facebook=auto&twitter=auto&linkedin=auto&pinterest=auto&reddit=auto&email=1")
+                script(
+                        src="https://lessbuttons.com/script.js?onmobile=hide&facebook=auto&twitter=auto&linkedin=auto&pinterest=auto&reddit=auto&email=1"
+                    )

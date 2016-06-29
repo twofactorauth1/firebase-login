@@ -12,9 +12,14 @@ var paypalAPIUsername = process.env.PAYPAL_API_USERNAME || 'kyle+business1_api1.
 var paypalAPIPassword = process.env.PAYPAL_API_PASSWORD || 'AXD2WJ292M5GYTB6';//'N3TBZGQMYEW66MTH';
 var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AkIU8rSQk.Oy5oGjp7-B9Oi15i8wASpz3NNY6GVHsDf4YnMxck0yqWrX';//'AFcWxV21C7fd0v3bYYYRCpSSRl31AHk7UU9Y3mtj6J5BdfSV61PJ2Mu';
 var paypalCheckoutURL = process.env.PAYPAL_CHECKOUT_URL || 'https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay';
-var paypalIsSandbox = process.env.PAYPAL_SANDBOX || true;
+var paypalIsSandbox = process.env.PAYPAL_SANDBOX;// || true;
 var paypalApplicationID = process.env.PAYPAL_APP_ID || 'APP-80W284485P519543T';
-
+if(!paypalIsSandbox) {
+    paypalIsSandbox = true;
+}
+if(paypalIsSandbox === 'false') {
+    paypalIsSandbox = false;
+}
 
 var realUserName = 'paypal_api1.indigenous.io';
 var realPassword = '7ZQUHXA6AHBDZ4E5';

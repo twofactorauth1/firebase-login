@@ -5,7 +5,7 @@
     <div class="ssb-blog-featured-slider">
         <div
             class="ssb-media-stacked"
-            ind-slider='{ slidesToShow:1, dots:true, arrows:false, autoplay:false, touchMove:true, draggable:true }'>
+            ind-slider='{ adaptiveHeight: true, slidesToShow:1, dots:true, arrows:false, autoplay:false, touchMove:true, draggable:true }'>
             <section
                 class="img-row col-sm-12 col-xs-12"
                 ng-repeat="post in vm.blog.posts | filter:{ featured: true } track by $index"
@@ -14,7 +14,7 @@
             </section>
         </div>
     </div>
-    <section class="ssb-media-stacked ssb-blog-post-list list-unstyled padding-15">
+    <section class="ssb-media-stacked ssb-blog-post-list list-unstyled padding-15 margin-top-15">
         <article
             ssb-blog-post-card-component
             post="post"
