@@ -201,8 +201,6 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.popups.show.image.edit', function(e, editor) {
                         editor.selection.save();
                         scope.$emit('activeEditor', { editor: editor, editorImage: editor.image.get() });
-                    }).on('froalaEditor.focus', function(e, editor) {
-                        editor.selection.clear();
                     })
                     .on('froalaEditor.bgColorChange', function(e, editor, val) {
                         if(editor.opts.isButton){
