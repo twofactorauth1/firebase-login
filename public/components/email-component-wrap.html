@@ -2,7 +2,8 @@
     <tr>
         <td 
             id="{{component.anchor || component._id}}" 
-            ng-style="component-wrap {'color':component.txtcolor||primaryTextColor}" 
+            ng-style="{'color': component.txtcolor || primaryTextColor}"
+            class="component-wrap"
             ng-if="component.visibility" 
             ng-class="{'editing': isEditing}"
             data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'">
