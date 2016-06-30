@@ -363,12 +363,10 @@
       $scope.isEditMode = edit;
       vm.openModalFn('media-modal', 'MediaModalCtrl', null, 'lg');
     }
-    ;
 
     function insertMediaFn(asset) {
-      console.log(asset);
+      $scope.$broadcast('email.insert.media', asset);
     }
-    ;
 
     function init(element) {
       vm.element = element;

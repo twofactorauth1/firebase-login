@@ -11,7 +11,7 @@
     var vm = this;
 
     vm.ssbEditor = true;
-    
+
     $scope.component = vm.component;
     $scope.isEditing = true;
     $scope.website = vm.website;
@@ -27,6 +27,10 @@
     $scope.secondaryFontStack = $scope.website.settings.font_family_2;
 
     vm.init = init;
+
+    $scope.$on('email.insert.media', function (event, args) {
+      console.log(event, args);
+    });
 
     function init(element) {
       vm.element = element;
