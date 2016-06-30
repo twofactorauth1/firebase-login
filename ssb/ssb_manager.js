@@ -3065,6 +3065,7 @@ module.exports = {
                                                  * The sections Array is an array of section References that belong to the site template.
                                                  * We need to make a copy of these sections for the page.
                                                  */
+                                                //TODO: keep track of globalHeader or sectionId translations
                                                 self._copySectionsForAccount(page.get('sections'), accountId, function(err, sectionRefAry){
                                                     if(err) {
                                                         callback(err);
@@ -3122,6 +3123,7 @@ module.exports = {
                 var query = {
                     accountId:accountId,
                     globalHeader:true,
+                    global:true,
                     latest: true
                 };
                 sectionDao.findAndOrder(query, null, $$.m.ssb.Section, 'modified.date', -1, function(err, sections){
@@ -3209,7 +3211,8 @@ module.exports = {
             },
             function(dereffedSections, cb) {
                 _.each(dereffedSections, function(section){
-                    var id = $$.u.idutils.generateUUID();
+                    //var id = $$.u.idutils.generateUUID();
+                    var id = section.id() + '' + accountId;
                     section.set('accountId', accountId);
                     section.set('_id', id);
                     section.set('anchor', id);
