@@ -28,10 +28,6 @@
 
     vm.init = init;
 
-    $scope.$on('email.insert.media', function (event, args) {
-      console.log(event, args);
-    });
-
     function init(element) {
       vm.element = element;
     }

@@ -18,6 +18,7 @@
     vm.website = {settings: {}};
     vm.email = null;
     vm.modalInstance = null;
+    vm.editor = null;
     vm.componentTypes = [{
         title: 'Header',
         type: 'email-header',
@@ -365,7 +366,11 @@
     }
 
     function insertMediaFn(asset) {
-      $scope.$broadcast('email.insert.media', asset);
+      if (vm.editor) {
+        vm.editor.image.insert(asset.url, !1, null, vm.editor.img);
+      } else {
+        toaster.pop('error', 'Position cursor at the point of insertion');
+      }
     }
 
     function init(element) {
@@ -387,6 +392,12 @@
           }
           vm.email = res.data;
           vm.dataLoaded = true;
+          $timeout(function () {
+            $('.editable').on('froalaEditor.focus', function (e, editor) {
+              vm.editor = editor;
+              console.info('Event froalaEditor.focus triggered');
+            });
+          }, 1000);
         }, function (err) {
           console.error(err);
           $state.go('app.emails');
