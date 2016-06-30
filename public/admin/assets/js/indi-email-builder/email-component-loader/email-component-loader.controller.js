@@ -11,7 +11,7 @@
     var vm = this;
 
     vm.ssbEditor = true;
-    
+
     $scope.component = vm.component;
     $scope.isEditing = true;
     $scope.website = vm.website;
