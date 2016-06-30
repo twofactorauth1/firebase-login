@@ -19,7 +19,7 @@
             </div>
 
             <h1 class="media-heading" itemprop="name headline">
-                <a ng-if="!vm.compactView" ng-class="ssb-theme-btn" class="btn btn-link" href="/blog/{{vm.post.post_url}}" target="_self">
+                <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}" target="_self">
                     {{vm.post.display_title || vm.post.post_title}}
                 </a>
                 <a ng-if="vm.compactView" class="btn btn-link" href="/blog/{{vm.post.post_url}}">
@@ -35,7 +35,7 @@
                 <i class="fa fa-user margin-left-10"></i>
                 <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
                     <span itemprop="name">
-                        <a ng-class="ssb-theme-btn" class="btn btn-link padding-top-0" href="/author/{{vm.post.post_author}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                        <a class="btn btn-link ssb-theme-btn padding-top-0" href="/author/{{vm.post.post_author}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
                     </span>
                 </span>
             </div>
