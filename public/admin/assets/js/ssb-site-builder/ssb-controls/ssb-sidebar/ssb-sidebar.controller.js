@@ -1097,7 +1097,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 		vm.donationProductTags = [];
 		ProductService.getProducts(function(products) {
 			products.forEach(function(product, index) {
-				if (product.type === 'DONATION' && product.status === 'Active') {
+				if (product.type === 'DONATION' && product.status.toLowerCase() === 'active') {
 					vm.donationProductTags.push({data: product._id, label: product.name});
 				}
 
