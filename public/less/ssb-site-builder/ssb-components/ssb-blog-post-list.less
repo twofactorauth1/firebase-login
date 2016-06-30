@@ -13,8 +13,10 @@
 
 .ssb-blog-featured-slider {
 
+    margin-bottom: 70px;
+
     @media screen and (min-width: 991px) {
-        margin-top: 50px;
+        // margin-top: 50px;
     }
 
     .slick-slide {
@@ -119,19 +121,25 @@
     article {
         margin-top: 50px;
         border: 1px solid #dadada;
+        margin-left: 15px;
+        margin-right: 15px;
+
+        &:first-of-type {
+            margin-top: 0;
+        }
 
         .ssb-media-left {
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
+            // padding-bottom: 56.25%;
+            // height: 0;
+            // overflow: hidden;
             position: relative;
 
             img {
-                position: absolute;
-                top: 0;
-                left: 0;
+                // position: absolute;
+                // top: 0;
+                // left: 0;
                 width: 100%;
-                z-index: 100;
+                // z-index: 100;
             }
         }
 
@@ -141,6 +149,7 @@
 
         .ssb-media-body .media-heading {
             margin-bottom: 0;
+            margin-left: -1.75px;
 
             .ssb-theme-btn {
                 padding: 0;
@@ -148,11 +157,29 @@
                 font-size: 24px;
                 line-height: 1.1;
                 text-align: left;
+
+                // font-size: 28px;
+                // margin-left: -1.75px;
+                // line-height: 1.12;
+                // letter-spacing: -.022em;
             }
         }
 
         .ssb-blog-post-body {
+
             margin-bottom: 30px;
+
+            p {
+                // font-size: 24px;
+                // margin-left: -1.5px;
+                // line-height: 1.18;
+                // letter-spacing: -.022em;
+            }
+
+            .ssb-theme-btn.btn-link {
+                margin-left: -1.75px;
+            }
+
         }
 
     }
