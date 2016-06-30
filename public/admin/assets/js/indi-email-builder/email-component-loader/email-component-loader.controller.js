@@ -9,8 +9,10 @@
     console.info('component-loader directive init...');
 
     var vm = this;
+    var pVm = $scope.$parent.vm;
 
     vm.ssbEditor = true;
+    vm.components = pVm.email.components;
 
     $scope.component = vm.component;
     $scope.isEditing = true;

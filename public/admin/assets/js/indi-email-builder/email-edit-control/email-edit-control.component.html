@@ -4,13 +4,13 @@
 
 <div class="ssb-edit-control-active">
 
-	<a
+    <a
         href
         class="ssb-edit-control-active-title"
         ng-click="vm.setActive(vm.sectionIndex, vm.componentIndex, vm.compiledControlId)">
 
         <span ng-if="vm.componentIndex !== undefined">
-            Edit {{(vm.component.name || vm.component.type || vm.component.title) | cleanType}}
+            Edit {{(vm.component.name|| vm.component.type || vm.component.title) | cleanType}}
         </span>
 
         <span ng-if="vm.componentIndex === undefined">
