@@ -86,6 +86,7 @@
             order.line_items_total = 0;
           }
           $scope.matchProducts(order);
+          $scope.setOrderCustomer(order);
           order.total = order.total;
         });
         $scope.orders = orders;
@@ -200,6 +201,12 @@
       $scope.filterorder.selected = null;
       $scope.triggerInput(elem);
     };
+
+    $scope.setOrderCustomer = function(order){
+        if(order && order.customer){
+           order.customerDetailedName = (order.customer.first || "") + " " + (order.customer.last || "") + " (" + order.customer._id + ")";
+        }
+    }
 
 
   }]);
