@@ -184,7 +184,7 @@
         vm.dataLoaded = false;
         var componentType = null;
         if (['email-footer', 'email-header'].indexOf(addedType.type) > -1) {
-          componentType = _.findWhere($scope.components, {
+          componentType = _.findWhere(vm.email.components, {
             type: addedType.type
           });
           if (componentType) {
@@ -223,7 +223,7 @@
         vm.dataLoaded = false;
         var componentType = null;
         if (['email', 'email-footer', 'email-header'].indexOf(addedType.type) > -1) {
-          componentType = _.findWhere($scope.components, {
+          componentType = _.findWhere(vm.email.components, {
             type: addedType.type
           });
           if (componentType) {
