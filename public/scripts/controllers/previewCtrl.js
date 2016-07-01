@@ -18,15 +18,17 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
                 navComponent: null
             };
             $scope.components = $scope.page.components;
-            $scope.components.forEach(function (value, index) {
-                if (value && value.type === 'masthead' && value._id == masthead_id) {
-                    if (index != 0 && $scope.components[index - 1].type == "navigation") {
-                        data.allowUndernav = true;
-                        data.navComponent = $scope.components[index - 1];
-                    } else
-                        data.allowUndernav = false;
-                }
-            });
+            if ($scope.components && $scope.components.length > 0) {
+                $scope.components.forEach(function (value, index) {
+                    if (value && value.type === 'masthead' && value._id == masthead_id) {
+                        if (index != 0 && $scope.components[index - 1].type == "navigation") {
+                            data.allowUndernav = true;
+                            data.navComponent = $scope.components[index - 1];
+                        } else
+                            data.allowUndernav = false;
+                    }
+                });
+            }
             fn(data);
         };
 

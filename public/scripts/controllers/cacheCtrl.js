@@ -16,7 +16,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
             navComponent: null
         }
 
-        if ($scope.components.length > 0) {
+        if ($scope.components && $scope.components.length > 0) {
             $scope.components.forEach(function (value, index) {
                 if (value && value.type === 'masthead' && value._id == masthead_id) {
                     if (index != 0 && $scope.components[index - 1].type == "navigation") {
@@ -27,7 +27,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                     }
                 }
             });
-        } else if ($scope.sections.length > 0) {
+        } else if ($scope.sections && $scope.sections.length > 0) {
             $scope.sections.forEach(function (sectionValue, sectionIndex) {
                 sectionValue.components.forEach(function (value, index) {
                     if (value && value.type === 'masthead' && value._id == masthead_id) {
