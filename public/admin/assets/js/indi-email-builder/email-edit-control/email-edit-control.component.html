@@ -11,7 +11,7 @@
     <div
         ng-if="vm.componentIndex !== 0"
         class="ssb-sidebar-item-icon ssb-move-section-up display-ib ti-arrow-up ng-scope"
-        ng-click="vm.moveComponentFn()"
+        ng-click="vm.moveComponentFn('up', vm.componentIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Move section up"
@@ -21,7 +21,7 @@
     <div
         ng-if="vm.componentIndex !== (vm.components.length - 1)"
         class="ssb-sidebar-item-icon ssb-move-section-down display-ib ti-arrow-down ng-scope"
-        ng-click="vm.moveComponentFn()"
+        ng-click="vm.moveComponentFn('down', vm.componentIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Move section down"
@@ -30,7 +30,7 @@
 
     <div
         class="ssb-sidebar-item-icon ssb-move-section-duplicate display-ib ti-files ng-scope"
-        ng-click="vm.duplicateComponentFn()"
+        ng-click="vm.duplicateComponentFn(vm.componentIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Duplicate section"
@@ -39,7 +39,7 @@
 
     <div
         class="ssb-sidebar-item-icon ssb-move-section-remove fa fa-trash-o display-ib"
-        ng-click="vm.removeComponentFn()"
+        ng-click="vm.removeComponentFn(vm.componentIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
         tooltip-html-unsafe="Remove section"

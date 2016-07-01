@@ -73,6 +73,7 @@
     vm.openModalFn = openModalFn;
     vm.closeModalFn = closeModalFn;
     vm.addComponentFn = addComponentFn;
+    vm.cloneComponentFn = cloneComponentFn;
     vm.componentClassFn = componentClassFn;
     vm.componentStyleFn = componentStyleFn;
     vm.saveFn = saveFn;
@@ -206,6 +207,45 @@
             }, 500);
             vm.dataLoaded = true;
             toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+          }
+        });
+      }
+    }
+
+    function cloneComponentFn(index) {
+      var clone = angular.copy(vm.email.components[index]);
+      delete clone['_id'];
+      delete clone['anchor'];
+      var addedType = {type: clone.type, version: clone.version};
+      console.log(addedType);
+
+      if (vm.dataLoaded) {
+        vm.dataLoaded = false;
+        var componentType = null;
+        if (['email', 'email-footer', 'email-header'].indexOf(addedType.type) > -1) {
+          componentType = _.findWhere($scope.components, {
+            type: addedType.type
+          });
+          if (componentType) {
+            toaster.pop('error', componentType.type + " component can't be cloned");
+            vm.dataLoaded = true;
+            return;
+          }
+        }
+
+        WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
+          if (newComponent) {
+            _.extend(newComponent, clone);
+            vm.email.components.push(newComponent);
+            $timeout(function () {
+              var element = document.getElementById(newComponent._id);
+              if (element) {
+                $document.scrollToElementAnimated(element, 175, 1000);
+                $(window).trigger('resize');
+              }
+            }, 500);
+            vm.dataLoaded = true;
+            toaster.pop('success', "Component cloned", "The " + newComponent.type + " component was cloned successfully.");
           }
         });
       }
@@ -372,6 +412,10 @@
         toaster.pop('error', 'Position cursor at the point of insertion');
       }
     }
+
+    $scope.$on('email.duplicate.component', function (event, args) {
+      vm.cloneComponentFn(args.index);
+    });
 
     function init(element) {
       vm.element = element;
