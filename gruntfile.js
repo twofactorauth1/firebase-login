@@ -287,8 +287,8 @@ module.exports = function(grunt) {
             stripe_cleanup: ['payments/tests/stripe_cleanup.js'],
             ssb: ['ssb/test/ssb_manager_test.js'],
             scheduler: ['scheduledjobs/tests/manager_test.js'],
-            selenium: ['test/selenium/*_test.js'],
-            ngparse:['utils/test/ngparser_test.js']
+            selenium: ['test/selenium/*_test.js']
+            //ngparse:['utils/test/ngparser_test.js']
         },
 
         // Running Karma from Grunt, with documentation from here:
