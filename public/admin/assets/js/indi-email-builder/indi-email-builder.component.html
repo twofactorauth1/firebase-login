@@ -111,14 +111,13 @@
                 </div>
                 <div class="col-sm-8">
                     <div class='pull-right'>
-                        <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-layout-media-overlay-alt">
+                        <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-plus">
                             <span>
                                 <div>
                                     Add Component
                                 </div>
                             </span>
                         </button>
-
                         <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
                             <span>
                                 <div>
@@ -126,10 +125,20 @@
                                 </div>
                             </span>
                         </button>
-
-                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">One-time email</button>
-                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Create Campaign</button>
-
+                        <button type="button" ng-disabled="saveLoading" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o  ti-layout-media-overlay-alt">
+                            <span>
+                                <div>
+                                    One-time email
+                                </div>
+                            </span>
+                        </button>
+                        <button type="button" ng-disabled="saveLoading" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o  ti-layout-media-overlay-alt">
+                            <span>
+                                <div>
+                                    Create Campaign
+                                </div>
+                            </span>
+                        </button>
                         <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger btn-wide btn-scroll btn-scroll-top btn-o ti-trash">
                             <span>
                                 <div>
