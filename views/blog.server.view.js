@@ -175,6 +175,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
 
                 data.pages = pageHolder;
+                data.posts = posts;
                 data.account = value;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
                 data.account.website.themeOverrides = data.account.website.themeOverrides ||{};

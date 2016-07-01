@@ -79,55 +79,54 @@ var mainApp = angular
             })
             .when('/blog', {
                 template: function(urlattr) {
-                    //if(window.indigenous.ssbBlog === true) {
-                    //    return '<div data-ng-include="\'blog.html\'"></div>';
-                    //} else {
-                        var s = '<div data-ng-include="';
-                        s += " '/template/blog";
-                        if(urlattr.cachebuster) {
-                            s+='?cachebuster=' + urlattr.cachebuster;
-                        }
-                        s+= "'";
-                        s += ' "></div>';
-                        return s;
-                    //}
-
+                    var _pageName = 'blog';
+                    if(window.indigenous.ssbBlog === true) {
+                        _pageName = 'blog-list';
+                    }    
+                    var s = '<div data-ng-include="';
+                    s += " '/template/" + _pageName;
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/author/:author', {
                 template: function(urlattr) {
+                    var _pageName = 'blog';
                     if(window.indigenous.ssbBlog === true) {
-                        return '<div class="blog-list-author" data-ng-include="\'blog.html\'"></div>';
-                    } else {
-                        var s = '<div data-ng-include="';
-                        s += " '/template/blog";
-                        if(urlattr.cachebuster) {
-                            s+='?cachebuster=' + urlattr.cachebuster;
-                        }
-                        s+= "'";
-                        s += ' "></div>';
-                        return s;
+                        _pageName = 'blog-list';
+                    }  
+                   
+                    var s = '<div data-ng-include="';
+                    s += " '/template/" + _pageName;
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
                     }
-
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/tag/:tag', {
                 template: function(urlattr) {
+                    var _pageName = 'blog';
                     if(window.indigenous.ssbBlog === true) {
-                        return '<div class="blog-list-tag" data-ng-include="\'blog.html\'"></div>';
-                    } else {
-                        var s = '<div data-ng-include="';
-                        s += " '/template/blog";
+                        _pageName = 'blog-list';
+                    }  
+                   
+                    var s = '<div data-ng-include="';
+                    s += " '/template/" + _pageName;
                         if(urlattr.cachebuster) {
                             s+='?cachebuster=' + urlattr.cachebuster;
                         }
                         s+= "'";
                         s += ' "></div>';
                         return s;
-                    }
-
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
