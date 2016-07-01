@@ -14,24 +14,13 @@
     vm.removeComponentFn = removeComponentFn;
 
     function moveComponentFn(direction, index) {
-      var toIndex;
-      var fromIndex = index;
-
-      if (direction === 'up') {
-        toIndex = fromIndex - 1;
-      }
-
-      if (direction === 'down') {
-        toIndex = fromIndex + 1;
-      }
-
-      vm.components.splice(toIndex, 0, vm.components.splice(fromIndex, 1)[0]);
+      $scope.$emit('email.move.component', {direction: direction, component: vm.component});
     }
 
     function duplicateComponentFn() {
       $scope.$emit('email.duplicate.component', {component: vm.component});
     }
-    
+
     function removeComponentFn() {
       $scope.$emit('email.remove.component', {component: vm.component});
     }

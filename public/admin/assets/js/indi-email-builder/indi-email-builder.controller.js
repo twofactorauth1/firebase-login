@@ -78,6 +78,7 @@
     vm.componentStyleFn = componentStyleFn;
     vm.saveFn = saveFn;
     vm.insertMediaFn = insertMediaFn;
+    vm.moveComponentFn = moveComponentFn;
     vm.clickImageButton = clickImageButton;
 
     vm.enabledComponentTypes = _.where(vm.componentTypes, {
@@ -411,6 +412,27 @@
         toaster.pop('error', 'Position cursor at the point of insertion');
       }
     }
+
+    function moveComponentFn(component, direction) {
+      var toIndex;
+      var fromIndex = _.findIndex(vm.email.components, function(x) {
+        return x._id === component._id;
+      });
+
+      if (direction === 'up') {
+        toIndex = fromIndex - 1;
+      }
+
+      if (direction === 'down') {
+        toIndex = fromIndex + 1;
+      }
+      
+      vm.email.components.splice(toIndex, 0, vm.email.components.splice(fromIndex, 1)[0]);
+    }
+
+    $scope.$on('email.move.component', function (event, args) {
+      vm.moveComponentFn(args.component, args.direction);
+    });
 
     $scope.$on('email.duplicate.component', function (event, args) {
       vm.cloneComponentFn(args.component);
