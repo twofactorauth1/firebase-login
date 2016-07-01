@@ -132,12 +132,22 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
         }
 
 
+
+
 if pages
     script(type="text/javascript").
         window.indigenous = window.indigenous || {};
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         window.indigenous.precache.siteData.pages = !{JSON.stringify(pages)};
+
+if posts
+    script(type="text/javascript").
+        window.indigenous = window.indigenous || {};
+        window.indigenous.precache = window.indigenous.precache || {};
+        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
+        window.indigenous.precache.siteData.posts = !{JSON.stringify(posts)};
+
 if post
     script(type="text/javascript").
         window.indigenous = window.indigenous || {};

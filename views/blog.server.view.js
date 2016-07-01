@@ -140,6 +140,239 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function addBlogTemplate(webpageData, allPages, page, posts, cb) {
+                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-list/ssb-blog-post-list.component.html', 'utf-8', function(err, html) {
+                    if (err) {
+                        self.log.error('Error reading post-list:', err);
+                        cb(err);
+                    } else {
+                        fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-card/ssb-blog-post-card.component.html', 'utf-8', function (err, cardHtml) {
+                            if (err) {
+                                self.log.error('Error reading post-card:', err);
+                                cb(err);
+                            } else {
+                                var blogListTemplate = {
+                                    id: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-list/ssb-blog-post-list.component.html',
+                                    data: html
+                                };
+                                var blogCardTemplate = {
+                                    id: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-blog-post/ssb-blog-post-card/ssb-blog-post-card.component.html',
+                                    data: cardHtml
+                                };
+                                data.templateIncludes.push(blogListTemplate);
+                                data.templateIncludes.push(blogCardTemplate);
+                                cb(null, webpageData, allPages, page, posts);
+                            }
+                        });
+                    }
+                });
+
+            },
+
+            function prepareForRender(value, allPages, page, posts, cb) {
+                var pageHolder = {};
+                _.each(allPages, function(page){
+                    pageHolder[page.get('handle')] = page.toJSON('frontend');
+                });
+
+                data.pages = pageHolder;
+                data.posts = posts;
+                data.account = value;
+                data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
+                data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
+                data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
+                value.website = value.website || {};
+                value.website.resources = value.website.resources || {};
+                value.website.resources.userScripts = value.website.resources.userScripts || {};
+                value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                if(pageHolder[handle]) {
+                    data.title = pageHolder[handle].title || value.website.title;
+                } else {
+                    data.title = value.website.title;
+                }
+
+                data.author = 'Indigenous';//TODO: wut?
+                data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+                data.website = value.website || {};
+                if(pageHolder[handle] && pageHolder[handle].seo) {
+                    data.seo = {
+                        description: pageHolder[handle].seo.description || value.website.seo.description,
+                        keywords: ''
+                    };
+                } else {
+                    data.seo = {
+                        description: value.website.seo.description,
+                        keywords: ''
+                    };
+                }
+
+
+                if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
+                    data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
+                } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
+                    data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
+                }
+
+
+                data.og = {
+                    type: 'website',
+                    title: (pageHolder[handle] || {}).title || value.website.title,
+                    image: value.website.settings.favicon
+                };
+                if (data.og.image && data.og.image.indexOf('//') === 0) {
+                    data.og.image = 'http:' + data.og.image;
+                }
+                data.includeEditor = false;
+
+                if (!data.account.website.settings) {
+                    self.log.warn('Website Settings is null for account ' + accountId);
+                    data.account.website.settings = {};
+                }
+                var jsonldHolder = [];
+
+                _.each(posts, function(post){
+                    var url = self._req.originalUrl;
+                    var orgName = value.business.name;
+                    var logoUrl = value.business.logo;
+                    jsonldHolder.push(jsonldbuilder.buildForBlogPost(post, url, orgName, logoUrl));
+                });
+                data.jsonld = JSON.stringify(jsonldHolder);
+                app.render('blog', data, function (err, html) {
+                    if (err) {
+                        self.log.error('Error during render: ' + err);
+                    }
+
+                    self.resp.send(html);
+                    self.cleanUp();
+                    self.log.debug('<< renderBlogPage');
+                    self = data = value = null;
+                });
+            }
+        ], function done(err){
+            self.log.error('Error in render:', err);
+            app.render('404.html', {}, function(err, html){
+                if(err) {
+                    self.log.error('Error during render:', err);
+                }
+                self.resp.status(404).send(html);
+            });
+        });
+    },
+
+    renderBlogPageWithParser: function(accountId) {
+        var self = this;
+        self.log.debug(accountId, null, '>> renderBlogPage');
+        var data = {ssbBlog:true};
+        var handle = 'blog-list';
+        async.waterfall([
+            function getWebpageData(cb){
+                ssbManager.getDataForWebpage(accountId, handle, function(err, value){
+                    if(err) {
+                        self.log.error('Error getting data for website:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function getAllPages(webpageData, cb) {
+                ssbManager.listPublishedPages(accountId, webpageData.website._id, function(err, allPages){
+                    cb(err, webpageData, allPages);
+                });
+            },
+            function getPublishedPage(webpageData, allPages, cb) {
+                ssbManager.getPublishedPage(accountId, webpageData.website._id, handle, function(err, page){
+                    cb(err, webpageData, allPages, page);
+                });
+            },
+            function readComponents(webpageData, allPages, page, cb) {
+                data.templates = '';
+                if(page) {
+                    data.templateIncludes = [];
+                    data.templateIncludes[0] = {id:'/components/component-wrap.html'};
+                    fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
+                        data.templateIncludes[0].data = html;
+                        var components = [];
+                        _.each(page.get('sections'), function(section){
+                            if(section) {
+                                components = components.concat(section.components);
+                            }
+                        });
+
+                        var map = {};
+                        async.eachSeries(components, function(component, cb){
+                            if(component) {
+                                var obj = {};
+                                obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                                if(map[obj.id]) {
+                                    cb(null);
+                                } else {
+                                    fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                        obj.data = html;
+                                        data.templateIncludes.push(obj);
+                                        map[obj.id] = obj;
+                                        cb();
+                                    });
+                                }
+                            } else {
+                                cb();
+                            }
+
+                        }, function done(err){
+                            cb(null, webpageData, allPages, page);
+                        });
+
+
+                    });
+                } else {
+                    cb('Could not find ' + handle);
+                }
+
+            },
+
+            function addSSBSection(webpageData, allPages, page, cb){
+                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
+                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
+                    ssbSectionTemplate.data = html;
+                    data.templateIncludes.push(ssbSectionTemplate);
+                    cb(null, webpageData, allPages, page);
+                });
+            },
+
+            function getBlogPosts(webpageData, allPages, page, cb) {
+
+                var _tag = null;
+                var _author = null;
+                var url_path = self._req.originalUrl;
+                if (url_path.indexOf("tag/") > -1) {
+                    _tag = url_path.replace('/tag/', '');
+                }
+
+                if (url_path.indexOf("author/") > -1) {
+                    _author = url_path.replace('/author/', '');
+                }
+
+                ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){
+                    if(_tag || _author){
+                        if(_author){
+                            posts =  posts.filter(function(post){
+                                // console.log(post)
+                                return post.get("post_author") === _author
+                            })
+                        }
+                        if(_tag){
+                            posts = posts.filter(function(post){
+                                if (post.get("post_tags")) {
+                                    return post.get("post_tags").indexOf(_tag) > -1;
+                                }
+                            })
+                        }
+                    }
+                    cb(err, webpageData, allPages, page, posts);
+
+                });
+            },
+
+            function addBlogTemplate(webpageData, allPages, page, posts, cb) {
                 /*
                  * Need to wrap this:
                  * <div class="ssb-layout__header_2-col_footer ssb-page-blog-list">

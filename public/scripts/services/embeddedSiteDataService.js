@@ -23,6 +23,7 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
     service.urlPathFallbacks = urlPathFallbacks;
     service.getSiteData = getSiteData;
     service.getPageData = getPageData;
+    service.getPostData = getPostData;
 
 
     /*
@@ -94,16 +95,18 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
         service.path = urlPathFallbacks();
 
         if (typeof service.siteData.pages[service.path] !== 'undefined') {
-
             callback(null, service.siteData.pages[service.path]);
-
         } else {
-
             callback("page not found", null);
-
         }
+    }
 
-
+    function getPostData(callback) {
+        if(typeof service.siteData.posts !== 'undefined') {
+            callback(null, service.siteData.posts);
+        } else {
+            callback('posts not found');
+        }
     }
 
 
