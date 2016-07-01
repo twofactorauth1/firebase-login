@@ -11,6 +11,7 @@
     vm.init = init;
     vm.moveComponentFn = moveComponentFn;
     vm.duplicateComponentFn = duplicateComponentFn;
+    vm.removeComponentFn = removeComponentFn;
 
     function moveComponentFn(direction, index) {
       var toIndex;
@@ -29,6 +30,10 @@
 
     function duplicateComponentFn(index) {
       $scope.$emit('email.duplicate.component', {index: index});
+    }
+    
+    function removeComponentFn(index) {
+      $scope.$emit('email.remove.component', {index: index});
     }
 
     function init(element) {

@@ -204,9 +204,9 @@
                 $document.scrollToElementAnimated(element, 175, 1000);
                 $(window).trigger('resize');
               }
+              vm.dataLoaded = true;
+              toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
             }, 500);
-            vm.dataLoaded = true;
-            toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
           }
         });
       }
@@ -243,9 +243,9 @@
                 $document.scrollToElementAnimated(element, 175, 1000);
                 $(window).trigger('resize');
               }
+              vm.dataLoaded = true;
+              toaster.pop('success', "Component cloned", "The " + newComponent.type + " component was cloned successfully.");
             }, 500);
-            vm.dataLoaded = true;
-            toaster.pop('success', "Component cloned", "The " + newComponent.type + " component was cloned successfully.");
           }
         });
       }
@@ -415,6 +415,20 @@
 
     $scope.$on('email.duplicate.component', function (event, args) {
       vm.cloneComponentFn(args.index);
+    });
+
+    $scope.$on('email.remove.component', function (event, args) {
+      vm.dataLoaded = false;
+      vm.email.components.splice(args.index, 1);
+      $timeout(function () {
+        var element = document.getElementById(vm.email.components[vm.email.components.length - 1]._id);
+        if (element) {
+          $document.scrollToElementAnimated(element, 175, 1000);
+          $(window).trigger('resize');
+        }
+        vm.dataLoaded = true;
+        toaster.pop('warning', 'component deleted');
+      }, 500);
     });
 
     function init(element) {
