@@ -80,6 +80,7 @@
     vm.insertMediaFn = insertMediaFn;
     vm.moveComponentFn = moveComponentFn;
     vm.clickImageButton = clickImageButton;
+    vm.deleteFn = deleteFn;
 
     vm.enabledComponentTypes = _.where(vm.componentTypes, {
       enabled: true
@@ -415,7 +416,7 @@
 
     function moveComponentFn(component, direction) {
       var toIndex;
-      var fromIndex = _.findIndex(vm.email.components, function(x) {
+      var fromIndex = _.findIndex(vm.email.components, function (x) {
         return x._id === component._id;
       });
 
@@ -426,8 +427,17 @@
       if (direction === 'down') {
         toIndex = fromIndex + 1;
       }
-      
+
       vm.email.components.splice(toIndex, 0, vm.email.components.splice(fromIndex, 1)[0]);
+    }
+
+    function deleteFn() {
+      vm.dataLoaded = false;
+      WebsiteService.deleteEmail(vm.email, function () {
+        vm.dataLoaded = true;
+        $state.go('app.emails');
+        toaster.pop('Warning', 'Email deleted.');
+      });
     }
 
     $scope.$on('email.move.component', function (event, args) {

@@ -111,10 +111,32 @@
                 </div>
                 <div class="col-sm-8">
                     <div class='pull-right'>
-                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="vm.openModalFn('add-email-component-modal')">Add Component</button>
-                        <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click='vm.saveFn()'>Save</button>
+                        <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-layout-media-overlay-alt">
+                            <span>
+                                <div>
+                                    Add Component
+                                </div>
+                            </span>
+                        </button>
+
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                            <span>
+                                <div>
+                                    Save
+                                </div>
+                            </span>
+                        </button>
+
                         <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">One-time email</button>
                         <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary">Create Campaign</button>
+
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger btn-wide btn-scroll btn-scroll-top btn-o ti-trash">
+                            <span>
+                                <div>
+                                    Delete
+                                </div>
+                            </span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -137,7 +159,7 @@
                                 <div class="clearfix mb15"></div>
                             </td>
                         </tr>
-                        
+
                         <tr id="{{component._id}}" ng-if="vm.email.components.length" ng-repeat="component in vm.email.components" class="fragment show-settings {{component.type}}" style="position:relative;" email-component-loader
                             component-class="vm.componentClassFn(component, $index)"
                             component-style="vm.componentStyleFn(component, $index)"
@@ -146,7 +168,7 @@
                             account="vm.account"
                             component-index="$index"
                             component-count="vm.email.components.length"
-                         ></tr>
+                            ></tr>
                     </table>
                 </div>
             </div>
