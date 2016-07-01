@@ -79,9 +79,9 @@ var mainApp = angular
             })
             .when('/blog', {
                 template: function(urlattr) {
-                    if(window.indigenous.ssbBlog === true) {
-                        return '<div data-ng-include="\'blog.html\'"></div>';
-                    } else {
+                    //if(window.indigenous.ssbBlog === true) {
+                    //    return '<div data-ng-include="\'blog.html\'"></div>';
+                    //} else {
                         var s = '<div data-ng-include="';
                         s += " '/template/blog";
                         if(urlattr.cachebuster) {
@@ -90,7 +90,7 @@ var mainApp = angular
                         s+= "'";
                         s += ' "></div>';
                         return s;
-                    }
+                    //}
 
                 },
                 controller: 'CacheCtrl as cacheCtrl'
