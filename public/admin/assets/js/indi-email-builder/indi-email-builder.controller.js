@@ -212,12 +212,11 @@
       }
     }
 
-    function cloneComponentFn(index) {
-      var clone = angular.copy(vm.email.components[index]);
+    function cloneComponentFn(component) {
+      var clone = angular.copy(component);
       delete clone['_id'];
       delete clone['anchor'];
       var addedType = {type: clone.type, version: clone.version};
-      console.log(addedType);
 
       if (vm.dataLoaded) {
         vm.dataLoaded = false;
@@ -414,12 +413,17 @@
     }
 
     $scope.$on('email.duplicate.component', function (event, args) {
-      vm.cloneComponentFn(args.index);
+      vm.cloneComponentFn(args.component);
     });
 
     $scope.$on('email.remove.component', function (event, args) {
       vm.dataLoaded = false;
-      vm.email.components.splice(args.index, 1);
+
+      vm.email.components.forEach(function (c, index) {
+        if (c._id === args.component._id) {
+          vm.email.components.splice(index, 1);
+        }
+      });
       $timeout(function () {
         var element = document.getElementById(vm.email.components[vm.email.components.length - 1]._id);
         if (element) {

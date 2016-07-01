@@ -7,6 +7,7 @@
     return {
       restrict: 'E',
       scope: {
+        component: '=',
         componentIndex: '=',
         components: '='
       },

@@ -28,12 +28,12 @@
       vm.components.splice(toIndex, 0, vm.components.splice(fromIndex, 1)[0]);
     }
 
-    function duplicateComponentFn(index) {
-      $scope.$emit('email.duplicate.component', {index: index});
+    function duplicateComponentFn() {
+      $scope.$emit('email.duplicate.component', {component: vm.component});
     }
     
-    function removeComponentFn(index) {
-      $scope.$emit('email.remove.component', {index: index});
+    function removeComponentFn() {
+      $scope.$emit('email.remove.component', {component: vm.component});
     }
 
     function init(element) {

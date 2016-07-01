@@ -1,5 +1,5 @@
 <td style="position:relative;background:#ffffff;">
-    <email-edit-control class="ssb-edit-control ssb-edit-control-section ssb-on" component-index='vm.componentIndex' components='vm.components' ></email-edit-control>
+    <email-edit-control class="ssb-edit-control ssb-edit-control-section ssb-on" component="vm.component" component-index='vm.componentIndex' components='vm.components' ></email-edit-control>
     <circular passed-options="circleOptions" passed-index="{{vm.componentIndex}}" passed-component="vm.component" passed-component-length="{{vm.componentCount}}" style="z-index:1087" class="circular"></circular>
     <div ng-include="'/components/email-component-wrap.html'"></div>
     <div ng-class="{'zee-blur': !vm.component.visibility}"></div>

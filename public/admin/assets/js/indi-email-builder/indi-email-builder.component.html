@@ -138,7 +138,7 @@
                             </td>
                         </tr>
                         
-                        <tr ng-if="vm.email.components.length" ng-repeat="component in vm.email.components track by $index" class="fragment show-settings {{component.type}}" style="position:relative;" email-component-loader
+                        <tr id="{{component._id}}" ng-if="vm.email.components.length" ng-repeat="component in vm.email.components track by $index" class="fragment show-settings {{component.type}}" style="position:relative;" email-component-loader
                             component-class="vm.componentClassFn(component, $index)"
                             component-style="vm.componentStyleFn(component, $index)"
                             component="component"
