@@ -178,6 +178,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Email Editor',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor')
+    }).state('app.emailCampaign', {
+        url: '/emails/campaigns/:id',
+        template: "<indi-email-campaign></indi-email-campaign>",
+        title: 'Email Campaign',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "/admin/assets/views/campaigns.html",
