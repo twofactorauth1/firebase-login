@@ -1371,6 +1371,8 @@ module.exports = {
                     });
 
                     if(existingSection) {
+                        //if(JSON.stringify(section) !== JSON.stringify(existingSection)){
+                        // This is not returning valid results
                         if(!existingSection.equals(section)){
                             existingSection.set('latest', false);
                             existingSection.set('_id', section.id() + '_' + section.get('_v'));
