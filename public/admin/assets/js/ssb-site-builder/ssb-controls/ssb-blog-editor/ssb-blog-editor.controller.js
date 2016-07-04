@@ -44,6 +44,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.autoSave = autoSave;
     vm.checkPendingChanges = checkPendingChanges;
     vm.refreshPost = refreshPost;
+    vm.draftPost = draftPost;
 
     vm.uiState.cleanBlogPanel = cleanBlogPanel;
 
@@ -355,6 +356,11 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         e.preventDefault();
         e.stopPropagation();
       }
+    }
+
+    function draftPost(post) {
+        post.post_status = 'DRAFT';
+        vm.savePost(post);
     }
 
     function init(element) {

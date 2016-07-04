@@ -243,6 +243,17 @@
                                 <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
                             </button>
 
+                            <button
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
+                                ng-if="vm.state.post.post_status === 'PUBLISHED'"
+                                class="btn btn-primary"
+                                ng-click="vm.draftPost(vm.state.post)"
+                                tooltip-placement="top"
+                                tooltip-append-to-body="true"
+                                tooltip="Draft">
+                                <i class="fa fa-folder-open-o"></i><span class="sr-only">Draft</span>
+                            </button>
+
 
                         </div>
 
