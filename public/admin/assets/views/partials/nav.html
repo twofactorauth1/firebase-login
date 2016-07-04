@@ -53,7 +53,7 @@
                     <span class="title" translate="sidebar.nav.website.PAGES"> Pages </span>
                 </a>
             </li>
-            <li ui-sref-active="active" ng-if="account.showhide.blog">
+            <li ui-sref-active="active" ng-if="account.showhide.blog && !account.showhide.ssbBlog">
                 <a ui-sref="app.website.posts">
                     <span class="title" translate="sidebar.nav.website.POSTS"> Blog Posts </span>
                 </a>
