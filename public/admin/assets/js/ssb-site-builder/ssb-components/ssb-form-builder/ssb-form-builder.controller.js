@@ -53,7 +53,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 	    }
 	}
     if(field && field.fieldsPerRow){
-        styleString = "min-width:" + Math.floor(100/field.fieldsPerRow) + '%';
+        styleString += "min-width:" + Math.floor(100/field.fieldsPerRow) + '%';
     }
 	return styleString;
 	};
