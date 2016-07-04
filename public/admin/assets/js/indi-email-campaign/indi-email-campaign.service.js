@@ -13,6 +13,8 @@
 
     campaignService.loading = {value: 0};
     campaignService.getCampaign = getCampaign;
+    campaignService.createCampaign = createCampaign;
+    campaignService.updateCampaign = updateCampaign;
 
     /**
      * Get get email by ID
@@ -28,6 +30,29 @@
       }
 
       return campaignRequest($http.get([baseCampaignAPIv1, id].join('/')).success(success).error(error));
+    }
+
+    function createCampaign(campaign) {
+      function success(data) {
+      }
+
+      function error(error) {
+        console.error('EmailCampaignService createCampaign error: ', JSON.stringify(error));
+      }
+
+      return campaignRequest($http.post(baseCampaignAPIv1, campaign).success(success).error(error));
+    }
+
+    function updateCampaign(campaign) {
+
+      function success(data) {
+      }
+
+      function error(error) {
+        console.error('EmailCampaignService updateCampaign error: ', JSON.stringify(error));
+      }
+
+      return campaignRequest($http.post([baseCampaignAPIv1, campaign._id].join('/'), campaign).success(success).error(error));
     }
 
     /**

@@ -13,10 +13,33 @@
     vm.init = init;
 
     vm.campaignId = $stateParams.id;
-    vm.campaign = {};
+    vm.campaign = {status: 'DRAFT'};
     vm.dataLoaded = false;
     vm.account = null;
     vm.website = {settings: {}};
+    vm.saveAsDraftFn = saveAsDraftFn;
+    vm.activateCampaignFn = activateCampaignFn;
+
+    function saveAsDraftFn() {
+      var fn = EmailCampaignService.updateCampaign;
+
+      if (vm.campaignId !== 'create') {
+        fn = EmailCampaignService.createCampaign;
+      }
+
+      fn(vm.campaign)
+        .then(function (res) {
+          vm.campaign = res.data;
+          toaster.pop('success', 'Campaign saved');
+        }, function (err) {
+          toaster.pop('error', 'Campaign save failed');
+        });
+    }
+
+    function activateCampaignFn() {
+      vm.campaign.status = 'PENDING';
+      vm.saveAsDraftFn();
+    }
 
     function init(element) {
       vm.element = element;
