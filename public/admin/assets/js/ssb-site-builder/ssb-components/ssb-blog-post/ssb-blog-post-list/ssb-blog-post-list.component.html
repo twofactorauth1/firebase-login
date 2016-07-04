@@ -1,4 +1,10 @@
 <div data-edit ng-class="vm.component.type+'-v'+vm.component.version">
+    <div class="ssb-blog-currently-viewing" ng-if="vm.blog.currentTag">
+        <h4> Currently Viewing Tag: <span class="currently-viewing-item" ng-bind-html="vm.blog.currentTag"></span> </h4>
+    </div>
+    <div class="ssb-blog-currently-viewing" ng-if="vm.blog.currentAuthor">
+        <h4> Currently Viewing Author: <span class="currently-viewing-item" ng-bind-html="vm.blog.currentAuthor"></span> </h4>
+    </div>
     <div ng-if="!vm.blog.posts.length" class="ssb-in-context-info margin-top-20 padding-30">
         <span class="fa fa-info-circle"> No published posts were found.</span>
     </div>
