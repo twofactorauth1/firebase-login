@@ -360,6 +360,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     function draftPost(post) {
         post.post_status = 'DRAFT';
+        post.publish_date = null;
         vm.savePost(post);
     }
 

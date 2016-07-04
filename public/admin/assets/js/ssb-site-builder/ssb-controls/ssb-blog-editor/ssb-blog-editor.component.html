@@ -235,6 +235,7 @@
                             <button
                                 ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 ng-if="vm.state.post.post_status !== 'PUBLISHED'"
+                                ng-hide="vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.publishPost(vm.state.post)"
                                 tooltip-placement="top"
@@ -246,6 +247,7 @@
                             <button
                                 ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 ng-if="vm.state.post.post_status === 'PUBLISHED'"
+                                ng-hide="vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.draftPost(vm.state.post)"
                                 tooltip-placement="top"
