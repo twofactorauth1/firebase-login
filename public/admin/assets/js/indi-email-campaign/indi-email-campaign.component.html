@@ -102,7 +102,7 @@
 
     <div ng-class="{
                 'load1 csspinner':
-                !vm.dataLoaded
+        !vm.dataLoaded
             }">
         <!-- end: PAGE TITLE -->
         <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
@@ -128,7 +128,7 @@
                                 </div>
                             </span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading || vm.campaign._id" ng-click='vm.activateCampaignFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-power-off">
+                        <button type="button" ng-disabled="saveLoading || !vm.campaign._id" ng-click='vm.activateCampaignFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-power-off">
                             <span>
                                 <div>
                                     Activate Campaign
@@ -140,42 +140,30 @@
             </div>
             <div class='row'>
                 <span>STATUS: {{vm.campaign.status}}</span>
-                <span>LAST SAVED: {{vm.campaign.modified.date | date : 'medium'}}</span>
+                <span>LAST SAVED: {{vm.campaign.modified.date| date : 'medium'}}</span>
             </div>
         </div>
-        <div class="row">
-            <div id='email-froala-container'></div>
-            <div id="email-froala-scrollable-container"></div>
-        </div>
-        <div class="row">
-            <div class="email-builder-main custom-fonts email-theme-{{vm.website.theme.name| slugify}}" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.dataLoaded">
-                <div class='components'>
-                    <table class="device-width email-body" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-                        <tr ng-if="vm.dataLoaded && !vm.email.components.length">
-                            <td>
-                                <div class="well empty-page center">
-                                    <h1>This Email is Empty.</h1>
-                                    <h4>Add some components and start editing!</h4>
-                                    <button class="btn btn-info margin-top-15" ng-click="vm.openModalFn('email-component-modal', null, null, 'lg')">Add Component</button>
-                                </div>
-                                <div class="clearfix mb15"></div>
-                            </td>
-                        </tr>
-
-                        <tr id="{{component._id}}" ng-if="vm.email.components.length" ng-repeat="component in vm.email.components" class="fragment show-settings {{component.type}}" style="position:relative;" email-component-loader
-                            component-class="vm.componentClassFn(component, $index)"
-                            component-style="vm.componentStyleFn(component, $index)"
-                            component="component"
-                            website="vm.website"
-                            account="vm.account"
-                            component-index="$index"
-                            component-count="vm.email.components.length"
-                            ></tr>
-                    </table>
+        <div class="row email-campaign-main" ng-hide="!vm.dataLoaded">
+            <div class="col-sm-4 bg-white">
+                <span>Email Preview</span>
+                <button type="button" ng-disabled="saveLoading || !vm.campaign.steps[0].settings.emailId" ui-sref='app.emailEditor({id: vm.campaign.steps[0].settings.emailId})' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-pencil">
+                    <span>
+                        <div>
+                            Edit
+                        </div>
+                    </span>
+                </button>
+            </div>
+            <div class="col-sm-4">
+                <div class='form-group'>
+                    <label>Campaign Type</label>
+                    <select class='form-control' ng-model='vm.campaign.type'>
+                        <option value='onetime'>One Time</option>
+                        <option value='autoresponder'>Auto Responder</option>
+                    </select>
                 </div>
             </div>
+            <div class="col-sm-4 bg-white">schedule</div>
         </div>
     </div>
 </div>
-
-<div data-ng-include data-src=" 'assets/views/partials/add-email-component-modal.html' " ></div>
