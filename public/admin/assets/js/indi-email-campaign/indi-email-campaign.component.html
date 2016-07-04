@@ -94,8 +94,8 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">Email Builder</h1>
-                <span class="mainDescription">Fill out details below</span></span>
+                <h1 class="mainTitle">Campaign Configuration</h1>
+                <span class="mainDescription">Fill out details below</span>
             </div>
         </div>
     </section>
@@ -109,48 +109,38 @@
             <div class='row'>
                 <div class="col-sm-4">
                     <div class='form-group'>
-                        <input class='form-control' type='text' placeholder='Untitled Email' ng-model='vm.email.title' />
+                        <input class='form-control' type='text' placeholder='Untitled Campaign' ng-model='vm.campaign.name' />
                     </div>
                 </div>
                 <div class="col-sm-8">
                     <div class='pull-right'>
-                        <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-plus">
+                        <button type="button" ng-disabled="saveLoading" ng-click="vm.saveAsDraftFn()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
                             <span>
                                 <div>
-                                    Add Component
+                                    Save as draft
                                 </div>
                             </span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.sendTestFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-location-arrow">
                             <span>
                                 <div>
-                                    Save
+                                    Send Test
                                 </div>
                             </span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o  ti-layout-media-overlay-alt">
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.activateCampaignFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-power-off">
                             <span>
                                 <div>
-                                    One-time email
-                                </div>
-                            </span>
-                        </button>
-                        <button type="button" ng-disabled="saveLoading" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o  ti-layout-media-overlay-alt">
-                            <span>
-                                <div>
-                                    Create Campaign
-                                </div>
-                            </span>
-                        </button>
-                        <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger btn-wide btn-scroll btn-scroll-top btn-o ti-trash">
-                            <span>
-                                <div>
-                                    Delete
+                                    Activate Campaign
                                 </div>
                             </span>
                         </button>
                     </div>
                 </div>
+            </div>
+            <div class='row'>
+                <span>STATUS: {{vm.campaign.status}}</span>
+                <span>LAST SAVED: {{vm.campaign.modified.date | date : 'medium'}}</span>
             </div>
         </div>
         <div class="row">
