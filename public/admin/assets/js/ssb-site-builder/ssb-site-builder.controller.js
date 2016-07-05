@@ -540,7 +540,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.accordion.sections[index] = { components: {} };
             vm.uiState.accordion.sections[index].isOpen = true;
-            vm.uiState.isDuplicateGlobalHeader = SimpleSiteBuilderService.checkDuplicateGlobalHeader(vm.state.page.sections[index]);
+            if(vm.state.page.sections[index])
+                vm.uiState.isDuplicateGlobalHeader = SimpleSiteBuilderService.checkDuplicateGlobalHeader(vm.state.page.sections[index]);
         } else {
             vm.uiState.activeSectionIndex = undefined;
             vm.uiState.activeComponentIndex = undefined;

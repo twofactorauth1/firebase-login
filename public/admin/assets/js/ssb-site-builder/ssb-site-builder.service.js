@@ -1213,13 +1213,16 @@
 
         function checkDuplicateGlobalHeader(section){
             var _duplicate = false;
-            if(section.globalHeader === true || section.title === "Header"){
-               var globalHeaders = getGlobalHeaders(ssbService.page.sections);
-               if(globalHeaders && globalHeaders.length){
-                    var _index = _.findIndex(globalHeaders, { _id: section._id });
-                    _duplicate = _index === -1;
-               }
+            if(section){
+                if(section.globalHeader === true || section.title === "Header"){
+                   var globalHeaders = getGlobalHeaders(ssbService.page.sections);
+                   if(globalHeaders && globalHeaders.length){
+                        var _index = _.findIndex(globalHeaders, { _id: section._id });
+                        _duplicate = _index === -1;
+                   }
+                }
             }
+            
             return _duplicate;
         }
 
