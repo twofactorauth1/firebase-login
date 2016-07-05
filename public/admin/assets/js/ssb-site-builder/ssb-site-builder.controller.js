@@ -540,7 +540,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.accordion.sections[index] = { components: {} };
             vm.uiState.accordion.sections[index].isOpen = true;
-            vm.uiState.isDuplicateGlobalHeader = SimpleSiteBuilderService.checkDuplicateGlobalHeader(vm.state.page.sections[index]);
+            if(vm.state.page.sections[index])
+                vm.uiState.isDuplicateGlobalHeader = SimpleSiteBuilderService.checkDuplicateGlobalHeader(vm.state.page.sections[index]);
         } else {
             vm.uiState.activeSectionIndex = undefined;
             vm.uiState.activeComponentIndex = undefined;
@@ -803,8 +804,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
-
-                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2)) {
+                    var changedPath = jsondiff1[i].path;
+                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath)) {
 
                         console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -847,17 +848,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * - handles temp IDs for buttons inside Froala editor (button was added)
      */
     function dataIsCompiledAdded(diff1, diff2) {
-            var updated =   diff1 &&
-                diff2 &&
-                angular.isDefined(diff1) &&
-                angular.isDefined(diff1.indexOf) &&
-                diff1.indexOf('data-compiled') === -1
-                angular.isDefined(diff2) &&
-                angular.isDefined(diff2.indexOf) &&
-                diff2.indexOf('data-compiled') !== -1
-            if(updated && angular.isDefined(diff1) && angular.isDefined(diff2)){
+            var updated = false;
+
+            if (diff1 && diff2) {
+                updated = angular.isDefined(diff1) &&
+                        angular.isDefined(diff1.indexOf) &&
+                        diff1.indexOf('data-compiled') === -1
+                        angular.isDefined(diff2) &&
+                        angular.isDefined(diff2.indexOf) &&
+                        diff2.indexOf('data-compiled') !== -1;
+            }
+
+            if (updated && angular.isDefined(diff1) && angular.isDefined(diff2)) {
                 updated = angular.equals(diff1, diff2)
             }
+
             return updated;
     };
 
@@ -880,10 +885,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      * Detect changes to page data, determine if they should be ignored
      * - handles page's published date updating after a successful publish action
      */
-    function dataIsPublishedDate(diff1, diff2) {
+    function dataIsPublishedDate(diff1, diff2, path) {
         var ret = false;
-
-        if (diff1) {
+        var isPublishDate = false;
+        if(path){
+            if(path.indexOf("published") > -1){
+                isPublishDate = true;
+            }
+        }
+        if (diff1 && isPublishDate) {
             if (diff1.length < 30 && diff1.indexOf(':') !== -1 && diff1.indexOf('-') !== -1) {
                 if (moment(diff1).isValid()) {
                     ret = true;

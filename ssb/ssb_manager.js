@@ -21,6 +21,7 @@ var pageCacheManager = require('../cms/pagecache_manager');
 //TODO: blogpostdao?!?  Seriously?!?
 var blogPostDao = require('../cms/dao/blogpost.dao');
 var sanitizeHtml = require('sanitize-html');
+var observableDiff = require('deep-diff').observableDiff;
 var PLATFORM_ID = 0;
 
 module.exports = {
@@ -808,7 +809,7 @@ module.exports = {
                 console.log('Error finding posts:', err);
                 fn(err);
             } else {
-                console.log('We found these posts:', posts.results);
+                // console.log('We found these posts:', posts.results);
                 fn(null, posts.results);
             }
         });
@@ -1371,7 +1372,13 @@ module.exports = {
                     });
 
                     if(existingSection) {
-                        if(!existingSection.equals(section)){
+                        var _change = false;
+                        observableDiff(section, existingSection, function (d) {
+                            if (d.path.join('.').indexOf("modified.") === -1) {
+                                _change = true;
+                            }
+                        });
+                        if(_change){
                             existingSection.set('latest', false);
                             existingSection.set('_id', section.id() + '_' + section.get('_v'));
                             var newVersion = (existingSection.get('_v')||0) + 1;
@@ -3065,6 +3072,7 @@ module.exports = {
                                                  * The sections Array is an array of section References that belong to the site template.
                                                  * We need to make a copy of these sections for the page.
                                                  */
+                                                //TODO: keep track of globalHeader or sectionId translations
                                                 self._copySectionsForAccount(page.get('sections'), accountId, function(err, sectionRefAry){
                                                     if(err) {
                                                         callback(err);
@@ -3122,6 +3130,7 @@ module.exports = {
                 var query = {
                     accountId:accountId,
                     globalHeader:true,
+                    global:true,
                     latest: true
                 };
                 sectionDao.findAndOrder(query, null, $$.m.ssb.Section, 'modified.date', -1, function(err, sections){
@@ -3209,7 +3218,8 @@ module.exports = {
             },
             function(dereffedSections, cb) {
                 _.each(dereffedSections, function(section){
-                    var id = $$.u.idutils.generateUUID();
+                    //var id = $$.u.idutils.generateUUID();
+                    var id = section.id() + '' + accountId;
                     section.set('accountId', accountId);
                     section.set('_id', id);
                     section.set('anchor', id);
@@ -3469,6 +3479,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> createDuplicatePost');
         blogPost.set('post_title', blogPost.get('post_title') + ' (copy)');
+        blogPost.set('display_title', blogPost.get('post_title'));
         blogPost.set("post_url", blogPost.get('post_url') + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true));
         blogPost.set('published_date', null);
         blogPost.set('post_status', "DRAFT");

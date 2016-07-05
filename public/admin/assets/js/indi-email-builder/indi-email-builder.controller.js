@@ -18,6 +18,7 @@
     vm.website = {settings: {}};
     vm.email = null;
     vm.modalInstance = null;
+    vm.editor = null;
     vm.componentTypes = [{
         title: 'Header',
         type: 'email-header',
@@ -72,11 +73,14 @@
     vm.openModalFn = openModalFn;
     vm.closeModalFn = closeModalFn;
     vm.addComponentFn = addComponentFn;
+    vm.cloneComponentFn = cloneComponentFn;
     vm.componentClassFn = componentClassFn;
     vm.componentStyleFn = componentStyleFn;
     vm.saveFn = saveFn;
     vm.insertMediaFn = insertMediaFn;
+    vm.moveComponentFn = moveComponentFn;
     vm.clickImageButton = clickImageButton;
+    vm.deleteFn = deleteFn;
 
     vm.enabledComponentTypes = _.where(vm.componentTypes, {
       enabled: true
@@ -182,7 +186,7 @@
         vm.dataLoaded = false;
         var componentType = null;
         if (['email-footer', 'email-header'].indexOf(addedType.type) > -1) {
-          componentType = _.findWhere($scope.components, {
+          componentType = _.findWhere(vm.email.components, {
             type: addedType.type
           });
           if (componentType) {
@@ -202,9 +206,47 @@
                 $document.scrollToElementAnimated(element, 175, 1000);
                 $(window).trigger('resize');
               }
+              vm.dataLoaded = true;
+              toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
             }, 500);
+          }
+        });
+      }
+    }
+
+    function cloneComponentFn(component) {
+      var clone = angular.copy(component);
+      delete clone['_id'];
+      delete clone['anchor'];
+      var addedType = {type: clone.type, version: clone.version};
+
+      if (vm.dataLoaded) {
+        vm.dataLoaded = false;
+        var componentType = null;
+        if (['email', 'email-footer', 'email-header'].indexOf(addedType.type) > -1) {
+          componentType = _.findWhere(vm.email.components, {
+            type: addedType.type
+          });
+          if (componentType) {
+            toaster.pop('error', componentType.type + " component can't be cloned");
             vm.dataLoaded = true;
-            toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+            return;
+          }
+        }
+
+        WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
+          if (newComponent) {
+            _.extend(newComponent, clone);
+            vm.email.components.push(newComponent);
+            $timeout(function () {
+              var element = document.getElementById(newComponent._id);
+              if (element) {
+                $document.scrollToElementAnimated(element, 175, 1000);
+                $(window).trigger('resize');
+              }
+              vm.dataLoaded = true;
+              toaster.pop('success', "Component cloned", "The " + newComponent.type + " component was cloned successfully.");
+            }, 500);
           }
         });
       }
@@ -363,12 +405,67 @@
       $scope.isEditMode = edit;
       vm.openModalFn('media-modal', 'MediaModalCtrl', null, 'lg');
     }
-    ;
 
     function insertMediaFn(asset) {
-      console.log(asset);
+      if (vm.editor) {
+        vm.editor.image.insert(asset.url, !1, null, vm.editor.img);
+      } else {
+        toaster.pop('error', 'Position cursor at the point of insertion');
+      }
     }
-    ;
+
+    function moveComponentFn(component, direction) {
+      var toIndex;
+      var fromIndex = _.findIndex(vm.email.components, function (x) {
+        return x._id === component._id;
+      });
+
+      if (direction === 'up') {
+        toIndex = fromIndex - 1;
+      }
+
+      if (direction === 'down') {
+        toIndex = fromIndex + 1;
+      }
+
+      vm.email.components.splice(toIndex, 0, vm.email.components.splice(fromIndex, 1)[0]);
+    }
+
+    function deleteFn() {
+      vm.dataLoaded = false;
+      WebsiteService.deleteEmail(vm.email, function () {
+        vm.dataLoaded = true;
+        $state.go('app.emails');
+        toaster.pop('Warning', 'Email deleted.');
+      });
+    }
+
+    $scope.$on('email.move.component', function (event, args) {
+      vm.moveComponentFn(args.component, args.direction);
+    });
+
+    $scope.$on('email.duplicate.component', function (event, args) {
+      vm.cloneComponentFn(args.component);
+    });
+
+    $scope.$on('email.remove.component', function (event, args) {
+      vm.dataLoaded = false;
+
+      vm.email.components.forEach(function (c, index) {
+        if (c._id === args.component._id) {
+          vm.email.components.splice(index, 1);
+        }
+      });
+      $timeout(function () {
+        var element = document.getElementById(vm.email.components[vm.email.components.length - 1]._id);
+        if (element) {
+          $document.scrollToElementAnimated(element, 175, 1000);
+          $(window).trigger('resize');
+        }
+        vm.dataLoaded = true;
+        toaster.pop('warning', 'component deleted');
+      }, 500);
+    });
 
     function init(element) {
       vm.element = element;
@@ -389,6 +486,12 @@
           }
           vm.email = res.data;
           vm.dataLoaded = true;
+          $timeout(function () {
+            $('.editable').on('froalaEditor.focus', function (e, editor) {
+              vm.editor = editor;
+              console.info('Event froalaEditor.focus triggered');
+            });
+          }, 1000);
         }, function (err) {
           console.error(err);
           $state.go('app.emails');

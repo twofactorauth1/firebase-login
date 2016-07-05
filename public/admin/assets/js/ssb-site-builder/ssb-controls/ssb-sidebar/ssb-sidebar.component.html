@@ -214,27 +214,27 @@
                         <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
-                            ng-if="page._id === vm.state.page._id" ng-click="vm.deletePage()"
+                            ng-if="page._id === vm.state.page._id && !vm.uiState.isBlogPage" ng-click="vm.deletePage()"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Delete page">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
-                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu !== false && !vm.uiState.isBlogPage"
                             ng-click="vm.hideFromMenu()"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Hide this page from main menu">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 display-ib ti-eye"
-                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false"
+                            ng-if="page._id === vm.state.page._id && vm.state.page.mainmenu === false && !vm.uiState.isBlogPage"
                             ng-click="vm.showPageOnMenu()"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Show this page on main menu">
                         </div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-files"
-                            ng-if="page._id === vm.state.page._id"
+                            ng-if="page._id === vm.state.page._id && !vm.uiState.isBlogPage"
                             ng-click="vm.duplicatePage()"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Create duplicate page">

@@ -44,6 +44,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.autoSave = autoSave;
     vm.checkPendingChanges = checkPendingChanges;
     vm.refreshPost = refreshPost;
+    vm.draftPost = draftPost;
 
     vm.uiState.cleanBlogPanel = cleanBlogPanel;
 
@@ -57,9 +58,9 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.state.post = angular.copy(vm.defaultPost);
     }
 
-    $scope.$watch(function() { return vm.uiState.openBlogPanel.id }, function(id) {
-        if (id === 'edit' && !vm.uiState.froalaEditorActive) {
-            // $timeout(vm.activateFroalaToolbar);
+    $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], function(id) {
+        if (vm.state.post && vm.state.pendingBlogChanges) {
+            vm.savePost();
         }
     }, true);
 
@@ -355,6 +356,12 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         e.preventDefault();
         e.stopPropagation();
       }
+    }
+
+    function draftPost(post) {
+        post.post_status = 'DRAFT';
+        post.publish_date = null;
+        vm.savePost(post);
     }
 
     function init(element) {

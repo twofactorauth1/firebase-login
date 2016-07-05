@@ -81,7 +81,9 @@
                                         <td>
                                             <div ng-repeat="address in account.business.addresses">
                                                 <a href>
-                                                    {{address.address}} {{address.address2}}<br>{{address.city}} {{address.state}} {{address.postcode}}
+                                                    {{address.address}} {{address.address2}}<br ng-if="(address.address || address.address2) && (address.address || address.state || address.zip)">
+                                                    {{address.city}}<span ng-if="address.city && address.state">,</span> {{address.state}} {{address.zip}}
+                                                    <span ng-if="address.country">(</span>{{address.country}}<span ng-if="address.country">)</span>
                                                 </a>
                                                 <br>
                                             </div>

@@ -53,6 +53,9 @@
           contact.hasGoogleId = $scope.checkGoogleId(contact);
 
           contact.bestAddress = $scope.displayAddressFormat(contact);
+          // delete isSelected field while loading a contact
+          if(contact.isSelected)
+            delete contact.isSelected;
           var tempTags = [];
           var tagLabel = "";
           _.each(contact.tags, function (tag) {
@@ -643,6 +646,8 @@
             }
 
             contact.tags = _.uniq(contact.tags);
+            // delete isSelected field while saving a contact
+            delete contact.isSelected;
             contactPromises.push(ContactService.putContactPromise(contact));
         });
 

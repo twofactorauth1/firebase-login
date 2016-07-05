@@ -217,8 +217,8 @@
                                 tooltip-append-to-body="true"
                                 tooltip-html-unsafe="Toggle Featured">
 
-                                <i ng-if="!vm.state.post.featured" class="fa fa-star"></i>
-                                <i ng-if="vm.state.post.featured" class="fa fa-star-o"></i>
+                                <i ng-if="vm.state.post.featured" class="fa fa-star"></i>
+                                <i ng-if="!vm.state.post.featured" class="fa fa-star-o"></i>
 
                             </button>
 
@@ -235,12 +235,25 @@
                             <button
                                 ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
                                 ng-if="vm.state.post.post_status !== 'PUBLISHED'"
+                                ng-hide="vm.uiState.saveLoading"
                                 class="btn btn-primary"
                                 ng-click="vm.publishPost(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
                                 tooltip="Publish">
                                 <i class="fa fa-globe"></i><span class="sr-only">Publish</span>
+                            </button>
+
+                            <button
+                                ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
+                                ng-if="vm.state.post.post_status === 'PUBLISHED'"
+                                ng-hide="vm.uiState.saveLoading"
+                                class="btn btn-primary"
+                                ng-click="vm.draftPost(vm.state.post)"
+                                tooltip-placement="top"
+                                tooltip-append-to-body="true"
+                                tooltip="Draft">
+                                <i class="fa fa-folder-open-o"></i><span class="sr-only">Draft</span>
                             </button>
 
 

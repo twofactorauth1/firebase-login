@@ -418,6 +418,22 @@
       }
     };
 
+
+    /*
+     * @validateEmail
+     * - email validation
+     */
+    $scope.validateEmail = function (email) {
+      var result = true;
+      if(email){
+        var regex = $scope.emailValidation;
+        result =  regex.test(email);
+      }
+      if(!result){
+        return "Invalid email address";
+      }
+    };
+
     /*
      * @analyzeSubject
      * - email subject quality feedback
@@ -1585,7 +1601,7 @@
      * - get saved contacts attached to this campaign
      */
     $scope.selectedContacts.individuals = [];
-    $scope.getContacts = function() {
+    $scope.getCampaignContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
           $scope.originalRecipients = angular.copy(data);
           $scope.recipients = data;
@@ -1775,7 +1791,7 @@
         }).then(function(data) {
           return $scope.getContacts();
         }).then(function(data) {
-          return $scope.getContacts();
+          return $scope.getCampaignContacts();
         }).then(function(data) {
           $scope.loadSavedTags();
         });

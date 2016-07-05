@@ -13,8 +13,10 @@
 
 .ssb-blog-featured-slider {
 
+    margin-bottom: 70px;
+
     @media screen and (min-width: 991px) {
-        margin-top: 50px;
+        // margin-top: 50px;
     }
 
     .slick-slide {
@@ -42,6 +44,7 @@
         transform: translateY(-50%);
         width: 100%;
 
+
         @media screen and (min-width: 992px) {
             min-height: 309px;
             max-height: 500px;
@@ -50,7 +53,7 @@
         img {
             position: absolute;
             top: 50%;
-            left: 0;
+            left: -15px;
             width: 100%;
             height: auto;
             transform: translateY(-50%);
@@ -83,7 +86,6 @@
     .media-heading .ssb-theme-btn {
 
         background-color: rgba(0,0,0,.4)!important;
-        color: #fff!important;
         font-weight: bold;
         padding: 5px;
         font-size: 24px;
@@ -92,10 +94,14 @@
         &:hover:before {
             background-color: transparent!important;
         }
+
+        &:focus {
+            background-color: transparent!important;
+        }
     }
 
     .slick-dots{
-        z-index: 1;
+        z-index: 2;
         margin: 0 !important;
 
         li button:before{
@@ -114,33 +120,53 @@
     }
 }
 
-.ssb-blog-post-list.ssb-media-stacked {
+.ssb-blog-currently-viewing{
+    position: relative;
+    background: #47b1cc;
+    padding: 10px;
+    color: white;    
+    text-align: center;
+    .currently-viewing-item {
+        font-weight: bold;
+        font-size: 18px;
+    }
+}
 
+.ssb-blog-post-list.ssb-media-stacked {
+    position:relative;
     article {
         margin-top: 50px;
         border: 1px solid #dadada;
+        margin-left: 15px;
+        margin-right: 15px;
+
+        &:first-of-type {
+            margin-top: 0;
+        }
 
         .ssb-media-left {
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
+            // padding-bottom: 56.25%;
+            // height: 0;
+            // overflow: hidden;
             position: relative;
 
             img {
-                position: absolute;
-                top: 0;
-                left: 0;
+                // position: absolute;
+                // top: 0;
+                // left: 0;
                 width: 100%;
-                z-index: 100;
+                // z-index: 100;
             }
         }
 
         .ssb-media-body {
             margin: 20px;
+            position: relative;
         }
 
         .ssb-media-body .media-heading {
             margin-bottom: 0;
+            margin-left: -1.75px;
 
             .ssb-theme-btn {
                 padding: 0;
@@ -148,11 +174,29 @@
                 font-size: 24px;
                 line-height: 1.1;
                 text-align: left;
+
+                // font-size: 28px;
+                // margin-left: -1.75px;
+                // line-height: 1.12;
+                // letter-spacing: -.022em;
             }
         }
 
         .ssb-blog-post-body {
+
             margin-bottom: 30px;
+
+            p {
+                // font-size: 24px;
+                // margin-left: -1.5px;
+                // line-height: 1.18;
+                // letter-spacing: -.022em;
+            }
+
+            .ssb-theme-btn.btn-link {
+                margin-left: -1.75px;
+            }
+
         }
 
     }

@@ -288,8 +288,8 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Yes, delete!",
       cancelButtonText: "No, do not delete!",
-      closeOnConfirm: false,
-      closeOnCancel: true
+      closeOnConfirm: true,
+      closeOnCancel: true,
     }, function (isConfirm) {
       if (isConfirm) {
         if (asset)

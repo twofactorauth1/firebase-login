@@ -39,6 +39,7 @@ var section = $$.m.ModelBase.extend({
             canAddComponents: false,
             version: '1',
             txtcolor: null,
+            border: {},
             bg: {
                 img: {
                     url : "",

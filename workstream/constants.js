@@ -97,7 +97,7 @@ defaultWorkstreams[1] = {
         {
             "_id" : 2,
             "name" : "Collect contact info",
-            "link" : "/admin/#/website/pages",
+            "link" : "/admin/#/website/site-builder/pages",
             "helpText" : "Add a simple form on a page that automatically creates contacts.",
             "complete" : false,
             "optional" : false,
@@ -178,7 +178,7 @@ defaultWorkstreams[2] = {
             "_id" : 10,
             "name" : "Write a blog post",
             "link" : "/admin/#/website/posts",
-            "helpText" : "Tell customers what you're thinking about and working on with blog posts that you can publish immediately or later.",
+            "helpText" : "Tell contacts what you're thinking about and working on with blog posts that you can publish immediately or later.",
             "complete" : false,
             "optional" : true,
             "helpLinks": [
@@ -245,7 +245,7 @@ defaultWorkstreams[3] = {
         {
             "_id" : 13,
             "name" : "Set up an online store",
-            "link" : "/admin/#/website/pages",
+            "link" : "/admin/#/website/site-builder/pages",
             "helpText" : "Add a product component or store to a page so that customers can view and purchase your offerings.",
             "complete" : false,
             "optional" : false,

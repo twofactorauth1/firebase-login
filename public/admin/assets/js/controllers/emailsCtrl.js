@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", "formValidations", '$q', function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService, formValidations, $q) {
+  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", "formValidations", '$q', '$state', function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService, formValidations, $q, $state) {
 
     $scope.setDefaults = function () {
       $scope.newEmail = {
@@ -259,9 +259,13 @@
     };
 
     $scope.viewSingle = function (email) {
-      $location.path('/editor').search({
-        email: email._id
-      });
+      if ($scope.account.showhide.ssbEmail) {
+        $state.go('app.emailEditor', {id: email._id});
+      } else {
+        $location.path('/editor').search({
+          email: email._id
+        });
+      }
     };
 
     $scope.filterScreenshot = {};
