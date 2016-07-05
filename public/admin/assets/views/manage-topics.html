@@ -139,7 +139,7 @@
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary btn-o" ng-click="createTopic(newtopic, $event)">Create Topic</button>
+            <button ng-disabled="!newtopic.title" class="btn btn-primary btn-o" ng-click="createTopic(newtopic, $event)">Create Topic</button>
         </div>
     </script>
     <div id="blueimp-gallery" class="blueimp-gallery">
