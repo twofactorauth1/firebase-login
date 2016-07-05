@@ -172,8 +172,8 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
-                                <td class="hidden-xs"><strong>Order ID: </strong> {{order.order_id}}</td>
-                                <td ng-class="{'center': tableView == 'list'}"><strong>Status: </strong>
+                                <td class="hidden-xs"><strong>Order ID:</strong> {{order.order_id}}</td>
+                                <td ng-class="{'center': tableView == 'list'}"><strong>Status:</strong>
                                     <span ng-if="tableView == 'list'" class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"
                                         ng-class="{'text-warning': order.status == orderConstant.order_status.PENDING_PAYMENT,
@@ -199,25 +199,25 @@
                                     <span ng-if="tableView == 'grid'" class="pull-left">{{formatOrderStatus(order.status)}}</span>
                                 </td>
                                 <td>
-                                    <strong ng-if="tableView == 'grid'">Customer: </strong>
+                                    <strong ng-if="tableView == 'grid'">Customer:</strong>
                                     <span class="pull-left" ng-class="{'col-style': tableView == 'list'}" ng-text-truncate="order.customerDetailedName" ng-tt-chars-threshold="17" ng-tt-no-toggling tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="{{order.customerDetailedName}}">
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-hide='tableView == "grid"'><strong>(Qty) Items: </strong>
+                                <td class="hidden-xs" ng-hide='tableView == "grid"'><strong>(Qty) Items:</strong>
                                     <span ng-repeat="item in order.line_items track by $index"> 
                                         <span>{{item.quantity ? '('+item.quantity+')' : '(1)'}}</span>
                                         {{item.name}}<br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}" ng-hide='tableView == "grid"'><strong>SKUs: </strong>
+                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}" ng-hide='tableView == "grid"'><strong>SKUs:</strong>
                                     <span ng-repeat="item in order.line_items track by $index">
                                         <span>{{item.product.sku ? item.product.sku : ' '}}</span>
                                         <br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Total: </strong> {{order.total | currency}}</td>
-                                <td class="hidden-xs"><strong>Created: </strong> {{order.created.date | date:'MMM d yy'}}</td>
-                                <td class="hidden-xs"><strong>Modified: </strong>{{order.modified.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Total:</strong> {{order.total | currency}}</td>
+                                <td class="hidden-xs"><strong>Created:</strong> {{order.created.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs"><strong>Modified:</strong>{{order.modified.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
                         <tfoot>
