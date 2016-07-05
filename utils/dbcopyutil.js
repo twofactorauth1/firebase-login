@@ -9,6 +9,7 @@ var STRIPE_ACCESS_TOKEN = 'sk_test_osAnWDulUbCkgw0D2kkwo1Ju';
 var STRIPE_REFRESH_TOKEN = 'rt_5NU1M6ubOAkICDJs0TpIa8iCRHDUwbSaC7VJgPXQ75MCfFGZ';
 var utils = require('./commonutils');
 require('../configs/log4js.config').configure();
+var UUID = require('node-uuid')
 
 var defaultSubscriptionPrivs = [
     'integrations/payments',
@@ -71,6 +72,219 @@ var copyutil = {
         var self = this;
         //self._copyAccount(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
         self._enableSiteBuilderOnLegacyAccount(accountId, mongoConfig.PROD_MONGODB_CONNECT, cb);
+    },
+
+    migrateToSSBBlogOnTest: function(accountId, cb) {
+        var self = this;
+        self._ensureLatestSectionProperty(accountId, mongoConfig.TEST_MONGODB_CONNECT, function(err){
+            self._migrateToSSBBlog(accountId, mongoConfig.TEST_MONGODB_CONNECT, cb);
+        });
+
+    },
+
+    migateToSSBBlogOnProd: function(accountId, cb) {
+
+    },
+
+    _ensureLatestSectionProperty: function(accountId, dbConnect, fn) {
+        var self = this;
+        var srcMongo = mongoskin.db(dbConnect, {safe:true});
+        var pagesCollection = srcMongo.collection('pages');
+        var sectionsCollection = srcMongo.collection('sections');
+
+        async.waterfall([
+            function(cb){
+                pagesCollection.find({accountId:accountId, latest:true}).toArray(function(err, items){
+                    if(err) {
+                        cb(err);
+                    } else {
+                        var sectionIdAry = [];
+                        _.each(items, function(page){
+                            sectionIdAry.concat(page.sections);
+                        });
+                        cb(null, sectionIdAry);
+                    }
+                });
+            },
+            function(sectionIdAry, cb) {
+                async.eachSeries(sectionIdAry, function(section, callback){
+                    sectionsCollection.find({_id: section._id}).toArray(function(err, items){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            if(items && items[0]) {
+                                items[0].latest = true;
+                                sectionsCollection.save(items[0], function(err, value){
+                                    callback(err);
+                                });
+                            } else {
+                                callback();
+                            }
+                        }
+                    });
+                }, function(err){
+                    cb(err);
+                });
+            }
+
+        ], function(err){
+            if(err) {
+                console.log('Error fixing section latest property:', err);
+            } else {
+                console.log('Fixed section latest property.');
+            }
+            fn(err);
+        });
+    },
+
+    _migrateToSSBBlog: function(accountId, dbConnect, fn) {
+        var self = this;
+        var srcMongo = mongoskin.db(dbConnect, {safe:true});
+
+        /*
+         * 1. account.showhide.ssbBlog = true
+         * 2. create blog-list and blog-post using global headers
+         * 3. Ensure navigation only links to /blog (nothing to do here.)
+         * 4. Admin navigation hide link to Blog Posts (nothing to do here.)
+         */
+
+        var accountsCollection = srcMongo.collection('accounts');
+        var pagesCollection = srcMongo.collection('pages');
+        var sectionsCollection = srcMongo.collection('sections');
+        var templatesCollection = srcMongo.collection('templates');
+        var publishedPagesCollection = srcMongo.collection('published_pages');
+
+        async.waterfall([
+            function(cb) {
+                accountsCollection.find({'_id':accountId}).toArray(function(err, items){
+                    if(err || !items || items.length < 1) {
+                        console.log('Error getting account:', err);
+                        err = err || 'Account not found';
+                        cb(err);
+                    } else {
+                        cb(null, items[0]);
+                    }
+                });
+            },
+            function(accountJSON, cb) {
+                accountJSON.showhide.ssbBlog = true;
+                //update this last so we know when we are done with account
+                templatesCollection.find({handle: {$in:['blog-list', 'blog-post']}}).toArray(function(err, items){
+                    if(err || !items || items.length !== 2) {
+                        console.log('Wrong number of templates (or error): ', err);
+                        err = err || 'Wrong number of templates';
+                        cb(err);
+                    } else {
+                        cb(null, accountJSON, items);
+                    }
+                });
+
+            },
+            function(accountJSON, templateJSONAry, cb) {
+                var websiteID = accountJSON.website.websiteId;
+                var pageJSONAry = [];
+                async.eachSeries(templateJSONAry, function(template, callback){
+                    template.accountId = accountId;
+                    template.websiteId = websiteID;
+                    template._id = UUID.v4();
+                    self._copySectionsForAccount(template.sections, accountId, sectionsCollection, function(err, sections){
+                        console.log('sections:', sections);
+                        template.sections = sections;
+                        pageJSONAry.push(template);
+                        callback(err);
+                    });
+
+                }, function(err){
+                    cb(err, accountJSON, templateJSONAry, pageJSONAry);
+                });
+            },
+
+            function(accountJSON, templateJSONAry, pageJSONAry, cb) {
+                var query = {
+                    accountId:accountId,
+                    globalHeader:true,
+                    global:true,
+                    latest: true
+                };
+                var orderByObj = {};
+                orderByObj['modified.date'] = -1;
+                var globalHeader = null;
+                sectionsCollection.find(query).sort(orderByObj).toArray(function(err, items){
+                    if(err) {
+                        cb(err);
+                    } else {
+                        if(items && items.length > 0) {
+                            globalHeader = items[0];
+                        }
+                        cb(null, accountJSON, templateJSONAry, pageJSONAry, globalHeader);
+                    }
+                });
+            },
+            function(accountJSON, templateJSONAry, pageJSONAry, globalHeader, cb) {
+                if(globalHeader) {
+                    _.each(pageJSONAry, function(page){
+                        page.sections[0]._id = globalHeader._id;
+                    });
+                }
+                async.eachSeries(pageJSONAry, function(page, callback){
+                    pagesCollection.save(page, function(err, savedPage){
+                        callback(err);
+                    });
+                }, function(err){
+                    accountsCollection.save(accountJSON, function(err, savedAccount){
+                        cb(err, pageJSONAry);
+                    });
+                });
+            },
+            function derefSectionsIntoPages(pages, cb) {
+                async.eachSeries(pages, function(page, callback){
+                    if(page.sections) {
+                        self._dereferenceSections(page.sections, sectionsCollection, function(err, sections){
+                            if(err) {
+                                self.log.error('Error dereferencing sections');
+                                callback(err);
+                            } else {
+                                page.sections =  sections;
+                                callback(null);
+                            }
+                        });
+                    } else {
+                        callback();
+                    }
+
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error dereferencing sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, pages);
+                    }
+                });
+
+            },
+            function saveIntoPublishedCollection(pages, cb) {
+                self.log.debug('saving published pages');
+                async.eachSeries(pages, function(page, callback){
+                    publishedPagesCollection.save(page, function(err, savedPage){
+                        callback(err);
+                    });
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error saving published pages:', err);
+                        cb(err);
+                    } else {
+                        cb(null);
+                    }
+                });
+            }
+        ], function done(err){
+            if(err) {
+                console.log('Error updating account [' + accountId + ']:', err);
+            } else {
+                console.log('Finished updating account:' + accountId);
+            }
+            fn();
+        });
     },
 
 
@@ -1118,6 +1332,55 @@ var copyutil = {
             }
         }, function done(err){
             fn(err, deReffedAry);
+        });
+    },
+
+    _copySectionsForAccount: function(sectionRefAry, accountId, sectionCollection, fn) {
+        var self = this;
+        /*
+         * 1. Dereference the sections
+         * 2. Change accountId
+         * 3. Change ID and Anchor
+         * 4. Save
+         * 5. Return array of new ID references
+         */
+        var savedSections = [];
+        async.waterfall([
+            function(cb) {
+                self._dereferenceSections(sectionRefAry, sectionCollection, cb);
+            },
+            function(dereffedSections, cb) {
+                //console.log('dereffedSections:', dereffedSections);
+                async.eachSeries(dereffedSections, function(section, callback){
+                    var id = section._id + '' + accountId;
+                    section.accountId = accountId;
+                    section._id = id;
+                    section.anchor =  id;
+                    //console.log('about to save:', section);
+                    sectionCollection.save(section, function(err, savedSection){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            savedSections.push(section);
+                            callback();
+                        }
+                    });
+                }, function(err){
+                    cb(err);
+                });
+            },
+            function(cb) {
+                //console.log('savedSections:', savedSections);
+                var refAry = [];
+                _.each(savedSections, function(section){
+                    //console.log('pushing to refAry:', section);
+                    refAry.push({_id: section._id});
+                });
+                cb(null, refAry);
+            }
+
+        ], function done(err, sectionRefAry){
+            fn(err, sectionRefAry);
         });
     }
 };

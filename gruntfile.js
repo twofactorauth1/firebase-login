@@ -591,6 +591,12 @@ module.exports = function(grunt) {
         locationLoader.loadFromFile(done);
     });
 
+    grunt.registerTask('testBlogMigrate', 'Test Blog Migrate', function(){
+        var done = this.async();
+        var accountId = 1641;
+        dbcopyutil.migrateToSSBBlogOnTest(accountId, done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
