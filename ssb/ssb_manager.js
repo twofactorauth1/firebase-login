@@ -21,6 +21,7 @@ var pageCacheManager = require('../cms/pagecache_manager');
 //TODO: blogpostdao?!?  Seriously?!?
 var blogPostDao = require('../cms/dao/blogpost.dao');
 var sanitizeHtml = require('sanitize-html');
+var observableDiff = require('deep-diff').observableDiff;
 var PLATFORM_ID = 0;
 
 module.exports = {
@@ -1371,9 +1372,13 @@ module.exports = {
                     });
 
                     if(existingSection) {
-                        //if(JSON.stringify(section) !== JSON.stringify(existingSection)){
-                        // This is not returning valid results
-                        if(!existingSection.equals(section)){
+                        var _change = false;
+                        observableDiff(section, existingSection, function (d) {
+                            if (d.path.join('.').indexOf("modified.") === -1) {
+                                _change = true;
+                            }
+                        });
+                        if(_change){
                             existingSection.set('latest', false);
                             existingSection.set('_id', section.id() + '_' + section.get('_v'));
                             var newVersion = (existingSection.get('_v')||0) + 1;
