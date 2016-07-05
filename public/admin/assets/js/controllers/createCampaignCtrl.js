@@ -418,6 +418,22 @@
       }
     };
 
+
+    /*
+     * @validateEmail
+     * - email validation
+     */
+    $scope.validateEmail = function (email) {
+      var result = true;
+      if(email){
+        var regex = $scope.emailValidation;
+        result =  regex.test(email);
+      }
+      if(!result){
+        return "Invalid email address";
+      }
+    };
+
     /*
      * @analyzeSubject
      * - email subject quality feedback
