@@ -1601,7 +1601,7 @@
      * - get saved contacts attached to this campaign
      */
     $scope.selectedContacts.individuals = [];
-    $scope.getContacts = function() {
+    $scope.getCampaignContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
           $scope.originalRecipients = angular.copy(data);
           $scope.recipients = data;
@@ -1791,7 +1791,7 @@
         }).then(function(data) {
           return $scope.getContacts();
         }).then(function(data) {
-          return $scope.getContacts();
+          return $scope.getCampaignContacts();
         }).then(function(data) {
           $scope.loadSavedTags();
         });
