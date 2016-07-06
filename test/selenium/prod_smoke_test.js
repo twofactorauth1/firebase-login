@@ -35,22 +35,25 @@ module.exports = {
             console.log('testing /index');
 
             driver.get('https://www.indigenous.io');
-            driver.wait(until.elementLocated(By.linkText('BLOG')), 20000);
+            driver.wait(until.elementLocated(By.linkText('Get Started')), 20000);
             var signupLink = driver.isElementPresent(By.linkText('SIGN UP'));
             signupLink.then(function(x){test.ok(x, 'Signup Link not present');});
-
-            var startTrialLink = driver.isElementPresent(By.linkText('START YOUR FREE TRIAL'));
-            startTrialLink.then(function(x){test.ok(x, 'Start trial link not present');});
-
-            driver.findElement(By.linkText('BLOG')).click();
-            var lastPromise = driver.wait(until.titleIs('Blog'), 5000);
-
-            lastPromise.thenFinally(function(){
+            signupLink.finally(function(){
                 test.ok(true);
                 test.done();
             });
-        },
+            //var startTrialLink = driver.isElementPresent(By.linkText('START YOUR FREE TRIAL'));
+            //startTrialLink.then(function(x){test.ok(x, 'Start trial link not present');});
 
+            //driver.findElement(By.linkText('BLOG')).click();
+            //var lastPromise = driver.wait(until.titleIs('Blog'), 5000);
+
+            //lastPromise.thenFinally(function(){
+            //    test.ok(true);
+            //    test.done();
+            //});
+        },
+        /*
         testBlog: function(test) {
             console.log('testing /blog');
             driver.wait(until.elementLocated(By.xpath('//*[@id="blog-sidebar"]/div[3]/div/span')), 20000);
@@ -79,10 +82,10 @@ module.exports = {
                 });
             });
         },
-
+        */
         testSignup: function(test) {
             console.log('testing /signup');
-            driver.get('https://www.indigenous.io/signup');
+            driver.get('https://indigenous.io/signup');
             driver.wait(until.elementLocated(By.id('email')), 20000);
 
             driver.isElementPresent(By.id('email')).then(function(el){test.ok(el, 'Email signup field missing.');});
