@@ -195,7 +195,7 @@
                             <tab heading="by Email Address" disable='vm.disableEditing'>
                                 <label class="text-muted">Enter emails manually or paste a comma-separated list. Emails already in contacts will be ignored.</label>
                                 <div class="well well-sm">
-                                    <tags-input ng-model="vm.selectedContacts.newEmails" add-on-paste="true" placeholder="Add a email" add-on-comma="true" allowed-tags-pattern="^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" on-tag-adding="checkContactExists($tag)">
+                                    <tags-input ng-model="vm.selectedContacts.newEmails" add-on-paste="true" placeholder="Add a email" add-on-comma="true" allowed-tags-pattern="^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" on-tag-adding="vm.checkContactExistsFn($tag)">
                                     </tags-input>
                                 </div>
                             </tab>
