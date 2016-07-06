@@ -64,7 +64,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         }
     }, 1000), true);
 
-    $scope.$watch('vm.state.post', _.debounce(vm.checkPendingChanges, 1000), true);
+    $scope.$watch('vm.state.post', _.debounce(vm.checkPendingChanges, 800), true);
 
     // $rootScope.$on('$locationChangeStart', vm.checkStateNavigation);
 
