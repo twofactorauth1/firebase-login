@@ -18,12 +18,16 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     vm.blog = SimpleSiteBuilderBlogService.blog || {};
 
+    vm.filteredPostView = false;
+
     if (path.indexOf("tag/") > -1) {
         vm.blog.currentTag = path.replace('/tag/', '');
+        vm.filteredPostView = true;
     }
 
     if (path.indexOf("author/") > -1) {
         vm.blog.currentAuthor = path.replace('/author/', '');
+        vm.filteredPostView = true;
     }
 
     $scope.$watchCollection('vm.blog.posts', function(newValue) {

@@ -121,15 +121,22 @@
 }
 
 .ssb-blog-currently-viewing{
-    position: relative;
-    background: #47b1cc;
-    padding: 10px;
-    color: white;    
+    position: relative;    
+    padding-top: 10px;     
     text-align: center;
     .currently-viewing-item {
-        font-weight: bold;
-        font-size: 18px;
+        font-size: 14px;
+        background: #47b1cc;
+        color: white;   
+        padding: 8px 12px;
+        border-radius: 4px;
+        display: inline-block;
     }
+}
+
+.ssb-blog-back-link{
+    text-align: center;
+    padding: 15px;
 }
 
 .ssb-blog-post-list.ssb-media-stacked {
@@ -195,6 +202,27 @@
 
             .ssb-theme-btn.btn-link {
                 margin-left: -1.75px;
+            }
+
+            .ssb-tag-heading{
+                color: #bbbaba;
+            }
+
+            .ssb-post_tags {
+                margin-bottom: 20px;
+                padding: 0;
+            }
+
+            .ssb-post_tags li {
+                display: inline-block;
+                margin-bottom: 10px;
+                background: none !important;
+                padding: 0;
+                margin-right: 10px;
+            }
+
+            .ssb-post_tags li a {        
+                padding: 4px 8px;
             }
 
         }
