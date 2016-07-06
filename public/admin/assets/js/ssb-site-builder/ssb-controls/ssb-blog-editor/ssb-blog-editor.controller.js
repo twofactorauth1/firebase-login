@@ -64,7 +64,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         }
     }, 1000), true);
 
-    $scope.$watch('vm.state.post', _.debounce(vm.checkPendingChanges, 800), true);
+    $scope.$watch('vm.state.post', vm.checkPendingChanges, true);
 
     // $rootScope.$on('$locationChangeStart', vm.checkStateNavigation);
 
@@ -319,7 +319,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             }
 
             if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
-                if (!equalPosts(compareNewValue, compareOldValue)) {
+                if (!vm.state.pendingBlogChanges && !equalPosts(compareNewValue, compareOldValue)) {
                     vm.state.pendingBlogChanges = true;
                 } else {
                     vm.state.pendingBlogChanges = false;
