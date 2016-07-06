@@ -196,7 +196,20 @@ $.FroalaEditor.build = _.memoize(function(type) {
         placeholderText: 'Type here',
         imageManagerScrollOffset: 0,
         dragImage: false,
-        pastePlain: true
+        pastePlain: true,
+        linkList: [
+        {
+          text: 'Google',
+          href: 'http://google.com',
+          target: '_blank',
+          rel: 'nofollow'
+        },
+        {
+          displayText: 'Facebook',
+          text: 'Facebook',
+          href: 'https://facebook.com',
+          target: '_blank'
+        }]
     };
 
     if (type === 'ssbBlogEditor') {

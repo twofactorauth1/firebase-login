@@ -2,9 +2,9 @@
 
   app.controller('EmailCampaignController', indiEmailCampaignController);
 
-  indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService'];
+  indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService'];
   /* @ngInject */
-  function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService) {
+  function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService) {
 
     console.info('email-campaign directive init...');
 
@@ -15,30 +15,327 @@
     vm.campaignId = $stateParams.id;
     vm.campaign = {status: 'DRAFT'};
     vm.dataLoaded = false;
+    vm.disableEditing = true;
     vm.account = null;
     vm.website = {settings: {}};
+    vm.contacts = [];
+    vm.allContacts = [];
+    vm.tagSelection = [];
+    vm.recipients = [];
+    vm.recipientsToRemove = [];
+    vm.selectedContacts = {
+      individuals: []
+    };
+    vm.whenToSend = 'now';
+    vm.watchDeliveryDate = false;
+    vm.delivery = {
+      date: moment(),
+      minDate: new Date()
+    };
+    vm.hstep = 1;
+    vm.mstep = 1;
+    vm.tableView = 'list';
+
     vm.saveAsDraftFn = saveAsDraftFn;
+    vm.sendTestFn = sendTestFn;
     vm.activateCampaignFn = activateCampaignFn;
+    vm.getContactsFn = getContactsFn;
+    vm.checkBestEmailFn = checkBestEmailFn;
+    vm.toggleSelectionFn = toggleSelectionFn;
+    vm.getRecipientsFn = getRecipientsFn;
+    vm.getSelectedTagsFn = getSelectedTagsFn;
+    vm.eliminateDuplicateFn = eliminateDuplicateFn;
+    vm.contactSelectedFn = contactSelectedFn;
+    vm.contactRemovedFn = contactRemovedFn;
+    vm.checkContactExistsFn = checkContactExistsFn;
+    vm.updateSendNowFn = updateSendNowFn;
+    vm.openModalFn = openModalFn;
+    vm.closeModalFn = closeModalFn;
 
     function saveAsDraftFn() {
+      vm.dataLoaded = false;
       var fn = EmailCampaignService.updateCampaign;
 
       if (vm.campaignId !== 'create') {
         fn = EmailCampaignService.createCampaign;
       }
-
+      vm.campaign.status = 'DRAFT';
       fn(vm.campaign)
         .then(function (res) {
           vm.campaign = res.data;
+          vm.dataLoaded = true;
+          vm.disableEditing = false;
           toaster.pop('success', 'Campaign saved');
         }, function (err) {
+          vm.dataLoaded = true;
           toaster.pop('error', 'Campaign save failed');
         });
     }
 
+    function sendTestFn() {
+      vm.dataLoaded = false;
+      EmailCampaignService.sendTestEmail(vm.campaign)
+        .then(function (res) {
+          vm.dataLoaded = true;
+          toaster.pop('success', 'Send test email');
+        }, function (err) {
+          vm.dataLoaded = true;
+          toaster.pop('error', 'Send test mail failed');
+        });
+    }
+
     function activateCampaignFn() {
+      vm.dataLoaded = false;
+      var fn = EmailCampaignService.updateCampaign;
+
+      if (vm.campaignId !== 'create') {
+        fn = EmailCampaignService.createCampaign;
+      }
       vm.campaign.status = 'PENDING';
-      vm.saveAsDraftFn();
+      fn(vm.campaign)
+        .then(function (res) {
+          vm.campaign = res.data;
+          vm.dataLoaded = true;
+          vm.disableEditing = true;
+          toaster.pop('success', 'Campaign activated');
+        }, function (err) {
+          vm.dataLoaded = true;
+          toaster.pop('error', 'Campaign activation failed');
+        });
+    }
+
+    function checkBestEmailFn(contact) {
+      var returnVal = ContactService.checkContactBestEmail(contact);
+      return returnVal;
+    }
+
+    function getContactsFn() {
+      var promise = ContactService.getContacts(function (contacts) {
+        var contactWithoutEmails = [];
+        _.each(contacts, function (contact) {
+          if (!vm.checkBestEmailFn(contact)) {
+            contactWithoutEmails.push(contact);
+          }
+        });
+        contacts = _.difference(contacts, contactWithoutEmails);
+        vm.contacts = contacts;
+        ContactService.getAllContactTags(contacts, function (tags) {
+          contactTags = tags;
+        });
+        var _tags = [];
+        vm.allContacts = [];
+        _.each(contacts, function (contact) {
+          vm.allContacts.push({
+            _id: contact._id,
+            first: contact.first
+          });
+          //contact.fullName = contact.first + " " + contact.last || '';
+          if (contact.tags && contact.tags.length > 0) {
+            _.each(contact.tags, function (tag) {
+              var tagLabel = _.findWhere(contactTags, {data: tag});
+              if (tagLabel)
+                _tags.push(tagLabel.label);
+              else
+                _tags.push(tag);
+            });
+          } else {
+            _tags.push('nt');
+          }
+        });
+        var d = _.groupBy(_tags, function (tag) {
+          return tag;
+        });
+
+        var x = _.map(d, function (tag) {
+          var returnObj = {
+            uniqueTag: tag[0],
+            numberOfTags: tag.length
+          };
+          var matchingTagObj = _.find(contactTags, function (matchTag) {
+            return matchTag.label === tag[0];
+          });
+          if (matchingTagObj) {
+            returnObj.matchingTag = matchingTagObj.label;
+          } else {
+            returnObj.matchingTag = 'No Tag';
+          }
+          return returnObj;
+        });
+        vm.contactCounts = x;
+      });
+
+      return promise;
+    }
+
+    function getSelectedTagsFn() {
+      var tags = [];
+      _.each(vm.tagSelection, function (fullTag) {
+        var matchingTag = _.find(contactTags, function (matchTag) {
+          return matchTag.label === fullTag;
+        });
+        if (matchingTag) {
+          tags.push(matchingTag.label);
+        } else {
+          tags.push(fullTag);
+        }
+      });
+      return tags;
+    }
+
+    function eliminateDuplicateFn(contact) {
+      return vm.selectedContacts.individuals.indexOf(contact._id) > -1;
+    }
+    ;
+
+    function getRecipientsFn() {
+
+      var fullContacts = [];
+
+      //get the tags that have been selected
+      var tags = vm.getSelectedTagsFn();
+
+      //loop through contacts and add if one of the tags matches
+
+      _.each(vm.contacts, function (contact) {
+        if (contact.tags && contact.tags.length > 0) {
+          var tempTags = [];
+          var tagLabel = "";
+          _.each(contact.tags, function (tag) {
+            tagLabel = _.findWhere(contactTags, {data: tag});
+            if (tagLabel)
+              tempTags.push(tagLabel.label);
+            else
+              tempTags.push(tag);
+          });
+          var tagExists = _.intersection(tempTags, tags);
+          if (tagExists.length > 0) {
+            if (!vm.eliminateDuplicateFn(contact))
+              fullContacts.push(contact);
+          }
+        } else {
+          if (tags.indexOf('No Tag') > -1) {
+            if (!vm.eliminateDuplicateFn(contact))
+              fullContacts.push(contact);
+          }
+        }
+
+        //add contacts from individual
+
+        if (vm.selectedContacts.individuals.indexOf(contact._id) > -1) {
+          fullContacts.push(contact);
+        }
+      });
+
+      return fullContacts;
+    }
+
+    function toggleSelectionFn(tagName) {
+      var idx = vm.tagSelection.indexOf(tagName);
+
+      // is currently selected
+      if (idx > -1) {
+        vm.tagSelection.splice(idx, 1);
+      } else {
+        vm.tagSelection.push(tagName);
+      }
+      vm.recipients = vm.getRecipientsFn();
+
+    }
+
+    function contactSelectedFn(select) {
+      var selected = select.selected[select.selected.length - 1];
+      var removalIndex = _.indexOf(vm.recipientsToRemove, selected._id);
+      var existingContact = _.find(vm.recipients, function (recipient) {
+        return recipient._id === selected._id;
+      });
+
+      if (!existingContact) {
+        vm.recipients.push(selected);
+      }
+
+      // clear search text
+      select.search = '';
+
+      //remove from removal array
+      if (removalIndex !== -1) {
+        vm.recipientsToRemove.splice(removalIndex, 1);
+      }
+    }
+
+    function contactRemovedFn(select, selected) {
+      var existingContactIndex;
+      var contact = _.findWhere(vm.recipients, {
+        _id: selected._id
+      });
+      if (contact) {
+        existingContactIndex = _.indexOf(vm.recipients, contact);
+      }
+
+      if (existingContactIndex > -1) {
+        //get the tags that have been selected
+        var tags = vm.getSelectedTagsFn();
+        var tempTags = [];
+        var tagLabel = "";
+        _.each(contact.tags, function (tag) {
+          tagLabel = _.findWhere(contactTags, {data: tag});
+          if (tagLabel)
+            tempTags.push(tagLabel.label);
+          else
+            tempTags.push(tag);
+        });
+        if (!tempTags.length)
+          tempTags.push('No Tag');
+        var tagExists = _.intersection(tempTags, tags);
+        if (tagExists.length === 0) {
+          vm.recipients.splice(existingContactIndex, 1);
+        }
+
+      }
+      // clear search text
+      select.search = '';
+
+      //add to removal array
+      vm.recipientsToRemove.push(selected._id);
+    }
+
+    function checkContactExistsFn(email) {
+      var matchingRecipient = _.find(vm.recipients, function (recipient) {
+        if (recipient.details && recipient.details[0] && recipient.details[0].emails && recipient.details[0].emails[0] && recipient.details[0].emails[0].email) {
+          return (recipient.details[0].emails[0].email).toLowerCase() === email.text;
+        }
+      });
+      var matchingContact = _.find(vm.contacts, function (contact) {
+        if (contact.details && contact.details[0] && contact.details[0].emails && contact.details[0].emails[0] && contact.details[0].emails[0].email) {
+          return (contact.details[0].emails[0].email).toLowerCase() === email.text;
+        }
+      });
+      if (matchingRecipient || matchingContact) {
+        return false;
+      }
+
+      return true;
+    }
+
+    function updateSendNowFn(value) {
+      vm.whenToSend = value;
+      vm.watchDeliveryDate = true;
+      if (vm.whenToSend !== 'later') {
+        vm.delivery.date = moment();
+      }
+    }
+
+    function openModalFn(template) {
+      vm.modalInstance = $modal.open({
+        templateUrl: template,
+        keyboard: false,
+        backdrop: 'static',
+        scope: $scope
+      });
+      vm.modalInstance.result.finally(vm.closeModalFn());
+    }
+    
+    function closeModalFn() {
+      vm.modalInstance.close();
     }
 
     function init(element) {
@@ -60,7 +357,13 @@
               $state.go('app.marketing.campaigns');
             }
             vm.campaign = res.data;
-            vm.dataLoaded = true;
+            if (vm.campaign.status === 'DRAFT') {
+              vm.disableEditing = false;
+            }
+            vm.getContactsFn()
+              .then(function () {
+                vm.dataLoaded = true;
+              });
           }, function (err) {
             $state.go('app.marketing.campaigns');
           });
