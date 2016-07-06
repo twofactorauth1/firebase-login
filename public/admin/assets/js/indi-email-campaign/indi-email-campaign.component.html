@@ -202,8 +202,40 @@
                         </tabset>
                     </div>
                 </div>
+                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-user" ng-disabled="vm.disableEditing">
+                    <span>
+                        <div>
+                            View full contact list
+                        </div>
+                    </span>
+                </button>
             </div>
-            <div class="col-sm-4 bg-white">schedule</div>
+            <div class="col-sm-4 bg-white">
+                <div class='form-group'>
+                    <label>When to send</label>
+                    <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
+                        <input type="radio" ng-change="vm.updateSendNowFn('now')" id="radio3" name="vertical" value="now" ng-model="vm.whenToSend" ng-disabled="vm.disableEditing">
+                        <label for="radio3">
+                            Send Now
+                        </label>
+                    </div>
+                    <div class="radio clip-radio radio-primary">
+                        <input ng-change="vm.updateSendNowFn('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="vm.whenToSend" ng-disabled="vm.disableEditing">
+                        <label for="radio4">
+                            Send Later
+                        </label>
+                    </div>
+                </div>
+                <hr/>
+                <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-class="{'csspinner': vm.whenToSend === 'now', 'disabled': vm.disableEditing}">
+                    <datepicker ng-model="vm.delivery.date" min-date="vm.delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
+                    <div class="clearfix"></div>
+                    <timepicker ng-model="vm.delivery.date" hour-step="vm.hstep" minute-step="vm.mstep" min="vm.delivery.minDate" class="center"></timepicker>
+                </div>
+                <div ng-if="invalidDate && whenToSend === 'later' && isEditable" class="col-xs-12">
+                    <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

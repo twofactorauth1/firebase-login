@@ -26,6 +26,14 @@
     vm.selectedContacts = {
       individuals: []
     };
+    vm.whenToSend = 'now';
+    vm.watchDeliveryDate = false;
+    vm.delivery = {
+      date: moment(),
+      minDate: new Date()
+    };
+    vm.hstep = 1;
+    vm.mstep = 1;
 
     vm.saveAsDraftFn = saveAsDraftFn;
     vm.sendTestFn = sendTestFn;
@@ -39,6 +47,7 @@
     vm.contactSelectedFn = contactSelectedFn;
     vm.contactRemovedFn = contactRemovedFn;
     vm.checkContactExistsFn = checkContactExistsFn;
+    vm.updateSendNowFn = updateSendNowFn;
 
     function saveAsDraftFn() {
       vm.dataLoaded = false;
@@ -302,6 +311,14 @@
       }
 
       return true;
+    }
+
+    function updateSendNowFn(value) {
+      vm.whenToSend = value;
+      vm.watchDeliveryDate = true;
+      if (vm.whenToSend !== 'later') {
+        vm.delivery.date = moment();
+      }
     }
 
     function init(element) {
