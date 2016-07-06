@@ -22,7 +22,7 @@
             </li>
 
             <li
-                ng-click="vm.uiState.openSidebarPanel = 'blog'; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Blog', id: 'blog' })"
+                ng-click="vm.uiState.openSidebarPanel = 'blog';  vm.uiState.activeSectionIndex = undefined; vm.uiState.activeComponentIndex = undefined; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Blog', id: 'blog' })"
                 ng-if="vm.state.account.showhide.ssbBlog"
                 class="nav-tab"
                 ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'blog' }">

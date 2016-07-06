@@ -319,11 +319,14 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             }
 
             if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
-                if (!vm.state.pendingBlogChanges && !equalPosts(compareNewValue, compareOldValue)) {
-                    vm.state.pendingBlogChanges = true;
-                } else {
-                    vm.state.pendingBlogChanges = false;
+                if(!vm.state.pendingBlogChanges){
+                    if (!equalPosts(compareNewValue, compareOldValue)) {
+                        vm.state.pendingBlogChanges = true;
+                    } else {
+                        vm.state.pendingBlogChanges = false;
+                    }
                 }
+                
             }
         }
 
