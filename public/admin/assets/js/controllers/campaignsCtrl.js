@@ -3,7 +3,7 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", "$window", function ($scope, $timeout, $location, toaster, $filter, $modal, CampaignService, $window) {
+  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", "$window", '$state', 'AccountService', function ($scope, $timeout, $location, toaster, $filter, $modal, CampaignService, $window, $state, AccountService) {
 
     $scope.Math = $window.Math;
     // $route.reload();
@@ -27,12 +27,19 @@
     fetchCampaigns();
 
     $scope.tableView = 'list';
-
+    
+    AccountService.getAccount(function (_account) {
+      $scope.account = _account;
+    });
+    
     $scope.viewSingle = function (campaign) {
       // var tableState = $scope.getSortOrder();
       // $state.current.sort = tableState.sort;
-
-      $location.path('/marketing/campaigns/' + campaign._id);
+      if ($scope.account.showhide.ssbEmail) {
+        $state.go('app.emailCampaign', {id: campaign._id});
+      } else {
+        $location.path('/marketing/campaigns/' + campaign._id);
+      }
     };
 
   }]);
