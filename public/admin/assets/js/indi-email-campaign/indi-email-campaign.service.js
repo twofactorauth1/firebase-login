@@ -15,6 +15,7 @@
     campaignService.getCampaign = getCampaign;
     campaignService.createCampaign = createCampaign;
     campaignService.updateCampaign = updateCampaign;
+    campaignService.sendTestEmail = sendTestEmail;
 
     /**
      * Get get email by ID
@@ -53,6 +54,18 @@
       }
 
       return campaignRequest($http.post([baseCampaignAPIv1, campaign._id].join('/'), campaign).success(success).error(error));
+    }
+
+    function sendTestEmail(campaign) {
+
+      function success(data) {
+      }
+
+      function error(error) {
+        console.error('EmailCampaignService sendTestEmail error: ', JSON.stringify(error));
+      }
+
+      return campaignRequest($http.post([baseCampaignAPIv1, 'testemail'].join('/'), campaign).success(success).error(error));
     }
 
     /**
