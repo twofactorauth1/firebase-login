@@ -58,11 +58,11 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.state.post = angular.copy(vm.defaultPost);
     }
 
-    $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], function(id) {
+    $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], _.debounce(function(id) {
         if (vm.state.post && vm.state.pendingBlogChanges) {
             vm.savePost();
         }
-    }, true);
+    }, 1000), true);
 
     $scope.$watch('vm.state.post', _.debounce(vm.checkPendingChanges, 1000), true);
 
