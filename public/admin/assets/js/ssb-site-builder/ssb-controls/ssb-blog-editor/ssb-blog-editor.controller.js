@@ -58,13 +58,13 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.state.post = angular.copy(vm.defaultPost);
     }
 
-    $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], function(id) {
-        if (vm.state.post && vm.state.pendingBlogChanges) {
+    $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], _.debounce(function(id) {
+        if (vm.state.post && vm.state.pendingBlogChanges && id[1] !== "edit") {
             vm.savePost();
         }
-    }, true);
+    }, 1000), true);
 
-    $scope.$watch('vm.state.post', _.debounce(vm.checkPendingChanges, 1000), true);
+    $scope.$watch('vm.state.post', vm.checkPendingChanges, true);
 
     // $rootScope.$on('$locationChangeStart', vm.checkStateNavigation);
 
@@ -319,7 +319,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             }
 
             if (compareOldValue && vm.state.post && vm.state.post.post_title !== '') {
-                if (!equalPosts(compareNewValue, compareOldValue)) {
+                if (!vm.state.pendingBlogChanges && !equalPosts(compareNewValue, compareOldValue)) {
                     vm.state.pendingBlogChanges = true;
                 } else {
                     vm.state.pendingBlogChanges = false;

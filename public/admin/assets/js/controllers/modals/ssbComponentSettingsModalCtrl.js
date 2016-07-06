@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'ContactService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', '$window', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, ContactService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert, $window) {
+app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'ContactService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', '$window', 'AccountService', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, ContactService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert, $window, AccountService) {
 
   $scope.blog = {};
 
@@ -979,58 +979,58 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * @getPages
        * -
        */
-
+      AccountService.getAccount(function(account) {
         SimpleSiteBuilderService.getPagesWithSections().then(function(pages){
-            var allPages = pages.data;
-            var account = SimpleSiteBuilderService.account;
-
+          var allPages = pages.data;
 
           // Suppress blog post and blog pages
 
           allPages = allPages.filter(function(page) {
             return page.handle !== 'blog-post' && page.handle !== 'single-post' && page.handle !== 'coming-soon'
           })
-            // If account blog is disabled then blog link should be suppressed
+          // If account blog is disabled then blog link should be suppressed
 
-            var _blogListPage = _.findWhere(allPages, {
-                handle: 'blog-list'
-            });
+          var _blogListPage = _.findWhere(allPages, {
+              handle: 'blog-list'
+          });
 
-            if (!account.showhide.blog) {
-                allPages = allPages.filter(function(page) {
-                    return page.handle !== 'blog-list' && page.handle !== 'blog'
-                })
-            }
-            // If account blog and ssbBlog are enabled then show 'blog-list' not 'blog'
-            else if(account.showhide.blog && account.showhide.ssbBlog && _blogListPage){
-                allPages = allPages.filter(function(page) {
-                    return page.handle !== 'blog'
-                })
+          if (!account.showhide.blog) {
+              allPages = allPages.filter(function(page) {
+                  return page.handle !== 'blog-list' && page.handle !== 'blog'
+              })
+          }
+          // If account blog and ssbBlog are enabled then show 'blog-list' not 'blog'
+          else if(account.showhide.blog && account.showhide.ssbBlog && _blogListPage){
+              allPages = allPages.filter(function(page) {
+                  return page.handle !== 'blog'
+              })
 
-                // Make sure 'blog-list' page points to 'blog'
+              // Make sure 'blog-list' page points to 'blog'
 
-                _blogListPage.handle = 'blog';
-            }
-            // Make sure 'blog-list' page appear only if ssbBlog is true
-            else if(!account.showhide.ssbBlog){
-                allPages = allPages.filter(function(page) {
-                    return page.handle !== 'blog-list'
-                })
-            }
+              _blogListPage.handle = 'blog';
+          }
+          // Make sure 'blog-list' page appear only if ssbBlog is true
+          else if(!account.showhide.ssbBlog){
+              allPages = allPages.filter(function(page) {
+                  return page.handle !== 'blog-list'
+              })
+          }
 
-            $scope.allPages = angular.copy(allPages);
+          $scope.allPages = angular.copy(allPages);
 
 
 
-            $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
-            _.each($scope.filteredPages, function (page) {
-                page.components = getPageComponents(page);
-            })
-            if($scope.linkPage)
-                $scope.currentPage = _.find($scope.filteredPages, function (page) {
-                    return page.handle === $scope.linkPage;
-                });
+          $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
+          _.each($scope.filteredPages, function (page) {
+              page.components = getPageComponents(page);
+          })
+          if($scope.linkPage)
+              $scope.currentPage = _.find($scope.filteredPages, function (page) {
+                  return page.handle === $scope.linkPage;
+              });
         })
+      })
+        
 
       WebsiteService.getEmails(true, function (emails) {
         $timeout(function () {
