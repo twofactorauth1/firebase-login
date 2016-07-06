@@ -2,9 +2,9 @@
 
   app.controller('EmailCampaignController', indiEmailCampaignController);
 
-  indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService'];
+  indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', '$modal'];
   /* @ngInject */
-  function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService) {
+  function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, $modal) {
 
     console.info('email-campaign directive init...');
 
@@ -34,6 +34,7 @@
     };
     vm.hstep = 1;
     vm.mstep = 1;
+    vm.tableView = 'list';
 
     vm.saveAsDraftFn = saveAsDraftFn;
     vm.sendTestFn = sendTestFn;
@@ -48,6 +49,8 @@
     vm.contactRemovedFn = contactRemovedFn;
     vm.checkContactExistsFn = checkContactExistsFn;
     vm.updateSendNowFn = updateSendNowFn;
+    vm.openModalFn = openModalFn;
+    vm.closeModalFn = closeModalFn;
 
     function saveAsDraftFn() {
       vm.dataLoaded = false;
@@ -319,6 +322,20 @@
       if (vm.whenToSend !== 'later') {
         vm.delivery.date = moment();
       }
+    }
+
+    function openModalFn(template) {
+      vm.modalInstance = $modal.open({
+        templateUrl: template,
+        keyboard: false,
+        backdrop: 'static',
+        scope: $scope
+      });
+      vm.modalInstance.result.finally(vm.closeModalFn());
+    }
+    
+    function closeModalFn() {
+      vm.modalInstance.close();
     }
 
     function init(element) {
