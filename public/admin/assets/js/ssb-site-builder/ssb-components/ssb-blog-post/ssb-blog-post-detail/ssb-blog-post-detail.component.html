@@ -33,9 +33,9 @@
             ng-model="vm.post.post_content">
         </section>
 
-        <ul class="post_tags" data-ng-if="vm.post.post_tags">
+        <ul class="ssb-post_tags" data-ng-if="vm.post.post_tags">
             <li ng-repeat="tag in vm.post.post_tags track by $index">
-                <a href="/tag/{{tag.text ? tag.text: tag}}" target="_self" itemprop="url" rel="tag">{{tag.text ? tag.text: tag}}</a>
+                <a href="/tag/{{tag.text ? tag.text: tag}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{tag.text ? tag.text: tag}}</a>
             </li>
         </ul>
     </div>
