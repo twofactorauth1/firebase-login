@@ -176,9 +176,9 @@
                             <tab heading="by Contact" disable='vm.disableEditing'>
                                 <label class="text-muted">Select individuals from your contact list</label>
                                 <div class="well well-sm">
-                                    <ui-select class="contact-list" multiple ng-model="vm.selectedContacts.individuals" on-select="contactSelected($select)" on-remove="contactRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
+                                    <ui-select class="contact-list" multiple ng-model="vm.selectedContacts.individuals" on-select="vm.contactSelectedFn($select)" on-remove="vm.contactRemovedFn($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
                                         <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
-                                        <ui-select-choices repeat="contact._id as contact in contacts | filter:$select.search">
+                                        <ui-select-choices repeat="contact._id as contact in vm.contacts | filter:$select.search">
                                             <span class="pull-left">
                                                 <img ng-src="contact.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="contact">
                                             </span>

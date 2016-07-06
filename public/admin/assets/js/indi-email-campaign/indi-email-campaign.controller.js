@@ -22,6 +22,7 @@
     vm.allContacts = [];
     vm.tagSelection = [];
     vm.recipients = [];
+    vm.recipientsToRemove = [];
     vm.selectedContacts = {
       individuals: []
     };
@@ -35,6 +36,8 @@
     vm.getRecipientsFn = getRecipientsFn;
     vm.getSelectedTagsFn = getSelectedTagsFn;
     vm.eliminateDuplicateFn = eliminateDuplicateFn;
+    vm.contactSelectedFn = contactSelectedFn;
+    vm.contactRemovedFn = contactRemovedFn;
 
     function saveAsDraftFn() {
       vm.dataLoaded = false;
@@ -224,6 +227,62 @@
       }
       vm.recipients = vm.getRecipientsFn();
 
+    }
+
+    function contactSelectedFn(select) {
+      var selected = select.selected[select.selected.length - 1];
+      var removalIndex = _.indexOf(vm.recipientsToRemove, selected._id);
+      var existingContact = _.find(vm.recipients, function (recipient) {
+        return recipient._id === selected._id;
+      });
+
+      if (!existingContact) {
+        vm.recipients.push(selected);
+      }
+
+      // clear search text
+      select.search = '';
+
+      //remove from removal array
+      if (removalIndex !== -1) {
+        vm.recipientsToRemove.splice(removalIndex, 1);
+      }
+    }
+
+    function contactRemovedFn(select, selected) {
+      var existingContactIndex;
+      var contact = _.findWhere(vm.recipients, {
+        _id: selected._id
+      });
+      if (contact) {
+        existingContactIndex = _.indexOf(vm.recipients, contact);
+      }
+
+      if (existingContactIndex > -1) {
+        //get the tags that have been selected
+        var tags = vm.getSelectedTagsFn();
+        var tempTags = [];
+        var tagLabel = "";
+        _.each(contact.tags, function (tag) {
+          tagLabel = _.findWhere(contactTags, {data: tag});
+          if (tagLabel)
+            tempTags.push(tagLabel.label);
+          else
+            tempTags.push(tag);
+        });
+        if (!tempTags.length)
+          tempTags.push('No Tag');
+        var tagExists = _.intersection(tempTags, tags);
+        if (tagExists.length === 0) {
+          vm.recipients.splice(existingContactIndex, 1);
+        }
+
+      }
+      // clear search text
+      select.search = '';
+
+      //add to removal array
+      vm.recipientsToRemove.push(selected._id);
     }
 
     function init(element) {
