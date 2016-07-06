@@ -15,9 +15,11 @@
     vm.campaignId = $stateParams.id;
     vm.campaign = {status: 'DRAFT'};
     vm.dataLoaded = false;
+    vm.disableEditing = true;
     vm.account = null;
     vm.website = {settings: {}};
     vm.saveAsDraftFn = saveAsDraftFn;
+    vm.sendTestFn = sendTestFn;
     vm.activateCampaignFn = activateCampaignFn;
 
     function saveAsDraftFn() {
@@ -36,8 +38,18 @@
         });
     }
 
+    function sendTestFn() {
+      EmailCampaignService.sendTestEmail(vm.campaign)
+        .then(function (res) {
+          toaster.pop('success', 'Send test email');
+        }, function (err) {
+          toaster.pop('error', 'Send test mail failed');
+        });
+    }
+
     function activateCampaignFn() {
       vm.campaign.status = 'PENDING';
+      vm.disableEditing = true;
       vm.saveAsDraftFn();
     }
 
@@ -60,6 +72,9 @@
               $state.go('app.marketing.campaigns');
             }
             vm.campaign = res.data;
+            if (vm.campaign.status === 'DRAFT') {
+              vm.disableEditing = false;
+            }
             vm.dataLoaded = true;
           }, function (err) {
             $state.go('app.marketing.campaigns');

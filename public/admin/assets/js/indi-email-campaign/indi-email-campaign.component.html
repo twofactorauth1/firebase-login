@@ -146,7 +146,7 @@
         <div class="row email-campaign-main" ng-hide="!vm.dataLoaded">
             <div class="col-sm-4 bg-white">
                 <span>Email Preview</span>
-                <button type="button" ng-disabled="saveLoading || !vm.campaign.steps[0].settings.emailId" ui-sref='app.emailEditor({id: vm.campaign.steps[0].settings.emailId})' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-pencil">
+                <button type="button" ng-disabled="saveLoading || !vm.campaign.steps[0].settings.emailId || vm.disableEditing" ui-sref='app.emailEditor({id: vm.campaign.steps[0].settings.emailId})' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-pencil">
                     <span>
                         <div>
                             Edit
