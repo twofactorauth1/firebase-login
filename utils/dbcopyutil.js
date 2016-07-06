@@ -76,6 +76,7 @@ var copyutil = {
 
     migrateToSSBBlogOnTest: function(accountId, cb) {
         var self = this;
+        console.log('Migrating TEST account: [' + accountId + ']');
         self._ensureLatestSectionProperty(accountId, mongoConfig.TEST_MONGODB_CONNECT, function(err){
             self._migrateToSSBBlog(accountId, mongoConfig.TEST_MONGODB_CONNECT, cb);
         });
@@ -83,7 +84,11 @@ var copyutil = {
     },
 
     migateToSSBBlogOnProd: function(accountId, cb) {
-
+        var self = this;
+        console.log('Migrating PROD account: [' + accountId + ']');
+        self._ensureLatestSectionProperty(accountId, mongoConfig.PROD_MONGODB_CONNECT, function(err){
+            self._migrateToSSBBlog(accountId, mongoConfig.PROD_MONGODB_CONNECT, cb);
+        });
     },
 
     _ensureLatestSectionProperty: function(accountId, dbConnect, fn) {
@@ -100,28 +105,35 @@ var copyutil = {
                     } else {
                         var sectionIdAry = [];
                         _.each(items, function(page){
-                            sectionIdAry.concat(page.sections);
+                            sectionIdAry = sectionIdAry.concat(page.sections);
                         });
                         cb(null, sectionIdAry);
                     }
                 });
             },
             function(sectionIdAry, cb) {
+                //console.log('fixing these sections:', sectionIdAry);
                 async.eachSeries(sectionIdAry, function(section, callback){
-                    sectionsCollection.find({_id: section._id}).toArray(function(err, items){
-                        if(err) {
-                            callback(err);
-                        } else {
-                            if(items && items[0]) {
-                                items[0].latest = true;
-                                sectionsCollection.save(items[0], function(err, value){
-                                    callback(err);
-                                });
+                    if(section && section._id) {
+                        sectionsCollection.find({_id: section._id}).toArray(function(err, items){
+                            if(err) {
+                                callback(err);
                             } else {
-                                callback();
+                                if(items && items[0]) {
+                                    items[0].latest = true;
+                                    console.log('saving:', items[0]._id);
+                                    sectionsCollection.save(items[0], function(err, value){
+                                        callback(err);
+                                    });
+                                } else {
+                                    callback();
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        callback();
+                    }
+
                 }, function(err){
                     cb(err);
                 });
@@ -188,7 +200,7 @@ var copyutil = {
                     template.websiteId = websiteID;
                     template._id = UUID.v4();
                     self._copySectionsForAccount(template.sections, accountId, sectionsCollection, function(err, sections){
-                        console.log('sections:', sections);
+                        //console.log('sections:', sections);
                         template.sections = sections;
                         pageJSONAry.push(template);
                         callback(err);

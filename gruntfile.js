@@ -440,6 +440,34 @@ module.exports = function(grunt) {
                     ]
                 }
             },
+            enableSSBBlog: {
+                options: {
+                    questions: [
+                        {
+                            config: 'doEnableSSBBlog.isTestAccount', // arbitray name or config for any other grunt task
+                            type: 'list', // list, checkbox, confirm, input, password
+                            message: 'Which environment is the account?', // Question to ask the user, function needs to return a string,
+                            default: true, // default value if nothing is entered
+                            choices: [
+                                { name: 'On Test', value: true, checked:true },
+                                { name: 'On Production', value: false }
+                            ]
+                        },
+                        {
+                            config: 'doEnableSSBBlog.accountId', // arbitray name or config for any other grunt task
+                            type: 'input', // list, checkbox, confirm, input, password
+                            message: 'Enter the accountId to enable SB Blog for.', // Question to ask the user, function needs to return a string,
+                            validate: function(value){
+                                if(isNaN(parseInt(value))){
+                                    return 'please enter a valid id. [' + value + ' is not valid.]';
+                                } else {
+                                    return true;
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
             convertAccountToSiteTemplate: {
                 options: {
                     questions: [
@@ -591,9 +619,22 @@ module.exports = function(grunt) {
         locationLoader.loadFromFile(done);
     });
 
+    grunt.registerTask('blogMigrate',  ['prompt:enableSSBBlog', 'doEnableSSBBlog']);
+
+    grunt.registerTask('doEnableSSBBlog', 'Enable SSB Blog', function(){
+        var done = this.async();
+        var accountId = parseInt(grunt.config('doEnableSSBBlog.accountId'));
+        var isTestAccount = grunt.config('doEnableSSBBlog.isTestAccount');
+        if(isTestAccount === true) {
+            dbcopyutil.migrateToSSBBlogOnTest(accountId, done);
+        } else {
+            dbcopyutil.migateToSSBBlogOnProd(accountId, done);
+        }
+    });
+
     grunt.registerTask('testBlogMigrate', 'Test Blog Migrate', function(){
         var done = this.async();
-        var accountId = 1641;
+        var accountId = 1700;
         dbcopyutil.migrateToSSBBlogOnTest(accountId, done);
     });
 
