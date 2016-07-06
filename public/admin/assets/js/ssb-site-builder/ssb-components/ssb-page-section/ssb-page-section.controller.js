@@ -355,13 +355,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
 
     function setFixedPosition() {
-        // var dup = vm.element.clone();
-        // dup.addClass('ssb-fixed-clone-element');
-        // dup.attr('id', 'clone_of_' + vm.section._id);
-        // dup.insertAfter(vm.element);
-        $timeout(function() {
-            new StickyState(vm.element[0]);
-        }, 2000);
+        new StickyState(vm.element[0]);
     }
 
     function sectionHasFooter(section) {
@@ -467,7 +461,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (!vm.uiState && vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
             $timeout(function() {
                 vm.setFixedPosition();
-            }, 1000);
+            }, 3000);
         }
 
     }
