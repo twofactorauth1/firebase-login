@@ -370,7 +370,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             dup.attr('id', 'clone_of_' + vm.section._id);
             dup.insertAfter(vm.element);
         } else {
-            new StickyState(vm.element[0]);
+            $timeout(function() {
+                new StickyState(vm.element[0]);
+            }, 2000);
         }
     }
 
@@ -477,7 +479,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (!vm.uiState && vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
             $timeout(function() {
                 vm.setFixedPosition();
-            }, 3000);
+            }, 1000);
         }
 
     }
