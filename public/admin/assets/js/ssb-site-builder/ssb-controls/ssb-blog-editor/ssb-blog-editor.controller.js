@@ -146,7 +146,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     function cleanBlogPanel() {
-        $rootScope.$broadcast('$destroyFroalaInstances');
+        //$rootScope.$broadcast('$destroyFroalaInstances');
         $timeout(function() {
             vm.uiState.openBlogPanel = { name: '', id: '' };
             vm.uiState.openSidebarPanel = '';
