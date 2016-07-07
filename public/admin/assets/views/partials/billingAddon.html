@@ -29,18 +29,18 @@
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Existing content imported</strong>
         </li>
         
+
+        
         <li ng-if="showSelectBtn">
             <a
                 type="button" 
-                class="select-plan btn btn-success btn-block center"
-                ng-class="{'disabled': !subscriptionSelected || !selectedPlan.allowAddOns}" 
+                class="select-plan btn btn-success btn-block center" 
                 ng-click="addInvoiceItem(addOn._id)">
                 Add
             </a>
             <a
                 type="button" 
                 class="deselect-plan btn btn-success btn-block center" 
-                ng-class="{'disabled': !subscriptionSelected || !selectedPlan.allowAddOns}"
                 ng-click="removeInvoiceItem(addOn._id)">
                 Remove
             </a>

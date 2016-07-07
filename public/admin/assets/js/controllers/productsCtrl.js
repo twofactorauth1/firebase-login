@@ -7,8 +7,7 @@
         $scope.itemPerPage = 100;
         $scope.showPages = 15;
         $scope.newProduct = {
-            status: 'inactive',
-            allowAddOns: true
+            status: 'inactive'
         };
         $scope.sortFields = {'modified.date': -1};
 
