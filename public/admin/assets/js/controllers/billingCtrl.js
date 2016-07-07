@@ -158,6 +158,7 @@
         return plan.product_attributes.stripePlans[0].id === planId;
       })[0];
       $scope.subscriptionSelected = planId !== null ? true : false;
+      $scope.selectedAddOns = [];
       // $scope.selectedPlan.plan.id = planId;
       // $scope.savePlanFn($scope.subscription.plan.id);
     };
