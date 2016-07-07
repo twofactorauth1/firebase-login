@@ -74,21 +74,28 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         };
 
+        function destroyShared(editor){
+            editor.shared.count = 1;
+            // Deleting shared instances
+            if(editor.shared){
+                editor.shared.count = 1;
+                delete editor.shared.$tb;
+                delete editor.shared.popup_buttons;
+                delete editor.shared.popups;
+                delete editor.shared.$image_resizer;
+                delete editor.shared.$img_overlay;
+                delete editor.shared.$line_breaker;
+                delete editor.shared.exit_flag;
+                delete editor.shared.vid_exit_flag;
+            }
+        }
+
         $rootScope.$on('$destroyFroalaInstances', function (event) {
             var elem = angular.element(element[0].querySelector('.editable'))[0];
             //$(elem).froalaEditor($.FroalaEditor.build());
             if($(elem).data('froala.editor')){
                 var editor = $(elem).data('froala.editor');
-                editor.shared.count = 1;
-                // Deleting shared instances
-                if(editor.shared){
-                    delete editor.shared.$tb;
-                    delete editor.shared.popup_buttons;
-                    delete editor.shared.popups;
-                    delete editor.shared.$image_resizer;
-                    delete editor.shared.$img_overlay;
-                    delete editor.shared.$line_breaker;
-                }
+                destroyShared(editor);
             }
         });
 
@@ -118,7 +125,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 $timeout(function() {
 
                     $(elem).on('froalaEditor.initialized', function(e, editor) {
-
+                    if($(elem).parents().hasClass("ssb-blog-editor"))
+                        destroyShared(editor);
                     //topbar positioning
                     $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
 

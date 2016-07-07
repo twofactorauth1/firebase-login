@@ -1073,6 +1073,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         })
     }
 
+
+
+
+
     function destroy() {
 
         console.debug('destroyed main SiteBuilder controller');
