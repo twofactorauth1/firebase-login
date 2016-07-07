@@ -135,7 +135,8 @@ var product = $$.m.ModelBase.extend({
             is_image: false,
             starred: false,
             tags: null,
-            assets: []
+            assets: [],
+            allowAddOns: true
         }
     },
 
