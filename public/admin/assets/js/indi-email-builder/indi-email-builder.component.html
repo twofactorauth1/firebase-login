@@ -101,10 +101,13 @@
     </section>
 
     <div ng-class="{'load1 csspinner': !vm.dataLoaded}">
-        <div class="padding-left-15 padding-right-15">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
-                <a href="#email-settings" class="btn btn-link text-primary" data-toggle="collapse" target="_self">Edit Settings</a>
-                <div id="email-settings" class="collapse container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
+                <a href="#email-settings" class="btn btn-link text-primary" data-toggle="collapse" target="_self">
+                    <i class="fa-settings"></i>
+                    <span>Edit Settings</span>
+                </a>
+                <div id="email-settings" class="collapse no-transition bg-white margin-bottom-15 padding-top-0 padding-bottom-15 no-border-bottom clearfix">
                     <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
                         <label>Title</label>
                         <input class='form-control' type='text' placeholder='Untitled Email' ng-model='vm.email.title' />
@@ -129,7 +132,7 @@
             </div>
         </div>
 
-        <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-xs-12 margin-top-10 margin-bottom-10">
                     <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary padding-right-10">
@@ -156,10 +159,10 @@
             </div>
         </div>
 
-        <div class="row">
-            <div id='email-froala-container'></div>
-            <div id="email-froala-scrollable-container"></div>
+        <div class="row email-builder-toolbar">
+            <div id='ssb-froala-scrollable-container'></div>
         </div>
+
         <div class="row">
             <div class="email-builder-main custom-fonts email-theme-{{vm.website.theme.name| slugify}}" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.dataLoaded">
                 <div class='components'>
