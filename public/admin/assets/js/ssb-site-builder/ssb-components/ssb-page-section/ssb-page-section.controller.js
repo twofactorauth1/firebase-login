@@ -72,6 +72,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
                     classString += ' ssb-fixed sticky';
 
+                    if (vm.index === 0) {
+                        classString += ' ssb-fixed-first-element';
+                    }
+
                 }
 
             }
@@ -353,9 +357,21 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         return styleString;
     }
 
-
+    /**
+     * setFixedPosition
+     * - If fixed element is first on page, just make it fixed
+     * - Else, create new StickyState for element to fix at scroll position
+     */
     function setFixedPosition() {
-        new StickyState(vm.element[0]);
+        var elementIsFirstPosition = vm.index === 0;
+        if (elementIsFirstPosition) {
+            var dup = vm.element.clone();
+            dup.addClass('ssb-fixed-clone-element');
+            dup.attr('id', 'clone_of_' + vm.section._id);
+            dup.insertAfter(vm.element);
+        } else {
+            new StickyState(vm.element[0]);
+        }
     }
 
     function sectionHasFooter(section) {
