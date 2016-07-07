@@ -101,55 +101,61 @@
     </section>
 
     <div ng-class="{'load1 csspinner': !vm.dataLoaded}">
-        <!-- end: PAGE TITLE -->
-        <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
-            <div class='row'>
-                <div class="col-sm-4">
-                    <div class='form-group'>
+        <div class="padding-left-15 padding-right-15">
+            <div class="row">
+                <a href="#email-settings" class="btn btn-link text-primary" data-toggle="collapse" target="_self">Edit Settings</a>
+                <div id="email-settings" class="collapse container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
+                        <label>Title</label>
                         <input class='form-control' type='text' placeholder='Untitled Email' ng-model='vm.email.title' />
                     </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class='pull-right'>
-                        <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-plus">
-                            <span>
-                                <div>
-                                    Add Component
-                                </div>
-                            </span>
-                        </button>
-                        <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
-                            <span>
-                                <div>
-                                    Save
-                                </div>
-                            </span>
-                        </button>
-                        <button type="button" ng-disabled="saveLoading" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o  ti-layout-media-overlay-alt">
-                            <span>
-                                <div>
-                                    One-time email
-                                </div>
-                            </span>
-                        </button>
-                        <button type="button" ng-disabled="saveLoading" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o  ti-layout-media-overlay-alt">
-                            <span>
-                                <div>
-                                    Create Campaign
-                                </div>
-                            </span>
-                        </button>
-                        <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger btn-wide btn-scroll btn-scroll-top btn-o ti-trash">
-                            <span>
-                                <div>
-                                    Delete
-                                </div>
-                            </span>
-                        </button>
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
+                        <label>Subject</label>
+                        <input name="subject" class="form-control" type="text" ng-model="vm.email.subject" required>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromName.$invalid && !emailSettingForm.fromName.$pristine }">
+                        <label>From Name</label>
+                        <input name="fromName" class="form-control" type="text" ng-model="vm.email.fromName" required>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromEmail.$invalid && !emailSettingForm.fromEmail.$pristine }">
+                        <label>From Email</label>
+                        <input name="fromEmail" ng-pattern="formValidations.email" class="form-control" type="email" ng-model="vm.email.fromEmail" required>
+                    </div>
+                    <div class="form-group  col-xs-12 col-sm-6 margin-bottom-0" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
+                        <label>Reply To</label>
+                        <input name="replyTo" class="form-control" type="email" ng-model="vm.email.replyTo">
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
+            <div class="row">
+                <div class="col-xs-12 margin-top-10 margin-bottom-10">
+                    <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary padding-right-10">
+                        <i class="ti-plus"></i>
+                        <span>Add Component</span>
+                    </button>
+                    <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10">
+                        <i class="ti-save"></i>
+                        <span>Save</span>
+                    </button>
+                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10">
+                        <i class="ti-layout-media-overlay-alt"></i>
+                        <span>One-time email</span>
+                    </button>
+                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10">
+                        <i class="ti-layout-media-overlay-alt"></i>
+                        <span>Create Campaign</span>
+                    </button>
+                    <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger padding-right-10">
+                        <i class="ti-trash"></i>
+                        <span>Delete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div id='email-froala-container'></div>
             <div id="email-froala-scrollable-container"></div>
