@@ -60,6 +60,79 @@
     vm.closeModalFn = closeModalFn;
     vm.getCampaignContactsFn = getCampaignContactsFn;
     vm.loadSavedTagsFn = loadSavedTagsFn;
+    vm.checkAndCreateContactFn = checkAndCreateContactFn;
+    vm.addContactsFn = addContactsFn;
+    vm.removeContactsFromCampaignFn = removeContactsFromCampaignFn;
+
+    function addContactsFn(createdContactsArr) {
+      //get an array of contact Ids from recipients
+      var recipientsIdArr = [];
+
+      _.each(vm.recipients, function (recipient) {
+        if (recipient._id) {
+          recipientsIdArr.push(recipient._id);
+        }
+      });
+
+      //add created contacts to recipients array
+      if (createdContactsArr.length > 0) {
+        _.each(createdContactsArr, function (createdContactId) {
+          if (recipientsIdArr.indexOf(createdContactId) < 0) {
+            recipientsIdArr.push(createdContactId);
+          }
+        });
+      }
+
+      var contactsArr = recipientsIdArr;
+
+      vm.campaign.contacts = contactsArr;
+    }
+
+    function removeContactsFromCampaignFn() {
+      angular.forEach(vm.recipientsToRemove, function (contactId) {
+        EmailCampaignService.cancelCampaignForContact(vm.campaign, contactId, function () {
+          console.warn('removed ' + contactId);
+        });
+      });
+      _.each(vm.removeContactsFromCampaign, function (id) {
+        console.warn('remove ' + id);
+        console.warn(_.indexOf(vm.campaign.contacts, id));
+      });
+    }
+
+    function checkAndCreateContactFn(fn) {
+      var contactsArr = [];
+      var promises = [];
+      if (vm.selectedContacts.newEmails) {
+        var _emails = vm.selectedContacts.newEmails;
+        _.each(_emails, function (email) {
+          var contact = _.findWhere(vm.contacts, {
+            email: email.text
+          });
+          if (!contact) {
+            var tempContact = vm.createContactData(email.text);
+            promises.push(ContactService.createContact(tempContact));
+          } else {
+            contactsArr.push(contact._id);
+          }
+        });
+      }
+
+      if (promises.length) {
+        $q.all(promises)
+          .then(function (data) {
+            _.each(data, function (value) {
+              contactsArr.push(value.data._id);
+            });
+            fn(contactsArr);
+          })
+          .catch(function (err) {
+            console.error(err);
+          });
+      } else {
+        fn(contactsArr);
+      }
+    }
 
     function saveAsDraftFn() {
       vm.dataLoaded = false;
@@ -68,17 +141,33 @@
       if (vm.campaignId !== 'create') {
         fn = EmailCampaignService.createCampaign;
       }
+
+      //resetting status
       vm.campaign.status = 'DRAFT';
-      fn(vm.campaign)
-        .then(function (res) {
-          vm.campaign = res.data;
-          vm.dataLoaded = true;
-          vm.disableEditing = false;
-          toaster.pop('success', 'Campaign saved');
-        }, function (err) {
-          vm.dataLoaded = true;
-          toaster.pop('error', 'Campaign save failed');
-        });
+
+      //populating structured delivery timestamp
+      var sendAt = {};
+      sendAt.year = moment.utc(vm.delivery.date).get('year');
+      sendAt.month = moment.utc(vm.delivery.date).get('month') + 1;
+      sendAt.day = moment.utc(vm.delivery.date).get('date');
+      sendAt.hour = moment.utc(vm.delivery.date).get('hour');
+      sendAt.minute = moment.utc(vm.delivery.date).get('minute');
+      vm.campaign.steps[0].settings.sendAt = sendAt;
+
+      //processing custom emails for contact
+      vm.checkAndCreateContactFn(function (createdContactsArr) {
+        vm.addContactsFn(createdContactsArr);
+        fn(vm.campaign)
+          .then(function (res) {
+            vm.campaign = res.data;
+            vm.dataLoaded = true;
+            vm.disableEditing = false;
+            toaster.pop('success', 'Campaign saved');
+          }, function (err) {
+            vm.dataLoaded = true;
+            toaster.pop('error', 'Campaign save failed');
+          });
+      });
     }
 
     function sendTestFn() {
