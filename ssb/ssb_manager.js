@@ -3795,6 +3795,7 @@ module.exports = {
 
         blogPostDao.exists(post_query, $$.m.BlogPost, function(err, value){
             if(value === true){
+                console.log("Found published posts");
                 var query = {
                     accountId:accountId,
                     websiteId:websiteId,
@@ -3831,6 +3832,8 @@ module.exports = {
                         })
                     }
                 });
+            }else{
+                console.log("No published post found");
             }
         })
         
