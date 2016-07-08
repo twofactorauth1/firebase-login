@@ -418,6 +418,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.error('Error handling events:', err);
             }
             async.eachSeries(contactActivitiesJSON, function(obj, cb){
+                self.log.debug('Creating contact activity for:', obj);
                 var activity = new $$.m.ContactActivity(obj);
                 contactActivityManager.createActivity(activity, function(err, value){
                     cb(err);
