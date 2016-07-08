@@ -713,8 +713,15 @@
      * Go back to the inline editor.
      */
     function back () {
-      editor.popups.hide('colors.picker');
-      editor.toolbar.showInline();
+      var link = editor.link.get();
+      if(link){
+        editor.link.back();
+      }
+      else{
+        editor.popups.hide('colors.picker');
+        editor.toolbar.showInline();
+      }
+      
     }
 
     function txtInputFocus(element, val){

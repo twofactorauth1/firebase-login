@@ -3421,7 +3421,7 @@ module.exports = {
         });
     },
 
-    createBlogPost: function(accountId, blogPost, fn) {
+    createBlogPost: function(accountId, userId, blogPost, fn) {
         var self = this;
         self.log.debug('>> createBlogPost');
 
@@ -3463,9 +3463,10 @@ module.exports = {
                 else{
                     blogPostDao.createPost(blogPost, function(err, savedPost){
                         if(err) {
-                            self.log.error('Error creating post: ' + err);
+                            self.log.error('Error creating post: ' + err);                            
                             return fn(err, null);
                         } else {
+                            self.checkAndPublishBlogPages(accountId, blogPost.get("websiteId"), userId)
                             return fn(err, savedPost);
                         }
                     });
@@ -3493,7 +3494,7 @@ module.exports = {
         });
     },
 
-    updateBlogPost: function(accountId, blogPost, fn) {
+    updateBlogPost: function(accountId, userId, blogPost, fn) {
         var self = this;
 
         //TODO: what's the intent here? would have to be blogPost.get('featured_image')
@@ -3535,6 +3536,7 @@ module.exports = {
                             self.log.error('Error creating post: ' + err);
                             return fn(err, null);
                         } else {
+                            self.checkAndPublishBlogPages(accountId, blogPost.get("websiteId"), userId)
                             return fn(err, savedPost);
                         }
                     });
@@ -3780,5 +3782,60 @@ module.exports = {
             }
         });
 
+    },
+
+    checkAndPublishBlogPages: function(accountId, websiteId, userId){      
+        var self = this;
+
+        var post_query = {
+            accountId: accountId,
+            post_status: $$.m.BlogPost.status.PUBLISHED,
+            websiteId: websiteId
+        }
+
+        blogPostDao.exists(post_query, $$.m.BlogPost, function(err, value){
+            if(value === true){
+                console.log("Found published posts");
+                var query = {
+                    accountId:accountId,
+                    websiteId:websiteId,
+                    latest:true,
+                    handle: {$in: ['blog-post', 'blog-list']}
+                };
+        
+                pageDao.findPublishedPages(query, function(err, pages){
+                    if(err) {
+                        self.log.error(accountId, null,'Error getting published pages:', err);
+                        return;
+                    }
+                    else if(pages && pages.length == 2){
+                        console.log("Blog pages already published");
+                        return;
+                    }
+                    else {
+                        pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error finding page:', err);
+                            } else {
+                                if(pages && pages.length){
+                                    _.each(pages, function(page){      
+                                        console.log("Publishing page", page.get("handle"));                          
+                                        self.publishPage(accountId, page.id(), userId, function(err, publishedPage){
+                                            if(err) {
+                                                self.log.error(accountId, userId,'Error publishing page:', err);
+                                                return;
+                                            }
+                                        });
+                                    })
+                                }
+                            }
+                        })
+                    }
+                });
+            }else{
+                console.log("No published post found");
+            }
+        })
+        
     }
 };
