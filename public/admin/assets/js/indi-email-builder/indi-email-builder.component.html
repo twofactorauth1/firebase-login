@@ -103,8 +103,9 @@
     <div ng-class="{'load1 csspinner': !vm.dataLoaded}">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
+                <span class="padding-15 padding-right-0"><b>{{vm.email.title}}</b></span>
                 <a href="#email-settings" class="btn btn-link text-primary" data-toggle="collapse" target="_self">
-                    <i class="fa-settings"></i>
+                    <i class="ti-settings"></i>
                     <span>Edit Settings</span>
                 </a>
                 <div id="email-settings" class="collapse no-transition bg-white margin-bottom-15 padding-top-0 padding-bottom-15 no-border-bottom clearfix">
@@ -135,23 +136,23 @@
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-xs-12 margin-top-10 margin-bottom-10">
-                    <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary padding-right-10">
+                    <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary padding-right-10 margin-bottom-5">
                         <i class="ti-plus"></i>
                         <span>Add Component</span>
                     </button>
-                    <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10">
+                    <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
                         <i class="ti-save"></i>
                         <span>Save</span>
                     </button>
-                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10">
+                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10 margin-bottom-5">
                         <i class="ti-layout-media-overlay-alt"></i>
                         <span>One-time email</span>
                     </button>
-                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10">
+                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10 margin-bottom-5">
                         <i class="ti-layout-media-overlay-alt"></i>
                         <span>Create Campaign</span>
                     </button>
-                    <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger padding-right-10">
+                    <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger padding-right-10 margin-bottom-5">
                         <i class="ti-trash"></i>
                         <span>Delete</span>
                     </button>

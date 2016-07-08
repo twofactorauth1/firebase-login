@@ -2,15 +2,18 @@
 
   app.controller('EmailBuilderController', indiEmailBuilderController);
 
-  indiEmailBuilderController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window'];
+  indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window'];
   /* @ngInject */
-  function indiEmailBuilderController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window) {
+  function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window) {
 
     console.info('email-builder directive init...');
 
     var vm = this;
 
     vm.init = init;
+
+    vm.state = vm.state || {};
+    vm.uiState = vm.uiState || {};
 
     vm.emailId = $stateParams.id;
     vm.dataLoaded = false;
@@ -104,6 +107,14 @@
       'capitalized': 'All',
       'lowercase': 'all'
     });
+
+
+    $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
+        $rootScope.$broadcast('$destroyFroalaInstances');
+        $rootScope.app.layout.isMinimalAdminChrome = false;
+        $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+    });
+
 
     function openModalFn(modal, controller, index, size) {
       console.log('openModal >>> ', modal, controller, index, size);
@@ -468,7 +479,12 @@
     });
 
     function init(element) {
-      vm.element = element;
+
+        vm.element = element;
+
+        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
+        $rootScope.app.layout.isSidebarClosed = true;
+        $rootScope.app.layout.isMinimalAdminChrome = true;
 
       AccountService.getAccount(function (data) {
         vm.account = data;

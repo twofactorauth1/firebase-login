@@ -645,6 +645,7 @@ div[class^="spacing-"] {
         height: 60px;
         line-height: 60px;
         background-color: #1c2b36;
+        text-align: center;
     }
 
     #ssb-froala-scrollable-container {
@@ -728,6 +729,11 @@ div[class^="spacing-"] {
             z-index: 5;
             pointer-events: auto!important;
             display: inline-block!important;
+            width: 100%;
+
+            & > .fr-layer {
+                // max-width: 320px;
+            }
         }
     }
 

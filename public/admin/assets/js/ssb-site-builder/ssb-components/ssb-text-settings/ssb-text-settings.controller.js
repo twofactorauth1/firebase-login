@@ -348,13 +348,21 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
         if ($attrs.isEdit) {
 
-            vm.parentComponentId = vm.parentComponent.attr('id');
+            if (!vm.element.closest('indi-email-builder').length) {
 
-            vm.parentSection = vm.element.closest('.ssb-section-layout');
+                vm.parentComponentId = vm.parentComponent.attr('id');
 
-            vm.parentSectionId = vm.parentSection.attr('id');
+                vm.parentSection = vm.element.closest('.ssb-section-layout');
 
-            setupElementForEditing();
+                vm.parentSectionId = vm.parentSection.attr('id');
+
+                setupElementForEditing();
+
+            } else {
+
+                console.debug('Text Settings should not be available in Email Editor');
+
+            }
 
         } else {
 
