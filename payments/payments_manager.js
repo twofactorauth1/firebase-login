@@ -156,7 +156,7 @@ module.exports = {
                 if(invoice.lines.data[0].id === subscriptionId) {
                     filteredInvoices.push(invoice);
                 } else {
-                    self.log.debug(accountId, userId, 'filtering: ', invoice);
+                    //self.log.debug(accountId, userId, 'filtering: ', invoice);
                 }
             });
             invoices.data = filteredInvoices;
