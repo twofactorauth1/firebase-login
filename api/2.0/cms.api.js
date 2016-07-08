@@ -641,7 +641,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(!blogPost.attributes.publish_date)
                     blogPost.attributes.publish_date = moment().format('MM/DD/YYYY');
                 self.log.debug('<< Publish Date is' + blogPost.attributes.publish_date);
-                ssbManager.createBlogPost(accountId, blogPost, function (err, value) {
+                ssbManager.createBlogPost(accountId, userId, blogPost, function (err, value) {
                     self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
                     self.sendResultOrError(res, err, value, "Error creating Blog Post");
                     self.createUserActivity(req, 'CREATE_BLOGPOST', null, null, function(){});
@@ -678,7 +678,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 blogPost.set('modified', modified);
                 // console.dir(req.body);
 
-                ssbManager.updateBlogPost(accountId, blogPost, function (err, value) {
+                ssbManager.updateBlogPost(accountId, userId, blogPost, function (err, value) {
                     self.log.debug('<< updateBlogPost');
                     self.sendResultOrError(res, err, value, "Error updating Blog Post");
                     self.createUserActivity(req, 'UPDATE_BLOGPOST', null, null, function(){});
