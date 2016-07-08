@@ -15,6 +15,8 @@
     campaignService.getCampaign = getCampaign;
     campaignService.createCampaign = createCampaign;
     campaignService.updateCampaign = updateCampaign;
+    campaignService.sendTestEmail = sendTestEmail;
+    campaignService.getCampaignContacts = getCampaignContacts;
 
     /**
      * Get get email by ID
@@ -53,6 +55,30 @@
       }
 
       return campaignRequest($http.post([baseCampaignAPIv1, campaign._id].join('/'), campaign).success(success).error(error));
+    }
+
+    function sendTestEmail(campaign) {
+
+      function success(data) {
+      }
+
+      function error(error) {
+        console.error('EmailCampaignService sendTestEmail error: ', JSON.stringify(error));
+      }
+
+      return campaignRequest($http.post([baseCampaignAPIv1, 'testemail'].join('/'), campaign).success(success).error(error));
+    }
+
+    function getCampaignContacts(id) {
+
+      function success(data) {
+      }
+
+      function error(error) {
+        console.error('EmailCampaignService getCampaignContacts error: ', JSON.stringify(error));
+      }
+
+      return campaignRequest($http.get([baseCampaignAPIv1, id, 'contacts'].join('/')).success(success).error(error));
     }
 
     /**

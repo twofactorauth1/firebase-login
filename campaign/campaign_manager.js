@@ -1990,6 +1990,46 @@ module.exports = {
         var self = this;
         self.log.debug('>> getCampaignEmailData');
         emailMessageManager.getMessageInfo(emailId, fn);
+    },
+
+    reconcileCampaignStatistics: function(campaignId, emailMessages, fn) {
+        var self = this;
+        self.log.debug('>> reconcileCampaignStatistics', emailMessages.length);
+        var stats = {
+            "emailsSent" : 0,
+            "emailsOpened" : 0,
+            "emailsClicked" : 0,
+            "participants" : 0,
+            "emailsBounced" : 0
+        };
+        _.each(emailMessages, function(message){
+
+            if(message.get('deliveredDate')) {
+                stats.emailsSent += 1;
+            }
+            if(message.get('openedDate')) {
+                stats.emailsOpened += 1;
+            }
+            if(message.get('clickedDate')) {
+                stats.emailsClicked += 1;
+            }
+            if(message.get('bouncedDate')) {
+                stats.emailsBounced += 1;
+            }
+        });
+        campaignDao.findOne({_id:campaignId}, $$.m.Campaign, function(err, campaign){
+            if(err || !campaign) {
+                self.log.error('Error finding campaign:', err);
+                fn(err);
+            } else {
+                self.log.debug('Stats before: ', campaign.get('statistics'));
+                stats.participants = campaign.get('statistics').participants;
+                campaign.set('statistics', stats);
+                self.log.debug('Stats after: ', campaign.get('statistics'));
+                self.log.debug('<< reconcileCampaignStatistics');
+                campaignDao.saveOrUpdate(campaign, fn);
+            }
+        });
     }
 
 }

@@ -181,7 +181,9 @@
 }
 
 .ssb-fixed, .ssb-fixed-clone-element {
-    position: fixed;
+    // position: fixed;
+    // position: static;
+    // overflow: auto;
     z-index: 5;
 
     .container.inner-page {
@@ -190,11 +192,19 @@
 
 }
 
+.ssb-fixed-first-element {
+    position: fixed;
+}
+
 .ssb-fixed-clone-element {
     position: relative;
     z-index: 1;
     pointer-events: none;
     visibility: hidden;
+}
+
+.main-include {
+    overflow: hidden;
 }
 
 

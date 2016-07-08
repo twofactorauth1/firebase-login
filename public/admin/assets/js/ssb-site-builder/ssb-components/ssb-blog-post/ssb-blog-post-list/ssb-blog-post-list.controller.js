@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogPostListComponentController', ssbBlogPostListComponentController);
 
-ssbBlogPostListComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope', '$timeout', '$location'];
+ssbBlogPostListComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope', '$timeout', '$location', '$filter'];
 /* @ngInject */
-function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope, $timeout, $location) {
+function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope, $timeout, $location, $filter) {
 
     console.info('ssb-blog-post-list directive init...')
 
@@ -18,12 +18,18 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     vm.blog = SimpleSiteBuilderBlogService.blog || {};
 
+    vm.sortBlogPosts = sortBlogPosts;
+
+    vm.filteredPostView = false;
+
     if (path.indexOf("tag/") > -1) {
         vm.blog.currentTag = path.replace('/tag/', '');
+        vm.filteredPostView = true;
     }
 
     if (path.indexOf("author/") > -1) {
         vm.blog.currentAuthor = path.replace('/author/', '');
+        vm.filteredPostView = true;
     }
 
     $scope.$watchCollection('vm.blog.posts', function(newValue) {
@@ -45,6 +51,10 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     function checkHasFeaturedPosts() {
         vm.hasFeaturedPosts = vm.blog.posts.filter(function(post){ return post.featured; }).length;
+    }
+
+    function sortBlogPosts(blogpost){
+        return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
     }
 
     function init(element) {

@@ -196,7 +196,20 @@ $.FroalaEditor.build = _.memoize(function(type) {
         placeholderText: 'Type here',
         imageManagerScrollOffset: 0,
         dragImage: false,
-        pastePlain: true
+        pastePlain: true,
+        linkList: [
+        {
+          text: 'Google',
+          href: 'http://google.com',
+          target: '_blank',
+          rel: 'nofollow'
+        },
+        {
+          displayText: 'Facebook',
+          text: 'Facebook',
+          href: 'https://facebook.com',
+          target: '_blank'
+        }]
     };
 
     if (type === 'ssbBlogEditor') {
@@ -208,7 +221,12 @@ $.FroalaEditor.build = _.memoize(function(type) {
     }
 
     if (type === 'ssbEmailEditor') {
-        _.extend($.FroalaEditor.config, {toolbarInline: false, scrollableContainer: '#email-froala-scrollable-container',  toolbarContainer: '#email-froala-container', placeholderText: 'Type your email here'});
+        _.extend($.FroalaEditor.config, {
+            // toolbarInline: false,
+            // scrollableContainer: '#email-froala-scrollable-container',
+            // toolbarContainer: '#email-froala-container',
+            placeholderText: 'Type your email here'
+        });
     }
 
     console.debug('called $.FroalaEditor.build', type);
