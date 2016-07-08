@@ -37,6 +37,11 @@
     vm.hstep = 1;
     vm.mstep = 1;
     vm.tableView = 'list';
+    vm.triggers = [{
+        name: 'Sign Up',
+        icon: 'fa-paper-plane',
+        value: 'SIGNUP'
+      }];
 
     vm.saveAsDraftFn = saveAsDraftFn;
     vm.sendTestFn = sendTestFn;
