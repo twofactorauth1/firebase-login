@@ -15,7 +15,7 @@
                 <small ng-bind-html="$select.selected.title"></small>
             </ui-select-match>
 
-            <ui-select-choices class="margin-top-20" repeat="page in vm.state.pages | sortListPages:vm.state.page._id">
+            <ui-select-choices class="margin-top-20" repeat="page in vm.state.pages | sortListPages:vm.state.page._id:vm.state.account">
                 <small ng-bind-html="page.title"></small>
             </ui-select-choices>
 

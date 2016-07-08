@@ -23,7 +23,7 @@
 
             <li
                 ng-click="vm.uiState.openSidebarPanel = 'blog';  vm.uiState.activeSectionIndex = undefined; vm.uiState.activeComponentIndex = undefined; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Blog', id: 'blog' })"
-                ng-if="vm.state.account.showhide.ssbBlog"
+                ng-if="vm.state.account.showhide.blog && vm.state.account.showhide.ssbBlog"
                 class="nav-tab"
                 ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'blog' }">
                 <div><div class="ti-comment-alt display-ib"></div>Blog</div>
@@ -210,7 +210,7 @@
                 <button ng-click="vm.openModal('ssb-new-page-modal', null, null, null);" class="btn btn-primary">Add Page</button>
 
                 <ul class="list-unstyled">
-                    <li ng-repeat="page in vm.state.pages track by $index" ng-class="{ 'active-page': page._id === vm.state.page._id }" class="ssb-page-section-settings-item">
+                    <li ng-repeat="page in vm.state.pages | sortListPages:vm.state.page._id:vm.state.account track by $index" ng-class="{ 'active-page': page._id === vm.state.page._id }" class="ssb-page-section-settings-item">
                         <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
                         <div
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
