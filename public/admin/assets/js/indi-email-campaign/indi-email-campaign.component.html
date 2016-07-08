@@ -162,7 +162,7 @@
                         <option value='autoresponder'>Auto Responder</option>
                     </select>
                 </div>
-                <div class="panel panel-white" ng-show="vm.campaign.type === 'onetime'">
+                <div class="panel panel-white" ng-if="vm.campaign.type === 'onetime'">
                     <div class="panel-body no-padding">
                         <tabset>
                             <tab heading="by Tag" disable='vm.disableEditing'>
@@ -202,7 +202,7 @@
                         </tabset>
                     </div>
                 </div>
-                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-user" ng-disabled="vm.disableEditing" ng-click='vm.openModalFn("campaign-contacts-list-modal")' ng-show="vm.campaign.type === 'onetime'">
+                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-user" ng-disabled="vm.disableEditing" ng-click='vm.openModalFn("campaign-contacts-list-modal")' ng-if="vm.campaign.type === 'onetime'">
                     <span>
                         <div>
                             View full contact list
