@@ -69,6 +69,15 @@
         fn = EmailCampaignService.createCampaign;
       }
       vm.campaign.status = 'DRAFT';
+      
+      var sendAt = {};
+      sendAt.year = moment.utc(vm.delivery).get('year');
+      sendAt.month = moment.utc(vm.delivery).get('month') + 1;
+      sendAt.day = moment.utc(vm.delivery).get('date');
+      sendAt.hour = moment.utc(vm.delivery).get('hour');
+      sendAt.minute = moment.utc(vm.delivery).get('minute');
+      vm.campaign.steps[0].settings.sendAt = sendAt;
+      
       fn(vm.campaign)
         .then(function (res) {
           vm.campaign = res.data;
