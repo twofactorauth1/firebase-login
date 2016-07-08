@@ -147,11 +147,11 @@
 
       //populating structured delivery timestamp
       var sendAt = {};
-      sendAt.year = moment.utc(vm.delivery).get('year');
-      sendAt.month = moment.utc(vm.delivery).get('month') + 1;
-      sendAt.day = moment.utc(vm.delivery).get('date');
-      sendAt.hour = moment.utc(vm.delivery).get('hour');
-      sendAt.minute = moment.utc(vm.delivery).get('minute');
+      sendAt.year = moment.utc(vm.delivery.date).get('year');
+      sendAt.month = moment.utc(vm.delivery.date).get('month') + 1;
+      sendAt.day = moment.utc(vm.delivery.date).get('date');
+      sendAt.hour = moment.utc(vm.delivery.date).get('hour');
+      sendAt.minute = moment.utc(vm.delivery.date).get('minute');
       vm.campaign.steps[0].settings.sendAt = sendAt;
 
       //processing custom emails for contact
@@ -168,7 +168,6 @@
             toaster.pop('error', 'Campaign save failed');
           });
       });
-
     }
 
     function sendTestFn() {
