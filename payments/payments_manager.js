@@ -135,6 +135,35 @@ module.exports = {
             log.debug('<< payWithPaypal');
             return fn(err, value);
         });
+    },
+
+    listInvoicesForAccount: function(account, dateFilter, ending_before, limit, starting_after, userId, fn) {
+        var self = this;
+        self.log = log;
+        var accountId = account.id();
+        self.log.debug(accountId, userId, '>> listInvoicesForAccount');
+        var customerId = account.get('billing').stripeCustomerId;
+        var subscriptionId = account.get('billing').subscriptionId;
+        if(!customerId || customerId === '') {
+            self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
+            return fn('No stripe customerId found');
+        }
+        stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null, function(err, invoices){
+            //need to filter based on subscriptionId
+            //TODO: if we ever keep track of subscription history, we will need to handle that as well
+            var filteredInvoices = [];
+            _.each(invoices.data, function(invoice){
+                if(invoice.lines.data[0].id === subscriptionId) {
+                    filteredInvoices.push(invoice);
+                } else {
+                    self.log.debug(accountId, userId, 'filtering: ', invoice);
+                }
+            });
+            invoices.data = filteredInvoices;
+            invoices.count = filteredInvoices.length;
+            self.log.debug(accountId, userId, '<< listInvoicesForAccount');
+            return fn(null, invoices);
+        });
     }
 
 
