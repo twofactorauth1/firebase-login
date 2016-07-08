@@ -150,12 +150,10 @@ app.use(express.session({
     secret: 'mys3cr3t',
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
-        domain: appConfig.cookie_subdomain,
-        secure:true
+        domain: appConfig.cookie_subdomain
         }, //stay open for 1 day of inactivity across all subdomains
     key: appConfig.cookie_name
 }));
-app.disable('x-powered-by');
 
 //Middle ware to refresh the session cookie expiration on every hit
 app.use(function (req, res, next) {
