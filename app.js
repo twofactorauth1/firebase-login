@@ -154,11 +154,12 @@ var sess = {
     }, //stay open for 1 day of inactivity across all subdomains
     key: appConfig.cookie_name};
 
-
+/*
 if (appConfig.cookie_subdomain === '.indigenous.io' || appConfig.cookie_subdomain === '.test.indigenous.io') {
     app.set('trust proxy', 1) // trust first proxy
     sess.cookie.secure = true // serve secure cookies
 }
+*/
 app.use(express.session(sess));
 
 //Middle ware to refresh the session cookie expiration on every hit
