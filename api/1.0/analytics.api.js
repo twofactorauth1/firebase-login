@@ -195,6 +195,7 @@ _.extend(api.prototype, baseApi.prototype, {
             var obj = {
                 email : event.email,
                 ts : moment.unix(event.timestamp).toDate(),
+                start: moment.unix(event.timestamp).toDate(),
                 accountId: event.accountId,
                 contactId: event.contactId
             };
@@ -418,7 +419,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.error('Error handling events:', err);
             }
             async.eachSeries(contactActivitiesJSON, function(obj, cb){
-                self.log.debug('Creating contact activity for:', obj);
                 var activity = new $$.m.ContactActivity(obj);
                 contactActivityManager.createActivity(activity, function(err, value){
                     cb(err);
