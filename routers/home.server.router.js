@@ -33,20 +33,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
 
         //send all routes to index and let the app router to navigate to the appropriate view
-        app.get("/index", this.setup.bind(this), this.optimizedIndex.bind(this));
-        app.get("/blog", this.setup.bind(this), this.renderBlogPage.bind(this));
+        app.get("/index", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
+        app.get("/blog", this.setupForPages.bind(this), this.renderBlogPage.bind(this));
         //app.get("/blog/*", this.setup.bind(this), this.optimizedIndex.bind(this));
-        app.get('/blog/feed/rss', this.setup.bind(this), this.blogRSS.bind(this));
-        app.get("/blog/:postName", this.setup.bind(this), this.renderBlogPost.bind(this));
-        app.get("/tag/*", this.setup.bind(this), this.renderBlogByAuthorOrPost.bind(this));
-        app.get("/category/*", this.setup.bind(this), this.optimizedIndex.bind(this));
-        app.get("/author/*", this.setup.bind(this), this.renderBlogByAuthorOrPost.bind(this));
-        app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
+        app.get('/blog/feed/rss', this.setupForPages.bind(this), this.blogRSS.bind(this));
+        app.get("/blog/:postName", this.setupForPages.bind(this), this.renderBlogPost.bind(this));
+        app.get("/tag/*", this.setupForPages.bind(this), this.renderBlogByAuthorOrPost.bind(this));
+        app.get("/category/*", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
+        app.get("/author/*", this.setupForPages.bind(this), this.renderBlogByAuthorOrPost.bind(this));
+        app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         app.get("/signup", this.setupForSocialSignup.bind(this), this.optimizedIndex.bind(this));
-        app.get("/post", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/post", this.setupForPages.bind(this), this.optimizedIndex.bind(this));
 
         app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
 
@@ -61,8 +61,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get("/demo", this.setup.bind(this), this.demo.bind(this));
         app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
-        //TODO: comment out the get
-        app.get('/addaccount/:subdomain', this.setup.bind(this), this.handleAddAccount.bind(this));
+
         app.post('/addaccount', this.setup.bind(this), this.handleAddAccount.bind(this));
         app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
 
