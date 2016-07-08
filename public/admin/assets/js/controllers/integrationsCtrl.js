@@ -29,7 +29,8 @@
             stripe.accountType = "account";
             stripe.id = Math.uuid(8);
             stripe.type = "st";
-            data.socialAccounts.push(stripe);
+            //the stripe account is part of the social config
+            //data.socialAccounts.push(stripe);
           }
           _.each(data.socialAccounts, function (socialAccount) {
             //get profile/page info
@@ -37,8 +38,15 @@
               SocialConfigService.getFBProfile(socialAccount.id, function (profile) {
                 socialAccount.profile = profile;
               });
+            } else if(socialAccount.type === 'stripe') {
+                //change it to st?
+                socialAccount.type = 'st';
             }
           });
+          if(!_.find(data.socialAccounts, function(cred){return cred.type === 'st'})){
+              //add the credential from the account.
+              data.socialAccounts.push(stripe);
+          }
           $scope.socialAccounts = data.socialAccounts;
           $scope.checkForIntegration();
           console.log();
