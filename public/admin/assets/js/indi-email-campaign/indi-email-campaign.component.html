@@ -162,7 +162,7 @@
                         <option value='autoresponder'>Auto Responder</option>
                     </select>
                 </div>
-                <div class="panel panel-white" ng-show="vm.campaign.type === 'onetime'">
+                <div class="panel panel-white" ng-class="{'csspinner': vm.campaign.type === 'autoresponder'}">
                     <div class="panel-body no-padding">
                         <tabset>
                             <tab heading="by Tag" disable='vm.disableEditing'>
@@ -201,16 +201,16 @@
                             </tab>
                         </tabset>
                     </div>
+                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-user" ng-disabled="vm.disableEditing" ng-click='vm.openModalFn("campaign-contacts-list-modal")'>
+                        <span>
+                            <div>
+                                View full contact list
+                            </div>
+                        </span>
+                    </button>
                 </div>
-                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-user" ng-disabled="vm.disableEditing" ng-click='vm.openModalFn("campaign-contacts-list-modal")' ng-show="vm.campaign.type === 'onetime'">
-                    <span>
-                        <div>
-                            View full contact list
-                        </div>
-                    </span>
-                </button>
             </div>
-            <div class="col-sm-4 bg-white">
+            <div class="col-sm-4 bg-white" ng-class="{'csspinner': vm.campaign.type === 'autoresponder'}">
                 <div class='form-group'>
                     <label>When to send</label>
                     <div class="radio clip-radio radio-primary" style="margin-top:0px!important">

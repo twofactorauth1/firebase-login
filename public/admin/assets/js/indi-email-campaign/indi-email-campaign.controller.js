@@ -2,13 +2,14 @@
 
   app.controller('EmailCampaignController', indiEmailCampaignController);
 
-  indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService'];
+  indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant'];
   /* @ngInject */
-  function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService) {
+  function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant) {
 
     console.info('email-campaign directive init...');
 
     var vm = this;
+    var contactTags = userConstant.contact_types.dp;
 
     vm.init = init;
 
@@ -23,6 +24,7 @@
     vm.tagSelection = [];
     vm.recipients = [];
     vm.recipientsToRemove = [];
+    vm.originalRecipients = [];
     vm.selectedContacts = {
       individuals: []
     };
@@ -51,6 +53,8 @@
     vm.updateSendNowFn = updateSendNowFn;
     vm.openModalFn = openModalFn;
     vm.closeModalFn = closeModalFn;
+    vm.getCampaignContactsFn = getCampaignContactsFn;
+    vm.loadSavedTagsFn = loadSavedTagsFn;
 
     function saveAsDraftFn() {
       vm.dataLoaded = false;
@@ -333,9 +337,40 @@
       });
       vm.modalInstance.result.finally(vm.closeModalFn());
     }
-    
+
     function closeModalFn() {
       vm.modalInstance.close();
+    }
+
+    function getCampaignContactsFn() {
+      vm.dataLoaded = false;
+      EmailCampaignService.getCampaignContacts(vm.campaignId)
+        .then(function (res) {
+          vm.originalRecipients = angular.copy(res.data);
+          vm.recipients = res.data;
+          var individuals = [];
+          _.each(res.data, function (contact) {
+            individuals.push(
+              contact._id
+              );
+          });
+          vm.selectedContacts.individuals = individuals;
+          vm.dataLoaded = true;
+        });
+    }
+
+    function loadSavedTagsFn() {
+      vm.dataLoaded = false;
+      _.each(vm.campaign.contactTags, function (tag) {
+        var tagLabel = _.findWhere(contactTags, {data: tag});
+        if (tagLabel) {
+          tag = tagLabel.label;
+        }
+        var tag = _.findWhere(vm.contactCounts, {uniqueTag: tag});
+        if (tag)
+          vm.toggleSelectionFn(tag.matchingTag);
+      });
+      vm.dataLoaded = true;
     }
 
     function init(element) {
@@ -362,8 +397,9 @@
             }
             vm.getContactsFn()
               .then(function () {
-                vm.dataLoaded = true;
+                vm.loadSavedTagsFn();
               });
+            vm.getCampaignContactsFn();
           }, function (err) {
             $state.go('app.marketing.campaigns');
           });
