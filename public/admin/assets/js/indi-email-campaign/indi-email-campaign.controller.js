@@ -396,7 +396,21 @@
               toaster.pop('error', 'Campaign not found');
               $state.go('app.marketing.campaigns');
             }
+
             vm.campaign = res.data;
+            console.info('campaign obj', vm.campaign);
+
+            var sendAtDateISOString = moment.utc(vm.campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
+            var localMoment = moment(sendAtDateISOString);
+
+            if (vm.campaign.type === 'onetime') {
+              if (localMoment.isValid()) {
+                vm.delivery.date = localMoment;
+                vm.delivery.originalDate = angular.copy(localMoment);
+                vm.whenToSend = localMoment.isAfter() ? 'later' : 'now';
+              }
+            }
+
             if (vm.campaign.status === 'DRAFT') {
               vm.disableEditing = false;
             }
