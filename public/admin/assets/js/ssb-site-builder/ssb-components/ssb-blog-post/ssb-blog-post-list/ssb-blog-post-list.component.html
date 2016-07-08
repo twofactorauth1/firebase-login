@@ -33,7 +33,7 @@
             ssb-blog-post-card-component
             post="post"
             filtered-post-view="vm.filteredPostView" 
-            ng-repeat="post in vm.blog.posts track by $index">
+            ng-repeat="post in vm.blog.posts | orderBy:vm.sortBlogPosts:true track by $index">
         </article>
     </section>
 </div>

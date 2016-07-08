@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderBlogPostListComponentController', ssbBlogPostListComponentController);
 
-ssbBlogPostListComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope', '$timeout', '$location'];
+ssbBlogPostListComponentController.$inject = ['SimpleSiteBuilderBlogService', '$scope', '$timeout', '$location', '$filter'];
 /* @ngInject */
-function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope, $timeout, $location) {
+function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope, $timeout, $location, $filter) {
 
     console.info('ssb-blog-post-list directive init...')
 
@@ -17,6 +17,8 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     var path = $location.$$path.replace('/page/', '');
 
     vm.blog = SimpleSiteBuilderBlogService.blog || {};
+
+    vm.sortBlogPosts = sortBlogPosts;
 
     vm.filteredPostView = false;
 
@@ -49,6 +51,10 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
 
     function checkHasFeaturedPosts() {
         vm.hasFeaturedPosts = vm.blog.posts.filter(function(post){ return post.featured; }).length;
+    }
+
+    function sortBlogPosts(blogpost){
+        return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
     }
 
     function init(element) {
