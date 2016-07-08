@@ -13,7 +13,7 @@
     vm.init = init;
 
     vm.campaignId = $stateParams.id;
-    vm.campaign = {status: 'DRAFT'};
+    vm.campaign = {status: 'DRAFT', type: 'onetime'};
     vm.dataLoaded = false;
     vm.disableEditing = true;
     vm.account = null;
