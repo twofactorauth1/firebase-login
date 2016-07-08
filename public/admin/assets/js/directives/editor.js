@@ -63,7 +63,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         scope.updateFroalaContent = _.debounce(function(editor) {
             $timeout(function() {
-                ngModel.$setViewValue(editor.html.get());
+
+                var html = editor.html.get().replace(/\u2028|\u2029/g, '');
+                               
+                ngModel.$setViewValue(html);
                 scope.compileEditorElements(editor);
             });
         }, 500)
@@ -132,7 +135,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                     //set initial text
                     if (ngModel.$viewValue) {
-                        var html = ngModel.$viewValue.replace("<span>", "<span style=''>");
+                        var html = ngModel.$viewValue.replace("<span>", "<span style=''>").replace(/\u2028|\u2029/g, '');
+                        ngModel.$setViewValue(html);
                         editor.html.set(html);
                     }
 
