@@ -111,15 +111,17 @@ _.extend(view.prototype, BaseView.prototype, {
                 var _author = null;
                 var url_path = self._req.originalUrl;
                 if (url_path.indexOf("tag/") > -1) {
-                    _tag = url_path.replace('/tag/', '');
+                    _tag = decodeURIComponent(url_path.replace('/tag/', ''));
                 }
 
                 if (url_path.indexOf("author/") > -1) {
-                    _author = url_path.replace('/author/', '');
+                    _author = decodeURIComponent(url_path.replace('/author/', ''));
                 }
 
                 ssbManager.getPublishedPosts(accountId, null, null, function(err, posts){
                     if(_tag || _author){
+
+                        
                         if(_author){
                             posts =  posts.filter(function(post){
                                 // console.log(post)
@@ -134,6 +136,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             })
                         }
                     }
+
                     cb(err, webpageData, allPages, page, posts);
 
                 });
