@@ -14,11 +14,16 @@
         vm.init = init;
 
         vm.campaignId = $stateParams.id;
-        vm.campaign = {status: 'DRAFT', type: 'onetime'};
+        vm.campaign = {
+            status: 'DRAFT',
+            type: 'onetime'
+        };
         vm.dataLoaded = false;
         vm.disableEditing = true;
         vm.account = null;
-        vm.website = {settings: {}};
+        vm.website = {
+            settings: {}
+        };
         vm.contacts = [];
         vm.allContacts = [];
         vm.tagSelection = [];
@@ -38,9 +43,9 @@
         vm.mstep = 1;
         vm.tableView = 'list';
         vm.triggers = [{
-                name: 'Sign Up',
-                icon: 'fa-paper-plane',
-                value: 'SIGNUP'
+            name: 'Sign Up',
+            icon: 'fa-paper-plane',
+            value: 'SIGNUP'
             }];
 
         vm.saveAsDraftFn = saveAsDraftFn;
@@ -64,6 +69,7 @@
         vm.addContactsFn = addContactsFn;
         vm.removeContactsFromCampaignFn = removeContactsFromCampaignFn;
 
+
         function addContactsFn(createdContactsArr) {
             //get an array of contact Ids from recipients
             var recipientsIdArr = [];
@@ -86,6 +92,7 @@
             var contactsArr = recipientsIdArr;
 
             vm.campaign.contacts = contactsArr;
+            console.log(vm.campaign.contacts);
         }
 
         function removeContactsFromCampaignFn() {
@@ -120,15 +127,15 @@
 
             if (promises.length) {
                 $q.all(promises)
-                  .then(function (data) {
-                      _.each(data, function (value) {
-                          contactsArr.push(value.data._id);
-                      });
-                      fn(contactsArr);
-                  })
-                  .catch(function (err) {
-                      console.error(err);
-                  });
+                    .then(function (data) {
+                        _.each(data, function (value) {
+                            contactsArr.push(value.data._id);
+                        });
+                        fn(contactsArr);
+                    })
+                    .catch(function (err) {
+                        console.error(err);
+                    });
             } else {
                 fn(contactsArr);
             }
@@ -154,33 +161,35 @@
             sendAt.minute = moment.utc(vm.delivery.date).get('minute');
             vm.campaign.steps[0].settings.sendAt = sendAt;
 
+            vm.campaign.contactTags = vm.getSelectedTagsFn();
+
             //processing custom emails for contact
             vm.checkAndCreateContactFn(function (createdContactsArr) {
                 vm.addContactsFn(createdContactsArr);
                 fn(vm.campaign)
-                  .then(function (res) {
-                      vm.campaign = res.data;
-                      vm.dataLoaded = true;
-                      vm.disableEditing = false;
-                      vm.removeContactsFromCampaignFn();
-                      toaster.pop('success', 'Campaign saved');
-                  }, function (err) {
-                      vm.dataLoaded = true;
-                      toaster.pop('error', 'Campaign save failed');
-                  });
+                    .then(function (res) {
+                        vm.campaign = res.data;
+                        vm.dataLoaded = true;
+                        vm.disableEditing = false;
+                        vm.removeContactsFromCampaignFn();
+                        toaster.pop('success', 'Campaign saved');
+                    }, function (err) {
+                        vm.dataLoaded = true;
+                        toaster.pop('error', 'Campaign save failed');
+                    });
             });
         }
 
         function sendTestFn() {
             vm.dataLoaded = false;
             EmailCampaignService.sendTestEmail(vm.campaign)
-              .then(function (res) {
-                  vm.dataLoaded = true;
-                  toaster.pop('success', 'Send test email');
-              }, function (err) {
-                  vm.dataLoaded = true;
-                  toaster.pop('error', 'Send test mail failed');
-              });
+                .then(function (res) {
+                    vm.dataLoaded = true;
+                    toaster.pop('success', 'Send test email');
+                }, function (err) {
+                    vm.dataLoaded = true;
+                    toaster.pop('error', 'Send test mail failed');
+                });
         }
 
         function activateCampaignFn() {
@@ -192,15 +201,15 @@
             }
             vm.campaign.status = 'PENDING';
             fn(vm.campaign)
-              .then(function (res) {
-                  vm.campaign = res.data;
-                  vm.dataLoaded = true;
-                  vm.disableEditing = true;
-                  toaster.pop('success', 'Campaign activated');
-              }, function (err) {
-                  vm.dataLoaded = true;
-                  toaster.pop('error', 'Campaign activation failed');
-              });
+                .then(function (res) {
+                    vm.campaign = res.data;
+                    vm.dataLoaded = true;
+                    vm.disableEditing = true;
+                    toaster.pop('success', 'Campaign activated');
+                }, function (err) {
+                    vm.dataLoaded = true;
+                    toaster.pop('error', 'Campaign activation failed');
+                });
         }
 
         function checkBestEmailFn(contact) {
@@ -231,7 +240,9 @@
                     //contact.fullName = contact.first + " " + contact.last || '';
                     if (contact.tags && contact.tags.length > 0) {
                         _.each(contact.tags, function (tag) {
-                            var tagLabel = _.findWhere(contactTags, {data: tag});
+                            var tagLabel = _.findWhere(contactTags, {
+                                data: tag
+                            });
                             if (tagLabel)
                                 _tags.push(tagLabel.label);
                             else
@@ -283,8 +294,7 @@
 
         function eliminateDuplicateFn(contact) {
             return vm.selectedContacts.individuals.indexOf(contact._id) > -1;
-        }
-        ;
+        };
 
         function getRecipientsFn() {
 
@@ -300,7 +310,9 @@
                     var tempTags = [];
                     var tagLabel = "";
                     _.each(contact.tags, function (tag) {
-                        tagLabel = _.findWhere(contactTags, {data: tag});
+                        tagLabel = _.findWhere(contactTags, {
+                            data: tag
+                        });
                         if (tagLabel)
                             tempTags.push(tagLabel.label);
                         else
@@ -376,7 +388,9 @@
                 var tempTags = [];
                 var tagLabel = "";
                 _.each(contact.tags, function (tag) {
-                    tagLabel = _.findWhere(contactTags, {data: tag});
+                    tagLabel = _.findWhere(contactTags, {
+                        data: tag
+                    });
                     if (tagLabel)
                         tempTags.push(tagLabel.label);
                     else
@@ -440,28 +454,32 @@
         function getCampaignContactsFn() {
             vm.dataLoaded = false;
             EmailCampaignService.getCampaignContacts(vm.campaignId)
-              .then(function (res) {
-                  vm.originalRecipients = angular.copy(res.data);
-                  vm.recipients = res.data;
-                  var individuals = [];
-                  _.each(res.data, function (contact) {
-                      individuals.push(
-                        contact._id
+                .then(function (res) {
+                    vm.originalRecipients = angular.copy(res.data);
+                    vm.recipients = res.data;
+                    var individuals = [];
+                    _.each(res.data, function (contact) {
+                        individuals.push(
+                            contact._id
                         );
-                  });
-                  vm.selectedContacts.individuals = individuals;
-                  vm.dataLoaded = true;
-              });
+                    });
+                    vm.selectedContacts.individuals = individuals;
+                    vm.dataLoaded = true;
+                });
         }
 
         function loadSavedTagsFn() {
             vm.dataLoaded = false;
             _.each(vm.campaign.contactTags, function (tag) {
-                var tagLabel = _.findWhere(contactTags, {data: tag});
+                var tagLabel = _.findWhere(contactTags, {
+                    data: tag
+                });
                 if (tagLabel) {
                     tag = tagLabel.label;
                 }
-                var tag = _.findWhere(vm.contactCounts, {uniqueTag: tag});
+                var tag = _.findWhere(vm.contactCounts, {
+                    uniqueTag: tag
+                });
                 if (tag)
                     vm.toggleSelectionFn(tag.matchingTag);
             });
@@ -481,37 +499,37 @@
 
             if (vm.campaignId !== 'create') {
                 EmailCampaignService.getCampaign(vm.campaignId)
-                  .then(function (res) {
-                      if (!res.data._id) {
-                          toaster.pop('error', 'Campaign not found');
-                          $state.go('app.marketing.campaigns');
-                      }
+                    .then(function (res) {
+                        if (!res.data._id) {
+                            toaster.pop('error', 'Campaign not found');
+                            $state.go('app.marketing.campaigns');
+                        }
 
-                      vm.campaign = res.data;
-                      console.info('campaign obj', vm.campaign);
+                        vm.campaign = res.data;
+                        console.info('campaign obj', vm.campaign);
 
-                      var sendAtDateISOString = moment.utc(vm.campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
-                      var localMoment = moment(sendAtDateISOString);
+                        var sendAtDateISOString = moment.utc(vm.campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
+                        var localMoment = moment(sendAtDateISOString);
 
-                      if (vm.campaign.type === 'onetime') {
-                          if (localMoment.isValid()) {
-                              vm.delivery.date = localMoment;
-                              vm.delivery.originalDate = angular.copy(localMoment);
-                              vm.whenToSend = localMoment.isAfter() ? 'later' : 'now';
-                          }
-                      }
+                        if (vm.campaign.type === 'onetime') {
+                            if (localMoment.isValid()) {
+                                vm.delivery.date = localMoment;
+                                vm.delivery.originalDate = angular.copy(localMoment);
+                                vm.whenToSend = localMoment.isAfter() ? 'later' : 'now';
+                            }
+                        }
 
-                      if (vm.campaign.status === 'DRAFT') {
-                          vm.disableEditing = false;
-                      }
-                      vm.getContactsFn()
-                        .then(function () {
-                            vm.loadSavedTagsFn();
-                        });
-                      vm.getCampaignContactsFn();
-                  }, function (err) {
-                      $state.go('app.marketing.campaigns');
-                  });
+                        if (vm.campaign.status === 'DRAFT') {
+                            vm.disableEditing = false;
+                        }
+                        vm.getContactsFn()
+                            .then(function () {
+                                vm.loadSavedTagsFn();
+                            });
+                        vm.getCampaignContactsFn();
+                    }, function (err) {
+                        $state.go('app.marketing.campaigns');
+                    });
             }
         }
 
