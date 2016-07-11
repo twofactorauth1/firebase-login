@@ -112,7 +112,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
             $(function() {
-
+                var blogPostEditor = $(elem).parents().hasClass("ssb-blog-editor");
                 var froalaConfig = $.FroalaEditor.build(
                     (function() {
                         if (attrs.ssbBlogEditor) {
@@ -124,12 +124,17 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
                     })()
                 );
+                // Case when editing blog post content
+                if(blogPostEditor){
+                    froalaConfig.enter = $.FroalaEditor.ENTER_P;
+                }
 
                 $timeout(function() {
 
                     $(elem).on('froalaEditor.initialized', function(e, editor) {
-                    if($(elem).parents().hasClass("ssb-blog-editor"))
+                    if(blogPostEditor){
                         destroyShared(editor);
+                    }
                     //topbar positioning
                     $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
 
@@ -144,6 +149,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     scope.compileEditorElements(editor, true);
 
                 }).froalaEditor(froalaConfig)
+
                     .on('froalaEditor.contentChanged', function(e, editor) {
                         scope.updateFroalaContent(editor);
                         // $(elem).froalaEditor('html.cleanEmptyTags');
