@@ -23,7 +23,7 @@
                             <li>
                                 <a class="text-dark" ng-click="viewSettings('website', 'Blog')">Blog</a>
                             </li>
-                            <li ng-if='account.showhide.userScripts'>
+                            <li>
                                 <a class="text-dark" ng-click="viewSettings('website', 'Scripts')">Scripts</a>
                             </li>
                         </ul>
@@ -247,7 +247,7 @@
                     </form>
                     <div class="clearfix"></div>
                 </tab>
-                <tab heading="Scripts" ng-if='account.showhide.userScripts'>
+                <tab heading="Scripts">
                       <form class="col-sm-6 form-horizontal">
                           <div class="form-group">
                               <label>Enable Scripts</label>
