@@ -17,7 +17,9 @@
         componentClass: '&',
         componentStyle: '&',
         componentIndex: '=',
-        componentCount: '='
+        componentCount: '=',
+        state: '=',
+        uiState: '='
       },
       replace: false,
       templateUrl: '/admin/assets/js/indi-email-builder/email-component-loader/email-component-loader.component.html',
