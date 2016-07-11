@@ -115,6 +115,33 @@
         $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
     });
 
+    $scope.$on('email.move.component', function (event, args) {
+      vm.moveComponentFn(args.component, args.direction);
+    });
+
+    $scope.$on('email.duplicate.component', function (event, args) {
+      vm.cloneComponentFn(args.component);
+    });
+
+    $scope.$on('email.remove.component', function (event, args) {
+      vm.dataLoaded = false;
+
+      vm.email.components.forEach(function (c, index) {
+        if (c._id === args.component._id) {
+          vm.email.components.splice(index, 1);
+        }
+      });
+      $timeout(function () {
+        var element = document.getElementById(vm.email.components[vm.email.components.length - 1]._id);
+        if (element) {
+          $document.scrollToElementAnimated(element, 175, 1000);
+          $(window).trigger('resize');
+        }
+        vm.dataLoaded = true;
+        toaster.pop('warning', 'component deleted');
+      }, 500);
+    });
+
 
     function openModalFn(modal, controller, index, size) {
       console.log('openModal >>> ', modal, controller, index, size);
@@ -451,32 +478,12 @@
       });
     }
 
-    $scope.$on('email.move.component', function (event, args) {
-      vm.moveComponentFn(args.component, args.direction);
-    });
-
-    $scope.$on('email.duplicate.component', function (event, args) {
-      vm.cloneComponentFn(args.component);
-    });
-
-    $scope.$on('email.remove.component', function (event, args) {
-      vm.dataLoaded = false;
-
-      vm.email.components.forEach(function (c, index) {
-        if (c._id === args.component._id) {
-          vm.email.components.splice(index, 1);
-        }
-      });
-      $timeout(function () {
-        var element = document.getElementById(vm.email.components[vm.email.components.length - 1]._id);
-        if (element) {
-          $document.scrollToElementAnimated(element, 175, 1000);
-          $(window).trigger('resize');
-        }
-        vm.dataLoaded = true;
-        toaster.pop('warning', 'component deleted');
-      }, 500);
-    });
+    function pageLinkClick(e) {
+      if (!angular.element(this).hasClass("clickable-link")) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }
 
     function init(element) {
 
@@ -486,32 +493,36 @@
         $rootScope.app.layout.isSidebarClosed = true;
         $rootScope.app.layout.isMinimalAdminChrome = true;
 
-      AccountService.getAccount(function (data) {
-        vm.account = data;
-      });
+        angular.element("body").on("click", ".ssb-page-section a", pageLinkClick);
 
-      WebsiteService.getWebsite(function (data) {
-        vm.website = data;
-      });
-
-      EmailBuilderService.getEmail(vm.emailId)
-        .then(function (res) {
-          if (!res.data._id) {
-            toaster.pop('error', 'Email not found');
-            $state.go('app.emails');
-          }
-          vm.email = res.data;
-          vm.dataLoaded = true;
-          $timeout(function () {
-            $('.editable').on('froalaEditor.focus', function (e, editor) {
-              vm.editor = editor;
-              console.info('Event froalaEditor.focus triggered');
-            });
-          }, 1000);
-        }, function (err) {
-          console.error(err);
-          $state.go('app.emails');
+        AccountService.getAccount(function (data) {
+            vm.account = data;
         });
+
+        WebsiteService.getWebsite(function (data) {
+            vm.website = data;
+        });
+
+        EmailBuilderService
+            .getEmail(vm.emailId)
+            .then(function (res) {
+                if (!res.data._id) {
+                    toaster.pop('error', 'Email not found');
+                    $state.go('app.emails');
+                }
+                vm.email = res.data;
+                vm.dataLoaded = true;
+                $timeout(function () {
+                    $('.editable').on('froalaEditor.focus', function (e, editor) {
+                        vm.editor = editor;
+                        console.info('Event froalaEditor.focus triggered');
+                    });
+                }, 1000);
+        }, function (err) {
+            console.error(err);
+            $state.go('app.emails');
+        });
+
     }
 
 
