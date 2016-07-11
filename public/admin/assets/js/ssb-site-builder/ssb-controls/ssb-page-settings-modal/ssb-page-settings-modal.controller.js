@@ -178,7 +178,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
       return (
     		  SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
     			  console.log('website saved');
-            if (vm.parentVm.state.account.showhide.userScripts) {
+            if (vm.parentVm.state.account.showhide.userScripts.enable && vm.parentVm.state.account.showhide.userScripts.toggle) {
               SimpleSiteBuilderService.updateScriptResource(vm.parentVm.state.website).then(function(response) {
                 vm.parentVm.state.website = response.data;
               });

@@ -11,7 +11,7 @@ angular.module('mainApp')
           scope.$on('$routeChangeSuccess', function (ev, curr, prev) {
             scope.scripts = '';
             accountService(function (err, account) {
-              if (account.showhide.userScripts) {
+              if (account.showhide.userScripts.enable && account.showhide.userScripts.toggle) {
                 websiteService(function (err, website) {
                   if (angular.isDefined(website.resources.userScripts.global)) {
                     scope.scripts += website.resources.userScripts.global.sanitized;

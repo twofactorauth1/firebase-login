@@ -440,6 +440,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    patch: function(query, patch, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._patchMongo(query, patch, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
 
     _isAuthenticationError: function (obj, fn) {
         var error;
