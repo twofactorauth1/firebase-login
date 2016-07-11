@@ -97,10 +97,12 @@
 
         function removeContactsFromCampaignFn() {
             angular.forEach(vm.recipientsToRemove, function (contactId) {
-                EmailCampaignService.cancelCampaignForContact(vm.campaign, contactId, function () {
-                    console.warn('removed ' + contactId);
-                });
+                EmailCampaignService.cancelCampaignForContact(vm.campaign, contactId)
+                    .then(function (res) {
+                        console.warn('removed ' + contactId);
+                    });
             });
+
             _.each(vm.removeContactsFromCampaign, function (id) {
                 console.warn('remove ' + id);
                 console.warn(_.indexOf(vm.campaign.contacts, id));
@@ -162,6 +164,7 @@
             vm.campaign.steps[0].settings.sendAt = sendAt;
 
             vm.campaign.contactTags = vm.getSelectedTagsFn();
+            vm.removeContactsFromCampaignFn();
 
             //processing custom emails for contact
             vm.checkAndCreateContactFn(function (createdContactsArr) {
@@ -171,7 +174,6 @@
                         vm.campaign = res.data;
                         vm.dataLoaded = true;
                         vm.disableEditing = false;
-                        vm.removeContactsFromCampaignFn();
                         toaster.pop('success', 'Campaign saved');
                     }, function (err) {
                         vm.dataLoaded = true;
