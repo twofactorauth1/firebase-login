@@ -224,9 +224,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
 
     if (type === 'ssbEmailEditor') {
         _.extend($.FroalaEditor.config, {
-            // toolbarInline: false,
-            // scrollableContainer: '#email-froala-scrollable-container',
-            // toolbarContainer: '#email-froala-container',
+            toolbarButtonsMD: toolbarbuttons,
             placeholderText: 'Type your email here'
         });
     }
