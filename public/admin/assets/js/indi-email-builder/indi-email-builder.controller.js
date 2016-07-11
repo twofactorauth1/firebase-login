@@ -15,11 +15,11 @@
     vm.state = vm.state || {};
     vm.uiState = vm.uiState || {};
 
-    vm.emailId = $stateParams.id;
+    vm.state.email = null;
+    vm.state.emailId = $stateParams.id;
     vm.dataLoaded = false;
     vm.account = null;
     vm.website = {settings: {}};
-    vm.email = null;
     vm.modalInstance = null;
     vm.editor = null;
     vm.componentTypes = [{
@@ -126,13 +126,13 @@
     $scope.$on('email.remove.component', function (event, args) {
       vm.dataLoaded = false;
 
-      vm.email.components.forEach(function (c, index) {
+      vm.state.email.components.forEach(function (c, index) {
         if (c._id === args.component._id) {
-          vm.email.components.splice(index, 1);
+          vm.state.email.components.splice(index, 1);
         }
       });
       $timeout(function () {
-        var element = document.getElementById(vm.email.components[vm.email.components.length - 1]._id);
+        var element = document.getElementById(vm.state.email.components[vm.state.email.components.length - 1]._id);
         if (element) {
           $document.scrollToElementAnimated(element, 175, 1000);
           $(window).trigger('resize');
@@ -153,7 +153,7 @@
         scope: $scope,
         resolve: {
           components: function () {
-            return vm.email && vm.email.components ? vm.email.components : [];
+            return vm.state.email && vm.state.email.components ? vm.state.email.components : [];
           }
         }
       };
@@ -224,7 +224,7 @@
         vm.dataLoaded = false;
         var componentType = null;
         if (['email-footer', 'email-header'].indexOf(addedType.type) > -1) {
-          componentType = _.findWhere(vm.email.components, {
+          componentType = _.findWhere(vm.state.email.components, {
             type: addedType.type
           });
           if (componentType) {
@@ -237,7 +237,7 @@
         WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
           if (newComponent) {
             vm.closeModalFn();
-            vm.email.components.push(newComponent);
+            vm.state.email.components.push(newComponent);
             $timeout(function () {
               var element = document.getElementById(newComponent._id);
               if (element) {
@@ -262,7 +262,7 @@
         vm.dataLoaded = false;
         var componentType = null;
         if (['email', 'email-footer', 'email-header'].indexOf(addedType.type) > -1) {
-          componentType = _.findWhere(vm.email.components, {
+          componentType = _.findWhere(vm.state.email.components, {
             type: addedType.type
           });
           if (componentType) {
@@ -275,7 +275,7 @@
         WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
           if (newComponent) {
             _.extend(newComponent, clone);
-            vm.email.components.push(newComponent);
+            vm.state.email.components.push(newComponent);
             $timeout(function () {
               var element = document.getElementById(newComponent._id);
               if (element) {
@@ -424,7 +424,7 @@
 
     function saveFn() {
       vm.dataLoaded = false;
-      EmailBuilderService.updateEmail(vm.email)
+      EmailBuilderService.updateEmail(vm.state.email)
         .then(function (res) {
           vm.dataLoaded = true;
           toaster.pop('success', 'Email saved');
@@ -454,7 +454,7 @@
 
     function moveComponentFn(component, direction) {
       var toIndex;
-      var fromIndex = _.findIndex(vm.email.components, function (x) {
+      var fromIndex = _.findIndex(vm.state.email.components, function (x) {
         return x._id === component._id;
       });
 
@@ -466,12 +466,12 @@
         toIndex = fromIndex + 1;
       }
 
-      vm.email.components.splice(toIndex, 0, vm.email.components.splice(fromIndex, 1)[0]);
+      vm.state.email.components.splice(toIndex, 0, vm.state.email.components.splice(fromIndex, 1)[0]);
     }
 
     function deleteFn() {
       vm.dataLoaded = false;
-      WebsiteService.deleteEmail(vm.email, function () {
+      WebsiteService.deleteEmail(vm.state.email, function () {
         vm.dataLoaded = true;
         $state.go('app.emails');
         toaster.pop('Warning', 'Email deleted.');
@@ -504,13 +504,13 @@
         });
 
         EmailBuilderService
-            .getEmail(vm.emailId)
+            .getEmail(vm.state.emailId)
             .then(function (res) {
                 if (!res.data._id) {
                     toaster.pop('error', 'Email not found');
                     $state.go('app.emails');
                 }
-                vm.email = res.data;
+                vm.state.email = res.data;
                 vm.dataLoaded = true;
                 $timeout(function () {
                     $('.editable').on('froalaEditor.focus', function (e, editor) {

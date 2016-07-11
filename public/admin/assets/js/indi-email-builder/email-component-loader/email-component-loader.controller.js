@@ -12,7 +12,7 @@
     var pVm = $scope.$parent.vm;
 
     vm.ssbEditor = true;
-    vm.components = pVm.email.components;
+    vm.components = pVm.state.email.components;
 
     $scope.component = vm.component;
     $scope.isEditing = true;
