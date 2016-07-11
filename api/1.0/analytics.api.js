@@ -548,6 +548,12 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    /**
+     * @deprecated
+     * @param req
+     * @param res
+     * @param next
+     */
     filterMandrillEvents: function(req, res, next) {
         //TODO: create customActivities
         var self = this;

@@ -451,7 +451,7 @@ module.exports = {
             return fn(errorString, null);
         }
 
-        if(step.executed !== null) {
+        if(step.executed) {
             var errorString = 'Cannot execute a step more than once.';
             self.log.error(errorString);
             return fn(errorString, null);
