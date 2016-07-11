@@ -338,6 +338,7 @@
         else
             editor.format.removeStyle('background-color');
 
+        $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
         editor.events.trigger("bgColorChange", []);
 
         setTimeout(function(){
@@ -388,6 +389,9 @@
             editor.opts.button.css('color', "");
         else
             editor.format.removeStyle('color');
+
+        $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
+
         editor.events.trigger("bgColorChange", []);
 
         $popup.find('input.sp-input').val("");
