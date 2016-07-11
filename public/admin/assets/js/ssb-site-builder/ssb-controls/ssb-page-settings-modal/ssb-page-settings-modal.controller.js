@@ -39,10 +39,9 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
             closeOnCancel: true
             }, function (isConfirm) {
             if (isConfirm) {
-                var originalPage = angular.copy(vm.originalPage);
-                originalPage.mainmenu = false;
+                vm.page.mainmenu = false;
                 angular.element('.modal.in').show();
-                savePage(originalPage, true);
+                saveSettings();
             } else {
                 vm.saveLoading = false;
                 angular.element('.modal.in').show();
