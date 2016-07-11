@@ -453,7 +453,13 @@ _.extend(api.prototype, baseApi.prototype, {
                                 by: 'ADMIN'
                             };
                             campaign.set('modified', modified);
-                            campaignManager.updateCampaign(campaign, cb);
+                            //TODO: updateCampaignStatistics
+                            //campaignManager.updateCampaign(campaign, cb);
+                            var accountId = campaign.get('accountId');
+                            var campaignId = campaign.id();
+                            var statistics = stats;
+                            var userId = 0;
+                            campaignManager.updateCampaignStatistics(accountId, campaignId, statistics, userId, cb);
                         }
                     });
                 }, function(err){
