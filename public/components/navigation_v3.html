@@ -1,4 +1,7 @@
 <style>
+    .navigation-v3 .navbar-default .navbar-nav.nav-align{
+        text-align:{{component.nav.align}} !important;
+    }
     .navigation-v3 .navbar-default .navbar-nav.nav-font-size > li > a{
         font-size:{{component.nav.font.size}}px !important;
     }
@@ -57,7 +60,7 @@
         <div class="col-sm-9">
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family}" class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
+                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align}" class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li class="top-menu-link" data-ng-repeat="link in mainMenu.links track by $index">
                         <a data-ng-show="link.linkTo.type == 'section'" ng-attr-target="{{link.linkTo.page === 'blog' ? '_self' : undefined || undefined}}" data-ng-if="link.linkTo.page === currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a data-ng-show="link.linkTo.type == 'section'" ng-attr-target="{{link.linkTo.page === 'blog' ? '_self' : undefined || undefined}}" data-ng-if="link.linkTo.page !== currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
@@ -67,7 +70,7 @@
                 </ul>
             </div>
             <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
+                <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
                         <a data-ng-show="link.linkTo.type == 'section'" ng-attr-target="{{link.linkTo.page === 'blog' ? '_self' : undefined || undefined}}" data-ng-if="link.linkTo.page === currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a data-ng-show="link.linkTo.type == 'section'" ng-attr-target="{{link.linkTo.page === 'blog' ? '_self' : undefined || undefined}}" data-ng-if="link.linkTo.page !== currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>

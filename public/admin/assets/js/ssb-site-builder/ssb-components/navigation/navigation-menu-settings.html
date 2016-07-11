@@ -86,3 +86,13 @@
         </div>
     </div>
 </div>
+
+
+<h4 class="ssb-sidebar-sub-heading-separator">Nav alignment</h4>
+<div class="row padding-left-10 padding-right-10">
+    <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-15">
+        <button type="button" ng-repeat="option in [
+        'left', 'center', 'right'
+      ]" ng-click="component.nav.align = option" ng-model="component.nav.align" class="btn text-capitalize" ng-class="{'active': option == component.nav.align }">{{option}}</button>
+    </div>
+</div>

@@ -554,11 +554,10 @@
           }
         });
 
-        if (!$scope.plans.length) {
-            $scope.product.status = 'inactive';
-        }
-
         if (saveProduct) {
+          if (!$scope.plans.length) {
+            $scope.product.status = 'inactive';
+          }
           $scope.saveProductFn();
         }
 
