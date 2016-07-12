@@ -16,6 +16,7 @@
     emailService.getEmails = getEmails;
     emailService.getEmail = getEmail;
     emailService.updateEmail = updateEmail;
+    emailService.sendOneTimeEmail = sendOneTimeEmail;
 
     /**
      * Get list of all emails for the account
@@ -84,6 +85,33 @@
         console.info('service | loading -1 : ' + emailService.loading.value);
       })
       return fn;
+    }
+
+    function sendOneTimeEmail(address, email) {
+
+        var payload = angular.toJson({
+            address: address,
+            content: email
+        });
+
+        function success(data) {
+
+        }
+
+        function error(error) {
+            console.error('EmailBuilderService sendOneTimeEmail error: ', JSON.stringify(error));
+        }
+
+        return emailRequest(
+            $http({
+                url: [baseCmsAPIUrlv1, 'testemail'].join('/'),
+                method: "POST",
+                data: payload
+            })
+            .success(success)
+            .error(error)
+        )
+
     }
 
     (function init() {

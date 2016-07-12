@@ -73,6 +73,7 @@
         enabled: true
       }];
 
+    vm.openSimpleModalFn = openSimpleModalFn;
     vm.openModalFn = openModalFn;
     vm.closeModalFn = closeModalFn;
     vm.addComponentFn = addComponentFn;
@@ -85,6 +86,7 @@
     vm.clickImageButton = clickImageButton;
     vm.deleteFn = deleteFn;
     vm.filterComponentsFn = filterComponentsFn;
+    vm.sendOneTimeEmailFn = sendOneTimeEmailFn;
 
     vm.uiState.navigation = {
         back: function() {
@@ -159,6 +161,24 @@
         toaster.pop('warning', 'component deleted');
       }, 500);
     });
+
+    function openSimpleModalFn(modal, _size) {
+
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            // backdrop: 'static',
+            scope: $scope,
+            size: _size || 'md',
+        };
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+
+    }
 
 
     function openModalFn(modal, controller, index, size) {
@@ -518,6 +538,16 @@
         vm.componentFilters.unshift({
           'capitalized': 'All',
           'lowercase': 'all'
+        });
+    }
+
+    function sendOneTimeEmailFn(address) {
+        vm.saveLoading = true;
+        EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function() {
+            vm.saveLoading = false;
+        }).catch(function(e) {
+            console.error('Error sending one-time email:', JSON.stringify(e));
+            vm.saveLoading = false;
         });
     }
 
