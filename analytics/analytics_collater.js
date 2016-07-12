@@ -155,6 +155,9 @@ var collator = {
                         }
                         var timeOnPage = page.get('end_time') - page.get('start_time');
                         page.set('timeOnPage', timeOnPage);
+                        //set keen.timestamp to be OUR server time
+                        var keen = {timestamp: page.get('server_time_dt')};
+                        page.set('keen', keen);
                     });
                     _.each(pingList, function (ping, index, list) {
                         //var page = _.findWhere(pageList, {url: ping.get('url')});
@@ -194,6 +197,8 @@ var collator = {
                         },
                         'output': 'ip_geo_info'
                     };
+                    //set keen.timestamp to be OUR server time
+                    keen.timestamp = sessionEvent.get('server_time_dt');
                     sessionEvent.set('keen', keen);
                     //send to keen unless test environment
                     // if (process.env.NODE_ENV !== "testing") {

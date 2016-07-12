@@ -145,15 +145,22 @@ app.use(express.methodOverride());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.cookieParser('mys3cr3tco00k13s'));
-app.use(express.session({
+var sess = {
     store: mongoStore,
     secret: 'mys3cr3t',
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
         domain: appConfig.cookie_subdomain
-        }, //stay open for 1 day of inactivity across all subdomains
-    key: appConfig.cookie_name
-}));
+    }, //stay open for 1 day of inactivity across all subdomains
+    key: appConfig.cookie_name};
+
+/*
+if (appConfig.cookie_subdomain === '.indigenous.io' || appConfig.cookie_subdomain === '.test.indigenous.io') {
+    app.set('trust proxy', 1) // trust first proxy
+    sess.cookie.secure = true // serve secure cookies
+}
+*/
+app.use(express.session(sess));
 
 //Middle ware to refresh the session cookie expiration on every hit
 app.use(function (req, res, next) {

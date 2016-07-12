@@ -596,6 +596,19 @@ var mongodao = {
         });
     },
 
+    _patchMongo: function(query, patch, type, fn) {
+        var self = this;
+        var collection = this.getTable(type);
+        this.mongo(collection).update(query, {$set: patch}, function(err, result){
+            if(err) {
+                self.log.error('An error occurred: #patchMongo:', err);
+                fn(err);
+            } else {
+                fn(null, result);
+            }
+        });
+    },
+
 
     _removeMongo: function (model, fn) {
         var self = this;

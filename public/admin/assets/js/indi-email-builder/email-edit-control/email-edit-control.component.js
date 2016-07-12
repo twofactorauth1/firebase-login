@@ -9,7 +9,9 @@
       scope: {
         component: '=',
         componentIndex: '=',
-        components: '='
+        components: '=',
+        state: '=',
+        uiState: '='
       },
       templateUrl: '/admin/assets/js/indi-email-builder/email-edit-control/email-edit-control.component.html',
       controller: 'EmailBuilderEditControlController',

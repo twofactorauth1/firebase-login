@@ -68,7 +68,21 @@ module.exports = {
     log: $$.g.getLogger("campaign_manager"),
 
     getCampaign: function (campaignId, fn) {
-        $$.dao.CampaignDao.getById(campaignId, fn);
+        var self = this;
+        self.log.debug('>> getCampaign');
+        campaignDao.getById(campaignId, function(err, campaign){
+            if(err) {
+                self.log.error('Error getting campaign:', err);
+                fn(err);
+            } else {
+                self.log.debug('<< getCampaign');
+                if(campaign && campaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                    self._updateStatusForCampaignObj(campaign, fn);
+                } else {
+                    return fn(null, campaign);
+                }
+            }
+        });
     },
 
     findCampaigns: function (query, fn) {
@@ -152,6 +166,35 @@ module.exports = {
 
     },
 
+    updateCampaignStatistics: function(accountId, campaignId, statistics, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCampaignStatistics');
+        var modified = {
+            date: new Date(),
+            by: userId
+        };
+        var patch = {
+            statistics: statistics,
+            modified: modified
+        };
+        campaignDao.patch({_id: campaignId}, patch, $$.m.Campaign, function(err, value){
+           if(err) {
+               self.log.error('Error patching campaign statistics:', err);
+               return fn(err);
+           } else {
+               campaignDao.getById(campaignId, function(err, campaign){
+                    if(err) {
+                        self.log.error('Error fetching updated campaign:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< updateCampaignStatistics');
+                        return fn(null, campaign);
+                    }
+               });
+           }
+        });
+    },
+
     updateCampaign: function(campaignObj, fn) {
         var self = this;
         self.log.debug('>> updateCampaign');
@@ -230,7 +273,7 @@ module.exports = {
                                         self.log.error('Error updating flows.  Campaign steps will NOT start.', err);
                                         return;
                                     } else {
-                                        async.each(flows, function(flow, cb){
+                                        async.eachSeries(flows, function(flow, cb){
                                             flow.set('steps', updatedSteps);
                                             campaignDao.saveOrUpdate(flow, function(err, value){
                                                 cb(err);
@@ -404,6 +447,12 @@ module.exports = {
         self.log.debug('>> step ', step);
         if(step === null) {
             var errorString = 'Error getting steps';
+            self.log.error(errorString);
+            return fn(errorString, null);
+        }
+
+        if(step.executed) {
+            var errorString = 'Cannot execute a step more than once.';
             self.log.error(errorString);
             return fn(errorString, null);
         }
@@ -650,7 +699,7 @@ module.exports = {
                 self.log.error('Error finding campaign: ' + err);
                 return fn(err, null);
             }
-            async.each(contactIdAry, function(contactId, callback){
+            async.eachSeries(contactIdAry, function(contactId, callback){
                 //need to create flow.
                 contactDao.getById(contactId, function(err, contact){
                     if(err) {
@@ -674,24 +723,10 @@ module.exports = {
                                 return fn(err, null);
                             }
                             self.log.debug('Added contact to campaign flow.');
+                            callback();
                         });
                     }
-                    self.log.debug('Added contact to campaign flow.');
-                    /*
-                     * We no longer auto-start the campaign steps.  This is done after we "start" the campaign.
-                     */
-                    callback();
-                    /*
-                    self.handleStep(flow, 0, function(err, value){
-                        if(err) {
-                            self.log.error('Error handling initial step of campaign: ' + err);
-                            callback(err);
-                        } else {
-                            self.log.debug('added contact.');
-                            callback();
-                        }
-                    });
-                    */
+
                 });
 
             }, function(err){
@@ -781,6 +816,34 @@ module.exports = {
                 });
             } else {
                 return fn(null, null);
+            }
+        });
+    },
+
+    _updateStatusForCampaignObj: function(campaign, fn) {
+        var self = this;
+        self.log.debug('>> _updateStatusForCampaignObj');
+        var campaignId = campaign.id();
+        var accountId = campaign.get('accountId');
+
+        self.getCampaignFlowsByCampaign(accountId, campaignId, function(err, flows){
+            var isDone = true;
+            _.each(flows, function(flow){
+                var flowSteps = flow.get('steps');
+                if(!flowSteps[flowSteps.length-1].executed) {
+                    isDone = false;
+                }
+            });
+            if(isDone === true) {
+                campaign.set('status', $$.m.Campaign.status.COMPLETED);
+                var modified = {
+                    date: new Date(),
+                    by: 'Admin'
+                };
+                campaign.set('modified', modified);
+                return campaignDao.saveOrUpdate(campaign, fn);
+            } else {
+                return fn(null, campaign);
             }
         });
     },
@@ -1473,7 +1536,7 @@ module.exports = {
         self.log.debug('>> bulkSubscribeToCourse');
         var timezoneOffset = 0;//TODO: calculate this.
         accountDao.getAccountByID(accountId, function(err, account){
-            async.each(subAry, function(sub, callback){
+            async.eachSeries(subAry, function(sub, callback){
                 courseDao.getById(sub.courseId, $$.m.Course, function(err, course){
                     if(err) {
                         callback('Error finding course.');
@@ -1897,7 +1960,7 @@ module.exports = {
 
         //loop through course videos and emails
         var i = 0;
-        async.each(messages, function(msg, cb){
+        async.eachSeries(messages, function(msg, cb){
             var sendObj = {};
             if(msg.video) {
                 var video = msg.video;
@@ -1965,7 +2028,7 @@ module.exports = {
                 self.log.error('Error finding flows for campaign [' + campaign.id() + ']:', err);
                 return;
             } else {
-                async.each(flows, function startFlow(flow, cb){
+                async.eachSeries(flows, function startFlow(flow, cb){
                     self.handleStep(flow, 0, function(err, value){
                         if(err) {
                             self.log.error('Error handling step of campaign: ' + err);
@@ -2023,11 +2086,14 @@ module.exports = {
                 fn(err);
             } else {
                 self.log.debug('Stats before: ', campaign.get('statistics'));
-                stats.participants = campaign.get('statistics').participants;
-                campaign.set('statistics', stats);
-                self.log.debug('Stats after: ', campaign.get('statistics'));
-                self.log.debug('<< reconcileCampaignStatistics');
-                campaignDao.saveOrUpdate(campaign, fn);
+                self.updateCampaignParticipants(campaign.get('accountId'), campaignId, function(err, updatedCampaign){
+                    stats.participants = updatedCampaign.get('statistics').participants;
+                    campaign.set('statistics', stats);
+                    self.log.debug('Stats after: ', campaign.get('statistics'));
+                    self.log.debug('<< reconcileCampaignStatistics');
+                    campaignDao.saveOrUpdate(campaign, fn);
+                });
+
             }
         });
     }

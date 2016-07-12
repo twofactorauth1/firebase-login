@@ -12,6 +12,7 @@
     vm.moveComponentFn = moveComponentFn;
     vm.duplicateComponentFn = duplicateComponentFn;
     vm.removeComponentFn = removeComponentFn;
+    vm.openMenuPanelFn = openMenuPanelFn;
 
     function moveComponentFn(direction, index) {
       $scope.$emit('email.move.component', {direction: direction, component: vm.component});
@@ -23,6 +24,11 @@
 
     function removeComponentFn() {
       $scope.$emit('email.remove.component', {component: vm.component});
+    }
+
+    function openMenuPanelFn(index) {
+        vm.uiState.showSectionPanel = true;
+        vm.uiState.activeComponentIndex = index;
     }
 
     function init(element) {

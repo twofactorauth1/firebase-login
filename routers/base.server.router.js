@@ -69,6 +69,45 @@ _.extend(baseRouter.prototype, {
 
     },
 
+    setupForPages: function(req, resp, next) {
+        //TODO: Cache Account By Host
+        var self = this;
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err && value != null) {
+                if (value === true) {
+                    logger.warn('We should not reach this code.  value ===true');
+                    logger.debug("host: " + req.get("host") + " -> accountId:0");
+                    req.session.accountId = 0;
+                    return next();
+                } else {
+                    logger.trace("host: " + req.get("host") + " -> accountId:" + value.id());
+                    if(self._hasExpiredTrial(value)) {
+                        logger.warn('Expired Trial... redirecting to ' + appConfig.www_url);
+                        return resp.redirect(appConfig.www_url);
+                    } else {
+                        req.session.unAuthAccountId = value.id();
+                        req.session.unAuthSubdomain = value.get('subdomain');
+                        req.session.unAuthDomain = value.get('domain');
+                        //req.session.locked = value.get('locked');
+                        return next();
+                    }
+                }
+            } else {
+                logger.warn("No account found from getAccountByHost");
+                return resp.redirect(appConfig.www_url + "/404");
+            }
+        });
+
+    },
+
+    _hasExpiredTrial: function(account) {
+        var DEFAULT_PLAN = 'NO_PLAN_ARGUMENT';
+        var billing = account.get('billing');
+        var planID = billing.plan;
+        var expired = moment(billing.signupDate).add(billing.trialLength, 'days').isBefore();
+        return (planID === DEFAULT_PLAN && expired === true);
+    },
+
     setupForSocialAuth: function(req, resp, next) {
         //TODO: Cache Account By Host
         var self = this;

@@ -274,7 +274,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
         // vm.checkStateNavigation(event, toState, toParams, fromState, fromParams, options);
         $rootScope.$broadcast('$destroyFroalaInstances');
-        $rootScope.app.layout.isMinimalAdminChrome =  false;
+        $rootScope.app.layout.isMinimalAdminChrome = false;
         $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
     });
 

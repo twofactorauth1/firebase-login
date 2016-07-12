@@ -1884,12 +1884,10 @@ _.extend(api.prototype, baseApi.prototype, {
             var ending_before = req.body.ending_before;
             var limit = req.body.limit;
             var starting_after = req.body.starting_after;
-
-            stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
-                function(err, value){
-                    self.log.debug('<< getInvoicesForAccount');
-                    return self.sendResultOrError(resp, err, value, "Error listing invoices.");
-                });
+            paymentsManager.listInvoicesForAccount(account, dateFilter, ending_before, limit, starting_after, self.userId(req), function(err, invoices){
+                self.log.debug('<< getInvoicesForAccount');
+                return self.sendResultOrError(resp, err, invoices, "Error listing invoices.");
+            });
         });
 
     },

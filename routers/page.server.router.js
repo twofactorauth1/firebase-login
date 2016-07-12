@@ -29,7 +29,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
+        app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setupForPages.bind(this)], this.optimizedIndex.bind(this));
         app.get('/preview/:pageId', this.isAuth.bind(this), this.previewIndex.bind(this));
         app.get('/preview/:pageId/:postId', this.isAuth.bind(this), this.previewIndex.bind(this));
         return this;

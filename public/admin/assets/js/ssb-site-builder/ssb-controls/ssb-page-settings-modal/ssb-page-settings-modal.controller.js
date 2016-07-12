@@ -39,10 +39,9 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
             closeOnCancel: true
             }, function (isConfirm) {
             if (isConfirm) {
-                var originalPage = angular.copy(vm.originalPage);
-                originalPage.mainmenu = false;
+                vm.page.mainmenu = false;
                 angular.element('.modal.in').show();
-                savePage(originalPage, true);
+                saveSettings();
             } else {
                 vm.saveLoading = false;
                 angular.element('.modal.in').show();
@@ -179,7 +178,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
       return (
     		  SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
     			  console.log('website saved');
-            if (vm.parentVm.state.account.showhide.userScripts) {
+            if (vm.parentVm.state.account.showhide.userScripts.enable && vm.parentVm.state.account.showhide.userScripts.toggle) {
               SimpleSiteBuilderService.updateScriptResource(vm.parentVm.state.website).then(function(response) {
                 vm.parentVm.state.website = response.data;
               });

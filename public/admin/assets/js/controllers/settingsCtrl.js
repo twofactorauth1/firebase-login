@@ -160,7 +160,7 @@
                             mainAccount.showhide.blog = $scope.account.showhide.blog;
                         }
 
-                        if ($scope.account.showhide.userScripts) {
+                        if ($scope.account.showhide.userScripts.enable && $scope.account.showhide.userScripts.toggle) {
                           SimpleSiteBuilderService.updateScriptResource($scope.website).then();
                         }
                     });
