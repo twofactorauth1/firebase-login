@@ -3,11 +3,11 @@
         <li class="plan-name" ng-if="!billingSubscriptionUnavailable">
             {{plan.name || 'All Inclusive' }}
         </li>
-        
+
         <li class="plan-unavailable" ng-if="billingSubscriptionUnavailable">
             Current plan data is unavailable.
         </li>
-        
+
         <li class="plan-price" ng-if="!billingSubscriptionUnavailable">
             <h3 class="center">
                 <i class="fa fa-usd fa-1"></i>
@@ -16,15 +16,15 @@
                 <span>/{{plan.product_attributes.stripePlans[0].interval || 'month'}}</span>
             </h3>
         </li>
-        
+
         <li ng-if="!billingSubscriptionUnavailable">
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Website Builder</strong>
         </li>
-        
+
         <li ng-if="!billingSubscriptionUnavailable">
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Contact Management</strong>
         </li>
-        
+
         <li ng-if="!billingSubscriptionUnavailable">
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Commerce</strong>
         </li>
@@ -37,20 +37,16 @@
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Site Analytics</strong>
         </li>
 
-        <li ng-if="!billingSubscriptionUnavailable">
-            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Social Feed</strong>
-        </li>
-        
         <li ng-if="showSelectBtn">
             <a
-                type="button" 
-                class="select-plan btn btn-success btn-block center" 
+                type="button"
+                class="select-plan btn btn-success btn-block center"
                 ng-click="switchSubscriptionPlanFn(plan.product_attributes.stripePlans[0].id)">
                 Select Plan
             </a>
             <a
-                type="button" 
-                class="deselect-plan btn btn-success btn-block center" 
+                type="button"
+                class="deselect-plan btn btn-success btn-block center"
                 ng-click="switchSubscriptionPlanFn(null)">
                 Cancel
             </a>
