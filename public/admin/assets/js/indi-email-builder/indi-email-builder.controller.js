@@ -84,34 +84,52 @@
     vm.moveComponentFn = moveComponentFn;
     vm.clickImageButton = clickImageButton;
     vm.deleteFn = deleteFn;
+    vm.filterComponentsFn = filterComponentsFn;
 
-    vm.enabledComponentTypes = _.where(vm.componentTypes, {
-      enabled: true
-    });
+    vm.uiState.navigation = {
+        back: function() {
+            vm.uiState.navigation.index = 0;
+        },
+        index: 0,
+        sectionPanel: {
+            navigationHistory: [],
+            loadPanel: function(obj, back) {
 
-    vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
+                if (!back) {
+                    vm.uiState.navigation.sectionPanel.navigationHistory.push(obj);
+                }
 
-    // Iterates through the array of filters and replaces each one with an object containing an
-    // upper and lowercase version
-    _.each(vm.componentFilters, function (element, index) {
-      componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
-      vm.componentFilters[index] = {
-        'capitalized': componentLabel,
-        'lowercase': element
-      };
-      componentLabel = null;
-    });
+                vm.uiState.openSidebarSectionPanel = obj;
+                console.log(vm.uiState.navigation.sectionPanel.navigationHistory);
 
-    // Manually add the All option to the begining of the list
-    vm.componentFilters.unshift({
-      'capitalized': 'All',
-      'lowercase': 'all'
-    });
+            },
+            back: function() {
+                var hist = vm.uiState.navigation.sectionPanel.navigationHistory;
+                var previousPanel;
 
+                hist.pop();
+
+                previousPanel = hist[hist.length - 1];
+
+                vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
+
+                if(previousPanel && !previousPanel.id){
+                    hideAllControls();
+                    angular.element(".ssb-active-section").addClass("ssb-active-edit-control");
+                }
+
+            },
+            reset: function() {
+                vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+                vm.uiState.navigation.sectionPanel.navigationHistory = [];
+            }
+        }
+    };
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
         $rootScope.$broadcast('$destroyFroalaInstances');
         $rootScope.app.layout.isMinimalAdminChrome = false;
+        $rootScope.app.layout.isMinimalAdminChromeLight = false;
         $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
     });
 
@@ -478,11 +496,41 @@
       });
     }
 
+    function filterComponentsFn() {
+        vm.enabledComponentTypes = _.where(vm.componentTypes, {
+          enabled: true
+        });
+
+        vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
+
+        // Iterates through the array of filters and replaces each one with an object containing an
+        // upper and lowercase version
+        _.each(vm.componentFilters, function (element, index) {
+          componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+          vm.componentFilters[index] = {
+            'capitalized': componentLabel,
+            'lowercase': element
+          };
+          componentLabel = null;
+        });
+
+        // Manually add the All option to the begining of the list
+        vm.componentFilters.unshift({
+          'capitalized': 'All',
+          'lowercase': 'all'
+        });
+    }
+
     function pageLinkClick(e) {
-      if (!angular.element(this).hasClass("clickable-link")) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
+        if (!angular.element(this).hasClass("clickable-link")) {
+            e.preventDefault();
+            // e.stopPropagation();
+        }
+    }
+
+    function emailSettingsClick(e) {
+        vm.uiState.navigation.sectionPanel.reset();
+        vm.uiState.showSectionPanel = false;
     }
 
     function init(element) {
@@ -492,8 +540,13 @@
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
         $rootScope.app.layout.isMinimalAdminChrome = true;
+        $rootScope.app.layout.isMinimalAdminChromeLight = true;
 
-        angular.element("body").on("click", ".ssb-page-section a", pageLinkClick);
+        angular.element("body").on("click", "[email-component-loader] a", pageLinkClick);
+
+        angular.element("body").on("click", 'a[href="#email-settings"]', emailSettingsClick);
+
+        vm.filterComponentsFn();
 
         AccountService.getAccount(function (data) {
             vm.account = data;
@@ -511,12 +564,14 @@
                     $state.go('app.emails');
                 }
                 vm.state.email = res.data;
-                vm.dataLoaded = true;
                 $timeout(function () {
                     $('.editable').on('froalaEditor.focus', function (e, editor) {
                         vm.editor = editor;
                         console.info('Event froalaEditor.focus triggered');
                     });
+
+                    vm.dataLoaded = true;
+
                 }, 1000);
         }, function (err) {
             console.error(err);
