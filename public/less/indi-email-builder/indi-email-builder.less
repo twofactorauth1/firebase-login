@@ -807,6 +807,25 @@ div[class^="spacing-"] {
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    .email-control-buttons {
+        text-align: center;
+    }
+
+    @media (max-width: 560px) {
+        .email-control-buttons {
+
+            .pull-right, .pull-left {
+                float: none;
+                width: 100%;
+            }
+
+            .btn {
+                width: 50%;
+                max-width: 225px;
+            }
+        }
+    }
 }
 
 .indi-email-builder-editor-container {

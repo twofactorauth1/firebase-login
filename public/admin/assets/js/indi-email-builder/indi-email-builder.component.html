@@ -135,15 +135,15 @@
 
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
-                <div class="col-xs-12 margin-top-10 margin-bottom-10">
-                    <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary padding-right-10 margin-bottom-5">
-                        <i class="ti-plus"></i>
-                        <span>Add Section</span>
-                    </button>
-                    <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
-                        <i class="ti-save"></i>
-                        <span>Save</span>
-                    </button>
+                <div class="email-control-buttons col-xs-12 margin-top-10 margin-bottom-10">
+
+                    <div class="pull-left">
+                        <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary padding-right-10 margin-bottom-5">
+                            <i class="ti-plus"></i>
+                            <span>Add Section</span>
+                        </button>
+                    </div>
+
                     <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10 margin-bottom-5">
                         <i class="ti-layout-media-overlay-alt"></i>
                         <span>One-time email</span>
@@ -152,10 +152,18 @@
                         <i class="ti-layout-media-overlay-alt"></i>
                         <span>Create Campaign</span>
                     </button>
-                    <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger padding-right-10 margin-bottom-5">
-                        <i class="ti-trash"></i>
-                        <span>Delete</span>
-                    </button>
+
+                    <div class="pull-right">
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                            <i class="ti-save"></i>
+                            <span>Save</span>
+                        </button>
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger padding-right-10 margin-bottom-5">
+                            <i class="ti-trash"></i>
+                            <span class="sr-only">Delete</span>
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
