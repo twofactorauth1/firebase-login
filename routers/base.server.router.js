@@ -202,6 +202,7 @@ _.extend(baseRouter.prototype, {
         logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
         if(!matchHostToSessionTest) {
             logger.debug('sSub:' + sSub + ', subObj.subdomain:' + subObj.subdomain + ', sDom:' + sDom + ', subObj.domain:' + subObj.domain);
+            logger.debug('req.session:', req.session);
         }
         return matchHostToSessionTest;
     },
