@@ -20,7 +20,6 @@ angular.module('mainApp')
                                         if (angular.isDefined(website.resources.userScripts[$routeParams.name])) {
                                             scope.scripts += '\n\n' + website.resources.userScripts[$routeParams.name].sanitized;
                                         }
-
                                         scope.scripts = $sce.trustAsHtml(scope.scripts);
                                     }
                                 });
