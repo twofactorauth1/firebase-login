@@ -7,16 +7,13 @@ angular.module('mainApp')
                 template: '<span ng-bind-html="scripts"></span>',
                 link: function(scope, elem, attr) {
                     scope.scripts = '';
-                    scope.$on('$routeChangeSuccess', function(ev, curr, prev) {
+
+                    var processFn = function() {
                         scope.scripts = '';
                         accountService(function(err, account) {
                             if (account.showhide.userScripts) {
                                 websiteService(function(err, website) {
                                     if (website.resources && website.resources.userScripts && website.resources.toggles && website.resources.toggles.userScripts) {
-                                        if (angular.isDefined(website.resources.userScripts.global)) {
-                                            scope.scripts += website.resources.userScripts.global.sanitized;
-                                        }
-
                                         if (angular.isDefined(website.resources.userScripts[$routeParams.name])) {
                                             scope.scripts += '\n\n' + website.resources.userScripts[$routeParams.name].sanitized;
                                         }
@@ -25,7 +22,13 @@ angular.module('mainApp')
                                 });
                             }
                         });
+                    };
+
+                    scope.$on('$routeChangeSuccess', function(ev, curr, prev) {
+                        processFn();
                     });
+
+                    // processFn();
                 }
             };
         }
