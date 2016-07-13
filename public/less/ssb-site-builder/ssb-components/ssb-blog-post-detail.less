@@ -59,17 +59,22 @@
         margin-right: 10px;
     }
 
-    .ssb-post_tags li a {        
+    .ssb-post_tags li a {
         padding: 4px 8px;
     }
 
-    
+
 
     #lessbuttons_holder {
 
         margin-top: 10px;
         margin-bottom: 50px;
         display: block;
+
+
+        &:empty {
+            margin: 0;
+        }
 
         .lessbuttons_com_button,
         .lessbuttons_com_otherbutton,
@@ -101,7 +106,7 @@
         }
     }
 
-    
+
    .ssb-theme-btn.btn-link {
         &:focus {
             background-color: transparent !important;
