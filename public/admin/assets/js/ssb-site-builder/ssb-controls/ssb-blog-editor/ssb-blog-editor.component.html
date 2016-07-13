@@ -5,7 +5,7 @@
             {{vm.uiState.openBlogPanel.name}}
         </h4>
 
-        <div class="close-panel ti-close" ng-click="vm.closeBlogPanel()"></div>
+        <div ng-if="vm.ssbBlogLoaded" class="close-panel ti-close" ng-click="vm.closeBlogPanel()"></div>
 
     </header>
 
