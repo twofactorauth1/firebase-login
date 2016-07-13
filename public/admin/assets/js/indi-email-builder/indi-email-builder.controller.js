@@ -17,12 +17,12 @@
 
     vm.state.email = null;
     vm.state.emailId = $stateParams.id;
-    vm.dataLoaded = false;
-    vm.account = null;
-    vm.website = {settings: {}};
-    vm.modalInstance = null;
-    vm.editor = null;
-    vm.componentTypes = [{
+    vm.uiState.dataLoaded = false;
+    vm.state.account = null;
+    vm.state.website = {settings: {}};
+    vm.uiState.modalInstance = null;
+    vm.uiState.editor = null;
+    vm.uiState.componentTypes = [{
         title: 'Header',
         type: 'email-header',
         preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
@@ -144,7 +144,7 @@
     });
 
     $scope.$on('email.remove.component', function (event, args) {
-      vm.dataLoaded = false;
+      vm.uiState.dataLoaded = false;
 
       vm.state.email.components.forEach(function (c, index) {
         if (c._id === args.component._id) {
@@ -157,7 +157,7 @@
           $document.scrollToElementAnimated(element, 175, 1000);
           $(window).trigger('resize');
         }
-        vm.dataLoaded = true;
+        vm.uiState.dataLoaded = true;
         toaster.pop('warning', 'component deleted');
       }, 500);
     });
@@ -172,9 +172,9 @@
             size: _size || 'md',
         };
 
-        vm.modalInstance = $modal.open(_modal);
+        vm.uiState.modalInstance = $modal.open(_modal);
 
-        vm.modalInstance.result.then(null, function () {
+        vm.uiState.modalInstance.result.then(null, function () {
             angular.element('.sp-container').addClass('sp-hidden');
         });
 
@@ -203,7 +203,7 @@
           return {};
         };
         _modal.resolve.website = function () {
-          return vm.website;
+          return vm.state.website;
         };
 
         _modal.resolve.showInsert = function () {
@@ -219,7 +219,7 @@
         };
 
         _modal.resolve.accountShowHide = function () {
-          return vm.account.showhide;
+          return vm.state.account.showhide;
         };
         _modal.resolve.isEmail = function () {
           return true;
@@ -244,22 +244,22 @@
       if (size) {
         _modal.size = size;
       }
-      vm.modalInstance = $modal.open(_modal);
-      vm.modalInstance.result.then(null, function () {
+      vm.uiState.modalInstance = $modal.open(_modal);
+      vm.uiState.modalInstance.result.then(null, function () {
         angular.element('.sp-container').addClass('sp-hidden');
       });
     }
 
 
     function closeModalFn() {
-      if (vm.modalInstance) {
-        vm.modalInstance.close();
+      if (vm.uiState.modalInstance) {
+        vm.uiState.modalInstance.close();
       }
     }
 
     function addComponentFn(addedType) {
-      if (vm.dataLoaded) {
-        vm.dataLoaded = false;
+      if (vm.uiState.dataLoaded) {
+        vm.uiState.dataLoaded = false;
         var componentType = null;
         if (['email-footer', 'email-header'].indexOf(addedType.type) > -1) {
           componentType = _.findWhere(vm.state.email.components, {
@@ -267,7 +267,7 @@
           });
           if (componentType) {
             toaster.pop('error', componentType.type + " component already exists");
-            vm.dataLoaded = true;
+            vm.uiState.dataLoaded = true;
             return;
           }
         }
@@ -282,7 +282,7 @@
                 $document.scrollToElementAnimated(element, 175, 1000);
                 $(window).trigger('resize');
               }
-              vm.dataLoaded = true;
+              vm.uiState.dataLoaded = true;
               toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
             }, 500);
           }
@@ -296,8 +296,8 @@
       delete clone['anchor'];
       var addedType = {type: clone.type, version: clone.version};
 
-      if (vm.dataLoaded) {
-        vm.dataLoaded = false;
+      if (vm.uiState.dataLoaded) {
+        vm.uiState.dataLoaded = false;
         var componentType = null;
         if (['email', 'email-footer', 'email-header'].indexOf(addedType.type) > -1) {
           componentType = _.findWhere(vm.state.email.components, {
@@ -305,7 +305,7 @@
           });
           if (componentType) {
             toaster.pop('error', componentType.type + " component can't be cloned");
-            vm.dataLoaded = true;
+            vm.uiState.dataLoaded = true;
             return;
           }
         }
@@ -320,7 +320,7 @@
                 $document.scrollToElementAnimated(element, 175, 1000);
                 $(window).trigger('resize');
               }
-              vm.dataLoaded = true;
+              vm.uiState.dataLoaded = true;
               toaster.pop('success', "Component cloned", "The " + newComponent.type + " component was cloned successfully.");
             }, 500);
           }
@@ -461,10 +461,10 @@
     }
 
     function saveFn() {
-      vm.dataLoaded = false;
+      vm.uiState.dataLoaded = false;
       EmailBuilderService.updateEmail(vm.state.email)
         .then(function (res) {
-          vm.dataLoaded = true;
+          vm.uiState.dataLoaded = true;
           toaster.pop('success', 'Email saved');
         });
     }
@@ -483,8 +483,8 @@
     }
 
     function insertMediaFn(asset) {
-      if (vm.editor) {
-        vm.editor.image.insert(asset.url, !1, null, vm.editor.img);
+      if (vm.uiState.editor) {
+        vm.uiState.editor.image.insert(asset.url, !1, null, vm.uiState.editor.img);
       } else {
         toaster.pop('error', 'Position cursor at the point of insertion');
       }
@@ -508,16 +508,16 @@
     }
 
     function deleteFn() {
-      vm.dataLoaded = false;
+      vm.uiState.dataLoaded = false;
       WebsiteService.deleteEmail(vm.state.email, function () {
-        vm.dataLoaded = true;
+        vm.uiState.dataLoaded = true;
         $state.go('app.emails');
         toaster.pop('Warning', 'Email deleted.');
       });
     }
 
     function filterComponentsFn() {
-        vm.enabledComponentTypes = _.where(vm.componentTypes, {
+        vm.enabledComponentTypes = _.where(vm.uiState.componentTypes, {
           enabled: true
         });
 
@@ -579,11 +579,11 @@
         vm.filterComponentsFn();
 
         AccountService.getAccount(function (data) {
-            vm.account = data;
+            vm.state.account = data;
         });
 
         WebsiteService.getWebsite(function (data) {
-            vm.website = data;
+            vm.state.website = data;
         });
 
         EmailBuilderService
@@ -596,11 +596,11 @@
                 vm.state.email = res.data;
                 $timeout(function () {
                     $('.editable').on('froalaEditor.focus', function (e, editor) {
-                        vm.editor = editor;
+                        vm.uiState.editor = editor;
                         console.info('Event froalaEditor.focus triggered');
                     });
 
-                    vm.dataLoaded = true;
+                    vm.uiState.dataLoaded = true;
 
                 }, 1000);
         }, function (err) {
