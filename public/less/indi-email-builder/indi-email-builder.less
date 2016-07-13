@@ -88,7 +88,7 @@
     }
 
     .ssb-sidebar-section-panel {
-        top: 240px;
+        top: 290px;
         z-index: 1;
     }
 
@@ -882,6 +882,10 @@ div[class^="spacing-"] {
             }
 
         }
+
+        .btn {
+            // font-size: 11px;
+        }
     }
 }
 
@@ -897,6 +901,19 @@ div[class^="spacing-"] {
 
 .indi-email-bg-btn {
     position: absolute;
-    right: 20px;
-    bottom: 100px;
+    right: 0px;
+    bottom: 200px;
+    z-index: 999;
+
+    @media (max-width: 400px) {
+        right: auto;
+        left: 0;
+        bottom: 91px;
+    }
+
+    @media (max-height: 630px) {
+        right: auto;
+        left: 0;
+        bottom: 91px;
+    }
 }

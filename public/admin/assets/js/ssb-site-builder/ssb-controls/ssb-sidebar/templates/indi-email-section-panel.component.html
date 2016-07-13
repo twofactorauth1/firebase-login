@@ -1,5 +1,5 @@
 <section ng-init="vm.state.editSection=false"
-    ng-if="(vm.uiState.showSectionPanel && vm.state.email.components[vm.uiState.activeComponentIndex])"
+    ng-if="vm.uiState.showSectionPanel"
     class="ssb-sidebar-section-panel draggable fade-in"
     ind-draggable>
 
@@ -8,9 +8,9 @@
             onhide="vm.state.editSection=false"
             id="edit_section_name"
             ng-if="vm.state.editSection"
-            editable-text="vm.state.page.sections[vm.uiState.activeSectionIndex].name">
+            editable-text="vm.state.emails.components[vm.uiState.activeComponentIndex].name">
 
-            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name || vm.state.page.sections[vm.uiState.activeSectionIndex].title}}
+            {{vm.state.emails.components[vm.uiState.activeComponentIndex].name || vm.state.emails.components[vm.uiState.activeComponentIndex].title}}
 
         </span>
 
@@ -37,9 +37,19 @@
     <!-- Scrollable menu container -->
     <div class="ssb-sidebar-section-panel-scrollable">
 
+        <!-- Email Background -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="!vm.uiState.activeComponentIndex"
+            settings-template="assets/js/ssb-site-builder/ssb-components/email/sidebar.settings.style.html"
+            component="vm.state.email"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
         <!-- Section Settings Home -->
         <ssb-sidebar-settings-panel
-            ng-if="!vm.uiState.openSidebarSectionPanel.id"
+            ng-if="vm.uiState.activeComponentIndex && !vm.uiState.openSidebarSectionPanel.id"
             settings-template="assets/js/indi-email-builder/email-components/shared/sidebar.settings.html"
             component="vm.state.email.components[vm.uiState.activeComponentIndex]"
             state="vm.state"

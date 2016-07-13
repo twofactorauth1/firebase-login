@@ -87,6 +87,8 @@
     vm.deleteFn = deleteFn;
     vm.filterComponentsFn = filterComponentsFn;
     vm.sendOneTimeEmailFn = sendOneTimeEmailFn;
+    vm.changeBackgroundFn = changeBackgroundFn;
+    vm.closeSectionPanel = closeSectionPanel;
 
     vm.uiState.navigation = {
         back: function() {
@@ -565,6 +567,16 @@
     function emailSettingsClick(e) {
         vm.uiState.navigation.sectionPanel.reset();
         vm.uiState.showSectionPanel = false;
+    }
+
+    function changeBackgroundFn() {
+        vm.uiState.showSectionPanel = true;
+        vm.uiState.activeComponentIndex = null;
+    }
+
+    function closeSectionPanel() {
+        vm.uiState.showSectionPanel = false;
+        vm.uiState.activeComponentIndex = null;
     }
 
     function init(element) {
