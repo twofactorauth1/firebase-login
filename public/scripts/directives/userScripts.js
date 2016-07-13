@@ -12,7 +12,7 @@ angular.module('mainApp')
                         accountService(function(err, account) {
                             if (account.showhide.userScripts) {
                                 websiteService(function(err, website) {
-                                    if (website.resources.toggles.userScripts) {
+                                    if (website.resources && website.resources.userScripts && website.resources.toggles && website.resources.toggles.userScripts) {
                                         if (angular.isDefined(website.resources.userScripts.global)) {
                                             scope.scripts += website.resources.userScripts.global.sanitized;
                                         }
