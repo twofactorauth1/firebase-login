@@ -321,7 +321,6 @@ var dao = {
                                 self.log.debug('Removed courses for user ' + user.id());
                                 var customerId = user.get('stripeId');
                                 if (customerId && customerId.length > 0) {
-                                    //TODO: fix this here.
                                     self.getStripeTokensFromAccount(accountId, function(err, creds){
                                         var accessToken = null;
                                         if(creds) {

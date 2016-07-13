@@ -296,12 +296,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                     authUrl = "/interim.html";
                                 }
                                 self.log.debug('redirecting to ' + authUrl);
-                                self.log.debug('Setting subdomain to: ' + value.get('subdomain'));
                                 req.session.subdomain = value.get('subdomain');
                                 req.session.domain = value.get('domain');
                                 req.session.accountId = value.id();
                                 req.session.unAuthAccountId = value.id();
-                                self.log.debug('req.session:', req.session);
                                 resp.redirect(authUrl);
                                 userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
 

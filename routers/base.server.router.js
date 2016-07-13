@@ -189,20 +189,20 @@ _.extend(baseRouter.prototype, {
         var sSub = req.session.subdomain;
         var sDom = req.session.domain;
         if(sSub=== null && sDom===null) {//nothing to match
-            logger.debug('matchHostToSession - nothing to match.  false');
+            logger.trace('matchHostToSession - nothing to match.  false');
             return false;
         }
 
         if(subObj.isMainApp === true) {
             var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app' || sSub ==='');
-            logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
+            logger.trace('matchHostToSession - mainAppTest: ' + mainAppTest);
             return mainAppTest;
         }
         var matchHostToSessionTest = (sSub === subObj.subdomain || sDom === subObj.domain);
-        logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
+        logger.trace('matchHostToSession test: ' + matchHostToSessionTest);
         if(!matchHostToSessionTest) {
-            logger.debug('sSub:' + sSub + ', subObj.subdomain:' + subObj.subdomain + ', sDom:' + sDom + ', subObj.domain:' + subObj.domain);
-            logger.debug('req.session:', req.session);
+            logger.trace('sSub:' + sSub + ', subObj.subdomain:' + subObj.subdomain + ', sDom:' + sDom + ', subObj.domain:' + subObj.domain);
+            logger.trace('req.session:', req.session);
         }
         return matchHostToSessionTest;
     },
@@ -322,10 +322,10 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
-        logger.debug('>> isAuth (' + req.originalUrl + ')');
-        logger.debug('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
+        logger.trace('>> isAuth (' + req.originalUrl + ')');
+        logger.trace('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
         var path = req.url;
-        logger.debug('path:', path);
+        logger.trace('path:', path);
         var redirectParam = req.query.redirectTo;
         //logger.debug('req.session.locked: ' + req.session.locked);
         // if(req.session.locked === 'true' || req.session.locked === true) {
@@ -384,12 +384,12 @@ _.extend(baseRouter.prototype, {
 
             }
         } else if(req.isAuthenticated() && (self.matchHostToSession(req) === false || req.session.midSignup === true)){
-            logger.debug('authenticated to the wrong session.  logging out.');
+            logger.trace('authenticated to the wrong session.  logging out.');
             self.logout(req, resp);
             //cookies.setRedirectUrl(req, resp, path);
             resp.redirect('/login?redirectTo=' + path.replace('/#', ''));
         } else {
-            logger.debug('Not authenticated');
+            logger.trace('Not authenticated');
             var checkAuthToken = function(req, fn) {
                 if (req.query.authtoken != null) {
                     var accountId = 0;
@@ -400,7 +400,7 @@ _.extend(baseRouter.prototype, {
                         if (err) {
                             return fn(err);
                         }
-                        logger.debug('Verified Auth Token:', value);
+                        logger.trace('Verified Auth Token:', value);
                         req.login(value, function(err) {
                             if (err) {
                                 return fn(err);
@@ -414,7 +414,7 @@ _.extend(baseRouter.prototype, {
             };
 
             if (req["session"] != null && req.session["accountId"] == null) {//TODO: do we need to check matchHostToken here?
-                logger.debug('No accountId in session');
+                logger.trace('No accountId in session');
 
                 accountDao.getAccountByHost(req.get("host"), function(err, value) {
                     if (!err && value != null) {
@@ -430,8 +430,7 @@ _.extend(baseRouter.prototype, {
                         if (!err) {
                             //need to remove the auth token here.
                             var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                            logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl + ' to remove authToken.');
-                            logg.debug('Session:', req.session);
+                            logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl + ' to remove authToken.');
                             return resp.redirect(redirectUrl);
                         } else {
                             logger.error('Error in checkAuthToken(3): ' + err);
@@ -442,12 +441,12 @@ _.extend(baseRouter.prototype, {
                     });
                 });
             } else {
-                logger.debug('Session is not null, accountId in session');
+                logger.trace('Session is not null, accountId in session');
                 checkAuthToken(req, function(err, value) {
                     if (!err) {
                         //need to remove the auth token here.
                         var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                        logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                        logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl);
                         return resp.redirect(redirectUrl);
                     } else {
                         logger.error('Error in checkAuthToken(4): ' + err);
