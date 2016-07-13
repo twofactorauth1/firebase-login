@@ -40,7 +40,7 @@
         <!-- Email Background -->
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="!vm.uiState.activeComponentIndex"
+            ng-if="'background' === vm.uiState.openSidebarSectionPanel.id"
             settings-template="assets/js/ssb-site-builder/ssb-components/email/sidebar.settings.style.html"
             component="vm.state.email"
             state="vm.state"
@@ -49,7 +49,7 @@
 
         <!-- Section Settings Home -->
         <ssb-sidebar-settings-panel
-            ng-if="vm.uiState.activeComponentIndex && !vm.uiState.openSidebarSectionPanel.id"
+            ng-if="vm.uiState.activeComponentIndex !== null && !vm.uiState.openSidebarSectionPanel.id"
             settings-template="assets/js/indi-email-builder/email-components/shared/sidebar.settings.html"
             component="vm.state.email.components[vm.uiState.activeComponentIndex]"
             state="vm.state"
@@ -59,7 +59,7 @@
         <!-- Section Settings Design -->
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'design' === vm.uiState.openSidebarSectionPanel.id"
+            ng-if="vm.uiState.activeComponentIndex !== null && 'design' === vm.uiState.openSidebarSectionPanel.id"
             settings-template="assets/js/indi-email-builder/email-components/shared/sidebar.settings.design.html"
             component="vm.state.email.components[vm.uiState.activeComponentIndex]"
             state="vm.state"

@@ -27,9 +27,16 @@
     }
 
     function openMenuPanelFn(index) {
+
+        vm.uiState.navigation.sectionPanel.reset();
+        vm.uiState.showSectionPanel = false;
+        vm.uiState.activeComponentIndex = null;
+
         vm.uiState.showSectionPanel = true;
         vm.uiState.activeComponentIndex = index;
+
     }
+
 
     function init(element) {
       vm.element = element;

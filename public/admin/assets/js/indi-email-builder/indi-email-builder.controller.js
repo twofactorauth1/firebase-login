@@ -78,8 +78,6 @@
     vm.closeModalFn = closeModalFn;
     vm.addComponentFn = addComponentFn;
     vm.cloneComponentFn = cloneComponentFn;
-    vm.componentClassFn = componentClassFn;
-    vm.componentStyleFn = componentStyleFn;
     vm.saveFn = saveFn;
     vm.insertMediaFn = insertMediaFn;
     vm.moveComponentFn = moveComponentFn;
@@ -330,137 +328,7 @@
       }
     }
 
-    function componentClassFn(component, index) {
-      var classString = 'container-fluid ';
 
-      if (component.type === 'email-1-col') {
-        // classString += 'col-sm-12 ';
-      }
-
-      if (component.type === 'email-2-col') {
-        classString += ' col-md-6 ';
-      }
-
-      if (component.type === 'email-3-col') {
-        classString += ' col-md-4 ';
-      }
-
-      if (component.type === 'email-4-col') {
-        classString += ' col-md-3';
-      }
-
-      if (index !== undefined) {
-        classString += ' email-component-index-' + index + ' ';
-      }
-
-      if (component.layoutModifiers) {
-
-        if (component.layoutModifiers.columns) {
-          if (component.layoutModifiers.columnsNum) {
-            classString += ' email-component-layout-columns-' + component.layoutModifiers.columnsNum + ' ';
-          }
-
-          if (component.layoutModifiers.columnsSpacing) {
-            classString += ' email-component-layout-columns-spacing-' + component.layoutModifiers.columnsSpacing + ' ';
-          }
-        }
-
-      }
-
-      return classString;
-
-    }
-
-    function componentStyleFn(component) {
-      var styleString = ' ';
-
-      if (component.spacing) {
-        if (component.spacing.pt) {
-          styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-        }
-
-        if (component.spacing.pb) {
-          styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-        }
-
-        if (component.spacing.pl) {
-          styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-        }
-
-        if (component.spacing.pr) {
-          styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-        }
-
-        if (component.spacing.mt) {
-          styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-        }
-
-        if (component.spacing.mb) {
-          styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-        }
-
-        if (component.spacing.ml) {
-          styleString += component.spacing.ml === 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
-        }
-
-        if (component.spacing.mr) {
-          styleString += (component.spacing.mr === 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
-        }
-
-        if (component.spacing.mw) {
-          styleString += (component.spacing.mw === '100%') ?
-            'max-width: ' + component.spacing.mw + ';' :
-            'max-width: ' + component.spacing.mw + 'px;margin:0 auto!important;';
-        }
-
-        if (component.spacing.lineHeight) {
-          styleString += 'line-height: ' + component.spacing.lineHeight;
-        }
-      }
-
-      if (component.txtcolor) {
-        styleString += 'color: ' + component.txtcolor + ';';
-      }
-
-      if (component.visibility === false) {
-        styleString += 'display: none!important;';
-      }
-
-      if (component.bg) {
-        if (component.bg.color) {
-          styleString += 'background-color: ' + component.bg.color + ';';
-        }
-
-        if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
-          styleString += 'background-image: url("' + component.bg.img.url + '");';
-        }
-      }
-
-      if (component.src) {
-        if (component.src && component.src !== '') {
-          styleString += 'background-image: url("' + component.src + '");';
-        }
-      }
-
-
-
-      if (component.layoutModifiers) {
-        if (component.layoutModifiers.columns) {
-          if (component.layoutModifiers.columnsMaxHeight) {
-            styleString += ' max-height: ' + component.layoutModifiers.columnsMaxHeight + 'px';
-          }
-        }
-      }
-
-      if (component.border && component.border.show && component.border.color) {
-        styleString += 'border-color: ' + component.border.color + ';';
-        styleString += 'border-width: ' + component.border.width + 'px;';
-        styleString += 'border-style: ' + component.border.style + ';';
-        styleString += 'border-radius: ' + component.border.radius + '%;';
-      }
-
-      return styleString;
-    }
 
     function saveFn() {
       vm.uiState.dataLoaded = false;
@@ -570,11 +438,13 @@
     }
 
     function changeBackgroundFn() {
+        vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Email Background', id: 'background' })
         vm.uiState.showSectionPanel = true;
         vm.uiState.activeComponentIndex = null;
     }
 
     function closeSectionPanel() {
+        vm.uiState.navigation.sectionPanel.reset();
         vm.uiState.showSectionPanel = false;
         vm.uiState.activeComponentIndex = null;
     }

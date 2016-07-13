@@ -88,8 +88,10 @@
     }
 
     .ssb-sidebar-section-panel {
-        top: 290px;
-        z-index: 1;
+        z-index: 999;
+        @media (min-width: 767px) {
+            top: 290px;
+        }
     }
 
     .ssb-page-section {
@@ -892,12 +894,7 @@ div[class^="spacing-"] {
 .indi-email-builder-editor-container {
     flex: 1;
     overflow: scroll;
-
-    // table.email-body > tbody > tr:last-child {
-    //     margin-bottom: 50px;
-    // }
 }
-
 
 .indi-email-bg-btn {
     position: absolute;
@@ -916,4 +913,9 @@ div[class^="spacing-"] {
         left: 0;
         bottom: 91px;
     }
+}
+
+[email-component-loader] > td {
+    position: relative;
+    background: #ffffff;
 }

@@ -29,6 +29,29 @@
     $scope.secondaryFontStack = $scope.website.settings.font_family_2;
 
     vm.init = init;
+    vm.componentStyleFn = componentStyleFn;
+
+
+    function componentStyleFn(component) {
+
+        var styleString = ' ';
+
+        if (component.bg) {
+
+            if (component.bg.color) {
+                styleString += 'background-color: ' + component.bg.color + ';';
+            }
+
+            if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
+                styleString += 'background-image: url("' + component.bg.img.url + '");';
+            }
+
+        }
+
+        return styleString;
+
+    }
+
 
     function init(element) {
       vm.element = element;
