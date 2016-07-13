@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="send-test-email-modal">
     <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <button type="button" class="close" ng-click="closeModal() || vm.closeModalFn()">&times;</button>
         <h4 class="modal-title">Send Test Email</h4>
     </div>
     <form name="testEmailForm" novalidate>
@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-info" ng-disabled="testEmailForm.$invalid || sendingEmail"  ng-click="sendTestEmail(testemail) || vm.sendOneTimeEmailFn(testemail);"><i class="fa fa-save"></i> Send</button>
+            <button class="btn btn-info" ng-disabled="testEmailForm.$invalid || sendingEmail || !vm.uiState.dataLoaded"  ng-click="sendTestEmail(testemail) || vm.sendOneTimeEmailFn(testemail);"><i class="fa fa-save"></i> Send</button>
         </div>
     </form>
 </script>

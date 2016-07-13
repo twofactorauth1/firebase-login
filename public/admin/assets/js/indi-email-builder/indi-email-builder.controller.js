@@ -542,12 +542,16 @@
     }
 
     function sendOneTimeEmailFn(address) {
-        vm.saveLoading = true;
+        vm.uiState.dataLoaded = false;
         EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function() {
-            vm.saveLoading = false;
+            vm.uiState.dataLoaded = true;
+            vm.closeModalFn();
+            toaster.pop('success', 'Test email sent successfully');
         }).catch(function(e) {
             console.error('Error sending one-time email:', JSON.stringify(e));
-            vm.saveLoading = false;
+            vm.uiState.dataLoaded = true;
+            vm.closeModalFn();
+            toaster.pop('error', 'Test email sending failed');
         });
     }
 
