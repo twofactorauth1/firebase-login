@@ -126,6 +126,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('editor/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.getEditableBlogPost.bind(this));
         app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
+        app.get(this.url('page/:id/blog/preview/:postId'), this.setup.bind(this), this.getBlogPostPreview.bind(this));
+        
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
@@ -1650,6 +1652,27 @@ _.extend(api.prototype, baseApi.prototype, {
 
         cmsManager.getBlogPost(accountId, blogPostId, statusAry, function (err, value) {
             self.log.debug('<< getBlogPost');
+            self.sendResultOrError(res, err, value, "Error getting Blog Post");
+            self = null;
+        });
+    },
+
+    
+    getBlogPostPreview: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> getBlogPostPreview');
+        var accountId = parseInt(self.currentAccountId(req));
+        var blogPostId = req.params.postId;
+        self.log.debug('Account ID: ' + accountId + ' Blog Post ID: ' + blogPostId);
+
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        
+
+        cmsManager.getBlogPostPreview(accountId, blogPostId, function (err, value) {
+            self.log.debug('<< getBlogPostPreview');
             self.sendResultOrError(res, err, value, "Error getting Blog Post");
             self = null;
         });
