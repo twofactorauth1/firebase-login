@@ -36,14 +36,14 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
 
             if post && post.post_title
                 title #{post.post_title}
-                meta(property="og:type" content="article")
-                meta(property='og:title' content=post.post_title)
-                meta(property="og:author", content=author)
-                meta(property='og:url' content=fullUrl)
-                meta(property='og:image' content=post.featured_image)
-                meta(property='og:image:url' content=post.featured_image)
-                meta(property='og:image:type' content='image/jpeg')
-                meta(property='og:description' content=post.post_excerpt)
+                meta(property='og:type', content="article")
+                meta(property='og:title', content=post.post_title)
+                meta(property='og:author', content=author)
+                meta(property='og:url', content=fullUrl)
+                meta(property='og:image', content=post.featured_image)
+                meta(property='og:image:url', content=post.featured_image)
+                meta(property='og:image:type', content='image/jpeg')
+                meta(property='og:description', content=post.post_excerpt)
 
                 meta(name="twitter:card" content="summary")
                 meta(name="twitter:title" content=post.post_title)

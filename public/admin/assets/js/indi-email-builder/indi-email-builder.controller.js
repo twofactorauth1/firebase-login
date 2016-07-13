@@ -17,12 +17,12 @@
 
     vm.state.email = null;
     vm.state.emailId = $stateParams.id;
-    vm.dataLoaded = false;
-    vm.account = null;
-    vm.website = {settings: {}};
-    vm.modalInstance = null;
-    vm.editor = null;
-    vm.componentTypes = [{
+    vm.uiState.dataLoaded = false;
+    vm.state.account = null;
+    vm.state.website = {settings: {}};
+    vm.uiState.modalInstance = null;
+    vm.uiState.editor = null;
+    vm.uiState.componentTypes = [{
         title: 'Header',
         type: 'email-header',
         preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
@@ -73,6 +73,7 @@
         enabled: true
       }];
 
+    vm.openSimpleModalFn = openSimpleModalFn;
     vm.openModalFn = openModalFn;
     vm.closeModalFn = closeModalFn;
     vm.addComponentFn = addComponentFn;
@@ -84,34 +85,53 @@
     vm.moveComponentFn = moveComponentFn;
     vm.clickImageButton = clickImageButton;
     vm.deleteFn = deleteFn;
+    vm.filterComponentsFn = filterComponentsFn;
+    vm.sendOneTimeEmailFn = sendOneTimeEmailFn;
 
-    vm.enabledComponentTypes = _.where(vm.componentTypes, {
-      enabled: true
-    });
+    vm.uiState.navigation = {
+        back: function() {
+            vm.uiState.navigation.index = 0;
+        },
+        index: 0,
+        sectionPanel: {
+            navigationHistory: [],
+            loadPanel: function(obj, back) {
 
-    vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
+                if (!back) {
+                    vm.uiState.navigation.sectionPanel.navigationHistory.push(obj);
+                }
 
-    // Iterates through the array of filters and replaces each one with an object containing an
-    // upper and lowercase version
-    _.each(vm.componentFilters, function (element, index) {
-      componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
-      vm.componentFilters[index] = {
-        'capitalized': componentLabel,
-        'lowercase': element
-      };
-      componentLabel = null;
-    });
+                vm.uiState.openSidebarSectionPanel = obj;
+                console.log(vm.uiState.navigation.sectionPanel.navigationHistory);
 
-    // Manually add the All option to the begining of the list
-    vm.componentFilters.unshift({
-      'capitalized': 'All',
-      'lowercase': 'all'
-    });
+            },
+            back: function() {
+                var hist = vm.uiState.navigation.sectionPanel.navigationHistory;
+                var previousPanel;
 
+                hist.pop();
+
+                previousPanel = hist[hist.length - 1];
+
+                vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
+
+                if(previousPanel && !previousPanel.id){
+                    hideAllControls();
+                    angular.element(".ssb-active-section").addClass("ssb-active-edit-control");
+                }
+
+            },
+            reset: function() {
+                vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+                vm.uiState.navigation.sectionPanel.navigationHistory = [];
+            }
+        }
+    };
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
         $rootScope.$broadcast('$destroyFroalaInstances');
         $rootScope.app.layout.isMinimalAdminChrome = false;
+        $rootScope.app.layout.isMinimalAdminChromeLight = false;
         $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
     });
 
@@ -124,7 +144,7 @@
     });
 
     $scope.$on('email.remove.component', function (event, args) {
-      vm.dataLoaded = false;
+      vm.uiState.dataLoaded = false;
 
       vm.state.email.components.forEach(function (c, index) {
         if (c._id === args.component._id) {
@@ -137,10 +157,28 @@
           $document.scrollToElementAnimated(element, 175, 1000);
           $(window).trigger('resize');
         }
-        vm.dataLoaded = true;
+        vm.uiState.dataLoaded = true;
         toaster.pop('warning', 'component deleted');
       }, 500);
     });
+
+    function openSimpleModalFn(modal, _size) {
+
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            // backdrop: 'static',
+            scope: $scope,
+            size: _size || 'md',
+        };
+
+        vm.uiState.modalInstance = $modal.open(_modal);
+
+        vm.uiState.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+
+    }
 
 
     function openModalFn(modal, controller, index, size) {
@@ -165,7 +203,7 @@
           return {};
         };
         _modal.resolve.website = function () {
-          return vm.website;
+          return vm.state.website;
         };
 
         _modal.resolve.showInsert = function () {
@@ -181,7 +219,7 @@
         };
 
         _modal.resolve.accountShowHide = function () {
-          return vm.account.showhide;
+          return vm.state.account.showhide;
         };
         _modal.resolve.isEmail = function () {
           return true;
@@ -206,22 +244,22 @@
       if (size) {
         _modal.size = size;
       }
-      vm.modalInstance = $modal.open(_modal);
-      vm.modalInstance.result.then(null, function () {
+      vm.uiState.modalInstance = $modal.open(_modal);
+      vm.uiState.modalInstance.result.then(null, function () {
         angular.element('.sp-container').addClass('sp-hidden');
       });
     }
 
 
     function closeModalFn() {
-      if (vm.modalInstance) {
-        vm.modalInstance.close();
+      if (vm.uiState.modalInstance) {
+        vm.uiState.modalInstance.close();
       }
     }
 
     function addComponentFn(addedType) {
-      if (vm.dataLoaded) {
-        vm.dataLoaded = false;
+      if (vm.uiState.dataLoaded) {
+        vm.uiState.dataLoaded = false;
         var componentType = null;
         if (['email-footer', 'email-header'].indexOf(addedType.type) > -1) {
           componentType = _.findWhere(vm.state.email.components, {
@@ -229,7 +267,7 @@
           });
           if (componentType) {
             toaster.pop('error', componentType.type + " component already exists");
-            vm.dataLoaded = true;
+            vm.uiState.dataLoaded = true;
             return;
           }
         }
@@ -244,7 +282,7 @@
                 $document.scrollToElementAnimated(element, 175, 1000);
                 $(window).trigger('resize');
               }
-              vm.dataLoaded = true;
+              vm.uiState.dataLoaded = true;
               toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
             }, 500);
           }
@@ -258,8 +296,8 @@
       delete clone['anchor'];
       var addedType = {type: clone.type, version: clone.version};
 
-      if (vm.dataLoaded) {
-        vm.dataLoaded = false;
+      if (vm.uiState.dataLoaded) {
+        vm.uiState.dataLoaded = false;
         var componentType = null;
         if (['email', 'email-footer', 'email-header'].indexOf(addedType.type) > -1) {
           componentType = _.findWhere(vm.state.email.components, {
@@ -267,7 +305,7 @@
           });
           if (componentType) {
             toaster.pop('error', componentType.type + " component can't be cloned");
-            vm.dataLoaded = true;
+            vm.uiState.dataLoaded = true;
             return;
           }
         }
@@ -282,7 +320,7 @@
                 $document.scrollToElementAnimated(element, 175, 1000);
                 $(window).trigger('resize');
               }
-              vm.dataLoaded = true;
+              vm.uiState.dataLoaded = true;
               toaster.pop('success', "Component cloned", "The " + newComponent.type + " component was cloned successfully.");
             }, 500);
           }
@@ -423,10 +461,10 @@
     }
 
     function saveFn() {
-      vm.dataLoaded = false;
+      vm.uiState.dataLoaded = false;
       EmailBuilderService.updateEmail(vm.state.email)
         .then(function (res) {
-          vm.dataLoaded = true;
+          vm.uiState.dataLoaded = true;
           toaster.pop('success', 'Email saved');
         });
     }
@@ -445,8 +483,8 @@
     }
 
     function insertMediaFn(asset) {
-      if (vm.editor) {
-        vm.editor.image.insert(asset.url, !1, null, vm.editor.img);
+      if (vm.uiState.editor) {
+        vm.uiState.editor.image.insert(asset.url, !1, null, vm.uiState.editor.img);
       } else {
         toaster.pop('error', 'Position cursor at the point of insertion');
       }
@@ -470,19 +508,63 @@
     }
 
     function deleteFn() {
-      vm.dataLoaded = false;
+      vm.uiState.dataLoaded = false;
       WebsiteService.deleteEmail(vm.state.email, function () {
-        vm.dataLoaded = true;
+        vm.uiState.dataLoaded = true;
         $state.go('app.emails');
         toaster.pop('Warning', 'Email deleted.');
       });
     }
 
+    function filterComponentsFn() {
+        vm.enabledComponentTypes = _.where(vm.uiState.componentTypes, {
+          enabled: true
+        });
+
+        vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
+
+        // Iterates through the array of filters and replaces each one with an object containing an
+        // upper and lowercase version
+        _.each(vm.componentFilters, function (element, index) {
+          componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+          vm.componentFilters[index] = {
+            'capitalized': componentLabel,
+            'lowercase': element
+          };
+          componentLabel = null;
+        });
+
+        // Manually add the All option to the begining of the list
+        vm.componentFilters.unshift({
+          'capitalized': 'All',
+          'lowercase': 'all'
+        });
+    }
+
+    function sendOneTimeEmailFn(address) {
+        vm.uiState.dataLoaded = false;
+        EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function() {
+            vm.uiState.dataLoaded = true;
+            vm.closeModalFn();
+            toaster.pop('success', 'Test email sent successfully');
+        }).catch(function(e) {
+            console.error('Error sending one-time email:', JSON.stringify(e));
+            vm.uiState.dataLoaded = true;
+            vm.closeModalFn();
+            toaster.pop('error', 'Test email sending failed');
+        });
+    }
+
     function pageLinkClick(e) {
-      if (!angular.element(this).hasClass("clickable-link")) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
+        if (!angular.element(this).hasClass("clickable-link")) {
+            e.preventDefault();
+            // e.stopPropagation();
+        }
+    }
+
+    function emailSettingsClick(e) {
+        vm.uiState.navigation.sectionPanel.reset();
+        vm.uiState.showSectionPanel = false;
     }
 
     function init(element) {
@@ -492,15 +574,20 @@
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
         $rootScope.app.layout.isMinimalAdminChrome = true;
+        $rootScope.app.layout.isMinimalAdminChromeLight = true;
 
-        angular.element("body").on("click", ".ssb-page-section a", pageLinkClick);
+        angular.element("body").on("click", "[email-component-loader] a", pageLinkClick);
+
+        angular.element("body").on("click", 'a[href="#email-settings"]', emailSettingsClick);
+
+        vm.filterComponentsFn();
 
         AccountService.getAccount(function (data) {
-            vm.account = data;
+            vm.state.account = data;
         });
 
         WebsiteService.getWebsite(function (data) {
-            vm.website = data;
+            vm.state.website = data;
         });
 
         EmailBuilderService
@@ -511,12 +598,14 @@
                     $state.go('app.emails');
                 }
                 vm.state.email = res.data;
-                vm.dataLoaded = true;
                 $timeout(function () {
                     $('.editable').on('froalaEditor.focus', function (e, editor) {
-                        vm.editor = editor;
+                        vm.uiState.editor = editor;
                         console.info('Event froalaEditor.focus triggered');
                     });
+
+                    vm.uiState.dataLoaded = true;
+
                 }, 1000);
         }, function (err) {
             console.error(err);

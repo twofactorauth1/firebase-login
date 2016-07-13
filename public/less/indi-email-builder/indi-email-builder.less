@@ -1,7 +1,16 @@
 @email-froala-topbar-min-width: 1000px;
 
+.app-minimal-admin-chrome-light {
+    @media screen and (min-width: 992px) {
+        #sidebar {
+            box-shadow: 0 2px 4px rgba(0,0,0,.2);
+        }
+    }
+}
+
 .email-builder-container {
     height: 100vh;
+    padding-top: 0!important;
 
     .main-content {
         height: 100%;
@@ -692,6 +701,9 @@ div[class^="spacing-"] {
             height: 60px;
             border-top: 0;
             border-bottom: 0;
+            display: flex!important;
+            flex-direction: column;
+            align-items: center;
         }
     }
 
@@ -727,6 +739,8 @@ div[class^="spacing-"] {
                 box-shadow: none;
                 vertical-align: middle;
                 text-align: center;
+                min-height: 60px;
+                line-height: 75px;
             }
         }
     }
@@ -748,11 +762,12 @@ div[class^="spacing-"] {
             display: block!important;
             left: 50%!important;
             transform: translateX(-50%);
+        }
+    }
 
-            button {
-                opacity: 1;
-            }
-
+    .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
+        button {
+            opacity: 1!important;
         }
     }
 
@@ -764,8 +779,25 @@ div[class^="spacing-"] {
             width: 100%;
             max-width: 430px;
 
-            & > .fr-layer {
-                // max-width: 320px;
+            display: flex!important;
+            flex-direction: column;
+            align-items: center;
+            position: static!important;
+
+            &:before {
+                background: #131e26;
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 60px;
+            }
+
+            & > .fr-layer, .fr-table-size {
+                background: #131e26;
+                width: 100%;
+                margin-top: 0;
             }
         }
     }
@@ -798,6 +830,12 @@ div[class^="spacing-"] {
             color: #808080!important;
             line-height: 0;
         }
+
+
+        .fr-color-set.sp-container {
+            overflow: visible;
+        }
+
     }
 
 
@@ -808,6 +846,15 @@ div[class^="spacing-"] {
     display: flex;
     flex-direction: column;
 
+    @media (min-width: 768px) {
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+    &:before {
+        z-index: 6;
+    }
+
     .email-control-buttons {
         text-align: center;
     }
@@ -815,15 +862,19 @@ div[class^="spacing-"] {
     @media (max-width: 560px) {
         .email-control-buttons {
 
-            .pull-right, .pull-left {
-                float: none;
-                width: 100%;
+            .btn, .pull-right, .pull-left {
+                float: left!important;
+                margin: 0 10px 0 0;
             }
 
-            .btn {
-                width: 50%;
-                max-width: 225px;
+            .pull-left {
+                margin-right: 0!important;
             }
+
+            .btn > span {
+                display: none;
+            }
+
         }
     }
 }

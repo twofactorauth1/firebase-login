@@ -56,7 +56,7 @@
         }
 
         function f() {
-            for (var a = '<div style="text-align: center; max-height: 400px; overflow-y: scroll; overflow-x: hidden">', c = 0; c < b.opts.fontAwesomeIconsSet.length; c++) 0 !== c && c % b.opts.fontAwesomeIconsStep === 0 && (a += "<br>"), a += '<span class="fr-command fr-fontAwesomeIcon fr-emoticon" data-cmd="insertFontAwesomeIcon" title="' + b.language.translate(b.opts.fontAwesomeIconsSet[c].desc) + '" data-param1="' + b.opts.fontAwesomeIconsSet[c].code + '">' + "<span class='fa fa-" + b.opts.fontAwesomeIconsSet[c].code + "'></span>" + "</span>";
+            for (var a = '<div class="fr-layer" style="text-align: center; max-height: 400px; overflow-y: scroll; overflow-x: hidden">', c = 0; c < b.opts.fontAwesomeIconsSet.length; c++) 0 !== c && c % b.opts.fontAwesomeIconsStep === 0 && (a += "<br>"), a += '<span class="fr-command fr-fontAwesomeIcon fr-emoticon" data-cmd="insertFontAwesomeIcon" title="' + b.language.translate(b.opts.fontAwesomeIconsSet[c].desc) + '" data-param1="' + b.opts.fontAwesomeIconsSet[c].code + '">' + "<span class='fa fa-" + b.opts.fontAwesomeIconsSet[c].code + "'></span>" + "</span>";
             return b.opts.fontAwesomeIconsUseImage && (a), a += "</div>"
         }
 

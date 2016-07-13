@@ -59,6 +59,10 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     }
 
     $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], _.debounce(function(id) {
+        $timeout(function() {
+           vm.ssbBlogLoaded = true; 
+        }, 0);
+        
         if (vm.state.post && vm.state.pendingBlogChanges && id[1] !== "edit") {
             vm.savePost();
         }

@@ -5,7 +5,7 @@
             {{vm.uiState.openBlogPanel.name}}
         </h4>
 
-        <div class="close-panel ti-close" ng-click="vm.closeBlogPanel()"></div>
+        <div ng-if="vm.ssbBlogLoaded" class="close-panel ti-close" ng-click="vm.closeBlogPanel()"></div>
 
     </header>
 
@@ -169,7 +169,7 @@
             ng-if="vm.uiState.openBlogPanel.id === 'edit'"
             class="ssb-blog-editor-scrollable-container row">
 
-            <div class="ssb-blog-editor">
+            <div class="ssb-blog-editor ssb-theme-{{vm.state.website.theme.name | slugify}}" >
 
                 <input autocomplete="false" type="text" class="ssb-blog-editor-post-title" ng-model="vm.state.post.post_title" placeholder="Title" />
 

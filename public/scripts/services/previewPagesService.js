@@ -5,8 +5,8 @@ mainApp.factory('previewPagesService', ['$http', '$location', '$cacheFactory', f
 
     function setPostData(pageId, postId) {
         if (window.indigenous && window.indigenous.precache) {
-            $http.get('/api/1.0/cms/page/' + pageId + '/blog/' + postId, {
-                cache: true
+            $http.get('/api/1.0/cms/page/' + pageId + '/blog/preview/' + postId, {
+                cache: false
             }).success(function (post) {
                 window.indigenous.precache.siteData.post = post;
             }).error(function(err) {

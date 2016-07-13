@@ -793,6 +793,15 @@ module.exports = {
         //blogPostDao.getById(postId, fn);
     },
 
+    getBlogPostPreview: function(accountId, postId, fn) {
+
+        var query = {
+            _id: postId,
+            accountId: accountId
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+    },
+
     getBlogPostByTitle: function(accountId, title, statusAry, fn) {
 
         var query = {

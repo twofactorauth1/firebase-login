@@ -110,14 +110,14 @@
                         </div>
                     </div>
                 </tab>
-                <tab ng-if='vm.parentVm.state.account.showhide.userScripts.toggle'>
+                <tab ng-if='vm.parentVm.state.website.resources.toggles.userScripts'>
                     <tab-heading>
                         Page Scripts
                     </tab-heading>
 
                     <div>
                         <div class="mb10"></div>
-                        <div class='form-group' ng-if='vm.parentVm.state.account.showhide.userScripts.toggle'>
+                        <div class='form-group' ng-if='vm.parentVm.state.website.resources.toggles.userScripts'>
                           <label>Scripts</label>
                           <span tooltip-placement="bottom" tooltip-html-unsafe="Add script snippets for your page"><i class="fa fa-info-circle" /></span>
                           <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.userScripts[vm.page.handle === "blog-list" ? "blog": vm.page.handle].original'></textarea>

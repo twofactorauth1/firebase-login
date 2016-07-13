@@ -10,7 +10,7 @@
     {{componentFilter.capitalized}}
     </tab-heading>
 
-    <div ng-repeat="type in vm.componentTypes| orderBy:'title' | filter:{ filter: componentFilter.lowercase, enabled: true }" ng-if="componentFilter.lowercase != 'all'" class="margin-bottom-15">
+    <div ng-repeat="type in vm.uiState.componentTypes| orderBy:'title' | filter:{ filter: componentFilter.lowercase, enabled: true }" ng-if="componentFilter.lowercase != 'all'" class="margin-bottom-15">
     <div class="col-xs-4">
     <div class="img-wrap">
     <a ng-href="{{type.preview}}" title="" data-gallery="">
@@ -27,7 +27,7 @@
     </div>
     <div class="clearfix"></div>
     </div>
-    <div ng-repeat="type in vm.componentTypes| orderBy:'title' | filter:{ enabled: true }" ng-if="componentFilter.lowercase == 'all'" class="margin-bottom-15">
+    <div ng-repeat="type in vm.uiState.componentTypes| orderBy:'title' | filter:{ enabled: true }" ng-if="componentFilter.lowercase == 'all'" class="margin-bottom-15">
     <div class="col-xs-4">
     <div class="img-wrap">
     <a ng-href="{{type.preview}}" title="" data-gallery="">

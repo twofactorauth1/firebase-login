@@ -223,10 +223,15 @@ $.FroalaEditor.build = _.memoize(function(type) {
     }
 
     if (type === 'ssbEmailEditor') {
+        var emailToolbarButtons = _.without(toolbarbuttons, 'fontAwesomeIcons', 'insertVideo');
         _.extend($.FroalaEditor.config, {
-            toolbarButtonsMD: toolbarbuttons,
+            toolbarButtons: emailToolbarButtons,
+            toolbarButtonsMD: emailToolbarButtons,
+            toolbarButtonsSM: emailToolbarButtons,
+            toolbarButtonsXS: emailToolbarButtons,
             placeholderText: 'Type your email here'
         });
+
     }
 
     console.debug('called $.FroalaEditor.build', type);
