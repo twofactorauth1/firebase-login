@@ -383,7 +383,7 @@ module.exports = {
                                 }
                                 if(campaign === null){
                                    self.log.error('Could not find campaign with campaignId: ' + campaignId);
-                                   return fn('Could not find campaign with campaignId: ' + campaignId, null); 
+                                   return fn('Could not find campaign with campaignId: ' + campaignId, null);
                                 }
                                 //need to create flow.
                                 var flow = new $$.m.CampaignFlow({
@@ -488,55 +488,14 @@ module.exports = {
                             var vars = step.settings.vars || [];
 
                             var emailId = step.settings.emailId;
-                            
+
                             emailDao.getEmailById(emailId, function(err, email){
                                 if(err || !email) {
                                     self.log.error('Error getting email to render: ' + err);
                                     return fn(err, null);
                                 }
-                                // var component = email.get('components')[0];
-                                // if (!component.bg.color) {
-                                //     component.bg.color = '#eaeaea';
-                                // }
 
-                                // if (!component.emailBg) {
-                                //     component.emailBg = '#ffffff';
-                                // }
-                                // if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                                //     component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                // }
-
-                                // component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                // component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                // component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                var components = [];
-                                var keys = ['logo','title','text','text1','text2','text3'];
-                                var regex = new RegExp('src="//s3.amazonaws', "g");
-
-                                email.get('components').forEach(function(component){
-                                    if(component.visibility){
-                                        for (var i = 0; i < keys.length; i++) {
-                                            if (component[keys[i]]) {
-                                            component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
-                                            }
-                                        }
-                                        if (!component.bg.color) {
-                                            component.bg.color = '#ffffff';
-                                        }
-                                        if (!component.emailBg) {
-                                            component.emailBg = '#ffffff';
-                                        }
-                                        if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                                            component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                        }
-                                        if (!component.txtcolor) {
-                                            component.txtcolor = '#000000';
-                                        }
-                                        components.push(component);
-                                    }                                    
-                                });
-                                
-                                app.render('emails/base_email_v2', { components: components }, function(err, html) {
+                                app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
                                     if (err) {
                                         self.log.error('error rendering html: ' + err);
                                         self.log.warn('email will not be sent.');
@@ -902,7 +861,7 @@ module.exports = {
 
     getContactsForCampaign: function(accountId, campaignId, fn) {
         var self = this;
-        
+
         var campaignQuery = {
             accountId: accountId,
             campaignId: campaignId
@@ -911,7 +870,7 @@ module.exports = {
         var contacts = [];
 
         self.log.debug('>> getContactsForCampaign');
-        
+
         async.waterfall([
             function(callback) {
                 campaignDao.findMany(campaignQuery, $$.m.CampaignFlow, function(err, value){

@@ -127,7 +127,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
         app.get(this.url('page/:id/blog/preview/:postId'), this.setup.bind(this), this.getBlogPostPreview.bind(this));
-        
+
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
@@ -368,41 +368,13 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
         var accountId = parseInt(self.currentAccountId(req));
 
-        var components = [];
-        var keys = ['logo','title','text','text1','text2','text3'];
-        var regex = new RegExp('src="//s3.amazonaws', "g");
-
-        emailDataObj.content.components.forEach(function(component){
-            if(component.visibility){
-                for (var i = 0; i < keys.length; i++) {
-                    if (component[keys[i]]) {
-                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
-                    }
-                }
-                if (!component.bg.color) {
-                    component.bg.color = '#ffffff';
-                }
-                if (!component.emailBg) {
-                    component.emailBg = '#ffffff';
-                }
-                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                }
-                if (!component.txtcolor) {
-                    component.txtcolor = '#000000';
-                }
-                components.push(component);
-            }
-        });
-
-        self.log.debug('components >>> ', components);
-
-        app.render('emails/base_email_v2', { components: components }, function(err, html){
+        app.render('emails/base_email_v2', emailMessageManager.contentTransformations(emailDataObj), function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
                 self.log.warn('email will not be sent.');
             } else {
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
+                console.log(html);
                 emailMessageManager.sendTestEmail(
                     emailDataObj.content.fromEmail,
                     emailDataObj.content.fromName,
@@ -1657,7 +1629,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    
+
     getBlogPostPreview: function(req, res) {
 
         var self = this;
@@ -1669,7 +1641,7 @@ _.extend(api.prototype, baseApi.prototype, {
         /*
          * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
          */
-        
+
 
         cmsManager.getBlogPostPreview(accountId, blogPostId, function (err, value) {
             self.log.debug('<< getBlogPostPreview');
