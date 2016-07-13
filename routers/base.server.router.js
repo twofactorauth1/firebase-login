@@ -422,6 +422,7 @@ _.extend(baseRouter.prototype, {
                             req.session.accountId = 0;
                         } else {
                             req.session.accountId = value.id();
+                            req.session.subdomain = value.get('subdomain');
                         }
                     }
 
@@ -429,7 +430,8 @@ _.extend(baseRouter.prototype, {
                         if (!err) {
                             //need to remove the auth token here.
                             var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                            logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                            logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl + ' to remove authToken.');
+                            logg.debug('Session:', req.session);
                             return resp.redirect(redirectUrl);
                         } else {
                             logger.error('Error in checkAuthToken(3): ' + err);
