@@ -189,17 +189,20 @@ _.extend(baseRouter.prototype, {
         var sSub = req.session.subdomain;
         var sDom = req.session.domain;
         if(sSub=== null && sDom===null) {//nothing to match
-            logger.trace('matchHostToSession - nothing to match.  false');
+            logger.debug('matchHostToSession - nothing to match.  false');
             return false;
         }
 
         if(subObj.isMainApp === true) {
             var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app' || sSub ==='');
-            logger.trace('matchHostToSession - mainAppTest: ' + mainAppTest);
+            logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
             return mainAppTest;
         }
         var matchHostToSessionTest = (sSub === subObj.subdomain || sDom === subObj.domain);
-        logger.trace('matchHostToSession test: ' + matchHostToSessionTest);
+        logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
+        if(!matchHostToSessionTest) {
+            logger.debug('sSub:' + sSub + ', subObj.subdomain:' + subObj.subdomain + ', sDom:' + sDom + ', subObj.domain:' + subObj.domain);
+        }
         return matchHostToSessionTest;
     },
 
