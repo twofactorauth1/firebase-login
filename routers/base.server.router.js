@@ -322,10 +322,10 @@ _.extend(baseRouter.prototype, {
 
     isAuth: function(req, resp, next) {
         var self = this;
-        logger.trace('>> isAuth (' + req.originalUrl + ')');
-        logger.trace('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
+        logger.debug('>> isAuth (' + req.originalUrl + ')');
+        logger.debug('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
         var path = req.url;
-        logger.trace('path:', path);
+        logger.debug('path:', path);
         var redirectParam = req.query.redirectTo;
         //logger.debug('req.session.locked: ' + req.session.locked);
         // if(req.session.locked === 'true' || req.session.locked === true) {
@@ -389,7 +389,7 @@ _.extend(baseRouter.prototype, {
             //cookies.setRedirectUrl(req, resp, path);
             resp.redirect('/login?redirectTo=' + path.replace('/#', ''));
         } else {
-            logger.trace('Not authenticated');
+            logger.debug('Not authenticated');
             var checkAuthToken = function(req, fn) {
                 if (req.query.authtoken != null) {
                     var accountId = 0;
@@ -400,7 +400,7 @@ _.extend(baseRouter.prototype, {
                         if (err) {
                             return fn(err);
                         }
-
+                        logger.debug('Verified Auth Token:', value);
                         req.login(value, function(err) {
                             if (err) {
                                 return fn(err);
@@ -414,7 +414,7 @@ _.extend(baseRouter.prototype, {
             };
 
             if (req["session"] != null && req.session["accountId"] == null) {//TODO: do we need to check matchHostToken here?
-                logger.trace('No accountId in session');
+                logger.debug('No accountId in session');
 
                 accountDao.getAccountByHost(req.get("host"), function(err, value) {
                     if (!err && value != null) {
@@ -429,7 +429,7 @@ _.extend(baseRouter.prototype, {
                         if (!err) {
                             //need to remove the auth token here.
                             var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                            logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl);
+                            logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
                             return resp.redirect(redirectUrl);
                         } else {
                             logger.error('Error in checkAuthToken(3): ' + err);
@@ -440,11 +440,12 @@ _.extend(baseRouter.prototype, {
                     });
                 });
             } else {
+                logger.debug('Session is not null, accountId in session');
                 checkAuthToken(req, function(err, value) {
                     if (!err) {
                         //need to remove the auth token here.
                         var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                        logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl);
+                        logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
                         return resp.redirect(redirectUrl);
                     } else {
                         logger.error('Error in checkAuthToken(4): ' + err);
