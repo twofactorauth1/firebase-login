@@ -189,20 +189,20 @@ _.extend(baseRouter.prototype, {
         var sSub = req.session.subdomain;
         var sDom = req.session.domain;
         if(sSub=== null && sDom===null) {//nothing to match
-            logger.debug('matchHostToSession - nothing to match.  false');
+            logger.trace('matchHostToSession - nothing to match.  false');
             return false;
         }
 
         if(subObj.isMainApp === true) {
             var mainAppTest =  (sSub === 'www' || sSub === 'main' || sSub==='app' || sSub ==='');
-            logger.debug('matchHostToSession - mainAppTest: ' + mainAppTest);
+            logger.trace('matchHostToSession - mainAppTest: ' + mainAppTest);
             return mainAppTest;
         }
         var matchHostToSessionTest = (sSub === subObj.subdomain || sDom === subObj.domain);
-        logger.debug('matchHostToSession test: ' + matchHostToSessionTest);
+        logger.trace('matchHostToSession test: ' + matchHostToSessionTest);
         if(!matchHostToSessionTest) {
-            logger.debug('sSub:' + sSub + ', subObj.subdomain:' + subObj.subdomain + ', sDom:' + sDom + ', subObj.domain:' + subObj.domain);
-            logger.debug('req.session:', req.session);
+            logger.trace('sSub:' + sSub + ', subObj.subdomain:' + subObj.subdomain + ', sDom:' + sDom + ', subObj.domain:' + subObj.domain);
+            logger.trace('req.session:', req.session);
         }
         return matchHostToSessionTest;
     },
@@ -384,7 +384,7 @@ _.extend(baseRouter.prototype, {
 
             }
         } else if(req.isAuthenticated() && (self.matchHostToSession(req) === false || req.session.midSignup === true)){
-            logger.debug('authenticated to the wrong session.  logging out.');
+            logger.trace('authenticated to the wrong session.  logging out.');
             self.logout(req, resp);
             //cookies.setRedirectUrl(req, resp, path);
             resp.redirect('/login?redirectTo=' + path.replace('/#', ''));
@@ -400,7 +400,7 @@ _.extend(baseRouter.prototype, {
                         if (err) {
                             return fn(err);
                         }
-
+                        logger.trace('Verified Auth Token:', value);
                         req.login(value, function(err) {
                             if (err) {
                                 return fn(err);
@@ -422,6 +422,7 @@ _.extend(baseRouter.prototype, {
                             req.session.accountId = 0;
                         } else {
                             req.session.accountId = value.id();
+                            req.session.subdomain = value.get('subdomain');
                         }
                     }
 
@@ -429,7 +430,7 @@ _.extend(baseRouter.prototype, {
                         if (!err) {
                             //need to remove the auth token here.
                             var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                            logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl);
+                            logger.trace('<< isAuth.  Redirecting to: ' + redirectUrl + ' to remove authToken.');
                             return resp.redirect(redirectUrl);
                         } else {
                             logger.error('Error in checkAuthToken(3): ' + err);
@@ -440,6 +441,7 @@ _.extend(baseRouter.prototype, {
                     });
                 });
             } else {
+                logger.trace('Session is not null, accountId in session');
                 checkAuthToken(req, function(err, value) {
                     if (!err) {
                         //need to remove the auth token here.
