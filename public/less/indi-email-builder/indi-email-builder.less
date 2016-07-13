@@ -1,3 +1,4 @@
+
 @email-froala-topbar-min-width: 1000px;
 
 .app-minimal-admin-chrome-light {
@@ -766,9 +767,14 @@ div[class^="spacing-"] {
     }
 
     .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
+
+        position: relative;
+        z-index: 99999;
+
         button {
             opacity: 1!important;
         }
+
     }
 
     .fr-popup.fr-inline.fr-desktop.fr-active {
@@ -888,3 +894,9 @@ div[class^="spacing-"] {
     // }
 }
 
+
+.indi-email-bg-btn {
+    position: absolute;
+    right: 20px;
+    bottom: 100px;
+}

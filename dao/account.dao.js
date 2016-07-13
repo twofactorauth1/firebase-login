@@ -321,12 +321,18 @@ var dao = {
                                 self.log.debug('Removed courses for user ' + user.id());
                                 var customerId = user.get('stripeId');
                                 if (customerId && customerId.length > 0) {
-                                    $$.dao.StripeDao.deleteStripeCustomer(customerId, null, user.id(), function (err, value) {
-                                        if (err) {
-                                            self.log.error('error deleting Stripe customer: ' + err);
-                                        } else {
-                                            self.log.debug('Deleted Stripe Customer');
+                                    self.getStripeTokensFromAccount(accountId, function(err, creds){
+                                        var accessToken = null;
+                                        if(creds) {
+                                            accessToken = creds.accessToken;
                                         }
+                                        $$.dao.StripeDao.deleteStripeCustomer(customerId, null, user.id(), accessToken, function (err, value) {
+                                            if (err) {
+                                                self.log.error('error deleting Stripe customer: ' + err);
+                                            } else {
+                                                self.log.debug('Deleted Stripe Customer');
+                                            }
+                                        });
                                     });
                                 }
                                 $$.dao.UserDao.remove(user, function (err, value) {
