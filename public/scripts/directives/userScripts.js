@@ -11,13 +11,13 @@ angular.module('mainApp')
           scope.$on('$routeChangeSuccess', function (ev, curr, prev) {
             scope.scripts = '';
             accountService(function (err, account) {
-              if (account.showhide.userScripts.enable && account.showhide.userScripts.toggle) {
+              if (account.showhide.userScripts && account.showhide.userScripts.enable && account.showhide.userScripts.toggle) {
                 websiteService(function (err, website) {
-                  if (angular.isDefined(website.resources.userScripts.global)) {
+                  if (website.resources.userScripts && angular.isDefined(website.resources.userScripts.global)) {
                     scope.scripts += website.resources.userScripts.global.sanitized;
                   }
 
-                  if (angular.isDefined(website.resources.userScripts[$routeParams.name])) {
+                  if (website.resources.userScripts && angular.isDefined(website.resources.userScripts[$routeParams.name])) {
                     scope.scripts += '\n\n' + website.resources.userScripts[$routeParams.name].sanitized;
                   }
 
