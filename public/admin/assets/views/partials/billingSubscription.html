@@ -17,24 +17,52 @@
             </h3>
         </li>
 
-        <li ng-if="!billingSubscriptionUnavailable">
+        <li ng-if="!billingSubscriptionUnavailable && !plan.managedServices">
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Website Builder</strong>
         </li>
 
-        <li ng-if="!billingSubscriptionUnavailable">
+        <li ng-if="!billingSubscriptionUnavailable && !plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Blog Builder</strong>
+        </li>
+
+        <li ng-if="!billingSubscriptionUnavailable && !plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>E-mail Newsletter</strong>
+        </li>
+
+        <li ng-if="!billingSubscriptionUnavailable && !plan.managedServices">
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Contact Management</strong>
         </li>
 
-        <li ng-if="!billingSubscriptionUnavailable">
+        <li ng-if="!billingSubscriptionUnavailable && !plan.managedServices">
             <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Commerce</strong>
         </li>
 
-        <li ng-if="!billingSubscriptionUnavailable">
-            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Marketing</strong>
+        <li ng-if="!billingSubscriptionUnavailable && !plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Site Analytics</strong>
         </li>
 
-        <li ng-if="!billingSubscriptionUnavailable">
-            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Site Analytics</strong>
+        <li ng-if="!billingSubscriptionUnavailable && plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>All the features of the platform plus</strong>
+        </li>
+
+        <li ng-if="!billingSubscriptionUnavailable && plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Unlimited menu and content updates</strong>
+        </li>
+
+        <li ng-if="!billingSubscriptionUnavailable && plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Weekly Blog Post Published</strong>
+        </li>
+
+        <li ng-if="!billingSubscriptionUnavailable && plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Monthly E-Mail Newsletter</strong>
+        </li>
+
+        <li ng-if="!billingSubscriptionUnavailable && plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Monthly Performance Review</strong>
+        </li>
+
+        <li ng-if="!billingSubscriptionUnavailable && plan.managedServices">
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>$50 AdWords Credit</strong>
         </li>
 
         <li ng-if="showSelectBtn">

@@ -36,6 +36,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         //GET
         app.get(this.url('myip'), this.getMyIp.bind(this));
+        app.get(this.url('ipcheck/:ip'), this.compareIPs.bind(this));
         app.get(this.url('activities'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
         app.get(this.url('activities/all'), this.isAuthAndSubscribedApi.bind(this), this.findActivities.bind(this));
         app.get(this.url('activities/read'), this.isAuthAndSubscribedApi.bind(this), this.findReadActivities.bind(this));
@@ -92,6 +93,20 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var ip = self.ip(req);
         self.sendResult(resp, ip);
+    },
+
+    compareIPs: function(req, resp) {
+        var self = this;
+        var ip = req.params.ip;
+        geoIPUtil.getGeoForIP(ip, function(err, ipinfo){
+            geoIPUtil.getMaxMindGeoForIP(ip, function(err, result){
+                var obj = {
+                    ipinfo: ipinfo,
+                    maxmind: result
+                };
+                self.sendResult(resp, obj);
+            });
+        });
     },
 
     //region CONTACT
@@ -661,7 +676,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
                     }
-                    geoIPUtil.getGeoForIP(self.ip(req), function(err, value){
+                    geoIPUtil.getMaxMindGeoForIP(self.ip(req), function(err, value){
                         self.log.debug('Got the following: ', value);
                         if(!err && value) {
                             /*
