@@ -541,10 +541,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 page.set('screenshot', null);
                 cmsDao.saveOrUpdate(page, function (err, updatedPage) {
                     self.sendResultOrError(resp, err, updatedPage, "Error saving website Page");
-                    cmsManager.updatePageScreenshot(updatedPage.id(), function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + updatedPage.id() + ': ' + err);}
-                        self = null;
-                    });
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
                     self._updatePageCache(pageUrl, accountId, page.get('handle'), null);
                     self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
@@ -587,10 +583,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     cmsManager.createPage(page, function (err, value) {
                         self.log.debug('<< createPage');
                         self.sendResultOrError(res, err, value, "Error creating Page");
-                        cmsManager.updatePageScreenshot(value.id(), function(err, value){
-                            if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
-                            self = null;
-                        });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl, accountId, pageObj.handle, temp);
                         self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
@@ -638,10 +630,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     cmsManager.createPageFromPage(page, function (err, value) {
                         self.log.debug('<< createPage');
                         self.sendResultOrError(res, err, value, "Error creating Page");
-                        cmsManager.updatePageScreenshot(value.id(), function(err, value){
-                            if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
-                            self = null;
-                        });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl, accountId, pageObj.handle, null);
                         self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
@@ -676,10 +664,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updatePage(pageId, pageObj, function (err, value) {
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(res, err, value, "Error updating Page");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
+
                     if(value) {
                         var pageUrl = self._buildPageUrl(req, value.get('handle'));
                         self._updatePageCache(pageUrl, accountId, null, pageId);
@@ -1155,11 +1140,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.createWebsiteAndPageFromTemplate(accountId, templateId, self.userId(req), websiteId, title, handle, mainmenu, function(err, websiteAndPage){
                     self.log.debug('<< createPageFromTemplate');
                     self.sendResultOrError(res, err, websiteAndPage ? websiteAndPage.page : null, 'Error creating page from template.');
-                    if(websiteAndPage)
-                        cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
-                            if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
-                            self = null;
-                        });
                 });
             }
         });
@@ -1383,10 +1363,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< addComponentToPageID' + pageId);
                     self.log.debug('<< addComponentToPageComponent' + componentObj);
                     self.sendResultOrError(res, err, value, "Error adding components to page");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
 
@@ -1413,10 +1389,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updatePageComponent(pageId, componentObj, function (err, value) {
                     self.log.debug('<< updateComponent');
                     self.sendResultOrError(res, err, value, "Error updating a component on a page");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
         });
@@ -1440,10 +1412,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updateAllPageComponents(pageId, componentAry, function (err, value) {
                     self.log.debug('<< updateAllComponents');
                     self.sendResultOrError(res, err, value, "Error updating components");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
         });
@@ -1468,10 +1436,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteComponent(pageId, componentId, function (err, value) {
                     self.log.debug('<< deleteComponent');
                     self.sendResultOrError(res, err, value, "Error deleting component");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
         });
@@ -1497,11 +1461,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function (err, value) {
                     self.log.debug('<< updateComponentOrder');
                     self.sendResultOrError(res, err, value, "Error deleting component");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
-
                 });
             }
         });
@@ -2120,6 +2079,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
+                self.sendResultOrError(res, 'Operation No longer supported', '', 'Operation No longer supported');
                 cmsManager.generateScreenshot(accountId, pageHandle, function(err, url){
                     self.log.debug('<< generateScreenshot');
                     self.sendResultOrError(res, err, url, "Error generating screenshot.");

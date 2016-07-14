@@ -7,7 +7,7 @@ var themeDao = require('./dao/theme.dao.js');
 var templateDao = require('./dao/template.dao.js');
 var topicDao = require('./dao/topic.dao.js');
 var emailDao = require('./dao/email.dao.js');
-var urlboxhelper = require('../utils/urlboxhelper');
+
 var s3dao = require('../dao/integrations/s3.dao');
 var fs = require('fs');
 var request = require('request');
@@ -398,21 +398,6 @@ module.exports = {
                 return fn(err, null);
             }
             fn(null, pageAry[0]);
-            log.debug('creating screenshots for default pages');
-            _.each(pageAry, function(page){
-                if(page.get('handle') && page.get('type') != 'notification') {
-                    self.updatePageScreenshot(page.id(), function(err, value){
-                        if(err) {
-                            log.error('Error updating screenshot: ' + err);
-                        } else {
-                            log.debug('updated screenshot: ' + value);
-                        }
-                    });
-                }
-
-            });
-
-            //return fn(null, pageAry[0]);
         });
     },
 
@@ -2313,7 +2298,7 @@ module.exports = {
 
     updatePageScreenshot: function(pageId, fn) {
         var self = this;
-        log.debug('>> updatePageScreenshot');
+        log.debug(null, null, '>> updatePageScreenshot');
 
         cmsDao.getPageById(pageId, function(err, page){
             if(err || !page) {
@@ -2322,24 +2307,15 @@ module.exports = {
             }
             var accountId = page.get('accountId');
             var pageHandle = page.get('handle');
-            self.generateScreenshot(accountId, pageHandle, function(err, url){
+            page.set('screenshot', '');
+            cmsDao.saveOrUpdate(page, function(err, savedPage){
                 if(err) {
-                    log.error('Error generating screenshot: ' + err);
+                    log.error('Error updating page: ' + err);
                     return fn(err, null);
+                } else {
+                    log.debug(accountId, null, '<< updatePageScreenshot (deprecated)');
+                    return fn(null, savedPage);
                 }
-                if (url.substr(0,5) == 'http:') {
-                  url = url.substr(5, url.length);
-                }
-                page.set('screenshot', url);
-                cmsDao.saveOrUpdate(page, function(err, savedPage){
-                    if(err) {
-                        log.error('Error updating page: ' + err);
-                        return fn(err, null);
-                    } else {
-                        log.debug('<< updatePageScreenshot');
-                        return fn(null, savedPage);
-                    }
-                });
             });
         });
     },
