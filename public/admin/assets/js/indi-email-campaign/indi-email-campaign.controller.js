@@ -488,6 +488,14 @@
             vm.dataLoaded = true;
         }
 
+        function checkIfDirty() {
+            //TODO
+        }
+
+        function resetDirty() {
+            //TODO
+        }
+
         function init(element) {
             vm.element = element;
 
