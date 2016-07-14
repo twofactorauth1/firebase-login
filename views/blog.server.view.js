@@ -131,7 +131,9 @@ _.extend(view.prototype, BaseView.prototype, {
                         if(_tag){
                             posts = posts.filter(function(post){
                                 if (post.get("post_tags")) {
-                                    return post.get("post_tags").indexOf(_tag) > -1;
+                                    return _.some(post.get("post_tags"), function(tag) {
+                                        return tag.toLowerCase() === _tag.toLowerCase() 
+                                    })
                                 }
                             })
                         }
