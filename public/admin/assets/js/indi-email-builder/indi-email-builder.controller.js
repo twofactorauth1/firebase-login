@@ -387,6 +387,7 @@
     }
 
     function filterComponentsFn() {
+        var componentLabel = '';
         vm.enabledComponentTypes = _.where(vm.uiState.componentTypes, {
           enabled: true
         });
