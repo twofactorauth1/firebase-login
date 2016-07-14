@@ -86,6 +86,7 @@
         ssbService.returnInvalidPost = returnInvalidPost;
         ssbService.checkAndSetGlobalHeader = checkAndSetGlobalHeader;
         ssbService.checkDuplicateGlobalHeader = checkDuplicateGlobalHeader;
+        ssbService.getTempComponent = getTempComponent;
 
         /**
          * This represents the category sorting for the add content panel
@@ -1864,6 +1865,17 @@
             var deferred = $q.defer();
             deferred.resolve(false);
             return deferred.promise;
+        }
+
+        function getTempComponent(component){
+            component._id = getTempUUID();
+            // Reset model properties
+            component.anchor = component._id;
+            component.text = "";
+            component.border = {};
+            component.bg = {};
+            component.txtcolor = null;
+            return component;
         }
 
         (function init() {
