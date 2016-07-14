@@ -39,6 +39,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     // vm.checkStateNavigation = checkStateNavigation;
     vm.checkPageNavigation = checkPageNavigation;
     vm.savePost = savePost;
+    vm.updateColumnLayout = updateColumnLayout;
 
     vm.uiState = {
         loading: 0,
@@ -145,7 +146,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         checkIfBlogPage: vm.isBlogPage,
 
-        isDuplicateGlobalHeader: false
+        isDuplicateGlobalHeader: false,
+
+        updateColumnLayout: vm.updateColumnLayout, 
 
     };
 
@@ -1109,7 +1112,31 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
-
+    function updateColumnLayout(section){
+        if(section && section.layoutModifiers && section.layoutModifiers.columns){
+            var columns = section.layoutModifiers.columns.columnsNum;
+            var columnLength = section.components.length;
+            if(columnLength){
+                if(section.components.length < columns){
+                    var _diff =  columns - section.components.length;
+                    var component = angular.copy(section.components[0]);
+                    component = SimpleSiteBuilderService.getTempComponent(component);
+                    while(_diff !== 0){
+                        section.components.push(component);
+                        _diff--;
+                    }
+                }
+                else if(section.components.length > columns){
+                    for(var i = columns; i < columnLength; i++){
+                        // remove empty components from section
+                        if(section.components[i] && !section.components[i].text){
+                            section.components.splice(i, 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     function init(element) {
 

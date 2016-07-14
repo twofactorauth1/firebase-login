@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderPageSectionController', ssbPageSectionController);
 
-ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$window', '$location', "SimpleSiteBuilderService"];
+ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$window', '$location'];
 /* @ngInject */
-function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window, $location, SimpleSiteBuilderService) {
+function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window, $location) {
 
     console.info('page-section directive init...')
 
@@ -33,58 +33,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             $timeout(function() {
                 vm.setupVideoBackground();
             }, 1000);
-        }
-    });
-
-
-    $scope.$watch('vm.section.layoutModifiers.columns', function (columns, oldColumns) {
-        if (angular.isDefined(columns)) {            
-                var columnLength = vm.section.components.length;
-                if(columnLength){
-                    var colClass = "col-sm-" + Math.floor(12/columns);
-                    var colOverrideClass = "ssb-col-" + columns;
-                    var oldClass, oldOverrideClass = "";
-                    if(oldColumns){
-                        oldClass =  "col-sm-" + Math.floor(12/oldColumns);
-                        oldOverrideClass = "ssb-col-" + oldColumns;
-                    }
-                    
-                    if(vm.section.components.length < columns){
-                        var _diff =  columns - vm.section.components.length;
-                        var component = angular.copy(vm.section.components[0]);
-                        component = SimpleSiteBuilderService.getTempComponent(component);
-                        while(_diff !== 0){
-                            vm.section.components.push(component);
-                            _diff--;
-                        }
-                    }
-                    else if(vm.section.components.length > columns){
-                        for(var i = columns; i < columnLength; i++){
-                            var _id = vm.section.components[i]._id;
-                            var selector = "#component_"+ _id + ".ssb-component-index-" + i;
-                            angular.element(selector).removeClass(oldClass).removeClass(oldOverrideClass);    
-                            angular.element(selector).addClass("ssb-col-hide");
-                            // remove empty components from section
-                            if(!vm.section.components[i].text){
-                                vm.section.components.splice(i, 1);
-                            }
-                        }
-                    }
-                    
-
-                    $timeout(function() {
-                        // Add colClass class to the corresponding sections
-                        for(var j = 0; j < columns; j++){
-                            var _id = vm.section.components[j]._id;
-                            var selector = "#component_"+ _id + ".ssb-component-index-" + j;
-                            angular.element(selector).removeClass(oldClass).removeClass(oldOverrideClass).removeClass("ssb-col-hide");
-                            angular.element(selector).addClass(colClass).addClass(colOverrideClass);
-                        }
-
-                    }, 100)
-
-                }
-           
         }
     });
 
@@ -302,6 +250,19 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
           classString += ' ssb-component-index-' + index + ' ';
         }
 
+        if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
+            if (vm.section.layoutModifiers.columns.columnsNum) {
+                var colCount = vm.section.layoutModifiers.columns.columnsNum;
+                var colClass = " col-md-" + Math.floor(12/colCount);
+                var colOverrideClass = " ssb-col-" + colCount;
+                classString += colClass;
+                classString += colOverrideClass;
+                if (index !== undefined && index > colCount) {
+                    classString += " ssb-col-hide";
+                }
+            } 
+        }
+
         if (component.layoutModifiers) {
 
             if (component.layoutModifiers.columns) {
@@ -450,6 +411,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function getTrustedUrl(url) {
         return $sce.trustAsResourceUrl(url);
     }
+
+   
 
     function setupVideoBackground() {
 

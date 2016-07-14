@@ -54,7 +54,7 @@
         </label>
         <div>
             <label class="radio-inline" ng-repeat="value in [1,2,3,4,5,6]">
-                <input type="radio" class="margin-top-1" ng-model="component.layoutModifiers.columns" value="{{value}}">
+                <input type="radio" class="margin-top-1" ng-model="component.layoutModifiers.columns.columnsNum" value="{{value}}" ng-change="vm.uiState.updateColumnLayout(component)">
                 {{value}}
             </label>
         </div>
