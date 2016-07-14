@@ -227,6 +227,13 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                 scope.formSuccess = false;
               }, 3000);
             } else {
+              scope.formSuccess = true;
+              scope.user = {};
+              simpleForm.$setPristine(true);
+
+              $timeout(function () {
+                scope.formSuccess = false;
+              }, 3000);
               if (scope.component.redirectType === 'page') {
                 window.location.href = scope.component.redirectUrl;
               }
