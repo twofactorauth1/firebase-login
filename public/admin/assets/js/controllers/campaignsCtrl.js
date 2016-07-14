@@ -27,11 +27,11 @@
     fetchCampaigns();
 
     $scope.tableView = 'list';
-    
+
     AccountService.getAccount(function (_account) {
       $scope.account = _account;
     });
-    
+
     $scope.viewSingle = function (campaign) {
       // var tableState = $scope.getSortOrder();
       // $state.current.sort = tableState.sort;
