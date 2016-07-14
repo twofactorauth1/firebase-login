@@ -36,6 +36,22 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
     });
 
+
+    $scope.$watch('vm.section.layoutModifiers.columns', function (columns) {
+        if (angular.isDefined(columns)) {
+            if(vm.section.components.length){
+                if(vm.section.components.length < columns){
+                    var _diff =  columns - vm.section.components.length;
+                    var component = angular.copy(vm.section.components[0]);
+                    while(_diff !== 0){
+                        vm.section.components.push(component);
+                        _diff--;
+                    }
+                }
+            }
+        }
+    });
+
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
     function sectionClass(section) {
@@ -76,6 +92,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         classString += ' ssb-fixed-first-element';
                     }
 
+                }
+                if(section.layoutModifiers.columns){
+                    var _col = section.layoutModifiers.columns;
+                    classString += ' ssb-text-column-layout ssb-text-column-' + _col;
                 }
 
             }

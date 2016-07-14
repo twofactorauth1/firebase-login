@@ -42,4 +42,21 @@
         </label>
         <switch ng-model="component.layoutModifiers.fixed" class="pull-right"></switch>
     </div>
+    <div class="form-group" ng-if="component.layoutModifiers.columns">
+        <label>
+            Column Settings
+            <span
+                tooltip-placement="top"
+                tooltip-html-unsafe="Set number of columns per row "
+                tooltip-append-to-body="true">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <div>
+            <label class="radio-inline" ng-repeat="value in [1,2,3,4,5,6]">
+                <input type="radio" class="margin-top-1" ng-model="component.layoutModifiers.columns" value="{{value}}">
+                {{value}}
+            </label>
+        </div>
+    </div>
 </div>
