@@ -1119,21 +1119,28 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             if(columnLength){
                 if(section.components.length < columns){
                     var _diff =  columns - section.components.length;
-                    var component = angular.copy(section.components[0]);
-                    component = SimpleSiteBuilderService.getTempComponent(component);
-                    while(_diff !== 0){
-                        section.components.push(component);
-                        _diff--;
-                    }
+                    var component = section.components[0];
+
+                    SimpleSiteBuilderService.getTempComponent(component).then(function(data){
+                        while(_diff !== 0){                            
+                            data._id = SimpleSiteBuilderService.getTempUUID();
+                            data.anchor = data._id; 
+                            section.components.push(angular.copy(data));
+                            _diff--;
+                        }  
+                    })
+                    
                 }
-                else if(section.components.length > columns){
-                    for(var i = columns; i < columnLength; i++){
-                        // remove empty components from section
-                        if(section.components[i] && !section.components[i].text){
-                            section.components.splice(i, 1);
-                        }
-                    }
-                }
+                // To Do
+                // Remove empty components
+                // else if(section.components.length > columns){
+                //     for(var i = columns; i < columnLength; i++){
+                //         // remove empty components from section
+                //         if(section.components[i] && !section.components[i].text){
+                //             section.components.splice(i, 1);
+                //         }
+                //     }
+                // }
             }
         }
     }

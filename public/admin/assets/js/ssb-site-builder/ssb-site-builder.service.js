@@ -1868,15 +1868,12 @@
         }
 
         function getTempComponent(component){
-            component._id = getTempUUID();
-            // Reset model properties
-            component.anchor = component._id;
-            component.text = "";
-            component.border = {};
-            component.bg = {};
-            component.txtcolor = null;
-            return component;
+            return getComponent(component, component.version || 1).then(function(result) {
+                return result.data;
+            });
         }
+
+        
 
         (function init() {
 

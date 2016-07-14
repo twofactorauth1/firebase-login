@@ -258,7 +258,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     classString += " col-xs-15 col-md-15";
                 }              
                 classString += colClass;
-                if (index !== undefined && index > colCount) {
+                if (index !== undefined && index >= colCount) {
                     classString += " ssb-col-hide";
                 }
             } 
