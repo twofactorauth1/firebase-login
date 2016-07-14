@@ -77,8 +77,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
 
                 }
-                if(section.layoutModifiers.columns){
-                    var _col = section.layoutModifiers.columns;
+                if(section.layoutModifiers.columns && section.layoutModifiers.columns.columnsNum){
+                    var _col = section.layoutModifiers.columns.columnsNum;
                     classString += ' ssb-text-column-layout ssb-text-column-' + _col;
                 }
 
@@ -253,10 +253,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
             if (vm.section.layoutModifiers.columns.columnsNum) {
                 var colCount = vm.section.layoutModifiers.columns.columnsNum;
-                var colClass = " col-md-" + Math.floor(12/colCount);
-                var colOverrideClass = " ssb-col-" + colCount;
+                var colClass = " col-xs-12 col-md-" + Math.floor(12/colCount);
+                if(colCount == 5){
+                    classString += " col-xs-15 col-md-15";
+                }              
                 classString += colClass;
-                classString += colOverrideClass;
                 if (index !== undefined && index > colCount) {
                     classString += " ssb-col-hide";
                 }
