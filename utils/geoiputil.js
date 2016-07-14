@@ -74,8 +74,9 @@ var geoiputil = {
             obj.continent_code = result.continent.code;
             obj.continent = result.continent.names.en;
         }
-        if(result.country) {
+        if(result.country && result.country.names) {
             obj.country = result.country.iso_code;
+            obj.countryName = result.country.names.en;
         }
         if(result.location) {
             obj.timezone = result.location.time_zone;

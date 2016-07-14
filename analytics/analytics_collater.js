@@ -16,6 +16,7 @@ var Keen = require('keen.io');
 var keenConfig = require('../configs/keen.config');
 var async = require('async');
 var moment = require('moment');
+var geoiputil = require('../utils/geoiputil');
 
 
 // Configure instance. Only projectId and writeKey are required to send data.
@@ -197,11 +198,20 @@ var collator = {
                         },
                         'output': 'ip_geo_info'
                     };
-                    //set keen.timestamp to be OUR server time
-                    keen.timestamp = sessionEvent.get('server_time_dt');
-                    sessionEvent.set('keen', keen);
-                    //send to keen unless test environment
-                    // if (process.env.NODE_ENV !== "testing") {
+                    geoiputil.getGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info){
+                        var replacementObject = {
+                            province: ip_geo_info.region,
+                            city: ip_geo_info.city,
+                            postal_code: ip_geo_info.postal,
+                            continent: ip_geo_info.continent,
+                            country: ip_geo_info.countryName
+                        };
+                        sessionEvent.set('maxmind', replacementObject);
+                        //set keen.timestamp to be OUR server time
+                        keen.timestamp = sessionEvent.get('server_time_dt');
+                        sessionEvent.set('keen', keen);
+                        //send to keen unless test environment
+                        // if (process.env.NODE_ENV !== "testing") {
                         client.addEvents({
                             "session_data": [sessionEvent],
                             "page_data": pageList
@@ -212,18 +222,20 @@ var collator = {
                                 log.info('Successfully sent events to keen.');
                             }
                         });
-                    // } else {
-                    //     log.info('skipping keen because of testing environment.');
-                    // }
-                    dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
-                        if(err) {
-                            log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));
-                        } else {
-                            log.debug('finished processing session event ' + sessionEvent.get('session_id'));
-                        }
-                        cb(null, 'OK');
-                        log.debug('<< _groupAndSend');
+                        // } else {
+                        //     log.info('skipping keen because of testing environment.');
+                        // }
+                        dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
+                            if(err) {
+                                log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));
+                            } else {
+                                log.debug('finished processing session event ' + sessionEvent.get('session_id'));
+                            }
+                            cb(null, 'OK');
+                            log.debug('<< _groupAndSend');
+                        });
                     });
+
                 });
             }
         ], function(err, result){
