@@ -1197,7 +1197,8 @@ var emailMessageManager = {
         var components = [];
         var keys = ['logo','title','text','text1','text2','text3'];
         var regex = new RegExp('src="//s3.amazonaws', "g");
-        email.content.components.forEach(function(component){
+        var emailContent = email.content || email;
+        emailContent.components.forEach(function(component) {
             if(component.visibility){
                 for (var i = 0; i < keys.length; i++) {
                     if (component[keys[i]]) {
