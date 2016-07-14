@@ -129,6 +129,12 @@
 
         var activeStripePlan = _.findWhere(productAttrs.stripePlans, {active: true});
 
+        if(product.name.contains('Managed Services')) {
+            product.managedServices = true;
+        } else {
+            product.managedServices = false;
+        }
+
         if (hasStripePlans && activeStripePlan) {
           PaymentService.getIndigenousStripePlan(activeStripePlan.id, function(plan){
             console.log(plan);
