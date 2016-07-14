@@ -121,13 +121,13 @@
 }
 
 .ssb-blog-currently-viewing{
-    position: relative;    
-    padding-top: 10px;     
+    position: relative;
+    padding-top: 10px;
     text-align: center;
     .currently-viewing-item {
         font-size: 14px;
         background: #47b1cc;
-        color: white;   
+        color: white;
         padding: 8px 12px;
         border-radius: 4px;
         display: inline-block;
@@ -221,7 +221,7 @@
                 margin-right: 10px;
             }
 
-            .ssb-post_tags li a {        
+            .ssb-post_tags li a {
                 padding: 4px 8px;
             }
 
@@ -231,8 +231,13 @@
 
 }
 
-[class*='col-'] .ssb-section-type-simple-form:first-of-type {
+.ssb-page-blog-list [class*='col-'] .ssb-section-type-simple-form:first-of-type {
     min-height: 350px;
+}
+
+.ssb-page-blog-list .ssb-section-type-social-link .inner-page,
+.ssb-page-blog-list .ssb-section-type-social-link + .ssb-page-section-text-only .inner-page {
+    padding: 0;
 }
 
 .blog-list-author,
@@ -247,5 +252,5 @@
         &:focus {
             background-color: transparent !important;
         }
-    }  
+    }
 }

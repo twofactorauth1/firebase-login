@@ -88,8 +88,10 @@
     }
 
     .ssb-sidebar-section-panel {
-        top: 240px;
-        z-index: 1;
+        z-index: 999;
+        @media (min-width: 767px) {
+            top: 290px;
+        }
     }
 
     .ssb-page-section {
@@ -882,21 +884,38 @@ div[class^="spacing-"] {
             }
 
         }
+
+        .btn {
+            // font-size: 11px;
+        }
     }
 }
 
 .indi-email-builder-editor-container {
     flex: 1;
     overflow: scroll;
-
-    // table.email-body > tbody > tr:last-child {
-    //     margin-bottom: 50px;
-    // }
 }
-
 
 .indi-email-bg-btn {
     position: absolute;
-    right: 20px;
-    bottom: 100px;
+    right: 0px;
+    bottom: 200px;
+    z-index: 999;
+
+    @media (max-width: 400px) {
+        right: auto;
+        left: 0;
+        bottom: 91px;
+    }
+
+    @media (max-height: 630px) {
+        right: auto;
+        left: 0;
+        bottom: 91px;
+    }
+}
+
+[email-component-loader] > td {
+    position: relative;
+    background: #ffffff;
 }

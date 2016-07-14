@@ -127,7 +127,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
         app.get(this.url('page/:id/blog/preview/:postId'), this.setup.bind(this), this.getBlogPostPreview.bind(this));
-        
+
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
@@ -368,41 +368,13 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
         var accountId = parseInt(self.currentAccountId(req));
 
-        var components = [];
-        var keys = ['logo','title','text','text1','text2','text3'];
-        var regex = new RegExp('src="//s3.amazonaws', "g");
-
-        emailDataObj.content.components.forEach(function(component){
-            if(component.visibility){
-                for (var i = 0; i < keys.length; i++) {
-                    if (component[keys[i]]) {
-                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
-                    }
-                }
-                if (!component.bg.color) {
-                    component.bg.color = '#ffffff';
-                }
-                if (!component.emailBg) {
-                    component.emailBg = '#ffffff';
-                }
-                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                }
-                if (!component.txtcolor) {
-                    component.txtcolor = '#000000';
-                }
-                components.push(component);
-            }
-        });
-
-        self.log.debug('components >>> ', components);
-
-        app.render('emails/base_email_v2', { components: components }, function(err, html){
+        app.render('emails/base_email_v2', emailMessageManager.contentTransformations(emailDataObj), function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
                 self.log.warn('email will not be sent.');
             } else {
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
+                console.log(html);
                 emailMessageManager.sendTestEmail(
                     emailDataObj.content.fromEmail,
                     emailDataObj.content.fromName,
@@ -569,10 +541,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 page.set('screenshot', null);
                 cmsDao.saveOrUpdate(page, function (err, updatedPage) {
                     self.sendResultOrError(resp, err, updatedPage, "Error saving website Page");
-                    cmsManager.updatePageScreenshot(updatedPage.id(), function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + updatedPage.id() + ': ' + err);}
-                        self = null;
-                    });
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
                     self._updatePageCache(pageUrl, accountId, page.get('handle'), null);
                     self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
@@ -615,10 +583,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     cmsManager.createPage(page, function (err, value) {
                         self.log.debug('<< createPage');
                         self.sendResultOrError(res, err, value, "Error creating Page");
-                        cmsManager.updatePageScreenshot(value.id(), function(err, value){
-                            if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
-                            self = null;
-                        });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl, accountId, pageObj.handle, temp);
                         self.createUserActivity(req, 'CREATE_PAGE', null, {pageUrl: pageUrl}, function(){});
@@ -666,10 +630,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     cmsManager.createPageFromPage(page, function (err, value) {
                         self.log.debug('<< createPage');
                         self.sendResultOrError(res, err, value, "Error creating Page");
-                        cmsManager.updatePageScreenshot(value.id(), function(err, value){
-                            if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
-                            self = null;
-                        });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
                         self._updatePageCache(pageUrl, accountId, pageObj.handle, null);
                         self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
@@ -704,10 +664,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updatePage(pageId, pageObj, function (err, value) {
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(res, err, value, "Error updating Page");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
+
                     if(value) {
                         var pageUrl = self._buildPageUrl(req, value.get('handle'));
                         self._updatePageCache(pageUrl, accountId, null, pageId);
@@ -1183,11 +1140,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.createWebsiteAndPageFromTemplate(accountId, templateId, self.userId(req), websiteId, title, handle, mainmenu, function(err, websiteAndPage){
                     self.log.debug('<< createPageFromTemplate');
                     self.sendResultOrError(res, err, websiteAndPage ? websiteAndPage.page : null, 'Error creating page from template.');
-                    if(websiteAndPage)
-                        cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
-                            if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
-                            self = null;
-                        });
                 });
             }
         });
@@ -1411,10 +1363,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< addComponentToPageID' + pageId);
                     self.log.debug('<< addComponentToPageComponent' + componentObj);
                     self.sendResultOrError(res, err, value, "Error adding components to page");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
 
@@ -1441,10 +1389,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updatePageComponent(pageId, componentObj, function (err, value) {
                     self.log.debug('<< updateComponent');
                     self.sendResultOrError(res, err, value, "Error updating a component on a page");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
         });
@@ -1468,10 +1412,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.updateAllPageComponents(pageId, componentAry, function (err, value) {
                     self.log.debug('<< updateAllComponents');
                     self.sendResultOrError(res, err, value, "Error updating components");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
         });
@@ -1496,10 +1436,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteComponent(pageId, componentId, function (err, value) {
                     self.log.debug('<< deleteComponent');
                     self.sendResultOrError(res, err, value, "Error deleting component");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
                 });
             }
         });
@@ -1525,11 +1461,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.modifyComponentOrder(pageId, componentId, newOrder, function (err, value) {
                     self.log.debug('<< updateComponentOrder');
                     self.sendResultOrError(res, err, value, "Error deleting component");
-                    cmsManager.updatePageScreenshot(pageId, function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + pageId + ': ' + err);}
-                        self = null;
-                    });
-
                 });
             }
         });
@@ -1657,7 +1588,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    
+
     getBlogPostPreview: function(req, res) {
 
         var self = this;
@@ -1669,7 +1600,7 @@ _.extend(api.prototype, baseApi.prototype, {
         /*
          * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
          */
-        
+
 
         cmsManager.getBlogPostPreview(accountId, blogPostId, function (err, value) {
             self.log.debug('<< getBlogPostPreview');
@@ -2148,6 +2079,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(res);
             } else {
+                self.sendResultOrError(res, 'Operation No longer supported', '', 'Operation No longer supported');
                 cmsManager.generateScreenshot(accountId, pageHandle, function(err, url){
                     self.log.debug('<< generateScreenshot');
                     self.sendResultOrError(res, err, url, "Error generating screenshot.");

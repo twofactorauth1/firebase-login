@@ -1,3 +1,12 @@
+<indig-navprompt
+    class="indig-navprompt"
+    my-state="{{$state.$current.name}}"
+    reset-dirty="vm.resetDirty()"
+    check-if-dirty="vm.checkIfDirty()"
+    save-page="vm.saveEmail()"
+    save-page-check="!saveLoading">
+</indig-navprompt>
+
 <style>
     /*
 
@@ -152,7 +161,7 @@
                         <i class="fa fa-paper-plane"></i>
                         <span>One-Time Email</span>
                     </button>
-                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10 margin-bottom-5">
+                    <button type="button" ng-disabled="saveLoading" ng-click="vm.createCampaignFn()" class="btn btn-primary padding-right-10 margin-bottom-5">
                         <i class="fa fa-bullhorn"></i>
                         <span>Create Campaign</span>
                     </button>
@@ -174,7 +183,7 @@
 
         <div class="indi-email-builder-editor-container  row">
             <div class="email-builder-main custom-fonts email-theme-{{vm.state.website.theme.name| slugify}}" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.dataLoaded">
-                <div class='components'>
+                <div class='components' style="background-color: {{vm.state.email.emailBg}}">
                     <table class="device-width email-body" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                         <tr ng-if="vm.uiState.dataLoaded && !vm.state.email.components.length">
                             <td>
@@ -208,9 +217,14 @@
                         <tr style="height: 150px"></tr>
                     </table>
                 </div>
-                <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="indi-email-bg-btn btn btn-primary">
-                    <i class="ti-media"></i>
-                    <span>Email Background</span>
+                <button
+                    ng-if="!vm.uiState.showSectionPanel"
+                    type="button"
+                    ng-disabled="saveLoading"
+                    ng-click='vm.changeBackgroundFn()'
+                    class="indi-email-bg-btn btn btn-primary">
+                    <i class="fa fa-file-picture-o"></i>
+                    <span>Change Background</span>
                 </button>
             </div>
             <div

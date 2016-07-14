@@ -280,6 +280,14 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
                 vm.formSuccess = false;
               }, 3000);
             } else {
+              vm.formSuccess = true;
+              vm.formBuilder = {};
+              form.$setPristine(true);
+
+              $timeout(function () {
+                vm.formSuccess = false;
+              }, 3000);
+              
               if (vm.component.redirectType === 'page') {
                 window.location.href = vm.component.redirectUrl;
               }

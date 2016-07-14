@@ -1190,6 +1190,44 @@ var emailMessageManager = {
                 return fn(null, json);
             }
         });
+    },
+
+    contentTransformations: function(email) {
+        var self = this;
+        var components = [];
+        var keys = ['logo','title','text','text1','text2','text3'];
+        var regex = new RegExp('src="//s3.amazonaws', "g");
+        email.content.components.forEach(function(component){
+            if(component.visibility){
+                for (var i = 0; i < keys.length; i++) {
+                    if (component[keys[i]]) {
+                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                    }
+                }
+                if (!component.bg.color) {
+                    component.bg.color = '#ffffff';
+                }
+                if (!component.emailBg) {
+                    component.emailBg = '#ffffff';
+                }
+                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                }
+                if (!component.txtcolor) {
+                    component.txtcolor = '#000000';
+                }
+                components.push(component);
+            }
+        });
+
+        self.log.debug('components >>> ', components);
+
+        email.components = components;
+
+        return {
+            email: email
+        }
+
     }
 };
 

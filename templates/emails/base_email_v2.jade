@@ -15,7 +15,6 @@ html
         body, div.body {
           -webkit-text-size-adjust: 100% !important;
           -ms-text-size-adjust: 100% !important;
-          background: #fff;
           height:100% !important;
           margin:0;
           padding:0;
@@ -62,11 +61,11 @@ html
       //- | </style>
       //- <!--<![endif]-->
   body
-    div(class="body email-body", style='width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;')
+    div(class="body email-body", style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;background-color:"+email.emailBg+";")
       table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
         tr
           td
-            each component in components
+            each component in email.components
               if component.type === 'email'
                 table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+component.emailBg+";")
                   tr
@@ -83,7 +82,7 @@ html
                                           td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
                                             div.logo-img
                                               !{component.logo}
-                                            
+
                       if component.title
                         table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                           tr
@@ -92,7 +91,7 @@ html
                                 tr
                                   td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
                                     div !{component.title}
-                      
+
                       if component.text
                         table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                           tr
@@ -118,7 +117,7 @@ html
                                           td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
                                             div.logo-img
                                               !{component.logo}
-                                            
+
                       if component.title
                         table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                           tr
@@ -149,7 +148,7 @@ html
                 |     </tr>
                 |    <tr>
                 |        <td>
-                |            <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">              
+                |            <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
                 |                <tr>
                 |                    <td align="center" width="100%" class="templateColumnContainer">
                 |                        <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
@@ -289,7 +288,7 @@ html
                 |         </td>
                 |     </tr>
                 | </table>
-              
+
               if component.type === 'email-hr'
                 | <table width="600" class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: !{component.bg.color};">
                 |     <tr>

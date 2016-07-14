@@ -754,34 +754,8 @@ module.exports = {
                                     log.error(accountId, userId, 'Error getting email to render: ' + err);
                                     return fn(err, null);
                                 }
-                                var components = [];
-                                var keys = ['logo','title','text','text1','text2','text3'];
-                                var regex = new RegExp('src="//s3.amazonaws', "g");
 
-                                email.get('components').forEach(function(component){
-                                    if(component.visibility){
-                                        for (var i = 0; i < keys.length; i++) {
-                                            if (component[keys[i]]) {
-                                            component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
-                                            }
-                                        }
-                                        if (!component.bg.color) {
-                                            component.bg.color = '#ffffff';
-                                        }
-                                        if (!component.emailBg) {
-                                            component.emailBg = '#ffffff';
-                                        }
-                                        if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                                            component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                        }
-                                        if (!component.txtcolor) {
-                                            component.txtcolor = '#000000';
-                                        }
-                                        components.push(component);
-                                    }
-                                });
-
-                                app.render('emails/base_email_v2', { components: components }, function(err, html) {
+                                app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
                                     if (err) {
                                         log.error(accountId, userId, 'Error updating order: ' + err);
                                         log.warn('email will not be sent.');
@@ -1259,7 +1233,7 @@ module.exports = {
         });
 
     },
-  
+
   /**
      * This method marks an order refunded and attempts to return charges using paypal.
      * @param orderId
@@ -1277,7 +1251,7 @@ module.exports = {
           log.error(accountId, userId, 'Error getting order: ' + err);
           return fn(err, null);
         }
-        
+
         order.set('note', order.get('note') + '\n' + note);
         order.set('status', $$.m.Order.status.REFUNDED);
         order.set('updated_at', new Date());
@@ -1286,7 +1260,7 @@ module.exports = {
             by: userId
         };
         order.set('modified', modified);
-        
+
         dao.saveOrUpdate(order, function(err, updatedOrder) {
             if (err) {
                 log.error(accountId, userId, 'Error updating order: ' + err);
@@ -1297,7 +1271,7 @@ module.exports = {
         });
       });
     },
-  
+
     /**
      * This method marks an order on_hold without making any other changes to the order.
      * @param orderId
@@ -1918,34 +1892,8 @@ module.exports = {
                                 log.error(accountId, userId, 'Error getting email to render: ' + err);
                                 return fn(err, null);
                             }
-                            var components = [];
-                            var keys = ['logo','title','text','text1','text2','text3'];
-                            var regex = new RegExp('src="//s3.amazonaws', "g");
 
-                            email.get('components').forEach(function(component){
-                                if(component.visibility){
-                                    for (var i = 0; i < keys.length; i++) {
-                                        if (component[keys[i]]) {
-                                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
-                                        }
-                                    }
-                                    if (!component.bg.color) {
-                                        component.bg.color = '#ffffff';
-                                    }
-                                    if (!component.emailBg) {
-                                        component.emailBg = '#ffffff';
-                                    }
-                                    if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                    }
-                                    if (!component.txtcolor) {
-                                        component.txtcolor = '#000000';
-                                    }
-                                    components.push(component);
-                                }
-                            });
-
-                            app.render('emails/base_email_v2', { components: components }, function(err, html) {
+                            app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
                                 if (err) {
                                     log.error(accountId, userId, 'Error updating order: ' + err);
                                     log.warn('email will not be sent.');
