@@ -1,3 +1,12 @@
+<indig-navprompt
+    class="indig-navprompt"
+    my-state="{{$state.$current.name}}"
+    reset-dirty="vm.resetDirty()"
+    check-if-dirty="vm.checkIfDirty()"
+    save-page="vm.saveEmail()"
+    save-page-check="!saveLoading">
+</indig-navprompt>
+
 <style>
     /*
 
@@ -152,7 +161,7 @@
                         <i class="fa fa-paper-plane"></i>
                         <span>One-Time Email</span>
                     </button>
-                    <button type="button" ng-disabled="saveLoading" class="btn btn-primary padding-right-10 margin-bottom-5">
+                    <button type="button" ng-disabled="saveLoading" ng-click="vm.createCampaignFn()" class="btn btn-primary padding-right-10 margin-bottom-5">
                         <i class="fa fa-bullhorn"></i>
                         <span>Create Campaign</span>
                     </button>

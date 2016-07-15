@@ -137,6 +137,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> listIndigenousPlans');
         stripeDao.listStripePlans(null, function(err, value){
+            var planAry = value.data;
+            value.data = _.sortBy(planAry, 'amount');
+
             self.log.debug('<< listIndigenousPlans');
             return self.sendResultOrError(resp, err, value, "Error listing Stripe Plans");
         });

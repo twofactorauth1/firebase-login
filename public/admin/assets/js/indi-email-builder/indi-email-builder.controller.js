@@ -2,9 +2,9 @@
 
   app.controller('EmailBuilderController', indiEmailBuilderController);
 
-  indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window'];
+  indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', 'EmailCampaignService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', '$location'];
   /* @ngInject */
-  function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window) {
+  function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, EmailCampaignService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, $location) {
 
     console.info('email-builder directive init...');
 
@@ -87,6 +87,9 @@
     vm.sendOneTimeEmailFn = sendOneTimeEmailFn;
     vm.changeBackgroundFn = changeBackgroundFn;
     vm.closeSectionPanel = closeSectionPanel;
+    vm.createCampaignFn = createCampaignFn;
+    vm.checkIfDirty = checkIfDirty;
+    vm.resetDirty = resetDirty;
 
     vm.uiState.navigation = {
         back: function() {
@@ -331,11 +334,11 @@
 
 
     function saveFn() {
-      vm.uiState.dataLoaded = false;
-      EmailBuilderService.updateEmail(vm.state.email)
-        .then(function (res) {
-          vm.uiState.dataLoaded = true;
-          toaster.pop('success', 'Email saved');
+        vm.uiState.dataLoaded = false;
+        EmailBuilderService.updateEmail(vm.state.email).then(function (res) {
+            vm.uiState.dataLoaded = true;
+            vm.state.originalEmail = vm.state.email;
+            toaster.pop('success', 'Email saved');
         });
     }
 
@@ -387,6 +390,7 @@
     }
 
     function filterComponentsFn() {
+        var componentLabel = '';
         vm.enabledComponentTypes = _.where(vm.uiState.componentTypes, {
           enabled: true
         });
@@ -449,6 +453,55 @@
         vm.uiState.activeComponentIndex = null;
     }
 
+    function createCampaignFn() {
+        var campaign = {
+            "name" : vm.state.email.title + ' Campaign Draft ' + moment().toDate().getTime(),
+            "type" : "onetime",
+            "status" : "DRAFT",
+            "visibility" : 1,
+            "startDate" : "",
+            "steps" : [
+                {
+                    "type" : "email",
+                    "trigger" : null,
+                    "index" : 1,
+                    "settings" : {
+                        "emailId" : vm.state.email._id,
+                        "offset" : "",
+                        "fromEmail" : vm.state.email.fromEmail,
+                        "fromName" : vm.state.email.fromName,
+                        "replyTo" : vm.state.email.replyTo,
+                        "bcc" : vm.state.email.bcc,
+                        "subject" : vm.state.email.subject,
+                        "vars" : [],
+                        "sendAt" : {}
+                    }
+                }
+            ],
+            "searchTags" : {
+                "operation" : "set",
+                "tags" : []
+            },
+            "contactTags" : [],
+        }
+
+        EmailCampaignService.createCampaign(campaign).then(function(res) {
+            console.log('EmailCampaignService.createCampaign created', res.data.name);
+            $location.path('/marketing/campaigns/' + res.data._id);
+        }).catch(function(err) {
+            console.error('EmailCampaignService.createCampaign error', JSON.stringify(err));
+        });
+
+    }
+
+    function checkIfDirty() {
+        return angular.equals(vm.state.email, vm.state.originalEmail);
+    }
+
+    function resetDirty() {
+        vm.state.originalEmail = vm.state.email;
+    }
+
     function init(element) {
 
         vm.element = element;
@@ -480,6 +533,7 @@
                     $state.go('app.emails');
                 }
                 vm.state.email = res.data;
+                vm.state.originalEmail = vm.state.email;
                 $timeout(function () {
                     $('.editable').on('froalaEditor.focus', function (e, editor) {
                         vm.uiState.editor = editor;
