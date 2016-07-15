@@ -515,7 +515,7 @@
                 isDirty = true;
             }
 
-            if (_.isEqual(vm.recipients, vm.originalRecipients)) {
+            if (_.isEqual(_.pluck(vm.recipients, '_id').sort(), _.pluck(vm.originalRecipients, '_id').sort())) {
                 isDirty = false;
             } else {
                 isDirty = true;
