@@ -75,6 +75,7 @@
         vm.removeContactsFromCampaignFn = removeContactsFromCampaignFn;
         vm.resetDirtyFn = resetDirtyFn;
         vm.checkIfDirtyFn = checkIfDirtyFn;
+        vm.duplicateFn = duplicateFn;
 
 
         function addContactsFn(createdContactsArr) {
@@ -527,6 +528,14 @@
             vm.campaign = angular.copy(vm.campaignOriginal);
             vm.delivery.date = angular.copy(vm.delivery.originalDate);
             vm.recipients = angular.copy(vm.originalRecipients);
+        }
+
+        function duplicateFn() {
+            EmailCampaignService.duplicateCampaign(vm.campaign)
+            .then(function(res) {
+                $state.go('app.emailCampaign', {id: res.data._id});
+                toaster.pop('success', 'Campaign cloned');
+            });
         }
 
         function init(element) {

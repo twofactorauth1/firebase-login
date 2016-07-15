@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window, $$*/
 /*jslint unparam:true*/
-(function () {
+(function() {
 
     app.factory('EmailCampaignService', EmailCampaignService);
 
@@ -21,6 +21,7 @@
         campaignService.sendTestEmail = sendTestEmail;
         campaignService.getCampaignContacts = getCampaignContacts;
         campaignService.cancelCampaignForContact = cancelCampaignForContact;
+        campaignService.duplicateCampaign = duplicateCampaign;
 
         /**
          * Get get email by ID
@@ -59,7 +60,10 @@
         }
 
         function sendTestEmail(address, campaign) {
-            var data = {address: address, content: campaign};
+            var data = {
+                address: address,
+                content: campaign
+            };
 
             function success(data) {}
 
@@ -98,6 +102,16 @@
             return campaignRequest(promise).success(success).error(error);
         }
 
+        function duplicateCampaign(campaign) {
+            function success(data) {}
+
+            function error(error) {
+                console.error('EmailCampaignService duplicateCampaign error: ', JSON.stringify(error));
+            }
+
+            return campaignRequest($http.post([baseCampaignAPIv1, campaign._id, 'duplicate'].join('/'), campaign).success(success).error(error));
+        }
+
         /**
          * A wrapper around API requests
          * @param {function} fn - callback
@@ -108,7 +122,7 @@
         function campaignRequest(fn) {
             campaignService.loading.value = campaignService.loading.value + 1;
             console.info('service | loading +1 : ' + campaignService.loading.value);
-            fn.finally(function () {
+            fn.finally(function() {
                 campaignService.loading.value = campaignService.loading.value - 1;
                 console.info('service | loading -1 : ' + campaignService.loading.value);
             });
@@ -117,7 +131,7 @@
 
         (function init() {
 
-            AccountService.getAccount(function (data) {
+            AccountService.getAccount(function(data) {
                 campaignService.account = data;
                 campaignService.websiteId = data.website.websiteId;
             });

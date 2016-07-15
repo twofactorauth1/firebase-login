@@ -121,6 +121,13 @@
                                 </div>
                             </span>
                         </button>
+                        <button type="button" ng-disabled="saveLoading" ng-click="vm.duplicateFn()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                            <span>
+                                <div>
+                                   Duplicate
+                                </div>
+                            </span>
+                        </button>
                         <button type="button" ng-disabled="saveLoading || !vm.state.email" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-location-arrow">
                             <span>
                                 <div>
