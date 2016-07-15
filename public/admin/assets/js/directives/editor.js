@@ -112,7 +112,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
             $(function() {
-                var blogPostEditor = $(elem).parents().hasClass("ssb-blog-editor");
+                var blogPostEditor = attrs.ssbBlogEditor;
                 var froalaConfig = $.FroalaEditor.build(
                     (function() {
                         if (attrs.ssbBlogEditor) {
