@@ -505,7 +505,7 @@
         }
 
         function checkIfDirtyFn() {
-            if (_.isEqual(vm.state.email, vm.state.originalEmail)) {
+            if (angular.equals(vm.state.email, vm.state.originalEmail)) {
                 return false;
             } else {
                 return true;
@@ -547,7 +547,7 @@
                         $state.go('app.emails');
                     }
                     vm.state.email = res.data;
-                    vm.state.originalEmail = angular.copy(vm.state.email);
+                    vm.state.originalEmail = angular.copy(res.data);
                     $timeout(function() {
                         $('.editable').on('froalaEditor.focus', function(e, editor) {
                             vm.uiState.editor = editor;
