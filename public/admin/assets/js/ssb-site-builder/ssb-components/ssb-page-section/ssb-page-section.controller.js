@@ -371,6 +371,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-style: ' + component.border.style + ';';
             styleString += 'border-radius: ' + component.border.radius + '%;';
         }
+        else if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns && vm.section.layoutModifiers.columns.columnsNum){            
+            if (vm.section.columnBorder && vm.section.columnBorder.show && vm.section.columnBorder.color) {
+                styleString += 'border-color: ' + vm.section.columnBorder.color + ';';
+                styleString += 'border-width: ' + vm.section.columnBorder.width + 'px;';
+                styleString += 'border-style: ' + vm.section.columnBorder.style + ';';
+                styleString += 'border-radius: ' + vm.section.columnBorder.radius + '%;';
+            }
+        }
 
         return styleString;
     }
