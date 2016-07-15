@@ -68,11 +68,11 @@ html
           td
             each component in email.components
               if component.type === 'email'
-                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+component.emailBg+";")
+                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+email.emailBg+";")
                   tr
                     td(align='center', width='100%')
                       if component.logo
-                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
+                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;background-color:'+component.bg.color+';')
                           tr
                             td.wrapper(width='100%')
                                 table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
@@ -85,7 +85,7 @@ html
                                               !{component.logo}
 
                       if component.title
-                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
                           tr
                             td(align='center', width='100%')
                               table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
@@ -94,7 +94,7 @@ html
                                     div !{component.title}
 
                       if component.text
-                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
                           tr
                             td(align='center', width='100%')
                               table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
