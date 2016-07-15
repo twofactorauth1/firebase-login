@@ -210,6 +210,9 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     function publishPost(post) {
         post.post_status = 'PUBLISHED';
+        if(!post.publish_date){
+           post.publish_date = $filter('date')(new Date(), "MM/dd/yyyy");
+        }
         vm.savePost(post);
     }
 
@@ -223,6 +226,11 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
         if (!post || !isValidPost(post)) {
             return SimpleSiteBuilderService.returnInvalidPost();
+        }
+
+        
+        if(!post.publish_date && post.post_status === 'PUBLISHED'){
+           post.publish_date = Date.parse($filter('date')(new Date(), "MM/dd/yyyy"));
         }
 
         var toast = {};

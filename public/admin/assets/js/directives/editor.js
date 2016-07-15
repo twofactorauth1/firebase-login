@@ -201,6 +201,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                             scope.compileEditorElements(editor, true);
                         }
 
+                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign'){
+                            scope.updateFroalaContent(editor);
+                        }
+
                     }).on('froalaEditor.focus', function (e, editor) {
                        editor.selection.save();
                     })
