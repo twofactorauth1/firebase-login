@@ -155,7 +155,9 @@
         </div>
     </div> -->
 
-    <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail || component.components[0].type !== 'ssb-blog-post-list'">
+
+
+    <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail || component.components[0].type === 'ssb-blog-post-list'">
         <label class="margin-bottom-0">
             Show video
             <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background video of component.">
