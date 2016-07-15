@@ -67,28 +67,31 @@ var geoiputil = {
         var obj = {
             ip: ip
         };
-        if(result.city && result.city.names) {
-            obj.city = result.city.names.en;
+        if(result) {
+            if(result.city && result.city.names) {
+                obj.city = result.city.names.en;
+            }
+            if(result.continent && result.continent.names) {
+                obj.continent_code = result.continent.code;
+                obj.continent = result.continent.names.en;
+            }
+            if(result.country && result.country.names) {
+                obj.country = result.country.iso_code;
+                obj.countryName = result.country.names.en;
+            }
+            if(result.location) {
+                obj.timezone = result.location.time_zone;
+                obj.loc = result.location.latitude + ',' + result.location.longitude;
+            }
+            if(result.postal) {
+                obj.postal = result.postal.code;
+            }
+            if(result.subdivisions && result.subdivisions[0] && result.subdivisions[0].names) {
+                obj.state = result.subdivisions[0].iso_code;
+                obj.region = result.subdivisions[0].names.en;
+            }
         }
-        if(result.continent && result.continent.names) {
-            obj.continent_code = result.continent.code;
-            obj.continent = result.continent.names.en;
-        }
-        if(result.country && result.country.names) {
-            obj.country = result.country.iso_code;
-            obj.countryName = result.country.names.en;
-        }
-        if(result.location) {
-            obj.timezone = result.location.time_zone;
-            obj.loc = result.location.latitude + ',' + result.location.longitude;
-        }
-        if(result.postal) {
-            obj.postal = result.postal.code;
-        }
-        if(result.subdivisions && result.subdivisions[0] && result.subdivisions[0].names) {
-            obj.state = result.subdivisions[0].iso_code;
-            obj.region = result.subdivisions[0].names.en;
-        }
+
         return obj;
     }
 };
