@@ -22,6 +22,7 @@
             type: 'onetime'
         };
         vm.campaignOriginal = angular.copy(vm.campaign);
+        vm.state.email = null;
         vm.uiState.dataLoaded = false;
         vm.disableEditing = true;
         vm.account = null;
@@ -191,7 +192,7 @@
 
         function sendTestFn(address) {
             vm.uiState.dataLoaded = false;
-            EmailCampaignService.sendTestEmail(address, vm.campaign)
+            EmailCampaignService.sendTestEmail(address, vm.state.email)
                 .then(function(res) {
                     vm.uiState.dataLoaded = true;
                     vm.closeModalFn();
@@ -546,10 +547,16 @@
                             toaster.pop('error', 'Campaign not found');
                             $state.go('app.marketing.campaigns');
                         }
-
                         vm.campaign = res.data;
                         vm.campaignOriginal = angular.copy(res.data);
                         console.info('campaign obj', vm.campaign);
+
+                        if (vm.campaign.steps[0].settings.emailId) {
+                            EmailBuilderService.getEmail(vm.campaign.steps[0].settings.emailId)
+                                .then(function(res) {
+                                    vm.state.email = res.data;
+                                });
+                        }
 
                         var sendAtDateISOString = moment.utc(vm.campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
                         var localMoment = moment(sendAtDateISOString);

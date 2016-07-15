@@ -10,6 +10,7 @@
     function EmailCampaignService($http, AccountService) {
         var campaignService = {};
         var baseCampaignAPIv1 = '/api/1.0/campaigns';
+        var baseCmsAPIUrlv1 = '/api/1.0/cms';
 
         campaignService.loading = {
             value: 0
@@ -66,7 +67,7 @@
                 console.error('EmailCampaignService sendTestEmail error: ', JSON.stringify(error));
             }
 
-            return campaignRequest($http.post([baseCampaignAPIv1, 'testemail'].join('/'), data).success(success).error(error));
+            return campaignRequest($http.post([baseCmsAPIUrlv1, 'testemail'].join('/'), data).success(success).error(error));
         }
 
         function getCampaignContacts(id) {
