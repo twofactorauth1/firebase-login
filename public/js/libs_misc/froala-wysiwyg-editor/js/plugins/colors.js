@@ -313,9 +313,7 @@
         $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
         if(editor.opts.isButton)
-
-            editor.opts.button.css('background-color', val);
-
+            editor.opts.button.css('background-color', val);        
         else
             editor.format.applyStyle('background-color', val);
         setTimeout(function(){
@@ -335,6 +333,8 @@
 
         if(editor.opts.isButton)
             editor.opts.button.css('background-color', "");
+        else if (editor.opts.isIE) 
+          $(editor.selection.element()).css('background-color', "");
         else
             editor.format.removeStyle('background-color');
 
@@ -369,7 +369,7 @@
         var val_hex =  editor.helpers.RGBToHex(val);
 
         if(editor.opts.isButton)
-            editor.opts.button.css('color', val);
+            $(editor.selection.element()).css('color', val);
         else
             editor.format.applyStyle('color', val);
 
@@ -387,6 +387,8 @@
       else {
         if(editor.opts.isButton)
             editor.opts.button.css('color', "");
+        else if (editor.opts.isIE) 
+          $(editor.selection.element()).css('color', "");
         else
             editor.format.removeStyle('color');
 

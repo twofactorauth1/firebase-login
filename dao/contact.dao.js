@@ -487,7 +487,7 @@ var dao = {
 
                 newContact.createOrUpdateDetails('emails', null, null, null, null, null, user.get('email'), null);
                 if(ip) {
-                    geoIPUtil.getGeoForIP(ip, function(err, value){
+                    geoIPUtil.getMaxMindGeoForIP(ip, function(err, value){
                         if(value) {
                             var city = value['city'] || '';
                             var state = value['region'] || '';

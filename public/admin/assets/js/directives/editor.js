@@ -112,7 +112,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
             $(function() {
-                var blogPostEditor = $(elem).parents().hasClass("ssb-blog-editor");
+                var blogPostEditor = attrs.ssbBlogEditor;
                 var froalaConfig = $.FroalaEditor.build(
                     (function() {
                         if (attrs.ssbBlogEditor) {
@@ -200,6 +200,11 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         if (cmd === 'undo') {
                             scope.compileEditorElements(editor, true);
                         }
+                        
+
+                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove'){
+                            scope.updateFroalaContent(editor);
+                        }
 
                     }).on('froalaEditor.focus', function (e, editor) {
                        editor.selection.save();
@@ -225,16 +230,21 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     .on('froalaEditor.bgColorChange', function(e, editor, val) {
                         if(editor.opts.isButton){
                             var btnElement = editor.opts.button.scope().vm.elementData;
-                            if(!btnElement.bg){
-                                btnElement.bg = {};
+                            if(btnElement.title === 'Button'){
+                                if(!btnElement.bg){
+                                    btnElement.bg = {};
+                                }
+                                editor.opts.button.scope().vm.elementData.bg.color = val;
                             }
-                            editor.opts.button.scope().vm.elementData.bg.color = val;
+                            
                         }
                     })
                     .on('froalaEditor.txtColorChange', function(e, editor, val) {
                         if(editor.opts.isButton){
                             var btnElement = editor.opts.button.scope().vm.elementData;
-                            editor.opts.button.scope().vm.elementData.txtcolor = val;
+                            if(btnElement.title === 'Button'){
+                                editor.opts.button.scope().vm.elementData.txtcolor = val;
+                            }
                         }
                     })
                     $(elem).froalaEditor('events.on', 'keydown', function (e) {

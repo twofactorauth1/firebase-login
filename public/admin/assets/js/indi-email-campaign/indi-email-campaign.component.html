@@ -89,7 +89,7 @@
 </style>
 
 <div class="indi-email-campaign">
-    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.saveEmail()" save-page-check="!vm.pageSaving"></indig-navprompt>
+    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="vm.resetDirtyFn()" check-if-dirty="vm.checkIfDirtyFn()" save-page="vm.saveAsDraftFn()" save-page-check="vm.uiState.dataLoaded"></indig-navprompt>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -102,7 +102,7 @@
 
     <div ng-class="{
                 'load1 csspinner':
-          !vm.dataLoaded
+          !vm.uiState.dataLoaded
             }">
         <!-- end: PAGE TITLE -->
         <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
@@ -121,7 +121,14 @@
                                 </div>
                             </span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading" ng-click='vm.sendTestFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-location-arrow">
+                        <button type="button" ng-disabled="saveLoading" ng-click="vm.duplicateFn()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                            <span>
+                                <div>
+                                   Duplicate
+                                </div>
+                            </span>
+                        </button>
+                        <button type="button" ng-disabled="saveLoading || !vm.state.email" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-location-arrow">
                             <span>
                                 <div>
                                     Send Test
@@ -143,8 +150,8 @@
                 <span>LAST SAVED: {{vm.campaign.modified.date| date : 'medium'}}</span>
             </div>
         </div>
-        <div class="row email-campaign-main" ng-hide="!vm.dataLoaded">
-            <div class="col-sm-4 bg-white">
+        <div class="row email-campaign-main" ng-hide="!vm.uiState.dataLoaded">
+            <!--<div class="col-sm-4 bg-white">
                 <span>Email Preview</span>
                 <button type="button" ng-disabled="saveLoading || !vm.campaign.steps[0].settings.emailId || vm.disableEditing" ui-sref='app.emailEditor({id: vm.campaign.steps[0].settings.emailId})' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-pencil">
                     <span>
@@ -153,8 +160,8 @@
                         </div>
                     </span>
                 </button>
-            </div>
-            <div class="col-sm-4">
+            </div>-->
+            <div class="col-sm-6">
                 <div class='form-group'>
                     <label>Campaign Type</label>
                     <select class='form-control' ng-model='vm.campaign.type' ng-disabled="vm.disableEditing">
@@ -223,7 +230,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 bg-white" ng-class="{'csspinner': vm.campaign.type === 'autoresponder'}">
+            <div class="col-sm-6 bg-white" ng-class="{'csspinner': vm.campaign.type === 'autoresponder'}">
                 <div class='form-group'>
                     <label>When to send</label>
                     <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
@@ -253,3 +260,4 @@
     </div>
 </div>
 <div data-ng-include data-src=" 'assets/views/partials/campaign-contacts-list-modal.html' "></div>
+<div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' "></div>
