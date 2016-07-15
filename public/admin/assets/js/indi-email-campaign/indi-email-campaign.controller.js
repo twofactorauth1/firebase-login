@@ -13,6 +13,8 @@
         var contactTags = userConstant.contact_types.dp;
 
         vm.init = init;
+        vm.state = vm.state || {};
+        vm.uiState = vm.uiState || {};
 
         vm.campaignId = $stateParams.id;
         vm.campaign = {
@@ -20,7 +22,7 @@
             type: 'onetime'
         };
         vm.campaignOriginal = angular.copy(vm.campaign);
-        vm.dataLoaded = false;
+        vm.uiState.dataLoaded = false;
         vm.disableEditing = true;
         vm.account = null;
         vm.website = {
@@ -148,7 +150,7 @@
         }
 
         function saveAsDraftFn() {
-            vm.dataLoaded = false;
+            vm.uiState.dataLoaded = false;
             var fn = EmailCampaignService.updateCampaign;
 
             if (vm.campaignId !== 'create') {
@@ -177,30 +179,32 @@
                     .then(function(res) {
                         vm.campaign = res.data;
                         vm.campaignOriginal = angular.copy(res.data);
-                        vm.dataLoaded = true;
+                        vm.uiState.dataLoaded = true;
                         vm.disableEditing = false;
                         toaster.pop('success', 'Campaign saved');
                     }, function(err) {
-                        vm.dataLoaded = true;
+                        vm.uiState.dataLoaded = true;
                         toaster.pop('error', 'Campaign save failed');
                     });
             });
         }
 
-        function sendTestFn() {
-            vm.dataLoaded = false;
-            EmailCampaignService.sendTestEmail(vm.campaign)
+        function sendTestFn(address) {
+            vm.uiState.dataLoaded = false;
+            EmailCampaignService.sendTestEmail(address, vm.campaign)
                 .then(function(res) {
-                    vm.dataLoaded = true;
+                    vm.uiState.dataLoaded = true;
+                    vm.closeModalFn();
                     toaster.pop('success', 'Send test email');
                 }, function(err) {
-                    vm.dataLoaded = true;
+                    vm.uiState.dataLoaded = true;
+                    vm.closeModalFn();
                     toaster.pop('error', 'Send test mail failed');
                 });
         }
 
         function activateCampaignFn() {
-            vm.dataLoaded = false;
+            vm.uiState.dataLoaded = false;
             var fn = EmailCampaignService.updateCampaign;
 
             if (vm.campaignId !== 'create') {
@@ -211,11 +215,11 @@
                 .then(function(res) {
                     vm.campaign = res.data;
                     vm.campaignOriginal = angular.copy(res.data);
-                    vm.dataLoaded = true;
+                    vm.uiState.dataLoaded = true;
                     vm.disableEditing = true;
                     toaster.pop('success', 'Campaign activated');
                 }, function(err) {
-                    vm.dataLoaded = true;
+                    vm.uiState.dataLoaded = true;
                     toaster.pop('error', 'Campaign activation failed');
                 });
         }
@@ -460,7 +464,7 @@
         }
 
         function getCampaignContactsFn() {
-            vm.dataLoaded = false;
+            vm.uiState.dataLoaded = false;
             EmailCampaignService.getCampaignContacts(vm.campaignId)
                 .then(function(res) {
                     vm.originalRecipients = angular.copy(res.data);
@@ -472,12 +476,12 @@
                         );
                     });
                     vm.selectedContacts.individuals = individuals;
-                    vm.dataLoaded = true;
+                    vm.uiState.dataLoaded = true;
                 });
         }
 
         function loadSavedTagsFn() {
-            vm.dataLoaded = false;
+            vm.uiState.dataLoaded = false;
             _.each(vm.campaign.contactTags, function(tag) {
                 var tagLabel = _.findWhere(contactTags, {
                     data: tag
@@ -491,7 +495,7 @@
                 if (tag)
                     vm.toggleSelectionFn(tag.matchingTag);
             });
-            vm.dataLoaded = true;
+            vm.uiState.dataLoaded = true;
         }
 
         function checkIfDirtyFn() {

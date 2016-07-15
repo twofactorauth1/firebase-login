@@ -57,7 +57,8 @@
             return campaignRequest($http.post([baseCampaignAPIv1, campaign._id].join('/'), campaign).success(success).error(error));
         }
 
-        function sendTestEmail(campaign) {
+        function sendTestEmail(address, campaign) {
+            var data = {address: address, content: campaign};
 
             function success(data) {}
 
@@ -65,7 +66,7 @@
                 console.error('EmailCampaignService sendTestEmail error: ', JSON.stringify(error));
             }
 
-            return campaignRequest($http.post([baseCampaignAPIv1, 'testemail'].join('/'), campaign).success(success).error(error));
+            return campaignRequest($http.post([baseCampaignAPIv1, 'testemail'].join('/'), data).success(success).error(error));
         }
 
         function getCampaignContacts(id) {

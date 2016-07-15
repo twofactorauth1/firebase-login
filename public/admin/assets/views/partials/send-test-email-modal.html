@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-info" ng-disabled="testEmailForm.$invalid || sendingEmail || !vm.uiState.dataLoaded"  ng-click="sendTestEmail(testemail) || vm.sendOneTimeEmailFn(testemail);"><i class="fa fa-save"></i> Send</button>
+            <button class="btn btn-info" ng-disabled="testEmailForm.$invalid || sendingEmail || !vm.uiState.dataLoaded"  ng-click="sendTestEmail(testemail) || vm.sendOneTimeEmailFn(testemail) || vm.sendTestFn(testemail)"><i class="fa fa-save"></i> Send</button>
         </div>
     </form>
 </script>
