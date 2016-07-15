@@ -1,6 +1,6 @@
 angular.module('mainApp')
-    .directive('userScripts', ['accountService', 'websiteService', '$routeParams', '$sce',
-        function(accountService, websiteService, $routeParams, $sce) {
+    .directive('userScripts', ['accountService', 'websiteService', '$routeParams', '$sce', '$location',
+        function(accountService, websiteService, $routeParams, $sce, $location) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -10,12 +10,15 @@ angular.module('mainApp')
 
                     var processFn = function() {
                         scope.scripts = '';
+                        var handle = $location.path().indexOf('/blog') > -1 ? 'blog' : $routeParams.name;
+                        console.info('User Script >>>', handle);
+
                         accountService(function(err, account) {
                             if (account.showhide.userScripts) {
                                 websiteService(function(err, website) {
                                     if (website.resources && website.resources.userScripts && website.resources.toggles && website.resources.toggles.userScripts) {
-                                        if (angular.isDefined(website.resources.userScripts[$routeParams.name])) {
-                                            scope.scripts += '\n\n' + website.resources.userScripts[$routeParams.name].sanitized;
+                                        if (angular.isDefined(website.resources.userScripts[handle])) {
+                                            scope.scripts += '\n\n' + website.resources.userScripts[handle].sanitized;
                                         }
                                         scope.scripts = $sce.trustAsHtml(scope.scripts);
                                     }

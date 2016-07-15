@@ -98,7 +98,7 @@
 </style>
 
 <div class="indi-email-builder">
-    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.saveEmail()" save-page-check="!vm.pageSaving"></indig-navprompt>
+    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="vm.resetDirtyFn()" check-if-dirty="vm.checkIfDirtyFn()" save-page="vm.saveFn()" save-page-check="vm.uiState.dataLoaded"></indig-navprompt>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="indi-email-builder-title padding-top-15 padding-bottom-15">
         <div class="row">

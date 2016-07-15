@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window, $$*/
 /*jslint unparam:true*/
-(function () {
+(function() {
 
     app.factory('EmailCampaignService', EmailCampaignService);
 
@@ -10,6 +10,7 @@
     function EmailCampaignService($http, AccountService) {
         var campaignService = {};
         var baseCampaignAPIv1 = '/api/1.0/campaigns';
+        var baseCmsAPIUrlv1 = '/api/1.0/cms';
 
         campaignService.loading = {
             value: 0
@@ -20,6 +21,7 @@
         campaignService.sendTestEmail = sendTestEmail;
         campaignService.getCampaignContacts = getCampaignContacts;
         campaignService.cancelCampaignForContact = cancelCampaignForContact;
+        campaignService.duplicateCampaign = duplicateCampaign;
 
         /**
          * Get get email by ID
@@ -57,7 +59,11 @@
             return campaignRequest($http.post([baseCampaignAPIv1, campaign._id].join('/'), campaign).success(success).error(error));
         }
 
-        function sendTestEmail(campaign) {
+        function sendTestEmail(address, campaign) {
+            var data = {
+                address: address,
+                content: campaign
+            };
 
             function success(data) {}
 
@@ -65,7 +71,7 @@
                 console.error('EmailCampaignService sendTestEmail error: ', JSON.stringify(error));
             }
 
-            return campaignRequest($http.post([baseCampaignAPIv1, 'testemail'].join('/'), campaign).success(success).error(error));
+            return campaignRequest($http.post([baseCmsAPIUrlv1, 'testemail'].join('/'), data).success(success).error(error));
         }
 
         function getCampaignContacts(id) {
@@ -96,6 +102,16 @@
             return campaignRequest(promise).success(success).error(error);
         }
 
+        function duplicateCampaign(campaign) {
+            function success(data) {}
+
+            function error(error) {
+                console.error('EmailCampaignService duplicateCampaign error: ', JSON.stringify(error));
+            }
+
+            return campaignRequest($http.post([baseCampaignAPIv1, campaign._id, 'duplicate'].join('/'), campaign).success(success).error(error));
+        }
+
         /**
          * A wrapper around API requests
          * @param {function} fn - callback
@@ -106,7 +122,7 @@
         function campaignRequest(fn) {
             campaignService.loading.value = campaignService.loading.value + 1;
             console.info('service | loading +1 : ' + campaignService.loading.value);
-            fn.finally(function () {
+            fn.finally(function() {
                 campaignService.loading.value = campaignService.loading.value - 1;
                 console.info('service | loading -1 : ' + campaignService.loading.value);
             });
@@ -115,7 +131,7 @@
 
         (function init() {
 
-            AccountService.getAccount(function (data) {
+            AccountService.getAccount(function(data) {
                 campaignService.account = data;
                 campaignService.websiteId = data.website.websiteId;
             });

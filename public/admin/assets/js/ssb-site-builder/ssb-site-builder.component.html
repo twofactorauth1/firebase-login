@@ -64,6 +64,17 @@
     background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}}!important;
 }
 
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn.btn-link, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn.btn-link:hover {
+    background-color: transparent;
+    border-color: transparent;
+    color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn.btn-link:hover, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn.btn-link:active, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn.btn-link:focus {
+    background-color: transparent;
+}
+
 .ssb-theme-young-soul .navbar-toggle .icon-bar {
     /*background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};*/
 }
