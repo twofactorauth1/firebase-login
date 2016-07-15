@@ -151,18 +151,25 @@ module.exports = {
         stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null, function(err, invoices){
             //need to filter based on subscriptionId
             //TODO: if we ever keep track of subscription history, we will need to handle that as well
-            var filteredInvoices = [];
-            _.each(invoices.data, function(invoice){
-                if(invoice.lines.data[0].id === subscriptionId) {
-                    filteredInvoices.push(invoice);
-                } else {
-                    //self.log.debug(accountId, userId, 'filtering: ', invoice);
-                }
-            });
-            invoices.data = filteredInvoices;
-            invoices.count = filteredInvoices.length;
-            self.log.debug(accountId, userId, '<< listInvoicesForAccount');
-            return fn(null, invoices);
+            if(err) {
+                self.log.error(accountId, userId, 'Error listing invoices:', err);
+                return fn(err);
+            } else {
+                var filteredInvoices = [];
+                invoices = invoices || {};
+                _.each(invoices.data, function(invoice){
+                    if(invoice.lines.data[0].id === subscriptionId) {
+                        filteredInvoices.push(invoice);
+                    } else {
+                        //self.log.debug(accountId, userId, 'filtering: ', invoice);
+                    }
+                });
+                invoices.data = filteredInvoices;
+                invoices.count = filteredInvoices.length;
+                self.log.debug(accountId, userId, '<< listInvoicesForAccount');
+                return fn(null, invoices);
+            }
+
         });
     }
 
