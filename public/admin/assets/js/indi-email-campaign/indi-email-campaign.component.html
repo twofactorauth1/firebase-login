@@ -144,7 +144,7 @@
             </div>
         </div>
         <div class="row email-campaign-main" ng-hide="!vm.dataLoaded">
-            <div class="col-sm-4 bg-white">
+            <!--<div class="col-sm-4 bg-white">
                 <span>Email Preview</span>
                 <button type="button" ng-disabled="saveLoading || !vm.campaign.steps[0].settings.emailId || vm.disableEditing" ui-sref='app.emailEditor({id: vm.campaign.steps[0].settings.emailId})' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-pencil">
                     <span>
@@ -153,8 +153,8 @@
                         </div>
                     </span>
                 </button>
-            </div>
-            <div class="col-sm-4">
+            </div>-->
+            <div class="col-sm-6">
                 <div class='form-group'>
                     <label>Campaign Type</label>
                     <select class='form-control' ng-model='vm.campaign.type' ng-disabled="vm.disableEditing">
@@ -223,7 +223,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4 bg-white" ng-class="{'csspinner': vm.campaign.type === 'autoresponder'}">
+            <div class="col-sm-6 bg-white" ng-class="{'csspinner': vm.campaign.type === 'autoresponder'}">
                 <div class='form-group'>
                     <label>When to send</label>
                     <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
