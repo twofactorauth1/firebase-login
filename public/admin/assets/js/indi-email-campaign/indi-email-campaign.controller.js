@@ -22,6 +22,7 @@
             type: 'onetime'
         };
         vm.campaignOriginal = angular.copy(vm.campaign);
+        vm.state.email = null;
         vm.uiState.dataLoaded = false;
         vm.disableEditing = true;
         vm.account = null;
@@ -74,6 +75,7 @@
         vm.removeContactsFromCampaignFn = removeContactsFromCampaignFn;
         vm.resetDirtyFn = resetDirtyFn;
         vm.checkIfDirtyFn = checkIfDirtyFn;
+        vm.duplicateFn = duplicateFn;
 
 
         function addContactsFn(createdContactsArr) {
@@ -191,7 +193,7 @@
 
         function sendTestFn(address) {
             vm.uiState.dataLoaded = false;
-            EmailCampaignService.sendTestEmail(address, vm.campaign)
+            EmailCampaignService.sendTestEmail(address, vm.state.email)
                 .then(function(res) {
                     vm.uiState.dataLoaded = true;
                     vm.closeModalFn();
@@ -513,7 +515,7 @@
                 isDirty = true;
             }
 
-            if (_.isEqual(vm.recipients, vm.originalRecipients)) {
+            if (_.isEqual(_.pluck(vm.recipients, '_id').sort(), _.pluck(vm.originalRecipients, '_id').sort())) {
                 isDirty = false;
             } else {
                 isDirty = true;
@@ -526,6 +528,14 @@
             vm.campaign = angular.copy(vm.campaignOriginal);
             vm.delivery.date = angular.copy(vm.delivery.originalDate);
             vm.recipients = angular.copy(vm.originalRecipients);
+        }
+
+        function duplicateFn() {
+            EmailCampaignService.duplicateCampaign(vm.campaign)
+            .then(function(res) {
+                $state.go('app.emailCampaign', {id: res.data._id});
+                toaster.pop('success', 'Campaign cloned');
+            });
         }
 
         function init(element) {
@@ -546,10 +556,16 @@
                             toaster.pop('error', 'Campaign not found');
                             $state.go('app.marketing.campaigns');
                         }
-
                         vm.campaign = res.data;
                         vm.campaignOriginal = angular.copy(res.data);
                         console.info('campaign obj', vm.campaign);
+
+                        if (vm.campaign.steps[0].settings.emailId) {
+                            EmailBuilderService.getEmail(vm.campaign.steps[0].settings.emailId)
+                                .then(function(res) {
+                                    vm.state.email = res.data;
+                                });
+                        }
 
                         var sendAtDateISOString = moment.utc(vm.campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
                         var localMoment = moment(sendAtDateISOString);
