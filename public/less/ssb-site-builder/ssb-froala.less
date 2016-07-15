@@ -1,9 +1,6 @@
 @ssb-froala-topbar-min-width: 1280px;
 @ssb-froala-topbar-min-width-large: 1680px;
 
-#ssb-froala-scrollable-container {
-    //bottom positioning
-}
 
 indi-email-builder #ssb-froala-scrollable-container,
 ssb-topbar #ssb-froala-scrollable-container {
@@ -15,9 +12,7 @@ ssb-topbar #ssb-froala-scrollable-container {
 
     //topbar positioning
     @media (min-width: @ssb-froala-topbar-min-width) {
-        // width: calc(~"100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
         width: calc(~"100% - 422px");
-        // left: calc(~"16.66666667% + 85px + 15px + 15px + 3px");
         left: 196px;
         right: calc(~"16.66666667% + 15px + 15px + 1px");
         white-space: nowrap;
@@ -30,11 +25,6 @@ ssb-topbar #ssb-froala-scrollable-container {
         width: calc(~"100% - 196px");
         left: 196px;
     }
-
-    // @media (min-width: 1330px) {
-    //     width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-    //     left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
-    // }
 
 }
 
@@ -57,21 +47,6 @@ ssb-topbar #ssb-froala-scrollable-container {
         max-width: none;
     }
 
-    //bottom positioning
-    // position: fixed!important;
-    // transform: translate(-50%,0);
-    // top: auto!important;
-    // bottom: 0!important;
-    // left: 50%!important;
-    // width: 100%;
-    // @media (min-width: 768px) {
-    //     //bottom positioning
-    //     // margin-left: 70px;
-    // }
-    // @media (min-width: 992px) {
-    //     //bottom positioning
-    //     // margin-left: 140px;
-    // }
 }
 
 .fr-popup.fr-desktop.fr-inline {
@@ -96,8 +71,7 @@ ssb-topbar #ssb-froala-scrollable-container {
             vertical-align: middle;
             text-align: center;
         }
-        // position: fixed;
-        // transform: translate(calc(-1 * ((16.666667% + 15px + 15px + 3px) + (16.66666667% + 15px + 15px + 1px))),0)
+
     }
 }
 
@@ -120,19 +94,6 @@ ssb-topbar #ssb-froala-scrollable-container {
 .fr-wrapper ::-moz-selection {
     background: rgba(21, 86, 103, 0.5) !important;
     color: inherit!important;
-}
-
-/*
- * This element prevents inserted HTML elements from
- * being deleted when they have no text in them. We
- * want to hide it visually so that it doesn't mess
- * with centering, etc.
- *
- * - NOTE: Not currently in use
- * - See /indigeweb/public/js/libs_misc/froala-wysiwyg-editor/config/config.js for usage
- */
-.ssb-froala-content-editable-false {
-    display: none!important;
 }
 
 /*
@@ -174,26 +135,14 @@ ssb-topbar #ssb-froala-scrollable-container {
         transform: translateX(-50%);
     }
 
-    //topbar positioning for wider screens
-    // @media (min-width: 1300px) {
-    //     left: 50%!important;
-    //     transform: translateX(-50%);
-    // }
-
 }
 
 .fr-popup.fr-inline.fr-desktop.fr-active {
     //topbar positioning for wider screens
     @media (min-width: @ssb-froala-topbar-min-width) {
-        // position: absolute!important;
         z-index: 5;
         pointer-events: auto!important;
         display: inline-block!important;
-        // width: 100%;
-        // top: -60px!important;
-
-        // left: 50%!important;
-        // transform: translateX(-50%);
     }
 }
 
@@ -312,7 +261,7 @@ body[ng-controller] .fr-popup .fr-buttons {
 
 /*
  * Code originally auto-generated from https://www.froala.com/wysiwyg-editor/customize
- * - replaced .custom-theme class with bodybody[ng-controller] selector
+ * - replaced .custom-theme class with body[ng-controller] selector
  * - changed various styles to match out design
  */
 // body[ng-controller] .fr-view table td,
@@ -414,6 +363,7 @@ body[ng-controller] .fr-tooltip {
   -moz-transition: opacity 0.2s ease 0s;
   -ms-transition: opacity 0.2s ease 0s;
   -o-transition: opacity 0.2s ease 0s;
+  z-index: 99999;
 }
 // body[ng-controller] .fr-element {
 //   color: #000000;
