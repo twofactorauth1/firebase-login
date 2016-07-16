@@ -1114,7 +1114,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function updateColumnLayout(section){
         if(section && section.layoutModifiers && section.layoutModifiers.columns){
-            var columns = section.layoutModifiers.columns.columnsNum;
+            var columns = parseInt(section.layoutModifiers.columns.columnsNum);
+
+            if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.length){
+                columns = columns + section.layoutModifiers.columns.ignoreColumns.length;
+            }
+
             var columnLength = section.components.length;
             if(columnLength){
                 if(section.components.length < columns){
@@ -1125,11 +1130,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         while(_diff !== 0){                            
                             data._id = SimpleSiteBuilderService.getTempUUID();
                             data.anchor = data._id; 
-                            section.components.push(angular.copy(data));
+                            var _newComponent = angular.copy(data);
+                            if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.indexOf("last") > -1){                                
+                                section.components.splice(section.components.length - 1, 0, _newComponent);                                     
+                            }
+                            else{
+                                section.components.push(_newComponent);
+                            }
                             _diff--;
                         }  
                     })
-                    
                 }
                 // To Do
                 // Remove empty components
