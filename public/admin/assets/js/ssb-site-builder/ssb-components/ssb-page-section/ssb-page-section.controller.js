@@ -238,6 +238,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
           classString += ' col-md-6 ';
         }
 
+        if (vm.section.layout === '2-col-right') {
+          classString += ' col-md-6 ';
+          if(index > 1){
+            classString += ' ssb-col-md-float-right';
+          }
+        }
+
         if (vm.section.layout === '3-col') {
           classString += ' col-md-4 ';
         }
