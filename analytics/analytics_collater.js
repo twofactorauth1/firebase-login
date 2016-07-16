@@ -198,7 +198,7 @@ var collator = {
                         },
                         'output': 'ip_geo_info'
                     };
-                    geoiputil.getGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info){
+                    geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info){
                         var replacementObject = {
                             province: ip_geo_info.region,
                             city: ip_geo_info.city,
