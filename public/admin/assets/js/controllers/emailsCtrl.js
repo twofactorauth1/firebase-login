@@ -85,8 +85,6 @@
         "fromEmail": _newEmail.fromEmail,
         "replyTo": _newEmail.replyTo,
         "components": [{
-          "_id": CommonService.generateUniqueAlphaNumericShort(),
-          "anchor": CommonService.generateUniqueAlphaNumericShort(),
           "type": "email-header",
           "version": 1,
           "txtcolor": "#888888",
@@ -108,8 +106,6 @@
           "visibility": true
         },
         {
-          "_id": CommonService.generateUniqueAlphaNumericShort(),
-          "anchor": CommonService.generateUniqueAlphaNumericShort(),
           "type": "email-1-col",
           "version": 1,
           "txtcolor": "#888888",
@@ -131,8 +127,6 @@
           "visibility": true
         },
         {
-          "_id": CommonService.generateUniqueAlphaNumericShort(),
-          "anchor": CommonService.generateUniqueAlphaNumericShort(),
           "type": "email-2-col",
           "version": 1,
           "txtcolor": "#888888",
@@ -154,8 +148,6 @@
           "visibility": true
         },
         {
-          "_id": CommonService.generateUniqueAlphaNumericShort(),
-          "anchor": CommonService.generateUniqueAlphaNumericShort(),
           "type": "email-3-col",
           "version": 1,
           "txtcolor": "#888888",
@@ -178,8 +170,6 @@
           "visibility": true
         },
         {
-          "_id": CommonService.generateUniqueAlphaNumericShort(),
-          "anchor": CommonService.generateUniqueAlphaNumericShort(),
           "type": "email-footer",
           "version": 1,
           "txtcolor": "#888888",
@@ -201,6 +191,12 @@
           "visibility": true
         }]
       };
+
+      emailToSend.components.forEach(function(comp, index) {
+          var uuid = CommonService.getUUID();
+          emailToSend.components[index]['_id'] = uuid;
+          emailToSend.components[index]['anchor'] = uuid;
+      });
 
       if ($scope.account.business.logo) {
         emailToSend.components[0].logo = '<img src="' + $scope.account.business.logo + '"/>';

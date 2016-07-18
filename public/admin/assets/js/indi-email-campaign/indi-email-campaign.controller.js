@@ -154,7 +154,7 @@
             vm.uiState.dataLoaded = false;
             var fn = EmailCampaignService.updateCampaign;
 
-            if (vm.state.campaignId !== 'create') {
+            if (vm.state.campaignId === 'create') {
                 fn = EmailCampaignService.createCampaign;
             }
 
@@ -209,7 +209,7 @@
             vm.uiState.dataLoaded = false;
             var fn = EmailCampaignService.updateCampaign;
 
-            if (vm.state.campaignId !== 'create') {
+            if (vm.state.campaignId === 'create') {
                 fn = EmailCampaignService.createCampaign;
             }
             vm.state.campaign.status = 'PENDING';
