@@ -174,7 +174,7 @@
                         <tabset>
                             <tab heading="by Tag" disable='vm.uiState.disableEditing'>
                                 <div class="checkbox clip-check check-primary" ng-repeat="count in vm.contactCounts track by $index">
-                                    <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="vm.toggleSelectionFn(count.matchingTag)" ng-checked="vm.state.tagSelection.indexOf(count.matchingTag) > - 1">
+                                    <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="vm.toggleSelectionFn(count.matchingTag)" ng-checked="vm.state.tagSelection.indexOf(count.matchingTag) > - 1" ng-disabled='vm.uiState.disableEditing'>
                                     <label for="checkbox{{count.uniqueTag}}">
                                         <span class="badge">{{count.numberOfTags}}</span> {{count.matchingTag}}
                                     </label>
