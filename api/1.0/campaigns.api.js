@@ -71,6 +71,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var createdObj = campaignObj.get('created') || {};
                 createdObj.by = req.user.id();
                 campaignObj.set('created', createdObj);
+                campaignObj.set('modified', createdObj);
                 campaignManager.createCampaign(campaignObj, function(err, value){
                     self.log.debug('<< createCampaign');
                     self.sendResultOrError(resp, err, value, "Error creating campaign");

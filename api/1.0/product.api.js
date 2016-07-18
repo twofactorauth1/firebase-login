@@ -259,7 +259,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 results.count = list.length;
                 results.total = 0;
                 _.each(list, function(order){
-                    results.total += parseFloat(order.get('total'));
+                    if (order.get('status') !== 'pending_payment') {
+                        results.total += parseFloat(order.get('total'));
+                    }
                 });
                 results.results = list;
                 self.sendResultOrError(resp, err, results, 'Error listing orders by product');

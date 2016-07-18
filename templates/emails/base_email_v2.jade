@@ -9,7 +9,8 @@ html
       meta(http-equiv="X-UA-Compatible",content="IE=edge")
       //- link(rel='stylesheet', href='/public/admin/assets/css/styles.css')
       //- link(rel='stylesheet', href='/public/admin/assets/css/frontend-admin.css')
-      //- link(rel='stylesheet', href="//fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic", type="text/css")
+      link(rel='stylesheet', href="//fonts.googleapis.com/css?family=Lato|Raleway|Roboto|Roboto+Condensed|Roboto+Slab|Oswald|Montserrat|Droid+Serif|Open+Sans|Open+Sans+Condensed|Lato|Raleway|Quicksand|Ubuntu|Merriweather|Quattrocento|Lora|Playfair+Display|Pacifico|Satisfy|Parisienne|Petit+Formal+Script|Indie+Flower|Shadows+Into+Light+Two", type="text/css")
+      link(rel='stylesheet', href='/public/js/libs/bootstrap/dist/css/bootstrap.min.css')
       link(rel='stylesheet', href='/public/admin/assets/css/email.css')
       style(type="text/css").
         body, div.body {
@@ -67,11 +68,11 @@ html
           td
             each component in email.components
               if component.type === 'email'
-                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+component.emailBg+";")
+                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+email.emailBg+";")
                   tr
                     td(align='center', width='100%')
                       if component.logo
-                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
+                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;background-color:'+component.bg.color+';')
                           tr
                             td.wrapper(width='100%')
                                 table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
@@ -84,7 +85,7 @@ html
                                               !{component.logo}
 
                       if component.title
-                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
                           tr
                             td(align='center', width='100%')
                               table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
@@ -93,7 +94,7 @@ html
                                     div !{component.title}
 
                       if component.text
-                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';')
                           tr
                             td(align='center', width='100%')
                               table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')

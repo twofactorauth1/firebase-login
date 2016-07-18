@@ -285,6 +285,37 @@
                                     <div class="mini-editor" ng-class="{'col-sm-8 col-sm-offset-2': !fullscreen, 'col-xs-12': fullscreen, 'disabled': !isEditable}">
                                         <div class="panel panel-white margin-top-5 margin-bottom-30" ng-if="!showPreview">
                                             <div class="panel-body no-padding">
+
+                                                <div
+                                                    ng-if="account.showhide.ssbEmail"
+                                                    class="padding-15">
+
+                                                    <span ng-if="!emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
+                                                    <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" close-on-select="false" search-enabled="true" style="min-width:100%">
+                                                        <ui-select-match
+                                                            placeholder="Select an email template">
+                                                            {{$select.selected.title}} (subject:{{$select.selected.subject}})
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="email._id as email in emails | propsFilter: {title: $select.search}">
+                                                            <div ng-bind-html="email.title | highlight: $select.search"></div>
+                                                            <small>
+                                                            subject: <span ng-bind-html="''+email.subject | highlight: $select.search"></span>
+                                                          </small>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+
+                                                    <a
+                                                        ng-if="account.showhide.ssbEmail && emailToSend._id"
+                                                        ng-href="/admin/#/emails/editor/{{emailToSend._id}}"
+                                                        class="btn btn-primary margin-top-15"
+                                                        tooltip-placement="top"
+                                                        tooltip-html-unsafe="Make changes to this email in the editor.">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                        <span> Edit email content</span>
+                                                    </a>
+
+                                                </div>
+
                                                 <div class="padding-15">
                                                     <div ng-show="!fullscreen" class="hidden show-fullscreen">
                                                         <button class="btn btn-o btn-primary" ng-click="togglePreview()">Preview</button>
@@ -334,16 +365,6 @@
                                                         <progressbar value="subjectScore" animate="true" type="{{getProgressType(subjectScore)}}" class="progress-xs margin-bottom-0"></progressbar>
                                                     </div>
                                                 </div>
-
-                                                <a
-                                                    ng-if="account.showhide.ssbEmail && emailToSend._id"
-                                                    ng-href="/admin/#/emails/editor/{{emailToSend._id}}"
-                                                    class="btn btn-primary"
-                                                    tooltip-placement="top"
-                                                    tooltip-html-unsafe="Make changes to this email in the editor.">
-                                                    <i class="fa fa-pencil-square-o"></i>
-                                                    <span> Edit email content</span>
-                                                </a>
 
                                                 <div ng-if="!account.showhide.ssbEmail" style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail(null, emailToSend); activateCKeditor();">
                                                     <div>
