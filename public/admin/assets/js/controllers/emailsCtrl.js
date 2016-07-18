@@ -25,7 +25,7 @@
           $scope.emails.forEach(function(email, index) {
             statPromises.push(WebsiteService.getEmailStatsPromise(email._id));
           });
-          
+
           $q.all(statPromises)
             .then(function(results) {
               results.forEach(function(result, index) {
@@ -90,7 +90,7 @@
           "type": "email-header",
           "version": 1,
           "txtcolor": "#888888",
-          "logo": "<h2>Logo Here</h2>",
+          "logo": $scope.account.business.logo ? ('<h2><img src="' + $scope.account.business.logo + '" /></h2>') : '<h2>Logo Here</h2>',
           // "title": "<h2 class='center'>New Email</h2>",
           // "subtitle": "subtitle",
           // "text": "This is your new email",
@@ -208,11 +208,11 @@
 
       WebsiteService.createEmail(emailToSend, function (newemail, err) {
         if(newemail && !err) {
+          $scope.closeModal();
           toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
           $scope.emails.unshift(newemail);
           $scope.displayedEmails.unshift(newemail);
           $scope.newEmailOriginal = angular.copy($scope.newEmail);
-          $scope.closeModal();
           $scope.viewSingle(newemail);
         } else if(err) {
           toaster.pop('error', "Error creating Email", err.message);
