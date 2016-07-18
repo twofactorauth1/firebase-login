@@ -1,0 +1,19 @@
+[class*="ssb-theme-"] {
+    .ssb-page-section-text-image-video.ssb-page-section-layout-2-col-v4 {
+        [video-component]{
+            clear: both;
+        }
+        [image-gallery-component]{
+            .image-gallery{
+                min-height: 120px !important;
+            }
+            .editing.image-wrap {
+                &:hover {
+                    .image-gallery{
+                        min-height: 116px!important;
+                    }
+                }
+            }
+        }
+    }
+}
