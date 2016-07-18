@@ -161,7 +161,7 @@
                 }
             });
             $timeout(function() {
-                var element = document.getElementById(vm.state.email.components[vm.state.email.components.length - 1]._id);
+                var element = vm.state.email.components.length ? document.getElementById(vm.state.email.components[vm.state.email.components.length - 1]._id) : null;
                 if (element) {
                     $document.scrollToElementAnimated(element, 175, 1000);
                     $(window).trigger('resize');
