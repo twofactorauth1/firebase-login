@@ -1,4 +1,4 @@
-(function() {
+(function () {
 
     app.controller('EmailCampaignController', indiEmailCampaignController);
 
@@ -82,7 +82,7 @@
             //get an array of contact Ids from recipients
             var recipientsIdArr = [];
 
-            _.each(vm.state.recipients, function(recipient) {
+            _.each(vm.state.recipients, function (recipient) {
                 if (recipient._id) {
                     recipientsIdArr.push(recipient._id);
                 }
@@ -90,7 +90,7 @@
 
             //add created contacts to recipients array
             if (createdContactsArr.length > 0) {
-                _.each(createdContactsArr, function(createdContactId) {
+                _.each(createdContactsArr, function (createdContactId) {
                     if (recipientsIdArr.indexOf(createdContactId) < 0) {
                         recipientsIdArr.push(createdContactId);
                     }
@@ -103,14 +103,14 @@
         }
 
         function removeContactsFromCampaignFn() {
-            angular.forEach(vm.state.recipientsToRemove, function(contactId) {
+            angular.forEach(vm.state.recipientsToRemove, function (contactId) {
                 EmailCampaignService.cancelCampaignForContact(vm.state.campaign, contactId)
-                    .then(function(res) {
+                    .then(function (res) {
                         console.warn('removed ' + contactId);
                     });
             });
 
-            _.each(vm.removeContactsFromCampaign, function(id) {
+            _.each(vm.removeContactsFromCampaign, function (id) {
                 console.warn('remove ' + id);
                 console.warn(_.indexOf(vm.state.campaign.contacts, id));
             });
@@ -121,7 +121,7 @@
             var promises = [];
             if (vm.uiState.selectedContacts.newEmails) {
                 var _emails = vm.uiState.selectedContacts.newEmails;
-                _.each(_emails, function(email) {
+                _.each(_emails, function (email) {
                     var contact = _.findWhere(vm.state.contacts, {
                         email: email.text
                     });
@@ -136,13 +136,13 @@
 
             if (promises.length) {
                 $q.all(promises)
-                    .then(function(data) {
-                        _.each(data, function(value) {
+                    .then(function (data) {
+                        _.each(data, function (value) {
                             contactsArr.push(value.data._id);
                         });
                         fn(contactsArr);
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         console.error(err);
                     });
             } else {
@@ -174,16 +174,17 @@
             vm.removeContactsFromCampaignFn();
 
             //processing custom emails for contact
-            vm.checkAndCreateContactFn(function(createdContactsArr) {
+            vm.checkAndCreateContactFn(function (createdContactsArr) {
                 vm.addContactsFn(createdContactsArr);
                 fn(vm.state.campaign)
-                    .then(function(res) {
+                    .then(function (res) {
                         vm.state.campaign = res.data;
                         vm.state.campaignOriginal = angular.copy(res.data);
+                        vm.state.originalRecipients = angular.copy(vm.state.recipients);
                         vm.uiState.dataLoaded = true;
                         vm.uiState.disableEditing = false;
                         toaster.pop('success', 'Campaign saved');
-                    }, function(err) {
+                    }, function (err) {
                         vm.uiState.dataLoaded = true;
                         toaster.pop('error', 'Campaign save failed');
                     });
@@ -193,11 +194,11 @@
         function sendTestFn(address) {
             vm.uiState.dataLoaded = false;
             EmailCampaignService.sendTestEmail(address, vm.state.email)
-                .then(function(res) {
+                .then(function (res) {
                     vm.uiState.dataLoaded = true;
                     vm.closeModalFn();
                     toaster.pop('success', 'Send test email');
-                }, function(err) {
+                }, function (err) {
                     vm.uiState.dataLoaded = true;
                     vm.closeModalFn();
                     toaster.pop('error', 'Send test mail failed');
@@ -213,13 +214,14 @@
             }
             vm.state.campaign.status = 'PENDING';
             fn(vm.state.campaign)
-                .then(function(res) {
+                .then(function (res) {
                     vm.state.campaign = res.data;
                     vm.state.campaignOriginal = angular.copy(res.data);
+                    vm.state.originalRecipients = angular.copy(vm.state.recipients);
                     vm.uiState.dataLoaded = true;
                     vm.uiState.disableEditing = true;
                     toaster.pop('success', 'Campaign activated');
-                }, function(err) {
+                }, function (err) {
                     vm.uiState.dataLoaded = true;
                     toaster.pop('error', 'Campaign activation failed');
                 });
@@ -231,28 +233,28 @@
         }
 
         function getContactsFn() {
-            var promise = ContactService.getContacts(function(contacts) {
+            var promise = ContactService.getContacts(function (contacts) {
                 var contactWithoutEmails = [];
-                _.each(contacts, function(contact) {
+                _.each(contacts, function (contact) {
                     if (!vm.checkBestEmailFn(contact)) {
                         contactWithoutEmails.push(contact);
                     }
                 });
                 contacts = _.difference(contacts, contactWithoutEmails);
                 vm.state.contacts = contacts;
-                ContactService.getAllContactTags(contacts, function(tags) {
+                ContactService.getAllContactTags(contacts, function (tags) {
                     contactTags = tags;
                 });
                 var _tags = [];
                 vm.state.allContacts = [];
-                _.each(contacts, function(contact) {
+                _.each(contacts, function (contact) {
                     vm.state.allContacts.push({
                         _id: contact._id,
                         first: contact.first
                     });
                     //contact.fullName = contact.first + " " + contact.last || '';
                     if (contact.tags && contact.tags.length > 0) {
-                        _.each(contact.tags, function(tag) {
+                        _.each(contact.tags, function (tag) {
                             var tagLabel = _.findWhere(contactTags, {
                                 data: tag
                             });
@@ -265,16 +267,16 @@
                         _tags.push('nt');
                     }
                 });
-                var d = _.groupBy(_tags, function(tag) {
+                var d = _.groupBy(_tags, function (tag) {
                     return tag;
                 });
 
-                var x = _.map(d, function(tag) {
+                var x = _.map(d, function (tag) {
                     var returnObj = {
                         uniqueTag: tag[0],
                         numberOfTags: tag.length
                     };
-                    var matchingTagObj = _.find(contactTags, function(matchTag) {
+                    var matchingTagObj = _.find(contactTags, function (matchTag) {
                         return matchTag.label === tag[0];
                     });
                     if (matchingTagObj) {
@@ -292,8 +294,8 @@
 
         function getSelectedTagsFn() {
             var tags = [];
-            _.each(vm.state.tagSelection, function(fullTag) {
-                var matchingTag = _.find(contactTags, function(matchTag) {
+            _.each(vm.state.tagSelection, function (fullTag) {
+                var matchingTag = _.find(contactTags, function (matchTag) {
                     return matchTag.label === fullTag;
                 });
                 if (matchingTag) {
@@ -318,11 +320,11 @@
 
             //loop through contacts and add if one of the tags matches
 
-            _.each(vm.state.contacts, function(contact) {
+            _.each(vm.state.contacts, function (contact) {
                 if (contact.tags && contact.tags.length > 0) {
                     var tempTags = [];
                     var tagLabel = "";
-                    _.each(contact.tags, function(tag) {
+                    _.each(contact.tags, function (tag) {
                         tagLabel = _.findWhere(contactTags, {
                             data: tag
                         });
@@ -333,13 +335,15 @@
                     });
                     var tagExists = _.intersection(tempTags, tags);
                     if (tagExists.length > 0) {
-                        if (!vm.eliminateDuplicateFn(contact))
+                        if (!vm.eliminateDuplicateFn(contact)) {
                             fullContacts.push(contact);
+                        }
                     }
                 } else {
                     if (tags.indexOf('No Tag') > -1) {
-                        if (!vm.eliminateDuplicateFn(contact))
+                        if (!vm.eliminateDuplicateFn(contact)) {
                             fullContacts.push(contact);
+                        }
                     }
                 }
 
@@ -369,7 +373,7 @@
         function contactSelectedFn(select) {
             var selected = select.selected[select.selected.length - 1];
             var removalIndex = _.indexOf(vm.state.recipientsToRemove, selected._id);
-            var existingContact = _.find(vm.state.recipients, function(recipient) {
+            var existingContact = _.find(vm.state.recipients, function (recipient) {
                 return recipient._id === selected._id;
             });
 
@@ -400,7 +404,7 @@
                 var tags = vm.getSelectedTagsFn();
                 var tempTags = [];
                 var tagLabel = "";
-                _.each(contact.tags, function(tag) {
+                _.each(contact.tags, function (tag) {
                     tagLabel = _.findWhere(contactTags, {
                         data: tag
                     });
@@ -425,12 +429,12 @@
         }
 
         function checkContactExistsFn(email) {
-            var matchingRecipient = _.find(vm.state.recipients, function(recipient) {
+            var matchingRecipient = _.find(vm.state.recipients, function (recipient) {
                 if (recipient.details && recipient.details[0] && recipient.details[0].emails && recipient.details[0].emails[0] && recipient.details[0].emails[0].email) {
                     return (recipient.details[0].emails[0].email).toLowerCase() === email.text;
                 }
             });
-            var matchingContact = _.find(vm.state.contacts, function(contact) {
+            var matchingContact = _.find(vm.state.contacts, function (contact) {
                 if (contact.details && contact.details[0] && contact.details[0].emails && contact.details[0].emails[0] && contact.details[0].emails[0].email) {
                     return (contact.details[0].emails[0].email).toLowerCase() === email.text;
                 }
@@ -467,11 +471,11 @@
         function getCampaignContactsFn() {
             vm.uiState.dataLoaded = false;
             EmailCampaignService.getCampaignContacts(vm.state.campaignId)
-                .then(function(res) {
+                .then(function (res) {
                     vm.state.originalRecipients = angular.copy(res.data);
                     vm.state.recipients = res.data;
                     var individuals = [];
-                    _.each(res.data, function(contact) {
+                    _.each(res.data, function (contact) {
                         individuals.push(
                             contact._id
                         );
@@ -483,7 +487,7 @@
 
         function loadSavedTagsFn() {
             vm.uiState.dataLoaded = false;
-            _.each(vm.state.campaign.contactTags, function(tag) {
+            _.each(vm.state.campaign.contactTags, function (tag) {
                 var tagLabel = _.findWhere(contactTags, {
                     data: tag
                 });
@@ -528,26 +532,28 @@
 
         function duplicateFn() {
             EmailCampaignService.duplicateCampaign(vm.state.campaign)
-            .then(function(res) {
-                $state.go('app.emailCampaign', {id: res.data._id});
-                toaster.pop('success', 'Campaign cloned');
-            });
+                .then(function (res) {
+                    $state.go('app.emailCampaign', {
+                        id: res.data._id
+                    });
+                    toaster.pop('success', 'Campaign cloned');
+                });
         }
 
         function init(element) {
             vm.element = element;
 
-            AccountService.getAccount(function(data) {
+            AccountService.getAccount(function (data) {
                 vm.state.account = data;
             });
 
-            WebsiteService.getWebsite(function(data) {
+            WebsiteService.getWebsite(function (data) {
                 vm.state.website = data;
             });
 
             if (vm.state.campaignId !== 'create') {
                 EmailCampaignService.getCampaign(vm.state.campaignId)
-                    .then(function(res) {
+                    .then(function (res) {
                         if (!res.data._id) {
                             toaster.pop('error', 'Campaign not found');
                             $state.go('app.marketing.campaigns');
@@ -558,7 +564,7 @@
 
                         if (vm.state.campaign.steps[0].settings.emailId) {
                             EmailBuilderService.getEmail(vm.state.campaign.steps[0].settings.emailId)
-                                .then(function(res) {
+                                .then(function (res) {
                                     vm.state.email = res.data;
                                 });
                         }
@@ -578,11 +584,11 @@
                             vm.uiState.disableEditing = false;
                         }
                         vm.getContactsFn()
-                            .then(function() {
+                            .then(function () {
                                 vm.loadSavedTagsFn();
                             });
                         vm.getCampaignContactsFn();
-                    }, function(err) {
+                    }, function (err) {
                         $state.go('app.marketing.campaigns');
                     });
             }
