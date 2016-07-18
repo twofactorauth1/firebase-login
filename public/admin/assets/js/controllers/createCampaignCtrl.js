@@ -3,6 +3,10 @@
 (function (angular) {
   app.controller('CreateCampaignCtrl', ["$scope",  "$rootScope", "$modal", "$location", "$window", "$stateParams", "toaster", "$timeout", "CampaignService", "ContactService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", "SweetAlert", function ($scope, $rootScope, $modal, $location, $window, $stateParams, toaster, $timeout, CampaignService, ContactService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations, SweetAlert) {
 
+    $scope.vm = {};
+    $scope.vm.uiState = $scope.vm.uiState || {};
+    $scope.vm.uiState.dataLoaded = false;
+
     /*
      * set editor theme
      */
@@ -350,7 +354,7 @@
       $scope.sendingEmail = true;
       WebsiteService.sendTestEmail(_email, $scope.emailToSend, function (data) {
         $scope.sendingEmail = false;
-        if (data && data[0] && data[0]._id) {
+        if (data) {
           $scope.closeModal();
           toaster.pop('success', 'Test Email sent successfully');
         }
@@ -1801,6 +1805,8 @@
         $scope.getAccount();
         $scope.getContacts();
       }
+
+      $scope.vm.uiState.dataLoaded = true;
 
     })();
 
