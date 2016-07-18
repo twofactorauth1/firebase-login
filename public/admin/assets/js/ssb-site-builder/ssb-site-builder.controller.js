@@ -39,6 +39,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     // vm.checkStateNavigation = checkStateNavigation;
     vm.checkPageNavigation = checkPageNavigation;
     vm.savePost = savePost;
+    vm.updateColumnLayout = updateColumnLayout;
 
     vm.uiState = {
         loading: 0,
@@ -145,7 +146,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         checkIfBlogPage: vm.isBlogPage,
 
-        isDuplicateGlobalHeader: false
+        isDuplicateGlobalHeader: false,
+
+        updateColumnLayout: vm.updateColumnLayout, 
 
     };
 
@@ -1109,7 +1112,48 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
+    function updateColumnLayout(section){
+        if(section && section.layoutModifiers && section.layoutModifiers.columns){
+            var columns = parseInt(section.layoutModifiers.columns.columnsNum);
 
+            if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.length){
+                columns = columns + section.layoutModifiers.columns.ignoreColumns.length;
+            }
+
+            var columnLength = section.components.length;
+            if(columnLength){
+                if(section.components.length < columns){
+                    var _diff =  columns - section.components.length;
+                    var component = section.components[0];
+
+                    SimpleSiteBuilderService.getTempComponent(component).then(function(data){
+                        while(_diff !== 0){                            
+                            data._id = SimpleSiteBuilderService.getTempUUID();
+                            data.anchor = data._id; 
+                            var _newComponent = angular.copy(data);
+                            if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.indexOf("last") > -1){                                
+                                section.components.splice(section.components.length - 1, 0, _newComponent);                                     
+                            }
+                            else{
+                                section.components.push(_newComponent);
+                            }
+                            _diff--;
+                        }  
+                    })
+                }
+                // To Do
+                // Remove empty components
+                // else if(section.components.length > columns){
+                //     for(var i = columns; i < columnLength; i++){
+                //         // remove empty components from section
+                //         if(section.components[i] && !section.components[i].text){
+                //             section.components.splice(i, 1);
+                //         }
+                //     }
+                // }
+            }
+        }
+    }
 
     function init(element) {
 

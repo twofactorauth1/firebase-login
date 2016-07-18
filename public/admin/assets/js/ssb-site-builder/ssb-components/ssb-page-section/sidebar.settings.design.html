@@ -1,3 +1,28 @@
+<div ng-if="component.components[0] && component.layoutModifiers.columns.columnsNum">
+    <h4 class="ssb-sidebar-sub-heading-separator">Column Settings</h4>
+    <div class="row padding-10">
+        <div class="form-group">
+            <label>
+                Number of columns
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="number of columns to show per row. "><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-6 pull-right">
+                <input type="text" ng-model="component.layoutModifiers.columns.columnsNum" min="1" max="6" ng-change="vm.uiState.updateColumnLayout(component)" touchspin>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                Column Spacing
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="space between columns"><i class="fa fa-info-circle" /></span>
+            </label>
+            <div class="col-xs-6 pull-right">
+                <input type="text" ng-model="component.layoutModifiers.columns.columnsSpacing" min="0" max="500" touchspin>
+            </div>
+        </div>       
+    </div>
+</div>
+
 <h4 class="ssb-sidebar-sub-heading-separator">Background</h4>
 
 <div class="row padding-10">
@@ -299,3 +324,4 @@
     </div>
 </div>
 <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/border.settings.html' "></div>
+<div ng-if="component.layoutModifiers.columns.columnsNum" data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/column.border.settings.html' "></div>

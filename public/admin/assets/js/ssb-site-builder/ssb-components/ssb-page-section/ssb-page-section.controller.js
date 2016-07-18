@@ -77,6 +77,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     }
 
                 }
+                if(section.layoutModifiers.columns && section.layoutModifiers.columns.columnsNum){
+                    var _col = section.layoutModifiers.columns.columnsNum;
+                    classString += ' ssb-text-column-layout ssb-text-column-' + _col;
+                }
 
             }
 
@@ -234,6 +238,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
           classString += ' col-md-6 ';
         }
 
+        if (vm.section.layout === '2-col-right') {
+          classString += ' col-md-6 ';
+          if(index > 1){
+            classString += ' ssb-col-md-float-right';
+          }
+        }
+
         if (vm.section.layout === '3-col') {
           classString += ' col-md-4 ';
         }
@@ -244,6 +255,51 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
         if (index !== undefined) {
           classString += ' ssb-component-index-' + index + ' ';
+        }
+
+        if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
+            if (vm.section.layoutModifiers.columns.columnsNum) {
+                var _lastCoulmnFullWidth = false;
+                var actualColumnsToIgnore = [];
+                if(vm.section.layoutModifiers.columns.ignoreColumns && vm.section.layoutModifiers.columns.ignoreColumns.length){
+                    var ignoreColumns = vm.section.layoutModifiers.columns.ignoreColumns;                    
+                    _.each(ignoreColumns, function(val){
+                        if(val === 'last'){
+                            actualColumnsToIgnore.push(vm.section.components.length - 1);
+                            _lastCoulmnFullWidth = true;
+                        }
+                        else{
+                            actualColumnsToIgnore.push(val - 1);   
+                        }
+                    });
+                }
+                var fixedColumn = actualColumnsToIgnore.indexOf(index) > -1 ? true : false;
+
+                var colCount = parseInt(vm.section.layoutModifiers.columns.columnsNum);
+                var colClass = " col-xs-12 col-md-" + Math.floor(12/colCount);
+                
+                if(!fixedColumn) {
+                    classString += colClass;
+                    if(colCount == 5){
+                        classString += " col-xs-15 col-md-15";
+                    }
+                }             
+                    
+                var totalCoulmns = colCount;
+
+                if(actualColumnsToIgnore.length){
+                    totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;
+                }
+
+                if (index !== undefined && index >= totalCoulmns && !fixedColumn) {
+                    classString += " ssb-col-hide";
+                }
+
+                if(index === vm.section.components.length - 1 && _lastCoulmnFullWidth){
+                    classString += " ssb-text-last-column-full-width";
+                }
+            }
+            
         }
 
         if (component.layoutModifiers) {
@@ -353,6 +409,19 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-style: ' + component.border.style + ';';
             styleString += 'border-radius: ' + component.border.radius + '%;';
         }
+        else if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns && vm.section.layoutModifiers.columns.columnsNum){            
+            if (vm.section.columnBorder && vm.section.columnBorder.show && vm.section.columnBorder.color) {
+                styleString += 'border-color: ' + vm.section.columnBorder.color + ';';
+                styleString += 'border-width: ' + vm.section.columnBorder.width + 'px;';
+                styleString += 'border-style: ' + vm.section.columnBorder.style + ';';
+                styleString += 'border-radius: ' + vm.section.columnBorder.radius + '%;';
+            }
+        }
+
+
+        if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns && vm.section.layoutModifiers.columns.columnsSpacing) {
+            //styleString += 'padding-right: ' + vm.section.layoutModifiers.columns.columnsSpacing + 'px;';
+        }
 
         return styleString;
     }
@@ -394,6 +463,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function getTrustedUrl(url) {
         return $sce.trustAsResourceUrl(url);
     }
+
+   
 
     function setupVideoBackground() {
 

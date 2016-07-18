@@ -46,7 +46,7 @@
 
     <ssb-component-loader
         ng-if="vm.section.components.length && !vm.section.layoutModifiers.custom"
-        ng-repeat="component in vm.section.components track by $index"
+        ng-repeat="component in vm.section.components"
         component-class="vm.componentClass(component, $index)"
         component-style="vm.componentStyle(component, $index)"
         component="component"
