@@ -500,24 +500,21 @@
         }
 
         function checkIfDirtyFn() {
-            var isDirty = true;
+            var isDirty = false;
 
-            if (angular.equals(vm.state.campaign, vm.state.campaignOriginal)) {
-                isDirty = false;
-            } else {
+            if (!angular.equals(vm.state.campaign, vm.state.campaignOriginal)) {
                 isDirty = true;
+                console.info('Dirty vm.state.campaign', vm.state.campaign, vm.state.campaignOriginal);
             }
 
-            if (angular.equals(vm.uiState.delivery.date, vm.uiState.delivery.originalDate)) {
-                isDirty = false;
-            } else {
+            if (!angular.equals(vm.uiState.delivery.date, vm.uiState.delivery.originalDate)) {
                 isDirty = true;
+                console.info('Dirty vm.uiState.delivery.date', vm.uiState.delivery.date, vm.uiState.delivery.originalDate);
             }
 
-            if (angular.equals(_.pluck(vm.state.recipients, '_id').sort(), _.pluck(vm.state.originalRecipients, '_id').sort())) {
-                isDirty = false;
-            } else {
+            if (!angular.equals(_.pluck(vm.state.recipients, '_id').sort(), _.pluck(vm.state.originalRecipients, '_id').sort())) {
                 isDirty = true;
+                console.info('Dirty vm.state.recipients', _.pluck(vm.state.recipients, '_id').sort(), _.pluck(vm.state.originalRecipients, '_id').sort());
             }
 
             return isDirty;
