@@ -100,7 +100,6 @@
             var contactsArr = recipientsIdArr;
 
             vm.state.campaign.contacts = contactsArr;
-            console.log(vm.state.campaign.contacts);
         }
 
         function removeContactsFromCampaignFn() {
@@ -503,19 +502,19 @@
         function checkIfDirtyFn() {
             var isDirty = true;
 
-            if (_.isEqual(vm.state.campaign, vm.state.campaignOriginal)) {
+            if (angular.equals(vm.state.campaign, vm.state.campaignOriginal)) {
                 isDirty = false;
             } else {
                 isDirty = true;
             }
 
-            if (_.isEqual(vm.uiState.delivery.date, vm.uiState.delivery.originalDate)) {
+            if (angular.equals(vm.uiState.delivery.date, vm.uiState.delivery.originalDate)) {
                 isDirty = false;
             } else {
                 isDirty = true;
             }
 
-            if (_.isEqual(_.pluck(vm.state.recipients, '_id').sort(), _.pluck(vm.state.originalRecipients, '_id').sort())) {
+            if (angular.equals(_.pluck(vm.state.recipients, '_id').sort(), _.pluck(vm.state.originalRecipients, '_id').sort())) {
                 isDirty = false;
             } else {
                 isDirty = true;
