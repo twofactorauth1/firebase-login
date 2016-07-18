@@ -118,26 +118,28 @@
                     <span>Edit Settings</span>
                 </a>
                 <div id="email-settings" class="collapse no-transition bg-white margin-bottom-15 padding-top-0 padding-bottom-15 no-border-bottom clearfix">
-                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
-                        <label>Title</label>
-                        <input class='form-control' type='text' placeholder='Untitled Email' ng-model='vm.state.email.title' />
-                    </div>
-                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
-                        <label>Subject</label>
-                        <input name="subject" class="form-control" type="text" ng-model="vm.state.email.subject" required>
-                    </div>
-                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromName.$invalid && !emailSettingForm.fromName.$pristine }">
-                        <label>From Name</label>
-                        <input name="fromName" class="form-control" type="text" ng-model="vm.state.email.fromName" required>
-                    </div>
-                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromEmail.$invalid && !emailSettingForm.fromEmail.$pristine }">
-                        <label>From Email</label>
-                        <input name="fromEmail" ng-pattern="formValidations.email" class="form-control" type="email" ng-model="vm.state.email.fromEmail" required>
-                    </div>
-                    <div class="form-group  col-xs-12 col-sm-6 margin-bottom-15" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
-                        <label>Reply To</label>
-                        <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo">
-                    </div>
+                    <form name='emailSettingForm'>
+                        <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
+                            <label>Title</label>
+                            <input class='form-control' type='text' placeholder='Untitled Email' ng-model='vm.state.email.title' required />
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
+                            <label>Subject</label>
+                            <input name="subject" class="form-control" type="text" ng-model="vm.state.email.subject" required>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromName.$invalid && !emailSettingForm.fromName.$pristine }">
+                            <label>From Name</label>
+                            <input name="fromName" class="form-control" type="text" ng-model="vm.state.email.fromName" required>
+                        </div>
+                        <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromEmail.$invalid && !emailSettingForm.fromEmail.$pristine }">
+                            <label>From Email</label>
+                            <input name="fromEmail" ng-pattern="formValidations.email" class="form-control" type="email" ng-model="vm.state.email.fromEmail" required>
+                        </div>
+                        <div class="form-group  col-xs-12 col-sm-6 margin-bottom-15" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
+                            <label>Reply To</label>
+                            <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo" required>
+                        </div>
+                    </form>
                     <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger btn-0 margin-left-15 margin-bottom-5">
                         <i class="ti-trash"></i>
                         <span>Delete Email</span>
@@ -167,7 +169,7 @@
                     </button>
 
                     <div class="pull-right">
-                        <button type="button" ng-disabled="saveLoading" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                        <button type="button" ng-disabled="saveLoading || emailSettingForm.$invalid" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
                             <i class="ti-save"></i>
                             <span>Save</span>
                         </button>
