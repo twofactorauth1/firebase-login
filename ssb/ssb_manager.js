@@ -3302,7 +3302,7 @@ module.exports = {
     cleanEditorHTML: function(page) {
         var sections = page.get && page.get('sections') || page.sections;
         var classesToRemove = 'ng-scope ssb-theme-btn-active-element';
-        var attributesToRemove = 'data-compiled data-ssb-active-style data-ssb-active-style data-ssb-class data-ssb-hover-style data-ssb-style ng-attr-style ng-class';
+        var attributesToRemove = 'data-compiled';
         var ignoreKeys = ['_id'];
 
         function processHTML(dataObject) {
