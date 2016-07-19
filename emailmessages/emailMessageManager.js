@@ -1241,7 +1241,8 @@ var emailMessageManager = {
         return sanitizeHtml(htmlString, {
             allowedTags: false,
             allowedAttributes: {
-                a: [ 'href', 'name', 'target', 'style', 'class' ]
+                'a': [ 'href', 'name', 'target', 'style', 'class' ],
+                '*': [ 'style', 'class' ]
             }
         })
 
