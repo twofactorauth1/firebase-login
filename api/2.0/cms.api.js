@@ -94,6 +94,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('blog/post/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
         app.post(this.url('blog/duplicate/post'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePost.bind(this));
+        app.get(this.url('blog/post/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
 
         app.post(this.url('websites/:id/updateBlogPages'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPages.bind(this));
       
@@ -736,6 +737,23 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    getBlogPost: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> getBlogPost');
+        var accountId = parseInt(self.accountId(req));
+        var blogPostId = req.params.postId;
+        self.log.debug('Account ID: ' + accountId + ' Blog Post ID: ' + blogPostId);
+
+       
+
+        ssbManager.getBlogPost(accountId, blogPostId, function (err, value) {
+            self.log.debug('<< getBlogPost');
+            self.sendResultOrError(res, err, value, "Error getting Blog Post");
+            self = null;
+        });
     },
 
     updateBlogPages: function(req, resp) {

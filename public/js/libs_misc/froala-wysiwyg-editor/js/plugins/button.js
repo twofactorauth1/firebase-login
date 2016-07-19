@@ -25,12 +25,36 @@
             this.popups.onShow('link.edit', function () {
                 var rmLink = this.popups.get("link.edit").find("button[data-cmd='linkRemove']");
                 if($(this.link.get()).hasClass("ssb-theme-btn"))
+                {
                     rmLink.hide();
+                }
                 else
                     rmLink.show();
             })
         }
     });
+
+      
+
+      $.FE.DefineIcon('linkRemoveBtn', { NAME: 'unlink' });
+      $.FE.RegisterCommand('linkRemoveBtn', {
+        title: 'Unlink',
+        callback: function () {
+          if(this.link && this.link.get() && this.link.get().href)
+            this.link.get().href = "";
+        },
+        refresh: function ($btn) {
+            this.popups.onShow('link.edit', function () {
+                var rmLink = this.popups.get("link.edit").find("button[data-cmd='linkRemoveBtn']");
+                if($(this.link.get()).hasClass("ssb-theme-btn"))
+                {
+                    rmLink.show(); 
+                }
+                else
+                    rmLink.hide();
+            })
+        }
+      })
 
     a.FroalaEditor.DefineIcon("deleteButton", {
         NAME: "trash"

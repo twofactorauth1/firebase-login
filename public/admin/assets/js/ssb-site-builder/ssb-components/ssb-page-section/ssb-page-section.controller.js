@@ -286,13 +286,34 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }             
                     
                 var totalCoulmns = colCount;
-
+                var actualColumnsIndexs = [];
+                for(var i = 0; i<= vm.section.components.length -1; i++){
+                    actualColumnsIndexs.push(i);
+                }
                 if(actualColumnsToIgnore.length){
-                    totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;
+                    totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;  
+                    actualColumnsIndexs = _.difference(actualColumnsIndexs, actualColumnsToIgnore);                  
                 }
 
                 if (index !== undefined && index >= totalCoulmns && !fixedColumn) {
-                    classString += " ssb-col-hide";
+                    classString += " ssb-col-hide"; 
+                    //actualColumnsIndexs = _.reject(actualColumnsIndexs, function(num){ return num === index; });                   
+                }
+
+                
+                if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
+                    if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
+                        if(actualColumnsIndexs.indexOf(index) === 0){
+                            classString += ' ssb-component-layout-columns-spacing-right-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                        }
+                        else if(actualColumnsIndexs.indexOf(index) === vm.section.layoutModifiers.columns.columnsNum - 1){
+                            classString += ' ssb-component-layout-columns-spacing-left-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                        }
+                        else{
+                            classString += ' ssb-component-layout-columns-spacing-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                        }
+                    }
+                    
                 }
 
                 if(index === vm.section.components.length - 1 && _lastCoulmnFullWidth){
