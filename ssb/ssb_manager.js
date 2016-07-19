@@ -3559,6 +3559,15 @@ module.exports = {
         });
     },
 
+    getBlogPost: function(accountId, postId, fn) {
+
+        var query = {
+            _id: postId,
+            accountId: accountId
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+    },
+
     /*
      * Create a post_excerpt based on post_content
      *
