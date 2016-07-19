@@ -212,8 +212,13 @@ var collator = {
                         } else {
                             log.debug('finished processing session event ' + sessionEvent.get('session_id'));
                         }
-                        cb(null, 'OK');
-                        log.debug('<< _groupAndSend');
+                        //need to save so we get page depth
+                        dao.saveOrUpdate(sessionEvent, function(err, value){
+                            log.debug('finished saving updated session event');
+                            cb(null, 'OK');
+                            log.debug('<< _groupAndSend');
+                        });
+
                     });
                 });
             }
