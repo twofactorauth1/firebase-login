@@ -149,7 +149,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             "'Verdana',Geneva,sans-serif": "Verdana"
         },
         //imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
-        linkEditButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
+        linkEditButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', 'color', 'linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton', 'linkRemoveBtn'],
         linkAutoPrefix: '',
         imageEditButtons: ["imageReplace", "imageAlign", "imageRemove", "imageLink", "linkOpen", "linkEdit", "linkRemove", "imageDisplay", "imageStyle", "imageAlt", "imageSize"],
         colorsText: [].concat.apply([], spectrumColors),
