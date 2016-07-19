@@ -399,6 +399,7 @@ module.exports = {
         });
     },
 
+
     getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, fn) {
         var self = this;
         self.log = _log;
@@ -470,6 +471,416 @@ module.exports = {
             fn(err, results);
         });
 
-    }
+    },
 
+    getPageViewsReport: function(accountId, userId, start, end, previousStart, previousEnd, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getPageViewsReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                }
+
+            }
+        };
+        stageAry.push(match);
+        var group = {
+            $group: {
+                _id: '$accountId',
+                count:{$sum:1}
+            }
+        };
+        stageAry.push(group);
+
+        async.waterfall([
+            function(cb) {
+                dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function (currentMonth, cb) {
+                stageAry[0].$match.server_time_dt.$gte = previousStart;
+                stageAry[0].$match.server_time_dt.$lte = previousEnd;
+                dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding previous month:', err);
+                        cb(err);
+                    } else {
+                        cb(null, currentMonth, value);
+                    }
+                });
+            },
+            function(currentMonth, previousMonth, cb) {
+                var result = {
+                    currentMonth:currentMonth,
+                    previousMonth: previousMonth
+                };
+                cb(null, result);
+            }
+        ], function(err, results){
+            self.log.debug(accountId, userId, '<< getPageViewsReport');
+            fn(err, results);
+        });
+
+    },
+
+    getSessionsReport:function(accountId, userId, start, end, previousStart, previousEnd, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getSessionsReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                },
+                fingerprint:{$ne:0}
+
+            }
+        };
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:'$session_id'
+            }
+        };
+        stageAry.push(group1);
+
+        var group2 = {
+            $group: {
+                _id: {
+                    name:'count'
+                },
+                total:{$sum:1}
+            }
+        };
+        stageAry.push(group2);
+
+        async.waterfall([
+            function(cb) {
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function (currentMonth, cb) {
+                stageAry[0].$match.server_time_dt.$gte = previousStart;
+                stageAry[0].$match.server_time_dt.$lte = previousEnd;
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding previous month:', err);
+                        cb(err);
+                    } else {
+                        cb(null, currentMonth, value);
+                    }
+                });
+            },
+            function(currentMonth, previousMonth, cb) {
+                var result = {
+                    currentMonth:currentMonth,
+                    previousMonth: previousMonth
+                };
+                cb(null, result);
+            }
+        ], function(err, results){
+            self.log.debug(accountId, userId, '<< getSessionsReport');
+            fn(err, results);
+        });
+
+    },
+
+    sessionLengthReport: function(accountId, userId, start, end, previousStart, previousEnd, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> sessionLengthReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                },
+                fingerprint:{$ne:0},
+                session_length: {$gte:5000}
+            }
+        };
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{ $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
+                averageTime:{$avg:'$session_length'},
+                count:{$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        async.waterfall([
+            function nonBounceAverageSessionLength(cb) {
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function bounceAverageSessionLength(nonBounceAvg, cb) {
+                stageAry[0].$match.session_length = {$lte:5000};
+                //TODO: re-enable this
+                //stageAry[0].$match.page_depth = {$lte:1};
+                self.log.debug('match:', stageAry[0]);
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        cb(err);
+                    } else {
+                        self.log.debug('results:', value);
+                        cb(null, nonBounceAvg, value);
+                    }
+                });
+            },
+            function previousNonBounceAverageSessionLength(nonBounceAvg, bounceAvg, cb) {
+                stageAry[0].$match.session_length = {$gte:5000};
+                //TODO: re-enable this
+                //stageAry[0].$match.page_depth = {$gte:1};
+                stageAry[0].$match.server_time_dt.$gte = previousStart;
+                stageAry[0].$match.server_time_dt.$lte = previousEnd;
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        cb(err);
+                    } else {
+                        cb(null, nonBounceAvg, bounceAvg, value);
+                    }
+                });
+            },
+            function previousBounceAverageSessionLength(nonBounceAvg, bounceAvg, prevNonBounceAvg, cb) {
+                stageAry[0].$match.session_length = {$lte:5000};
+                //TODO: re-enable this
+                //stageAry[0].$match.page_depth = {$lte:1};
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error('Error finding current month:', err);
+                        cb(err);
+                    } else {
+                        cb(null, nonBounceAvg, bounceAvg, prevNonBounceAvg, value);
+                    }
+                });
+            },
+            function compileResults(nonBounceAvg, bounceAvg, prevNonBounceAvg, prevBounceAvg, cb) {
+                var result = {
+                    nonBounceAvg:nonBounceAvg,
+                    bounceAvg:bounceAvg,
+                    prevNonBounceAvg:prevNonBounceAvg,
+                    prevBounceAvg:prevBounceAvg
+                };
+                cb(null, result);
+            }
+        ], function(err, result){
+            self.log.debug(accountId, userId, '<< sessionLengthReport');
+            fn(err, result);
+        });
+
+    },
+
+    trafficSourcesReport: function(accountId, userId, start, end, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> trafficSourcesReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                },
+                fingerprint:{$ne:0}
+            }
+        };
+        stageAry.push(match);
+
+        var group = {
+            $group:{
+                _id:'$referrer.domain',
+                count:{$sum:1}
+            }
+        };
+        stageAry.push(group);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                fn(null, value);
+            }
+        });
+    },
+
+    newVsReturningReport: function(accountId, userId, start, end, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> newVsReturningReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                },
+                fingerprint:{$ne:0}
+            }
+        };
+        stageAry.push(match);
+
+        var group1 = {
+            $group:{
+                _id:{
+                    permanent_tracker: '$permanent_tracker',
+                    new_visitor: '$new_visitor'
+                },
+                count:{$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        var group2 = {
+            $group:{
+                _id:'$_id.new_visitor',
+                count:{$sum:1}
+            }
+        };
+        stageAry.push(group2);
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                _.each(value, function(result){
+                    if(result._id === false) {
+                        result._id = 'returning';
+                    } else {
+                        result._id = 'new';
+                    }
+                });
+                self.log.debug(accountId, userId, '<< newVsReturningReport');
+                fn(null, value);
+            }
+        });
+    },
+
+    pageAnalyticsReport: function(accountId, userId, start, end, fn) {
+        /*
+         var params2 = {
+         event_collection: 'page_data',
+         analyses: {
+         "pageviews": {
+         "analysis_type": "count"
+         },
+         "uniquePageviews": {
+         "analysis_type": "count_unique",
+         "target_property": "session_id"
+         },
+         "timeOnPage": {
+         "analysis_type": "sum",
+         "target_property": "timeOnPage"
+         },
+         "avgTimeOnPage": {
+         "analysis_type": "average",
+         "target_property": "timeOnPage"
+         },
+         "entrances": {
+         "analysis_type": "count",
+         "target_property": "entrance"
+         },
+         "exits": {
+         "analysis_type": "count",
+         "target_property": "exit"
+         }
+         },
+         timeframe: {
+         "start": date.startDate,
+         "end": date.endDate
+         },
+         group_by: 'url.path',
+         filters: filters
+         };
+         */
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> pageAnalyticsReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        stageAry.push(match);
+
+        var group1 = {
+            $group:{
+                _id:{
+                    url_path: '$url.path',
+                    sessionId: '$session_id',
+                    entrances:'$entrance',
+                    exits:'$exit'
+                },
+                pageviews:{$sum:1},
+                timeOnPage:{$sum:'$timeOnPage'},
+                avgTimeOnPage:{$avg:'$timeOnPage'}
+
+            }
+        };
+        stageAry.push(group1);
+
+        var group2 = {
+            $group:{
+                _id:'$_id.new_visitor',
+                count:{$sum:1}
+            }
+        };
+        //stageAry.push(group2);
+        dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                fn(null, value);
+            }
+        });
+    }
 };
