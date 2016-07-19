@@ -10,6 +10,7 @@ var sectionDao = require('./dao/section.dao');
 var componentDao = require('./dao/component.dao');
 var siteTemplateDao = require('./dao/sitetemplate.dao');
 var blogPostDao = require('../cms/dao/blogpost.dao.js');
+var emailDao = require('../cms/dao/email.dao.js');
 
 var async = require('async');
 var slug = require('slug');
@@ -3299,9 +3300,9 @@ module.exports = {
      * - save "clean" sections back onto page
      */
     cleanEditorHTML: function(page) {
-        var sections = page.get('sections');
+        var sections = page.get && page.get('sections') || page.sections;
         var classesToRemove = 'ng-scope ssb-theme-btn-active-element';
-        var attributesToRemove = 'data-compiled';
+        var attributesToRemove = 'data-compiled data-ssb-active-style data-ssb-active-style data-ssb-class data-ssb-hover-style data-ssb-style ng-attr-style ng-class';
         var ignoreKeys = ['_id'];
 
         function processHTML(dataObject) {
@@ -3329,13 +3330,20 @@ module.exports = {
                     if (hasClass || hasAttr) {
 
                         var htmlString = '';
+                        var $ssbButton = $$$('#temp_wrap').find('.ssb-theme-btn');
+                        var attributesToRemoveArray = attributesToRemove.split(' ');
 
-                        // console.log('before ::', $$$('#temp_wrap').html());
+                        console.log('before ::', $$$('#temp_wrap').html());
 
-                        $$$('#temp_wrap').find('.ssb-theme-btn')
-                            .removeClass(classesToRemove)
-                            .removeAttr(attributesToRemove);
-                        // console.log('after ::', $$$('#temp_wrap').html());
+                        $ssbButton.removeClass(classesToRemove)
+
+                        if (hasAttr) {
+                            for (var i = 0; i < attributesToRemoveArray.length; i++) {
+                                $ssbButton.removeAttr(attributesToRemoveArray[i]);
+                            }
+                        }
+
+                        console.log('after ::', $$$('#temp_wrap').html());
 
                         htmlString = $$$('#temp_wrap').html();
 
@@ -3364,7 +3372,13 @@ module.exports = {
             .value();
 
         if (sections.length) {
-            page.set('sections', sections);
+
+            if (page.set) {
+                page.set('sections', sections);
+            } else {
+                page.sections = sections;
+            }
+
         }
 
         return page;
@@ -3463,7 +3477,7 @@ module.exports = {
                 else{
                     blogPostDao.createPost(blogPost, function(err, savedPost){
                         if(err) {
-                            self.log.error('Error creating post: ' + err);                            
+                            self.log.error('Error creating post: ' + err);
                             return fn(err, null);
                         } else {
                             self.checkAndPublishBlogPages(accountId, blogPost.get("websiteId"), userId)
@@ -3793,7 +3807,7 @@ module.exports = {
 
     },
 
-    checkAndPublishBlogPages: function(accountId, websiteId, userId){      
+    checkAndPublishBlogPages: function(accountId, websiteId, userId){
         var self = this;
 
         var post_query = {
@@ -3811,7 +3825,7 @@ module.exports = {
                     latest:true,
                     handle: {$in: ['blog-post', 'blog-list']}
                 };
-        
+
                 pageDao.findPublishedPages(query, function(err, pages){
                     if(err) {
                         self.log.error(accountId, null,'Error getting published pages:', err);
@@ -3827,8 +3841,8 @@ module.exports = {
                                 self.log.error(accountId, userId, 'Error finding page:', err);
                             } else {
                                 if(pages && pages.length){
-                                    _.each(pages, function(page){      
-                                        console.log("Publishing page", page.get("handle"));                          
+                                    _.each(pages, function(page){
+                                        console.log("Publishing page", page.get("handle"));
                                         self.publishPage(accountId, page.id(), userId, function(err, publishedPage){
                                             if(err) {
                                                 self.log.error(accountId, userId,'Error publishing page:', err);
@@ -3845,6 +3859,29 @@ module.exports = {
                 console.log("No published post found");
             }
         })
-        
+
+    },
+
+    updateEmail: function(email, emailId, fn) {
+        var self = this;
+        var nameCheckQuery = {'title': email.get('title'), _id : { $ne: emailId }, 'accountId': email.get('accountId')};
+        emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
+            if(err) {
+                self.log.error('Exception thrown checking for uniqueness: ' + err);
+                fn(err, null);
+            } else if(value === true) {
+                self.log.warn('Attempted to update an email with a title that already exists.');
+                fn('Title already exists', null);
+            } else {
+                var cleanEditorHTMLResult = self.cleanEditorHTML({ sections: [{ components: email.get('components') }] });
+                email.set('components', cleanEditorHTMLResult.sections[0].components);
+                self.log.debug(email.get('components'));
+                emailDao.saveOrUpdate(email, function(err, savedEmail){
+                    self.log.debug('<< updateEmail');
+                    fn(null, savedEmail);
+                });
+            }
+        });
     }
+
 };

@@ -1,5 +1,5 @@
 <div
-    ng-click="vm.openMenuPanelFn(vm.componentIndex);"
+    ng-click="vm.setActive(vm.componentIndex, vm.compiledControlId);"
     class="ssb-settings-btn">
     <i class="fa fa-pencil"></i>
 </div>
@@ -7,9 +7,14 @@
 <div class="ssb-edit-control-active">
 
     <a
-        ng-click="vm.openMenuPanelFn(vm.componentIndex);"
+        ng-click="vm.setActive(vm.componentIndex, vm.compiledControlId);"
         class="ssb-edit-control-active-title">
-        <span>Edit Section</span>
+
+        <span ng-if="vm.component">
+            Edit {{(vm.component.type || vm.component.name || vm.component.title) | cleanType}}
+        </span>
+
+        <span ng-if="!vm.component">Edit Section</span>
     </a>
 
     <div
