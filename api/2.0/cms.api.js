@@ -97,8 +97,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('blog/post/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
 
         app.post(this.url('websites/:id/updateBlogPages'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPages.bind(this));
-      
+
         app.post(this.url('websites/:id/userScripts'), this.isAuthAndSubscribedApi.bind(this), this.updateScriptResource.bind(this));
+
+        app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
 
     },
 
@@ -747,7 +749,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var blogPostId = req.params.postId;
         self.log.debug('Account ID: ' + accountId + ' Blog Post ID: ' + blogPostId);
 
-       
+
 
         ssbManager.getBlogPost(accountId, blogPostId, function (err, value) {
             self.log.debug('<< getBlogPost');
@@ -774,7 +776,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-  
+
     updateScriptResource: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
@@ -796,6 +798,44 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    updateEmail: function (req, res) {
+        var self = this;
+        self.log.debug('>> updateEmail');
+
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var emailObj = req.body;
+                self.log.debug('>> email body');
+                var email = require('../../cms/model/email');
+
+                if (email != null) {
+                    self.log.debug('>> email not null');
+                    email = new $$.m.cms.Email(emailObj);
+                    var emailId = req.params.id;
+                    var accountId = parseInt(self.accountId(req));
+                    email.set('accountId', accountId);
+                    email.attributes.modified.date = new Date();
+                    self.log.debug('>> email updated');
+                    ssbManager.updateEmail(email, emailId, function (err, value) {
+                        self.log.debug('<< updateEmail');
+                        self.sendResultOrError(res, err, value, "Error updating Email");
+
+                        self.createUserActivity(req, 'UPDATE_EMAIL', null, null, function(){});
+                    });
+                } else {
+                    self.log.error('Cannot update null email.');
+                    self.wrapError(res, 400, 'Bad Parameter', 'Cannot update a null email.');
+                    self = null;
+                }
+            }
+        });
+
     }
 
 });
