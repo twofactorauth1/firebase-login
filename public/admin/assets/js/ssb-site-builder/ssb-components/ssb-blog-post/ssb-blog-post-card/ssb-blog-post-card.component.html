@@ -44,7 +44,7 @@
             </div>
 
             <section class="ssb-blog-post-body" itemprop="articleBody">
-                <p>{{vm.post.post_excerpt}}</p>
+                <p ng-bind-html="vm.post.post_excerpt | unsafe"></p>
                 <a ng-if="!vm.compactView" class="btn btn-link ssb-theme-btn" href="/blog/{{vm.post.post_url}}" target="_self">READ MORE <i class="fa fa-long-arrow-right"></i></a>
                 <div data-ng-if="vm.post.post_tags && !vm.compactView && vm.filteredPostView && vm.post.post_tags.length">
                     <h5 class="ssb-tag-heading">TAGS</h5>
