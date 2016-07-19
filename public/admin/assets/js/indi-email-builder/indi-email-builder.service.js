@@ -10,6 +10,7 @@
   function EmailBuilderService($http, AccountService) {
     var emailService = {};
     var baseCmsAPIUrlv1 = '/api/1.0/cms';
+    var baseCmsAPIUrlv2 = '/api/2.0/cms';
     var baseWebsiteAPIUrlv1 = '/api/1.0/cms/website';
 
     emailService.loading = {value: 0};
@@ -63,7 +64,7 @@
       }
 
       var promise = $http({
-        url: [baseCmsAPIUrlv1, 'email', email._id].join('/'),
+        url: [baseCmsAPIUrlv2, 'email', email._id].join('/'),
         method: "PUT",
         data: angular.toJson(email)
       });
