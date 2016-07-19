@@ -48,7 +48,7 @@
                 var rmLink = this.popups.get("link.edit").find("button[data-cmd='linkRemoveBtn']");
                 if($(this.link.get()).hasClass("ssb-theme-btn"))
                 {
-                    rmLink.hide(); 
+                    rmLink.show(); 
                 }
                 else
                     rmLink.hide();
