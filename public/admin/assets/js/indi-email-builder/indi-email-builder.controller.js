@@ -2,9 +2,9 @@
 
     app.controller('EmailBuilderController', indiEmailBuilderController);
 
-    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', 'EmailCampaignService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', '$location'];
+    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', 'EmailCampaignService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', '$location', 'SweetAlert'];
     /* @ngInject */
-    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, EmailCampaignService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, $location) {
+    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, EmailCampaignService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, $location, SweetAlert) {
 
         console.info('email-builder directive init...');
 
@@ -393,12 +393,26 @@
         }
 
         function deleteFn() {
-            vm.uiState.dataLoaded = false;
-            WebsiteService.deleteEmail(vm.state.email, function() {
-                vm.uiState.dirtyOverride = true;
-                vm.uiState.dataLoaded = true;
-                $state.go('app.emails');
-                toaster.pop('Warning', 'Email deleted.');
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You want to delete this email?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true,
+                closeOnCancel: true,
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    vm.uiState.dataLoaded = false;
+                    WebsiteService.deleteEmail(vm.state.email, function() {
+                        vm.uiState.dirtyOverride = true;
+                        vm.uiState.dataLoaded = true;
+                        $state.go('app.emails');
+                        toaster.pop('Warning', 'Email deleted.');
+                    });
+                }
             });
         }
 
@@ -524,15 +538,15 @@
             vm.state.email = angular.copy(vm.state.originalEmail);
         }
 
-        $scope.$on('focusEditor', function (event, args) {
+        $scope.$on('focusEditor', function(event, args) {
             vm.uiState.editor = args.editor;
             vm.uiState.editor.img = null;
         });
 
-        $scope.$on('activeEditor', function (event, args) {
-            if(args.editor)
+        $scope.$on('activeEditor', function(event, args) {
+            if (args.editor)
                 vm.uiState.editor = args.editor;
-            if(args.editorImage)
+            if (args.editorImage)
                 vm.uiState.editor.img = args.editorImage;
         });
 

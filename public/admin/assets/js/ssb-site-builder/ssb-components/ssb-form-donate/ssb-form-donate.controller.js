@@ -664,6 +664,7 @@
                 }
                 var orderService = $injector.get('orderService');
                 var order = _formattedOrder();
+                order.status = 'completed';
                 if (order.customer) {
                     cardInput.name = order.customer.first + ' ' + order.customer.last;
                     // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
@@ -832,7 +833,7 @@
                 $timeout(function () {
                     vm.openModalFn();
                 }, 1000);
-                console.log(vm.checkoutModalState, orderCookieData);
+
                 if (vm.checkoutModalState == 5 && orderCookieData) {
                     if ($injector.has('orderService')) {
                         var orderService = $injector.get('orderService');

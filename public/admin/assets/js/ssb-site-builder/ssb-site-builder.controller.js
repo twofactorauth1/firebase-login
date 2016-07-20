@@ -40,6 +40,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.checkPageNavigation = checkPageNavigation;
     vm.savePost = savePost;
     vm.updateColumnLayout = updateColumnLayout;
+    vm.setDefaultSpacing = setDefaultSpacing;
 
     vm.uiState = {
         loading: 0,
@@ -148,7 +149,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isDuplicateGlobalHeader: false,
 
-        updateColumnLayout: vm.updateColumnLayout, 
+        updateColumnLayout: vm.updateColumnLayout,
+
+        setDefaultSpacing: vm.setDefaultSpacing 
 
     };
 
@@ -1153,6 +1156,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 // }
             }
         }
+    }
+
+    function setDefaultSpacing(section, value){
+        if(!section.spacing){
+            section.spacing = {};
+        }
+        section.spacing.default = value ? false : true;
     }
 
     function init(element) {

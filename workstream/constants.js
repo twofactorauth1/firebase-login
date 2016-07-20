@@ -91,7 +91,7 @@ defaultWorkstreams[1] = {
             "complete" : false,
             "optional" : false,
             "helpLinks": [
-                { type: "help", name: "Import from social networks or .csv files", link: "/admin/#/support/help-topics?topic=7a4d5cd1-fd74-4d15-bce7-3ee6076f56ce" }
+                { type: "help", name: "Import from Google or .csv files", link: "/admin/#/support/help-topics?topic=7a4d5cd1-fd74-4d15-bce7-3ee6076f56ce" }
             ]
         },
         {
