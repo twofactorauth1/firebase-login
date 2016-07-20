@@ -103,6 +103,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 classString += ' ssb-page-section-layout-blur-image';
             }
 
+            if(section.spacing && section.spacing.default){
+                classString += " no-component-vertical-space";
+            }
+
         }
         // console.debug('section classString')
         // console.debug(classString)
@@ -335,10 +339,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
             }
 
-        }
-
-        if(vm.section && vm.section.spacing && !vm.section.spacing.default){
-            classString += " default-inner-page-spacing-50";
         }
 
         return classString;
