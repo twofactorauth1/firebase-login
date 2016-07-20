@@ -522,6 +522,18 @@
             vm.state.email = angular.copy(vm.state.originalEmail);
         }
 
+        $scope.$on('focusEditor', function (event, args) {
+            vm.uiState.editor = args.editor;
+            vm.uiState.editor.img = null;
+        });
+
+        $scope.$on('activeEditor', function (event, args) {
+            if(args.editor)
+                vm.uiState.editor = args.editor;
+            if(args.editorImage)
+                vm.uiState.editor.img = args.editorImage;
+        });
+
         function init(element) {
 
             vm.element = element;
@@ -554,14 +566,8 @@
                     }
                     vm.state.email = res.data;
                     vm.state.originalEmail = angular.copy(res.data);
-                    $timeout(function() {
-                        $('.editable').on('froalaEditor.focus', function(e, editor) {
-                            vm.uiState.editor = editor;
-                            console.info('Event froalaEditor.focus triggered');
-                        });
-
+                    $timeout(function() {                 
                         vm.uiState.dataLoaded = true;
-
                     }, 1000);
                 }, function(err) {
                     console.error(err);
