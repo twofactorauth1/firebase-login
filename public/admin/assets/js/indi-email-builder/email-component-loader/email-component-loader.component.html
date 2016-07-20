@@ -1,13 +1,15 @@
-<td ng-attr-style="{{vm.componentStyleFn(vm.component)}}">
-    <email-edit-control
-        class="ssb-edit-control ssb-edit-control-section"
-        component="vm.component"
-        component-index='vm.componentIndex'
-        components='vm.components'
-        state="vm.state"
-        ui-state="vm.uiState">
-    </email-edit-control>
-    <circular ng-if="!vm.account.showhide.ssbEmail" passed-options="circleOptions" passed-index="{{vm.componentIndex}}" passed-component="vm.component" passed-component-length="{{vm.componentCount}}" style="z-index:1087" class="circular"></circular>
-    <div ng-include="'/components/email-component-wrap.html'"></div>
-    <div ng-class="{'zee-blur': !vm.component.visibility}"></div>
+<td class="ssb-page-section ssb-edit-wrap" ng-attr-style="{{vm.componentStyleFn(vm.component)}}">
+        <span class="editable-title">Section</span>
+        <span class="editable-cover"></span>
+        <email-edit-control
+            class="ssb-edit-control ssb-edit-control-section"
+            component="vm.component"
+            component-index='vm.componentIndex'
+            components='vm.components'
+            state="vm.state"
+            ui-state="vm.uiState">
+        </email-edit-control>
+        <div ng-include="'/components/email-component-wrap.html'"></div>
+        <div ng-class="{'zee-blur': !vm.component.visibility}"></div>
+    </div>
 </td>

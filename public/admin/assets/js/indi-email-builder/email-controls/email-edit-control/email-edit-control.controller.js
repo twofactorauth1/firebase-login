@@ -2,9 +2,9 @@
 
   app.controller('EmailBuilderEditControlController', indiEmailBuilderEditControlController);
 
-  indiEmailBuilderEditControlController.$inject = ['$scope'];
+  indiEmailBuilderEditControlController.$inject = ['$scope', '$filter', '$timeout'];
   /* @ngInject */
-  function indiEmailBuilderEditControlController($scope) {
+  function indiEmailBuilderEditControlController($scope, $filter, $timeout) {
 
     var vm = this;
 
@@ -48,7 +48,7 @@
 
     function setActiveComponent(componentIndex) {
 
-        var component = vm.state.emails[componentIndex];
+        var component = vm.state.email.components[componentIndex];
         var name = $filter('cleanType')(component.type).toLowerCase().trim().replace(' ', '-');
         var sectionPanelLoadConfig = {
             name: name,
