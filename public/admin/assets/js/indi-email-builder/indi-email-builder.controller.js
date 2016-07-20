@@ -25,6 +25,7 @@
         };
         vm.uiState.modalInstance = null;
         vm.uiState.editor = null;
+
         vm.uiState.componentTypes = [{
             title: 'Header',
             type: 'email-header',
@@ -75,7 +76,6 @@
             description: 'A footer for your email.',
             enabled: true
         }];
-        vm.uiState.dirtyOverride = false;
 
         vm.openSimpleModalFn = openSimpleModalFn;
         vm.openModalFn = openModalFn;
@@ -343,6 +343,19 @@
 
 
 
+        $scope.$on('focusEditor', function (event, args) {
+          vm.uiState.editor = args.editor;
+          vm.uiState.editor.img = null;
+        });
+
+        $scope.$on('activeEditor', function (event, args) {
+          if(args.editor)
+           vm.uiState.editor = args.editor;
+          if(args.editorImage)
+           vm.uiState.editor.img = args.editorImage;
+        });
+
+
         function saveFn() {
             vm.uiState.dataLoaded = false;
             EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
@@ -393,7 +406,6 @@
         function deleteFn() {
             vm.uiState.dataLoaded = false;
             WebsiteService.deleteEmail(vm.state.email, function() {
-                vm.uiState.dirtyOverride = true;
                 vm.uiState.dataLoaded = true;
                 $state.go('app.emails');
                 toaster.pop('Warning', 'Email deleted.');
@@ -507,10 +519,6 @@
         }
 
         function checkIfDirtyFn() {
-            if (vm.uiState.dirtyOverride) {
-                return false;
-            }
-
             if (angular.equals(vm.state.email, vm.state.originalEmail)) {
                 return false;
             } else {
@@ -555,12 +563,8 @@
                     vm.state.email = res.data;
                     vm.state.originalEmail = angular.copy(res.data);
                     $timeout(function() {
-                        $('.editable').on('froalaEditor.focus', function(e, editor) {
-                            vm.uiState.editor = editor;
-                            console.info('Event froalaEditor.focus triggered');
-                        });
                         vm.uiState.dataLoaded = true;
-                    }, 0);
+                    }, 1000);
                 }, function(err) {
                     console.error(err);
                     $state.go('app.emails');
