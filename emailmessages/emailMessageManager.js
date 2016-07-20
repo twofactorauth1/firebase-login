@@ -20,6 +20,7 @@ var sendgrid  = require('sendgrid')(sendgridConfig.API_KEY);
 var dao = require('./dao/emailmessage.dao');
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var serialize = require('node-serialize');
+var sanitizeHtml = require('sanitize-html');
 
 
 var emailMessageManager = {
@@ -1204,6 +1205,9 @@ var emailMessageManager = {
                 for (var i = 0; i < keys.length; i++) {
                     if (component[keys[i]]) {
                         component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                        // self.log.debug('sanitizeHtmlForSending before:', component[keys[i]]);
+                        component[keys[i]] = self.sanitizeHtmlForSending(component[keys[i]]);
+                        // self.log.debug('sanitizeHtmlForSending after:', component[keys[i]]);
                     }
                 }
                 if (!component.bg.color) {
@@ -1230,7 +1234,20 @@ var emailMessageManager = {
             email: emailContent
         }
 
+    },
+
+    sanitizeHtmlForSending: function(htmlString) {
+
+        return sanitizeHtml(htmlString, {
+            allowedTags: false,
+            allowedAttributes: {
+                'a': [ 'href', 'name', 'target', 'style', 'class' ],
+                '*': [ 'style', 'class' ]
+            }
+        })
+
     }
+
 };
 
 $$.u = $$.u || {};

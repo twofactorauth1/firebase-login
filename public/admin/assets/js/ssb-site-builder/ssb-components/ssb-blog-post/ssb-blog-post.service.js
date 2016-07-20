@@ -156,8 +156,28 @@
 
         }
 
-        function getPost(pageId, id) {
+        function getPost(post) {
+            
+            function success(data) {
+                var index = _.findIndex(ssbBlogService.blog.posts, {
+                    _id: data._id
+                });
 
+                if (index > -1) {
+                    ssbBlogService.blog.posts[index] = data;
+                }
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderBlogService duplicatePost error: ', JSON.stringify(error));
+            }
+
+            return (
+                ssbBlogRequest($http({
+                    url: baseBlogAPIUrl + '/post/' + post._id,
+                    method: 'GET'
+                }).success(success).error(error))
+            )
         }
 
 

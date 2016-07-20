@@ -1,95 +1,14 @@
-<style>
-    /*
-
-    TODO:
-        - decide on classnames for all hook-able stuff
-        - mirror classnames here and in theme stylesheet(s)
-        - add the hook classes to all relevant component markup
-
-    */
-
-
-    .email-theme-{{vm.state.website.theme.handle}} {
-        color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
-        font-family: {{vm.state.website.themeOverrides.defaultFontStack}};
-        background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-section-layout {
-        background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-navigation a {
-        color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header {
-        background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};
-        color: {{vm.state.website.themeOverrides.styles.headerTextColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
-        /*color: {{vm.state.website.themeOverrides.styles.headerTextColor}};*/
-        /*font-size: {{vm.state.website.themeOverrides.styles.headerSize}};*/
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero {
-        background-color: {{vm.state.website.themeOverrides.styles.heroBackgroundColor}};
-        color: {{vm.state.website.themeOverrides.styles.heroTextColor}};
-        text-align: center;
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
-        /*color: {{vm.state.website.themeOverrides.styles.heroTextColor}};*/
-        /*font-size: {{vm.state.website.themeOverrides.styles.heroSize}};*/
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-heading-text {
-        font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-paragraph-text {
-        font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn, .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:hover {
-        background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
-        color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
-        border-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:hover, .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:active, .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:focus {
-        background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}}!important;
-    }
-
-    .email-theme-young-soul .navbar-toggle .icon-bar {
-        /*background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};*/
-    }
-
-    @media screen and (min-width: 768px) {
-
-        .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
-            font-size: {{vm.state.website.themeOverrides.styles.headerSize}};
-        }
-
-        .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
-            font-size: {{vm.state.website.themeOverrides.styles.heroSize}};
-        }
-
-        .email-theme-{{vm.state.website.theme.handle}} .email-theme-heading-text {
-            font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
-        }
-
-        .email-theme-{{vm.state.website.theme.handle}} .email-theme-paragraph-text {
-            font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
-        }
-
-    }
-
-</style>
+<indig-navprompt
+    class="indig-navprompt"
+    my-state="{{$state.$current.name}}"
+    reset-dirty="vm.resetDirtyFn()"
+    check-if-dirty="vm.checkIfDirtyFn()"
+    save-page="vm.saveAsDraftFn()"
+    save-page-check="vm.uiState.dataLoaded">
+</indig-navprompt>
 
 <div class="indi-email-campaign">
-    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="vm.resetDirtyFn()" check-if-dirty="vm.checkIfDirtyFn()" save-page="vm.saveAsDraftFn()" save-page-check="vm.uiState.dataLoaded"></indig-navprompt>
+
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">

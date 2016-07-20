@@ -137,7 +137,7 @@
                         </div>
                         <div class="form-group  col-xs-12 col-sm-6 margin-bottom-15" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
                             <label>Reply To</label>
-                            <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo" required>
+                            <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo">
                         </div>
                     </form>
                     <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger btn-0 margin-left-15 margin-bottom-5">
@@ -183,8 +183,8 @@
             <div id='ssb-froala-scrollable-container'></div>
         </div>
 
-        <div class="indi-email-builder-editor-container  row">
-            <div class="email-builder-main custom-fonts email-theme-{{vm.state.website.theme.name| slugify}}" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.dataLoaded">
+        <div class="indi-email-builder-editor-container ssb-theme-{{vm.state.website.theme.name | slugify}} row">
+            <div class="email-builder-main custom-fonts" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.dataLoaded">
                 <div class='components' style="background-color: {{vm.state.email.emailBg}}">
                     <table class="device-width email-body" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                         <tr ng-if="vm.uiState.dataLoaded && !vm.state.email.components.length">
@@ -192,7 +192,7 @@
                                 <div class="well empty-page center">
                                     <h1>This Email is Empty.</h1>
                                     <h4>Add some components and start editing!</h4>
-                                    <button class="btn btn-info margin-top-15" ng-click="vm.openModalFn('email-component-modal', null, null, 'lg')">Add Component</button>
+                                    <button class="btn btn-info margin-top-15" ng-click="vm.openModalFn('add-email-component-modal')">Add Component</button>
                                 </div>
                                 <div class="clearfix mb15"></div>
                             </td>

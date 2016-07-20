@@ -83,30 +83,50 @@ var collator = {
                 log.error('Error finding max server_time for sessionEvent ' + sessionEvent.get('session_id'));
                 return;
             }
-            //log.debug('maxValue: ', value);
-            if(!value) {
-                log.debug('No pings found for session ' + sessionEvent.id() + '.  Closing.');
-                collator._closeSessionWithNoPings(sessionEvent, callback);
-            } else {
-                log.debug('value:', value);
-                var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;//TODO: This may be the problem!!!
-                log.debug('lastSeenVsNowInSecs '+ lastSeenVsNowInSecs+' secondsSinceLastPingThreshold '+secondsSinceLastPingThreshold);
-                if(lastSeenVsNowInSecs >= secondsSinceLastPingThreshold) {
-                    collator._groupAndSendWithCallback(sessionEvent, value, function(err, value){
-                        if(err) {
-                            log.error('Error grouping and sending: ' + err);
-                            callback(err);
-                        } else {
-                            log.debug('<< _processSessionEvent');
-                            callback();
-                        }
-                    });
+            //TODO: instrument the session here.
+            var keen = {};
+            keen.addons = [];
+            keen.addons[0]={
+                'name': 'keen:ip_to_geo',
+                'input':{
+                    'ip':'ip_address'
+                },
+                'output': 'ip_geo_info'
+            };
+            //set keen.timestamp to be OUR server time
+            keen.timestamp = sessionEvent.get('server_time_dt');
+            sessionEvent.set('keen', keen);
+            geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
+                var replacementObject = {
+                    province: ip_geo_info.region,
+                    city: ip_geo_info.city,
+                    postal_code: ip_geo_info.postal,
+                    continent: ip_geo_info.continent,
+                    country: ip_geo_info.countryName
+                };
+                sessionEvent.set('maxmind', replacementObject);
+                if(!value) {
+                    log.debug('No pings found for session ' + sessionEvent.id() + '.  Closing.');
+                    collator._closeSessionWithNoPings(sessionEvent, callback);
                 } else {
-                    callback();
+                    log.debug('value:', value);
+                    var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;//TODO: This may be the problem!!!
+                    log.debug('lastSeenVsNowInSecs '+ lastSeenVsNowInSecs+' secondsSinceLastPingThreshold '+secondsSinceLastPingThreshold);
+                    if(lastSeenVsNowInSecs >= secondsSinceLastPingThreshold) {
+                        collator._groupAndSendWithCallback(sessionEvent, value, function(err, value){
+                            if(err) {
+                                log.error('Error grouping and sending: ' + err);
+                                callback(err);
+                            } else {
+                                log.debug('<< _processSessionEvent');
+                                callback();
+                            }
+                        });
+                    } else {
+                        callback();
+                    }
                 }
-            }
-
-
+            });
         });
     },
 
@@ -175,67 +195,31 @@ var collator = {
                     });
 
                     sessionEvent.set('page_depth', pageList.length);
-                    /*
-                     * Add this to sessionEvent:
-                     * "keen" : {
-                            "addons" : [
-                            {
-                                "name" : "keen:ip_to_geo",
-                                "input" : {
-                                    "ip" : "ip_address"
-                                },
-                                "output" : "ip_geo_info"
-                            }
-                            ]
-                     },
-                     */
-                    var keen = {};
-                    keen.addons = [];
-                    keen.addons[0]={
-                        'name': 'keen:ip_to_geo',
-                        'input':{
-                            'ip':'ip_address'
-                        },
-                        'output': 'ip_geo_info'
-                    };
-                    geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info){
-                        var replacementObject = {
-                            province: ip_geo_info.region,
-                            city: ip_geo_info.city,
-                            postal_code: ip_geo_info.postal,
-                            continent: ip_geo_info.continent,
-                            country: ip_geo_info.countryName
-                        };
-                        sessionEvent.set('maxmind', replacementObject);
-                        //set keen.timestamp to be OUR server time
-                        keen.timestamp = sessionEvent.get('server_time_dt');
-                        sessionEvent.set('keen', keen);
-                        //send to keen unless test environment
-                        // if (process.env.NODE_ENV !== "testing") {
-                        client.addEvents({
-                            "session_data": [sessionEvent],
-                            "page_data": pageList
-                        }, function (err, res) {
-                            if (err) {
-                                log.error('Error sending data to keen.');
-                            } else {
-                                log.info('Successfully sent events to keen.');
-                            }
-                        });
-                        // } else {
-                        //     log.info('skipping keen because of testing environment.');
-                        // }
-                        dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
-                            if(err) {
-                                log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));
-                            } else {
-                                log.debug('finished processing session event ' + sessionEvent.get('session_id'));
-                            }
+                    client.addEvents({
+                        "session_data": [sessionEvent],
+                        "page_data": pageList
+                    }, function (err, res) {
+                        if (err) {
+                            log.error('Error sending data to keen.');
+                        } else {
+                            log.info('Successfully sent events to keen.');
+                        }
+                    });
+
+                    dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
+                        if(err) {
+                            log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));
+                        } else {
+                            log.debug('finished processing session event ' + sessionEvent.get('session_id'));
+                        }
+                        //need to save so we get page depth
+                        dao.saveOrUpdate(sessionEvent, function(err, value){
+                            log.debug('finished saving updated session event');
                             cb(null, 'OK');
                             log.debug('<< _groupAndSend');
                         });
-                    });
 
+                    });
                 });
             }
         ], function(err, result){

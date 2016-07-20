@@ -28,45 +28,6 @@
         </select>
     </div>
 </div>
-<div class="row padding-10" ng-if="vm.component.type === 'text-only' || vm.component.type === 'ssb-text'">
-    <div class="form-group">
-        <label for="colorpicker">
-            Multi Column Layout
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Column-based text layout."><i class="fa fa-info-circle" /></span>
-        </label>
-        <switch ng-model="vm.component.layoutModifiers.columns" class="pull-right"></switch>
-    </div>
-    <div class="form-group margin-bottom-5" ng-if="vm.component.layoutModifiers.columns">
-        <label>
-            Columns
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="The number of columns for text to flow into."><i class="fa fa-info-circle" /></span>
-        </label>
-        <div class="col-sm-6 pull-right">
-            <input type="text" ng-model="vm.component.layoutModifiers.columnsNum" min="0" max="4" touchspin>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="form-group margin-bottom-5" ng-if="vm.component.layoutModifiers.columns">
-        <label>
-            Columns Spacing
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="The space between columns."><i class="fa fa-info-circle" /></span>
-        </label>
-        <div class="col-sm-6 pull-right">
-            <input type="text" ng-model="vm.component.layoutModifiers.columnsSpacing" step="10" min="0" max="500" touchspin>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-    <div class="form-group margin-bottom-5" ng-if="vm.component.layoutModifiers.columns">
-        <label>
-            Max Height
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="The height at which text should flow into columns."><i class="fa fa-info-circle" /></span>
-        </label>
-        <div class="col-sm-6 pull-right">
-            <input type="text" ng-model="vm.component.layoutModifiers.columnsMaxHeight" min="300" max="1000" touchspin>
-        </div>
-        <div class="clearfix"></div>
-    </div>
-</div>
 <!-- <hr></hr>
     <div class="form-group">
         <label for="component-title">Version</label>

@@ -433,15 +433,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         // if edit control hasn't been created, create it and compile it
         if (!SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId)) {
             $scope.component = { title: 'Button_'+elementId, type: 'Button' }; //TODO: make generic/configurable
-            var template = '<ssb-edit-control ' +
-                                'data-compiled-control-id="control_' + elementId + '" ' +
-                                'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-btn on" ' +
-                                'component="component" ' +
-                                'state="pvm.state" ' +
-                                'ui-state="pvm.uiState" ' +
-                                'section-index="null" ' +
-                                'component-index="null">' +
-                            '</ssb-edit-control>';
+            var template = getEditControlTemplate();
             $compile(template)($scope, compiledEditControl);
 
         // else set active element (for contextual menu) and position the edit control and make visible
@@ -498,19 +490,25 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     }
 
     function positionEditControl() {
+        var container = document.querySelector('.ssb-site-builder-container') || document.querySelector('.email-builder-container');
         var top = 0;
         var left = 0;
         var topbarHeight = 125;
         var sidebarWidth = 140;
-        var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
+        var scrollTop = container.scrollTop;
         var topOffset = 35;
         var leftOffset = 35;
         var compiledEl = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
         var compiledEditControl = SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId);
 
-        if (compiledEl.length) {
+        if (compiledEl.length && document.querySelector('.ssb-site-builder-container')) {
             top = compiledEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
             left = compiledEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
+        }
+
+        if (compiledEl.length && document.querySelector('.email-builder-container')) {
+            top = compiledEl[0].getBoundingClientRect().top - topOffset;
+            left = compiledEl[0].getBoundingClientRect().left - leftOffset;
         }
 
         if (compiledEditControl && compiledEditControl.length) {
@@ -519,13 +517,24 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     }
 
-    // function clearActiveElement(e) {
-    //     var isEditControl = $(e.target).parents('[data-compiled-control-id], [data-compiled]').length > 0;
-    //     if (!isEditControl) {
-    //         pvm.uiState.activeElement = {};
-    //         angular.element('[data-compiled-control-id], [data-compiled]').removeClass('on ssb-theme-btn-active-element');
-    //     }
-    // }
+    function getEditControlTemplate() {
+        var ret = '';
+        var baseTemplate = 'data-compiled-control-id="control_' + elementId + '" ' +
+            'class="ssb-edit-control ssb-edit-control-component ssb-edit-control-component-btn on" ' +
+            'component="component" ' +
+            'state="pvm.state" ' +
+            'ui-state="pvm.uiState" ' +
+            'section-index="null" ' +
+            'component-index="null">';
+
+        if (document.querySelector('.email-builder-container') !== null) {
+            ret = '<email-edit-control ' + baseTemplate + '</email-edit-control>';
+        } else {
+            ret = '<ssb-edit-control ' + baseTemplate + '</ssb-edit-control>';
+        }
+
+        return ret;
+    }
 
     function init(element) {
 

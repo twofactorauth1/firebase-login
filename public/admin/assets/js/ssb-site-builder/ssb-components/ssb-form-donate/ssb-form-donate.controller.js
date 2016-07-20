@@ -12,6 +12,7 @@
         var localStorageService = null;
         var $routeParams = null;
         var orderCookieData = null;
+        var orderCookieKey = 'order_cookie';
 
         if ($injector.has('ProductService')) {
             productService = $injector.get('ProductService');
@@ -23,15 +24,14 @@
 
         if ($injector.has("localStorageService")) {
             localStorageService = $injector.get('localStorageService');
+            orderCookieData = localStorageService.get(orderCookieKey);
         }
 
         if ($injector.has("$routeParams")) {
             $routeParams = $injector.get('$routeParams');
-            orderCookieData = localStorageService.get(orderCookieKey);
         }
 
         var vm = this;
-        var orderCookieKey = 'order_cookie';
 
         vm.init = init;
 
@@ -664,6 +664,7 @@
                 }
                 var orderService = $injector.get('orderService');
                 var order = _formattedOrder();
+                order.status = 'completed';
                 if (order.customer) {
                     cardInput.name = order.customer.first + ' ' + order.customer.last;
                     // cardInput.address_line1 = order.customer.details[0].addresses.length ? order.customer.details[0].addresses[0].address : '';
@@ -832,6 +833,7 @@
                 $timeout(function () {
                     vm.openModalFn();
                 }, 1000);
+
                 if (vm.checkoutModalState == 5 && orderCookieData) {
                     if ($injector.has('orderService')) {
                         var orderService = $injector.get('orderService');

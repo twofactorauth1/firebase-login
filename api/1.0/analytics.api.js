@@ -56,10 +56,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //visit
         app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
-        app.post(this.url('session/:id/pageStart'), this.storePageInfo.bind(this));
+        app.post(this.url('session/:id/pageStart'), this.setup.bind(this), this.storePageInfo.bind(this));
         app.post(this.url('session/:id/ping'), this.storePingInfo.bind(this));
 
-
+        app.get(this.url('reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runVisitorsReport.bind(this));
+        app.get(this.url('reports/visitorLocations'), this.isAuthAndSubscribedApi.bind(this), this.visitorLocationsReport.bind(this));
+        app.get(this.url('reports/visitorDevices'), this.isAuthAndSubscribedApi.bind(this), this.visitorDeviceReport.bind(this));
+        app.get(this.url('reports/users'), this.isAuthAndSubscribedApi.bind(this), this.userReport.bind(this));
+        app.get(this.url('reports/pageviews'), this.isAuthAndSubscribedApi.bind(this), this.pageviewsReport.bind(this));
+        app.get(this.url('reports/sessions'), this.isAuthAndSubscribedApi.bind(this), this.sessionsReport.bind(this));
+        app.get(this.url('reports/sessionLength'), this.isAuthAndSubscribedApi.bind(this), this.sessionLengthReport.bind(this));
+        app.get(this.url('reports/trafficSources'), this.isAuthAndSubscribedApi.bind(this), this.trafficSourcesReport.bind(this));
+        app.get(this.url('reports/newVsReturning'), this.isAuthAndSubscribedApi.bind(this), this.newVsReturningReport.bind(this));
+        app.get(this.url('reports/pageAnalytics'), this.isAuthAndSubscribedApi.bind(this), this.pageAnalyticsReport.bind(this));
     },
 
     sendToKeen: function(req, res) {
@@ -1045,6 +1054,11 @@ _.extend(api.prototype, baseApi.prototype, {
         pageEvent.set('server_time', new Date().getTime());
         pageEvent.set('server_time_dt', new Date());
 
+        pageEvent.set('accountId', self.currentAccountId(req));
+        if(!self.currentAccountId) {
+            self.log.warn('current account ID is null for request:', req);
+        }
+
         analyticsManager.storePageEvent(pageEvent, function(err){
             if(err) {
                 self.log.error('Error saving page event: ' + err);
@@ -1067,6 +1081,282 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
         self.send200(res);
+    },
+
+    runVisitorsReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> runVisitorsReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end).toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start).toDate();
+        }
+        analyticsManager.getVisitorReports(accountId, userId, start, end, function(err, value){
+            self.log.debug(accountId, userId, '<< runVisitorsReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    visitorLocationsReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> visitorLocationsReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end).toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start).toDate();
+        }
+
+        analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, function(err, value){
+            self.log.debug(accountId, userId, '<< visitorLocationsReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    visitorDeviceReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> visitorDeviceReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+        }
+
+        analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, function(err, value){
+            self.log.debug(accountId, userId, '<< visitorDeviceReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    userReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> userReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var previousStart = moment(start).add(-1, 'months').toDate();
+        var previousEnd = start;
+
+        analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
+            self.log.debug(accountId, userId, '<< userReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    pageviewsReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> pageviewsReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var previousStart = moment(start).add(-1, 'months').toDate();
+        var previousEnd = start;
+
+        analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
+            self.log.debug(accountId, userId, '<< pageviewsReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    sessionsReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> sessionsReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var previousStart = moment(start).add(-1, 'months').toDate();
+        var previousEnd = start;
+
+        analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
+            self.log.debug(accountId, userId, '<< sessionsReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    sessionLengthReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> sessionLengthReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var previousStart = moment(start).add(-1, 'months').toDate();
+        var previousEnd = start;
+
+        analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
+            self.log.debug(accountId, userId, '<< sessionLengthReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+        //sessionLengthReport
+    },
+
+    trafficSourcesReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> trafficSourcesReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+            self.log.debug('start:', start);
+        }
+        analyticsManager.trafficSourcesReport(accountId, userId, start, end,function(err, value){
+            self.log.debug(accountId, userId, '<< trafficSourcesReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    newVsReturningReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> newVsReturningReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+            self.log.debug('start:', start);
+        }
+        analyticsManager.newVsReturningReport(accountId, userId, start, end,function(err, value){
+            self.log.debug(accountId, userId, '<< newVsReturningReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    pageAnalyticsReport: function(req, resp){
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> pageAnalyticsReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end, 'MM/DD/YYYY').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'MM/DD/YYYY').toDate();
+            self.log.debug('start:', start);
+        }
+        analyticsManager.pageAnalyticsReport(accountId, userId, start, end,function(err, value){
+            self.log.debug(accountId, userId, '<< pageAnalyticsReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
     }
 });
 

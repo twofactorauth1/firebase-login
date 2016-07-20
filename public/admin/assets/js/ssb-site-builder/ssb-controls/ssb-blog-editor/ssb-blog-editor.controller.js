@@ -64,7 +64,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         }, 0);
         
         if (vm.state.post && vm.state.pendingBlogChanges && id[1] !== "edit") {
-            vm.savePost();
+            vm.savePost(null, null , true);
         }
     }, 1000), true);
 
@@ -221,7 +221,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.savePost(post);
     }
 
-    function savePost(post, suppressToaster) {
+    function savePost(post, suppressToaster, reload) {
         var post = post || vm.state.post;
 
         if (!post || !isValidPost(post)) {
@@ -245,7 +245,12 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             toast = { type: 'success', title: 'Post Saved', message: 'The post was saved successfully.' };
         }).catch(function(error) {
             toast = { type: 'error', title: 'Error', message: (error.data ? error.data.message : 'Error updating post. Please try again.') };
-            vm.handleSaveErrors(error);
+            if(post._id && reload){
+                SimpleSiteBuilderBlogService.getPost(post);
+                vm.handleSaveErrors(error);
+            }
+            else
+                vm.handleSaveErrors(error);
         }).finally(function() {
             vm.uiState.saveLoading = false;
             if (!suppressToaster) {

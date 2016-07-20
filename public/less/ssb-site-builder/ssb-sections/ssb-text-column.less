@@ -37,4 +37,36 @@
 	        float: left;
 	    }
 	}
+
+
+
+	.generate-column-spacing-classes(500);
+
+	.generate-column-spacing-classes(@n, @i: 10) when (@i =< @n) {
+	  .ssb-component-layout-columns-spacing-last-column-@{i} {
+	  	.component-wrap{
+	  		margin-right: -(1px * @i/2);
+		    padding-left: (1px * @i/2);
+		    padding-right: (1px * @i/2);
+	  	}
+	    
+	  }
+	  .ssb-component-layout-columns-spacing-first-column-@{i} {
+	    .component-wrap{
+	  		margin-right: 0;
+		    padding-left: (1px * @i/2);
+		    padding-right: (1px * @i/2);
+		    margin-left: -(1px * @i/2);
+	  	}
+	  }
+	  .ssb-component-layout-columns-spacing-@{i} {
+	    .component-wrap{
+	  		margin-right: -(1px * @i/4);
+		    padding-left: (1px * @i/2);
+		    padding-right: (1px * @i/2);
+		    margin-LEFT: -(1px * @i/4);
+	  	}
+	  }
+	  .generate-column-spacing-classes(@n, (@i + 10));
+	}
 }
