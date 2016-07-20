@@ -304,10 +304,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
                         if(actualColumnsIndexs.indexOf(index) === 0){
-                            classString += ' ssb-component-layout-columns-spacing-right-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                            classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
                         }
                         else if(actualColumnsIndexs.indexOf(index) === vm.section.layoutModifiers.columns.columnsNum - 1){
-                            classString += ' ssb-component-layout-columns-spacing-left-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
+                            classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
                         }
                         else{
                             classString += ' ssb-component-layout-columns-spacing-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
