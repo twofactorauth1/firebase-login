@@ -75,6 +75,7 @@
             description: 'A footer for your email.',
             enabled: true
         }];
+        vm.uiState.dirtyOverride = false;
 
         vm.openSimpleModalFn = openSimpleModalFn;
         vm.openModalFn = openModalFn;
@@ -392,6 +393,7 @@
         function deleteFn() {
             vm.uiState.dataLoaded = false;
             WebsiteService.deleteEmail(vm.state.email, function() {
+                vm.uiState.dirtyOverride = true;
                 vm.uiState.dataLoaded = true;
                 $state.go('app.emails');
                 toaster.pop('Warning', 'Email deleted.');
@@ -505,6 +507,10 @@
         }
 
         function checkIfDirtyFn() {
+            if (vm.uiState.dirtyOverride) {
+                return false;
+            }
+
             if (angular.equals(vm.state.email, vm.state.originalEmail)) {
                 return false;
             } else {
