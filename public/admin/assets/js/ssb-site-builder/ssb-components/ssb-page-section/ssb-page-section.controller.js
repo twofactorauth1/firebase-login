@@ -337,7 +337,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
         }
 
-        if(vm.section && vm.section.spacing && vm.section.spacing.default){
+        if(vm.section && vm.section.spacing && !vm.section.spacing.default){
             classString += " default-inner-page-spacing-50";
         }
 
