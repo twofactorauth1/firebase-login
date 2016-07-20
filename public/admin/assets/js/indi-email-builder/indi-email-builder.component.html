@@ -137,7 +137,7 @@
                         </div>
                         <div class="form-group  col-xs-12 col-sm-6 margin-bottom-15" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
                             <label>Reply To</label>
-                            <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo" required>
+                            <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo">
                         </div>
                     </form>
                     <button type="button" ng-disabled="saveLoading" ng-click='vm.deleteFn()' class="btn btn-danger btn-0 margin-left-15 margin-bottom-5">
