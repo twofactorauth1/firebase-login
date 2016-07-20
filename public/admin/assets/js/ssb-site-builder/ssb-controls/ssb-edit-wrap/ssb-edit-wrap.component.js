@@ -523,7 +523,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                         /*
                          * if contextual menu is already open, open directly from single click
                          */
-                        if (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
+                        if (clickedComponentScope && (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge)) {
                             $timeout(function() {
                                 editControlComponent.find('.ssb-settings-btn').click();
                             });
