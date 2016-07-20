@@ -1,0 +1,107 @@
+<section
+    ng-if="vm.uiState.showSectionPanel"
+    class="ssb-sidebar-section-panel draggable fade-in"
+    ind-draggable>
+
+    <h4 class="ssb-sidebar-sub-heading draggable-handle">
+        <div>
+            <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 1" class="fa fa-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
+            <!-- Heading for Component and text elements -->
+            <span ng-if="vm.uiState.openSidebarSectionPanel.id">
+                {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
+            </span>
+            <!-- Heading for Sections -->
+            <span ng-if="!vm.uiState.openSidebarSectionPanel.id">
+                Section
+            </span>
+        </div>
+    </h4>
+
+    <div class="close-panel fa fa-close" ng-click="vm.closeSectionPanel()"></div>
+
+    <!-- Loading background -->
+    <div class="ssb-sidebar-section-panel-loading-background">
+        <div class="center"><br><span class="fa fa-spinner fa-spin"></span><br>Loading menu...</div>
+    </div>
+
+    <!-- Scrollable menu container -->
+    <div class="ssb-sidebar-section-panel-scrollable">
+
+        <!-- Email Background -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'background' === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/email/sidebar.settings.style.html"
+            component="vm.state.email"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <!-- Section Settings Home -->
+        <ssb-sidebar-settings-panel
+            ng-if="vm.uiState.activeComponentIndex !== null && !vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/indi-email-builder/email-components/shared/sidebar.settings.html"
+            component="vm.state.email.components[vm.uiState.activeComponentIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <!-- Section Settings Design -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="vm.uiState.activeComponentIndex !== null && 'design' === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/indi-email-builder/email-components/shared/sidebar.settings.design.html"
+            component="vm.state.email.components[vm.uiState.activeComponentIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel"
+            ng-if="vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'design' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.design.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'button-version' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.version.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'layout' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'settings' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id && vm.uiState.activeElement._id.indexOf('button-element_') == 0"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html"
+            component="vm.uiState.activeElement"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+    </div>
+</section>

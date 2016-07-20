@@ -1,0 +1,35 @@
+<div class="ssb-topbar-inner">
+
+    <div class="pull-left">
+
+        <div
+            class="ssb-email-back"
+            ng-click="vm.backToEmailList();">
+            <i
+                class="fa fa-arrow-left"
+                tooltip-placement="bottom"
+                tooltip-append-to-body="true"
+                tooltip="Back">
+            </i>
+            <span>Back</span>
+        </div>
+
+    </div>
+
+    <div id='ssb-froala-scrollable-container'></div>
+
+    <div class="pull-right text-right">
+
+        <email-action-buttons
+            ng-if="vm.uiState.openBlogPanel.id !== 'edit'"
+            class="ssb-control-bar"
+            save-action="vm.savePage()"
+            cancel-action="vm.cancelPendingEdits()"
+            state="vm.state"
+            revert-action='vm.revertPage(versionId)'
+            publish-action="vm.publishPage()">
+        </email-action-buttons>
+
+    </div>
+
+</div>

@@ -14,7 +14,9 @@
         vm.init = init;
 
         vm.state = vm.state || {};
-        vm.uiState = vm.uiState || {};
+        vm.uiState = {
+            sidebarOrientation: 'vertical'
+        };
 
         vm.state.email = null;
         vm.state.emailId = $stateParams.id;
@@ -566,7 +568,7 @@
                     }
                     vm.state.email = res.data;
                     vm.state.originalEmail = angular.copy(res.data);
-                    $timeout(function() {                 
+                    $timeout(function() {
                         vm.uiState.dataLoaded = true;
                     }, 1000);
                 }, function(err) {

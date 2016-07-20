@@ -174,7 +174,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('emailsCtrl', 'chartEmailService')
     }).state('app.emailEditor', {
         url: '/emails/editor/:id',
-        template: "<indi-email-builder></indi-email-builder>",
+        template: '<indi-email-builder class="ssb-site-builder"></indi-email-builder>',
         title: 'Email Editor',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'angular-slider')
