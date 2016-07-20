@@ -12,6 +12,7 @@
         var localStorageService = null;
         var $routeParams = null;
         var orderCookieData = null;
+        var orderCookieKey = 'order_cookie';
 
         if ($injector.has('ProductService')) {
             productService = $injector.get('ProductService');
@@ -23,15 +24,14 @@
 
         if ($injector.has("localStorageService")) {
             localStorageService = $injector.get('localStorageService');
+            orderCookieData = localStorageService.get(orderCookieKey);
         }
 
         if ($injector.has("$routeParams")) {
             $routeParams = $injector.get('$routeParams');
-            orderCookieData = localStorageService.get(orderCookieKey);
         }
 
         var vm = this;
-        var orderCookieKey = 'order_cookie';
 
         vm.init = init;
 
@@ -832,6 +832,7 @@
                 $timeout(function () {
                     vm.openModalFn();
                 }, 1000);
+                console.log(vm.checkoutModalState, orderCookieData);
                 if (vm.checkoutModalState == 5 && orderCookieData) {
                     if ($injector.has('orderService')) {
                         var orderService = $injector.get('orderService');
