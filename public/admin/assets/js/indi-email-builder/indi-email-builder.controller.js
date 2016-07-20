@@ -559,8 +559,10 @@
                             vm.uiState.editor = editor;
                             console.info('Event froalaEditor.focus triggered');
                         });
+
                         vm.uiState.dataLoaded = true;
-                    }, 0);
+
+                    }, 1000);
                 }, function(err) {
                     console.error(err);
                     $state.go('app.emails');
