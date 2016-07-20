@@ -9,7 +9,7 @@
                 class="fa fa-arrow-left"
                 tooltip-placement="bottom"
                 tooltip-append-to-body="true"
-                tooltip="Back to email list">
+                tooltip="Back">
             </i>
             <!-- <span>Back</span> -->
         </div>
@@ -23,11 +23,13 @@
         <email-action-buttons
             ng-if="vm.uiState.openBlogPanel.id !== 'edit'"
             class="ssb-control-bar"
-            save-action="vm.savePage()"
+            save-action="vm.saveEmail()"
             cancel-action="vm.cancelPendingEdits()"
             state="vm.state"
+            ui-state="vm.uiState"
             revert-action='vm.revertPage(versionId)'
-            publish-action="vm.publishPage()">
+            create-campaign-action="vm.uiState.createCampaign(vm.state.email)"
+            send-email-action="vm.uiState.openSimpleModal('send-test-email-modal')">
         </email-action-buttons>
 
     </div>

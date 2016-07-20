@@ -39,7 +39,7 @@
 
         <!-- Section Settings Home -->
         <ssb-sidebar-settings-panel
-            ng-if="vm.uiState.activeComponentIndex !== null && vm.uiState.openSidebarSectionPanel.componentId"
+            ng-if="vm.uiState.activeComponentIndex !== null && vm.uiState.activeComponentIndex !== undefined && vm.uiState.openSidebarSectionPanel.componentId"
             settings-template="assets/js/indi-email-builder/email-components/shared/sidebar.settings.html"
             component="vm.state.email.components[vm.uiState.activeComponentIndex]"
             state="vm.state"

@@ -20,11 +20,12 @@
 
         vm.state.email = null;
         vm.state.emailId = $stateParams.id;
-        vm.uiState.dataLoaded = false;
+        vm.state.pendingEmailChanges = false;
         vm.state.account = null;
         vm.state.website = {
             settings: {}
         };
+        vm.uiState.dataLoaded = false;
         vm.uiState.modalInstance = null;
         vm.uiState.editor = null;
         vm.uiState.componentTypes = [{
@@ -78,24 +79,11 @@
             enabled: true
         }];
         vm.uiState.dirtyOverride = false;
-
-        vm.openSimpleModalFn = openSimpleModalFn;
-        vm.openModalFn = openModalFn;
-        vm.closeModalFn = closeModalFn;
-        vm.addComponentFn = addComponentFn;
-        vm.cloneComponentFn = cloneComponentFn;
-        vm.saveFn = saveFn;
-        vm.insertMediaFn = insertMediaFn;
-        vm.moveComponentFn = moveComponentFn;
-        vm.clickImageButton = clickImageButton;
-        vm.deleteFn = deleteFn;
-        vm.filterComponentsFn = filterComponentsFn;
-        vm.sendOneTimeEmailFn = sendOneTimeEmailFn;
-        vm.changeBackgroundFn = changeBackgroundFn;
-        vm.closeSectionPanel = closeSectionPanel;
-        vm.createCampaignFn = createCampaignFn;
-        vm.checkIfDirtyFn = checkIfDirtyFn;
-        vm.resetDirtyFn = resetDirtyFn;
+        vm.uiState.openSimpleModal = openSimpleModalFn;
+        vm.uiState.closeModal = closeModalFn;
+        vm.uiState.saveEmail = saveFn;
+        vm.uiState.createCampaign = createCampaignFn;
+        vm.uiState.sendOneTimeEmail = sendOneTimeEmailFn;
 
         vm.uiState.navigation = {
             back: function() {
@@ -140,6 +128,20 @@
             }
         };
 
+        vm.addComponentFn = addComponentFn;
+        vm.cloneComponentFn = cloneComponentFn;
+        vm.saveFn = saveFn;
+        vm.insertMediaFn = insertMediaFn;
+        vm.moveComponentFn = moveComponentFn;
+        vm.clickImageButton = clickImageButton;
+        vm.deleteFn = deleteFn;
+        vm.filterComponentsFn = filterComponentsFn;
+        vm.changeBackgroundFn = changeBackgroundFn;
+        vm.closeSectionPanel = closeSectionPanel;
+        vm.checkIfDirtyFn = checkIfDirtyFn;
+        vm.resetDirtyFn = resetDirtyFn;
+        vm.pageChanged = pageChanged;
+
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
             $rootScope.$broadcast('$destroyFroalaInstances');
             $rootScope.app.layout.isMinimalAdminChrome = false;
@@ -174,6 +176,34 @@
             }, 500);
         });
 
+        $scope.$on('focusEditor', function(event, args) {
+            vm.uiState.editor = args.editor;
+            vm.uiState.editor.img = null;
+        });
+
+        $scope.$on('activeEditor', function(event, args) {
+            if (args.editor)
+                vm.uiState.editor = args.editor;
+            if (args.editorImage)
+                vm.uiState.editor.img = args.editorImage;
+        });
+
+        var unbindEmailStateWatcher = $scope.$watch('vm.state.email', _.debounce(function(email) {
+            console.time('angular.equals for email');
+            if (email && vm.state.originalEmail && vm.pageChanged(email, vm.state.originalEmail)) {
+                console.timeEnd('angular.equals for email');
+                vm.state.pendingEmailChanges = true;
+                console.log("Email changed");
+                if (vm.uiState && vm.uiState.selectedEmail) {
+                    vm.uiState.selectedEmail = vm.state.email;
+                }
+            } else {
+                vm.state.pendingEmailChanges = false;
+            }
+        }, 100), true);
+
+
+
         function openSimpleModalFn(modal, _size) {
 
             var _modal = {
@@ -191,77 +221,6 @@
             });
 
         }
-
-
-        function openModalFn(modal, controller, index, size) {
-            console.log('openModal >>> ', modal, controller, index, size);
-            var _modal = {
-                templateUrl: modal,
-                keyboard: false,
-                backdrop: 'static',
-                size: 'md',
-                scope: $scope,
-                resolve: {
-                    components: function() {
-                        return vm.state.email && vm.state.email.components ? vm.state.email.components : [];
-                    }
-                }
-            };
-
-            if (controller) {
-                _modal.controller = controller;
-
-                _modal.resolve.contactMap = function() {
-                    return {};
-                };
-                _modal.resolve.website = function() {
-                    return vm.state.website;
-                };
-
-                _modal.resolve.showInsert = function() {
-                    return true;
-                };
-
-                _modal.resolve.insertMedia = function() {
-                    return vm.insertMediaFn;
-                };
-
-                _modal.resolve.openParentModal = function() {
-                    return vm.openModalFn;
-                };
-
-                _modal.resolve.accountShowHide = function() {
-                    return vm.state.account.showhide;
-                };
-                _modal.resolve.isEmail = function() {
-                    return true;
-                };
-
-                _modal.resolve.isSingleSelect = function() {
-                    return true;
-                };
-            }
-
-            if (angular.isDefined(index) && index !== null && index >= 0) {
-                $scope.setEditingComponent(index);
-                _modal.resolve.clickedIndex = function() {
-                    return index;
-                };
-
-                _modal.resolve.pageHandle = function() {
-                    return $scope.page ? $scope.page.handle : null;
-                };
-            }
-
-            if (size) {
-                _modal.size = size;
-            }
-            vm.uiState.modalInstance = $modal.open(_modal);
-            vm.uiState.modalInstance.result.then(null, function() {
-                angular.element('.sp-container').addClass('sp-hidden');
-            });
-        }
-
 
         function closeModalFn() {
             if (vm.uiState.modalInstance) {
@@ -459,7 +418,6 @@
         function pageLinkClick(e) {
             if (!angular.element(this).hasClass("clickable-link")) {
                 e.preventDefault();
-                // e.stopPropagation();
             }
         }
 
@@ -527,7 +485,7 @@
                 return false;
             }
 
-            if (angular.equals(vm.state.email, vm.state.originalEmail)) {
+            if (!vm.state.pendingEmailChanges) {
                 return false;
             } else {
                 return true;
@@ -536,19 +494,117 @@
 
         function resetDirtyFn() {
             vm.state.email = angular.copy(vm.state.originalEmail);
+            vm.state.pendingEmailChanges = false;
         }
 
-        $scope.$on('focusEditor', function(event, args) {
-            vm.uiState.editor = args.editor;
-            vm.uiState.editor.img = null;
-        });
+        /**
+         * Inspect changes beyond simple angular.equals
+         * - if angular.equals detects a change, then:
+         *      - get the specific change from the data (DeepDiff)
+         *      - if that change is ONLY a [data-compile] difference, then:
+         *          - ignore it as a change
+         *          - apply to original data so future compares don't include this diff
+         *          - decrement changes so we don't count it in number of changes
+         *          - return changes > 0
+         *      - else the change is legit, return true
+         * - else the change is legit, return true
+         *
+         * TODO: handle undo in Froala
+         * TODO: consolidate usages (ssb-site-builder.controller.js)
+         */
+        function pageChanged(originalEmail, currentEmail) {
+            if (!angular.equals(originalEmail, currentEmail) && !vm.state.pendingEmailChanges) {
+                var originalEmail = JSON.parse(angular.toJson(originalEmail));
+                var currentEmail = JSON.parse(angular.toJson(currentEmail));
+                var jsondiff1 = DeepDiff.diff(originalEmail, currentEmail);
+                var changes = jsondiff1.length;
 
-        $scope.$on('activeEditor', function(event, args) {
-            if (args.editor)
-                vm.uiState.editor = args.editor;
-            if (args.editorImage)
-                vm.uiState.editor.img = args.editorImage;
-        });
+                if (changes) {
+
+                    for (var i = 0; i < changes; i++) {
+
+                        console.debug('tracked change');
+                        console.debug(jsondiff1[i].lhs);
+                        console.debug(jsondiff1[i].rhs);
+
+                        var diff1 = jsondiff1[i].lhs;
+                        var diff2 = jsondiff1[i].rhs;
+                        var changedPath = jsondiff1[i].path;
+                        if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2)) {
+
+                            console.debug('change to ignore detected @: ', jsondiff1[i].path);
+
+                            $timeout(function() {
+
+                                DeepDiff.applyChange(originalEmail, currentEmail, jsondiff1[i]);
+
+                                vm.state.originalEmail = originalEmail;
+
+                                console.debug('should be empty: ', DeepDiff.diff(originalEmail, currentEmail));
+
+                                changes--;
+
+                                return changes > 0;
+
+                            });
+
+                        } else {
+                            console.log(diff1);
+                            console.log(diff2);
+                            return true;
+                        }
+                    }
+                } else {
+
+                    return changes > 0;
+
+                }
+
+            } else {
+
+                return false
+
+            }
+
+        }
+
+        /**
+         * Detect changes to page data, determine if they should be ignored
+         * - handles temp IDs for buttons inside Froala editor (button was added)
+         */
+        function dataIsCompiledAdded(diff1, diff2) {
+                var updated = false;
+
+                if (diff1 && diff2) {
+                    updated = angular.isDefined(diff1) &&
+                            angular.isDefined(diff1.indexOf) &&
+                            diff1.indexOf('data-compiled') === -1
+                            angular.isDefined(diff2) &&
+                            angular.isDefined(diff2.indexOf) &&
+                            diff2.indexOf('data-compiled') !== -1;
+                }
+
+                if (updated && angular.isDefined(diff1) && angular.isDefined(diff2)) {
+                    updated = angular.equals(diff1, diff2)
+                }
+
+                return updated;
+        };
+
+        /**
+         * Detect changes to page data, determine if they should be ignored
+         * - handles temp IDs for buttons inside Froala editor (button was removed)
+         */
+        function dataIsCompiledRemoved(diff1, diff2) {
+            return  diff1 &&
+                    diff2 &&
+                    angular.isDefined(diff1) &&
+                    angular.isDefined(diff1.indexOf) &&
+                    diff1.indexOf('data-compiled') !== -1 &&
+                    angular.isDefined(diff2) &&
+                    angular.isDefined(diff2.indexOf) &&
+                    diff2.indexOf('data-compiled') === -1
+        };
 
         function init(element) {
 
