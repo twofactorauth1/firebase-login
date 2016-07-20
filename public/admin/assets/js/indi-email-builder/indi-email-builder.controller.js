@@ -1,10 +1,10 @@
-(function() {
+(function () {
 
     app.controller('EmailBuilderController', indiEmailBuilderController);
 
-    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', 'EmailCampaignService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', '$location'];
+    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', 'EmailCampaignService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', '$location', 'SweetAlert'];
     /* @ngInject */
-    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, EmailCampaignService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, $location) {
+    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, EmailCampaignService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, $location, SweetAlert) {
 
         console.info('email-builder directive init...');
 
@@ -96,13 +96,13 @@
         vm.resetDirtyFn = resetDirtyFn;
 
         vm.uiState.navigation = {
-            back: function() {
+            back: function () {
                 vm.uiState.navigation.index = 0;
             },
             index: 0,
             sectionPanel: {
                 navigationHistory: [],
-                loadPanel: function(obj, back) {
+                loadPanel: function (obj, back) {
 
                     if (!back) {
                         vm.uiState.navigation.sectionPanel.navigationHistory.push(obj);
@@ -112,7 +112,7 @@
                     console.log(vm.uiState.navigation.sectionPanel.navigationHistory);
 
                 },
-                back: function() {
+                back: function () {
                     var hist = vm.uiState.navigation.sectionPanel.navigationHistory;
                     var previousPanel;
 
@@ -128,7 +128,7 @@
                     }
 
                 },
-                reset: function() {
+                reset: function () {
                     vm.uiState.openSidebarSectionPanel = {
                         name: '',
                         id: ''
@@ -138,30 +138,30 @@
             }
         };
 
-        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
             $rootScope.$broadcast('$destroyFroalaInstances');
             $rootScope.app.layout.isMinimalAdminChrome = false;
             $rootScope.app.layout.isMinimalAdminChromeLight = false;
             $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
         });
 
-        $scope.$on('email.move.component', function(event, args) {
+        $scope.$on('email.move.component', function (event, args) {
             vm.moveComponentFn(args.component, args.direction);
         });
 
-        $scope.$on('email.duplicate.component', function(event, args) {
+        $scope.$on('email.duplicate.component', function (event, args) {
             vm.cloneComponentFn(args.component);
         });
 
-        $scope.$on('email.remove.component', function(event, args) {
+        $scope.$on('email.remove.component', function (event, args) {
             vm.uiState.dataLoaded = false;
 
-            vm.state.email.components.forEach(function(c, index) {
+            vm.state.email.components.forEach(function (c, index) {
                 if (c._id === args.component._id) {
                     vm.state.email.components.splice(index, 1);
                 }
             });
-            $timeout(function() {
+            $timeout(function () {
                 var element = vm.state.email.components.length ? document.getElementById(vm.state.email.components[vm.state.email.components.length - 1]._id) : null;
                 if (element) {
                     $document.scrollToElementAnimated(element, 175, 1000);
@@ -184,7 +184,7 @@
 
             vm.uiState.modalInstance = $modal.open(_modal);
 
-            vm.uiState.modalInstance.result.then(null, function() {
+            vm.uiState.modalInstance.result.then(null, function () {
                 angular.element('.sp-container').addClass('sp-hidden');
             });
 
@@ -200,7 +200,7 @@
                 size: 'md',
                 scope: $scope,
                 resolve: {
-                    components: function() {
+                    components: function () {
                         return vm.state.email && vm.state.email.components ? vm.state.email.components : [];
                     }
                 }
@@ -209,44 +209,44 @@
             if (controller) {
                 _modal.controller = controller;
 
-                _modal.resolve.contactMap = function() {
+                _modal.resolve.contactMap = function () {
                     return {};
                 };
-                _modal.resolve.website = function() {
+                _modal.resolve.website = function () {
                     return vm.state.website;
                 };
 
-                _modal.resolve.showInsert = function() {
+                _modal.resolve.showInsert = function () {
                     return true;
                 };
 
-                _modal.resolve.insertMedia = function() {
+                _modal.resolve.insertMedia = function () {
                     return vm.insertMediaFn;
                 };
 
-                _modal.resolve.openParentModal = function() {
+                _modal.resolve.openParentModal = function () {
                     return vm.openModalFn;
                 };
 
-                _modal.resolve.accountShowHide = function() {
+                _modal.resolve.accountShowHide = function () {
                     return vm.state.account.showhide;
                 };
-                _modal.resolve.isEmail = function() {
+                _modal.resolve.isEmail = function () {
                     return true;
                 };
 
-                _modal.resolve.isSingleSelect = function() {
+                _modal.resolve.isSingleSelect = function () {
                     return true;
                 };
             }
 
             if (angular.isDefined(index) && index !== null && index >= 0) {
                 $scope.setEditingComponent(index);
-                _modal.resolve.clickedIndex = function() {
+                _modal.resolve.clickedIndex = function () {
                     return index;
                 };
 
-                _modal.resolve.pageHandle = function() {
+                _modal.resolve.pageHandle = function () {
                     return $scope.page ? $scope.page.handle : null;
                 };
             }
@@ -255,7 +255,7 @@
                 _modal.size = size;
             }
             vm.uiState.modalInstance = $modal.open(_modal);
-            vm.uiState.modalInstance.result.then(null, function() {
+            vm.uiState.modalInstance.result.then(null, function () {
                 angular.element('.sp-container').addClass('sp-hidden');
             });
         }
@@ -282,11 +282,11 @@
                     }
                 }
 
-                WebsiteService.getComponent(addedType, addedType.version || 1, function(newComponent) {
+                WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
                     if (newComponent) {
                         vm.closeModalFn();
                         vm.state.email.components.push(newComponent);
-                        $timeout(function() {
+                        $timeout(function () {
                             var element = document.getElementById(newComponent._id);
                             if (element) {
                                 $document.scrollToElementAnimated(element, 175, 1000);
@@ -323,11 +323,11 @@
                     }
                 }
 
-                WebsiteService.getComponent(addedType, addedType.version || 1, function(newComponent) {
+                WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
                     if (newComponent) {
                         _.extend(newComponent, clone);
                         vm.state.email.components.push(newComponent);
-                        $timeout(function() {
+                        $timeout(function () {
                             var element = document.getElementById(newComponent._id);
                             if (element) {
                                 $document.scrollToElementAnimated(element, 175, 1000);
@@ -345,14 +345,14 @@
 
         function saveFn() {
             vm.uiState.dataLoaded = false;
-            EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
+            EmailBuilderService.updateEmail(vm.state.email).then(function (res) {
                 vm.uiState.dataLoaded = true;
                 vm.state.originalEmail = angular.copy(vm.state.email);
                 toaster.pop('success', 'Email saved');
             });
         }
 
-        $window.clickandInsertImageButton = function(editor) {
+        $window.clickandInsertImageButton = function (editor) {
             console.log('clickandInsertImageButton >>> ');
             vm.clickImageButton(editor, false);
         };
@@ -375,7 +375,7 @@
 
         function moveComponentFn(component, direction) {
             var toIndex;
-            var fromIndex = _.findIndex(vm.state.email.components, function(x) {
+            var fromIndex = _.findIndex(vm.state.email.components, function (x) {
                 return x._id === component._id;
             });
 
@@ -391,12 +391,26 @@
         }
 
         function deleteFn() {
-            vm.uiState.dataLoaded = false;
-            WebsiteService.deleteEmail(vm.state.email, function() {
-                vm.uiState.dirtyOverride = true;
-                vm.uiState.dataLoaded = true;
-                $state.go('app.emails');
-                toaster.pop('Warning', 'Email deleted.');
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You want to delete this email?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true,
+                closeOnCancel: true,
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    vm.uiState.dataLoaded = false;
+                    WebsiteService.deleteEmail(vm.state.email, function () {
+                        vm.uiState.dirtyOverride = true;
+                        vm.uiState.dataLoaded = true;
+                        $state.go('app.emails');
+                        toaster.pop('Warning', 'Email deleted.');
+                    });
+                }
             });
         }
 
@@ -410,7 +424,7 @@
 
             // Iterates through the array of filters and replaces each one with an object containing an
             // upper and lowercase version
-            _.each(vm.componentFilters, function(element, index) {
+            _.each(vm.componentFilters, function (element, index) {
                 componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
                 vm.componentFilters[index] = {
                     'capitalized': componentLabel,
@@ -428,11 +442,11 @@
 
         function sendOneTimeEmailFn(address) {
             vm.uiState.dataLoaded = false;
-            EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function() {
+            EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function () {
                 vm.uiState.dataLoaded = true;
                 vm.closeModalFn();
                 toaster.pop('success', 'Test email sent successfully');
-            }).catch(function(e) {
+            }).catch(function (e) {
                 console.error('Error sending one-time email:', JSON.stringify(e));
                 vm.uiState.dataLoaded = true;
                 vm.closeModalFn();
@@ -497,10 +511,10 @@
                 "contactTags": [],
             }
 
-            EmailCampaignService.createCampaign(campaign).then(function(res) {
+            EmailCampaignService.createCampaign(campaign).then(function (res) {
                 console.log('EmailCampaignService.createCampaign created', res.data.name);
                 $location.path('/marketing/campaigns/' + res.data._id);
-            }).catch(function(err) {
+            }).catch(function (err) {
                 console.error('EmailCampaignService.createCampaign error', JSON.stringify(err));
             });
 
@@ -528,9 +542,9 @@
         });
 
         $scope.$on('activeEditor', function (event, args) {
-            if(args.editor)
+            if (args.editor)
                 vm.uiState.editor = args.editor;
-            if(args.editorImage)
+            if (args.editorImage)
                 vm.uiState.editor.img = args.editorImage;
         });
 
@@ -549,27 +563,27 @@
 
             vm.filterComponentsFn();
 
-            AccountService.getAccount(function(data) {
+            AccountService.getAccount(function (data) {
                 vm.state.account = data;
             });
 
-            WebsiteService.getWebsite(function(data) {
+            WebsiteService.getWebsite(function (data) {
                 vm.state.website = data;
             });
 
             EmailBuilderService
                 .getEmail(vm.state.emailId)
-                .then(function(res) {
+                .then(function (res) {
                     if (!res.data._id) {
                         toaster.pop('error', 'Email not found');
                         $state.go('app.emails');
                     }
                     vm.state.email = res.data;
                     vm.state.originalEmail = angular.copy(res.data);
-                    $timeout(function() {                 
+                    $timeout(function () {
                         vm.uiState.dataLoaded = true;
                     }, 1000);
-                }, function(err) {
+                }, function (err) {
                     console.error(err);
                     $state.go('app.emails');
                 });
