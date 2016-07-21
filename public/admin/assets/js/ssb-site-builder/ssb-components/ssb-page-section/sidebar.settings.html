@@ -23,8 +23,8 @@
         <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' })" class="ssb-sidebar-section-panel-btn btn btn-link">
             <i class="fa fa-magic display-ib"></i> Style
         </button>
-
-        <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'version' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        
+        <button ng-hide="component.title === 'Blog Post List' || component.title === 'Blog Post Detail'" ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'version' })" class="ssb-sidebar-section-panel-btn btn btn-link">
             <i class="fa fa-clone display-ib"></i> Layout
         </button>
 
