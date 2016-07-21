@@ -14,6 +14,8 @@
     var baseWebsiteAPIUrlv1 = '/api/1.0/cms/website';
 
     emailService.loading = {value: 0};
+    emailService.email = {};
+    emailService.emails = [];
     emailService.getEmails = getEmails;
     emailService.getEmail = getEmail;
     emailService.updateEmail = updateEmail;
@@ -41,14 +43,15 @@
      */
     function getEmail(id) {
 
-      function success(data) {
-      }
+        function success(data) {
+            emailService.email = data;
+        }
 
-      function error(error) {
-        console.error('EmailBuilderService getEmail error: ', JSON.stringify(error));
-      }
+        function error(error) {
+            console.error('EmailBuilderService getEmail error: ', JSON.stringify(error));
+        }
 
-      return emailRequest($http.get([baseCmsAPIUrlv1, 'email', id].join('/')).success(success).error(error));
+        return emailRequest($http.get([baseCmsAPIUrlv1, 'email', id].join('/')).success(success).error(error));
     }
 
     /**
@@ -120,6 +123,7 @@
       AccountService.getAccount(function (data) {
         emailService.account = data;
         emailService.websiteId = data.website.websiteId;
+        emailService.getEmails();
       });
 
     })();

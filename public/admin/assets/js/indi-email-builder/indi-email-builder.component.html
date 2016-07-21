@@ -1,115 +1,14 @@
-<indig-navprompt
-    class="indig-navprompt"
-    my-state="{{$state.$current.name}}"
-    reset-dirty="vm.resetDirty()"
-    check-if-dirty="vm.checkIfDirty()"
-    save-page="vm.saveEmail()"
-    save-page-check="!saveLoading">
-</indig-navprompt>
-
-<style>
-    /*
-
-    TODO:
-        - decide on classnames for all hook-able stuff
-        - mirror classnames here and in theme stylesheet(s)
-        - add the hook classes to all relevant component markup
-
-    */
-
-
-    .email-theme-{{vm.state.website.theme.handle}} {
-        color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
-        font-family: {{vm.state.website.themeOverrides.defaultFontStack}};
-        background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-section-layout {
-        background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-navigation a {
-        color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header {
-        background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};
-        color: {{vm.state.website.themeOverrides.styles.headerTextColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
-        /*color: {{vm.state.website.themeOverrides.styles.headerTextColor}};*/
-        /*font-size: {{vm.state.website.themeOverrides.styles.headerSize}};*/
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero {
-        background-color: {{vm.state.website.themeOverrides.styles.heroBackgroundColor}};
-        color: {{vm.state.website.themeOverrides.styles.heroTextColor}};
-        text-align: center;
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
-        /*color: {{vm.state.website.themeOverrides.styles.heroTextColor}};*/
-        /*font-size: {{vm.state.website.themeOverrides.styles.heroSize}};*/
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-heading-text {
-        font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-paragraph-text {
-        font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn, .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:hover {
-        background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
-        color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
-        border-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
-    }
-
-    .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:hover, .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:active, .email-theme-{{vm.state.website.theme.handle}} .email-theme-btn:focus {
-        background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}}!important;
-    }
-
-    .email-theme-young-soul .navbar-toggle .icon-bar {
-        /*background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};*/
-    }
-
-    @media screen and (min-width: 768px) {
-
-        .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
-            font-size: {{vm.state.website.themeOverrides.styles.headerSize}};
-        }
-
-        .email-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
-            font-size: {{vm.state.website.themeOverrides.styles.heroSize}};
-        }
-
-        .email-theme-{{vm.state.website.theme.handle}} .email-theme-heading-text {
-            font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
-        }
-
-        .email-theme-{{vm.state.website.theme.handle}} .email-theme-paragraph-text {
-            font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
-        }
-
-    }
-
-</style>
-
 <div class="indi-email-builder">
-    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="vm.resetDirtyFn()" check-if-dirty="vm.checkIfDirtyFn()" save-page="vm.saveFn()" save-page-check="vm.uiState.dataLoaded"></indig-navprompt>
-    <!-- start: PAGE TITLE -->
-    <section id="page-title" class="indi-email-builder-title padding-top-15 padding-bottom-15">
-        <div class="row">
-            <div class="col-sm-8">
-                <h1 class="mainTitle">Email Builder</h1>
-                <span class="mainDescription">Fill out details below</span></span>
-            </div>
-        </div>
-    </section>
+    <indig-navprompt
+        class="indig-navprompt"
+        my-state="{{$state.$current.name}}"
+        reset-dirty="vm.resetDirtyFn()"
+        check-if-dirty="vm.checkIfDirtyFn()"
+        save-page="vm.uiState.saveEmail()"
+        save-page-check="vm.uiState.dataLoaded">
+    </indig-navprompt>
 
-    <div class="indi-email-builder-controls" ng-class="{'load1 csspinner': !vm.uiState.dataLoaded}">
+    <!-- <div class="indi-email-builder-controls" ng-class="{'load1 csspinner': !vm.uiState.dataLoaded}">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <h3 class="margin-bottom-0 margin-top-0 padding-bottom-0 padding-15 padding-right-0">{{vm.state.email.title}}</h3>
@@ -146,45 +45,10 @@
                     </button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
-            <div class="row">
-                <div class="email-control-buttons col-xs-12 margin-top-10 margin-bottom-10">
-
-                    <div class="pull-left">
-                        <button type="button" ng-disabled="saveLoading" ng-click="vm.openModalFn('add-email-component-modal')" class="btn btn-primary padding-right-10 margin-bottom-5">
-                            <i class="ti-plus"></i>
-                            <span>Add Section</span>
-                        </button>
-                    </div>
-
-                    <button type="button" ng-click="vm.openSimpleModalFn('send-test-email-modal');" ng-disabled="saveLoading" class="btn btn-primary padding-right-10 margin-bottom-5">
-                        <i class="fa fa-paper-plane"></i>
-                        <span>One-Time Email</span>
-                    </button>
-                    <button type="button" ng-disabled="saveLoading" ng-click="vm.createCampaignFn()" class="btn btn-primary padding-right-10 margin-bottom-5">
-                        <i class="fa fa-bullhorn"></i>
-                        <span>Create Campaign</span>
-                    </button>
-
-                    <div class="pull-right">
-                        <button type="button" ng-disabled="saveLoading || emailSettingForm.$invalid" ng-click='vm.saveFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
-                            <i class="ti-save"></i>
-                            <span>Save</span>
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row email-builder-toolbar">
-            <div id='ssb-froala-scrollable-container'></div>
-        </div>
-
-        <div class="indi-email-builder-editor-container ssb-theme-{{vm.state.website.theme.name | slugify}} row">
-            <div class="email-builder-main custom-fonts" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.dataLoaded">
+        <div id="ssb-main" class="indi-email-builder-editor-container ssb-main ssb-theme-{{vm.state.website.theme.name | slugify}} row">
+            <div class="email-builder-main custom-fonts" ng-hide="!vm.uiState.dataLoaded">
                 <div class='components' style="background-color: {{vm.state.email.emailBg}}">
                     <table class="device-width email-body" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                         <tr ng-if="vm.uiState.dataLoaded && !vm.state.email.components.length">
@@ -213,8 +77,8 @@
                             website="vm.state.website"
                             account="vm.state.account"
                             component-index="$index"
-                            component-count="vm.state.email.components.length"
-                            ></tr>
+                            component-count="vm.state.email.components.length">
+                        </tr>
 
                         <tr style="height: 150px"></tr>
                     </table>
@@ -229,13 +93,24 @@
                     <span>Change Background</span>
                 </button>
             </div>
-            <div
+            <!-- <div
                 data-ng-include
                 data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-sidebar/templates/indi-email-section-panel.component.html' ">
-            </div>
+            </div> -->
         </div>
     </div>
+
+    <email-sidebar
+        ng-if="vm.state.email"
+        class="fade-in-left ssb-sidebar ssb-sidebar-show"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </email-sidebar>
+
+    <email-topbar ng-if="vm.state.email" class="ssb-topbar fade-in-down" state="vm.state" ui-state="vm.uiState"></email-topbar>
+
 </div>
+
 
 <div data-ng-include data-src=" 'assets/views/partials/add-email-component-modal.html' " ></div>
 <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' "></div>

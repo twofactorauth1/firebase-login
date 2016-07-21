@@ -16,7 +16,7 @@
 	<div
         data-ng-include=" 'assets/views/partials/main-content.html' "
         class="main-content"
-        ng-class="{'margin-left-0': hideSidebar, 'ssb-site-builder-container': $state.current.name === 'app.website.ssbSiteBuilder.editor', 'dohy-dashboard-container': $state.current.name === 'app.dohy', 'email-builder-container': $state.current.name === 'app.emailEditor' }">
+        ng-class="{'margin-left-0': hideSidebar, 'ssb-site-builder-container': $state.current.name === 'app.website.ssbSiteBuilder.editor', 'dohy-dashboard-container': $state.current.name === 'app.dohy', 'ssb-site-builder-container email-builder-container': $state.current.name === 'app.emailEditor' }">
     </div>
 	<!-- / main content -->
 </div>

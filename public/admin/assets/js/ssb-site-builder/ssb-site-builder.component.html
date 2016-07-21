@@ -245,7 +245,7 @@
         ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer', 'ssb-blog-page': vm.uiState.isBlogPage }">
     </ssb-sidebar>
 
-    <ssb-topbar ng-if="vm.state.page" class="fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
+    <ssb-topbar ng-if="vm.state.page" class="ssb-topbar fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
 
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-page-settings-modal/ssb-page-settings-modal.component.html' " ></div>
