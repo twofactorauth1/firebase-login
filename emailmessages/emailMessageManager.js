@@ -1242,8 +1242,8 @@ var emailMessageManager = {
             allowedTags: false,
             allowedAttributes: {
                 'a': [ 'href', 'name', 'target', 'style', 'class' ],
-                'img': [ 'src', 'alt', 'style', 'class' ],
-                '*': [ 'style', 'class' ]
+                'img': [ 'src', 'alt', 'style', 'class', 'width', 'height' ],
+                '*': [ 'style', 'class', 'width', 'height' ]
             }
         })
 
