@@ -553,6 +553,13 @@ module.exports = {
                     by: userId
                 };
                 savedOrder.set('modified', modified);
+
+                if (savedOrder.get('line_items').length && savedOrder.get('line_items')[0].type == 'DONATION') {
+                    savedOrder.set('status', 'completed');
+                } else {
+                    savedOrder.set('status', 'processing');
+                }
+
                 dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
                     if(err) {
                         log.error(accountId, userId, 'Error updating order: ' + err);

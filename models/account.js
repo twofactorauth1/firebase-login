@@ -86,7 +86,8 @@ var account = $$.m.ModelBase.extend({
                 "dohy": true,
                 "userScripts": false,
                 "ssbBlog": true,
-                "ssbEmail": true
+                "ssbEmail": true,
+                "ssbFeatureFixedElements": true
             },
             "email_preferences": {
                 new_contacts: true,
