@@ -177,7 +177,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: '<indi-email-builder class="ssb-site-builder"></indi-email-builder>',
         title: 'Email Editor',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'angular-slider', 'deep-diff')
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'angular-slider', 'deep-diff', 'sortListPages')
     }).state('app.emailCampaign', {
         url: '/emails/campaigns/:id',
         template: "<indi-email-campaign></indi-email-campaign>",

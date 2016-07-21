@@ -12,11 +12,21 @@ function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleS
 
     vm.init = init;
     vm.save = save;
+    vm.createCampaign = createCampaign;
+    vm.sendEmail = sendEmail;
     vm.cancel = cancel;
     vm.revert = revert;
 
     function save() {
-    	vm.saveAction();
+        vm.saveAction();
+    }
+
+    function createCampaign() {
+        vm.createCampaignAction();
+    }
+
+    function sendEmail() {
+    	vm.sendEmailAction();
     }
 
     function cancel() {

@@ -703,115 +703,29 @@ function ssbEmailBuilderSidebarController($scope, $attrs, $filter, $document, $t
      */
     function setupSectionContent() {
 
-        var unbindWatcher = $scope.$watch(function() {
-            return SimpleSiteBuilderService.platformSections
-        }, function(newValue, oldValue) {
+        var componentLabel = '';
+        vm.enabledComponentTypes = _.where(vm.uiState.componentTypes, {
+            enabled: true
+        });
 
-            if (newValue) {
+        vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
 
-                var sectionLabel;
+        // Iterates through the array of filters and replaces each one with an object containing an
+        // upper and lowercase version
+        _.each(vm.componentFilters, function(element, index) {
+            componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+            vm.componentFilters[index] = {
+                'capitalized': componentLabel,
+                'lowercase': element
+            };
+            componentLabel = null;
+        });
 
-                /*
-                * @platformSections
-                * - an array of sections to add to a page, sorted and filtered
-                */
-                vm.uiState.contentSectionDisplayOrder = _.invert(_.object(_.pairs(SimpleSiteBuilderService.contentSectionDisplayOrder)));
-                vm.enabledPlatformSections = _(vm.state.platformSections).chain() // allow chaining underscore methods
-
-                                                .sortBy(function(x) { // sort by predetermined order
-                                                    return vm.uiState.contentSectionDisplayOrder[x.filter]
-                                                })
-
-                                                .filter(function(x) { //filter out any not enabled
-                                                    return x.enabled;
-                                                })
-
-                                                .value(); //return the new array
-
-
-
-                /*
-                * @userSections
-                * - an array of sections created by current user
-                */
-                vm.enabledUserSections = _.where(vm.state.userSections, {
-                    enabled: true
-                });
-
-
-                /*
-                 * The unique filter values of all the enabled components, sorted
-                 */
-                vm.sectionFilters = _(vm.enabledPlatformSections).chain()
-
-                                        .pluck('filter') // get just the filter values
-
-                                        .uniq() // get just unique values
-
-                                        .without('misc') // remove misc, put at end of array later
-
-                                        .sortBy(function(x) { // sort by predetermined order
-                                            return vm.uiState.contentSectionDisplayOrder[x] && parseInt(vm.uiState.contentSectionDisplayOrder[x], 10)
-                                        })
-
-                                        .value(); // return the new array
-
-
-
-                // Iterates through the array of filters and replaces each one with an object containing an
-                // upper and lowercase version
-                // Note: not sure why this was done, could be handled in CSS? - Jack
-
-                // List the section icons
-                var sectionIcons = SimpleSiteBuilderService.contentSectionIcons;
-
-                _.each(vm.sectionFilters, function (element, index) {
-                    sectionLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
-                    vm.sectionFilters[index] = {
-                      'capitalized': sectionLabel,
-                      'lowercase': element,
-                      'icon': sectionIcons[element] ? sectionIcons[element].icon : 'fa-adjust'
-                    };
-                    sectionLabel = null;
-                });
-
-                // Manually add the Misc section back on to the end of the list
-                vm.sectionFilters.push({
-                  'capitalized': 'Misc',
-                  'lowercase': 'misc',
-                  'icon': sectionIcons['misc'].icon
-                });
-
-                // Manually add the All option to the end of the list
-                vm.sectionFilters.push({
-                    'capitalized': 'All',
-                    'lowercase': 'all',
-                    'icon': sectionIcons['all'].icon
-                });
-
-                vm.setFilterType = function (label) {
-                    vm.typefilter = label;
-                };
-
-                //initially show platform sections
-                //TODO: when we implement section reuse
-                vm.sections = vm.enabledPlatformSections;
-                vm.sectionType = 'enabledPlatformSections';
-
-                // type is 'enabledPlatformSections' or 'enabledUserSections'
-                // TODO: when we implement section reuse
-                vm.setSectionType = function (type) {
-                    SimpleSiteBuilderService.getUserSections().then(function() {
-                        vm.sectionType = type;
-                        vm.sections = vm[type];
-                    })
-                };
-
-
-                unbindWatcher();
-
-            }
-        }, true);
+        // Manually add the All option to the begining of the list
+        vm.componentFilters.unshift({
+            'capitalized': 'All',
+            'lowercase': 'all'
+        });
 
     }
 

@@ -23,84 +23,33 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
     //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
         vm.state.saveLoading = true;
-        var isLegacyPage = !vm.state.page.ssb;
-        console.log(isLegacyPage);
         var promise = null;
 
-        if (!vm.uiState.hasSeenWarning && isLegacyPage) {
 
-            SweetAlert.swal({
-              title: "Are you sure?",
-              text: "CAUTION: This editor is under active development. Pages saved in Site Builder will not render or be editable in the legacy Pages editor.",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "Yes — Use Site Builder editor.",
-              cancelButtonText: "No — Use the legacy editor.",
-              closeOnConfirm: true,
-              closeOnCancel: true
-            },
-            function (isConfirm) {
-                if (isConfirm) {
+        vm.state.pendingPageChanges = false;
 
-                    vm.uiState.hasSeenWarning = true;
+        //hide section panel
+        vm.uiState.showSectionPanel = false;
 
-                    vm.state.pendingPageChanges = false;
+        //reset section panel
+        vm.uiState.navigation.sectionPanel.reset();
 
-                    //hide section panel
-                    vm.uiState.showSectionPanel = false;
-
-                    //reset section panel
-                    vm.uiState.navigation.sectionPanel.reset();
-
-                    promise = saveWebsite().then(function(){
-                        return (
-                            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
-                                    console.log('page saved');
-                                    if (!vm.state.publishLoading) {
-                                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                                    }
-                                    vm.state.saveLoading = false;
-                                })
-                            }).catch(function(err) {
-                                vm.state.saveLoading = false;
-                                toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                            })
-                        )
-                    })
-                }
-                else{
-                    vm.state.saveLoading = false;
-                }
-            });
-
-        } else {
-            vm.state.pendingPageChanges = false;
-
-            //hide section panel
-            vm.uiState.showSectionPanel = false;
-
-            //reset section panel
-            vm.uiState.navigation.sectionPanel.reset();
-
-            promise = saveWebsite().then(function(){
-                return (
-                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
-                            console.log('page saved');
-                            if (!vm.state.publishLoading) {
-                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                            }
-                            vm.state.saveLoading = false;
-                        })
-                    }).catch(function(err) {
-                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+        promise = saveWebsite().then(function(){
+            return (
+                SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                    SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                        console.log('page saved');
+                        if (!vm.state.publishLoading) {
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                        }
                         vm.state.saveLoading = false;
                     })
-                )
-            })
-        }
+                }).catch(function(err) {
+                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                    vm.state.saveLoading = false;
+                })
+            )
+        })
 
 
         return promise;

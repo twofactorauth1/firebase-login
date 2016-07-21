@@ -10,8 +10,8 @@ function emailActionButtons() {
             state: '=',
             saveAction: '&',
             cancelAction: '&',
-            revertAction: '&',
-            publishAction: '&'
+            createCampaignAction: '&',
+            sendEmailAction: '&'
         },
         templateUrl: 'assets/js/indi-email-builder/email-controls/email-action-buttons/email-action-buttons.component.html',
         controller: 'EmailBuilderActionButtonsController',

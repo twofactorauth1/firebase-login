@@ -2,9 +2,9 @@
 
     app.controller('EmailBuilderController', indiEmailBuilderController);
 
-    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', 'EmailCampaignService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', '$location', 'SweetAlert'];
+    indiEmailBuilderController.$inject = ['$scope', '$rootScope', 'EmailBuilderService', 'EmailCampaignService', 'SimpleSiteBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', '$location', 'SweetAlert'];
     /* @ngInject */
-    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, EmailCampaignService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, $location, SweetAlert) {
+    function indiEmailBuilderController($scope, $rootScope, EmailBuilderService, EmailCampaignService, SimpleSiteBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, $location, SweetAlert) {
 
         console.info('email-builder directive init...');
 
@@ -14,80 +14,98 @@
         vm.init = init;
 
         vm.state = vm.state || {};
-        vm.uiState = {
-            sidebarOrientation: 'vertical'
-        };
-
-        vm.state.email = null;
         vm.state.emailId = $stateParams.id;
+        vm.state.email = null;
+        vm.state.emails = null;
         vm.state.pendingEmailChanges = false;
+        vm.state.pendingWebsiteChanges = false;
         vm.state.account = null;
         vm.state.website = {
             settings: {}
         };
-        vm.uiState.dataLoaded = false;
-        vm.uiState.modalInstance = null;
-        vm.uiState.editor = null;
-        vm.uiState.componentTypes = [{
-            title: 'Header',
-            type: 'email-header',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-            filter: 'email',
-            description: 'Use this component for email header section.',
-            enabled: true
-        }, {
-            title: 'Content 1 Column',
-            type: 'email-1-col',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-            filter: 'layout',
-            description: 'Use this component for single column content.',
-            enabled: true
-        }, {
-            title: 'Content 2 Column',
-            type: 'email-2-col',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-            filter: 'layout',
-            description: 'Use this component for 2 column content.',
-            enabled: true
-        }, {
-            title: 'Content 3 Column',
-            type: 'email-3-col',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-            filter: 'layout',
-            description: 'Use this component for 3 column content.',
-            enabled: true
-        }, {
-            title: 'Social Links',
-            type: 'email-social',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-            filter: 'social',
-            description: 'Use this component for social links.',
-            enabled: true
-        }, {
-            title: 'Horizontal Rule',
-            type: 'email-hr',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-            filter: 'layout',
-            description: 'Use this component to insert a horizontal rule between components.',
-            enabled: true
-        }, {
-            title: 'Footer',
-            type: 'email-footer',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
-            filter: 'email',
-            description: 'A footer for your email.',
-            enabled: true
-        }];
-        vm.uiState.dirtyOverride = false;
-        vm.uiState.openSimpleModal = openSimpleModalFn;
-        vm.uiState.closeModal = closeModalFn;
-        vm.uiState.saveEmail = saveFn;
-        vm.uiState.createCampaign = createCampaignFn;
-        vm.uiState.sendOneTimeEmail = sendOneTimeEmailFn;
+
+        vm.uiState = {
+            sidebarOrientation: 'vertical',
+            dataLoaded: false,
+            modalInstance: null,
+            editor: null,
+            dirtyOverride: false,
+            openSimpleModal: openSimpleModalFn,
+            closeModal: closeModalFn,
+            saveEmail: saveFn,
+            saveAndLoadEmail: saveAndLoadEmail,
+            createCampaign: createCampaignFn,
+            sendOneTimeEmail: sendOneTimeEmailFn,
+            addComponent: addComponentFn,
+            delete: deleteFn,
+            componentTypes: [{
+                    title: 'Header',
+                    type: 'email-header',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    filter: 'email',
+                    description: 'Use this component for email header section.',
+                    enabled: true
+                }, {
+                    title: 'Content 1 Column',
+                    type: 'email-1-col',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    filter: 'layout',
+                    description: 'Use this component for single column content.',
+                    enabled: true
+                }, {
+                    title: 'Content 2 Column',
+                    type: 'email-2-col',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    filter: 'layout',
+                    description: 'Use this component for 2 column content.',
+                    enabled: true
+                }, {
+                    title: 'Content 3 Column',
+                    type: 'email-3-col',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    filter: 'layout',
+                    description: 'Use this component for 3 column content.',
+                    enabled: true
+                }, {
+                    title: 'Social Links',
+                    type: 'email-social',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    filter: 'social',
+                    description: 'Use this component for social links.',
+                    enabled: true
+                }, {
+                    title: 'Horizontal Rule',
+                    type: 'email-hr',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    filter: 'layout',
+                    description: 'Use this component to insert a horizontal rule between components.',
+                    enabled: true
+                }, {
+                    title: 'Footer',
+                    type: 'email-footer',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
+                    filter: 'email',
+                    description: 'A footer for your email.',
+                    enabled: true
+                }]
+        };
 
         vm.uiState.navigation = {
             back: function() {
                 vm.uiState.navigation.index = 0;
+                vm.uiState.navigation.indexClass = 'ssb-sidebar-position-0';
+            },
+            loadEmail: function(emailId) {
+                if (emailId && emailId !== vm.state.email._id) {
+                    EmailBuilderService.getEmails();
+                    if(!vm.state.pendingWebsiteChanges && !vm.state.pendingEmailChanges) {
+                        vm.uiState.loaded = false;
+                    }
+                    $location.path('/emails/editor/' + emailId);
+                } else {
+                    vm.uiState.navigation.index = 1;
+                    vm.uiState.navigation.indexClass = 'ssb-sidebar-position-1';
+                }
             },
             index: 0,
             sectionPanel: {
@@ -135,12 +153,13 @@
         vm.moveComponentFn = moveComponentFn;
         vm.clickImageButton = clickImageButton;
         vm.deleteFn = deleteFn;
-        vm.filterComponentsFn = filterComponentsFn;
+        // vm.filterComponentsFn = filterComponentsFn;
         vm.changeBackgroundFn = changeBackgroundFn;
         vm.closeSectionPanel = closeSectionPanel;
         vm.checkIfDirtyFn = checkIfDirtyFn;
         vm.resetDirtyFn = resetDirtyFn;
         vm.pageChanged = pageChanged;
+        vm.openModalFn = openModalFn;
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
             $rootScope.$broadcast('$destroyFroalaInstances');
@@ -188,6 +207,24 @@
                 vm.uiState.editor.img = args.editorImage;
         });
 
+        $scope.$on('$destroy', destroy);
+
+        /**
+         * watchers
+         */
+        var unbindWebsiteServiceWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
+            vm.state.pendingWebsiteChanges = false;
+            vm.state.website = website;
+            vm.state.originalWebsite = null;
+            $timeout(function() {
+                vm.state.originalWebsite = angular.copy(website);
+            }, 1000);
+        });
+
+        var unbindEmailServiceWatcher = $scope.$watch(function() { return EmailBuilderService.emails; }, function(emails){
+            vm.state.emails = emails;
+        });
+
         var unbindEmailStateWatcher = $scope.$watch('vm.state.email', _.debounce(function(email) {
             console.time('angular.equals for email');
             if (email && vm.state.originalEmail && vm.pageChanged(email, vm.state.originalEmail)) {
@@ -222,6 +259,77 @@
 
         }
 
+        function openModalFn(modal, controller, index, size) {
+            console.log('openModal >>> ', modal, controller, index, size);
+            var _modal = {
+                templateUrl: modal,
+                keyboard: false,
+                backdrop: 'static',
+                size: 'md',
+                scope: $scope,
+                resolve: {
+                    components: function() {
+                        return vm.state.email && vm.state.email.components ? vm.state.email.components : [];
+                    }
+                }
+            };
+
+            if (controller) {
+                _modal.controller = controller;
+
+                _modal.resolve.contactMap = function() {
+                    return {};
+                };
+                _modal.resolve.website = function() {
+                    return vm.state.website;
+                };
+
+                _modal.resolve.showInsert = function() {
+                    return true;
+                };
+
+                _modal.resolve.insertMedia = function() {
+                    return vm.insertMediaFn;
+                };
+
+                _modal.resolve.openParentModal = function() {
+                    return vm.openModalFn;
+                };
+
+                _modal.resolve.accountShowHide = function() {
+                    return vm.state.account.showhide;
+                };
+                _modal.resolve.isEmail = function() {
+                    return true;
+                };
+
+                _modal.resolve.isSingleSelect = function() {
+                    return true;
+                };
+            }
+
+            if (angular.isDefined(index) && index !== null && index >= 0) {
+                $scope.setEditingComponent(index);
+                _modal.resolve.clickedIndex = function() {
+                    return index;
+                };
+                _modal.resolve.pageHandle = function() {
+                    return $scope.page ? $scope.page.handle : null;
+                };
+            }
+
+            if (size) {
+                _modal.size = size;
+            }
+
+            vm.uiState.modalInstance = $modal.open(_modal);
+
+            vm.uiState.modalInstance.result.then(null, function() {
+                angular.element('.sp-container').addClass('sp-hidden');
+            });
+        }
+
+
         function closeModalFn() {
             if (vm.uiState.modalInstance) {
                 vm.uiState.modalInstance.close();
@@ -245,7 +353,7 @@
 
                 WebsiteService.getComponent(addedType, addedType.version || 1, function(newComponent) {
                     if (newComponent) {
-                        vm.closeModalFn();
+                        vm.uiState.closeModal();
                         vm.state.email.components.push(newComponent);
                         $timeout(function() {
                             var element = document.getElementById(newComponent._id);
@@ -328,7 +436,9 @@
 
         function insertMediaFn(asset) {
             if (vm.uiState.editor) {
-                vm.uiState.editor.image.insert(asset.url, !1, null, vm.uiState.editor.img);
+                $timeout(function() {
+                    vm.uiState.editor.image.insert(asset.url, !1, null, vm.uiState.editor.img);
+                }, 0);
             } else {
                 toaster.pop('error', 'Position cursor at the point of insertion');
             }
@@ -375,42 +485,42 @@
             });
         }
 
-        function filterComponentsFn() {
-            var componentLabel = '';
-            vm.enabledComponentTypes = _.where(vm.uiState.componentTypes, {
-                enabled: true
-            });
+        // function filterComponentsFn() {
+        //     var componentLabel = '';
+        //     vm.enabledComponentTypes = _.where(vm.uiState.componentTypes, {
+        //         enabled: true
+        //     });
 
-            vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
+        //     vm.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledComponentTypes, 'filter'), 'filter')), 'misc');
 
-            // Iterates through the array of filters and replaces each one with an object containing an
-            // upper and lowercase version
-            _.each(vm.componentFilters, function(element, index) {
-                componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
-                vm.componentFilters[index] = {
-                    'capitalized': componentLabel,
-                    'lowercase': element
-                };
-                componentLabel = null;
-            });
+        //     // Iterates through the array of filters and replaces each one with an object containing an
+        //     // upper and lowercase version
+        //     _.each(vm.componentFilters, function(element, index) {
+        //         componentLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+        //         vm.componentFilters[index] = {
+        //             'capitalized': componentLabel,
+        //             'lowercase': element
+        //         };
+        //         componentLabel = null;
+        //     });
 
-            // Manually add the All option to the begining of the list
-            vm.componentFilters.unshift({
-                'capitalized': 'All',
-                'lowercase': 'all'
-            });
-        }
+        //     // Manually add the All option to the begining of the list
+        //     vm.componentFilters.unshift({
+        //         'capitalized': 'All',
+        //         'lowercase': 'all'
+        //     });
+        // }
 
         function sendOneTimeEmailFn(address) {
             vm.uiState.dataLoaded = false;
             EmailBuilderService.sendOneTimeEmail(address, vm.state.email).then(function() {
                 vm.uiState.dataLoaded = true;
-                vm.closeModalFn();
+                vm.uiState.closeModal();
                 toaster.pop('success', 'Test email sent successfully');
             }).catch(function(e) {
                 console.error('Error sending one-time email:', JSON.stringify(e));
                 vm.uiState.dataLoaded = true;
-                vm.closeModalFn();
+                vm.uiState.closeModal();
                 toaster.pop('error', 'Test email sending failed');
             });
         }
@@ -562,7 +672,7 @@
 
             } else {
 
-                return false
+                return !angular.equals(originalEmail, currentEmail)
 
             }
 
@@ -606,6 +716,54 @@
                     diff2.indexOf('data-compiled') === -1
         };
 
+        function saveWebsite() {
+            vm.state.pendingWebsiteChanges = false;
+            return (
+                SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+                    console.log('website saved');
+                })
+            )
+        }
+
+        function saveAndLoadEmail(email) {
+            if (vm.state.pendingEmailChanges || vm.state.pendingWebsiteChanges) {
+                vm.state.saveLoading = true;
+                vm.state.pendingWebsiteChanges = false;
+                vm.state.pendingEmailChanges = false;
+                saveWebsite().then(function(){
+                    return (
+                        EmailBuilderService.updateEmail(vm.state.email).then(function(response){
+                            SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                console.log('email saved');
+                                toaster.pop('success', 'Email Saved', 'The email was saved successfully.');
+                                vm.state.saveLoading = false;
+                                vm.uiState.navigation.loadEmail(email._id);
+                                EmailBuilderService.getEmails();
+                            })
+                        }).catch(function(err) {
+                            toaster.pop('error', 'Error', 'The email was not saved. Please try again.');
+                            vm.state.saveLoading = false;
+                        })
+                    )
+                })
+            } else {
+                vm.uiState.navigation.loadEmail(email._id);
+                EmailBuilderService.getEmails();
+            }
+        };
+
+        function destroy() {
+
+            console.debug('destroyed main EmailBuilder controller');
+
+            angular.element("body").off("click", "[email-component-loader] a", pageLinkClick);
+
+            unbindEmailStateWatcher();
+            unbindEmailServiceWatcher();
+            unbindWebsiteServiceWatcher();
+
+        }
+
         function init(element) {
 
             vm.element = element;
@@ -617,9 +775,7 @@
 
             angular.element("body").on("click", "[email-component-loader] a", pageLinkClick);
 
-            angular.element("body").on("click", 'a[href="#email-settings"]', emailSettingsClick);
-
-            vm.filterComponentsFn();
+            // vm.filterComponentsFn();
 
             AccountService.getAccount(function(data) {
                 vm.state.account = data;

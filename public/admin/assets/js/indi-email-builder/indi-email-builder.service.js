@@ -15,6 +15,7 @@
 
     emailService.loading = {value: 0};
     emailService.email = {};
+    emailService.emails = [];
     emailService.getEmails = getEmails;
     emailService.getEmail = getEmail;
     emailService.updateEmail = updateEmail;
@@ -122,6 +123,7 @@
       AccountService.getAccount(function (data) {
         emailService.account = data;
         emailService.websiteId = data.website.websiteId;
+        emailService.getEmails();
       });
 
     })();

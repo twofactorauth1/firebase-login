@@ -2,17 +2,23 @@
 
     <div class="pull-left">
 
-        <div
-            class="ssb-nav-back"
-            ng-click="vm.backToEmailList();">
-            <i
-                class="fa fa-arrow-left"
-                tooltip-placement="bottom"
-                tooltip-append-to-body="true"
-                tooltip="Back">
-            </i>
-            <!-- <span>Back</span> -->
-        </div>
+        <ui-select
+            ng-init="vm.uiState.selectedPage = vm.state.email"
+            ng-model="vm.uiState.selectedPage"
+            ng-change="vm.uiState.saveAndLoadEmail($select.selected);"
+            theme="bootstrap"
+            class="ssb-ui-select-dark"
+            search-enabled="false">
+
+            <ui-select-match>
+                <small ng-bind-html="$select.selected.title"></small>
+            </ui-select-match>
+
+            <ui-select-choices class="margin-top-20" repeat="email in vm.state.emails | sortListPages:vm.state.email._id:vm.state.account">
+                <small ng-bind-html="email.title"></small>
+            </ui-select-choices>
+
+        </ui-select>
 
     </div>
 
@@ -21,15 +27,14 @@
     <div class="pull-right text-right">
 
         <email-action-buttons
-            ng-if="vm.uiState.openBlogPanel.id !== 'edit'"
             class="ssb-control-bar"
             save-action="vm.saveEmail()"
             cancel-action="vm.cancelPendingEdits()"
             state="vm.state"
             ui-state="vm.uiState"
             revert-action='vm.revertPage(versionId)'
-            create-campaign-action="vm.uiState.createCampaign(vm.state.email)"
-            send-email-action="vm.uiState.openSimpleModal('send-test-email-modal')">
+            create-campaign-action="vm.createCampaign(vm.state.email)"
+            send-email-action="vm.openSendEmailModal();">
         </email-action-buttons>
 
     </div>
