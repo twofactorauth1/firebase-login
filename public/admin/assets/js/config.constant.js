@@ -622,6 +622,7 @@ app.constant('JS_REQUIRES', {
     'simpleSiteBuilderService': 'assets/js/ssb-site-builder/ssb-site-builder.service.js',
     'emailBuilderService': 'assets/js/indi-email-builder/indi-email-builder.service.js',
     'indiLoginModalService': 'assets/js/indi-login-modal/indi-login-modal.service.js',
+    'siteAnalyticsService': 'assets/js/site-analytics/site-analytics.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
