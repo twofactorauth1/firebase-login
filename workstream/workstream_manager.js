@@ -328,7 +328,7 @@ module.exports = {
                 urlAry.push(appConfig.www_url.replace('http://', '').replace(':3000', ''));
             }
             var query = {
-                'url.domain': {$in:urlAry},
+                'accountId': accountId,
                 'server_time': {$gt:startDateMillis, $lt:endDateMillis},
                 'server_time_dt': {$exists:true}
             };
