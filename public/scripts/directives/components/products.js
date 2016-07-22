@@ -231,7 +231,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                 } else {
                     scope.invalidZipCode = true;
-                    CartDetailsService.showTax = false;
+                    if (scope.settings.taxbased !== 'business_location') {
+                        CartDetailsService.showTax = false;
+                    }
                 }
             };
 
@@ -1256,7 +1258,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope: scope,
                 backdrop: 'static'
               });
-                
+
               $timeout(function () {
                 $('#product-card-details-' + scope.component._id).card({
                     container: '#card-wrapper-' + scope.component._id
@@ -1289,10 +1291,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                   scope.checkoutModalState = 1;
                 }
             }
-            
+
         },
         controller: function($scope) {
-            var cookieKey = 'cart_cookie';
+            var cookieKey = 'cart_cookie_' + $scope.component._id;
             var cookieData = localStorageService.get(cookieKey);
             if (!cookieData) {
                 cookieData = {
