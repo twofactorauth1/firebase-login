@@ -1394,6 +1394,121 @@ var copyutil = {
         ], function done(err, sectionRefAry){
             fn(err, sectionRefAry);
         });
+    },
+
+    addMaxMindToSessionEvents: function(accountId, fn) {
+        var query = {
+            maxmind:{$exists:false},
+            accountId:6
+        };
+        if(accountId && accountId !== 0) {
+            query.accountId = accountId;
+        }
+        var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var sessionCollection = srcMongo.collection('session_events');
+        var geoiputil = require('./geoiputil');
+        sessionCollection.find(query).toArray(function(err, sessionEvents){
+            if(err) {
+                console.log('Error:', err);
+                fn(err);
+            } else {
+                async.eachLimit(sessionEvents, 20, function(event, cb){
+                    if(event.ip_address) {
+                        geoiputil.getMaxMindGeoForIP(event.ip_address, function(err, ip_geo_info){
+                            var replacementObject = {
+                                province: ip_geo_info.region,
+                                city: ip_geo_info.city,
+                                postal_code: ip_geo_info.postal,
+                                continent: ip_geo_info.continent,
+                                country: ip_geo_info.countryName
+                            };
+                            event.maxmind = replacementObject;
+                            sessionCollection.save(event, function(err, savedEvent){
+                                cb(err);
+                            });
+                        });
+                    } else {
+                        cb();
+                    }
+                }, function(err){
+                    if(err) {
+                        console.log('Error:', err);
+                        fn(err);
+                    } else {
+                        console.log('Done.');
+                        fn();
+                    }
+                });
+            }
+        });
+    },
+
+    addAccountIdToPageEvents: function(fn) {
+        var query = {
+            accountId:{$exists:false},
+            server_time_dt:{$gte:new Date('2016-04-01 00:00:00.000Z')}
+        };
+
+        var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var pageCollection = srcMongo.collection('page_events');
+        var accountsCollection = srcMongo.collection('accounts');
+        pageCollection.find(query).toArray(function(err, pageEvents){
+            if(err) {
+                console.log('Error:', err);
+                fn(err);
+            } else {
+                async.eachLimit(pageEvents, 20, function(pageEvent, cb){
+                    var domain = pageEvent.url.domain;
+                    var accountQuery = {};
+                    if(domain.indexOf('www') === 0) {
+                        var customDomain = domain.replace('www.', '');
+                        if (customDomain === 'indigenous.local' || customDomain === 'test.indigenous.io' || customDomain === 'indigenous.io') {
+                            accountQuery = {_id:6};
+                        } else {
+                            accountQuery = {customDomain : customDomain};
+                        }
+
+                        console.log('Custom domain query:', accountQuery);
+                    } else {
+                        var subdomain = domain.substring(0, domain.indexOf('.'));
+                        accountQuery = {subdomain:subdomain};
+                        console.log('subdomain query:', accountQuery);
+
+                    }
+                    accountsCollection.find(accountQuery).toArray(function(err, accounts){
+                        if(err || !accounts) {
+                            console.log('Error:', err);
+                            cb(err);
+                        } else {
+                            var account = accounts[0];
+                            if(account) {
+                                var accountId = account._id;
+                                console.log('Setting accountId: ' + accountId);
+                                pageEvent.accountId = accountId;
+                                pageCollection.save(pageEvent, function(err, savedEvent){
+                                    cb();
+                                });
+
+                            } else {
+                                console.log(accounts);
+                                cb();
+                            }
+                        }
+                    });
+                }, function(err){
+                    if(err) {
+                        console.log('Error:', err);
+                        fn(err);
+                    } else {
+                        console.log('done');
+                        fn();
+                    }
+                });
+
+            }
+        });
     }
 };
 
