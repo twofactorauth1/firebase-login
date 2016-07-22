@@ -47,7 +47,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor: null,
+            txtcolor: '#888888',
 
             /**
              *
@@ -66,7 +66,9 @@ var component = $$.m.ModelBase.extend({
                 color : ""
             },
 
-            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false}
+            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false},
+
+            text: '<div style="text-align: center;"><span style="font-family: Quicksand, sans-serif; font-size: 14px;"><br></span></div><div style="text-align: center;"><span style="font-family: Quicksand, sans-serif; font-size: 18px;">Your logo here</span></div><br><div style="text-align: center;"><span style="font-family: Quicksand, sans-serif; color: rgb(80, 199, 232); font-size: 14px;"><strong class="">www.indigenous.io</strong></span></div><br><br>'
 
         }
     },
