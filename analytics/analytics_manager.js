@@ -253,9 +253,12 @@ module.exports = {
         };
         stageAry.push(match);
         var group1 = {
-            $group: {_id:{
-                permanent_tracker:'$permanent_tracker',
-                yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}} }
+            $group: {
+                _id:{
+                    permanent_tracker:'$permanent_tracker',
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
+                }
+            }
         };
         stageAry.push(group1);
 
@@ -281,6 +284,8 @@ module.exports = {
                             result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
                             resultAry.push(result);
                         });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
                         cb(null, resultAry);
                     }
                 });
@@ -304,6 +309,8 @@ module.exports = {
                             result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
                             resultAry.push(result);
                         });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
                         cb(null, newVisitorResults, resultAry);
                     }
                 });
@@ -344,12 +351,15 @@ module.exports = {
         var group1 = {
             $group: {
                 _id: '$maxmind.province',
-                count: {$sum:1}
+                result: {$sum:1}
             }
         };
         stageAry.push(group1);
 
         dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            _.each(value, function(result){
+                result['ip_geo_info.province'] = result._id;
+            });
             self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
             fn(err, value);
         });
@@ -421,16 +431,17 @@ module.exports = {
 
         var group1 = {
             $group: {
-                _id:'$permanent_tracker'
+                _id:{
+                    permanent_tracker:'$permanent_tracker',
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
+                }
             }
         };
         stageAry.push(group1);
 
         var group2 = {
             $group: {
-                _id: {
-                    name:'count'
-                },
+                _id: '$_id.yearMonthDay',
                 total:{$sum:1}
             }
         };
@@ -443,7 +454,20 @@ module.exports = {
                         self.log.error('Error finding current month:', err);
                         cb(err);
                     } else {
-                        cb(null, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.total,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        cb(null, resultAry);
                     }
                 });
             },
@@ -455,11 +479,25 @@ module.exports = {
                         self.log.error('Error finding previous month:', err);
                         cb(err);
                     } else {
-                        cb(null, currentMonth, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.total,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        cb(null, currentMonth, resultAry);
                     }
                 });
             },
             function(currentMonth, previousMonth, cb) {
+
                 var result = {
                     currentMonth:currentMonth,
                     previousMonth: previousMonth
@@ -492,7 +530,7 @@ module.exports = {
         stageAry.push(match);
         var group = {
             $group: {
-                _id: '$accountId',
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
                 count:{$sum:1}
             }
         };
@@ -505,7 +543,20 @@ module.exports = {
                         self.log.error('Error finding current month:', err);
                         cb(err);
                     } else {
-                        cb(null, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.count,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        cb(null, resultAry);
                     }
                 });
             },
@@ -517,7 +568,20 @@ module.exports = {
                         self.log.error('Error finding previous month:', err);
                         cb(err);
                     } else {
-                        cb(null, currentMonth, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.count,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        cb(null, currentMonth, resultAry);
                     }
                 });
             },
@@ -556,16 +620,17 @@ module.exports = {
 
         var group1 = {
             $group: {
-                _id:'$session_id'
+                _id:{
+                    session_id:'$session_id',
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
+                }
             }
         };
         stageAry.push(group1);
 
         var group2 = {
             $group: {
-                _id: {
-                    name:'count'
-                },
+                _id: '$_id.yearMonthDay',
                 total:{$sum:1}
             }
         };
@@ -578,7 +643,20 @@ module.exports = {
                         self.log.error('Error finding current month:', err);
                         cb(err);
                     } else {
-                        cb(null, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                total: entry.total,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        cb(null, resultAry);
                     }
                 });
             },
@@ -590,7 +668,20 @@ module.exports = {
                         self.log.error('Error finding previous month:', err);
                         cb(err);
                     } else {
-                        cb(null, currentMonth, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                total: entry.total,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousEnd).format('YYYY-MM-DD'));
+                        cb(null, currentMonth, resultAry);
                     }
                 });
             },
@@ -643,7 +734,21 @@ module.exports = {
                         self.log.error('Error finding current month:', err);
                         cb(err);
                     } else {
-                        cb(null, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.averageTime,
+                                count: entry.count,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        cb(null, resultAry);
                     }
                 });
             },
@@ -651,14 +756,28 @@ module.exports = {
                 stageAry[0].$match.session_length = {$lte:5000};
                 //TODO: re-enable this
                 //stageAry[0].$match.page_depth = {$lte:1};
-                self.log.debug('match:', stageAry[0]);
+                //self.log.debug('match:', stageAry[0]);
                 dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
                     if(err) {
                         self.log.error('Error finding current month:', err);
                         cb(err);
                     } else {
-                        self.log.debug('results:', value);
-                        cb(null, nonBounceAvg, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.averageTime,
+                                count: entry.count,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0,count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        //self.log.debug('results:', value);
+                        cb(null, nonBounceAvg, resultAry);
                     }
                 });
             },
@@ -673,7 +792,21 @@ module.exports = {
                         self.log.error('Error finding current month:', err);
                         cb(err);
                     } else {
-                        cb(null, nonBounceAvg, bounceAvg, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.averageTime,
+                                count: entry.count,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0,count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        cb(null, nonBounceAvg, bounceAvg, resultAry);
                     }
                 });
             },
@@ -686,7 +819,21 @@ module.exports = {
                         self.log.error('Error finding current month:', err);
                         cb(err);
                     } else {
-                        cb(null, nonBounceAvg, bounceAvg, prevNonBounceAvg, value);
+                        var resultAry = [];
+                        _.each(value, function (entry) {
+                            var result = {
+                                value: entry.averageTime,
+                                count: entry.count,
+                                timeframe: {
+                                    start: entry._id
+                                }
+                            };
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            resultAry.push(result);
+                        });
+                        resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                        resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        cb(null, nonBounceAvg, bounceAvg, prevNonBounceAvg, resultAry);
                     }
                 });
             },
@@ -697,6 +844,35 @@ module.exports = {
                     prevNonBounceAvg:prevNonBounceAvg,
                     prevBounceAvg:prevBounceAvg
                 };
+                var currentMonthAvg = 0;
+                var currentMonthCount = 0;
+                var prevMonthAvg = 0;
+                var prevMonthCount = 0;
+                _.each(nonBounceAvg.concat(bounceAvg), function(nb){
+                    if(nb.value >0) {
+                        nb.valueSeconds = nb.value / 1000;
+                        currentMonthAvg+= (nb.value * nb.count);
+                        currentMonthCount += nb.count;
+                    } else {
+                        nb.valueSeconds = 0;
+                    }
+                });
+                result.currentMonthAverage = (currentMonthAvg / currentMonthCount);
+                _.each(prevNonBounceAvg.concat(prevBounceAvg), function(nb){
+                    if(nb.value >0) {
+                        nb.valueSeconds = nb.value / 1000;
+                        prevMonthAvg+= (nb.value * nb.count);
+                        prevMonthCount += nb.count;
+                    } else {
+                        nb.valueSeconds = 0;
+                    }
+                });
+                result.previousMonthAverage = (prevMonthAvg / prevMonthCount);
+                result.previousMonthBounceCount = 0;
+                _.each(prevBounceAvg, function(ba){
+                    result.previousMonthBounceCount += ba.count;
+                });
+
                 cb(null, result);
             }
         ], function(err, result){
@@ -727,7 +903,7 @@ module.exports = {
         var group = {
             $group:{
                 _id:'$referrer.domain',
-                count:{$sum:1}
+                result:{$sum:1}
             }
         };
         stageAry.push(group);
@@ -737,6 +913,9 @@ module.exports = {
                 self.log.error('Error finding current month:', err);
                 fn(err);
             } else {
+                _.each(value, function(result){
+                    result['referrer.domain'] = result._id;
+                });
                 self.log.debug(accountId, userId, '<< trafficSourcesReport');
                 fn(null, value);
             }
@@ -852,35 +1031,71 @@ module.exports = {
 
         var group1 = {
             $group:{
-                _id:{
-                    url_path: '$url.path',
-                    sessionId: '$session_id',
-                    entrances:'$entrance',
-                    exits:'$exit'
+                _id: {
+                    path: '$url.path',
+                    sessionId: '$session_id'
                 },
                 pageviews:{$sum:1},
                 timeOnPage:{$sum:'$timeOnPage'},
                 avgTimeOnPage:{$avg:'$timeOnPage'}
-
             }
         };
         stageAry.push(group1);
 
         var group2 = {
-            $group:{
-                _id:'$_id.new_visitor',
-                count:{$sum:1}
+            $group: {
+                _id: '$_id.path',
+                uniquePageviews: {$sum:1},
+                pageviews: {$sum:'$pageviews'},
+                timeOnPage: {$sum:'$timeOnPage'},
+                avgTimeOnPage:{$avg:'$avgTimeOnPage'}
             }
         };
-        //stageAry.push(group2);
+        stageAry.push(group2);
+
         dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
             if(err) {
                 self.log.error('Error finding current month:', err);
                 fn(err);
             } else {
+                _.each(value, function(result){
+                    result['url.path'] = result._id;
+                });
                 self.log.debug(accountId, userId, '<< trafficSourcesReport');
                 fn(null, value);
             }
         });
+    },
+
+    _zeroMissingDays: function(resultAry, blankResult, firstDate, lastDate) {
+        var currentDate = firstDate;
+        var zeroedResultAry = [];
+        _.each(resultAry, function(result){
+            while(moment(currentDate).isBefore(result.timeframe.start)) {
+
+                zeroedResultAry.push({
+                    timeframe:{
+                        start : currentDate,
+                        end : moment(currentDate).add(1, 'days').format('YYYY-MM-DD')
+                    }
+                });
+                zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+                currentDate = moment(currentDate).add(1, 'days').format('YYYY-MM-DD');
+            }
+            zeroedResultAry.push(result);
+            currentDate = moment(result.timeframe.start).add(1, 'days').format('YYYY-MM-DD');
+        });
+        while(moment(currentDate).isBefore(moment(lastDate))) {
+            zeroedResultAry.push({
+                timeframe:{
+                    start : currentDate,
+                    end : moment(currentDate).add(1, 'days').format('YYYY-MM-DD')
+                }
+            });
+            zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+            currentDate = moment(currentDate).add(1, 'days').format('YYYY-MM-DD');
+        }
+
+        return zeroedResultAry;
     }
 };

@@ -1,25 +1,29 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window) {
+app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'isSingleSelect', 'SweetAlert', "$window", "AccountService", function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, isSingleSelect, SweetAlert, $window, AccountService) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
   $scope.maximumUploadItems = 20;
 
-  AssetsService.getAssetsByAccount(function (data) {
-    if (data instanceof Array) {
-      $scope.originalAssets = data.slice(0);
-      $scope.assets = data.slice(0);
-      if ($scope.insertMediaType) {
-        $scope.m.selectAll(scope.insertMediaType, true);
+  AccountService.getAccount(function (account) {
+    $scope.account = account;
+    AssetsService.getAssetsByAccount(function (data) {
+      if (data instanceof Array) {
+        $scope.originalAssets = data.slice(0);
+        $scope.assets = data.slice(0);
+        if ($scope.insertMediaType) {
+          $scope.m.selectAll(scope.insertMediaType, true);
+        }
+        $timeout(function() {
+          $scope.loadingAssets = false;
+        }, 500);
       }
-      $timeout(function() {
-        $scope.loadingAssets = false;
-      }, 500);
-    }
-  });
+    });
+  })
+  
 
   $scope.successCopy = function () {
       ToasterService.show('success', 'Successfully copied text to your clipboard! Now just paste it wherever you would like.');
@@ -376,6 +380,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.m.onAssetUpdateCallback = function (asset) {
     var originalAsset = angular.copy(asset);
     originalAsset.checked = false;
+    originalAsset.accountId = $scope.account._id;
     AssetsService.updateAsset(originalAsset, function (data, status) {
       if (status == 200) {
         ToasterService.show('success', 'Asset updated.');

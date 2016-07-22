@@ -69,6 +69,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/trafficSources'), this.isAuthAndSubscribedApi.bind(this), this.trafficSourcesReport.bind(this));
         app.get(this.url('reports/newVsReturning'), this.isAuthAndSubscribedApi.bind(this), this.newVsReturningReport.bind(this));
         app.get(this.url('reports/pageAnalytics'), this.isAuthAndSubscribedApi.bind(this), this.pageAnalyticsReport.bind(this));
+        app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
     },
 
     sendToKeen: function(req, res) {
@@ -1181,8 +1182,15 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
 
-        var previousStart = moment(start).add(-1, 'months').toDate();
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
         var previousEnd = start;
+        self.log.debug('dateDiff:', dateDiff);
+        self.log.debug('start:', start);
+        self.log.debug('end:', end);
+        self.log.debug('previousStart:', previousStart);
+        self.log.debug('previousEnd:', previousEnd);
 
         analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
             self.log.debug(accountId, userId, '<< userReport');
@@ -1211,8 +1219,15 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
 
-        var previousStart = moment(start).add(-1, 'months').toDate();
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
         var previousEnd = start;
+        self.log.debug('dateDiff:', dateDiff);
+        self.log.debug('start:', start);
+        self.log.debug('end:', end);
+        self.log.debug('previousStart:', previousStart);
+        self.log.debug('previousEnd:', previousEnd);
 
         analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
             self.log.debug(accountId, userId, '<< pageviewsReport');
@@ -1241,8 +1256,15 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
 
-        var previousStart = moment(start).add(-1, 'months').toDate();
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
         var previousEnd = start;
+        self.log.debug('dateDiff:', dateDiff);
+        self.log.debug('start:', start);
+        self.log.debug('end:', end);
+        self.log.debug('previousStart:', previousStart);
+        self.log.debug('previousEnd:', previousEnd);
 
         analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
             self.log.debug(accountId, userId, '<< sessionsReport');
@@ -1270,9 +1292,15 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'MM/DD/YYYY').toDate();
             self.log.debug('start:', start);
         }
+        var dateDiff = moment(start).diff(end, 'days');
 
-        var previousStart = moment(start).add(-1, 'months').toDate();
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
         var previousEnd = start;
+        self.log.debug('dateDiff:', dateDiff);
+        self.log.debug('start:', start);
+        self.log.debug('end:', end);
+        self.log.debug('previousStart:', previousStart);
+        self.log.debug('previousEnd:', previousEnd);
 
         analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, function(err, value){
             self.log.debug(accountId, userId, '<< sessionLengthReport');
@@ -1356,6 +1384,75 @@ _.extend(api.prototype, baseApi.prototype, {
         analyticsManager.pageAnalyticsReport(accountId, userId, start, end,function(err, value){
             self.log.debug(accountId, userId, '<< pageAnalyticsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    allReports: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> allReports');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            end = moment(end).toDate();
+        }
+
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start).toDate();
+            self.log.debug('start:', start);
+        }
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
+        var previousEnd = start;
+        self.log.debug('dateDiff:', dateDiff);
+        self.log.debug('start:', start);
+        self.log.debug('end:', end);
+        self.log.debug('previousStart:', previousStart);
+        self.log.debug('previousEnd:', previousEnd);
+
+        async.parallel({
+            visitorReports: function(callback){
+                analyticsManager.getVisitorReports(accountId, userId, start, end, callback);
+            },
+            visitorLocationsReport: function(callback) {
+                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, callback);
+            },
+            visitorDeviceReport: function(callback) {
+                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, callback);
+            },
+            userReport: function(callback) {
+                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, callback);
+            },
+            pageViewsReport: function(callback) {
+                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, callback);
+            },
+            sessionsReport: function(callback) {
+                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, callback);
+            },
+            sessionLengthReport: function(callback) {
+                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, callback);
+            },
+            trafficSourcesReport: function(callback) {
+                analyticsManager.trafficSourcesReport(accountId, userId, start, end, callback);
+            },
+            newVsReturningReport: function(callback) {
+                analyticsManager.newVsReturningReport(accountId, userId, start, end, callback);
+            },
+            pageAnalyticsReport: function(callback) {
+                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, callback);
+            }
+        }, function(err, results){
+            self.log.debug(accountId, userId, '<< allReports');
+            self.sendResultOrError(resp, err, results, 'Error getting report');
         });
     }
 });

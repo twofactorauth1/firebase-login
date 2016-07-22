@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, Keen, Highcharts, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-    app.service('ChartAnalyticsService', ['KeenService', function (KeenService) {
+    app.service('ChartAnalyticsService', ['KeenService', 'SiteAnalyticsService', function (KeenService, SiteAnalyticsService) {
 
         //common functions
 
@@ -59,7 +59,20 @@
             return hostname;
         };
 
+        this.calculatePercentChange = function(oldval, newval) {
+            console.log('>> calculatePercentChange(' + oldval + ',' + newval + ')');
+            oldval = parseInt(oldval, 10);
+            newval = parseInt(newval, 10);
+            if (oldval === 0 && newval === 0) {
+                return 0;
+            }
+            //percent change is new-old/old
+            var result = ((newval - oldval) / oldval) * 100;
+            return Math.round(result * 100) / 100;
+        };
+
         this.calculatePercentage = function (oldval, newval) {
+            console.log('>> calculatePercentage(' + oldval +',' + newval +')');
             var result;
             oldval = parseInt(oldval, 10);
             newval = parseInt(newval, 10);
@@ -714,6 +727,13 @@
             return queryData;
         };
 
+        this.runMongoReports = function(date, account, fn) {
+            SiteAnalyticsService.runReports(date.startDate, date.endDate, function(data){
+                console.log('I got this:', data);
+                fn(data);
+            });
+        };
+
         this.runReports = function (date, account, fn) {
             var self = this;
             var hostname = this.getHostName(account);
@@ -1075,7 +1095,7 @@
                 },
                 series: [
                     {
-                        name: 'Time on Site',
+                        name: 'Visitors',
                         data: timeOnSiteData
                     },
                     {
@@ -1190,8 +1210,9 @@
         };
 
         this.visitorLocations = function (locationData, highchartsData) {
-
+            console.log('>> visitorLocations');
             if ($("#visitor_locations").length) {
+                console.log('"#visitor_locations');
                 var chart1 = new Highcharts.Map({
                     chart: {
                         renderTo: 'visitor_locations',
