@@ -10,7 +10,15 @@ angular.module('mainApp')
 
                     var processFn = function() {
                         scope.scripts = '';
+                        
                         var handle = $location.path().indexOf('/blog') > -1 ? 'blog' : $routeParams.name;
+                        // Cases to handle blog and blog-list pages script
+                        if($location.$$path.indexOf("/blog/") > -1){
+                            handle = 'blog-post'
+                        }
+                        else if($location.$$path.indexOf("/author/") > -1 || $location.$$path.indexOf("/tag/") > -1){
+                            handle = 'blog'
+                        }
                         console.info('User Script >>>', handle);
 
                         accountService(function(err, account) {
