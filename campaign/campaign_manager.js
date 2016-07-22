@@ -853,8 +853,10 @@ module.exports = {
                 self.log.error('Error deleting campaign flow: ' + err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< cancelRunning Campaign');
-                return fn(null, value);
+                self.updateCampaignParticipants(accountId, campaignId, function(){
+                    self.log.debug('<< cancelRunning Campaign');
+                    return fn(null, value);
+                });
             }
         });
     },
