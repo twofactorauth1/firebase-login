@@ -41,49 +41,49 @@
             componentTypes: [{
                     title: 'Header',
                     type: 'email-header',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/photos/content_email_header.jpg',
                     filter: 'email',
                     description: 'Use this component for email header section.',
                     enabled: true
                 }, {
                     title: 'Content 1 Column',
                     type: 'email-1-col',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/photos/content_email_1_column.jpg',
                     filter: 'layout',
                     description: 'Use this component for single column content.',
                     enabled: true
                 }, {
                     title: 'Content 2 Column',
                     type: 'email-2-col',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/photos/content_email_2_column.jpg',
                     filter: 'layout',
                     description: 'Use this component for 2 column content.',
                     enabled: true
                 }, {
                     title: 'Content 3 Column',
                     type: 'email-3-col',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/photos/content_email_3_column.jpg',
                     filter: 'layout',
                     description: 'Use this component for 3 column content.',
                     enabled: true
                 }, {
                     title: 'Social Links',
                     type: 'email-social',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/photos/content_email_social.jpg',
                     filter: 'social',
                     description: 'Use this component for social links.',
                     enabled: true
                 }, {
                     title: 'Horizontal Rule',
                     type: 'email-hr',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/photos/content_email_breakline.jpg',
                     filter: 'layout',
                     description: 'Use this component to insert a horizontal rule between components.',
                     enabled: true
                 }, {
                     title: 'Footer',
                     type: 'email-footer',
-                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
+                    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/photos/content_email_footer.jpg',
                     filter: 'email',
                     description: 'A footer for your email.',
                     enabled: true
