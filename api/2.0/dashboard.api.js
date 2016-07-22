@@ -180,15 +180,21 @@ _.extend(api.prototype, baseApi.prototype, {
             startDate = moment().startOf('month').toDate();
         }
         if(req.query.endDate) {
-            endDate = moment(req.query.endDate);
+            endDate = moment(req.query.endDate).toDate();
         } else {
             endDate = moment().endOf('month').toDate();
         }
 
         self.log.debug(accountId, userId, 'Using dates:' + startDate + ' and ' + endDate);
         workstreamManager.getNewVisitorsByDayReport(accountId, startDate, endDate, function(err, results){
-            self.log.debug(accountId, userId, '<< getUniqueVisitorsByDayReport');
-            return self.sendResultOrError(resp, err, results, "Error getting report");
+            workstreamManager.getVisitorsByDayReport(accountId, startDate, endDate, function(err, visitorResults){
+                if(visitorResults) {
+                    results.totalVisitors = visitorResults.total;
+                }
+                self.log.debug(accountId, userId, '<< getUniqueVisitorsByDayReport');
+                return self.sendResultOrError(resp, err, results, "Error getting report");
+            });
+
         });
     },
 

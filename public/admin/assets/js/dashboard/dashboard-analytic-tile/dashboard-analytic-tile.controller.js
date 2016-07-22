@@ -37,10 +37,14 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         analyticDataValue: DashboardService.state.analytics.visitors.total
                     },
                     {
+                        analyticDataLabel: 'MTD UNIQUE VISITORS',
+                        analyticDataValue: DashboardService.state.analytics.allvisitors.total
+                    },
+                    {
                         analyticDataLabel: 'MTD PAGE VIEWS',
                         analyticDataValue: DashboardService.state.analytics.pageViews.total
                     }
-                ]
+                ];
 
                 break;
 
