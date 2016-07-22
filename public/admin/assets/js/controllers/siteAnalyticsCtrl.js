@@ -342,7 +342,7 @@
 
             var sessionsPreviousData = 0;
             _.each(results.sessionsReport.previousMonth, function (previousSession) {
-                var value = previousSession.value || 0;
+                var value = previousSession.total || previousSession.value || 0;
                 sessionsPreviousData += value;
             });
             console.log('Calculate percent change sessions:');
