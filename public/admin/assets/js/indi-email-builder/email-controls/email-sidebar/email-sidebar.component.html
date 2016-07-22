@@ -1,0 +1,228 @@
+<div class="ssb-sidebar-inner" ng-class="vm.uiState.navigation.indexClass">
+
+    <div
+        class="ssb-sidebar-icons tabbable margin-bottom-0 ng-isolate-scope"
+        ng-class="{ 'tabs-left': vm.uiState.sidebarOrientation === 'vertical' }">
+        <ul class="nav nav-tabs">
+
+            <li ng-click="vm.uiState.openSidebarPanel = 'add'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'add' }">
+                <div><div class="ti-plus display-ib"></div>Add</div>
+            </li>
+
+            <li ng-click="vm.uiState.openSidebarPanel = 'settings'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'settings' }">
+                <div><div class="ti-files display-ib"></div>Settings</div>
+            </li>
+
+            <!-- <li ng-click="vm.uiState.openSidebarPanel = 'design'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
+                <div><div class="ti-brush display-ib"></div>Design</div>
+            </li> -->
+
+        </ul>
+    </div>
+
+
+    <div ng-if="vm.uiState.openSidebarPanel === 'add'" class="site-editor-group site-editor-group-add editor-group tab-content">
+        <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'add' }">
+           <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        Add Section
+                    </h4>
+
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
+
+                <div class="ssb-sidebar-tabbable-inner">
+                    <tabset class="tabbable tabs-left margin-bottom-0" ng-class="{'email-sections' : isEmail}">
+                        <tab ng-repeat="componentFilter in vm.componentFilters">
+                            <tab-heading>
+                            <i class="fa {{componentFilter.icon}}">&nbsp;</i>
+                                {{componentFilter.capitalized}}
+                            </tab-heading>
+
+                            <!-- <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ featured: true, enabled: true }" ng-if="componentFilter.lowercase === 'featured'" class="ssb-sidebar-add-section margin-bottom-15"> -->
+                            <div ng-sortable="vm.uiState.sortableListAddContentConfig" >
+                                <div sectionId = "{{section._id}}" ng-repeat="section in vm.uiState.componentTypes | orderBy:['title', 'version'] | filter:{ filter: componentFilter.lowercase }" ng-if="componentFilter.lowercase != 'all' && componentFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15 ssb-sidebar-layout-version" ng-click="vm.uiState.addComponent(section);vm.uiState.openSidebarPanel = '';" >
+                                    <div class="ssb-sidebar-add-section-img">
+                                        <div class="img-wrap">
+                                            <a href>
+                                                <span
+                                                    style=" background-image: url('{{section.preview}}');height: 190px;cursor: move;cursor: -webkit-grabbing;">
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <i
+                                            class="fa fa-info"
+                                            tooltip-placement="left"
+                                            tooltip-html-unsafe="<h4 style='color: white'>{{section.name || section.title}}</h4><p>{{section.description}}</p>"
+                                            tooltip-append-to-body="true">
+                                        </i>
+                                    </div>
+                                    <div class="ssb-sidebar-add-section-btn">
+                                        <a type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
+                                            <span>Add {{section.name || section.title}}</span>
+                                        </a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+
+                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.componentTypes | orderBy:['title', 'version']" ng-if="componentFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.uiState.addComponent(section);vm.uiState.openSidebarPanel = '';">
+                                    <div class="ssb-sidebar-add-section-img">
+                                        <div class="img-wrap">
+                                            <a href>
+                                                <span style="  background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;cursor: move;cursor: -webkit-grabbing;"></span>
+                                            </a>
+                                        </div>
+                                        <i
+                                            class="fa fa-info"
+                                            tooltip-placement="left"
+                                            tooltip-html-unsafe="<h4 style='color: white'>{{section.name || section.title}}</h4><p>{{section.description}}</p>"
+                                            tooltip-append-to-body="true">
+                                        </i>
+                                    </div>
+                                    <div class="ssb-sidebar-add-section-btn">
+                                        <a type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right">
+                                            <span>Add {{section.name || section.title}}</span>
+                                        </a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </tab>
+                    </tabset>
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+
+    <div ng-if="vm.uiState.openSidebarPanel === 'settings'" class="site-editor-group site-editor-group-settings editor-group tab-content">
+        <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'settings' }">
+            <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        Email Settings
+                    </h4>
+
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
+
+                <div class="ssb-sidebar-tabbable-inner">
+
+                    <form name='emailSettingForm'>
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
+                        <label>Title</label>
+                        <input class='form-control' type='text' placeholder='Untitled Email' ng-model='vm.state.email.title' required />
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
+                        <label>Subject</label>
+                        <input name="subject" class="form-control" type="text" ng-model="vm.state.email.subject" required>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromName.$invalid && !emailSettingForm.fromName.$pristine }">
+                        <label>From Name</label>
+                        <input name="fromName" class="form-control" type="text" ng-model="vm.state.email.fromName" required>
+                    </div>
+                    <div class="form-group col-xs-12 col-sm-6" ng-class="{ 'has-error' : emailSettingForm.fromEmail.$invalid && !emailSettingForm.fromEmail.$pristine }">
+                        <label>From Email</label>
+                        <input name="fromEmail" ng-pattern="formValidations.email" class="form-control" type="email" ng-model="vm.state.email.fromEmail" required>
+                    </div>
+                    <div class="form-group  col-xs-12 col-sm-6 margin-bottom-15" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
+                        <label>Reply To</label>
+                        <input name="replyTo" class="form-control" type="email" ng-model="vm.state.email.replyTo">
+                    </div>
+                </form>
+                <button type="button" ng-disabled="saveLoading" ng-click='vm.uiState.delete()' class="btn btn-danger btn-0 margin-left-15 margin-bottom-5">
+                    <i class="ti-trash"></i>
+                    <span>Delete Email</span>
+                </button>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- <div ng-if="vm.uiState.openSidebarPanel === 'content'" class="site-editor-group site-editor-group-content editor-group tab-content">
+        <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'content' }">
+        </div>
+    </div> -->
+
+    <!-- <div ng-if="vm.uiState.openSidebarPanel === 'design'" class="site-editor-group site-editor-group-design editor-group tab-content">
+        <div class="tab-pane" ng-class="{ 'active': vm.uiState.openSidebarPanel === 'design' }">
+
+            <section class="ssb-sidebar-panel-inner-container">
+                <header class="ssb-sidebar-panel-header">
+                    <h4 class="ssb-sidebar-sub-heading">
+                        Design
+                    </h4>
+
+                    <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+                </header>
+
+                <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
+                <div class="form-group">
+
+                    <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true)" theme="bootstrap">
+                      <ui-select-match placeholder="Select a theme">
+                          <small ng-bind-html="$select.selected.name"></small>
+                      </ui-select-match>
+                      <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
+                          <small ng-bind-html="theme.name | highlight: $select.search"></small>
+                      </ui-select-choices>
+                    </ui-select>
+
+                    <div class="row padding-10">
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.bodyBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Body Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default body/page background color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Header Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header background color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Header Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default header text color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Hero Text Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero text color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.heroBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Hero Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default hero background color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Button Background Color <span tooltip-placement="top" tooltip-html-unsafe="Override the default button background color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Text Color (Primary) <span tooltip-placement="top" tooltip-html-unsafe="Override the default text color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnTextColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Text Color (Buttons) <span tooltip-placement="top" tooltip-html-unsafe="Override the default button text color color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+                    </div>
+
+
+                </div>
+            </section>
+
+        </div>
+    </div> -->
+
+    <div
+        data-ng-include data-src=" 'assets/js/indi-email-builder/email-controls/email-sidebar/templates/indi-email-section-panel.component.html' ">
+    </div>
+
+
+</div>

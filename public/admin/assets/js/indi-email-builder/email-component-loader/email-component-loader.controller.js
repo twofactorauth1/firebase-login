@@ -16,17 +16,7 @@
 
     $scope.component = vm.component;
     $scope.isEditing = true;
-    $scope.website = vm.website;
-    $scope.primaryColor = $scope.website.settings.primary_color;
-    $scope.secondaryColor = $scope.website.settings.secondary_color;
-    $scope.primaryHighlight = $scope.website.settings.primary_highlight;
-    $scope.primaryTextColor = $scope.website.settings.primary_text_color;
-    $scope.primaryFontFamily = $scope.website.settings.font_family;
-    $scope.secondaryFontFamily = $scope.website.settings.font_family_2;
-    $scope.googleFontFamily = $scope.website.settings.google_font_family;
-
-    $scope.primaryFontStack = $scope.website.settings.font_family;
-    $scope.secondaryFontStack = $scope.website.settings.font_family_2;
+    $scope.website = vm.state.website;
 
     vm.init = init;
     vm.componentStyleFn = componentStyleFn;

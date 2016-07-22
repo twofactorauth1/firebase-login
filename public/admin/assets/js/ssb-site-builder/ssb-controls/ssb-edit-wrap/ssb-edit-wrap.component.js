@@ -282,13 +282,13 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     el.addClass('ssb-active-edit-control');
 
                     $timeout(function() {
-                        el.find('> ssb-edit-control').addClass('ssb-on');
+                        el.find('> .ssb-edit-control').addClass('ssb-on');
                     }, 500);
 
                     //if contextual menu is already open, open directly from single click
                     if (el.scope().vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
                         $timeout(function() {
-                            el.find('> ssb-edit-control .ssb-settings-btn').click();
+                            el.find('> .ssb-edit-control .ssb-settings-btn').click();
                         });
                     }
 
@@ -523,7 +523,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                         /*
                          * if contextual menu is already open, open directly from single click
                          */
-                        if (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
+                        if (clickedComponentScope && (clickedComponentScope.vm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge)) {
                             $timeout(function() {
                                 editControlComponent.find('.ssb-settings-btn').click();
                             });

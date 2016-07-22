@@ -14,7 +14,7 @@ function emailEditControl() {
             componentIndex: '=?',
             compiledControlId: '@?'
         },
-        templateUrl: '/admin/assets/js/indi-email-builder/email-edit-control/email-edit-control.component.html',
+        templateUrl: '/admin/assets/js/indi-email-builder/email-controls/email-edit-control/email-edit-control.component.html',
         controller: 'EmailBuilderEditControlController',
         controllerAs: 'vm',
         bindToController: true,

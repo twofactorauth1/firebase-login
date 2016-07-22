@@ -9,13 +9,14 @@ html
       meta(http-equiv="X-UA-Compatible",content="IE=edge")
       //- link(rel='stylesheet', href='/public/admin/assets/css/styles.css')
       //- link(rel='stylesheet', href='/public/admin/assets/css/frontend-admin.css')
-      link(rel='stylesheet', href="//fonts.googleapis.com/css?family=Lato|Raleway|Roboto|Roboto+Condensed|Roboto+Slab|Oswald|Montserrat|Droid+Serif|Open+Sans|Open+Sans+Condensed|Lato|Raleway|Quicksand|Ubuntu|Merriweather|Quattrocento|Lora|Playfair+Display|Pacifico|Satisfy|Parisienne|Petit+Formal+Script|Indie+Flower|Shadows+Into+Light+Two", type="text/css")
+      link(rel='stylesheet', href="//fonts.googleapis.com/css?family=Roboto|Roboto+Condensed|Roboto+Slab|Oswald|Montserrat|Droid+Serif|Open+Sans|Open+Sans+Condensed|Lato|Raleway|Quicksand|Ubuntu|Merriweather|Quattrocento|Lora|Playfair+Display|Pacifico|Satisfy|Parisienne|Petit+Formal+Script|Indie+Flower|Shadows+Into+Light+Two", type="text/css")
       link(rel='stylesheet', href='/public/js/libs/bootstrap/dist/css/bootstrap.min.css')
       link(rel='stylesheet', href='/public/admin/assets/css/email.css')
       style(type="text/css").
         body, div.body {
           -webkit-text-size-adjust: 100% !important;
           -ms-text-size-adjust: 100% !important;
+          -webkit-font-smoothing: antialiased;
           height:100% !important;
           margin:0;
           padding:0;
@@ -29,6 +30,8 @@ html
           line-height:100%;
           outline:none;
           text-decoration:none;
+          position: relative;
+          max-width: 100%
         }
 
         a {
@@ -54,10 +57,17 @@ html
           /*display: table-cell;*/
         }
 
+        h1, h2, h3, h4, h5 {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            margin-top: 0;
+            color: #5b5b60;
+        }
+
       //- <!--[if gte mso 9]><!-->
       //- | <style>
       //- |   img {
-      //- |     border: 2px solid red;
+      //- |     border: 2px solid lightGray;
       //- |   }
       //- | </style>
       //- <!--<![endif]-->
