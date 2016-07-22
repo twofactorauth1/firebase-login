@@ -328,7 +328,7 @@ module.exports = {
                 urlAry.push(appConfig.www_url.replace('http://', '').replace(':3000', ''));
             }
             var query = {
-                'url.domain': {$in:urlAry},
+                'accountId': accountId,
                 'server_time': {$gt:startDateMillis, $lt:endDateMillis},
                 'server_time_dt': {$exists:true}
             };
@@ -398,6 +398,61 @@ module.exports = {
             fn(err, response);
         });
 
+    },
+
+    getVisitorsByDayReport: function(accountId, startDate, endDate, fn) {
+        var self = this;
+        self.log.debug(accountId, null, '>> getVisitorsByDayReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:startDate,
+                    $lte:endDate
+                },
+                fingerprint:{$ne:0}
+
+            }
+        };
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{
+                    permanent_tracker:'$permanent_tracker',
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }}
+                }
+            }
+        };
+        stageAry.push(group1);
+
+        var group2 = {
+            $group: {
+                _id: '$_id.yearMonthDay',
+                total:{$sum:1}
+            }
+        };
+        stageAry.push(group2);
+
+        analyticsDao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value){
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                var total = 0;
+                _.each(value, function(result){
+                    total+= result.total;
+                });
+                var response = {
+                    results: _.sortBy(value, '_id'),
+                    total:total
+                };
+                self.log.debug(accountId, null, '<< getVisitorsByDayReport');
+                fn(null, response);
+            }
+        });
     },
 
     getRevenueByMonthReport: function(accountId, fn) {
@@ -548,6 +603,11 @@ module.exports = {
             function getCampaignStats(callback){
                 self.getCampaignStatsByMonthReport(accountId, startDate, endDate, function(err, results){
                     callback(err, {campaigns:results});
+                });
+            },
+            function getVisitors(callback) {
+                self.getVisitorsByDayReport(accountId, startDate, endDate, function(err, results){
+                    callback(err, {allvisitors:results});
                 });
             }
         ], function done(err, results){

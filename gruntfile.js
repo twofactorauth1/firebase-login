@@ -638,6 +638,17 @@ module.exports = function(grunt) {
         dbcopyutil.migrateToSSBBlogOnTest(accountId, done);
     });
 
+    grunt.registerTask('updateSessionEvents', 'Update Session Events', function(){
+        var done = this.async();
+        var accountId = 0;
+        dbcopyutil.addMaxMindToSessionEvents(accountId, done);
+    });
+
+    grunt.registerTask('updatePageEvents', 'Update Page Events', function(){
+        var done = this.async();
+        dbcopyutil.addAccountIdToPageEvents( done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
