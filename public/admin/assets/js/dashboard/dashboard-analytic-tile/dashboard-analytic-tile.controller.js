@@ -109,7 +109,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Revenue';
                 ret.data = [
                     {
-                        analyticDataLabel: 'YTD NEW REV.',
+                        analyticDataLabel: 'YTD ORDER REV.',
                         analyticDataValue: '$' + DashboardService.state.analytics.revenue.YTDTotalAmount
                     },
                     {
