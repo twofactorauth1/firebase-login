@@ -140,23 +140,25 @@ html
 
               if component.type === 'email-1-col'
                 | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-                |     <tr>
-                |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
-                |                 <tr>
-                |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
-                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
-                |                             <tr>
-                |                                 <td valign="top" class="leftColumnContent">
-                |                                     !{component.title}
-                |                                 </td>
-                |                             </tr>
-                |                         </table>
-                |                     </td>
-                |                 </tr>
-                |             </table>
-                |         </td>
-                |     </tr>
+                if component.title
+                    |     <tr>
+                    |         <td>
+                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                    |                 <tr>
+                    |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
+                    |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
+                    |                             <tr>
+                    |                                 <td valign="top" class="leftColumnContent">
+                    |                                     !{component.title}
+                    |                                 </td>
+                    |                             </tr>
+                    |                         </table>
+                    |                     </td>
+                    |                 </tr>
+                    |             </table>
+                    |         </td>
+                    |     </tr>
+
                 |    <tr>
                 |        <td>
                 |            <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
@@ -178,23 +180,25 @@ html
 
               if component.type === 'email-2-col'
                 | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-                |     <tr>
-                |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
-                |                 <tr>
-                |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
-                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
-                |                             <tr>
-                |                                 <td valign="top" class="leftColumnContent">
-                |                                     !{component.title}
-                |                                 </td>
-                |                             </tr>
-                |                         </table>
-                |                     </td>
-                |                 </tr>
-                |             </table>
-                |         </td>
-                |     </tr>
+                if component.title
+                    |     <tr>
+                    |         <td>
+                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                    |                 <tr>
+                    |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
+                    |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
+                    |                             <tr>
+                    |                                 <td valign="top" class="leftColumnContent">
+                    |                                     !{component.title}
+                    |                                 </td>
+                    |                             </tr>
+                    |                         </table>
+                    |                     </td>
+                    |                 </tr>
+                    |             </table>
+                    |         </td>
+                    |     </tr>
+
                 |     <tr>
                 |         <td>
                 |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
@@ -225,23 +229,25 @@ html
 
               if component.type === 'email-3-col'
                 | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
-                |     <tr>
-                |         <td>
-                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
-                |                 <tr>
-                |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
-                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
-                |                             <tr>
-                |                                 <td valign="top" class="leftColumnContent">
-                |                                     !{component.title}
-                |                                 </td>
-                |                             </tr>
-                |                         </table>
-                |                     </td>
-                |                 </tr>
-                |             </table>
-                |         </td>
-                |     </tr>
+                if component.title
+                    |     <tr>
+                    |         <td>
+                    |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                    |                 <tr>
+                    |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
+                    |                         <table border="0" cellpadding="10" cellspacing="0" width="100%" style="color: !{component.txtcolor};">
+                    |                             <tr>
+                    |                                 <td valign="top" class="leftColumnContent">
+                    |                                     !{component.title}
+                    |                                 </td>
+                    |                             </tr>
+                    |                         </table>
+                    |                     </td>
+                    |                 </tr>
+                    |             </table>
+                    |         </td>
+                    |     </tr>
+
                 |     <tr>
                 |         <td>
                 |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
