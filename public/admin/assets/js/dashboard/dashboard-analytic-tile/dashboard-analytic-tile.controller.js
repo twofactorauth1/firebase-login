@@ -44,7 +44,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                         analyticDataLabel: 'MTD PAGE VIEWS',
                         analyticDataValue: DashboardService.state.analytics.pageViews.total
                     }
-                ]
+                ];
 
                 break;
 
