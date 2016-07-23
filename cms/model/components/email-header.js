@@ -47,7 +47,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor: null,
+            txtcolor: '#888888',
 
             /**
              *
@@ -66,7 +66,9 @@ var component = $$.m.ModelBase.extend({
                 color : ""
             },
 
-            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false}
+            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false},
+
+            logo: '<h2><span style="font-family: Quicksand,sans-serif;">Your logo here</span></h2><h2><br></h2><h2><span style="color: rgb(0, 0, 0); font-family: Quicksand, sans-serif;"><strong><span style="font-size: 36px;">Title &amp; Date</span></strong></span></h2><br><br><br><br><br>'
 
         }
     },

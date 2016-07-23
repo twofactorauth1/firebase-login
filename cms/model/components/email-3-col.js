@@ -47,7 +47,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor: null,
+            txtcolor: '#888888',
 
             /**
              *
@@ -66,7 +66,13 @@ var component = $$.m.ModelBase.extend({
                 color : ""
             },
 
-            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false}
+            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false},
+
+            text1: '<img class="fr-dib fr-draggable" src="//s3.amazonaws.com/indigenous-digital-assets/account_355/sandcombo_1467228121007.jpg" style="width: auto;"><br><span style="color: rgb(0, 0, 0); font-family: Quicksand, sans-serif; font-size: 14px;">The four main parts of a flower are generally defined by their positions on the receptacle and not by their function. Many flowers lack some parts or parts may be modified into other functions and/or look like what is typically another part. In some families, like the petals are greatly reduced and in many species the sepals are colorful and petal-like.</span>',
+
+            text2: '<img class="fr-dib fr-draggable" src="//s3.amazonaws.com/indigenous-digital-assets/account_355/pizza_1467228119393.jpg" style="width: auto;"><br><span style="font-family: Quicksand, sans-serif; color: rgb(0, 0, 0); font-size: 14px;">The four main parts of a flower are generally defined by their positions on the receptacle and not by their function. Many flowers lack some parts or parts may be modified into other functions and/or look like what is typically another part. In some families, like the petals are greatly reduced and in many species the sepals are colorful and petal-like.</span>',
+
+            text3: '<img class="fr-dib fr-draggable" src="//s3.amazonaws.com/indigenous-digital-assets/account_355/sandcombo_1467228121007.jpg" style="width: auto;"><br><span style="color: rgb(0, 0, 0); font-size: 14px; font-family: Quicksand, sans-serif;">The four main parts of a flower are generally defined by their positions on the receptacle and not by their function. Many flowers lack some parts or parts may be modified into other functions and/or look like what is typically another part. In some families, like the petals are greatly reduced and in many species the sepals are colorful and petal-like.</span>'
 
         }
     },

@@ -47,7 +47,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor: null,
+            txtcolor: '#888888',
 
             /**
              *
@@ -66,7 +66,9 @@ var component = $$.m.ModelBase.extend({
                 color : ""
             },
 
-            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false}
+            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false},
+
+            text: '<div style="text-align: left;"><br></div><div style="text-align: left;"><span style="font-family: Quicksand, sans-serif; color: rgb(0, 0, 0); font-size: 14px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae justo lacinia, rhoncus nulla in, suscipit ipsum. Praesent eu faucibus arcu. Curabitur ac dui ut est rhoncus accumsan et non ex. Pellentesque porttitor nisi at scelerisque rutrum. Maecenas sit amet ornare orci, non rutrum ante. Fusce sed arcu ac tortor porta faucibus et non quam. Fusce placerat nunc pharetra lectus aliquam, nec sagittis arcu ornare. Interdum et malesuada fames ac ante ipsum primis in faucibus</span></div><div data-empty="true" style="text-align: center;"><br></div><div style="text-align: center;"><span style="font-family: Quicksand, sans-serif; font-size: 14px;"><a class="btn btn-primary ssb-theme-btn ssb-element ssb-element-button" data-ssb-active-style=" background-color: ;" data-ssb-class="{&quot;ssb-element&quot;:true,&quot;ssb-element-button&quot;:true,&quot;ssb-hide-during-load&quot;:false}" data-ssb-hover-style=" background-color: ;" data-ssb-style=" " href="www.indigenous.io" ng-attr-style="{{vm.elementStyle()}}" ng-class="vm.elementClass()" style=" "><strong>Full Menu</strong></a></span><br><br><br><br></div>'
 
         }
     },
