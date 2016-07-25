@@ -40,6 +40,7 @@ app.constant('formValidations', {
 app.constant('orderConstant', {
   order_status: {
     PENDING_PAYMENT: "pending_payment",
+    PAID: "paid",  
     PROCESSING: "processing",
     ON_HOLD: "on_hold",
     COMPLETED: "completed",
@@ -50,6 +51,9 @@ app.constant('orderConstant', {
     dp: [{
         label: "Pending Payment",
         data: "pending_payment"
+      }, {
+          label: "Paid",
+          data: "paid"
       }, {
         label: "Processing",
         data: "processing"
@@ -569,6 +573,7 @@ app.constant('JS_REQUIRES', {
     'manageTopicsCtrl': 'assets/js/controllers/manageTopicsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
+    'orderDetailEditCtrl': 'assets/js/controllers/orderDetailEditCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'campaignsCtrl': 'assets/js/controllers/campaignsCtrl.js',

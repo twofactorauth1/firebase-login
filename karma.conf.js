@@ -88,6 +88,7 @@ module.exports = function (config) {
         // add module here
         // 'public/admin/assets/js/**/*.js',
         'public/admin/assets/js/controllers/orderDetailCtrl.js',
+        'public/admin/assets/js/controllers/orderDetailEditCtrl.js',
         'public/admin/assets/js/controllers/billingCtrl.js',
         'public/admin/assets/js/controllers/createCampaignCtrl.js',
 
