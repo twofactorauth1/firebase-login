@@ -156,6 +156,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Order Detail',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('orderDetailCtrl', 'orderService', 'contactService', 'userService')
+    }).state('app.commerce.orderdetailedit', {
+        url: '/orders/:orderId/edit',
+        templateUrl: "/admin/assets/views/order-detail-edit.html",
+        title: 'Order Detail Edit',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('orderDetailEditCtrl', 'orderService', 'contactService', 'userService')
     }).state('app.marketing', {
         url: '/marketing',
         template: '<div ui-view class="fade-in-up"></div>',

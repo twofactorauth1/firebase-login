@@ -569,6 +569,7 @@ app.constant('JS_REQUIRES', {
     'manageTopicsCtrl': 'assets/js/controllers/manageTopicsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
+    'orderDetailEditCtrl': 'assets/js/controllers/orderDetailEditCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'campaignsCtrl': 'assets/js/controllers/campaignsCtrl.js',
