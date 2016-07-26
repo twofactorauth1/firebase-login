@@ -3882,6 +3882,41 @@ module.exports = {
                 });
             }
         });
+    },
+
+    createDuplicateEmail: function(accountId, email, created, fn) {
+        var self = this;
+        var userId = created.by;
+        self.log.debug(accountId, userId, '>> createDuplicateEmail');
+
+        var emailHandle = slug(email.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);        
+        
+        var components = email.get('components');
+
+        email.set('_id', null);
+        email.set('handle', emailHandle);
+        email.set('title', email.get('title') + ' (clone)');
+        email.set('created', created);
+        email.set('modified', created);
+
+        //reset all component _id's for duplicate email
+
+        if (components.length) {
+            components = components.map(function(component) {
+                var id = $$.u.idutils.generateUUID();
+                component._id = id;
+                return component;
+            });
+        }
+
+        emailDao.saveOrUpdate(email, function(err, emailObj){
+            if(err) {
+                fn(err, null);
+            } else {
+                self.log.debug(accountId, userId, '<< createDuplicateEmail');
+                fn(null, emailObj);
+            }
+        });
     }
 
 };

@@ -102,6 +102,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
 
+        app.post(this.url('email/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicateEmail.bind(this));//create duplicate page
     },
 
     noop: function(req, resp) {
@@ -836,7 +837,35 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
-    }
+    },
+
+    createDuplicateEmail: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> createDuplicateEmail');
+        var _email = req.body;
+        // Delete _id of the existing email;
+        delete _email._id;
+        var duplicateEmail = new $$.m.cms.Email(_email);
+
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var created = {date: new Date(), by:self.userId(req)};
+                ssbManager.createDuplicateEmail(accountId, duplicateEmail, created, function(err, email){
+                    self.log.debug(accountId, userId, '<< createDuplicateEmail');
+                    self.sendResultOrError(resp, err, email, "Error creating email");
+                    self.createUserActivity(req, 'CREATE_DUPLICATE_EMAIL', null, {emailId: email._id}, function(){});
+                });
+            }
+        });
+
+    },
+
+
 
 });
 

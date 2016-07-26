@@ -20,6 +20,7 @@
     emailService.getEmail = getEmail;
     emailService.updateEmail = updateEmail;
     emailService.sendOneTimeEmail = sendOneTimeEmail;
+    emailService.duplicateEmail = duplicateEmail;
 
     /**
      * Get list of all emails for the account
@@ -116,6 +117,22 @@
             .error(error)
         )
 
+    }
+
+    function duplicateEmail(email){
+      function success(data) {
+      }
+
+      function error(error) {
+        console.error('EmailBuilderService updateEmail error: ', JSON.stringify(error));
+      }
+
+      var promise = $http({
+        url: [baseCmsAPIUrlv2, 'email', 'duplicate'].join('/'),
+        method: "POST",
+        data: angular.toJson(email)
+      });
+      return emailRequest(promise).success(success).error(error);
     }
 
     (function init() {
