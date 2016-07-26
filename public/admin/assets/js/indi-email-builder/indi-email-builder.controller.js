@@ -417,7 +417,7 @@
             vm.uiState.dataLoaded = false;
             EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
                 vm.uiState.dataLoaded = true;
-                vm.state.originalEmail = angular.copy(vm.state.email);
+                vm.state.pendingEmailChanges = false;
                 toaster.pop('success', 'Email saved');
             });
         }
@@ -619,20 +619,12 @@
         }
 
         function checkIfDirtyFn() {
-            if (vm.uiState.dirtyOverride) {
-                return false;
-            }
-
-            if (!vm.state.pendingEmailChanges) {
-                return false;
-            } else {
-                return true;
-            }
+            return vm.state.pendingEmailChanges;
         }
 
         function resetDirtyFn() {
-            vm.state.email = angular.copy(vm.state.originalEmail);
             vm.state.pendingEmailChanges = false;
+            vm.uiState.dirtyOverride = false;
         }
 
         /**
@@ -767,6 +759,7 @@
                                 vm.state.saveLoading = false;
                                 vm.uiState.navigation.loadEmail(email._id);
                                 EmailBuilderService.getEmails();
+                                vm.state.pendingEmailChanges = false;
                             })
                         }).catch(function(err) {
                             toaster.pop('error', 'Error', 'The email was not saved. Please try again.');
