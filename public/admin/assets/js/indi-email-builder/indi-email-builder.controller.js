@@ -38,6 +38,7 @@
             sendOneTimeEmail: sendOneTimeEmailFn,
             addComponent: addComponentFn,
             delete: deleteFn,
+            duplicateEmail: duplicateEmailFn,
             componentTypes: [{
                     title: 'Header',
                     type: 'email-header',
@@ -480,6 +481,33 @@
                         vm.uiState.dataLoaded = true;
                         $state.go('app.emails');
                         toaster.pop('Warning', 'Email deleted.');
+                    });
+                }
+            });
+        }
+
+        function duplicateEmailFn(){
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You want to clone this email?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true,
+                closeOnCancel: true,
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    vm.uiState.dataLoaded = false;
+                    vm.state.saveLoading = true;
+                    EmailBuilderService.duplicateEmail(vm.state.email).then(function(response){
+                        var email = response.data;
+                        vm.uiState.dirtyOverride = true;
+                        vm.uiState.dataLoaded = true;
+                        vm.state.saveLoading = false;
+                        toaster.pop('Warning', 'Email cloned.');
+                        vm.uiState.navigation.loadEmail(email._id);
                     });
                 }
             });
