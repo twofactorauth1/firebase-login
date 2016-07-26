@@ -200,6 +200,14 @@
       }
     };
 
+    this.updateEmailCache = function(email){
+      var _emails = emailcache.get('emails');
+      if (_emails) {
+        _emails.push(email);
+        emailcache.put('emails', _emails);
+      }
+    }
+
     var resetCache = false;
 
     this.getPages = function (fn) {

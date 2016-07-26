@@ -507,7 +507,7 @@
                         vm.uiState.dataLoaded = true;
                         vm.state.saveLoading = false;
                         toaster.pop('Warning', 'Email cloned.');
-                        EmailBuilderService.getEmails();
+                        WebsiteService.updateEmailCache(email);
                         vm.uiState.navigation.loadEmail(email._id);
                     });
                 }
