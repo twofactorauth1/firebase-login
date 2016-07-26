@@ -28,7 +28,7 @@
     </div>
 
     <div
-        ng-if="vm.componentIndex !== (vm.components.length - 1)"
+        ng-if="vm.componentIndex !== (vm.state.email.components.length - 1)"
         class="ssb-sidebar-item-icon ssb-move-section-down display-ib ti-arrow-down ng-scope"
         ng-click="vm.moveComponentFn('down')"
         tooltip-animation="false"
