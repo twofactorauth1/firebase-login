@@ -1292,6 +1292,18 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             }
 
+            scope.cartValidItemCountFn = function () {
+                var isValid = true;
+                scope.cartDetails.forEach(function(item, index) {
+                    if (!item.quantity) {
+                        isValid = false;
+                    } else if (parseInt(item.quantity) <= 0) {
+                        isValid = false;
+                    }
+                });
+                return isValid
+            };
+
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie_' + $scope.component._id;

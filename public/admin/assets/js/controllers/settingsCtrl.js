@@ -112,6 +112,12 @@
           toaster.pop('error', "Paypal address can't be blank");
           return;
       }
+        
+        if ($scope.account.commerceSettings.taxes && $scope.account.commerceSettings.taxbased === 'business_location' && $scope.account.business.addresses.length && $scope.account.business.addresses[0].zip === '') {
+            $scope.saveLoading = false;
+            toaster.pop('error', "Business Location tax basis requires an address on Business Profile");
+            return;
+        }
 
         AccountService.updateAccount($scope.account, function (data, error) {
             if (error) {

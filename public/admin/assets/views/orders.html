@@ -164,7 +164,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
+                            <tr ng-repeat="order in displayedOrders" ui-sref='app.commerce.orderdetailedit({orderId: order._id})'>
                                 <td class="hidden-xs"><strong>Order ID:</strong> {{order.order_id}}</td>
                                 <td ng-class="{'center': tableView == 'list'}"><strong>Status:</strong>
                                     <span ng-if="tableView == 'list'" class="fa-stack fa-lg">
