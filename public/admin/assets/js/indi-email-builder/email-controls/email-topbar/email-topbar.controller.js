@@ -16,6 +16,7 @@ function ssbEmailBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $
     vm.openSendEmailModal = openSendEmailModal;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.hideActiveToolTips = hideActiveToolTips;
+    vm.checkSettingsValidityFn = checkSettingsValidityFn;
 
 
     function saveEmail() {
@@ -39,8 +40,9 @@ function ssbEmailBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $
                         vm.state.saveLoading = false;
                         vm.state.pendingEmailChanges = false;
                     })
-                }).catch(function(err) {
-                    toaster.pop('error', 'Error', 'The email was not saved. Please try again.');
+                }).catch(function(error) {
+                    var message = error.data ? error.data.message : 'The email was not saved. Please try again.';
+                    toaster.pop('error', 'Error', message);
                     vm.state.saveLoading = false;
                 })
             )
@@ -85,7 +87,14 @@ function ssbEmailBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $
         angular.element('.tooltip').remove();
     }
 
-
+    function checkSettingsValidityFn () {
+        if (vm.state.email.title && vm.state.email.subject && vm.state.email.fromName && vm.state.email.fromEmail) {
+            return true;
+        } else {
+            return false;   
+        }
+    }
+    
     function init(element) {
     	vm.element = element;
         if (!vm.state.email) {

@@ -21,16 +21,7 @@
             this.undo.saveStep();
         },
         refresh: function(a) {
-            var l = this.link.remove
-            this.popups.onShow('link.edit', function () {
-                var rmLink = this.popups.get("link.edit").find("button[data-cmd='linkRemove']");
-                if($(this.link.get()).hasClass("ssb-theme-btn"))
-                {
-                    rmLink.hide();
-                }
-                else
-                    rmLink.show();
-            })
+            var l = this.link.remove;
         }
     });
 
@@ -45,13 +36,17 @@
         },
         refresh: function ($btn) {
             this.popups.onShow('link.edit', function () {
-                var rmLink = this.popups.get("link.edit").find("button[data-cmd='linkRemoveBtn']");
+                var rmLink = this.popups.get("link.edit").find("button[data-cmd='linkRemove']");
+                var rmLinkButton = this.popups.get("link.edit").find("button[data-cmd='linkRemoveBtn']");
                 if($(this.link.get()).hasClass("ssb-theme-btn"))
                 {
-                    rmLink.show(); 
+                    rmLink.hide(); 
+                    rmLinkButton.show();
                 }
-                else
-                    rmLink.hide();
+                else{
+                    rmLink.show(); 
+                    rmLinkButton.hide();
+                }
             })
         }
       })

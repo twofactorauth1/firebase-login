@@ -281,7 +281,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         // vm.checkStateNavigation(event, toState, toParams, fromState, fromParams, options);
         $rootScope.$broadcast('$destroyFroalaInstances');
         $rootScope.app.layout.isMinimalAdminChrome = false;
-        $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+        //$rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
     });
 
     $rootScope.$on('$locationChangeStart', function (event, toState, toParams, fromState, fromParams, options) {
@@ -1178,9 +1178,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         // angular.element($window).on('beforeunload', vm.checkPageNavigation);
 
         setupBreakpoints();
-
-        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
+        
         $rootScope.app.layout.isMinimalAdminChrome = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
