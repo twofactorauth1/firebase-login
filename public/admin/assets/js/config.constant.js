@@ -40,6 +40,7 @@ app.constant('formValidations', {
 app.constant('orderConstant', {
   order_status: {
     PENDING_PAYMENT: "pending_payment",
+    PAID: "paid",
     PROCESSING: "processing",
     ON_HOLD: "on_hold",
     COMPLETED: "completed",
@@ -48,6 +49,9 @@ app.constant('orderConstant', {
     FAILED: "failed",
 
     dp: [{
+        label: 'Paid',
+        data: 'paid'
+      }, {
         label: "Pending Payment",
         data: "pending_payment"
       }, {
