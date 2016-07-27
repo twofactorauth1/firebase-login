@@ -113,10 +113,24 @@
           return;
       }
         
-        if ($scope.account.commerceSettings.taxes && $scope.account.commerceSettings.taxbased === 'business_location' && $scope.account.business && $scope.account.business.addresses && $scope.account.business.addresses.length && $scope.account.business.addresses[0].zip === '') {
-            $scope.saveLoading = false;
-            toaster.pop('error', "Business Location tax basis requires an address on Business Profile");
-            return;
+        if ($scope.account.commerceSettings.taxes && $scope.account.commerceSettings.taxbased === 'business_location') {
+            var hasZip = true;
+
+            if (!$scope.account.business) {
+                hasZip = false;    
+            } else if ($scope.account.business && !$scope.account.business.addresses) {
+                hasZip = false;
+            } else if ($scope.account.business && $scope.account.business.addresses && !$scope.account.business.addresses.length) {
+                hasZip = false;
+            } else if ($scope.account.business && $scope.account.business.addresses && $scope.account.business.addresses.length && $scope.account.business.addresses[0].zip === '') {
+                hasZip = false;
+            }
+
+            if (!hasZip) {
+                $scope.saveLoading = false;
+                toaster.pop('error', "Business Location tax basis requires an address on Business Profile");
+                return;
+            }
         }
 
         AccountService.updateAccount($scope.account, function (data, error) {
