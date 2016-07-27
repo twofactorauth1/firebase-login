@@ -23,9 +23,7 @@
     </div>
 
     <div id='ssb-froala-scrollable-container'></div>
-
     <div class="pull-right text-right">
-
         <email-action-buttons
             class="ssb-control-bar"
             save-action="vm.saveEmail()"
@@ -34,7 +32,8 @@
             ui-state="vm.uiState"
             revert-action='vm.revertPage(versionId)'
             create-campaign-action="vm.createCampaign(vm.state.email)"
-            send-email-action="vm.openSendEmailModal();">
+            send-email-action="vm.openSendEmailModal()"
+            settings-valid-action="vm.checkSettingsValidityFn()">
         </email-action-buttons>
 
     </div>

@@ -16,6 +16,7 @@ function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleS
     vm.sendEmail = sendEmail;
     vm.cancel = cancel;
     vm.revert = revert;
+    vm.settingsValid = settingsValid;
 
     function save() {
         vm.saveAction();
@@ -35,6 +36,10 @@ function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleS
 
     function revert(versionId) {
         vm.revertAction({versionId: versionId});
+    }
+    
+    function settingsValid() {
+        return vm.settingsValidAction();
     }
 
     function init(element) {
