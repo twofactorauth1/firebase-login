@@ -38,6 +38,7 @@
             sendOneTimeEmail: sendOneTimeEmailFn,
             addComponent: addComponentFn,
             delete: deleteFn,
+            duplicateEmail: duplicateEmailFn,
             componentTypes: [{
                     title: 'Header',
                     type: 'email-header',
@@ -416,7 +417,7 @@
             vm.uiState.dataLoaded = false;
             EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
                 vm.uiState.dataLoaded = true;
-                vm.state.originalEmail = angular.copy(vm.state.email);
+                vm.state.pendingEmailChanges = false;
                 toaster.pop('success', 'Email saved');
             });
         }
@@ -480,6 +481,34 @@
                         vm.uiState.dataLoaded = true;
                         $state.go('app.emails');
                         toaster.pop('Warning', 'Email deleted.');
+                    });
+                }
+            });
+        }
+
+        function duplicateEmailFn(){
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You want to clone this email?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true,
+                closeOnCancel: true,
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    vm.uiState.dataLoaded = false;
+                    vm.state.saveLoading = true;
+                    EmailBuilderService.duplicateEmail(vm.state.email).then(function(response){
+                        var email = response.data;
+                        vm.uiState.dirtyOverride = true;
+                        vm.uiState.dataLoaded = true;
+                        vm.state.saveLoading = false;
+                        toaster.pop('Warning', 'Email cloned.');
+                        WebsiteService.updateEmailCache(email);
+                        vm.uiState.navigation.loadEmail(email._id);
                     });
                 }
             });
@@ -591,20 +620,12 @@
         }
 
         function checkIfDirtyFn() {
-            if (vm.uiState.dirtyOverride) {
-                return false;
-            }
-
-            if (!vm.state.pendingEmailChanges) {
-                return false;
-            } else {
-                return true;
-            }
+            return vm.state.pendingEmailChanges;
         }
 
         function resetDirtyFn() {
-            vm.state.email = angular.copy(vm.state.originalEmail);
             vm.state.pendingEmailChanges = false;
+            vm.uiState.dirtyOverride = false;
         }
 
         /**
@@ -739,9 +760,11 @@
                                 vm.state.saveLoading = false;
                                 vm.uiState.navigation.loadEmail(email._id);
                                 EmailBuilderService.getEmails();
+                                vm.state.pendingEmailChanges = false;
                             })
-                        }).catch(function(err) {
-                            toaster.pop('error', 'Error', 'The email was not saved. Please try again.');
+                        }).catch(function(error) {
+                            var message = error.data ? error.data.message : 'The email was not saved. Please try again.';
+                            toaster.pop('error', 'Error', message);
                             vm.state.saveLoading = false;
                         })
                     )

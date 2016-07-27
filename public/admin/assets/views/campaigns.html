@@ -157,13 +157,13 @@
                                                 <div class="col-xs-12">
                                                     <div class="col-xs-6 text-center border-right">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsOpened/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsOpened/campaign.statistics.emailsSent)*100) * 100) / 100}}%)</span>
                                                         </div>
                                                         Opened
                                                     </div>
                                                     <div class="col-xs-6 text-center">
                                                         <div class="rate">
-                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsClicked/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
+                                                            <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsClicked/campaign.statistics.emailsOpened)*100) * 100) / 100}}%)</span>
                                                         </div>
                                                         Clicked
                                                     </div>
