@@ -42,5 +42,14 @@
       // }
     };
 
+    $scope.percentCalFn = function (x, y) {
+        var ret = Math.round(((x/y)*100) * 100) / 100;
+        if (isNaN(ret)) {
+            return 0;
+        } else {
+            return ret;
+        }
+    };
+
   }]);
 })(angular);

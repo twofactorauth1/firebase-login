@@ -39,8 +39,9 @@ function ssbEmailBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $
                         vm.state.saveLoading = false;
                         vm.state.pendingEmailChanges = false;
                     })
-                }).catch(function(err) {
-                    toaster.pop('error', 'Error', 'The email was not saved. Please try again.');
+                }).catch(function(error) {
+                    var message = error.data ? error.data.message : 'The email was not saved. Please try again.';
+                    toaster.pop('error', 'Error', message);
                     vm.state.saveLoading = false;
                 })
             )

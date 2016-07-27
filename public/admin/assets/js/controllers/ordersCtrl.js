@@ -119,6 +119,9 @@
       name: 'Pending Payment',
       value: 'pending_payment'
     }, {
+        name: 'Paid',
+        value: 'paid'
+    }, {
       name: 'Processing',
       value: 'processing'
     }, {
