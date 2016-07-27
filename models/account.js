@@ -96,7 +96,7 @@ var account = $$.m.ModelBase.extend({
                 no_notifications: false
             },
             commerceSettings : {
-                taxes : true,
+                taxes : false,
                 taxbased : "business_location",
                 taxnexus : []
             },
