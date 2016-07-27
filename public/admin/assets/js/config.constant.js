@@ -603,6 +603,7 @@ app.constant('JS_REQUIRES', {
     'inboxCtrl': 'assets/js/controllers/inboxCtrl.js',
     'xeditableCtrl': 'assets/js/controllers/xeditableCtrl.js',
     'chatCtrl': 'assets/js/controllers/chatCtrl.js',
+    'editTopicCtrl': 'assets/js/controllers/editTopicCtrl.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',

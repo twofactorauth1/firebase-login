@@ -110,7 +110,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             elem = element[0];
         }
 
-        if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
+        if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor) || ($rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic")) {
             $(function() {
                 var blogPostEditor = attrs.ssbBlogEditor;
                 var froalaConfig = $.FroalaEditor.build(
