@@ -11,7 +11,8 @@ function emailActionButtons() {
             saveAction: '&',
             cancelAction: '&',
             createCampaignAction: '&',
-            sendEmailAction: '&'
+            sendEmailAction: '&',
+            settingsValidAction: '&'
         },
         templateUrl: 'assets/js/indi-email-builder/email-controls/email-action-buttons/email-action-buttons.component.html',
         controller: 'EmailBuilderActionButtonsController',
