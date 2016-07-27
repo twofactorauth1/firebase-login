@@ -3864,7 +3864,8 @@ module.exports = {
 
     updateEmail: function(email, emailId, fn) {
         var self = this;
-        var nameCheckQuery = {'title': email.get('title'), _id : { $ne: emailId }, 'accountId': email.get('accountId')};
+        var nameCheckQuery = {'title': new RegExp('^'+email.get('title')+'$', "i"), _id : { $ne: emailId }, 'accountId': email.get('accountId')};
+        
         emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
             if(err) {
                 self.log.error('Exception thrown checking for uniqueness: ' + err);
