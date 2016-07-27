@@ -22,6 +22,9 @@
                         <li ng-class="{'active': currentStatus == 'pending_payment'}">
                             <a href="#" ng-click="statusUpdated('pending_payment')">Pending Payment</a>
                         </li>
+                        <li ng-class="{'active': currentStatus == 'paid'}">
+                            <a href="#" ng-click="statusUpdated('paid')">Paid</a>
+                        </li>
                         <li ng-class="{'active': currentStatus == 'processing'}">
                             <a href="#" ng-click="statusUpdated('processing')">Processing</a>
                         </li>

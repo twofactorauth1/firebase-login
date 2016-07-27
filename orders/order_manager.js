@@ -557,7 +557,7 @@ module.exports = {
                 if (savedOrder.get('line_items').length && savedOrder.get('line_items')[0].type == 'DONATION') {
                     savedOrder.set('status', 'completed');
                 } else {
-                    savedOrder.set('status', 'processing');
+                    savedOrder.set('status', 'paid');
                 }
 
                 dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
@@ -1826,7 +1826,7 @@ module.exports = {
           if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
             order.set('status', 'completed');
           } else {
-            order.set('status', 'processing');
+            order.set('status', 'paid');
           }
           order.attributes.modified.date = new Date();
           log.debug(accountId, userId, '>> Order', order);
