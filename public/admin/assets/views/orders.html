@@ -171,6 +171,7 @@
                                         <span class="fa fa-circle-thin fa-stack-2x"
                                         ng-class="{'text-warning': order.status == orderConstant.order_status.PENDING_PAYMENT,
                                                       'text-muted': order.status == orderConstant.order_status.ON_HOLD,
+                                                      'text-azure': order.status == orderConstant.order_status.PAID,
                                                       'text-blue': order.status == orderConstant.order_status.PROCESSING,
                                                       'text-green': order.status == orderConstant.order_status.COMPLETED,
                                                       'text-purple': order.status == orderConstant.order_status.REFUNDED,
@@ -181,6 +182,7 @@
                                         <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{formatOrderStatus(order.status)}} "
                                            ng-class="{'fa-ellipsis-h text-warning': order.status == orderConstant.order_status.PENDING_PAYMENT,
                                                       'fa-minus text-muted': order.status == orderConstant.order_status.ON_HOLD,
+                                                     'fa-money text-azure': order.status == orderConstant.order_status.PAID,
                                                       'fa-clock-o text-blue': order.status == orderConstant.order_status.PROCESSING,
                                                       'fa-check text-green': order.status == orderConstant.order_status.COMPLETED,
                                                       'fa-exchange text-purple': order.status == orderConstant.order_status.REFUNDED,

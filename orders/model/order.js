@@ -20,7 +20,7 @@ var order = $$.m.ModelBase.extend({
             "completed_at" : null,
             "updated_at" : null,
             "created_at" : new Date(),
-            "status" : "processing", //pending, on-hold, processing, completed, refunded, failed, and cancelled
+            "status" : "paid", //pending, on-hold, paid, processing, completed, refunded, failed, and cancelled
             "total" : 0.0,
             "cart_discount" : 0.0,
             "total_discount" : 0.0,
@@ -121,6 +121,7 @@ var order = $$.m.ModelBase.extend({
         idStrategy: "uuid"
     },
     status: {
+        PAID: 'paid',
         PROCESSING : 'processing',
         PENDING: 'pending',
         ON_HOLD: 'on-hold',
