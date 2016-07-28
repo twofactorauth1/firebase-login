@@ -3768,7 +3768,11 @@ module.exports = {
         async.waterfall([
             function getTemplates(cb) {
                 templateDao.findMany({handle:{$in:['blog-list', 'blog-post']}}, $$.m.ssb.Template, function(err, templates){
-                    cb(err, templates);
+                    var uniqueTemplates = _.uniq(templates, function(template) {
+                        return template.get("handle"); 
+                    });
+                    
+                    cb(err, uniqueTemplates);
                 });
             },
             function copySections(templates, cb) {
