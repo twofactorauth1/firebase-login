@@ -218,18 +218,6 @@
     $scope.cancelPage = function () {
       $scope.checkForSaveBeforeLeave();
     };
-
-    /*
-     * @getAccount
-     * -
-     */
-
-    AccountService.getAccount(function (account) {
-      $scope.account = account;
-    });
-
-   
-
     /*
      * @clickable-link
      * -
@@ -281,17 +269,7 @@
       $scope.editImage = image;
       $scope.clickImageButton(editor, false);
     };
-
-    /*
-     * @window.clickImageButton
-     * -
-     */
-
-    $window.clickImageButton = function (btn) {
-      console.log('clickImageButton >>> ');
-      var urlInput = $(btn).closest('td').prev('td').find('input');
-      $scope.clickImageButton(urlInput, true);
-    };
+    
 
     /*
      * @addBackground Image
@@ -349,26 +327,7 @@
       
       $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
-
-    function getFilename(url)
-    {
-       if (url)
-       {
-          var m = url.toString().match(/.*\/(.+?)\./);
-          if (m && m.length > 1)
-          {
-             return m[1];
-          }
-       }
-       return "";
-    }
-
-    function getUrl(value) {
-      if (value && !/http[s]?/.test(value)) {
-        value = 'http:' + value;
-      }
-      return value;
-    };
+   
 
     /*
      * @addFroalaEditorImage
@@ -648,15 +607,7 @@
      */
 
     $scope.openDuplicateModal = function () {
-      if ($scope.single_post) {
-        $scope.openSimpleModal("post-duplicate-modal");
-      }
-      if ($scope.isPage) {
-        $scope.openSimpleModal("page-duplicate-modal");
-      }
-      if ($scope.isEmail) {
-        $scope.openSimpleModal("email-duplicate-modal");
-      }
+      
     };
 
     
@@ -809,24 +760,6 @@
         $scope.dragging = false;
       }
     };
-
-    $scope.$watch('app.layout.isSidebarClosed', function (newValue, oldValue) {
-      resetEditorPosition();
-    });
-
-    angular.element($window).bind('resize', function () {
-      resetEditorPosition();
-    });
-
-    function resetEditorPosition(){
-      var x = $window.scrollX
-      var y = $window.scrollY
-      $window.scrollTo(0, 0);
-      $timeout(function() {
-        $window.scrollTo(x, y);
-      },0);
-
-    }
 
     /*
      * @locationChangeStart
