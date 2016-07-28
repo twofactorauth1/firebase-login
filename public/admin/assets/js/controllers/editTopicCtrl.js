@@ -265,8 +265,20 @@
 
     $window.clickandInsertImageButton = function (editor, image) {
       console.log('clickandInsertImageButton >>> ');
-      $scope.editor = editor;
-      $scope.editImage = image;
+      if(editor){
+          $scope.showInsert = true;
+          $scope.activeEditor = editor;
+          $scope.activeEditor.img = image;
+      }
+      else{
+        if($scope.activeEditor){
+            $scope.showInsert = true;
+        }
+        else{
+            $scope.showInsert = false;
+        }
+      }
+      
       $scope.clickImageButton(editor, false);
     };
     
@@ -337,7 +349,7 @@
     WebsiteService.isImage(url).then(function(result) {
       var _image = result;
       $timeout(function() {
-          $scope.editor.image.insert(url, !1, null, $scope.editImage);
+          $scope.activeEditor.image.insert(url, !1, null, $scope.activeEditor.img);
       }, 0);
     });
 
@@ -760,6 +772,19 @@
         $scope.dragging = false;
       }
     };
+
+
+    $scope.$on('focusEditor', function(event, args) {
+        $scope.activeEditor = args.editor;
+        $scope.activeEditor.img = null;
+    });
+
+    $scope.$on('activeEditor', function(event, args) {
+        if (args.editor)
+            $scope.activeEditor = args.editor;
+        if (args.editorImage)
+            $scope.activeEditor.img = args.editorImage;
+    });
 
     /*
      * @locationChangeStart
