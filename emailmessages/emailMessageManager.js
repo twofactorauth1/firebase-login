@@ -42,54 +42,55 @@ var emailMessageManager = {
                 });
                 self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
 
-
-                    var params = {
-                        smtpapi:  new sendgrid.smtpapi(),
-                        to:       [toAddress],
-                        //toname:   [],
-                        from:     fromAddress,
-                        fromname: '',
-                        subject:  subject,
-                        //text:     '',
-                        html:     mergedHtml,
-                        //bcc:      [],
-                        //cc:       [],
-                        //replyto:  '',
-                        date:     moment().toISOString(),
-                        //headers:    {}
-                        category: 'welcome'
-                    };
-                    if(fromName && fromName.length > 0) {
-                        params.fromname = fromName;
-                    }
-                    if(toName && toName.length > 0) {
-                        params.toname = toName;
-                    }
-
-
-                    self._safeStoreEmail(params, accountId, userId, emailId, function(err, emailmessage){
-                        //we should not have an err here
-                        if(err) {
-                            self.log.error('Error storing email (this should not happen):', err);
-                            return fn(err);
-                        } else {
-                            var email = new sendgrid.Email(params);
-                            email.setUniqueArgs({
-                                emailmessageId: emailmessage.id(),
-                                accountId:accountId
-                            });
-
-
-                            sendgrid.send(email, function(err, json) {
-                                if (err) {
-                                    self.log.error('Error sending email:', err);
-                                    return fn(err);
-                                } else {
-                                    self.log.debug('<< sendAccountWelcomeEmail');
-                                    return fn(null, json);
-                                }
-                            });
+                    juice.juiceResources(mergedHtml, {}, function(err, html){
+                        var params = {
+                            smtpapi:  new sendgrid.smtpapi(),
+                            to:       [toAddress],
+                            //toname:   [],
+                            from:     fromAddress,
+                            fromname: '',
+                            subject:  subject,
+                            //text:     '',
+                            html:     html,
+                            //bcc:      [],
+                            //cc:       [],
+                            //replyto:  '',
+                            date:     moment().toISOString(),
+                            //headers:    {}
+                            category: 'welcome'
+                        };
+                        if(fromName && fromName.length > 0) {
+                            params.fromname = fromName;
                         }
+                        if(toName && toName.length > 0) {
+                            params.toname = toName;
+                        }
+
+
+                        self._safeStoreEmail(params, accountId, userId, emailId, function(err, emailmessage){
+                            //we should not have an err here
+                            if(err) {
+                                self.log.error('Error storing email (this should not happen):', err);
+                                return fn(err);
+                            } else {
+                                var email = new sendgrid.Email(params);
+                                email.setUniqueArgs({
+                                    emailmessageId: emailmessage.id(),
+                                    accountId:accountId
+                                });
+
+
+                                sendgrid.send(email, function(err, json) {
+                                    if (err) {
+                                        self.log.error('Error sending email:', err);
+                                        return fn(err);
+                                    } else {
+                                        self.log.debug('<< sendAccountWelcomeEmail');
+                                        return fn(null, json);
+                                    }
+                                });
+                            }
+                        });
                     });
                 });
             }
