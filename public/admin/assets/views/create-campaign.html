@@ -283,7 +283,7 @@
                                     </div>
 
                                     <div class="mini-editor" ng-class="{'col-sm-8 col-sm-offset-2': !fullscreen, 'col-xs-12': fullscreen, 'disabled': !isEditable}">
-                                        <div class="panel panel-white margin-top-5 margin-bottom-30" ng-if="!showPreview">
+                                        <div class="panel panel-white margin-top-5 margin-bottom-30 email-template-list" ng-if="!showPreview">
                                             <div class="panel-body no-padding">
 
                                                 <div
@@ -291,7 +291,7 @@
                                                     class="padding-15">
 
                                                     <span ng-if="!emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
-                                                    <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" close-on-select="false" search-enabled="true" style="min-width:100%">
+                                                    <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" search-enabled="true" style="min-width:100%">
                                                         <ui-select-match
                                                             placeholder="Select an email template">
                                                             {{$select.selected.title}} (subject:{{$select.selected.subject}})
@@ -605,7 +605,7 @@
                                                         </ui-select>
                                                     </div>
                                                     <div class="form-group" ng-show="newCampaignObj.type !== 'autoresponder'">
-                                                        <label>Number of recipients: {{recipients.length}}</label>
+                                                        <label>Number of recipients: {{recipients.length + selectedContacts.newEmails.length || 0}}</label>
                                                     </div>
                                                     <div class="form-group">
                                                         <label class="radio-inline"><input type="radio" name="optradio" value="set" ng-model="newCampaignObj.searchTags.operation">Set tags</label>
