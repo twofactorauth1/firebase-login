@@ -3028,6 +3028,9 @@ module.exports = {
                             pagesToCreate = constants.defaultPages; //hard-coded page object(s)
                         }
 
+                        pagesToCreate = _.reject(pagesToCreate, function(page){ return page.pageHandle === 'blog-post' ||  page.pageHandle === 'blog-list'});
+
+                        
                         async.eachSeries(pagesToCreate, function(pageData, callback){
                             self.log.debug(accountId, userId, 'pagesToCreate', pagesToCreate);
 
