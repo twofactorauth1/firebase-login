@@ -18,9 +18,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         vm.saveLoading = true;
         saveWebsite().then(function(){
             SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
-                vm.parentVm.closeModal();
-                vm.saveLoading = false;
-                vm.parentVm.uiState.navigation.loadPage(page.data._id);
+                SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
+                    vm.parentVm.closeModal();
+                    vm.saveLoading = false;
+                    vm.parentVm.uiState.navigation.loadPage(page.data._id);
+                })
+               
             });
         })
     }
