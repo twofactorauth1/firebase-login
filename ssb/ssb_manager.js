@@ -3028,6 +3028,9 @@ module.exports = {
                             pagesToCreate = constants.defaultPages; //hard-coded page object(s)
                         }
 
+                        pagesToCreate = _.reject(pagesToCreate, function(page){ return page.pageHandle === 'blog-post' ||  page.pageHandle === 'blog-list'});
+
+                        
                         async.eachSeries(pagesToCreate, function(pageData, callback){
                             self.log.debug(accountId, userId, 'pagesToCreate', pagesToCreate);
 
@@ -3765,7 +3768,11 @@ module.exports = {
         async.waterfall([
             function getTemplates(cb) {
                 templateDao.findMany({handle:{$in:['blog-list', 'blog-post']}}, $$.m.ssb.Template, function(err, templates){
-                    cb(err, templates);
+                    var uniqueTemplates = _.uniq(templates, function(template) {
+                        return template.get("handle"); 
+                    });
+                    
+                    cb(err, uniqueTemplates);
                 });
             },
             function copySections(templates, cb) {

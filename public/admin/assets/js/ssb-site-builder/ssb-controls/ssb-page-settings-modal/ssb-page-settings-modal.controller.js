@@ -18,9 +18,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         vm.saveLoading = true;
         saveWebsite().then(function(){
             SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
-                vm.parentVm.closeModal();
-                vm.saveLoading = false;
-                vm.parentVm.uiState.navigation.loadPage(page.data._id);
+                SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
+                    vm.parentVm.closeModal();
+                    vm.saveLoading = false;
+                    vm.parentVm.uiState.navigation.loadPage(page.data._id);
+                })
+               
             });
         })
     }
@@ -175,16 +178,16 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     }
 
     function saveWebsite() {
-      return (
-    		  SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
-    			  console.log('website saved');
-            if (vm.parentVm.state.account.showhide.userScripts && vm.parentVm.state.website.resources.toggles.userScripts) {
-              SimpleSiteBuilderService.updateScriptResource(vm.parentVm.state.website).then(function(response) {
-                vm.parentVm.state.website = response.data;
-              });
-            }
-    		  })
-      )
+        return (
+            SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
+                console.log('website saved');
+                if (vm.parentVm.state.account.showhide.userScripts && vm.parentVm.state.website.resources.toggles.userScripts) {
+                    SimpleSiteBuilderService.updateScriptResource(vm.parentVm.state.website).then(function(response) {
+                        vm.parentVm.state.website = response.data;
+                    });
+                }
+            })
+        )
     }
 
     function validateDuplicatePage(pageHandle, old_handle) {
