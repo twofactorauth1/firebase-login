@@ -291,7 +291,7 @@
                                                     class="padding-15">
 
                                                     <span ng-if="!emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
-                                                    <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" close-on-select="false" search-enabled="true" style="min-width:100%">
+                                                    <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" search-enabled="true" style="min-width:100%">
                                                         <ui-select-match
                                                             placeholder="Select an email template">
                                                             {{$select.selected.title}} (subject:{{$select.selected.subject}})
