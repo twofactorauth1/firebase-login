@@ -88,7 +88,7 @@
                                <!-- <td class="center">
                                     <img id="template_screenshot_{{template._id}}" ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td> -->
-                                <td><strong>Title: </strong><span ng-text-truncate="template.title" ng-tt-chars-threshold="26" ng-tt-no-toggling></span></td>
+                                <td><strong>Title: </strong><span ng-text-truncate="template.title" ng-tt-chars-threshold="16" ng-tt-no-toggling tooltip-placement="top" tooltip="{{template.title}}" tooltip-enable="template.title.length > 16"></span></td>
                                 <td><strong>Type: </strong><span ng-text-truncate="template.type" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
                                 <td><strong>Sent: </strong><span class="text-large">{{template.stats.sends}}</span></td>
                                 <td><strong>Clicks: </strong><span class="text-large">{{template.stats.clicks}}</span></td>
