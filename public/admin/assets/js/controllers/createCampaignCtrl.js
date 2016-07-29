@@ -1212,7 +1212,8 @@
       if (valid) {
         if (i === 2 && (!$scope.newCampaignObj.name || $scope.checkCampaignNameExists()))
           valid = false;
-        else if (i === 3 && (!$scope.emailToSend.title || $scope.emailTitleExists))
+        //(!$scope.emailToSend.title || $scope.emailTitleExists)
+        else if (i === 3 && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && angular.equals($scope.newCampaignObj.steps[0].settings.emailId, ""))
           valid = false;
         else if (i === 4 && ($scope.newCampaignObj.type == 'onetime' && !$scope.recipients.length && !$scope.checkNewRecipients()))
           valid = false;
