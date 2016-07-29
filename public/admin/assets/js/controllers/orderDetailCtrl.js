@@ -849,8 +849,7 @@
                         angular.copy($scope.order, $scope.originalOrder);
                         console.log('updatedOrder ', updatedOrder);
                         toaster.pop('success', 'Order updated successfully.');
-                        $scope.pageSaving = false;
-                        $location.path('/commerce/orders');
+                        $scope.pageSaving = false;                       
                     });
                 } else {
                     OrderService.createOrder($scope.order, function (updatedOrder) {
@@ -865,8 +864,6 @@
                                 order: "true",
                                 id: updatedOrder._id,
                             });
-                        } else {
-                            $location.path('/commerce/orders');
                         }
                     });
                 }
