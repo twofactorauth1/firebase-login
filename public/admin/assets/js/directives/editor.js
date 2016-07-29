@@ -127,6 +127,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 // Case when editing blog post content
                 if(blogPostEditor){
                     froalaConfig.enter = $.FroalaEditor.ENTER_P;
+                    froalaConfig.placeholderText = attrs.placeholder;
                 }
 
                 $timeout(function() {

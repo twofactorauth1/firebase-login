@@ -1,6 +1,6 @@
 <div class="button-group">
     <div class="inline-block" tooltip-placement="bottom" tooltip="Save">
-        <button ng-disabled="!vm.state.pendingEmailChanges || !vm.settingsValid()" class="btn btn-primary btn-o" ng-click="vm.save()">
+        <button ng-disabled="!vm.state.pendingEmailChanges" class="btn btn-primary btn-o" ng-click="vm.save()">
             <span ng-if="!vm.state.saveLoading || vm.state.publishLoading" class="fa fa-save"></span>
             <span class="sr-only">Save</span>
             <span ng-if="vm.state.saveLoading"><i class="fa fa-spinner fa-spin"></i></span>

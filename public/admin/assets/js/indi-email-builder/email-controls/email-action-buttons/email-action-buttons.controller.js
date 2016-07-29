@@ -2,9 +2,9 @@
 
 app.controller('EmailBuilderActionButtonsController', ssbEmailBuilderActionButtonsController);
 
-ssbEmailBuilderActionButtonsController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$timeout'];
+ssbEmailBuilderActionButtonsController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$timeout', 'toaster'];
 /* @ngInject */
-function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleSiteBuilderService, $timeout) {
+function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleSiteBuilderService, $timeout, toaster) {
 
     console.info('email-build sidebar directive init...')
 
@@ -19,7 +19,11 @@ function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleS
     vm.settingsValid = settingsValid;
 
     function save() {
-        vm.saveAction();
+        if (vm.settingsValid()) {
+            vm.saveAction();
+        } else {
+            toaster.pop('warning', 'Mandatory field should not be blank');
+        }
     }
 
     function createCampaign() {
@@ -37,7 +41,7 @@ function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleS
     function revert(versionId) {
         vm.revertAction({versionId: versionId});
     }
-    
+
     function settingsValid() {
         return vm.settingsValidAction();
     }

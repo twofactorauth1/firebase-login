@@ -50,7 +50,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     vm.defaultPost = {
         post_title: '',
-        post_content: 'Tell your story...',
+        post_content: '',
         post_author: getDefualtAuthor()
     };
 
