@@ -25,6 +25,7 @@
         };
 
         vm.uiState = {
+            allowRedirect: true,
             sidebarOrientation: 'vertical',
             dataLoaded: false,
             modalInstance: null,
@@ -416,6 +417,7 @@
 
         function saveFn() {
             if (vm.checkSettingsValidityFn()) {
+                vm.uiState.allowRedirect = true;
                 vm.uiState.dataLoaded = false;
                 EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
                     vm.uiState.dataLoaded = true;
@@ -423,6 +425,7 @@
                     toaster.pop('success', 'Email saved');
                 });
             } else {
+                vm.uiState.allowRedirect = false;
                 toaster.pop('warning', 'Mandatory field should not be blank');
             }
         }
