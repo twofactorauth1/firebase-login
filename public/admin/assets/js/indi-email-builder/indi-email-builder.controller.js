@@ -161,6 +161,7 @@
         vm.resetDirtyFn = resetDirtyFn;
         vm.pageChanged = pageChanged;
         vm.openModalFn = openModalFn;
+        vm.checkSettingsValidityFn = checkSettingsValidityFn;
 
         $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
             $rootScope.$broadcast('$destroyFroalaInstances');
@@ -414,12 +415,16 @@
 
 
         function saveFn() {
-            vm.uiState.dataLoaded = false;
-            EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
-                vm.uiState.dataLoaded = true;
-                vm.state.pendingEmailChanges = false;
-                toaster.pop('success', 'Email saved');
-            });
+            if (vm.checkSettingsValidityFn()) {
+                vm.uiState.dataLoaded = false;
+                EmailBuilderService.updateEmail(vm.state.email).then(function(res) {
+                    vm.uiState.dataLoaded = true;
+                    vm.state.pendingEmailChanges = false;
+                    toaster.pop('success', 'Email saved');
+                });
+            } else {
+                toaster.pop('warning', 'Mandatory field should not be blank');
+            }
         }
 
         $window.clickandInsertImageButton = function(editor) {
@@ -785,6 +790,14 @@
             unbindEmailServiceWatcher();
             unbindWebsiteServiceWatcher();
 
+        }
+
+        function checkSettingsValidityFn () {
+            if (vm.state.email.title && vm.state.email.subject && vm.state.email.fromName && vm.state.email.fromEmail) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         function init(element) {
