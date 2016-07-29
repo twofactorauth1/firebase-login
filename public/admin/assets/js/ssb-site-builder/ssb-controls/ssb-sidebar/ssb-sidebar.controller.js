@@ -519,12 +519,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function setActiveSection(index) {
-      vm.uiState.showSectionPanel = false;
+        vm.uiState.showSectionPanel = false;
         $timeout(function() {
           SimpleSiteBuilderService.setActiveSection(index);
           if (vm.state.page.sections[index].visibility) {
             vm.uiState.showSectionPanel = true;
             vm.scrollToActiveSection();
+          }
+          else{
+            vm.uiState.activeSectionIndex = index;
           }
         })
     }
