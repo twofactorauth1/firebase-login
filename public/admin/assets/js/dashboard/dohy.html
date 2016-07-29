@@ -33,7 +33,7 @@
 
             <div
                 ng-repeat="analytic in vm.state.analyticsWidgets track by analytic.name"
-                class="image__cell analytic-unlocked" ng-class="'analytic-unlocked'">
+                class="analytic-unlocked col-xs-12 col-sm-6 " ng-class="{'col-md-4 col-lg-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-6 col-md-6 col-lg-4': !app.layout.isSidebarClosed}">
                 <dashboard-analytic-tile-component
                     state="vm.state"
                     ui-state="vm.uiState"
