@@ -69,6 +69,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
     $scope.components = [];
     embeddedSiteDataService.getPageData($scope.websiteId, function (err, data) {
         console.log('pagesService ', data);
+        $scope.$emit('external.scripts.page.data', {page: data});
         if (err) {
             console.warn('no page found', $location.$$path);
             if ($location.$$path === '/login') {
