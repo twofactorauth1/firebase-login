@@ -1,12 +1,12 @@
 angular.module('mainApp')
-    .directive('externalScripts', ['accountService', 'websiteService', '$routeParams', '$sce', '$location',
-        function (accountService, websiteService, $routeParams, $sce, $location) {
+    .directive('externalScripts', ['$sce',
+        function ($sce) {
             return {
                 restrict: 'E',
                 replace: true,
-                template: '<span ng-bind-html="scripts"></span>',
+                template: '<span ng-bind-html="externalScripts"></span>',
                 link: function (scope, elem, attr) {
-                    scope.scripts = '';
+                    scope.externalScripts = '';
 
                     var scriptLookup = {
                         'products': '<script src="https://www.paypalobjects.com/js/external/dg.js" async></script>',
@@ -14,7 +14,7 @@ angular.module('mainApp')
                     }
 
                     scope.$on('external.scripts.page.data', function (event, args) {
-                        scope.scripts = '';
+                        scope.externalScripts = '';
                         var page = args.page;
                         var componentTypes = _.uniq(_.pluck(_.flatten(_.pluck(page.sections, 'components')), 'type'));
                         var scriptList = [];
@@ -28,12 +28,12 @@ angular.module('mainApp')
                         scriptList = _.uniq(scriptList);
 
                         scriptList.forEach(function(s, i) {
-                            scope.scripts += '\n\n' + s;
+                            scope.externalScripts += '\n\n' + s;
                         });
 
-                        console.info('external scripts', scope.scripts);
+                        console.info('external scripts', scope.externalScripts);
 
-                        scope.scripts = $sce.trustAsHtml(scope.scripts);
+                        scope.externalScripts = $sce.trustAsHtml(scope.externalScripts);
                     });
                 }
             };
