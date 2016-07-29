@@ -117,7 +117,7 @@ defaultWorkstreams[1] = {
     "analyticWidgets" : [
         {
             name: "contacts",
-            link: "/admin/#/customers"
+            link: "/admin/#/contacts"
         }
     ],
     "name" : "Manage Contacts",
