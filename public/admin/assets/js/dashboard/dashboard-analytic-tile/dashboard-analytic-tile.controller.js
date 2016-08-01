@@ -110,7 +110,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.data = [
                     {
                         analyticDataLabel: 'YTD ORDER REV.',
-                        analyticDataValue: '$' + DashboardService.state.analytics.revenue.YTDTotalAmount
+                        analyticDataValue: '$' + (parseFloat(DashboardService.state.analytics.revenue.YTDTotalAmount) - parseFloat(DashboardService.state.analytics.revenue.YTDTotalTax)).toFixed(2)
+                    },
+                    {
+                        analyticDataLabel: 'YTD TAX COLLECTED',
+                        analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalTax
                     },
                     {
                         analyticDataLabel: 'YTD NEW ORDERS',
