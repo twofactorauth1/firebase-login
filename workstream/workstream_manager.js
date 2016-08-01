@@ -475,28 +475,32 @@ module.exports = {
 
                 // Count number of matching docs for the group
                 count: { $sum: 1 },
-                amount: { $max: '$total' } // total is currently a string (cannot $sum in aggregate)
+                amount: { $max: '$total' }, // total is currently a string (cannot $sum in aggregate)
+                tax: {$max: '$total_tax'}
             }
         });
 
         orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, results){
-
             var total = 0;
             var totalAmount = 0;
+            var totalTax = 0;
 
             _.each(results, function(result){
                 total+= result.count;
                 totalAmount += parseFloat(result.amount);
+                totalTax += parseFloat(result.tax);
 
                 delete result._id;
                 delete result.count;
                 delete result.amount;
+                delete result.tax;
             });
 
             var response = {
                 //results: results,
                 YTDTotalOrders: total,
-                YTDTotalAmount: totalAmount.toFixed(2)
+                YTDTotalAmount: totalAmount.toFixed(2),
+                YTDTotalTax: totalTax.toFixed(2)
             };
             self.log.debug('<< getRevenueByMonthReport: ', response);
             fn(err, response);

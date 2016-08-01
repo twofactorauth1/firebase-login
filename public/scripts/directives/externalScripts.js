@@ -1,6 +1,6 @@
 angular.module('mainApp')
-    .directive('externalScripts', ['$sce',
-        function ($sce) {
+    .directive('externalScripts', ['$sce', 'externalScriptLookup',
+        function ($sce, externalScriptLookup) {
             return {
                 restrict: 'E',
                 replace: true,
@@ -8,9 +8,7 @@ angular.module('mainApp')
                 link: function (scope, elem, attr) {
                     scope.externalScripts = '';
 
-                    var scriptLookup = {
-                        '<script src="https://www.paypalobjects.com/js/external/dg.js" async></script>': ['products', 'ssb-form-donate']
-                    };
+                    var scriptLookup = externalScriptLookup;
 
                     scope.$on('external.scripts.page.data', function (event, args) {
                         scope.externalScripts = '';
