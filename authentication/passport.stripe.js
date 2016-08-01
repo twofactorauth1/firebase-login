@@ -39,7 +39,7 @@ passport.use(new StripeStrategy({
         stripeAccount.baggage.publishable_key = stripe_properties.stripe_publishable_key;
         stripeAccount.id = function() {
             return accessToken;
-        }
+        };
 
         req.session.stripeAccessToken = accessToken;
         var userId = null;
@@ -57,32 +57,24 @@ passport.use(new StripeStrategy({
             }
         }
         console.log('req.session.accountId: ' + req.session.accountId);
-        userDao.getById(userId, function(err, value){
-            if (value == null || err) {
-                log.error("No user found during stripe callback for userId[" + userId + "]. (" + err + ")");
-                return done("User not found", "Incorrect username");
+        userDao.getById(userId, function(err, user){
+            if(err) {
+                log.error('Error fetching user:', err);
+                return done(err);
             }
-            var user = value;
-
-            user._setCredentials(stripeAccount, false);
-            // add accessToken to account.
             stripeDao.getStripeAccount(accessToken, function(err, account){
-                console.log('account >>> ', account);
+                //console.log('account >>> ', account);
                 accountDao.addStripeTokensToAccount(stripeAccount.baggage.accountId, accessToken, refreshToken, account.business_name, account.business_logo, function(err, value){
                     if(err) {
                         log.error('Error saving Stripe Tokens to account: ' + err);
                     }
+                    log.debug('<< stripeCallback');
+                    return done(err, user);
                 });
             });
-            userDao.saveOrUpdate(user, function(err, value){
-                if(value==null) {
-                    log.error("Error during saveOrUpdate of user: (" + err + ")");
-                    return done(err, "SaveOrUpdate Error");
-                }
-                log.debug('<< stripeCallback');
-                return done(err, value);
-            });
         });
+
+
 
     }
 ));
