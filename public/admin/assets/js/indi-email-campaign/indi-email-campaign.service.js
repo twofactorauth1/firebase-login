@@ -22,6 +22,7 @@
         campaignService.getCampaignContacts = getCampaignContacts;
         campaignService.cancelCampaignForContact = cancelCampaignForContact;
         campaignService.duplicateCampaign = duplicateCampaign;
+        campaignService.deleteCampaign = deleteCampaign;
 
         /**
          * Get get email by ID
@@ -57,6 +58,22 @@
             }
 
             return campaignRequest($http.post([baseCampaignAPIv1, campaign._id].join('/'), campaign).success(success).error(error));
+        }
+
+        function deleteCampaign(campaign) {
+
+            function success(data) {}
+
+            function error(error) {
+                console.error('EmailCampaignService deleteCampaign error: ', JSON.stringify(error));
+            }
+
+            return campaignRequest(
+                $http({
+                    url: [baseCampaignAPIv1, campaign._id].join('/'),
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
         }
 
         function sendTestEmail(address, campaign) {

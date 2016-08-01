@@ -2,9 +2,9 @@
 
     app.controller('EmailCampaignController', indiEmailCampaignController);
 
-    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant'];
+    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant', 'editableOptions', 'SweetAlert', '$location'];
     /* @ngInject */
-    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant) {
+    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant, editableOptions, SweetAlert, $location) {
 
         console.info('email-campaign directive init...');
 
@@ -15,6 +15,8 @@
         vm.init = init;
         vm.state = vm.state || {};
         vm.uiState = vm.uiState || {};
+
+        editableOptions.theme = 'bs3';
 
         vm.state.campaignId = $stateParams.id;
         vm.state.campaign = {
@@ -98,13 +100,23 @@
         vm.resetDirtyFn = resetDirtyFn;
         vm.checkIfDirtyFn = checkIfDirtyFn;
         vm.duplicateFn = duplicateFn;
+        vm.changeEmailFn = changeEmailFn;
+        vm.deleteCampaignFn = deleteCampaignFn;
 
         $scope.$watch('vm.state.campaign.type', function() {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
-            if (vm.state.campaign.type === 'autoresponder') {
-                vm.state.campaign.steps[0].trigger = 'SIGNUP';
-            } else {
-                vm.state.campaign.steps[0].trigger = null;
+            if (vm.state.campaign.steps) {
+                if (vm.state.campaign.type === 'autoresponder') {
+                    vm.state.campaign.steps[0].trigger = 'SIGNUP';
+                } else {
+                    vm.state.campaign.steps[0].trigger = null;
+                }
+            }
+        });
+
+        $scope.$watch('emailToSend.subject', function (newValue, oldValue) {
+            if (newValue) {
+                vm.analyzeSubject(newValue);
             }
         });
 
@@ -570,6 +582,46 @@
                 });
         }
 
+        function changeEmailFn() {
+            var email = _.findWhere(vm.state.emails, {
+                _id: vm.state.campaign.steps[0].settings.emailId
+            });
+            vm.state.campaign.steps[0].settings.emailId = email._id;
+            vm.state.campaign.steps[0].settings.fromEmail = email.fromEmail;
+            vm.state.campaign.steps[0].settings.fromName = email.fromName;
+            vm.state.campaign.steps[0].settings.replyTo = email.replyTo;
+            vm.state.campaign.steps[0].settings.bcc = email.bcc;
+            vm.state.campaign.steps[0].settings.subject = email.subject;
+            vm.state.campaign.steps[0].settings.vars = email.vars;
+        }
+
+        function deleteCampaignFn() {
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Do you want to cancel this campaign?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, cancel campaign!",
+                cancelButtonText: "No, do not cancel campaign!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    EmailCampaignService.deleteCampaign(vm.state.campaign).then(function(data) {
+                        toaster.pop('success', "Campaign cancelled.", "The " + vm.state.campaign.name + " campaign was cancelled successfully.");
+                        vm.closeModal();
+                        $timeout(function () {
+                            $location.path('/marketing/campaigns');
+                        }, 500)
+                    });
+                } else {
+                    SweetAlert.swal("Not Cancelled", "The campaign was not cancelled.", "error");
+                }
+            });
+        };
+
         function init(element) {
             vm.element = element;
 
@@ -579,6 +631,14 @@
 
             WebsiteService.getWebsite(function (data) {
                 vm.state.website = data;
+            });
+
+            WebsiteService.getEmails(null, function (data) {
+                vm.state.emails = data;
+            });
+
+            ContactService.getContactTags(function(tags){
+                vm.state.contactTags = tags;
             });
 
             if (vm.state.campaignId !== 'create') {

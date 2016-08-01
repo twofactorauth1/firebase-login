@@ -620,7 +620,7 @@
 
             EmailCampaignService.createCampaign(campaign).then(function(res) {
                 console.log('EmailCampaignService.createCampaign created', res.data.name);
-                $location.path('/marketing/campaigns/' + res.data._id);
+                $location.path('/emails/campaigns/' + res.data._id);
             }).catch(function(err) {
                 console.error('EmailCampaignService.createCampaign error', JSON.stringify(err));
             });

@@ -86,7 +86,8 @@ var campaign = $$.m.ModelBase.extend({
         DRAFT:'DRAFT',
         PENDING:'PENDING',
         RUNNING:'RUNNING',
-        COMPLETED:'COMPLETED'
+        COMPLETED:'COMPLETED',
+        CANCELLED:'CANCELLED'
     }
 });
 

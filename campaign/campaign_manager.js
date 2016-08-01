@@ -827,7 +827,25 @@ module.exports = {
                 return fn(err, null);
             } else {
                 self.log.debug('<< cancelRunning Campaign');
-                return fn(null, value);
+                self.log.debug('>> mark campaign cancelled');
+                campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+                    if(err) {
+                        self.log.error('Error updating campaign status:', err);
+                        return fn(err, null);
+                    } else {
+                        campaign.set('status', $$.m.Campaign.status.CANCELLED);
+                        var modified = {
+                            date: new Date(),
+                            by: 'Admin'
+                        };
+                        campaign.set('modified', modified);
+
+                        self.log.debug('<< mark campaign cancelled');
+
+                        return campaignDao.saveOrUpdate(campaign, fn);
+                    }
+                });
+
             }
         });
     },

@@ -35,11 +35,11 @@
                                 </div>
                                 <div class="visible-xs margin-bottom-15 clearfix"></div>
                                 <div class="col-xs-12 col-sm-6">
-                                    <div class="form-group margin-bottom-0 pull-right">
+                                    <!-- <div class="form-group margin-bottom-0 pull-right">
                                         <button type="button" ui-sref="app.marketing.createcampaign" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active">
                                             <span translate="sidebar.nav.marketing.NEWCAMPAIGN">New Campaign</span>
                                         </button>
-                                    </div>
+                                    </div> -->
                                     <div class="form-group margin-bottom-0 pull-left">
                                         <div class="btn-group tableView">
                                             <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
@@ -98,7 +98,8 @@
                                         <div class="panel-heading" ng-class="{
                                             'bg-grey': campaign.status.toLowerCase() == 'draft',
                                             'bg-light-yellow': campaign.status.toLowerCase() == 'running',
-                                            'bg-green': campaign.status.toLowerCase() == 'completed'
+                                            'bg-green': campaign.status.toLowerCase() == 'completed',
+                                            'bg-red': campaign.status.toLowerCase() == 'cancelled'
                                         }">
                                             <span class="fa-stack fa-lg fa-inverse pull-left" style="margin: -8px 5px 0 -7px;">
                                                 <span class="fa fa-circle-thin fa-stack-2x">
@@ -106,7 +107,8 @@
                                             <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
                                                   'fa-pencil': campaign.status.toLowerCase() == 'draft',
                                                   'fa-clock-o': campaign.status.toLowerCase() == 'running',
-                                                  'fa-check': campaign.status.toLowerCase() == 'completed'
+                                                  'fa-check': campaign.status.toLowerCase() == 'completed',
+                                                  'fa-close': campaign.status.toLowerCase() == 'cancelled'
                                                 }">
                                                 </span>
                                             </span>
@@ -178,13 +180,15 @@
                                         ng-class="{
                                             'text-muted': campaign.status.toLowerCase() == 'draft',
                                             'text-orange': campaign.status.toLowerCase() == 'running',
-                                            'text-green': campaign.status.toLowerCase() == 'completed'
+                                            'text-green': campaign.status.toLowerCase() == 'completed',
+                                            'text-red': campaign.status.toLowerCase() == 'cancelled'
                                         }">
                                         </span>
                                     <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
                                           'fa-pencil text-muted': campaign.status.toLowerCase() == 'draft',
                                           'fa-clock-o text-orange': campaign.status.toLowerCase() == 'running',
-                                          'fa-check text-green': campaign.status.toLowerCase() == 'completed'
+                                          'fa-check text-green': campaign.status.toLowerCase() == 'completed',
+                                          'fa-close text-red': campaign.status.toLowerCase() == 'cancelled'
                                         }">
                                         </span>
                                     </span>
