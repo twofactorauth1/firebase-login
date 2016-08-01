@@ -34,8 +34,6 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
       if(!angular.isDefined(scope.component.bg.img.show))
         scope.component.bg.img.show = false;
 
-      scope.component.bg.img.show = false;
-
       if(scope.component.boxColor)
         scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
 
@@ -65,7 +63,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
                     scope.reloadMap();
                   }, 500);
                 }
-              }); 
+              });
               }
             }
           });
