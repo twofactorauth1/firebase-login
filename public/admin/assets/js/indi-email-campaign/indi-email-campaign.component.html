@@ -24,7 +24,7 @@
           !vm.uiState.dataLoaded
             }">
         <!-- end: PAGE TITLE -->
-        <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
+        <div class="container-fluid container-fullw bg-white padding-top-15 padding-bottom-15">
             <div class='row'>
                 <div class="col-sm-4">
                     <div class='form-group'>
@@ -33,146 +33,139 @@
                 </div>
                 <div class="col-sm-8">
                     <div class='pull-right'>
-                        <button type="button" ng-disabled="saveLoading" ng-click="vm.saveAsDraftFn()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
-                            <span>
-                                <div>
-                                    Save as draft
-                                </div>
-                            </span>
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.saveAsDraftFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                            <i class="ti-save"></i>
+                            <span>Save</span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading" ng-click="vm.duplicateFn()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
-                            <span>
-                                <div>
-                                   Duplicate
-                                </div>
-                            </span>
+                        <button type="button" ng-disabled="saveLoading" ng-click='vm.duplicateFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                            <i class="ti-files"></i>
+                            <span>Duplicate</span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading || !vm.state.email" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-location-arrow">
-                            <span>
-                                <div>
-                                    Send Test
-                                </div>
-                            </span>
+                        <button type="button" ng-disabled="saveLoading || !vm.state.email" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary padding-right-10 margin-bottom-5">
+                            <i class="ti-location-arrow"></i>
+                            <span>Send Test</span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading || !vm.state.campaign._id" ng-click='vm.activateCampaignFn()' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-power-off">
-                            <span>
-                                <div>
-                                    Activate Campaign
-                                </div>
-                            </span>
+                        <button type="button" ng-disabled="saveLoading || !vm.state.campaign._id" ng-click='vm.activateCampaignFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                            <i class="ti-power-off"></i>
+                            <span>Activate Campaign</span>
                         </button>
                     </div>
                 </div>
             </div>
             <div class='row'>
-                <span>STATUS: {{vm.state.campaign.status}}</span>
-                <span>LAST SAVED: {{vm.state.campaign.modified.date| date : 'medium'}}</span>
+                <div class="col-xs-12">
+                    <h4 class="text-u ssb-admin-panel-header inline no-border">Status:</h4>
+                    <span class="text-u text-indigenous-blue padding-right-15">{{vm.state.campaign.status}}</span>
+                    <h4 class="text-u ssb-admin-panel-header inline no-border">Last Saved:</h4>
+                    <span class="text-u text-indigenous-blue">{{vm.state.campaign.modified.date | date : 'medium' || vm.state.campaign.created.date | date : 'medium'}}</span>
+                </div>
             </div>
         </div>
-        <div class="row email-campaign-main" ng-hide="!vm.uiState.dataLoaded">
-            <!--<div class="col-sm-4 bg-white">
-                <span>Email Preview</span>
-                <button type="button" ng-disabled="saveLoading || !vm.state.campaign.steps[0].settings.emailId || vm.uiState.disableEditing" ui-sref='app.emailEditor({id: vm.state.campaign.steps[0].settings.emailId})' class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-pencil">
-                    <span>
-                        <div>
-                            Edit
+        <div class="container-fluid container-fullw margin-bottom-15 padding-top-15 padding-bottom-15">
+            <div class="row email-campaign-main" ng-hide="!vm.uiState.dataLoaded">
+                <div class="col-sm-6">
+                    <h4 class="text-u ssb-admin-panel-header no-border">Campaign type</h4>
+                    <div class='form-group bg-white padding-10'>
+                        <!-- <select class='form-control' ng-model='vm.state.campaign.type' ng-disabled="vm.uiState.disableEditing">
+                            <option value='onetime'>One Time</option>
+                            <option value='autoresponder'>Auto Responder</option>
+                        </select> -->
+                        <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
+                            <input type="radio" id="radio_one-time" name="campaign_type" ng-checked="vm.state.campaign.type === 'onetime'" value="onetime" ng-model="vm.state.campaign.type" ng-disabled="vm.uiState.disableEditing">
+                            <label for="radio_one-time" class="margin-top-0 margin-bottom-0">
+                                One Time
+                            </label>
                         </div>
-                    </span>
-                </button>
-            </div>-->
-            <div class="col-sm-6">
-                <div class='form-group'>
-                    <label>Campaign Type</label>
-                    <select class='form-control' ng-model='vm.state.campaign.type' ng-disabled="vm.uiState.disableEditing">
-                        <option value='onetime'>One Time</option>
-                        <option value='autoresponder'>Auto Responder</option>
-                    </select>
-                </div>
-                <div class="panel panel-white" ng-class="{'csspinner': vm.state.campaign.type === 'autoresponder'}">
-                    <div class="panel-body no-padding">
-                        <tabset>
-                            <tab heading="by Tag" disable='vm.uiState.disableEditing'>
-                                <div class="checkbox clip-check check-primary" ng-repeat="count in vm.contactCounts track by $index">
-                                    <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="vm.toggleSelectionFn(count.matchingTag)" ng-checked="vm.state.tagSelection.indexOf(count.matchingTag) > - 1" ng-disabled='vm.uiState.disableEditing'>
-                                    <label for="checkbox{{count.uniqueTag}}">
-                                        <span class="badge">{{count.numberOfTags}}</span> {{count.matchingTag}}
-                                    </label>
-                                </div>
-                            </tab>
-                            <tab heading="by Contact" disable='vm.uiState.disableEditing'>
-                                <label class="text-muted">Select individuals from your contact list</label>
-                                <div class="well well-sm">
-                                    <ui-select class="contact-list" multiple ng-model="vm.uiState.selectedContacts.individuals" on-select="vm.state.contactselectedFn($select)" on-remove="vm.contactRemovedFn($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
-                                        <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
-                                        <ui-select-choices repeat="contact._id as contact in vm.state.contacts | filter:$select.search">
-                                            <span class="pull-left">
-                                                <img ng-src="contact.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="contact">
-                                            </span>
-                                            <span class="pull-left" style="line-height: 16px;margin-top: 3px;">
-                                                {{contact.first}} {{contact.last}}
+                        <div class="radio clip-radio radio-primary margin-bottom-0" style="margin-top:0px!important">
+                            <input type="radio" id="radio_auto-responder" name="campaign_type" ng-checked="vm.state.campaign.type === 'autoresponder'" value="autoresponder" ng-model="vm.state.campaign.type" ng-disabled="vm.uiState.disableEditing">
+                            <label for="radio_auto-responder" class="margin-top-0 margin-bottom-0">
+                                Auto Responder
+                            </label>
+                        </div>
+                    </div>
+                    <h4 class="text-u ssb-admin-panel-header no-border">Email list</h4>
+                    <div class="panel panel-white">
+                        <div class="panel-body no-padding">
+                            <tabset>
+                                <tab heading="by Tag" disable='vm.uiState.disableEditing'>
+                                    <div class="checkbox clip-check check-primary" ng-repeat="count in vm.contactCounts track by $index">
+                                        <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="vm.toggleSelectionFn(count.matchingTag)" ng-checked="vm.state.tagSelection.indexOf(count.matchingTag) > - 1" ng-disabled='vm.uiState.disableEditing'>
+                                        <label for="checkbox{{count.uniqueTag}}">
+                                            <span class="badge">{{count.numberOfTags}}</span> {{count.matchingTag}}
+                                        </label>
+                                    </div>
+                                </tab>
+                                <tab heading="by Contact" disable='vm.uiState.disableEditing'>
+                                    <label class="text-muted">Select individuals from your contact list</label>
+                                    <div class="well well-sm">
+                                        <ui-select class="contact-list" multiple ng-model="vm.uiState.selectedContacts.individuals" on-select="vm.state.contactselectedFn($select)" on-remove="vm.contactRemovedFn($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
+                                            <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
+                                            <ui-select-choices repeat="contact._id as contact in vm.state.contacts | filter:$select.search">
+                                                <span class="pull-left">
+                                                    <img ng-src="contact.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="contact">
+                                                </span>
+                                                <span class="pull-left" style="line-height: 16px;margin-top: 3px;">
+                                                    {{contact.first}} {{contact.last}}
+                                                    <div class="clearfix"></div>
+                                                    <small ng-if="contact.details[0].emails[0].email.length > 0">{{contact.details[0].emails[0].email}}</small>
+                                                </span>
                                                 <div class="clearfix"></div>
-                                                <small ng-if="contact.details[0].emails[0].email.length > 0">{{contact.details[0].emails[0].email}}</small>
-                                            </span>
-                                            <div class="clearfix"></div>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </div>
-                            </tab>
-                            <tab heading="by Email Address" disable='vm.uiState.disableEditing'>
-                                <label class="text-muted">Enter emails manually or paste a comma-separated list. Emails already in contacts will be ignored.</label>
-                                <div class="well well-sm">
-                                    <tags-input ng-model="vm.uiState.selectedContacts.newEmails" add-on-paste="true" placeholder="Add a email" add-on-comma="true" allowed-tags-pattern="^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" on-tag-adding="vm.checkContactExistsFn($tag)">
-                                    </tags-input>
-                                </div>
-                            </tab>
-                        </tabset>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </div>
+                                </tab>
+                                <tab heading="by Email Address" disable='vm.uiState.disableEditing'>
+                                    <label class="text-muted">Enter emails manually or paste a comma-separated list. Emails already in contacts will be ignored.</label>
+                                    <div class="well well-sm">
+                                        <tags-input ng-model="vm.uiState.selectedContacts.newEmails" add-on-paste="true" placeholder="Add a email" add-on-comma="true" allowed-tags-pattern="^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" on-tag-adding="vm.checkContactExistsFn($tag)">
+                                        </tags-input>
+                                    </div>
+                                </tab>
+                            </tabset>
+                        </div>
+                        <button type="button" ng-disabled="vm.uiState.disableEditing" ng-click='vm.openModalFn("campaign-contacts-list-modal")' class="btn btn-primary margin-left-15 margin-bottom-15">
+                            <i class="fa fa-users"></i>
+                            <span>View full contact list</span>
+                        </button>
                     </div>
-                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-user" ng-disabled="vm.uiState.disableEditing" ng-click='vm.openModalFn("campaign-contacts-list-modal")'>
-                        <span>
-                            <div>
-                                View full contact list
-                            </div>
-                        </span>
-                    </button>
-                </div>
-                <div class="panel panel-white" ng-class="{'csspinner': vm.state.campaign.type === 'onetime'}">
-                    <div class="row margin-bottom-30">
-                        <div class="col-xs-4" ng-repeat="trigger in vm.uiState.triggers">
-                            <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel - light - grey pulse',false:'panel - white'}[trigger == vm.state.campaign.steps[0].trigger]">
-                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.state.campaign.steps[0].trigger = trigger.value">
-                                    <span ng-class="{'text-nephritis': vm.state.campaign.steps[0].trigger == trigger.value, 'text-muted': vm.state.campaign.steps[0].trigger != trigger.value, 'fa fa-check fa-2x': vm.state.campaign.steps[0].trigger == trigger.value}" class="text-nephritis" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
-                                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
-                                    <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
+                    <div class="panel panel-white" ng-if="vm.state.campaign.type === 'autoresponder'">
+                        <div class="row margin-bottom-30">
+                            <div class="col-xs-4" ng-repeat="trigger in vm.uiState.triggers">
+                                <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel - light - grey pulse',false:'panel - white'}[trigger == vm.state.campaign.steps[0].trigger]">
+                                    <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.state.campaign.steps[0].trigger = trigger.value">
+                                        <span ng-class="{'text-nephritis': vm.state.campaign.steps[0].trigger == trigger.value, 'text-muted': vm.state.campaign.steps[0].trigger != trigger.value, 'fa fa-check fa-2x': vm.state.campaign.steps[0].trigger == trigger.value}" class="text-nephritis" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                        <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-6 bg-white" ng-class="{'csspinner': vm.state.campaign.type === 'autoresponder'}">
-                <div class='form-group'>
-                    <label>When to send</label>
-                    <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
-                        <input type="radio" ng-change="vm.updateSendNowFn('now')" id="radio3" name="vertical" value="now" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
-                        <label for="radio3">
-                            Send Now
-                        </label>
+                <div class="col-sm-6" ng-if="vm.state.campaign.type === 'onetime'">
+                    <h4 class="text-u ssb-admin-panel-header no-border">When to send</h4>
+                    <div class='form-group bg-white padding-10'>
+                        <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
+                            <input type="radio" ng-change="vm.updateSendNowFn('now')" id="radio3" name="vertical" value="now" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
+                            <label for="radio3" class="margin-top-0 margin-bottom-0">
+                                Now
+                            </label>
+                        </div>
+                        <div class="radio clip-radio radio-primary margin-bottom-0">
+                            <input ng-change="vm.updateSendNowFn('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
+                            <label for="radio4" class="margin-top-0 margin-bottom-0">
+                                Later
+                            </label>
+                        </div>
                     </div>
-                    <div class="radio clip-radio radio-primary">
-                        <input ng-change="vm.updateSendNowFn('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
-                        <label for="radio4">
-                            Send Later
-                        </label>
+                    <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-if="vm.uiState.whenToSend !== 'now'" ng-class="{'disabled': vm.uiState.disableEditing}">
+                        <datepicker ng-model="vm.uiState.delivery.date" min-date="vm.uiState.delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
+                        <div class="clearfix"></div>
+                        <timepicker ng-model="vm.uiState.delivery.date" hour-step="vm.uiState.hstep" minute-step="vm.uiState.mstep" min="vm.uiState.delivery.minDate" class="center"></timepicker>
                     </div>
-                </div>
-                <hr/>
-                <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-class="{'csspinner': vm.uiState.whenToSend === 'now', 'disabled': vm.uiState.disableEditing}">
-                    <datepicker ng-model="vm.uiState.delivery.date" min-date="vm.uiState.delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
-                    <div class="clearfix"></div>
-                    <timepicker ng-model="vm.uiState.delivery.date" hour-step="vm.uiState.hstep" minute-step="vm.uiState.mstep" min="vm.uiState.delivery.minDate" class="center"></timepicker>
-                </div>
-                <div ng-if="invalidDate && whenToSend === 'later' && isEditable" class="col-xs-12">
-                    <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
+                    <div ng-if="invalidDate && whenToSend === 'later' && isEditable" class="col-xs-12">
+                        <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
+                    </div>
                 </div>
             </div>
         </div>
