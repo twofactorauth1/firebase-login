@@ -34,10 +34,9 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         scope.component.bg = {};
       if(!angular.isDefined(scope.component.bg.img))
         scope.component.bg.img = {};
-      if(!angular.isDefined(scope.component.bg.img.show))
+      if(!angular.isDefined(scope.component.bg.img.show)) {
         scope.component.bg.img.show = false;
-
-      scope.component.bg.img.show = false;
+      }
 
       function hexToRgb(hex, opacity) {
         var c;
