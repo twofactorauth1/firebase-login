@@ -36,7 +36,7 @@
       // var tableState = $scope.getSortOrder();
       // $state.current.sort = tableState.sort;
       // if ($scope.account.showhide.ssbEmail) {
-        // $state.go('app.emailCampaign', {id: campaign._id});
+      //   $state.go('app.emailCampaign', {id: campaign._id});
       // } else {
         $location.path('/marketing/campaigns/' + campaign._id);
       // }

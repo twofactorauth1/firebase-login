@@ -1096,12 +1096,16 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end).toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start).toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            self.log.debug('start:', start);
         }
         analyticsManager.getVisitorReports(accountId, userId, start, end, function(err, value){
             self.log.debug(accountId, userId, '<< runVisitorsReport');
@@ -1121,12 +1125,16 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end).toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start).toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            self.log.debug('start:', start);
         }
 
         analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, function(err, value){
@@ -1147,12 +1155,16 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            self.log.debug('start:', start);
         }
 
         analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, function(err, value){
@@ -1173,12 +1185,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1210,12 +1225,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1247,12 +1265,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1284,12 +1305,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1321,12 +1345,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.trafficSourcesReport(accountId, userId, start, end,function(err, value){
@@ -1347,12 +1374,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.newVsReturningReport(accountId, userId, start, end,function(err, value){
@@ -1373,12 +1403,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end, 'MM/DD/YYYY').toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
+
+
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'MM/DD/YYYY').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.pageAnalyticsReport(accountId, userId, start, end,function(err, value){
@@ -1391,7 +1424,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var userId = self.userId(req);
         var accountId = self.accountId(req);
-        self.log.debug(accountId, userId, '>> allReports');
+        self.log.debug(accountId, userId, '>> allReports (' + req.query.start + ', ' + req.query.end + ')');
         var start = req.query.start;
         var end = req.query.end;
 
@@ -1399,14 +1432,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(!end) {
             end = moment().toDate();
         } else {
-            end = moment(end).toDate();
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start).toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');

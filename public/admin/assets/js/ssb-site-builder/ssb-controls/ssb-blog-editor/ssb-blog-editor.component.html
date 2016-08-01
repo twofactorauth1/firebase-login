@@ -188,7 +188,7 @@
                 <div class="ssb-blog-editor-controls-inner">
                     <div class="ssb-blog-editor-controls-inner-fixed">
 
-                        <h4 class="text-u inline no-border">Status:</h4>
+                        <h4 class="text-u ssb-admin-panel-header inline no-border">Status:</h4>
                         <span class="text-u text-indigenous-blue">{{vm.state.post.post_status || 'Unsaved Draft'}}</span>
 
                         <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
@@ -268,12 +268,12 @@
                         </div>
 
                         <div class="row block ssb-blog-editor-controls-tags">
-                            <h4 class="text-u">Tags</h4>
+                            <h4 class="text-u ssb-admin-panel-header">Tags</h4>
                             <tags-input min-length="1" ng-model="vm.state.post.post_tags"></tags-input>
                         </div>
 
                         <div class="row block ssb-blog-editor-featured-image">
-                            <h4 class="text-u">Featured Image</h4>
+                            <h4 class="text-u ssb-admin-panel-header">Featured Image</h4>
                             <i ng-if="vm.state.post.featured_image" class="fa fa-close" ng-click="vm.removeFeaturedImage(vm.state.post);"></i>
                             <div class="center" ng-click="vm.setFeaturedImage(vm.state.post);">
                                 <div ng-if="vm.state.post.featured_image">
