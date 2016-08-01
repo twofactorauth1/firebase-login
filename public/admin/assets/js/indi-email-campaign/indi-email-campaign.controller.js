@@ -102,6 +102,7 @@
         vm.duplicateFn = duplicateFn;
         vm.changeEmailFn = changeEmailFn;
         vm.deleteCampaignFn = deleteCampaignFn;
+        vm.formatDateFn = formatDateFn;
 
         $scope.$watch('vm.state.campaign.type', function() {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
@@ -254,7 +255,7 @@
             if (vm.state.campaignId === 'create') {
                 fn = EmailCampaignService.createCampaign;
             }
-            vm.state.campaign.status = 'PENDING';
+            vm.state.campaign.status = 'RUNNING';
             fn(vm.state.campaign)
                 .then(function (res) {
                     vm.state.campaign = angular.extend(vm.state.campaign, res.data);
@@ -611,7 +612,7 @@
                 if (isConfirm) {
                     EmailCampaignService.deleteCampaign(vm.state.campaign).then(function(data) {
                         toaster.pop('success', "Campaign cancelled.", "The " + vm.state.campaign.name + " campaign was cancelled successfully.");
-                        vm.closeModal();
+                        vm.closeModalFn();
                         $timeout(function () {
                             $location.path('/marketing/campaigns');
                         }, 500)
@@ -620,6 +621,30 @@
                     SweetAlert.swal("Not Cancelled", "The campaign was not cancelled.", "error");
                 }
             });
+        };
+
+        function formatDateFn(date) {
+
+            var formattedDate;
+            var localDate;
+
+            if (!date._d) {
+
+                if (date.year) {
+                    formattedDate = { year: date.year, month: date.month - 1, day: date.day, hour: date.hour, minute: date.minute };
+                } else if (date instanceof Date) {
+                    formattedDate = moment(date);
+                }
+
+                localDate = moment.utc(formattedDate);
+                localDate = localDate.local();
+
+            } else {
+                localDate = moment(date);
+            }
+
+            return localDate.format("dddd, MMMM Do YYYY, h:mm A");
+
         };
 
         function init(element) {
