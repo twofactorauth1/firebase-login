@@ -14,7 +14,27 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle">Campaign Configuration</h1>
-                <span class="mainDescription">Fill out details below</span>
+                <div class="mainDescription">
+                    <span ng-if="!vm.uiState.disableEditing">Edit this <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign before activating it</span>
+                    <span ng-if="vm.uiState.disableEditing">This <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign was activated on {{::vm.formatDateFn(vm.state.campaign.steps[0].settings.sendAt)}}</span>
+                    <span class="fa-stack fa-lg text-large margin-left-5">
+                        <span class="fa fa-circle-thin fa-stack-2x"
+                            ng-class="{
+                                'text-muted': vm.state.campaign.status.toLowerCase() == 'draft',
+                                'text-orange': vm.state.campaign.status.toLowerCase() == 'running',
+                                'text-green': vm.state.campaign.status.toLowerCase() == 'completed',
+                                'text-red': vm.state.campaign.status.toLowerCase() == 'cancelled'
+                            }">
+                        </span>
+                        <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{vm.state.campaign.status | titleCase}} " ng-class="{
+                              'fa-pencil text-muted': vm.state.campaign.status.toLowerCase() == 'draft',
+                              'fa-clock-o text-orange': vm.state.campaign.status.toLowerCase() == 'running',
+                              'fa-check text-green': vm.state.campaign.status.toLowerCase() == 'completed',
+                              'fa-close text-red': vm.state.campaign.status.toLowerCase() == 'cancelled'
+                            }">
+                        </span>
+                    </span>
+                </div>
             </div>
         </div>
     </section>
@@ -48,7 +68,7 @@
                 </div>
                 <div class="col-sm-8">
                     <div class='pull-right'>
-                        <button type="button" ng-disabled="saveLoading || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.saveAsDraftFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                        <button type="button" ng-disabled="vm.uiState.disableEditing || saveLoading || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.saveAsDraftFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
                             <i class="ti-save"></i>
                             <span>Save</span>
                         </button>
@@ -56,11 +76,11 @@
                             <i class="ti-files"></i>
                             <span>Duplicate</span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading || !vm.state.email || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary padding-right-10 margin-bottom-5">
+                        <button type="button" ng-disabled="vm.uiState.disableEditing || saveLoading || !vm.state.email || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.openModalFn("send-test-email-modal")' class="btn btn-primary padding-right-10 margin-bottom-5">
                             <i class="ti-location-arrow"></i>
                             <span>Send Test</span>
                         </button>
-                        <button type="button" ng-disabled="saveLoading || !vm.state.campaign._id || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.activateCampaignFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                        <button type="button" ng-disabled="vm.uiState.disableEditing || saveLoading || !vm.state.campaign._id || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.activateCampaignFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
                             <i class="ti-power-off"></i>
                             <span>Activate Campaign</span>
                         </button>
@@ -147,7 +167,8 @@
                                 ng-href="/admin/#/emails/editor/{{vm.state.campaign.steps[0].settings.emailId}}"
                                 class="btn btn-primary margin-top-15"
                                 tooltip-placement="top"
-                                tooltip-html-unsafe="Make changes to this email in the editor.">
+                                tooltip-html-unsafe="Make changes to this email in the editor."
+                                ng-disabled="vm.uiState.disableEditing">
                                 <i class="fa fa-pencil-square-o"></i>
                                 <span> Edit email content</span>
                             </a>
@@ -198,7 +219,7 @@
                                 <tabset>
                                     <tab heading="by Tag" disable='vm.uiState.disableEditing'>
                                         <div class="checkbox clip-check check-primary" ng-repeat="count in vm.contactCounts track by $index">
-                                            <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="vm.toggleSelectionFn(count.matchingTag)" ng-checked="vm.state.tagSelection.indexOf(count.matchingTag) > - 1" ng-disabled='vm.uiState.disableEditing'>
+                                            <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="vm.toggleSelectionFn(count.matchingTag)" ng-checked="vm.state.tagSelection.indexOf(count.matchingTag) > - 1" ng-disabled="vm.uiState.disableEditing">
                                             <label for="checkbox{{count.uniqueTag}}">
                                                 <span class="badge">{{count.numberOfTags}}</span> {{count.matchingTag}}
                                             </label>
@@ -231,7 +252,7 @@
                                         </div>
                                     </tab>
                                 </tabset>
-                                <button type="button" ng-disabled="vm.uiState.disableEditing" ng-click='vm.openModalFn("campaign-contacts-list-modal")' class="btn btn-primary margin-left-15 margin-bottom-15">
+                                <button type="button" ng-click='vm.openModalFn("campaign-contacts-list-modal")' class="btn btn-primary margin-left-15 margin-bottom-15">
                                     <i class="fa fa-users"></i>
                                     <span>View full contact list</span>
                                 </button>
@@ -275,7 +296,7 @@
                         <div class="well well-sm margin-bottom-30">
                             <form role="form" class="ng-pristine ng-valid">
                                 <div class="form-group">
-                                    <ui-select multiple tagging="tagToContact" tagging-match-to-key="label" ng-model="vm.state.campaign.searchTags.tags" theme="bootstrap">
+                                    <ui-select multiple tagging="tagToContact" tagging-match-to-key="label" ng-model="vm.state.campaign.searchTags.tags" theme="bootstrap" ng-disabled="vm.uiState.disableEditing">
                                         <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
                                         <ui-select-choices repeat="tag in vm.state.contactTags | orderBy:'label' | filter:$select.search">
                                             {{tag.label}}
@@ -286,8 +307,8 @@
                                     <label>Number of recipients: {{vm.state.recipients.length + vm.uiState.selectedContacts.newEmails.length || 0}}</label>
                                 </div>
                                 <div class="form-group">
-                                    <label class="radio-inline"><input type="radio" name="optradio" value="set" ng-model="vm.state.campaign.searchTags.operation">Set tags</label>
-                                    <label class="radio-inline"><input type="radio" name="optradio" value="add" ng-model="vm.state.campaign.searchTags.operation">Add tags</label>
+                                    <label class="radio-inline"><input type="radio" name="optradio" value="set" ng-model="vm.state.campaign.searchTags.operation" ng-disabled="vm.uiState.disableEditing">Set tags</label>
+                                    <label class="radio-inline"><input type="radio" name="optradio" value="add" ng-model="vm.state.campaign.searchTags.operation" ng-disabled="vm.uiState.disableEditing">Add tags</label>
                                 </div>
                             </form>
                         </div>
