@@ -9,7 +9,8 @@ angular.module('mainApp')
                     scope.externalScripts = '';
 
                     var scriptLookup = {
-                        '<script src="https://www.paypalobjects.com/js/external/dg.js" async></script>': ['products', 'ssb-form-donate']
+                        '<script src="https://www.paypalobjects.com/js/external/dg.js" async></script>': ['products', 'ssb-form-donate'],
+                        '<script src="https://js.stripe.com/v2/?tmp" async></script>': ['products', 'ssb-form-donate']
                     };
 
                     scope.$on('external.scripts.page.data', function (event, args) {
