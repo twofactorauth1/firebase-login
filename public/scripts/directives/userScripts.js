@@ -4,13 +4,13 @@ angular.module('mainApp')
             return {
                 restrict: 'E',
                 replace: true,
-                template: '<span ng-bind-html="scripts"></span>',
+                template: '<span ng-bind-html="userScripts"></span>',
                 link: function(scope, elem, attr) {
-                    scope.scripts = '';
+                    scope.userScripts = '';
 
                     var processFn = function() {
-                        scope.scripts = '';
-                        
+                        scope.userScripts = '';
+
                         var handle = $location.path().indexOf('/blog') > -1 ? 'blog' : $routeParams.name;
                         // Cases to handle blog and blog-list pages script
                         if($location.$$path.indexOf("/blog/") > -1){
@@ -26,9 +26,9 @@ angular.module('mainApp')
                                 websiteService(function(err, website) {
                                     if (website.resources && website.resources.userScripts && website.resources.toggles && website.resources.toggles.userScripts) {
                                         if (angular.isDefined(website.resources.userScripts[handle])) {
-                                            scope.scripts += '\n\n' + website.resources.userScripts[handle].sanitized;
+                                            scope.userScripts += '\n\n' + website.resources.userScripts[handle].sanitized;
                                         }
-                                        scope.scripts = $sce.trustAsHtml(scope.scripts);
+                                        scope.userScripts = $sce.trustAsHtml(scope.userScripts);
                                     }
                                 });
                             }

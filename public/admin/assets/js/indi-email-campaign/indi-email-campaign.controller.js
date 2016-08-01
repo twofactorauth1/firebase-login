@@ -18,8 +18,30 @@
 
         vm.state.campaignId = $stateParams.id;
         vm.state.campaign = {
-            status: 'DRAFT',
-            type: 'onetime'
+            "name": "",
+            "type": "onetime",
+            "status": "DRAFT",
+            "startDate": "", //not used on autoresponder
+            "steps": [{
+                "type": "email",
+                "trigger": null,
+                "index": 1,
+                "settings": {
+                    "emailId": "",
+                    "offset": "", //in minutes
+                    "fromEmail": "",
+                    "fromName": '',
+                    "replyTo": '',
+                    "bcc": '',
+                    "subject": '',
+                    "vars": [],
+                    "sendAt": {},
+                }
+            }],
+            "searchTags": {
+                operation: "set",
+                tags: []
+            }
         };
         vm.state.campaignOriginal = angular.copy(vm.state.campaign);
         vm.state.email = null;
@@ -77,6 +99,14 @@
         vm.checkIfDirtyFn = checkIfDirtyFn;
         vm.duplicateFn = duplicateFn;
 
+        $scope.$watch('vm.state.campaign.type', function() {
+            console.debug('vm.state.campaign.type', vm.state.campaign.type);
+            if (vm.state.campaign.type === 'autoresponder') {
+                vm.state.campaign.steps[0].trigger = 'SIGNUP';
+            } else {
+                vm.state.campaign.steps[0].trigger = null;
+            }
+        });
 
         function addContactsFn(createdContactsArr) {
             //get an array of contact Ids from recipients
@@ -178,7 +208,7 @@
                 vm.addContactsFn(createdContactsArr);
                 fn(vm.state.campaign)
                     .then(function (res) {
-                        vm.state.campaign = res.data;
+                        vm.state.campaign = angular.extend(vm.state.campaign, res.data);
                         vm.state.campaignOriginal = angular.copy(res.data);
                         vm.state.originalRecipients = angular.copy(vm.state.recipients);
                         vm.uiState.dataLoaded = true;
@@ -215,7 +245,7 @@
             vm.state.campaign.status = 'PENDING';
             fn(vm.state.campaign)
                 .then(function (res) {
-                    vm.state.campaign = res.data;
+                    vm.state.campaign = angular.extend(vm.state.campaign, res.data);
                     vm.state.campaignOriginal = angular.copy(res.data);
                     vm.state.originalRecipients = angular.copy(vm.state.recipients);
                     vm.uiState.dataLoaded = true;
@@ -558,7 +588,7 @@
                             toaster.pop('error', 'Campaign not found');
                             $state.go('app.marketing.campaigns');
                         }
-                        vm.state.campaign = res.data;
+                        vm.state.campaign = angular.extend(vm.state.campaign, res.data);
                         vm.state.campaignOriginal = angular.copy(res.data);
                         console.info('campaign obj', vm.state.campaign);
 
