@@ -9,9 +9,8 @@ angular.module('mainApp')
                     scope.externalScripts = '';
 
                     var scriptLookup = {
-                        'products': '<script src="https://www.paypalobjects.com/js/external/dg.js" async></script>',
-                        'ssb-form-donate': '<script src="https://www.paypalobjects.com/js/external/dg.js" async></script>'
-                    }
+                        '<script src="https://www.paypalobjects.com/js/external/dg.js" async></script>': ['products', 'ssb-form-donate']
+                    };
 
                     scope.$on('external.scripts.page.data', function (event, args) {
                         scope.externalScripts = '';
@@ -20,14 +19,16 @@ angular.module('mainApp')
                         var scriptList = [];
 
                         componentTypes.forEach(function (c, i) {
-                            if (scriptLookup[c]) {
-                                scriptList.push(scriptLookup[c]);
+                            for (var k in scriptLookup) {
+                                if (scriptLookup[k].indexOf(c) > -1) {
+                                    scriptList.push(k);
+                                }
                             }
                         });
 
                         scriptList = _.uniq(scriptList);
 
-                        scriptList.forEach(function(s, i) {
+                        scriptList.forEach(function (s, i) {
                             scope.externalScripts += '\n\n' + s;
                         });
 
