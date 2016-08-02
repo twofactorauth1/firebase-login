@@ -12,20 +12,10 @@ require('./model/session_event');
 require('./model/ping_event');
 var analyticsTimerConfig = require('../configs/analyticstimer.config');
 
-var Keen = require('keen.io');
-var keenConfig = require('../configs/keen.config');
 var async = require('async');
 var moment = require('moment');
 var geoiputil = require('../utils/geoiputil');
 
-
-// Configure instance. Only projectId and writeKey are required to send data.
-var client = Keen.configure({
-    projectId: keenConfig.KEEN_PROJECT_ID,
-    writeKey: keenConfig.KEEN_WRITE_KEY,
-    readKey: keenConfig.KEEN_READ_KEY,
-    masterKey: keenConfig.KEEN_MASTER_KEY
-});
 
 var secondsSinceLastPingThreshold = analyticsTimerConfig.ANALYTICS_LAST_PING_SECONDS || 120;
 
@@ -195,16 +185,6 @@ var collator = {
                     });
 
                     sessionEvent.set('page_depth', pageList.length);
-                    client.addEvents({
-                        "session_data": [sessionEvent],
-                        "page_data": pageList
-                    }, function (err, res) {
-                        if (err) {
-                            log.error('Error sending data to keen.');
-                        } else {
-                            log.info('Successfully sent events to keen.');
-                        }
-                    });
 
                     dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
                         if(err) {
@@ -277,20 +257,6 @@ var collator = {
                 }
             });
             pageList.push(fakePageEvent);
-            if (process.env.NODE_ENV !== "testing") {
-                client.addEvents({
-                    "session_data": [sessionEvent],
-                    "page_data": pageList
-                }, function (err, res) {
-                    if (err) {
-                        log.error('Error sending data to keen.');
-                    } else {
-                        log.info('Successfully sent events to keen.');
-                    }
-                });
-            } else {
-                log.info('skipping keen because of testing environment.');
-            }
 
             dao.saveOrUpdate(sessionEvent, function(err, value) {
                 if (err) {
@@ -323,21 +289,7 @@ var collator = {
                     var timeOnPage = page.get('end_time') - page.get('start_time');
                     page.set('timeOnPage', timeOnPage);
                 });
-                //send to keen unless test environment
-                if (process.env.NODE_ENV !== "testing") {
-                    client.addEvents({
-                        "session_data": [sessionEvent],
-                        "page_data": pageList
-                    }, function (err, res) {
-                        if (err) {
-                            log.error('Error sending data to keen.');
-                        } else {
-                            log.info('Successfully sent events to keen.');
-                        }
-                    });
-                } else {
-                    log.info('skipping keen because of testing environment.');
-                }
+
                 dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
                     if(err) {
                         log.error('Error saving page events for session with id: ' + sessionEvent.get('session_id'));
@@ -349,9 +301,6 @@ var collator = {
 
             }
         });
-
-
-
 
 
     },
@@ -374,7 +323,7 @@ var collator = {
             log.debug('<< _processSessionEvent');
         });
 
-        //if last seen exceeds threshold, group pages, set endtime, send to Keen
+
     },
 
     _groupAndSend: function(sessionEvent, lastSeenMS) {
@@ -419,21 +368,7 @@ var collator = {
 
                     sessionEvent.set('page_depth', pageList.length);
 
-                    //send to keen unless test environment
-                    if (process.env.NODE_ENV !== "testing") {
-                        client.addEvents({
-                            "session_data": [sessionEvent],
-                            "page_data": pageList
-                        }, function (err, res) {
-                            if (err) {
-                                log.error('Error sending data to keen.');
-                            } else {
-                                log.info('Successfully sent events to keen.');
-                            }
-                        });
-                    } else {
-                        log.info('skipping keen because of testing environment.');
-                    }
+
                     //persist changes
                     dao.batchUpdate(pageList, $$.m.PageEvent, function(err, value){
                         if(err) {
@@ -449,6 +384,6 @@ var collator = {
 
     }
 
-}
+};
 
 module.exports = collator;
