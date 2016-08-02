@@ -710,13 +710,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     // Hook froala insert up to our Media Manager
-    window.clickandInsertImageButton = function (editor) {
+    window.clickandInsertImageButton = function (editor, image) {
       console.log('clickandInsertImageButton >>> ');
 
         if(editor){
             vm.showInsert = true;
             vm.state.imageEditor.editor = editor;
-            vm.state.imageEditor.img = editor.image.get();
+            vm.state.imageEditor.img = image;
         }
         else{
             if(vm.state.imageEditor && vm.state.imageEditor.editor){

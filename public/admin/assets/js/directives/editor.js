@@ -110,7 +110,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             elem = element[0];
         }
 
-        if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
+        var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";
+
+        if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor) || helpTopics) {
             $(function() {
                 var blogPostEditor = attrs.ssbBlogEditor;
                 var froalaConfig = $.FroalaEditor.build(
@@ -133,7 +135,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 $timeout(function() {
 
                     $(elem).on('froalaEditor.initialized', function(e, editor) {
-                    if(blogPostEditor){
+                    if(blogPostEditor || helpTopics){
                         destroyShared(editor);
                     }
                     //topbar positioning

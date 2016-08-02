@@ -260,10 +260,10 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('manageTopicsCtrl', 'userService')
     }).state('app.support.singletopic', {
         url: '/manage-topics/:id',
-        templateUrl: "/admin/assets/views/editor.html",
+        templateUrl: "/admin/assets/views/editTopics.html",
         title: 'Topic Single',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'editTopicCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
     }).state('app.onboarding', {
         url: '/onboarding',
         templateUrl: "/admin/assets/views/onboarding.html",
