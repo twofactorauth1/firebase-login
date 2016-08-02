@@ -60,7 +60,8 @@
         vm.state.recipientsToRemove = [];
         vm.state.originalRecipients = [];
         vm.uiState.selectedContacts = {
-            individuals: []
+            individuals: [],
+            newEmails: []
         };
         vm.uiState.whenToSend = 'now';
         vm.uiState.watchDeliveryDate = false;
@@ -102,7 +103,7 @@
         vm.duplicateFn = duplicateFn;
         vm.updateCampaignEmailSettingsFn = updateCampaignEmailSettingsFn;
         vm.deleteCampaignFn = deleteCampaignFn;
-        vm.formatDateFn = formatDateFn;
+        vm.canActivateFn = canActivateFn;
 
         $scope.$watch('vm.state.campaign.type', function() {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
@@ -590,15 +591,19 @@
                 email = _.findWhere(vm.state.emails, {
                     _id: vm.state.campaign.steps[0].settings.emailId
                 });
+                vm.state.campaign.steps[0].settings.emailId = email._id;
+                vm.state.campaign.steps[0].settings.fromEmail = email.fromEmail;
+                vm.state.campaign.steps[0].settings.fromName = email.fromName;
+                vm.state.campaign.steps[0].settings.replyTo = email.replyTo;
+                vm.state.campaign.steps[0].settings.bcc = email.bcc;
+                vm.state.campaign.steps[0].settings.subject = email.subject;
+                vm.state.campaign.steps[0].settings.vars = email.vars;
+            } else {
+                var indexInEmailList = _.findIndex(vm.state.emails, {
+                    _id: email._id
+                });
+                vm.state.emails[indexInEmailList] = email;
             }
-
-            vm.state.campaign.steps[0].settings.emailId = email._id;
-            vm.state.campaign.steps[0].settings.fromEmail = email.fromEmail;
-            vm.state.campaign.steps[0].settings.fromName = email.fromName;
-            vm.state.campaign.steps[0].settings.replyTo = email.replyTo;
-            vm.state.campaign.steps[0].settings.bcc = email.bcc;
-            vm.state.campaign.steps[0].settings.subject = email.subject;
-            vm.state.campaign.steps[0].settings.vars = email.vars;
         }
 
         function deleteCampaignFn() {
@@ -628,29 +633,13 @@
             });
         };
 
-        function formatDateFn(date) {
-
-            var formattedDate;
-            var localDate;
-
-            if (!date._d) {
-
-                if (date.year) {
-                    formattedDate = { year: date.year, month: date.month - 1, day: date.day, hour: date.hour, minute: date.minute };
-                } else if (date instanceof Date) {
-                    formattedDate = moment(date);
-                }
-
-                localDate = moment.utc(formattedDate);
-                localDate = localDate.local();
-
-            } else {
-                localDate = moment(date);
-            }
-
-            return localDate.format("dddd, MMMM Do YYYY, h:mm A");
-
-        };
+        function canActivateFn() {
+            var dataIsLoaded = vm.uiState.dataLoaded;
+            var campaignHasId = vm.state.campaign && angular.isDefined(vm.state.campaign._id);
+            var campaignNotCancelled = vm.state.campaign.status.toLowerCase() !== 'cancelled';
+            var campaignHasContacts = (vm.state.recipients.length + vm.uiState.selectedContacts.newEmails.length) > 0;
+            return dataIsLoaded && campaignHasId && campaignNotCancelled && campaignHasContacts;
+        }
 
         function init(element) {
             vm.element = element;
@@ -661,10 +650,6 @@
 
             WebsiteService.getWebsite(function (data) {
                 vm.state.website = data;
-            });
-
-            WebsiteService.getEmails(null, function (data) {
-                vm.state.emails = data;
             });
 
             ContactService.getContactTags(function(tags){
@@ -685,10 +670,18 @@
                             EmailBuilderService.getEmail(campaign.steps[0].settings.emailId)
                                 .then(function (res) {
                                     vm.state.email = res.data;
-                                    vm.updateCampaignEmailSettingsFn()
                                     vm.state.campaign = angular.extend(vm.state.campaign, campaign);
-                                    vm.state.campaignOriginal = angular.copy(campaign);
-                                    console.info('campaign obj', vm.state.campaign);
+
+                                    if (vm.state.campaign.status === 'DRAFT') {
+                                        vm.uiState.disableEditing = false;
+                                    }
+
+                                    WebsiteService.getEmails(null, function (data) {
+                                        vm.state.emails = data;
+                                        vm.updateCampaignEmailSettingsFn()
+                                        vm.state.campaignOriginal = angular.copy(campaign);
+                                        console.info('campaign obj', vm.state.campaign);
+                                    });
                                 });
                         } else {
                             vm.state.campaign = angular.extend(vm.state.campaign, campaign);
@@ -709,9 +702,6 @@
                             }
                         }
 
-                        if (vm.state.campaign.status === 'DRAFT') {
-                            vm.uiState.disableEditing = false;
-                        }
                         vm.getContactsFn()
                             .then(function () {
                                 vm.loadSavedTagsFn();
