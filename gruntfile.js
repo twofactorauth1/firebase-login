@@ -6,7 +6,6 @@
  */
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
-var KEEN_CONFIG = require('./configs/keen.config');
 var GOOGLE_CONFIG = require('./configs/google.config');
 var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
 var FACEBOOK_CONFIG = require('./configs/facebook.config');
@@ -332,9 +331,6 @@ module.exports = function(grunt) {
                         name: 'development',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
                         segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
-                        keenWriteKey: KEEN_CONFIG.KEEN_WRITE_KEY,
-                        keenReadKey: KEEN_CONFIG.KEEN_READ_KEY,
-                        keenProjectId: KEEN_CONFIG.KEEN_PROJECT_ID,
                         googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
                         googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
                         googleClientId: GOOGLE_CONFIG.CLIENT_ID,
@@ -356,9 +352,6 @@ module.exports = function(grunt) {
                         name: 'production',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
                         segmentKey: SEGMENTIO_CONFIG.SEGMENT_PROD_WRITE_KEY,
-                        keenWriteKey: KEEN_CONFIG.KEEN_PROD_WRITE_KEY,
-                        keenReadKey: KEEN_CONFIG.KEEN_PROD_READ_KEY,
-                        keenProjectId: KEEN_CONFIG.KEEN_PROD_PROJECT_ID,
                         googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
                         googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
                         googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,
