@@ -32,8 +32,26 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         'ng-bind-html="ngModel | unsafe">' +
                     '</div>';
 
+        var topicTemplate =
+                    '<div ' +                        
+                        'class="edit-wrap"> ' +
+                        '<span class="editable-title">{{title | formatText}}</span>' +
+                        '<div ' +                                                      
+                            'class="editable element-wrap' +
+                            'ng-bind-html="ngModel | unsafe">' +
+                        '</div>' +
+                    '</div>';
+
+        var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";                    
+
+        attrs.helpTopics = helpTopics;
+
         if (attrs.ssbBlogEditor) {
-            return blogTemplate
+            return pageTemplate
+        }
+
+        if (attrs.helpTopics) {
+            return topicTemplate
         }
 
         if (attrs.ssbEmailEditor) {
@@ -110,11 +128,12 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             elem = element[0];
         }
 
-        var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";
+        
 
-        if (scope.$parent.ssbEditor || angular.element(elem).scope().pvm || (scope.$parent.vm && scope.$parent.vm.ssbEditor) || helpTopics) {
+        if (scope.$parent.ssbEditor || (angular.element(elem).scope() && angular.element(elem).scope().pvm) || (scope.$parent.vm && scope.$parent.vm.ssbEditor) || attrs.helpTopics) {
             $(function() {
                 var blogPostEditor = attrs.ssbBlogEditor;
+                var helpTopicsEditor = attrs.helpTopics;
                 var froalaConfig = $.FroalaEditor.build(
                     (function() {
                         if (attrs.ssbBlogEditor) {
@@ -135,7 +154,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 $timeout(function() {
 
                     $(elem).on('froalaEditor.initialized', function(e, editor) {
-                    if(blogPostEditor || helpTopics){
+                    if(blogPostEditor || helpTopicsEditor){
                         destroyShared(editor);
                     }
                     //topbar positioning
