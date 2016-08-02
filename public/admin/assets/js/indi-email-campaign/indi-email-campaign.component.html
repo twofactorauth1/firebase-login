@@ -102,7 +102,73 @@
         </div>
         <div class="container-fluid container-fullw margin-bottom-15 padding-top-15 padding-bottom-15">
             <div class="row email-campaign-main" ng-hide="!vm.uiState.dataLoaded">
+
                 <div class="col-md-4">
+                    <h4 class="text-u ssb-admin-panel-header no-border">Campaign type</h4>
+                    <div class="panel panel-white form-group bg-white padding-10">
+                        <!-- <select class='form-control' ng-model='vm.state.campaign.type' ng-disabled="vm.uiState.disableEditing">
+                            <option value='onetime'>One Time</option>
+                            <option value='autoresponder'>Auto Responder</option>
+                        </select> -->
+                        <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
+                            <input type="radio" id="radio_one-time" name="campaign_type" ng-checked="vm.state.campaign.type === 'onetime'" value="onetime" ng-model="vm.state.campaign.type" ng-disabled="vm.uiState.disableEditing">
+                            <label for="radio_one-time" class="margin-top-0 margin-bottom-0">
+                                One Time
+                            </label>
+                        </div>
+                        <div class="radio clip-radio radio-primary margin-bottom-0" style="margin-top:0px!important">
+                            <input type="radio" id="radio_auto-responder" name="campaign_type" ng-checked="vm.state.campaign.type === 'autoresponder'" value="autoresponder" ng-model="vm.state.campaign.type" ng-disabled="vm.uiState.disableEditing">
+                            <label for="radio_auto-responder" class="margin-top-0 margin-bottom-0">
+                                Auto Responder
+                            </label>
+                        </div>
+                    </div>
+
+                    <div ng-if="vm.state.campaign.type === 'autoresponder'">
+                        <h4 class="text-u ssb-admin-panel-header no-border">When To Send</h4>
+                        <div class="panel panel-white form-group bg-white padding-10">
+                            <p>Send an automated response for the following events. More events coming soon.</p>
+                            <div class="row margin-bottom-30">
+                                <div class="col-xs-12" ng-repeat="trigger in vm.uiState.triggers">
+                                    <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel - light - grey pulse',false:'panel - white'}[trigger == vm.state.campaign.steps[0].trigger]">
+                                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.state.campaign.steps[0].trigger = trigger.value">
+                                            <span ng-class="{'text-nephritis': vm.state.campaign.steps[0].trigger == trigger.value, 'text-muted': vm.state.campaign.steps[0].trigger != trigger.value, 'fa fa-check fa-2x': vm.state.campaign.steps[0].trigger == trigger.value}" class="text-nephritis" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                            <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="vm.state.campaign.type === 'onetime'">
+                        <h4 class="text-u ssb-admin-panel-header no-border">When to send</h4>
+                        <div class="panel panel-white form-group bg-white padding-10">
+                            <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
+                                <input type="radio" ng-change="vm.updateSendNowFn('now')" id="radio3" name="vertical" value="now" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
+                                <label for="radio3" class="margin-top-0 margin-bottom-0">
+                                    Now
+                                </label>
+                            </div>
+                            <div class="radio clip-radio radio-primary margin-bottom-0">
+                                <input ng-change="vm.updateSendNowFn('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
+                                <label for="radio4" class="margin-top-0 margin-bottom-0">
+                                    Later
+                                </label>
+                            </div>
+                        </div>
+                        <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-if="vm.uiState.whenToSend !== 'now'" ng-class="{'disabled': vm.uiState.disableEditing}">
+                            <datepicker ng-model="vm.uiState.delivery.date" min-date="vm.uiState.delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
+                            <div class="clearfix"></div>
+                            <timepicker ng-model="vm.uiState.delivery.date" hour-step="vm.uiState.hstep" minute-step="vm.uiState.mstep" min="vm.uiState.delivery.minDate" class="center"></timepicker>
+                        </div>
+                        <div ng-if="invalidDate && whenToSend === 'later' && isEditable" class="col-xs-12">
+                            <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
                     <h4 class="text-u ssb-admin-panel-header no-border">Campaign Email</h4>
                     <div class="panel panel-white form-group bg-white padding-10">
                         <span ng-if="!vm.state.emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
@@ -179,42 +245,12 @@
 
                         </div>
                     </div>
+
                 </div>
 
-                <div class="col-md-4">
-                    <h4 class="text-u ssb-admin-panel-header no-border">Campaign type</h4>
-                    <div class="panel panel-white form-group bg-white padding-10">
-                        <!-- <select class='form-control' ng-model='vm.state.campaign.type' ng-disabled="vm.uiState.disableEditing">
-                            <option value='onetime'>One Time</option>
-                            <option value='autoresponder'>Auto Responder</option>
-                        </select> -->
-                        <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
-                            <input type="radio" id="radio_one-time" name="campaign_type" ng-checked="vm.state.campaign.type === 'onetime'" value="onetime" ng-model="vm.state.campaign.type" ng-disabled="vm.uiState.disableEditing">
-                            <label for="radio_one-time" class="margin-top-0 margin-bottom-0">
-                                One Time
-                            </label>
-                        </div>
-                        <div class="radio clip-radio radio-primary margin-bottom-0" style="margin-top:0px!important">
-                            <input type="radio" id="radio_auto-responder" name="campaign_type" ng-checked="vm.state.campaign.type === 'autoresponder'" value="autoresponder" ng-model="vm.state.campaign.type" ng-disabled="vm.uiState.disableEditing">
-                            <label for="radio_auto-responder" class="margin-top-0 margin-bottom-0">
-                                Auto Responder
-                            </label>
-                        </div>
-                    </div>
 
-                    <div class="panel panel-white" ng-if="vm.state.campaign.type === 'autoresponder'">
-                        <div class="row margin-bottom-30">
-                            <div class="col-xs-12" ng-repeat="trigger in vm.uiState.triggers">
-                                <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel - light - grey pulse',false:'panel - white'}[trigger == vm.state.campaign.steps[0].trigger]">
-                                    <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.state.campaign.steps[0].trigger = trigger.value">
-                                        <span ng-class="{'text-nephritis': vm.state.campaign.steps[0].trigger == trigger.value, 'text-muted': vm.state.campaign.steps[0].trigger != trigger.value, 'fa fa-check fa-2x': vm.state.campaign.steps[0].trigger == trigger.value}" class="text-nephritis" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
-                                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
-                                        <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+                <div class="col-md-4">
 
                     <div ng-if="vm.state.campaign.type === 'onetime'">
                         <h4 class="text-u ssb-admin-panel-header no-border">Recipient list</h4>
@@ -268,33 +304,6 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
-
-                    <div ng-if="vm.state.campaign.type === 'onetime'">
-                        <h4 class="text-u ssb-admin-panel-header no-border">When to send</h4>
-                        <div class="panel panel-white form-group bg-white padding-10">
-                            <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
-                                <input type="radio" ng-change="vm.updateSendNowFn('now')" id="radio3" name="vertical" value="now" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
-                                <label for="radio3" class="margin-top-0 margin-bottom-0">
-                                    Now
-                                </label>
-                            </div>
-                            <div class="radio clip-radio radio-primary margin-bottom-0">
-                                <input ng-change="vm.updateSendNowFn('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="vm.uiState.whenToSend" ng-disabled="vm.uiState.disableEditing">
-                                <label for="radio4" class="margin-top-0 margin-bottom-0">
-                                    Later
-                                </label>
-                            </div>
-                        </div>
-                        <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-if="vm.uiState.whenToSend !== 'now'" ng-class="{'disabled': vm.uiState.disableEditing}">
-                            <datepicker ng-model="vm.uiState.delivery.date" min-date="vm.uiState.delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
-                            <div class="clearfix"></div>
-                            <timepicker ng-model="vm.uiState.delivery.date" hour-step="vm.uiState.hstep" minute-step="vm.uiState.mstep" min="vm.uiState.delivery.minDate" class="center"></timepicker>
-                        </div>
-                        <div ng-if="invalidDate && whenToSend === 'later' && isEditable" class="col-xs-12">
-                            <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
 
                 </div>
