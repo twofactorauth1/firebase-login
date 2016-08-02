@@ -109,7 +109,11 @@
 
                         <div ng-if="vm.state.emails.length">
 
-                            <ui-select ng-model="vm.state.campaign.steps[0].settings.emailId" theme="bootstrap" on-select="vm.changeEmailFn()" ng-disabled="vm.uiState.disableEditing">
+                            <ui-select
+                                ng-model="vm.state.campaign.steps[0].settings.emailId"
+                                theme="bootstrap"
+                                on-select="vm.updateCampaignEmailSettingsFn(true)"
+                                ng-disabled="vm.uiState.disableEditing">
                                 <ui-select-match
                                     placeholder="Select an email template">
                                     {{$select.selected.title}} (subject:{{$select.selected.subject}})

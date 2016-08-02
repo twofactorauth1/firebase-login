@@ -100,7 +100,7 @@
         vm.resetDirtyFn = resetDirtyFn;
         vm.checkIfDirtyFn = checkIfDirtyFn;
         vm.duplicateFn = duplicateFn;
-        vm.changeEmailFn = changeEmailFn;
+        vm.updateCampaignEmailSettingsFn = updateCampaignEmailSettingsFn;
         vm.deleteCampaignFn = deleteCampaignFn;
         vm.formatDateFn = formatDateFn;
 
@@ -583,10 +583,15 @@
                 });
         }
 
-        function changeEmailFn() {
-            var email = _.findWhere(vm.state.emails, {
-                _id: vm.state.campaign.steps[0].settings.emailId
-            });
+        function updateCampaignEmailSettingsFn(change) {
+            var email = vm.state.email;
+
+            if (change) {
+                email = _.findWhere(vm.state.emails, {
+                    _id: vm.state.campaign.steps[0].settings.emailId
+                });
+            }
+
             vm.state.campaign.steps[0].settings.emailId = email._id;
             vm.state.campaign.steps[0].settings.fromEmail = email.fromEmail;
             vm.state.campaign.steps[0].settings.fromName = email.fromName;
@@ -673,16 +678,25 @@
                             toaster.pop('error', 'Campaign not found');
                             $state.go('app.marketing.campaigns');
                         }
-                        vm.state.campaign = angular.extend(vm.state.campaign, res.data);
-                        vm.state.campaignOriginal = angular.copy(res.data);
-                        console.info('campaign obj', vm.state.campaign);
 
-                        if (vm.state.campaign.steps[0].settings.emailId) {
-                            EmailBuilderService.getEmail(vm.state.campaign.steps[0].settings.emailId)
+                        var campaign = res.data;
+
+                        if (campaign.steps[0].settings.emailId) {
+                            EmailBuilderService.getEmail(campaign.steps[0].settings.emailId)
                                 .then(function (res) {
                                     vm.state.email = res.data;
+                                    vm.updateCampaignEmailSettingsFn()
+                                    vm.state.campaign = angular.extend(vm.state.campaign, campaign);
+                                    vm.state.campaignOriginal = angular.copy(campaign);
+                                    console.info('campaign obj', vm.state.campaign);
                                 });
+                        } else {
+                            vm.state.campaign = angular.extend(vm.state.campaign, campaign);
+                            vm.state.campaignOriginal = angular.copy(campaign);
+                            console.info('campaign obj', vm.state.campaign);
                         }
+
+
 
                         var sendAtDateISOString = moment.utc(vm.state.campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
                         var localMoment = moment(sendAtDateISOString);
