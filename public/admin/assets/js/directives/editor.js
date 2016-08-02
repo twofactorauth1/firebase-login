@@ -279,6 +279,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 return false
                             }
                         }
+                        else{
+                            return true;
+                        }
 
                     }, true);
 
