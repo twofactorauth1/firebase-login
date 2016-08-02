@@ -16,7 +16,7 @@
                 <h1 class="mainTitle">Campaign Configuration</h1>
                 <div class="mainDescription">
                     <span ng-if="!vm.uiState.disableEditing">Edit this <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign before activating it</span>
-                    <span ng-if="vm.uiState.disableEditing">This <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign was activated on {{vm.state.campaign.modified.date}}</span>
+                    <span ng-if="vm.uiState.disableEditing">This <b>{{vm.state.campaign.status.toLowerCase()}}</b> campaign was activated on {{vm.state.campaign.modified.date | date : 'medium'}}</span>
                     <span class="fa-stack fa-lg text-large margin-left-5">
                         <span class="fa fa-circle-thin fa-stack-2x"
                             ng-class="{
