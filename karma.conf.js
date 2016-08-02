@@ -81,7 +81,6 @@ module.exports = function (config) {
         'public/admin/assets/js/services/account.js',
         'public/admin/assets/js/services/website.js',
         'public/admin/assets/js/services/chart_email.js',
-        'public/admin/assets/js/services/keen.js',
         'public/js/libs/angular-xeditable/dist/js/xeditable.min.js',
         'public/js/libs_misc/ckeditor/ckeditor.js',
 

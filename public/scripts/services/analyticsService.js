@@ -103,17 +103,6 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         sessionProperties = {
             session_id: ipCookie("session_cookie")["id"],
             permanent_tracker: ipCookie("permanent_cookie")["id"],
-            keen : {
-                addons : [
-                    {
-                        name : "keen:ip_to_geo",
-                        input : {
-                            ip : "ip_address"
-                        },
-                        output : "ip_geo_info"
-                    }
-                ]
-            },
             user_agent: {
                 browser: parser.getBrowser(),
                 engine: parser.getEngine(),

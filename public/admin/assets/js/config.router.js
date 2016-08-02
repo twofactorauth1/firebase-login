@@ -73,7 +73,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/site-analytics.html",
         title: 'Site Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'keenService', 'chartAnalyticsService')
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'chartAnalyticsService')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "/admin/assets/views/pages.html",
@@ -127,7 +127,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/contact-detail.html",
         title: 'Single Contact',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
+        resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'offset','assetsService', 'toasterService', 'orderService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',

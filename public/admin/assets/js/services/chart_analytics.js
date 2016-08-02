@@ -1,8 +1,8 @@
 'use strict';
-/*global app, moment, angular, window, Keen, Highcharts, $$*/
+/*global app, moment, angular, window, Highcharts, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-    app.service('ChartAnalyticsService', ['KeenService', 'SiteAnalyticsService', function (KeenService, SiteAnalyticsService) {
+    app.service('ChartAnalyticsService', ['SiteAnalyticsService', function (SiteAnalyticsService) {
 
         //common functions
 
@@ -60,7 +60,7 @@
         };
 
         this.calculatePercentChange = function(oldval, newval) {
-            console.log('>> calculatePercentChange(' + oldval + ',' + newval + ')');
+            //console.log('>> calculatePercentChange(' + oldval + ',' + newval + ')');
             oldval = parseInt(oldval, 10);
             newval = parseInt(newval, 10);
             if (oldval === 0 && newval === 0) {
@@ -356,380 +356,12 @@
         this.queryReports = function (date, _hostname, _hostnameAry) {
             var queryData = {};
 
-            queryData.visitorLocations = new Keen.Query("count", {
-                eventCollection: "session_data",
-                groupBy: "ip_geo_info.province",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "ip_geo_info",
-                        "operator": "ne",
-                        "property_value": "null"
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.deviceReportByCategory = new Keen.Query("count", {
-                eventCollection: "session_data",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                groupBy: "user_agent.device",
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.userReport = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "fingerprint",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.userReportPreviousMonth = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "fingerprint",
-                timeframe: {
-                    "start": timeframePreviousStart,
-                    "end": timeframePreviousEnd
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.pageviewsReport = new Keen.Query("count", {
-                eventCollection: "page_data",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "url.domain",
-                        "operator": "in",
-                        "property_value": _hostnameAry.split(',')
-                    }
-                ]
-            });
-
-
-            queryData.pageviewsPreviousReport = new Keen.Query("count", {
-                eventCollection: "page_data",
-                timeframe: {
-                    "start": timeframePreviousStart,
-                    "end": timeframePreviousEnd
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "url.domain",
-                        "operator": "in",
-                        "property_value": _hostnameAry.split(',')
-                    }
-                ]
-            });
-
-            queryData.sessionsReport = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "session_id",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.sessionsPreviousReport = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "session_id",
-                timeframe: {
-                    "start": timeframePreviousStart,
-                    "end": timeframePreviousEnd
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.sessionLengthReport = new Keen.Query("count", {
-                eventCollection: "session_data",
-                targetProperty: "session_length",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.sessionAvgLengthReport = new Keen.Query("average", {
-                eventCollection: "session_data",
-                targetProperty: "session_length",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.bouncesReport = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "session_id",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                interval: interval,
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "session_length",
-                        "operator": "lte",
-                        "property_value": 5000
-                    },
-                    {
-                        "property_name": "page_depth",
-                        "operator": "eq",
-                        "property_value": 1
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.bouncesPreviousReport = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "session_id",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "session_length",
-                        "operator": "lte",
-                        "property_value": 5000
-                    },
-                    {
-                        "property_name": "page_depth",
-                        "operator": "eq",
-                        "property_value": 1
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.trafficSources = new Keen.Query("count", {
-                eventCollection: "session_data",
-                groupBy: "referrer.domain",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.returningVisitors = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "permanent_tracker",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "new_visitor",
-                        "operator": "eq",
-                        "property_value": false
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-            queryData.newVisitors = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "permanent_tracker",
-                timeframe: {
-                    "start": date.startDate,
-                    "end": date.endDate
-                },
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "new_visitor",
-                        "operator": "eq",
-                        "property_value": true
-                    },
-                    {
-                        "property_name": "fingerprint",
-                        "operator": "ne",
-                        "property_value": 0
-                    }
-                ]
-            });
-
-
-            queryData.sessionPreviousAvgLengthReport = new Keen.Query("average", {
-                eventCollection: "session_data",
-                targetProperty: "session_length",
-                timeframe: {
-                    "start": timeframePreviousStart,
-                    "end": timeframePreviousEnd
-                },
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    }
-                ]
-            }, {
-                "property_name": "fingerprint",
-                "operator": "ne",
-                "property_value": 0
-            });
-
             return queryData;
         };
 
         this.runMongoReports = function(date, account, fn) {
             SiteAnalyticsService.runReports(date.startDate, date.endDate, function(data){
-                console.log('I got this:', data);
+                //console.log('I got this:', data);
                 fn(data);
             });
         };
@@ -742,31 +374,7 @@
             console.log('date range ', date);
             console.log('hostnameAry', hostnameAry);
 
-            KeenService.keenClient(function (client) {
-                var queryData = self.queryReports(date, hostname, hostnameAry);
-                client.run([
-                    queryData.visitorLocations,
-                    queryData.deviceReportByCategory,
-                    queryData.userReport,
-                    queryData.userReportPreviousMonth,
-                    queryData.pageviewsReport,
-                    queryData.pageviewsPreviousReport,
-                    queryData.sessionsReport,
-                    queryData.sessionsPreviousReport,
-                    queryData.sessionLengthReport,
-                    queryData.sessionAvgLengthReport,
-                    queryData.bouncesReport,
-                    queryData.bouncesPreviousReport,
-                    queryData.trafficSources,
-                    queryData.returningVisitors,
-                    queryData.newVisitors,
-                    // queryData.pageDepth,
-                    queryData.sessionPreviousAvgLengthReport
-                ], function (results) {
-                    fn(results);
-                    console.log(results[2]);
-                });
-            });
+            fn({});
         };
 
         this.runPagedReports = function (date, account, fn) {
@@ -816,108 +424,20 @@
                 filters: filters
             };
 
-            KeenService.multiAnalysis(params2, function (multidata) {
-                var formattedTopPages = [];
-                var pagedformattedTopPages;
-
-                // ----------------------------------------
-                // Top Pageviews
-                // ----------------------------------------
-                _.each(multidata.result, function (singleRow) {
-                    var subObj = {};
-
-                    if (singleRow['url.path']) {
-                        subObj.page = singleRow['url.path'];
-                        subObj.pageviews = singleRow.pageviews;
-                        subObj.avgTime = Math.abs(singleRow.avgTimeOnPage) / 1000;
-                        subObj.uniquePageviews = singleRow.uniquePageviews;
-                        //TODO
-                        //subObj.entrances = singleRow['entrances'];
-                        //subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
-                        //subObj.exitRate = self.calculatePercentage(singleRow['exits'], currentTotalPageviews);
-                    }
-                    if (subObj) {
-                        formattedTopPages.push(subObj);
-                    }
-                });
-
-                //pagedformattedTopPages = formattedTopPages.slice(0, 15);  // don't bother shortening list (UI does)
-                pagedformattedTopPages = formattedTopPages;
-                reportData.formattedTopPages = formattedTopPages;
-                reportData.pagedformattedTopPages = pagedformattedTopPages;
-                fn(reportData);
-            });
+            fn(reportData);
         };
 
         this.visitorsReport = function (date, account, fn) {
             var self = this;
             var _hostname = this.getHostName(account);
+            fn({});
 
-            KeenService.keenClient(function (client) {
-                var queryData = self.queryVisitorReports(date, _hostname);
-                client.run([
-                    queryData.returningVisitors,
-                    queryData.newVisitors,
-                    queryData.lastVisitor
-                ], function (results) {
-                    fn(results);
-                });
-            });
         };
 
         this.queryVisitorReports = function (date, _hostname) {
             var queryData = {};
 
-            queryData.returningVisitors = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "permanent_tracker",
-                timeframe: "this_month",
-                interval: "daily",
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "new_visitor",
-                        "operator": "eq",
-                        "property_value": false
-                    }
-                ]
-            });
 
-            queryData.newVisitors = new Keen.Query("count_unique", {
-                eventCollection: "session_data",
-                targetProperty: "permanent_tracker",
-                timeframe: "this_month",
-                interval: "daily",
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    },
-                    {
-                        "property_name": "new_visitor",
-                        "operator": "eq",
-                        "property_value": true
-                    }
-                ]
-            });
-
-            queryData.lastVisitor = new Keen.Query("extraction", {
-                eventCollection: "session_data",
-                targetProperty: "permanent_tracker",
-                latest: 1,
-                filters: [
-                    {
-                        "property_name": "accountId",
-                        "operator": "eq",
-                        "property_value": $$.server.accountId
-                    }
-                ]
-            });
 
             return queryData;
         };

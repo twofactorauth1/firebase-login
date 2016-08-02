@@ -4,384 +4,383 @@
 app.controller('DashboardCtrl', ["$scope", "OrderService", "ContactService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", '$state',
     function ($scope, OrderService, ContactService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant, $state) {
 
-    $scope.accountHideDohy = false;
+        $scope.accountHideDohy = false;
 
-    /*
-     * @getAccount
-     * - get user account and then run visitors report
-     */
+        /*
+         * @getAccount
+         * - get user account and then run visitors report
+         */
 
-    UserService.getAccount(function (account) {
-        if(account.showhide.dohy===true) {
-            $state.go('app.dohy');
-        } else {
-            $scope.analyticsAccount = account;
-            $scope.runVisitorsReport();
-            $scope.runNetRevenueReport();
-            $scope.accountHideDohy = true;
-        }
+        UserService.getAccount(function (account) {
+            if (account.showhide.dohy === true) {
+                $state.go('app.dohy');
+            } else {
+                $scope.analyticsAccount = account;
+                $scope.runVisitorsReport();
+                $scope.runNetRevenueReport();
+                $scope.accountHideDohy = true;
+            }
 
-    });
-
-
-  /*
-   * @getActivityName
-   * - get activity actual name
-   */
-  $scope.getActivityName = function (activity) {
-    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
-      data: activity
-    });
-    if (activity_hash) {
-      return activity_hash.label;
-    }
-  };
-
-
-  /**********PAGINATION RELATED **********/
-    $scope.curPage = 0;
-    $scope.pageSize = 1000;
-    $scope.numberOfPages = function () {
-      if ($scope.activities)
-        return Math.ceil($scope.activities.length / $scope.pageSize);
-      else
-        return 0;
-    };
-    $scope.changePage = function (page) {
-      $scope.curPage = $scope.curPage + page;
-    }
-
-  /*
-   * @isSameDateAs
-   * - determine if two dates are identical and return boolean
-   */
-
-  $scope.isSameDateAs = function (oDate, pDate) {
-    return (
-      oDate.getFullYear() === pDate.getFullYear() &&
-      oDate.getMonth() === pDate.getMonth() &&
-      oDate.getDate() === pDate.getDate()
-    );
-  };
-
-  /*
-   * @getDaysThisMonth
-   * - get an array of days this month for loop purposes
-   */
-
-  $scope.getDaysThisMonth = function () {
-    var newDate = new Date();
-    var numOfDays = newDate.getDate();
-    var days = [];
-    var i = 0;
-    for (i; i <= numOfDays; i++) {
-      days[i] = new Date(newDate.getFullYear(), newDate.getMonth(), i + 1);
-    }
-
-    return days;
-  };
-
-  ContactService.getContacts(function (contacts) {
-    ContactService.getAllContactActivities(function (activities) {
-      $scope.activities = activities.results;
-      _.each($scope.activities, function (activity) {
-        var matchingContacts = _.findWhere(contacts, {
-          _id: activity.contactId
-        });
-        activity.contact = matchingContacts;
-      });
-    });
-  });
-
-  /*
-   * @getOrders
-   * - get orders for orders widget
-   */
-
-  OrderService.getOrders(function (orders) {
-    $scope.orders = orders;
-    $scope.ordersThisMonth = [];
-    var tempData = [];
-    _.each($scope.getDaysThisMonth(), function (day) {
-      var thisDaysOrders = 0;
-      _.each(orders, function (order) {
-        if (order.created.date) {
-          if ($scope.isSameDateAs(new Date(order.created.date), new Date(day))) {
-            $scope.ordersThisMonth.push(order);
-            thisDaysOrders = thisDaysOrders + 1;
-          }
-        }
-      });
-
-      tempData.push(thisDaysOrders);
-    });
-    $scope.analyticsOrders = tempData;
-  });
-
-  /*
-   * @getCompletedOrders
-   * - get the number of compled orders this month
-   */
-
-  $scope.getCompletedOrders = function () {
-    var completedOrders = [];
-    _.each($scope.ordersThisMonth, function (order) {
-      if (order.status === 'completed') {
-        completedOrders.push(order);
-      }
-    });
-
-    return completedOrders.length;
-  };
-
-  /*
-   * @lastContactDate
-   * - get the last contact date that was created
-   */
-
-  $scope.lastContactDate = function () {
-    if ($scope.contactsThisMonth && $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1] && $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1].created) {
-      return $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1].created.date;
-    }
-
-  };
-
-  /*
-   * @getContacts
-   * - get contact for the contact widget
-   */
-  $scope.contactNames = [];
-  ContactService.getContacts(function (contacts) {
-
-    $scope.contacts = contacts;
-    $scope.contactsThisMonth = [];
-    var tempData = [];
-    _.each($scope.getDaysThisMonth(), function (day) {
-      var thisDaysContacts = 0;
-      _.each(contacts, function (contact) {
-        if (contact.created.date) {
-          if ($scope.isSameDateAs(new Date(contact.created.date), new Date(day))) {
-            $scope.contactsThisMonth.push(contact);
-            thisDaysContacts = thisDaysContacts + 1;
-          }
-        }
-
-      });
-      tempData.push(thisDaysContacts);
-    });
-    _.each(contacts, function (contact) {
-      if(contact.first || contact.last)
-        $scope.contactNames.push(contact.first + ' ' + contact.last);
-    });
-    $scope.analyticsContacts = tempData;
-  });
-
-  /*
-   * @getContactLeads
-   * - get the number of contacts that have a lead tag
-   */
-
-  $scope.getContactLeads = function () {
-    var contactLeads = [];
-    _.each($scope.contactsThisMonth, function (contact) {
-      if (contact.tags && contact.tags.length > 0) {
-        if (contact.tags.indexOf('ld') > -1) {
-          contactLeads.push(contact);
-        }
-      }
-    });
-
-    return contactLeads.length;
-  };
-
-  /*
-   * @lastOrderDate
-   * - get the date of the last order created
-   */
-
-  $scope.lastOrderDate = function () {
-    if ($scope.ordersThisMonth && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1] && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created) {
-      return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date;
-    }
-  };
-
-
-
-  /*
-   * @date
-   * - start and end date for this month
-   */
-
-  $scope.date = {
-    startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
-    endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
-  };
-
-  /*
-   * @runVisitorsReport
-   * - vistor reports recieves Keen data for visitors widget
-   */
-  $scope.analyticsVisitors = [];
-  $scope.runVisitorsReport = function () {
-    ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, function (data) {
-      var returningVisitors = data[0].result;
-      var newVisitors = data[1].result;
-
-      $scope.visitorsThisMonth = 0;
-      $scope.totalNewVisitors = 0;
-      $scope.totalReturningVisitors = 0;
-      $scope.lastVisitorDate = null;
-      if (data[2].result[0]) {
-        $scope.lastVisitorDate = data[2].result[0].keen.created_at;
-      }
-      var tempData = [];
-      _.each($scope.getDaysThisMonth(), function (day) {
-        var thisDaysVisitors = 0;
-        _.each(returningVisitors, function (visitor, index) {
-          if ($scope.isSameDateAs(new Date(visitor.timeframe.start), new Date(day))) {
-            $scope.visitorsThisMonth += (visitor.value + newVisitors[index].value);
-            thisDaysVisitors += (visitor.value + newVisitors[index].value);
-            $scope.totalNewVisitors += newVisitors[index].value;
-            $scope.totalReturningVisitors += visitor.value;
-          }
         });
 
-        tempData.push(thisDaysVisitors);
-      });
 
-      $scope.$apply(function () {
-        $scope.analyticsVisitors = tempData;
-      });
-    });
-  };
+        /*
+         * @getActivityName
+         * - get activity actual name
+         */
+        $scope.getActivityName = function (activity) {
+            var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
+                data: activity
+            });
+            if (activity_hash) {
+                return activity_hash.label;
+            }
+        };
 
-  /*
-   * @runNetRevenueReport
-   * - get net revenue data from Keen for dashboard widget
-   */
 
-  $scope.runNetRevenueReport = function () {
-    ChartCommerceService.runNetRevenuReport(function (revenueData) {
-      var revenue = revenueData[0].result;
-      $scope.charges = revenueData[1].result;
-      if (revenueData[2].result.length > 0) {
-        $scope.lastChargeDate = revenueData[2].result[0].keen.created_at;
-      }
-      $scope.revenueThisMonth = 0;
-      var tempData = [];
-      _.each($scope.getDaysThisMonth(), function (day) {
-        var thisDaysRevenue = 0;
-        _.each(revenue, function (rev) {
-          if ($scope.isSameDateAs(new Date(rev.timeframe.start), new Date(day))) {
-            $scope.revenueThisMonth += (rev.value / 100);
-            thisDaysRevenue += (rev.value/100);
-          }
+        /**********PAGINATION RELATED **********/
+        $scope.curPage = 0;
+        $scope.pageSize = 1000;
+        $scope.numberOfPages = function () {
+            if ($scope.activities)
+                return Math.ceil($scope.activities.length / $scope.pageSize);
+            else
+                return 0;
+        };
+        $scope.changePage = function (page) {
+            $scope.curPage = $scope.curPage + page;
+        };
+
+        /*
+         * @isSameDateAs
+         * - determine if two dates are identical and return boolean
+         */
+
+        $scope.isSameDateAs = function (oDate, pDate) {
+            return (
+                oDate.getFullYear() === pDate.getFullYear() &&
+                oDate.getMonth() === pDate.getMonth() &&
+                oDate.getDate() === pDate.getDate()
+                );
+        };
+
+        /*
+         * @getDaysThisMonth
+         * - get an array of days this month for loop purposes
+         */
+
+        $scope.getDaysThisMonth = function () {
+            var newDate = new Date();
+            var numOfDays = newDate.getDate();
+            var days = [];
+            var i = 0;
+            for (i; i <= numOfDays; i++) {
+                days[i] = new Date(newDate.getFullYear(), newDate.getMonth(), i + 1);
+            }
+
+            return days;
+        };
+
+        ContactService.getContacts(function (contacts) {
+            ContactService.getAllContactActivities(function (activities) {
+                $scope.activities = activities.results;
+                _.each($scope.activities, function (activity) {
+                    var matchingContacts = _.findWhere(contacts, {
+                        _id: activity.contactId
+                    });
+                    activity.contact = matchingContacts;
+                });
+            });
         });
 
-        tempData.push(thisDaysRevenue);
-      });
+        /*
+         * @getOrders
+         * - get orders for orders widget
+         */
 
-      $scope.$apply(function () {
-        $scope.analyticsRevenue = tempData;
-      });
-    });
-  };
+        OrderService.getOrders(function (orders) {
+            $scope.orders = orders;
+            $scope.ordersThisMonth = [];
+            var tempData = [];
+            _.each($scope.getDaysThisMonth(), function (day) {
+                var thisDaysOrders = 0;
+                _.each(orders, function (order) {
+                    if (order.created.date) {
+                        if ($scope.isSameDateAs(new Date(order.created.date), new Date(day))) {
+                            $scope.ordersThisMonth.push(order);
+                            thisDaysOrders = thisDaysOrders + 1;
+                        }
+                    }
+                });
 
-  /*
-   * @openModal
-   * -
-   */
+                tempData.push(thisDaysOrders);
+            });
+            $scope.analyticsOrders = tempData;
+        });
 
-  $scope.openModal = function (modal) {
-    $scope.modalInstance = $modal.open({
-      templateUrl: modal,
-      keyboard: false,
-      backdrop: 'static',
-      scope: $scope
-    });
-  };
+        /*
+         * @getCompletedOrders
+         * - get the number of compled orders this month
+         */
 
-  /*
-   * @closeModal
-   * -
-   */
+        $scope.getCompletedOrders = function () {
+            var completedOrders = [];
+            _.each($scope.ordersThisMonth, function (order) {
+                if (order.status === 'completed') {
+                    completedOrders.push(order);
+                }
+            });
 
-  $scope.closeModal = function () {
-    $scope.modalInstance.close();
-  };
+            return completedOrders.length;
+        };
 
-  $scope.newActivity = {
-    start: new Date(),
-    end: new Date()
-  };
+        /*
+         * @lastContactDate
+         * - get the last contact date that was created
+         */
 
-  $scope.activityTypes = [];
+        $scope.lastContactDate = function () {
+            if ($scope.contactsThisMonth && $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1] && $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1].created) {
+                return $scope.contactsThisMonth[$scope.contactsThisMonth.length - 1].created.date;
+            }
 
-  contactConstant.contact_activity_types.dp.forEach(function (value, index) {
-    $scope.activityTypes.push(value.label);
-  });
+        };
 
-  $scope.updateActivityTypeFn = function (selection) {
-    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
-      label: selection
-    });
-    if (activity_hash) {
-      $scope.newActivity.activityType = activity_hash.data;
-    }
-  };
+        /*
+         * @getContacts
+         * - get contact for the contact widget
+         */
+        $scope.contactNames = [];
+        ContactService.getContacts(function (contacts) {
 
-  $scope.updateContactNameFn = function (selection) {
-    var firstLast = selection.split(' ');
-    var contactHash = _.findWhere($scope.contacts, {
-      first: firstLast[0],
-      last: firstLast[1]
-    });
-    if (contactHash) {
-      $scope.newActivity.contactId = contactHash._id;
-    }
-  };
+            $scope.contacts = contacts;
+            $scope.contactsThisMonth = [];
+            var tempData = [];
+            _.each($scope.getDaysThisMonth(), function (day) {
+                var thisDaysContacts = 0;
+                _.each(contacts, function (contact) {
+                    if (contact.created.date) {
+                        if ($scope.isSameDateAs(new Date(contact.created.date), new Date(day))) {
+                            $scope.contactsThisMonth.push(contact);
+                            thisDaysContacts = thisDaysContacts + 1;
+                        }
+                    }
 
-  //$scope.all_activities = angular.copy($scope.activities);
-  $scope.addActivityFn = function () {
-    angular.element("#activity_type .error").html("");
-    angular.element("#activity_type .error").removeClass('has-error');
-    var activity_type = angular.element("#activity_type input").val();
-    var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
-      label: activity_type
-    });
-     if(!activity_type || !activity_type.trim()) {
-      angular.element("#activity_type .error").html("Activity Type Required");
-      angular.element("#activity_type .error").addClass('has-error');
-      return;
-    }
-    if (!activity_hash) {
-      $scope.newActivity.activityType = activity_type;
-    } else {
-      $scope.newActivity.activityType = activity_hash.data;
-    }
+                });
+                tempData.push(thisDaysContacts);
+            });
+            _.each(contacts, function (contact) {
+                if (contact.first || contact.last)
+                    $scope.contactNames.push(contact.first + ' ' + contact.last);
+            });
+            $scope.analyticsContacts = tempData;
+        });
 
-    ContactService.postContactActivity($scope.newActivity, function (activity) {
-      var matchingContact = _.findWhere($scope.contacts, {
-        _id: activity.contactId
-      });
-      activity.contact = matchingContact;
-      $scope.activities.push(activity);
-      $scope.activities = _.sortBy($scope.activities, function (o) {
-        return o.start;
-      }).reverse();
-      $scope.newActivity = {
-        start: new Date(),
-        end: new Date()
-      };
-      if (!angular.isDefined($scope.activity_type)) {
-        $scope.activity_type = '';
-      }
-      $scope.activities = $filter('filter')($scope.activities, {
-        activityType: $scope.activity_type
-      });
-      $scope.total = $scope.activities.length;
+        /*
+         * @getContactLeads
+         * - get the number of contacts that have a lead tag
+         */
 
-      $scope.closeModal('addActivityModal');
-    });
-  };
-}]);
+        $scope.getContactLeads = function () {
+            var contactLeads = [];
+            _.each($scope.contactsThisMonth, function (contact) {
+                if (contact.tags && contact.tags.length > 0) {
+                    if (contact.tags.indexOf('ld') > -1) {
+                        contactLeads.push(contact);
+                    }
+                }
+            });
+
+            return contactLeads.length;
+        };
+
+        /*
+         * @lastOrderDate
+         * - get the date of the last order created
+         */
+
+        $scope.lastOrderDate = function () {
+            if ($scope.ordersThisMonth && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1] && $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created) {
+                return $scope.ordersThisMonth[$scope.ordersThisMonth.length - 1].created.date;
+            }
+        };
+
+
+        /*
+         * @date
+         * - start and end date for this month
+         */
+
+        $scope.date = {
+            startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
+            endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
+        };
+
+        /*
+         * @runVisitorsReport
+         * - vistor reports recieves Keen data for visitors widget
+         */
+        $scope.analyticsVisitors = [];
+        $scope.runVisitorsReport = function () {
+            ChartAnalyticsService.visitorsReport($scope.date, $scope.analyticsAccount, function (data) {
+                var returningVisitors = data[0].result;
+                var newVisitors = data[1].result;
+
+                $scope.visitorsThisMonth = 0;
+                $scope.totalNewVisitors = 0;
+                $scope.totalReturningVisitors = 0;
+                $scope.lastVisitorDate = null;
+                if (data[2].result[0]) {
+                    $scope.lastVisitorDate = data[2].result[0].keen.created_at;
+                }
+                var tempData = [];
+                _.each($scope.getDaysThisMonth(), function (day) {
+                    var thisDaysVisitors = 0;
+                    _.each(returningVisitors, function (visitor, index) {
+                        if ($scope.isSameDateAs(new Date(visitor.timeframe.start), new Date(day))) {
+                            $scope.visitorsThisMonth += (visitor.value + newVisitors[index].value);
+                            thisDaysVisitors += (visitor.value + newVisitors[index].value);
+                            $scope.totalNewVisitors += newVisitors[index].value;
+                            $scope.totalReturningVisitors += visitor.value;
+                        }
+                    });
+
+                    tempData.push(thisDaysVisitors);
+                });
+
+                $scope.$apply(function () {
+                    $scope.analyticsVisitors = tempData;
+                });
+            });
+        };
+
+        /*
+         * @runNetRevenueReport
+         * - get net revenue data from Keen for dashboard widget
+         */
+
+        $scope.runNetRevenueReport = function () {
+            ChartCommerceService.runNetRevenuReport(function (revenueData) {
+                var revenue = revenueData[0].result;
+                $scope.charges = revenueData[1].result;
+                if (revenueData[2].result.length > 0) {
+                    $scope.lastChargeDate = revenueData[2].result[0].keen.created_at;
+                }
+                $scope.revenueThisMonth = 0;
+                var tempData = [];
+                _.each($scope.getDaysThisMonth(), function (day) {
+                    var thisDaysRevenue = 0;
+                    _.each(revenue, function (rev) {
+                        if ($scope.isSameDateAs(new Date(rev.timeframe.start), new Date(day))) {
+                            $scope.revenueThisMonth += (rev.value / 100);
+                            thisDaysRevenue += (rev.value / 100);
+                        }
+                    });
+
+                    tempData.push(thisDaysRevenue);
+                });
+
+                $scope.$apply(function () {
+                    $scope.analyticsRevenue = tempData;
+                });
+            });
+        };
+
+        /*
+         * @openModal
+         * -
+         */
+
+        $scope.openModal = function (modal) {
+            $scope.modalInstance = $modal.open({
+                templateUrl: modal,
+                keyboard: false,
+                backdrop: 'static',
+                scope: $scope
+            });
+        };
+
+        /*
+         * @closeModal
+         * -
+         */
+
+        $scope.closeModal = function () {
+            $scope.modalInstance.close();
+        };
+
+        $scope.newActivity = {
+            start: new Date(),
+            end: new Date()
+        };
+
+        $scope.activityTypes = [];
+
+        contactConstant.contact_activity_types.dp.forEach(function (value, index) {
+            $scope.activityTypes.push(value.label);
+        });
+
+        $scope.updateActivityTypeFn = function (selection) {
+            var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
+                label: selection
+            });
+            if (activity_hash) {
+                $scope.newActivity.activityType = activity_hash.data;
+            }
+        };
+
+        $scope.updateContactNameFn = function (selection) {
+            var firstLast = selection.split(' ');
+            var contactHash = _.findWhere($scope.contacts, {
+                first: firstLast[0],
+                last: firstLast[1]
+            });
+            if (contactHash) {
+                $scope.newActivity.contactId = contactHash._id;
+            }
+        };
+
+        //$scope.all_activities = angular.copy($scope.activities);
+        $scope.addActivityFn = function () {
+            angular.element("#activity_type .error").html("");
+            angular.element("#activity_type .error").removeClass('has-error');
+            var activity_type = angular.element("#activity_type input").val();
+            var activity_hash = _.findWhere(contactConstant.contact_activity_types.dp, {
+                label: activity_type
+            });
+            if (!activity_type || !activity_type.trim()) {
+                angular.element("#activity_type .error").html("Activity Type Required");
+                angular.element("#activity_type .error").addClass('has-error');
+                return;
+            }
+            if (!activity_hash) {
+                $scope.newActivity.activityType = activity_type;
+            } else {
+                $scope.newActivity.activityType = activity_hash.data;
+            }
+
+            ContactService.postContactActivity($scope.newActivity, function (activity) {
+                var matchingContact = _.findWhere($scope.contacts, {
+                    _id: activity.contactId
+                });
+                activity.contact = matchingContact;
+                $scope.activities.push(activity);
+                $scope.activities = _.sortBy($scope.activities, function (o) {
+                    return o.start;
+                }).reverse();
+                $scope.newActivity = {
+                    start: new Date(),
+                    end: new Date()
+                };
+                if (!angular.isDefined($scope.activity_type)) {
+                    $scope.activity_type = '';
+                }
+                $scope.activities = $filter('filter')($scope.activities, {
+                    activityType: $scope.activity_type
+                });
+                $scope.total = $scope.activities.length;
+
+                $scope.closeModal('addActivityModal');
+            });
+        };
+    }]);
