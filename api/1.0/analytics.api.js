@@ -9,7 +9,6 @@ var baseApi = require('../base.api');
 var cookies = require('../../utils/cookieutil');
 var analyticsDao = require('../../analytics/dao/analytics.dao.js');
 var analyticsManager = require('../../analytics/analytics_manager.js');
-var keenConfig = require('../../configs/keen.config');
 var async = require('async');
 var contactDao = require('../../dao/contact.dao');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager');
@@ -45,9 +44,6 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEvent.bind(this));
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
-        app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
-        app.post(this.url('mandrill/event/unsub'), this.handleUnsubscribe.bind(this));
-
         app.post(this.url('sendgrid/event'), this.filterSendgridEvents.bind(this), this.handleSendgridEvent.bind(this));
         app.get(this.url('sendgrid/event'), this.testSendgridEvent.bind(this));
         app.post(this.url('stripe/event'), this.sendStripeEventToKeen.bind(this));
@@ -72,116 +68,17 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
     },
 
-    sendToKeen: function(req, res) {
-        var self = this;
-        self.log.debug('>> sendToKeen');
-        //var request = require('request');
-        var request = require('superagent');
 
-        var msg = {};
-        var messagesToSend = [];
-        if(req.body.mandrill_events) {
-            try {
-                msg = JSON.parse(req.body.mandrill_events);
-                if(_.isArray(msg)) {
-                    //msg = {'mandrill_events': JSON.parse(req.body.mandrill_events)};
-                    _.each(msg, function(value, key, list){
-                        var obj = {};
-                        if(value.event) {
-                            var name = 'mandrill_' + value.event;
-                            obj.collection = name;
-                            obj.value = value;
-                            messagesToSend.push(obj);
-                        }
-                    });
-                } else {
-                    messagesToSend.push(msg);
-                }
-            } catch(err) {
-                self.log.debug('error parsing events: ' + err);
-                msg = req.body;
-            }
 
-        } else {
-            msg = req.body;
-            messagesToSend.push(msg);
-        }
-        //self.log.info('Sending the following to keen:');
-        //console.dir(messagesToSend);
-        var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/";
-        var api_key = keenConfig.KEEN_WRITE_KEY;
-        async.eachSeries(messagesToSend, function(message, callback){
-            self.log.debug('url ', url + message.collection + '?api_key=' + api_key);
-            var newrequest = request.post(url + message.collection + '?api_key=' + api_key)
-                .send(message.value)
-                .end(function(error, result){
-                    if(error) {
-                        self.log.error("received error: " + error);
-                    }
-                });
-            callback();
-        }, function(err){
-            if(err) {
-                self.log.error('Error during send to keen: ' + err);
-            } else {
-                self.log.debug('<< sendToKeen');
-            }
-        });
-
-        //TODO: Verify message from mandirll
-        //TODO: parameterize url
-        self.sendResult(res, {'ok': 'ok'});
-    },
-
+    /**
+     * This was previously used to send stripe events to Keen.  We are no longer querying Keen for this data.
+     * @param req
+     * @param resp
+     */
     sendStripeEventToKeen: function(req, resp) {
         var self = this;
-        self.log.debug('>> sendStripeEventToKeen', req.body);
-        var request = require('superagent');
-
-        var msg = null;
-        if(req.body) {
-            msg = req.body;
-            self.log.debug('got message', msg);
-            if(msg.data && msg.data.object && msg.data.object.customer) {
-                var customerId = msg.data.object.customer;
-                accountDao.getAccountByBillingCustomerId(customerId, function(err, account){
-                    if(err) {
-                        self.log.error('Error getting account by customerId', err);
-                    } else if(account){
-                        msg.customerAccountId = account.id();
-                        msg.accountId = appConfig.mainAccountID;
-                    } else {
-                        self.log.debug('could not find account for customerId:' + customerId);
-                    }
-                    //https://api.keen.io/3.0/projects/547edcea46f9a776b6579e2c/events/Stripe_Events?api_key=98f22da64681d5b81e2abb7323493526d8d258f0d355e95f742335b4ff1b75af2709baa51d16b60f168158fe7cfd8d1de89d637ddf8a9ca721859b009c4b004d443728df52346307e456f0511b3e82be4a96efaa9f6dcb7f847053e97eee2b796fc3e2d1a57bb1a86fb07d2e00894966
-                    var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/Stripe_Events";
-                    var api_key = keenConfig.KEEN_WRITE_KEY;
-
-                    request.post(url + '?api_key=' + api_key)
-                        .send(msg)
-                        .end(function(error, result){
-                            if(error) {
-                                self.log.error('Error during send to keen: ' + err);
-                            } else {
-                                self.log.debug('<< sendStripeEventToKeen');
-                            }
-                            self.sendResult(resp, {'ok': 'ok'});
-                        }
-                    );
-                });
-            } else {
-                //self.log.debug('msg.data', msg.data);
-                //self.log.debug('msg.data.object', msg.data.object);
-                //self.log.debug('msg.data.object.customer', msg.data.object.customer);
-                self.log.debug('<< sendStripeEventToKeen (no customer)');
-                self.send200(resp);
-            }
-
-        } else {
-            self.log.debug('<< sendStripeEventToKeen (no event)');
-            self.send200(resp);
-        }
-
+        //self.log.debug('>> sendStripeEventToKeen', req.body);
+        self.send200(resp);
     },
 
     verifyEvent: function(req, res, next) {
@@ -558,208 +455,9 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
-    /**
-     * @deprecated
-     * @param req
-     * @param res
-     * @param next
-     */
-    filterMandrillEvents: function(req, res, next) {
-        //TODO: create customActivities
-        var self = this;
-        self.log.debug('>> filterMandrillEvents');
-        var msg = null;
-        var objArray = [];
-        if(req.body.mandrill_events) {
-            try {
-                msg = JSON.parse(req.body.mandrill_events);
-                if(_.isArray(msg)) {
-                    _.each(msg, function (value, key, list) {
-                        var type = value.event;
-                        var obj = {};
-                        if(value.msg) {
-                            obj.email = value.msg.email;
-                            obj.sender = value.msg.sender;
-                            obj.ts = moment.utc(value.ts*1000).toDate();
-                            if (type === 'send') {
-                                obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
-                                objArray.push(obj);
-                                if(value.msg.metadata && value.msg.metadata.campaignId) {
-                                    var metadata = value.msg.metadata;
-                                    self.log.debug('Using metadata', metadata);
-                                    campaignManager.handleCampaignEmailSentEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
-                                        if(err) {
-                                            self.log.error('Error handling email send event:' + err);
-                                            return;
-                                        } else {
-                                            self.log.debug('Handled email sent event.');
-                                            return;
-                                        }
-                                    });
-                                }
-                            } else if (type === 'open') {
-                                obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
-                                objArray.push(obj);
-                                //if value.msg.metadata.campaignId, trigger campaignStep
-                                if(value.msg.metadata && value.msg.metadata.campaignId) {
-                                    var metadata = value.msg.metadata;
-                                    self.log.debug('triggering campaign step for metadata ', metadata);
-                                    campaignManager.handleCampaignEmailOpenEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
-                                        if(err) {
-                                            self.log.error('Error handling email open event:' + err);
-                                            return;
-                                        } else {
-                                            self.log.debug('Handled email open event.');
-                                            return;
-                                        }
-                                    });
-                                }
-                            } else if (type === 'click') {
-                                obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
-                                objArray.push(obj);
-                                if(value.msg.metadata && value.msg.metadata.campaignId) {
-                                    var metadata = value.msg.metadata;
-                                    self.log.debug('Using metadata', metadata);
-                                    campaignManager.handleCampaignEmailClickEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
-                                        if(err) {
-                                            self.log.error('Error handling email click event:' + err);
-                                            return;
-                                        } else {
-                                            self.log.debug('Handled email click event.');
-                                            return;
-                                        }
-                                    });
-                                }
-                            } else if (type === 'unsub') {
-                                obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
-                                objArray.push(obj);
-                            }
-                        }
 
-                    });
-                }
-            } catch(err) {
-                self.log.debug('error parsing events: ' + err);
-                msg = req.body;
-            }
 
-        }
 
-        self.log.debug('<< filterMandrillEvents');
-        next();
-        //create contactActivities from events.
-        _.each(objArray, function(value, key, list){
-            var query = {};
-            //TODO: get contactId from sender Email
-            //query.accountId = value.id();
-
-            query['details.emails.email'] = value.email;
-
-            contactDao.findMany(query, $$.m.Contact, function(err, list){
-                if(err) {
-                    self.log.error('Error finding contacts by email: ' + err);
-                } else if(!list || list.length < 1) {
-                    self.log.warn('Contact could not be found for email address: ' + value.email);
-                } else if(list.length > 1) {
-                    self.log.warn('Too many contacts found for email address: ' + value.email);
-                } else {
-                    var contact = list[0];
-                    var activity = new $$.m.ContactActivity({
-                        accountId: contact.get('accountId'),
-                        contactId: contact.id(),
-                        activityType: value.activityType,
-                        start: value.ts
-                    });
-                    contactActivityManager.createActivity(activity, function(err, value){});
-                }
-            });
-        });
-    },
-
-    handleUnsubscribe: function(req, resp) {
-        var self = this;
-        self.log.debug('>> handleUnsubscribe');
-        var msg;
-        var objArray = [];
-        if(req.body.mandrill_events) {
-            try {
-                msg = JSON.parse(req.body.mandrill_events);
-                if(_.isArray(msg)) {
-                    _.each(msg, function (value, key, list) {
-                        var type = value.event;
-                        var obj = {};
-                        obj.email = value.msg.email;
-                        obj.sender = value.msg.sender;
-                        obj.ts = moment.utc(value.ts*1000).toDate();
-                        obj.accountId = value.msg.metadata.accountId;
-                        if (type === 'unsub') {
-                            obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
-                            objArray.push(obj);
-                        }
-                    });
-                }
-            } catch(err) {
-                self.log.debug('error parsing events: ' + err);
-                msg = req.body;
-            }
-        }
-        self.send200(resp);
-        async.each(objArray, function(obj, callback){
-            /*
-             *  - Get contact by accountId and email address.
-             *  - Mark the contact as "unsubscribed"
-             *  - create contact activity
-             */
-            contactDao.findContactsByEmail(obj.accountId, obj.email, function(err, contactAry){
-                if(err) {
-                    self.log.error('Error finding contact for [' + obj.email + '] and [' + obj.accountId + ']');
-                    return;
-                } else if(contactAry === null || contactAry.length ===0){
-                    //this might be a user and contact on main account
-                    contactDao.findContactsByEmail(appConfig.mainAccountID, obj.email, function(err, contacts){
-                        if(err || contacts === null || contacts.length===0) {
-                            self.log.error('Error finding contact for [' + obj.email + '] and [' + appConfig.mainAccountID + ']');
-                            return;
-                        } else {
-                            var contact = contacts[0];
-                            contact.set('unsubscribed', true);
-                            contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
-                                if(err) {
-                                    self.log.error('Error marking contact unsubscribed', err);
-                                    return;
-                                } else {
-                                    var activity = new $$.m.ContactActivity({
-                                        accountId: contact.get('accountId'),
-                                        contactId: contact.id(),
-                                        activityType: obj.activityType,
-                                        start: obj.ts
-                                    });
-                                    contactActivityManager.createActivity(activity, function(err, value){});
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    var contact = contactAry[0];
-                    contact.set('unsubscribed', true);
-                    contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
-                        if(err) {
-                            self.log.error('Error marking contact unsubscribed', err);
-                            return;
-                        } else {
-                            var activity = new $$.m.ContactActivity({
-                                accountId: contact.get('accountId'),
-                                contactId: contact.id(),
-                                activityType: obj.activityType,
-                                start: obj.ts
-                            });
-                            contactActivityManager.createActivity(activity, function(err, value){});
-                        }
-                    });
-                }
-            });
-        });
-    },
 
     saveAnalyticEvent: function(req, res) {
         var self = this;
