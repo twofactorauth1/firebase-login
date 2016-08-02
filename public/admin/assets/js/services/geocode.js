@@ -1,5 +1,5 @@
 'use strict';
-/*global app, Keen, $$, google*/
+/*global app, $$, google*/
 /*jslint unparam: true*/
 (function (angular) {
   app.service('GeocodeService', function ($http) {
@@ -17,7 +17,7 @@
           }).join(", ");
           if (_topline) {
             if(breakLine)
-              separator = ' <br> '
+              separator = ' <br> ';
             return _topline + separator + _bottomline;
           }
           return _bottomline;

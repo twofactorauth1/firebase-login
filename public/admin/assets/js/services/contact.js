@@ -1,5 +1,5 @@
 'use strict';
-/*global app, Keen, $$*/
+/*global app, $$*/
 /*jslint unparam: true*/
 (function (angular) {
   app.service('ContactService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', '$q', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations, $q) {
