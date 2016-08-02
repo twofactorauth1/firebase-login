@@ -113,35 +113,6 @@
 
                 }
 
-                /*
-                 * continuously poll for workstream updates
-                 * - stop after ~10 minutes
-                 * - dashboardService.polls can be reset on user navigation
-                 * - only request when no other dashboard requests in flight
-                 *
-                 * TODO: should really be a server push w/ EventSource
-                 * polyfill lib -> https://github.com/Yaffle/EventSource
-                 */
-                if(dashboardService.doPolling) {
-                    if(dashboardService.numberPolling <=1) {
-                        dashboardService.numberPolling--;
-                        (function poll() {
-
-                            if (dashboardService.polls < 300 && dashboardService.loading.value === 0) {
-                                $timeout(dashboardService.getWorkstreams, 3000);
-                                dashboardService.numberPolling++;
-                                dashboardService.polls++;
-                                // console.log('dashboardService.polls', dashboardService.polls);
-                            } else {
-                                $timeout(poll, 1000);
-                            }
-
-                        })();
-                    } else {
-                        dashboardService.numberPolling--;
-                        // console.info('dashboardService skipping poll');
-                    }
-                }
             }
 
             function error(error) {
