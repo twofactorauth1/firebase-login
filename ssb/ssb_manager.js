@@ -1092,6 +1092,18 @@ module.exports = {
                     }
                 });
             },
+            //delete existing page 
+            function removeExistingPage(page, cb) {
+                pageDao.removePublishedPageByHandle(accountId, page.get("handle"), function(err){
+                    if(err) {
+                        self.log.error(accountId, userId,'Error publishing page:', err);
+                        cb(err);
+                    }
+                    else{
+                        cb(null, page);
+                    }
+                });
+            },
             function savePublishedPage(page, cb) {
                 page.set('published', {date:new Date(), by: userId});
                 pageDao.savePublishedPage(page, function(err, publishedPage){
