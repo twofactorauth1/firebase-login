@@ -741,7 +741,7 @@
 
 
 
-                        var sendAtDateISOString = moment.utc(vm.state.campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
+                        var sendAtDateISOString = moment.utc(campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
                         var localMoment = moment(sendAtDateISOString);
 
                         if (vm.state.campaign.type === 'onetime') {
