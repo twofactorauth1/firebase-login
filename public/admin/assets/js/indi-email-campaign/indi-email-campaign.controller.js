@@ -669,7 +669,8 @@
             var campaignHasId = vm.state.campaign && angular.isDefined(vm.state.campaign._id);
             var campaignNotCancelled = vm.state.campaign.status.toLowerCase() !== 'cancelled';
             var campaignHasContacts = (vm.state.recipients.length + vm.uiState.selectedContacts.newEmails.length) > 0;
-            return dataIsLoaded && campaignHasId && campaignNotCancelled && campaignHasContacts;
+            var campaignIsOneTime = (vm.state.campaign.type === 'onetime');
+            return dataIsLoaded && campaignHasId && campaignNotCancelled && (campaignIsOneTime ? campaignHasContacts : true);
         }
 
         function tagToContactFn(value) {
