@@ -107,6 +107,8 @@
         vm.canActivateFn = canActivateFn;
         vm.tagToContactFn = tagToContactFn;
         vm.createContactDataFn = createContactDataFn;
+        vm.contactTagsFn = contactTagsFn;
+
 
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
@@ -686,6 +688,10 @@
                 email: email
             });
             return contact;
+        }
+
+        function contactTagsFn(contact) {
+            return ContactService.contactTags(contact);
         }
 
         function init(element) {
