@@ -319,8 +319,8 @@
         setTimeout(function(){
             editor.selection.save();
         })
-
-        editor.events.trigger("bgColorChange", [val]);
+        if(editor.opts.isButton)
+          editor.events.trigger("bgColorChange", [val]);
 
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
@@ -339,7 +339,8 @@
             editor.format.removeStyle('background-color');
 
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-        editor.events.trigger("bgColorChange", []);
+        if(editor.opts.isButton)
+          editor.events.trigger("bgColorChange", []);
 
         setTimeout(function(){
             editor.events.trigger("contentChanged");
@@ -373,7 +374,8 @@
         else
             editor.format.applyStyle('color', val);
 
-        editor.events.trigger("txtColorChange", [val]);
+        if(editor.opts.isButton)
+          editor.events.trigger("txtColorChange", [val]);
 
         setTimeout(function(){
             editor.selection.save();
@@ -394,7 +396,8 @@
 
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
 
-        editor.events.trigger("bgColorChange", []);
+        if(editor.opts.isButton)
+          editor.events.trigger("bgColorChange", []);
 
         $popup.find('input.sp-input').val("");
         setTimeout(function(){
@@ -424,12 +427,14 @@
         else
             editor.format.removeStyle('color');
 
-        editor.events.trigger("txtColorChange", []);
+        if(editor.opts.isButton)
+          editor.events.trigger("txtColorChange", []);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
             editor.selection.save();
+            closeColorPicker();
         })
-        initializeSpectrum("color");
+        
       }
       else{
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
@@ -438,12 +443,14 @@
             editor.opts.button.css('background-color', "");
         else
             editor.format.removeStyle('background-color');
-        editor.events.trigger("bgColorChange", [val]);
+        if(editor.opts.isButton)
+          editor.events.trigger("bgColorChange", []);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
             editor.selection.save();
+            closeColorPicker();
         })
-        initializeSpectrum("background-color");
+        
       }
     }
 
