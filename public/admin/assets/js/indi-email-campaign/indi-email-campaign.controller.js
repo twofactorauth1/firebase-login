@@ -226,7 +226,7 @@
             }
         }
 
-        function saveAsDraftFn() {
+        function saveAsDraftFn(isActivation) {
             vm.uiState.dataLoaded = false;
             var fn = EmailCampaignService.updateCampaign;
 
@@ -250,6 +250,11 @@
             vm.removeContactsFromCampaignFn();
 
             //processing custom emails for contact
+
+            if (isActivation) {
+                vm.state.campaign.status = 'RUNNING';
+            }
+
             vm.checkAndCreateContactFn(function (createdContactsArr) {
                 vm.addContactsFn(createdContactsArr);
                 fn(vm.state.campaign)
@@ -259,10 +264,20 @@
                         vm.state.originalRecipients = angular.copy(vm.state.recipients);
                         vm.uiState.dataLoaded = true;
                         vm.uiState.disableEditing = false;
-                        toaster.pop('success', 'Campaign saved');
+                        if (isActivation) {
+                            vm.uiState.disableEditing = true;
+                            toaster.pop('success', 'Campaign activated');
+                        } else {
+                            toaster.pop('success', 'Campaign saved');
+                        }
                     }, function (err) {
                         vm.uiState.dataLoaded = true;
-                        toaster.pop('error', 'Campaign save failed');
+
+                        if (isActivation) {
+                            toaster.pop('error', 'Campaign activation failed');
+                        } else {
+                            toaster.pop('error', 'Campaign save failed');
+                        }
                     });
             });
         }
@@ -282,25 +297,7 @@
         }
 
         function activateCampaignFn() {
-            vm.uiState.dataLoaded = false;
-            var fn = EmailCampaignService.updateCampaign;
-
-            if (vm.state.campaignId === 'create') {
-                fn = EmailCampaignService.createCampaign;
-            }
-            vm.state.campaign.status = 'RUNNING';
-            fn(vm.state.campaign)
-                .then(function (res) {
-                    vm.state.campaign = angular.extend(vm.state.campaign, res.data);
-                    vm.state.campaignOriginal = angular.copy(res.data);
-                    vm.state.originalRecipients = angular.copy(vm.state.recipients);
-                    vm.uiState.dataLoaded = true;
-                    vm.uiState.disableEditing = true;
-                    toaster.pop('success', 'Campaign activated');
-                }, function (err) {
-                    vm.uiState.dataLoaded = true;
-                    toaster.pop('error', 'Campaign activation failed');
-                });
+            vm.saveAsDraftFn(true);
         }
 
         function checkBestEmailFn(contact) {
