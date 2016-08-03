@@ -234,11 +234,11 @@
                             </div>
 
                             <a
-                                ng-href="/admin/#/emails/editor/{{vm.state.campaign.steps[0].settings.emailId}}"
+                                ui-sref='app.emailEditor({id: vm.state.campaign.steps[0].settings.emailId})'
                                 class="btn btn-primary margin-top-15"
                                 tooltip-placement="top"
                                 tooltip-html-unsafe="Make changes to this email in the editor."
-                                ng-disabled="vm.uiState.disableEditing">
+                                ng-disabled="vm.uiState.disableEditing || !vm.state.campaign.steps[0].settings.emailId">
                                 <i class="fa fa-pencil-square-o"></i>
                                 <span> Edit email content</span>
                             </a>
