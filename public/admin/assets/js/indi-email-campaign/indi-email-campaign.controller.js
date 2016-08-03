@@ -106,6 +106,7 @@
         vm.deleteCampaignFn = deleteCampaignFn;
         vm.canActivateFn = canActivateFn;
         vm.tagToContactFn = tagToContactFn;
+        vm.createContactDataFn = createContactDataFn;
 
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
@@ -201,7 +202,7 @@
                         email: email.text
                     });
                     if (!contact) {
-                        var tempContact = vm.createContactData(email.text);
+                        var tempContact = vm.createContactDataFn(email.text);
                         promises.push(ContactService.createContact(tempContact));
                     } else {
                         contactsArr.push(contact._id);
@@ -673,6 +674,20 @@
 
         function tagToContactFn(value) {
             return ContactService.tagToContact(value);
+        }
+
+        function createContactDataFn(email) {
+            // New contact
+            var contact = {
+                details: [{
+                    emails: []
+            	   }]
+            };
+
+            contact.details[0].emails.push({
+                email: email
+            });
+            return contact;
         }
 
         function init(element) {
