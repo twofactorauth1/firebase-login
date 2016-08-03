@@ -646,14 +646,13 @@
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: "Yes, cancel campaign!",
                     cancelButtonText: "No, do not cancel campaign!",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
+                    closeOnConfirm: true,
+                    closeOnCancel: true
                 },
                 function (isConfirm) {
                     if (isConfirm) {
                         EmailCampaignService.deleteCampaign(vm.state.campaign).then(function (data) {
                             toaster.pop('success', "Campaign cancelled.", "The " + vm.state.campaign.name + " campaign was cancelled successfully.");
-                            vm.closeModalFn();
                             $timeout(function () {
                                 $location.path('/marketing/campaigns');
                             }, 500)
