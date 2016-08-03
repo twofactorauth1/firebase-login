@@ -234,11 +234,11 @@
                             </div>
 
                             <a
-                                ng-href="/admin/#/emails/editor/{{vm.state.campaign.steps[0].settings.emailId}}"
+                                ui-sref='app.emailEditor({id: vm.state.campaign.steps[0].settings.emailId})'
                                 class="btn btn-primary margin-top-15"
                                 tooltip-placement="top"
                                 tooltip-html-unsafe="Make changes to this email in the editor."
-                                ng-disabled="vm.uiState.disableEditing">
+                                ng-disabled="vm.uiState.disableEditing || !vm.state.campaign.steps[0].settings.emailId">
                                 <i class="fa fa-pencil-square-o"></i>
                                 <span> Edit email content</span>
                             </a>
@@ -315,7 +315,7 @@
                         <div class="well well-sm margin-bottom-30">
                             <form role="form" class="ng-pristine ng-valid">
                                 <div class="form-group">
-                                    <ui-select multiple tagging="tagToContact" tagging-match-to-key="label" ng-model="vm.state.campaign.searchTags.tags" theme="bootstrap" ng-disabled="vm.uiState.disableEditing">
+                                    <ui-select multiple tagging="vm.tagToContactFn" tagging-match-to-key="label" ng-model="vm.state.campaign.searchTags.tags" theme="bootstrap" ng-disabled="vm.uiState.disableEditing">
                                         <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
                                         <ui-select-choices repeat="tag in vm.state.contactTags | orderBy:'label' | filter:$select.search">
                                             {{tag.label}}

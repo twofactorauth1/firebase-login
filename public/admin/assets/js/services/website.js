@@ -682,6 +682,20 @@
         });
     };
 
+
+    this.createDuplicateTopic = function (topic, fn) {
+      var apiUrl = baseUrl + ['cms', 'topic', 'duplicate'].join('/');
+      $http({
+        url: apiUrl,
+        method: "POST",
+        data: angular.toJson(topic)
+      }).success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Update Topic with ERROR', err);
+      });
+    };
+
     this.getPageComponents = function (pageId, fn) {
       var apiUrl = baseUrl + ['cms', 'page', pageId, 'components'].join('/');
       $http.get(apiUrl).success(function (data, status, headers, config) {

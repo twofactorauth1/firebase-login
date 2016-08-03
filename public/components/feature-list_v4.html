@@ -4,7 +4,7 @@
     </div>
     <div class="features-wrap">
         <div ng-repeat="feature in component.features" class="feature">
-            <div class="row row-xs-height feature-single" ng-style="{'background': component.blockbgcolor}">
+            <div class="row row-xs-height feature-single" ng-attr-style="{{featureStyle(component)}}">
                 <div class="col-sm-3 col-xs-4 col-xs-height feature-icon {{featureClass()}}">
                     <div elem ng-model="feature.top"></div>
                 </div>

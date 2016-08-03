@@ -26,6 +26,23 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
             scope.component.features.splice(index, 1);
         };
 
+        scope.featureStyle = function(component){
+            var styleString = " ";
+
+            if(component && component.blockBorder && component.blockBorder.show && component.blockBorder.color){
+                styleString += 'border-color: ' + component.blockBorder.color + ';';
+                styleString += 'border-width: ' + component.blockBorder.width + 'px;';
+                styleString += 'border-style: ' + component.blockBorder.style + ';';
+                styleString += 'border-radius: ' + component.blockBorder.radius + '%;';
+            }
+
+            if(component.blockbgcolor){
+                styleString += 'background: ' + component.blockbgcolor;   
+            }
+
+            return styleString;
+        }
+
         scope.featureClass = function(){
             var parent_id = scope.component.anchor || scope.component._id;
             var element = angular.element("#"+parent_id + " div.features-wrap")

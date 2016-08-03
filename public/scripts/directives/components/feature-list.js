@@ -20,6 +20,23 @@ app.directive('featureListComponent',['$window', function ($window) {
                 return "";
             }
         }
+
+        scope.featureStyle = function(component){
+            var styleString = " ";
+
+            if(component && component.blockBorder && component.blockBorder.show && component.blockBorder.color){
+                styleString += 'border-color: ' + component.blockBorder.color + ';';
+                styleString += 'border-width: ' + component.blockBorder.width + 'px;';
+                styleString += 'border-style: ' + component.blockBorder.style + ';';
+                styleString += 'border-radius: ' + component.blockBorder.radius + '%;';
+            }
+
+            if(component.blockbgcolor){
+                styleString += 'background: ' + component.blockbgcolor;   
+            }
+
+            return styleString;
+        }
     }
   };
 }]);

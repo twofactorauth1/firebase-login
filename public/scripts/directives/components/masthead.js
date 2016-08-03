@@ -43,6 +43,9 @@ app.directive('mastheadComponent', ['$window', '$timeout', function ($window, $t
                         var mastheadUnderNavElement = angular.element(".masthead_" + scope.component._id + ".mastHeadUndernav");
                         if (scope.addUndernavClasses && scope.allowUndernav) {
                             var navHeight = angular.element(".undernav").height();
+                            if(scope.navComponent){
+                                navHeight = angular.element(".component_wrap_"+ scope.navComponent._id +".undernav").height();
+                            }
                             var margin = navHeight;
                             if (mastheadElement) {
                                 mastheadElement.css("margin-top", -margin);

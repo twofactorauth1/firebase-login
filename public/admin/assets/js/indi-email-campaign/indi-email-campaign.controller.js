@@ -96,6 +96,7 @@
         vm.getCampaignContactsFn = getCampaignContactsFn;
         vm.loadSavedTagsFn = loadSavedTagsFn;
         vm.checkAndCreateContactFn = checkAndCreateContactFn;
+        vm.updateTagsFn = updateTagsFn;
         vm.addContactsFn = addContactsFn;
         vm.removeContactsFromCampaignFn = removeContactsFromCampaignFn;
         vm.resetDirtyFn = resetDirtyFn;
@@ -104,8 +105,9 @@
         vm.updateCampaignEmailSettingsFn = updateCampaignEmailSettingsFn;
         vm.deleteCampaignFn = deleteCampaignFn;
         vm.canActivateFn = canActivateFn;
+        vm.tagToContactFn = tagToContactFn;
 
-        $scope.$watch('vm.state.campaign.type', function() {
+        $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
             if (vm.state.campaign.steps) {
                 if (vm.state.campaign.type === 'autoresponder') {
@@ -121,6 +123,34 @@
                 vm.analyzeSubject(newValue);
             }
         });
+
+        function updateTagsFn(recipients) {
+            if (angular.isDefined(vm.state.campaign.searchTags.tags) && vm.state.campaign.searchTags.tags.length) {
+
+                ContactService.getContacts(function (contacts) {
+                    $scope.contacts = contacts;
+                    var tags = _.uniq(_.pluck(vm.state.campaign.searchTags.tags, 'data'));
+                    recipients.forEach(function (id, index) {
+                        var c = _.findWhere($scope.contacts, {
+                            _id: id
+                        });
+                        if (c) {
+                            if (vm.state.campaign.searchTags.operation == 'add') {
+                                if (c.tags) {
+                                    c.tags = c.tags.concat(tags);
+                                } else {
+                                    c.tags = tags;
+                                }
+                            } else if (vm.state.campaign.searchTags.operation == 'set') {
+                                c.tags = tags;
+                            }
+                            c.tags = _.uniq(c.tags);
+                            ContactService.saveContact(c, function () {});
+                        }
+                    });
+                });
+            }
+        }
 
         function addContactsFn(createdContactsArr) {
             //get an array of contact Ids from recipients
@@ -144,6 +174,7 @@
             var contactsArr = recipientsIdArr;
 
             vm.state.campaign.contacts = contactsArr;
+            vm.updateTagsFn(vm.state.campaign.contacts);
         }
 
         function removeContactsFromCampaignFn() {
@@ -223,7 +254,7 @@
                 fn(vm.state.campaign)
                     .then(function (res) {
                         vm.state.campaign = angular.extend(vm.state.campaign, res.data);
-                        vm.state.campaignOriginal = angular.copy(res.data);
+                        vm.state.campaignOriginal = angular.copy(vm.state.campaign);
                         vm.state.originalRecipients = angular.copy(vm.state.recipients);
                         vm.uiState.dataLoaded = true;
                         vm.uiState.disableEditing = false;
@@ -608,29 +639,28 @@
 
         function deleteCampaignFn() {
             SweetAlert.swal({
-                title: "Are you sure?",
-                text: "Do you want to cancel this campaign?",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, cancel campaign!",
-                cancelButtonText: "No, do not cancel campaign!",
-                closeOnConfirm: false,
-                closeOnCancel: false
-            },
-            function (isConfirm) {
-                if (isConfirm) {
-                    EmailCampaignService.deleteCampaign(vm.state.campaign).then(function(data) {
-                        toaster.pop('success', "Campaign cancelled.", "The " + vm.state.campaign.name + " campaign was cancelled successfully.");
-                        vm.closeModalFn();
-                        $timeout(function () {
-                            $location.path('/marketing/campaigns');
-                        }, 500)
-                    });
-                } else {
-                    SweetAlert.swal("Not Cancelled", "The campaign was not cancelled.", "error");
-                }
-            });
+                    title: "Are you sure?",
+                    text: "Do you want to cancel this campaign?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, cancel campaign!",
+                    cancelButtonText: "No, do not cancel campaign!",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        EmailCampaignService.deleteCampaign(vm.state.campaign).then(function (data) {
+                            toaster.pop('success', "Campaign cancelled.", "The " + vm.state.campaign.name + " campaign was cancelled successfully.");
+                            $timeout(function () {
+                                $location.path('/marketing/campaigns');
+                            }, 500)
+                        });
+                    } else {
+                        SweetAlert.swal("Not Cancelled", "The campaign was not cancelled.", "error");
+                    }
+                });
         };
 
         function canActivateFn() {
@@ -640,6 +670,10 @@
             var campaignHasContacts = (vm.state.recipients.length + vm.uiState.selectedContacts.newEmails.length) > 0;
             var campaignIsOneTime = (vm.state.campaign.type === 'onetime');
             return dataIsLoaded && campaignHasId && campaignNotCancelled && (campaignIsOneTime ? campaignHasContacts : true);
+        }
+
+        function tagToContactFn(value) {
+            return ContactService.tagToContact(value);
         }
 
         function init(element) {
@@ -653,7 +687,7 @@
                 vm.state.website = data;
             });
 
-            ContactService.getContactTags(function(tags){
+            ContactService.getContactTags(function (tags) {
                 vm.state.contactTags = tags;
             });
 

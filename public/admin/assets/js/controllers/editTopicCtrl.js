@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditTopicCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", "SimpleSiteBuilderService", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window, SimpleSiteBuilderService) {
+  app.controller('EditTopicCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window) {
 
     /*
      * @circleOptions
@@ -240,6 +240,7 @@
     $scope.retrieveTopic = function (_id) {
       $scope.topicActive = true;
       WebsiteService.getTopics(function (topics) {
+        $scope.allTopics = topics;
         $scope.topic = _.find(topics, function (top) {
           return top._id === _id;
         });
@@ -619,7 +620,12 @@
      */
 
     $scope.openDuplicateModal = function () {
-      
+      $scope.currentTopic = angular.copy($scope.topic);
+      $scope.newTopic = {};
+      $scope.newTopic.title = $scope.currentTopic.title + " copy";
+      $scope.newTopic.category = $scope.currentTopic.category;
+      $scope.newTopic.components = $scope.currentTopic.components;
+      $scope.openSimpleModal("topic-duplicate-modal");
     };
 
     
@@ -785,6 +791,30 @@
         if (args.editorImage)
             $scope.activeEditor.img = args.editorImage;
     });
+
+
+    $scope.createDuplicateTopic = function (newTopic) {
+        $scope.saveLoading = true;
+        $scope.newTopic.handle = $filter('slugify')(newTopic.title);
+        var duplicate = _.findWhere($scope.allTopics, {
+          handle: $scope.newTopic.handle
+        });
+        if(duplicate){
+          toaster.pop('error', "Topic Title " + newTopic.title, "Already exists");
+          $scope.saveLoading = false;
+          return;
+        }
+        WebsiteService.createDuplicateTopic(newTopic, function (topic) {
+          $scope.duplicate = true;
+          $scope.closeModal();
+          $scope.topic = topic;
+          $scope.saveLoading = false;
+          toaster.pop('success', "Topic Saved", "The " + newTopic.title + " topic was created successfully.");
+          $location.url('/support/manage-topics/').search({
+            topic_id: topic._id
+          });
+        });
+    };
 
     /*
      * @locationChangeStart

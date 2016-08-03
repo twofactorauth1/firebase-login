@@ -44,8 +44,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
         var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";                    
 
-        attrs.helpTopics = helpTopics;
-
+        if(helpTopics){
+            attrs.helpTopics = helpTopics;
+        }
+        
         if (attrs.ssbBlogEditor) {
             return pageTemplate
         }
