@@ -103,7 +103,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('topic'), this.isAuthAndSubscribedApi.bind(this), this.createTopic.bind(this));
         app.put(this.url('topic/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTopic.bind(this));
         app.delete(this.url('topic/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTopic.bind(this));
-
+        app.post(this.url('topic/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicateTopic.bind(this));
         // COMPONENTS
         app.get(this.url('page/:id/components'), this.isAuthAndSubscribedApi.bind(this), this.getComponentsByPage.bind(this));
         app.get(this.url('page/:id/components/type/:type'), this.isAuthAndSubscribedApi.bind(this), this.getComponentsByType.bind(this));
@@ -1208,6 +1208,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         category: topicData.category,
                         handle: topicData.handle
                     });
+                    
                     topic.attributes.modified.date = new Date();
                     topic.attributes.created.date = new Date();
                 }
@@ -1275,6 +1276,39 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    createDuplicateTopic: function(req, res) {
+        var self = this;
+        self.log.debug('>> createTopic');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var topicData = req.body;
+                var topic = require('../../cms/model/topic');
+                var temp = $$.u.idutils.generateUUID();
+                if (topic != null) {
+                    self.log.debug('>> topic not null');
+                    topic = new Topic({
+                        _id: temp,
+                        title: topicData.title,
+                        category: topicData.category,
+                        handle: topicData.handle,
+                        components: topicData.components
+                    });
+                    
+                    topic.attributes.modified.date = new Date();
+                    topic.attributes.created.date = new Date();
+                }
+                cmsManager.duplicateTopic(topic, function(err, createdTopic){
+                    self.log.debug('<< duplicateTopic');
+                    self.sendResultOrError(res, err, createdTopic, 'Error creating topic.');
+                });
+            }
+        });
+
     },
 
     //COMPONENTS
