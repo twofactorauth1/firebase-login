@@ -13,7 +13,7 @@
     <div class="features-wrap">
         <div ng-repeat="feature in component.features" class="feature-list">
             <div class="feature feature-height {{featureClass()}}" ng-class="{'col-sm-3':component.features.length >= 4, 'col-sm-4':component.features.length == 3, 'col-sm-6':component.features.length == 2, 'col-sm-12':component.features.length == 1}">
-                <div class="feature-single feature-single-0" ng-style="{'background': component.blockbgcolor}">
+                <div class="feature-single feature-single-0" ng-attr-style="{{featureStyle(component)}}">
                     <div elem ng-model="feature.top"></div>
                     <div class="feature-content">
                         <div elem ng-model="feature.content"></div>

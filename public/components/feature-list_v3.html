@@ -15,7 +15,7 @@
     <div class="clearfix mb15"></div>
     <div class="row features-wrap">
         <div ng-repeat="feature in component.features" class="feature col-sm-4 feature-height {{featureClass()}}">
-            <div class="feature-single" ng-style="{'background': component.blockbgcolor}">
+            <div class="feature-single" ng-attr-style="{{featureStyle(component)}}">
                 <div elem ng-model="feature.top"></div>
                 <div class="feature-content">
                     <div elem ng-model="feature.content"></div>
