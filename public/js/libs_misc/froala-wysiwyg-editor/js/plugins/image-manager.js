@@ -2084,8 +2084,9 @@
     callback: function() {
       var ed = this;
       this.$el.find(".fr-marker") && (this.events.disableBlur());
-      this.selection.save()
-      clickandInsertImageButton(this);
+      this.selection.save();
+      var image = this.image.get();
+      clickandInsertImageButton(this, image);
       setTimeout(function(){
         ed.selection.restore();
       }, 0)

@@ -51,6 +51,12 @@ var dao = {
         self.removeByQuery(query, self.publishedPageObj, fn);
     },
 
+    removePublishedPageByHandle: function(accountId, handle, fn){
+        var self = this;
+        var query = {accountId:accountId, handle:handle};
+        self.removeByQuery(query, self.publishedPageObj, fn);
+    },
+
     options: {
         name: "ssb.page.dao",
         defaultModel: $$.m.ssb.Page

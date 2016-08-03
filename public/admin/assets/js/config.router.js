@@ -73,7 +73,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/site-analytics.html",
         title: 'Site Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'keenService', 'chartAnalyticsService')
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'chartAnalyticsService')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "/admin/assets/views/pages.html",
@@ -127,7 +127,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/contact-detail.html",
         title: 'Single Contact',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
+        resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'offset','assetsService', 'toasterService', 'orderService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -260,10 +260,10 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('manageTopicsCtrl', 'userService')
     }).state('app.support.singletopic', {
         url: '/manage-topics/:id',
-        templateUrl: "/admin/assets/views/editor.html",
+        templateUrl: "/admin/assets/views/editTopics.html",
         title: 'Topic Single',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'editTopicCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
     }).state('app.onboarding', {
         url: '/onboarding',
         templateUrl: "/admin/assets/views/onboarding.html",

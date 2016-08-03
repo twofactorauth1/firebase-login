@@ -27,7 +27,7 @@
                                         <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail screenshot" alt="image">
                                     </td>
                                     <td><strong>First Name: </strong> <span ng-if="contact.first || contact.last" ng-text-truncate="contact.first + ' ' + contact.last || ''" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first && !contact.last">--</span></td>
-                                    <td><strong>Tags: </strong>{{contactTagsFn(contact) || '--'}}</td>
+                                    <td><strong>Tags: </strong>{{vm.contactTagsFn(contact) || '--'}}</td>
                                     <td class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.details[0].emails[0].email"><span ng-text-truncate="contact.details[0].emails[0].email" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
                                         </span><span ng-if="!contact.details[0].emails[0].email">--</span></td>
                                     <td><strong>Address: </strong>

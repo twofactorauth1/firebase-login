@@ -1,5 +1,5 @@
 'use strict';
-/*global app, Keen, $$*/
+/*global app, $$*/
 
 (function (angular) {
   app.service('ImportContactService', function ($http) {
@@ -24,7 +24,7 @@
         switch (socialType) {
           case $$.constants.social.types.FACEBOOK:
             api += "facebook/";
-            path = "friends/import/"
+            path = "friends/import/";
             break;
           case $$.constants.social.types.GOOGLE:
             api += "google/";

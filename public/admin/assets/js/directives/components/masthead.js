@@ -48,6 +48,9 @@ app.directive('mastheadComponent',['$window', '$timeout', 'SimpleSiteBuilderServ
                     if (scope.addUndernavClasses && scope.allowUndernav) {
 
                         var navHeight = angular.element(".undernav").height();
+                        if(scope.navComponent){
+                            navHeight = angular.element(".component_wrap_"+ scope.navComponent._id +".undernav").height();
+                        }
                         var margin =  navHeight;
                         var impmargin = "margin-top: -"+ margin + 'px !important';
 

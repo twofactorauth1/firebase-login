@@ -2667,4 +2667,17 @@ module.exports = {
             }
         });
     },
+
+    duplicateTopic: function(topic, fn) {
+        log.debug('>> duplicateTopic ', topic);
+        topicDao.saveOrUpdate(topic, function(err, value){
+            if(err) {
+                log.error('Exception thrown updating topic: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< duplicateTopic');
+                fn(null, value);
+            }
+        });
+    }
 };

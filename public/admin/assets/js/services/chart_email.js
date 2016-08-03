@@ -1,8 +1,8 @@
 'use strict';
-/*global app, Keen, $$*/
+/*global app, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-  app.service('ChartEmailService', ['KeenService', '$q', function (KeenService, $q) {
+  app.service('ChartEmailService', [ '$q', function ($q) {
 
     this.queryMandrillData = function (emails, fn) {
       var self = this;
@@ -11,56 +11,7 @@
       // Emails Sent
       // # of emails sent from this account grouped by emailId
       // ======================================
-      KeenService.keenClient(function (client) {
-        var queryData = {};
 
-        queryData.emailsSent = new Keen.Query("count", {
-          eventCollection: "mandrill_send",
-          targetProperty: 'msg.metadata.emailId',
-          groupBy: 'msg.metadata.emailId',
-          filters: [{
-            "property_name": 'msg.metadata.accountId',
-            "operator": "eq",
-            "property_value": $$.server.accountId
-          }]
-        });
-
-        queryData.emailsOpen = new Keen.Query("count_unique", {
-          eventCollection: "mandrill_open",
-          targetProperty: '_id',
-          groupBy: 'msg.metadata.emailId',
-          filters: [{
-            "property_name": 'msg.metadata.accountId',
-            "operator": "eq",
-            "property_value": $$.server.accountId
-          }]
-        });
-
-        queryData.emailsClick = new Keen.Query("count_unique", {
-          eventCollection: "mandrill_click",
-          targetProperty: '_id',
-          groupBy: 'msg.metadata.emailId',
-          filters: [{
-            "property_name": 'msg.metadata.accountId',
-            "operator": "eq",
-            "property_value": $$.server.accountId
-          }]
-        });
-
-        client.run([
-          queryData.emailsSent,
-          queryData.emailsOpen,
-          queryData.emailsClick
-        ], function (response) {
-          var _response = {
-            emailsSent: response[0].result,
-            emailsOpen: response[1].result,
-            emailsClick: response[2].result
-          };
-          var formatted = self.formatEmails(emails, _response);
-          deferred.resolve(fn(formatted));
-        });
-      });
 
       return deferred.promise;
 

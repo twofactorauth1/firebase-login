@@ -1,0 +1,91 @@
+<div class="page-detail" ng-controller="EditTopicCtrl">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">                
+                <h1 class="mainTitle">{{ topic.title || 'Title'}}</h1>
+                <span class="mainDescription">Listed under the {{topic.category}} category.</span>
+            </div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+
+    <div sticky offset="65" sticky-class="editor-toolbar-wrap" style="position: relative;">
+        <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!editorLoaded || pageNotFound" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
+                                        <span>Settings</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <div  class="col-sm-2 col-xs-6 center">
+                                     <div>
+                                        <a ng-disabled="!editorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="viewTopic(topic._id)" target="_blank">
+                                            <span>View</span>
+                                        </a>
+                                    </div>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!editorLoaded || pageNotFound" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                        <span>Duplicate</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!editorLoaded || pageNotFound" ng-click="clickImageButton(activeEditor, false)" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                        <span>Media</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="saveLoading || !editorLoaded  || pageNotFound" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                                        <span ng-if="saveLoading">
+                                            <span class="fa fa-spinner fa-spin"></span>
+                                        </span>
+                                        <span>
+                                            <div ng-if="!saveLoading">
+                                            Save
+                                            </div>
+                                        </span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>                               
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!editorLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
+                                        <span>Close</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="editorLoaded" class="ssb-topbar" style="top:initial;">
+            <div id="ssb-froala-scrollable-container"></div>
+        </div>
+    </div>
+    <div id="editor-toolbar" class="" perfect-scrollbar suppress-scroll-y="true"></div>
+    <div class="clearfix"></div>
+
+    <div ng-hide="!editorLoaded">
+        <div data-ng-include data-src=" 'assets/views/partials/topic-loader.html' "></div>
+    </div>
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="editorLoaded || pageNotFound">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
+        </div>
+    </div>
+    <div data-ng-include data-src=" 'assets/views/partials/add-component-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/component-settings-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/topic-settings-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/topic-duplicate-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>
+</div>

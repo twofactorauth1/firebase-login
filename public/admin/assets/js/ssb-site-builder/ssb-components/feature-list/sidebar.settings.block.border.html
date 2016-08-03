@@ -1,0 +1,85 @@
+<h4 class="ssb-sidebar-sub-heading-separator">Feature block border</h4>
+
+<div class="row padding-10">
+    <div>
+
+        <div class="form-group">
+            <label for="show_border" class="margin-bottom-0">
+                Show border
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide border.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+            <switch ng-model="component.blockBorder.show" class="pull-right"></switch>
+        </div>
+        <div ng-if="component.blockBorder.show">
+            <div class="form-group ssb-spectrum-color-picker-small">
+                <div class="ssb-spectrum-color-picker-background-container">
+                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.blockBorder.color"></spectrum-colorpicker>
+                    <i class="fa fa-eyedropper" />
+                </div>
+                <label for="colorpicker">
+                    Color
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Choose a color for the border around this section.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label>
+                        Width
+                        <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set the thickness of the border.">
+                            <i class="fa fa-info-circle" />
+                        </span>
+                    </label>
+                </div>
+                <div>
+                    <rzslider
+                        class="slider-opacity"
+                        name="border-width"
+                        rz-slider-model="component.blockBorder.width"
+                        rz-slider-options="{floor: 0, ceil: 100}">
+                    </rzslider>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label>
+                        Style
+                        <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set the style of the border.">
+                            <i class="fa fa-info-circle" />
+                        </span>
+                    </label>
+                </div>
+                <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-0">
+                    <button type="button" ng-click="component.blockBorder.style = 'solid'" ng-model="component.blockBorder.style" class="btn text-capitalize" ng-class="{'active': component.blockBorder.style === 'solid' }"><span class="line solid"></span></button>
+                    <button type="button" ng-click="component.blockBorder.style = 'dotted'" ng-model="component.blockBorder.style" class="btn text-capitalize" ng-class="{'active': component.blockBorder.style === 'dotted' }"><span class="line dotted"></span></button>
+                    <button type="button" ng-click="component.blockBorder.style = 'dashed'" ng-model="component.blockBorder.style" class="btn text-capitalize" ng-class="{'active': component.blockBorder.style === 'dashed' }"><span class="line dashed"></span></button>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label>
+                        Roundness
+                        <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set the roundness of the border to create a curved corner effect. Also known as border radius.">
+                            <i class="fa fa-info-circle" />
+                        </span>
+                    </label>
+                </div>
+                <div>
+                    <rzslider
+                        class="slider-opacity"
+                        name="border-radius"
+                        rz-slider-model="component.blockBorder.radius"
+                        rz-slider-options="{floor: 0, ceil: 50}">
+                    </rzslider>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

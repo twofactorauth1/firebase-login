@@ -1,5 +1,5 @@
 'use strict';
-/*global app, Keen, $$*/
+/*global app, $$*/
 /*jslint unparam: true*/
 (function (angular) {
     app.service('CommonService', ['$http', function ($http) {

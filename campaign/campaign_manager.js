@@ -335,8 +335,28 @@ module.exports = {
                         self.log.error('Error saving campaign:', err);
                         return fn(err);
                     } else {
-                        self.log.debug('<< duplicateCampaign');
-                        return fn(null, savedCampaign);
+                        self.getContactsForCampaign(accountId, campaignId, function (err, contacts) {
+                            if (err) {
+                                self.log.error('Error getting campaign contacts:', err);
+                                return fn(err);
+                            } else {
+                                var contactIdAry = [];
+
+                                contacts.forEach(function(contact, index) {
+                                    contactIdAry.push(contact.get('_id'));
+                                });
+
+                                self.bulkAddContactToCampaign(contactIdAry, savedCampaign.get('_id'), accountId, function(err) {
+                                    if (err) {
+                                        self.log.error('Error updating campaign contacts:', err);
+                                        return fn(err);
+                                    } else {
+                                        self.log.debug('<< duplicateCampaign');
+                                        return fn(null, savedCampaign);
+                                    }
+                                });
+                            }
+                        });
                     }
                 });
             }
