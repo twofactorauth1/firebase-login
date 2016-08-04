@@ -290,27 +290,27 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }             
                     
                 var totalCoulmns = colCount;
-                var actualColumnsIndexs = [];
+                var actualColumnsIndexes = [];
                 for(var i = 0; i<= vm.section.components.length -1; i++){
-                    actualColumnsIndexs.push(i);
+                    actualColumnsIndexes.push(i);
                 }
                 if(actualColumnsToIgnore.length){
                     totalCoulmns = totalCoulmns + actualColumnsToIgnore.length;  
-                    actualColumnsIndexs = _.difference(actualColumnsIndexs, actualColumnsToIgnore);                  
+                    actualColumnsIndexes = _.difference(actualColumnsIndexes, actualColumnsToIgnore);                  
                 }
 
                 if (index !== undefined && index >= totalCoulmns && !fixedColumn) {
                     classString += " ssb-col-hide"; 
-                    //actualColumnsIndexs = _.reject(actualColumnsIndexs, function(num){ return num === index; });                   
+                    //actualColumnsIndexes = _.reject(actualColumnsIndexes, function(num){ return num === index; });                   
                 }
 
                 
                 if (vm.section.layoutModifiers.columns.columnsSpacing && !fixedColumn) {
                     if(parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){
-                        if(actualColumnsIndexs.indexOf(index) === 0){
+                        if(actualColumnsIndexes.indexOf(index) === 0){
                             classString += ' ssb-component-layout-columns-spacing-first-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
                         }
-                        else if(actualColumnsIndexs.indexOf(index) === vm.section.layoutModifiers.columns.columnsNum - 1){
+                        else if(actualColumnsIndexes.indexOf(index) === vm.section.layoutModifiers.columns.columnsNum - 1){
                             classString += ' ssb-component-layout-columns-spacing-last-column-' + vm.section.layoutModifiers.columns.columnsSpacing + ' ';    
                         }
                         else{
@@ -324,8 +324,25 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     classString += " ssb-text-last-column-full-width";
                 }
             }
+
+            if(!fixedColumn && parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){            
+                if (vm.section.columnBorder && vm.section.columnBorder.show && vm.section.columnBorder.color) {
+                    var element = angular.element(".inner-component-style." + component.type + "" + component._id);
+                    if(element){
+                        element.css({
+                            'border-color':  vm.section.columnBorder.color,
+                            'border-width':  vm.section.columnBorder.width + 'px',
+                            'border-style':  vm.section.columnBorder.style,
+                            'border-radius':  vm.section.columnBorder.radius + "%"
+                        })
+                    }
+                }
+            }
             
         }
+
+
+
 
         if (component.layoutModifiers) {
 
@@ -434,19 +451,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-style: ' + component.border.style + ';';
             styleString += 'border-radius: ' + component.border.radius + '%;';
         }
-        else if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns && vm.section.layoutModifiers.columns.columnsNum){            
-            if (vm.section.columnBorder && vm.section.columnBorder.show && vm.section.columnBorder.color) {
-                styleString += 'border-color: ' + vm.section.columnBorder.color + ';';
-                styleString += 'border-width: ' + vm.section.columnBorder.width + 'px;';
-                styleString += 'border-style: ' + vm.section.columnBorder.style + ';';
-                styleString += 'border-radius: ' + vm.section.columnBorder.radius + '%;';
-            }
-        }
-
-
-        if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns && vm.section.layoutModifiers.columns.columnsSpacing) {
-            //styleString += 'padding-right: ' + vm.section.layoutModifiers.columns.columnsSpacing + 'px;';
-        }
+        
 
         return styleString;
     }

@@ -1,0 +1,24 @@
+<script type="text/ng-template" id="topic-duplicate-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Create Duplicate Topic</h4>
+    </div>
+    <div class="modal-body no-padding bg-white" style="max-height:500px;">
+        <div style="padding:10px">
+            <div class="form-group">
+                <label>Title:</label>
+                <input id="edit-topic-title" class="form-control input-lg" type="text" ng-model="newTopic.title">
+            </div>
+            <div class="form-group">
+                <label class="pull-left">Topic Category</label>
+                <select id="topic_category" ng-model="newTopic.category" class="form-control margin-bottom-0" ng-options="category for category in topicCategories">
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" ng-disabled="!newTopic.title || !newTopic.category || saveLoading" class="btn btn-info btn-wide btn-o" ng-click="createDuplicateTopic(newTopic)">
+            Done
+        </button>
+    </div>
+</script>
