@@ -49,7 +49,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
         }
         
         if (attrs.ssbBlogEditor) {
-            return pageTemplate
+            return blogTemplate
         }
 
         if (attrs.helpTopics) {
