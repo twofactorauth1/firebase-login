@@ -16,7 +16,7 @@
         'ssb-edit-wrap': component.type !== 'navigation' && component.type !== 'social-link'}">
     <span ng-if="$parent.ssbEditor" class="editable-title">{{component.type}}</span>
     <span ng-if="$parent.ssbEditor" class="editable-cover"></span>
-    <div class="component {{component.type}}{{component._id}}" id="{{component._id}}">
+    <div class="component {{component.type}}{{component._id}} inner-component-style" id="{{component._id}}">
         <div id="{{component.anchor}}"
              ng-style="{'color':component.txtcolor||primaryTextColor}">
             <div ng-if="!component.bg.img.url && component.type != 'email'"
