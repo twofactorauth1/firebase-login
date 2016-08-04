@@ -3605,6 +3605,9 @@ module.exports = {
      */
     getBlogPostExcerpt: function (content) {
         var $$$ = cheerio.load('<div id="temp_wrap">' + content + '</div>');
+        // Replace table
+        $$$('#temp_wrap').find('table').replaceWith("");
+
         var excerpt = $$$('#temp_wrap').text();
         var maxLength = 250;
 
