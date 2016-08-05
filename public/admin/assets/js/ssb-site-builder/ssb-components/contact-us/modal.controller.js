@@ -19,6 +19,7 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
     vm.setLatLon = setLatLon;
     vm.validateGeoAddress = validateGeoAddress;
     vm.validateHours = validateHours;
+    vm.setContactShowInfo = setContactShowInfo;
 
 
     function updateContactUsAddress() {
@@ -206,6 +207,11 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
           }
         }
     });
+
+    function setContactShowInfo(component, value){       
+        component.hideBusinessInfo = value ? false : true;
+    }
+
 
     (function init() {
 

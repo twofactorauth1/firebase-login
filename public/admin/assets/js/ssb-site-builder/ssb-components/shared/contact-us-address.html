@@ -1,4 +1,10 @@
-
+<div class="form-group" ng-init="showBusinessInfo = !vm.component.hideBusinessInfo">
+    <label for="custom-address">
+        Show Business Info
+        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business info ( Address and hours)."><i class="fa fa-info-circle" /></span>
+    </label>
+    <switch ng-model="showBusinessInfo" ng-change="vm.setContactShowInfo(vm.component, showBusinessInfo)" class="pull-right"></switch>
+</div>
 <div class="form-group">
     <label for="custom-address">
         Custom Address
