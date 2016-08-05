@@ -17,15 +17,21 @@ module.exports = {
     recordPurchase: function(email, amount, fn) {
         var self = this;
         self.log.debug('>> recordPurchase');
-        dao.recordPurchase(email, config.LEAD_DYNO_DEFAULT_PLAN, amount, function(err, value){
-            if(err) {
-                self.log.error('Error recording purchase:', err);
-                return fn(err, null);
-            } else {
-                self.log.debug('<< recordPurchase');
-                return fn(err, value);
-            }
-        });
+        if(config.LEAD_DYNO_ENABLED === true || config.LEAD_DYNO_ENABLED === 'true'){
+            dao.recordPurchase(email, config.LEAD_DYNO_DEFAULT_PLAN, amount, function(err, value){
+                if(err) {
+                    self.log.error('Error recording purchase:', err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('<< recordPurchase');
+                    return fn(err, value);
+                }
+            });
+        } else {
+            self.log.debug('<< recordPurchase (skipped)');
+            fn(null, 'skipped');
+        }
+
 
     }
 
