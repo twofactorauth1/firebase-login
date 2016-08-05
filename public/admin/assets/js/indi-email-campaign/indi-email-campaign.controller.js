@@ -253,35 +253,47 @@
 
             //processing custom emails for contact
 
-            if (isActivation) {
-                vm.state.campaign.status = 'RUNNING';
-            }
-
-            vm.checkAndCreateContactFn(function (createdContactsArr) {
-                vm.addContactsFn(createdContactsArr);
-                fn(vm.state.campaign)
-                    .then(function (res) {
-                        vm.state.campaign = angular.extend(vm.state.campaign, res.data);
-                        vm.state.campaignOriginal = angular.copy(vm.state.campaign);
-                        vm.state.originalRecipients = angular.copy(vm.state.recipients);
+           
+            EmailCampaignService.checkIfDuplicateCampaign(vm.state.campaign._id, vm.state.campaign.name)
+                .then(function (response) {
+                    if(response.data){
+                        toaster.pop('warning', 'Campaign name already exists');
                         vm.uiState.dataLoaded = true;
                         vm.uiState.disableEditing = false;
-                        if (isActivation) {
-                            vm.uiState.disableEditing = true;
-                            toaster.pop('success', 'Campaign activated');
-                        } else {
-                            toaster.pop('success', 'Campaign saved');
-                        }
-                    }, function (err) {
-                        vm.uiState.dataLoaded = true;
+                        return;
+                    }
+                    if (isActivation) {
+                        vm.state.campaign.status = 'RUNNING';
+                    }
+                    vm.checkAndCreateContactFn(function (createdContactsArr) {
+                        vm.addContactsFn(createdContactsArr);
+                        fn(vm.state.campaign)
+                            .then(function (res) {
+                                vm.state.campaign = angular.extend(vm.state.campaign, res.data);
+                                vm.state.campaignOriginal = angular.copy(vm.state.campaign);
+                                vm.state.originalRecipients = angular.copy(vm.state.recipients);
+                                vm.uiState.dataLoaded = true;
+                                vm.uiState.disableEditing = false;
+                                if (isActivation) {
+                                    vm.uiState.disableEditing = true;
+                                    toaster.pop('success', 'Campaign activated');
+                                } else {
+                                    toaster.pop('success', 'Campaign saved');
+                                }
+                            }, function (err) {
+                                vm.uiState.dataLoaded = true;
 
-                        if (isActivation) {
-                            toaster.pop('error', 'Campaign activation failed');
-                        } else {
-                            toaster.pop('error', 'Campaign save failed');
-                        }
-                    });
-            });
+                                if (isActivation) {
+                                    toaster.pop('error', 'Campaign activation failed');
+                                } else {
+                                    toaster.pop('error', 'Campaign save failed');
+                                }
+                            });
+                        });
+                    }
+            );
+            
+            
         }
 
         function sendTestFn(address) {

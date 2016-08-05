@@ -226,7 +226,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
                         
 
-                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove'){
+                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove'){
                             scope.updateFroalaContent(editor);
                         }
 
@@ -250,7 +250,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.popups.show.image.edit', function(e, editor) {
                         editor.selection.save();
                         scope.$emit('activeEditor', { editor: editor, editorImage: editor.image.get() });
+                    }).on('froalaEditor.image.removed', function(e, editor) {
+                        scope.updateFroalaContent(editor);
                     })
+
                     .on('froalaEditor.bgColorChange', function(e, editor, val) {
                         if(editor.opts.isButton){
                             var btnElement = editor.opts.button.scope().vm.elementData;

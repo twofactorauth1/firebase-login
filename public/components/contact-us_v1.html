@@ -7,8 +7,8 @@
             <marker  position="{{component.location.lat}}, {{component.location.lon}}"></marker>
            </map>
             <div class="clearfix visible-xs"></div>
-            <div ng-class="{'no-info' : !contactAddress && !component.contact.phone && !component.showHours}" class="panel-default widget-weather col-xs-12 col-sm-4 col-md-3 col-lg-3  col-sm-offset-9" style="{{component.splitHours ? 'width:30%' : ''}}">
-                <div class="panel-body">
+            <div ng-class="{'no-info' : !contactAddress && !component.contact.phone && !component.showHours}" class="panel-default widget-weather col-xs-12 col-sm-4 col-md-3 col-lg-3  col-sm-offset-9" style="{{component.splitHours ? 'width:30%' : ''}}" ng-if="!component.hideBusinessInfo">
+                <div class="panel-body" >
                     <div class="row" >
                         <div class="col-xs-12 temp settings no-offset-top" data-edit ng-style="{'max-width': calcMaxWidth('contact-panel-{{component._id}}'),
                         'width': component.boxProperties.width ? component.boxProperties.width : '',

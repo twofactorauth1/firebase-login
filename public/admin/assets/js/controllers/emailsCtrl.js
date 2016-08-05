@@ -204,12 +204,15 @@
 
       WebsiteService.createEmail(emailToSend, function (newemail, err) {
         if(newemail && !err) {
-          $scope.closeModal();
+          
           toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
           $scope.emails.unshift(newemail);
           $scope.displayedEmails.unshift(newemail);
           $scope.newEmailOriginal = angular.copy($scope.newEmail);
-          $scope.viewSingle(newemail);
+          $timeout(function() {
+              $scope.viewSingle(newemail);
+          }, 0);
+          
         } else if(err) {
           toaster.pop('error', "Error creating Email", err.message);
         }

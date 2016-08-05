@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/statistics/reconcile'), this.isAuthAndSubscribedApi.bind(this), this.reconcileCampaignStatistics.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));
+        app.get(this.url(':id/campaigns/:title'), this.isAuthAndSubscribedApi.bind(this), this.checkIfCampaignExists.bind(this));
 
         app.post(this.url(':id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.addContactToCampaign.bind(this));
         app.post(this.url(':id/contacts'), this.isAuthAndSubscribedApi.bind(this), this.bulkAddContactToCampaign.bind(this));
@@ -197,6 +198,30 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 campaignManager.getCampaign(req.params.id, function (err, value) {
+                    if (err) {
+                        var errorMsg = "There was an error getting campaign " + req.params.id + ": " + err.message;
+                        self.log.error(errorMsg);
+                        self.log.error(err.stack);
+                        self.wrapError(resp, 500, errorMsg, err, value);
+                    } else {
+                        self.sendResult(resp, value);
+                    }
+                });
+            }
+        });
+    },
+
+
+    checkIfCampaignExists: function (req, resp) {
+        var self = this;
+        var title = req.params.title;
+        console.log(req.params);
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.checkIfCampaignExists(accountId, req.params.id, title, function (err, value) {
                     if (err) {
                         var errorMsg = "There was an error getting campaign " + req.params.id + ": " + err.message;
                         self.log.error(errorMsg);
