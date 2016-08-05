@@ -23,6 +23,7 @@
         campaignService.cancelCampaignForContact = cancelCampaignForContact;
         campaignService.duplicateCampaign = duplicateCampaign;
         campaignService.deleteCampaign = deleteCampaign;
+        campaignService.checkIfDuplicateCampaign = checkIfDuplicateCampaign;
 
         /**
          * Get get email by ID
@@ -127,6 +128,17 @@
             }
 
             return campaignRequest($http.post([baseCampaignAPIv1, campaign._id, 'duplicate'].join('/'), campaign).success(success).error(error));
+        }
+
+        function checkIfDuplicateCampaign(id, title) {
+
+            function success(data) {}
+
+            function error(error) {
+                console.error('EmailCampaignService getCampaign error: ', JSON.stringify(error));
+            }
+
+            return campaignRequest($http.get([baseCampaignAPIv1, id, 'campaigns', title].join('/')).success(success).error(error));
         }
 
         /**
