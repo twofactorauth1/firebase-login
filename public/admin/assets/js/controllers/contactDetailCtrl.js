@@ -277,6 +277,7 @@
             if (!_firstAddress) {
                 $scope.loadingMap = false;
                 $scope.originalContact = angular.copy($scope.contact);
+                //TODO: use contact.fingerprint to get address from session_events.maxmind
             } else {
                 //contact has address and lat/lon
                 if (_firstAddress.lat && _firstAddress.lon) {

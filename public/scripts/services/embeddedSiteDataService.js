@@ -41,6 +41,10 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
             path = "signup";
         }
 
+        if (path === '/signup2') {
+            path = "signup2";
+        }
+
         if (path.indexOf("blog/") > -1) {
             if(window.indigenous.ssbBlog === true) {
                 path = 'blog-post';

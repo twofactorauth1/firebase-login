@@ -7,7 +7,6 @@
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var GOOGLE_CONFIG = require('./configs/google.config');
-var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
 var FACEBOOK_CONFIG = require('./configs/facebook.config');
 var PAYPAL_CONFIG = require('./configs/paypal.config');
 
@@ -337,7 +336,6 @@ module.exports = function(grunt) {
                         googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
                         googleBrowserKey: GOOGLE_CONFIG.BROWSER_KEY,
-                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
                         facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
                         paypalCheckoutURL: PAYPAL_CONFIG.PAYPAL_CHECKOUT_URL
                     }
@@ -358,7 +356,6 @@ module.exports = function(grunt) {
                         googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
                         googleBrowserKey: GOOGLE_CONFIG.PROD_BROWSER_KEY,
-                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
                         facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
                         paypalCheckoutURL: PAYPAL_CONFIG.PROD_PAYPAL_CHECKOUT_URL
                     }

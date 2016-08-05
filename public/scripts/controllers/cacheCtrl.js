@@ -14,7 +14,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
         var data = {
             allowUndernav : false,
             navComponent: null
-        }
+        };
 
         if ($scope.components && $scope.components.length > 0) {
             $scope.components.forEach(function (value, index) {
