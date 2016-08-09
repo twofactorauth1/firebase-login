@@ -17,8 +17,8 @@
         font-family: 'FontAwesome'!important;
     }
     .inner-page {
-        max-width: 600px!important;
-        padding: 25px;
+        max-width: 700px!important;
+        padding: 30px 0;
         background: transparent;
         border: 0;
     }
@@ -209,13 +209,44 @@
         }
         .signup-body{
             background: white;
+            border-radius: 0;
         }
     }
     .business-domain .input-group{
         input{
             box-shadow: none;
-            border-radius: none;
+            border-radius: 0;
         }
+    }
+    .features-wrap{
+        .feature-block{
+            background: rgb(28, 43, 54);
+            border-radius: 5px;
+            margin-left:-15px;
+        }
+        .feature-content{
+            padding-bottom: 20px;
+            span{
+                font-family: Raleway, sans-serif;
+            }
+        }
+    }
+    .selected-plan{
+        border: 3px solid #EFA022;
+    }
+    .section-title{
+        span{
+            font-family: Raleway, sans-serif;
+            font-size: 28px;
+        }
+    }
+    .sign-up-medium-text{
+        font-size: 18px !important;
+        color: #a8a8a8;
+    }
+    .sign-up-small-text{
+        font-size: 14px !important;
+        color: #d3d3d3;
     }
     .payment-signup {
         &:after {
@@ -253,9 +284,6 @@
             color: #808080;
         }
         input {
-            -webkit-box-shadow: 0px 0px 0 3px #f3f7f8;
-            -moz-box-shadow: 0px 0px 0 3px #f3f7f8;
-            box-shadow: 0px 0px 0 3px #f3f7f8;
             color: #007fbc;
             font-size: 14px;
             &:focus {
