@@ -18,6 +18,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             scope.validBusinessName = true;
             scope.dotComExt = false;
 
+
+
             UserService.getTmpAccount(function(data) {
                 scope.tmpAccount = data;
                 var tmpAccount = data;
@@ -271,11 +273,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                         //send facebook tracking info
                                         window._fbq = window._fbq || [];
                                         window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
-                                        //send affiliate purchase info
-                                        LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
-                                        LeadDyno.recordPurchase(newUser.email, null, function(){
-                                            window.location = data.accountUrl;
-                                        });
+
 
                                         if (!_gaw.loaded) {
                                             var adWordsInjectable =
@@ -298,6 +296,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                                             _gaw.loaded = true;
                                         }
+                                        //TODO: setTimeout?
+                                        window.location = data.accountUrl;
                                     } else {
                                         window.location = data.accountUrl;
                                     }
@@ -474,27 +474,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     //send facebook tracking info
                                     window._fbq = window._fbq || [];
                                     window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
-                                    console.log('sent facebook message');
+                                    //console.log('sent facebook message');
 
-                                    //send affiliate purchase info
-                                    var leadData = {
-                                        first_name: newAccount.first,
-                                        last_name: newAccount.last,
-                                        company: newAccount.businessName,
-                                        custom_status: 'trialing'
-                                    };
-                                    LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
-                                    LeadDyno.recordLead(newUser.email, leadData, function(){
-                                        console.log('recorded lead');
-                                        var customerData = {
-                                            plan_code:'zero',
-                                            purchase_amount:0
-                                        };
-                                        LeadDyno.recordPurchase(newUser.email, customerData, function(){
-                                            console.log('recorded purchase');
-                                            window.location = data.accountUrl;
-                                        });
-                                    });
+
+                                    //TODO: setTimeout?
+                                    window.location = data.accountUrl;
                                 } else {
                                     window.location = data.accountUrl;
                                 }

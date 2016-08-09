@@ -1,0 +1,347 @@
+<link href='//fonts.googleapis.com/css?family=Raleway:700,300' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="js/libs_misc/crypto/hmac-sha256.js" />
+<script type="text/javascript" src="js/libs_misc/crypto/enc-base64-min.js" />
+<script type="text/javascript" src="js/libs/skeuocard/lib/js/jquery.card.js" />
+
+<div ng-show="!isFormValid">
+    <div ng-class="component.type+'-v'+component.version">
+        <div class="payment-form-header">
+            <div style="max-width:1024px!important;margin:0 auto;">
+                <img src="//s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="pull-left hidden-xs" style="display: block;">
+                <img src="//s3-us-west-2.amazonaws.com/indigenous-admin/logo-mark.png" width="57" height="57" class="pull-left visible-xs" style="display: block;">
+                <p class="pull-right" style="line-height: 65px;">Already have an account? <a href="/login">Log In</a></p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="top-signup account-info-signup">
+            <div class="inner-page">
+                <div class="padding-10 signup-getting-started">
+                    <h2 class="center text-bold margin-bottom-5">Getting Started</h2>
+                    <h3 class="center">We just need some information.</h3>
+                </div>
+                <div class="signup-body well">
+                    <div class="section-title pull-left margin-bottom-20">
+                        <span>Select a Plan</span>
+                        <br>
+                        <span class="sign-up-medium-text">Pick the plan that works for you, no contract required:</span>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="features-wrap">
+                        <div class="col-sm-6">
+                            <div class="feature-block selected-plan">
+                                <div class="">
+                                    <div class="">
+                                        <div class="center"><br></div>
+                                        <div class="center">
+                                            <span class="plan-title" style="">
+                                                <strong class="">
+                                                    <span>All-In-One&nbsp;</span>
+                                                </strong>
+                                            </span>
+                                        </div>
+                                        <div class="center">
+                                            <span class="plan-subtitle">
+                                                <strong class="">
+                                                    <span>Digital Platform</span>
+                                                </strong>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feature-content">
+                                    <div class="margin-top-20">
+                                        <div class="center">
+                                            <span class="plan-amount">
+                                                <strong><span>$49.95/</span></strong>
+                                            </span>
+                                            <span class="plan-duration">
+                                                <strong class=""><span>month</span></strong>
+                                            </span>
+                                        </div>
+                                        <div class="center">
+                                            <span class="plan-fee">$500 setup fee*&nbsp;</span>
+                                        </div>
+                                        <br>
+                                        <div class="center">
+                                            <div class="center">
+                                                <span style="font-size: 18px;">
+                                                    <a class="btn btn-primary ssb-theme-btn ssb-element ssb-element-button" data-ssb-active-style=" background-color: ;" data-ssb-class="{&quot;ssb-element&quot;:true,&quot;ssb-element-button&quot;:true,&quot;ssb-hide-during-load&quot;:false}" data-ssb-hover-style=" background-color: ;" data-ssb-style=" " href="https://indigenous.io/signup" style=" ">
+                                                        <strong>Choose Plan</strong>
+                                                    </a>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6" >
+                            <div class="feature-block">
+                                <div class="">
+                                    <div class="" style="">
+                                        <div>
+                                            <br>
+                                        </div>
+                                        <div class="center">
+                                            <span class="plan-title">
+                                                <strong class=""><span>Managed Services&nbsp;</span></strong>
+                                            </span>
+                                        </div>
+                                        <div class="center">
+                                            <span class="plan-subtitle">
+                                                <strong class=""><span>We Do it For You!</span></strong>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="feature-content">
+                                    <div class="margin-top-20">
+                                        <div class="center">
+                                            <span class="plan-amount">
+                                                <strong><span>$250/</span></strong>
+                                            </span>
+                                            <span class="plan-duration">
+                                                <strong class=""><span>month</span></strong>
+                                            </span>
+                                        </div>
+                                        <div class="center">
+                                            <span class="plan-fee">$500 setup fee*</span>
+                                        </div>
+                                        <div data-empty="true" class="center">
+                                            <br>
+                                        </div>
+                                        <div class="center">
+                                            <span style="font-size: 18px;">
+                                                <a class="btn btn-primary ssb-theme-btn ssb-element ssb-element-button" data-ssb-active-style=" background-color: ;" data-ssb-class="{&quot;ssb-element&quot;:true,&quot;ssb-element-button&quot;:true,&quot;ssb-hide-during-load&quot;:false}" data-ssb-hover-style=" background-color: ;" data-ssb-style=" " href="https://indigenous.io/signup" style="color: rgb(255, 255, 255) !important; background-color: rgb(239, 160, 34) !important;">
+                                                    <strong>Choose Plan</strong>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group padding-top-20">
+                            <input type="checkbox" value=""><span class="sign-up-medium-text">  I want web site build, blog setup and setup of first email campaign!</span>
+                            <div style="display:inline-block" class=" padding-top-10">
+                                <span class="sign-up-small-text">* Setup fee includes web site build, blog setup and setup of first email campaign!</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="row margin-top-20" >
+                        <form name="card-details" action="#" class="form-group col-xs-12 mb0 has-feedback" data-card-container="#card-container" data-values="cardValues" data-card data-options="cardOptions" data-messages="cardMessages">
+                        <div class="section-title padding-bottom-10">
+                            <span>Basic Information</span>
+                        </div>
+                        <!-- NAME -->
+                        <div id="fullName" class="form-group col-xs-12 has-feedback" style="padding-left:0">
+                            <input class="form-control" type="text" ng-model="newAccount.fullName" placeholder="Name" name="fullName"/>
+                            <span class="glyphicon form-control-feedback"></span>
+                            <span class="error help-block" />
+                        </div>
+                        <!-- EMAIL AND PASSWORD -->
+                        <div id="email" class="form-group col-xs-12 has-feedback" ng-hide="tmpAccount.tempUser" style="padding-left:0">
+                            <input class="form-control" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" name="email" placeholder="Email Address"/>
+                            <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
+                        </div>
+                        <div id="password" class="form-group col-xs-12 has-feedback" ng-hide="newAccount.hidePassword" style="padding-left:0">
+                            <input class="form-control" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" placeholder="Password"/>
+                            <span class="glyphicon form-control-feedback"></span>
+                            <span class="error help-block" />
+                        </div>
+
+
+
+                        <!-- Business Name -->
+                        <div id="business-name"
+                             class="form-group col-xs-12 has-feedback"
+                             ng-class="{'has-error': !validBusinessName,
+                              'has-success': domainExistsAlready!==undefined && !domainExistsAlready}" style="padding-left:0">
+                            <div class="row-fluid business-domain">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon">https://</span>
+                                    <input class="form-control"
+                                       type="text"
+                                       ng-model="newAccount.businessName"
+                                       ng-change="checkDomainExists(newAccount)"
+                                       ng-model-options="{ debounce: 800 }"
+                                       placeholder="Business Name"
+                                       style="width:100%"/>
+                                    <span class="input-group-addon">.indigenous.io</span>
+                                </div>
+                                
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <span class="glyphicon form-control-feedback"
+                                  ng-class="{'glyphicon-remove': !validBusinessName,
+                                    'glyphicon-ok': domainExistsAlready!==undefined && !domainExistsAlready}"></span>
+                            <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
+                            <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
+                            <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong>. You can change it at any time.</span>
+                            <span class="help-block" ng-show="dotComExt">This field is for your Indigenous account subdomain. You may point the domain of your choosing to your site at any time.</span>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="section-title padding-bottom-10">
+                            <span>Payment Information</span>
+                        </div>
+                        
+                        <div class="col-xs-12 col-sm-6">
+
+                            <div class="row">
+                                <div id="card_number" class="form-group small-6">
+                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="" class="form-control">
+                                    <span class="glyphicon form-control-feedback"></span>
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-left:0">
+                                    <input placeholder="MM/YYYY" ng-blur="" type="text" id="expiry" name="expiry" class="form-control" style="width:100%;padding-right:0px">
+                                    <span class="glyphicon form-control-feedback"></span>
+                                    <span class="error help-block" />
+                                </div>
+                                <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-right:0">
+                                    <input placeholder="CVC" ng-blur="" type="text" id="cvc" name="cvc" class="form-control" style="width:100%; padding-right:0px">
+                                    <span class="glyphicon form-control-feedback"></span>
+                                    <span class="error help-block" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- Coupon DETAILS -->
+                                <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon, 'has-success': couponIsValid && !checkingCoupon}" style="padding-left:0; padding-right:0">
+                                    <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
+                                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
+                                    <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
+                                    <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6">
+                            <div id="card-container"></div>
+                        </div>
+
+                        <div class="clearfix margin-bottom-10"></div>
+                        <hr>
+                        <div class=" padding-bottom-10 center">
+                            <span class="sign-up-medium-text ">Satisfaction Guaranteed</span>
+                        </div>
+                        <!-- BUY -->
+                        <div class="submit-signup center">
+                            <a type="button" style="cursor:pointer;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #48b1cc), color-stop(1, #48b1cc));background:-moz-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:-webkit-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:-o-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:-ms-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:linear-gradient(to bottom, #48b1cc 5%, #48b1cc 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#48b1cc', endColorstr='#48b1cc',GradientType=0);background-color:#%1;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #48b1cc;display:inline-block;color:#ffffff;font-family:;font-size:16px;font-weight:bold;font-style:%1;padding:10px 30px;text-decoration:none;text-shadow:0px 1px 1px #48b1cc;" ng-click="createAccountWithoutCC(newAccount)"> SIGN UP</a>
+                            <span class="help-block" ng-show='havingNetworkIssue'>Something went wrong during the creation of your account. Please try again.</span>
+                        </div>
+                        <p class="center margin-top-10">By clicking this button you agree to our <a href="/legal">Terms of Service</a>.</p>
+                        <p class="center margin-top-10"><a href="/legal#privacy-policy">Privacy Policy</a>: We hate SPAM and promise to keep your information safe.</p>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="price-signup hidden">
+            <div class="inner-page">
+                <div class="clearfix mb20"></div>
+                <div ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
+                    <h4 class="center">{{plan.name}}</h4>
+                    <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
+                    <div class="clearfix mb15"></div>
+                    <p class="center"><span ng-show="currentCoupon.created != 1437591986 && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">+ <i class="fa fa-usd fa-1"></i> {{subscriptionPlanOneTimeFee}} One Time Setup Fee</span> <span ng-if="currentCoupon.created == 1437591986">No Setup Fee</span></p>
+                    <div class="col-xs-12">
+                        <a type="button" class="btn ssb-theme-btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length == 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
+                        <a type="button" class="btn ssb-theme-btn btn-green btn-block center active" ng-hide="subscriptionPlans.length == 1" ng-if="newAccount.membership == plan.id">Selected</a>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-signup hidden">
+            <div class="inner-page">
+                <div class="clearfix mb20"></div>
+                <div class="card-wrapper mb20"></div>
+                <h4>Payment Info</h4>
+                <!--
+                <xform name="card-detailsXX" action="#" class="form-group col-xs-12 mb0 has-feedback" >
+                    <div class="row">
+                        <div id="card_number" class="form-group small-6 columns col-sm-6">
+                            <input placeholder="Card number" type="text" name="number" id="number" ng-blur="" class="form-control input-lg">
+                            <span class="glyphicon form-control-feedback"></span>
+                            <span class="error help-block" />
+                        </div>
+                        <div class="visible-xs mb20"></div>
+                        <div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">
+                            <input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">
+                            <span class="glyphicon form-control-feedback"></span>
+                            <span class="error help-block" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
+                            <input placeholder="MM/YY" ng-blur="" type="text" id="expiry" name="expiry" class="form-control input-lg">
+                            <span class="glyphicon form-control-feedback"></span>
+                            <span class="error help-block" />
+                        </div>
+                        <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">
+                            <input placeholder="CVC" ng-blur="" type="text" id="cvc" name="cvc" class="form-control input-lg">
+                            <span class="glyphicon form-control-feedback"></span>
+                            <span class="error help-block" />
+                        </div>
+                    </div>
+                </xform>
+                -->
+                <!-- Coupon DETAILS -->
+                <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon, 'has-success': couponIsValid && !checkingCoupon}">
+                    <input class="form-control input-lg" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }" />
+                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
+                    <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
+                    <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
+                </div>
+                <div class="clearfix mb15"></div>
+                <div>
+                    <img class="center" style="display: block;" src="//s3-us-west-2.amazonaws.com/indigenous-admin/trust-seals-stripe.png">
+                </div>
+                <div class="clearfix mb30"></div>
+                <!-- BUY -->
+                <div class="submit-signup mb10 center">
+                    <a type="button" style="background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb8823), color-stop(1, #f86807));background:-moz-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-webkit-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-o-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-ms-linear-gradient(top, #fb8823 5%, #f86807 100%);background:linear-gradient(to bottom, #fb8823 5%, #f86807 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb8823', endColorstr='#f86807',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:arial;font-size:18px;font-weight:normal;font-style:%1;padding:14px 45px;text-decoration:none;text-shadow:1px 1px 0px #cc4b14;" ng-click="createAccountWithoutCC(newAccount)"> BECOME AN INDIGENOUS MEMBER NOW</a>
+                </div>
+                <p class="center margin-top-10">By clicking this button you agree to our <a href="/legal">Terms of Service</a>.</p>
+                <br>
+                <p class="center">* <span ng-if="subscriptionPlans[0].trial_period_days">{{subscriptionPlans[0].trial_period_days}}-day free trial</span> <span ng-if="currentCoupon.created == 1437591986"> with sign-up fee waived, </span> <span ng-if="!currentCoupon.created && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">then a one time charge for $546.95 ($497 + $49.95), then</span> $49.95/month.
+                    <br> Once payment is processed, there are no refunds and there is no proration.
+                    <br> For cancellations, please contact our support via chat.</p>
+                <div class="clearfix margin-bottom-10"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.modal -->
+<div ng-show="isFormValid" id="overlay">
+    <div id="loading">
+        <div class="msg col-sm-12"><img style="margin: 0 auto;width: 100px;display: block;" src="//s3.amazonaws.com/indigenous-digital-assets/account_6/smaller_1430710720590.png"></div>
+        <div class="msg col-sm-12">
+            <h1 class="text-center">We’re pleased to have you.</h1>
+        </div>
+        <div class="msg col-sm-12">
+            <div class="text-center"><i class="fa fa-spinner fa-spin"></i></div>
+        </div>
+        <div class="msg col-sm-12">
+            <h4 class="text-center">We’re building your account now.</h4></div>
+    </div>
+</div>
+<script type="text/javascript">
+    card = $('form[name="card-details"]').card({
+        container: '#card-container',
+        width:275,
+        formSelectors:{
+            nameInput:'input[name="fullName"]'
+        }
+    });
+</script>

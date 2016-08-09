@@ -34,6 +34,17 @@ var dao = {
         self.findOne(query, $$.m.ssb.Page, fn);
     },
 
+    getPublishedPageForWebsite: function(websiteId, pageName, accountId, fn) {
+        var self = this;
+        var query = {
+            websiteId: websiteId,
+            handle: pageName,
+            accountId: accountId,
+            latest: true
+        };
+        self.findOne(query, self.publishedPageObj, fn);
+    },
+
     savePublishedPage: function(page, fn) {
         var self = this;
         self.addToCollection(page, 'published_pages', fn);

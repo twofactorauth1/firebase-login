@@ -367,7 +367,7 @@ module.exports = {
                             });
                         },
                         function getPage(webpageData, cb) {
-                            cmsDao.getLatestPageForWebsite(webpageData.website._id, pageName, accountId, function(err, page){
+                            pageDao.getPublishedPageForWebsite(webpageData.website._id, pageName, accountId, function(err, page){
                                 if(err) {
                                     self.log.error('Error getting latest page for website:', err);
                                     cb(err);
@@ -393,6 +393,7 @@ module.exports = {
                         },
                         function readComponents(webpageData, page, cb) {
                             if(page) {
+                                self.log.debug('got page:', page);
                                 if(page.get('sections') != null && page.get('sections').length > 0) {
                                     html = self.buildTemplateMarkup(page);
                                 } else {
