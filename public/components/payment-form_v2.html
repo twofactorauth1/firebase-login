@@ -186,37 +186,34 @@
                     
                     <div class="col-xs-6">
 
-                            <div class="row">
-                                <div id="card_number" class="form-group small-6">
-                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="" class="form-control input-sm">
-                                    <span class="glyphicon form-control-feedback"></span>
-                                    <span class="error help-block" />
-                                </div>
+                        <div class="row">
+                            <div id="card_number" class="form-group small-6">
+                                <input placeholder="Card number" type="text" name="number" id="number" ng-blur="" class="form-control input-sm">
+                                <span class="glyphicon form-control-feedback"></span>
+                                <span class="error help-block" />
                             </div>
-                            <div class="row">
-                                <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-left:0">
-                                    <input placeholder="MM/YYYY" ng-blur="" type="text" id="expiry" name="expiry" class="form-control input-sm" style="width:100%;padding-right:0px">
-                                    <span class="glyphicon form-control-feedback"></span>
-                                    <span class="error help-block" />
-                                </div>
-                                <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-right:0">
-                                    <input placeholder="CVC" ng-blur="" type="text" id="cvc" name="cvc" class="form-control input-sm" style="width:100%; padding-right:0px">
-                                    <span class="glyphicon form-control-feedback"></span>
-                                    <span class="error help-block" />
-                                </div>
+                        </div>
+                        <div class="row">
+                            <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-left:0">
+                                <input placeholder="MM/YYYY" ng-blur="" type="text" id="expiry" name="expiry" class="form-control input-sm" style="width:100%;padding-right:0px">
+                                <span class="glyphicon form-control-feedback"></span>
+                                <span class="error help-block" />
                             </div>
-                            <div class="row">
-                                <!-- Coupon DETAILS -->
-                                <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon, 'has-success': couponIsValid && !checkingCoupon}" style="padding-left:0; padding-right:0">
-                                    <input class="form-control input-sm" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
-                                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
-                                    <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
-                                    <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
-                                </div>
+                            <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-right:0">
+                                <input placeholder="CVC" ng-blur="" type="text" id="cvc" name="cvc" class="form-control input-sm" style="width:100%; padding-right:0px">
+                                <span class="glyphicon form-control-feedback"></span>
+                                <span class="error help-block" />
                             </div>
-
-
-
+                        </div>
+                        <div class="row">
+                            <!-- Coupon DETAILS -->
+                            <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon, 'has-success': couponIsValid && !checkingCoupon}" style="padding-left:0; padding-right:0">
+                                <input class="form-control input-sm" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
+                                <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
+                                <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
+                                <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-xs-6">
                         <div id="card-container" style="margin-top:-30px"></div>
