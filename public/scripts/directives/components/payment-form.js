@@ -8,9 +8,14 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {
-                email: '',
-                plan: 'ALLINONE'
+                email: ''
             };
+
+            if (scope.component.version === 2) {
+                //TODO: set true plan _id's
+                scope.newAccount.plan = 'ALLINONE'
+            }
+
             scope.emailValidation = formValidations.email;
             scope.havingNetworkIssue = false;
 
