@@ -209,6 +209,7 @@
           $scope.emails.unshift(newemail);
           $scope.displayedEmails.unshift(newemail);
           $scope.newEmailOriginal = angular.copy($scope.newEmail);
+          $scope.closeModal();
           $timeout(function() {
               $scope.viewSingle(newemail);
           }, 0);
