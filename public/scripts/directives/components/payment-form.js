@@ -8,7 +8,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {
-                email: ''
+                email: '',
+                plan: 'ALLINONE'
             };
             scope.emailValidation = formValidations.email;
             scope.havingNetworkIssue = false;
@@ -152,6 +153,177 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             };
 
             scope.createAccount = function(newAccount) {
+                if (scope.component.version === 1) {
+                    scope.createAccountVersion1(newAccount);
+                } else {
+                    scope.createAccountVersion2(newAccount);
+                }
+            };
+
+            scope.createAccountVersion2 = function(newAccount) {
+
+                if (!scope.validateFormVersion2()) {
+                    return;
+                }
+
+                var tmpAccount = scope.tmpAccount;
+                tmpAccount.subdomain = $.trim(newAccount.businessName).replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
+                tmpAccount.business = tmpAccount.business || {};
+                tmpAccount.business.name = newAccount.businessName;
+
+                UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+                    var newUser = {
+                        username: newAccount.email,
+                        password: newAccount.password,
+                        email: newAccount.email,
+                        accountToken: data.token,
+                        coupon: newAccount.coupon
+                    };
+
+                    scope.showFooter(false);
+
+                    PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
+                        if (error) {
+                            console.info(error);
+                            scope.$apply(function() {
+                                scope.isFormValid = false;
+                                scope.showFooter(true);
+                            })
+                            switch (error.param) {
+                                case "number":
+                                    angular.element("#card_number .error").html(error.message);
+                                    angular.element("#card_number").addClass('has-error');
+                                    angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                    break;
+                                case "exp_year":
+                                    angular.element("#card_expiry .error").html(error.message);
+                                    angular.element("#card_expiry").addClass('has-error');
+                                    angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                                    break;
+                                case "cvc":
+                                    angular.element("#card_cvc .error").html(error.message);
+                                    angular.element("#card_cvc").addClass('has-error');
+                                    angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                                    break;
+                            }
+                        } else {
+                            newUser.cardToken = token;
+                            newUser.plan = scope.newAccount.plan;
+                            newUser.anonymousId = window.analytics.user().anonymousId();
+                            newUser.permanent_cookie = ipCookie("permanent_cookie");
+                            newUser.fingerprint = new Fingerprint().get();
+
+                            UserService.initializeUser(newUser, function(err, data) {
+                                if (data && data.accountUrl) {
+                                    console.log('$location ', $location);
+                                    console.log('data.accountUrl ', data.accountUrl);
+                                    //we don't want to record purchases in non-prod environments
+                                    if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+                                        var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                        //send data to intercom
+                                        window.intercomSettings = {
+                                            name: newUser.username,
+                                            email: newUser.email,
+                                            user_hash: hash.toString(CryptoJS.enc.Hex),
+                                            created_at: Math.floor(Date.now() / 1000),
+                                            app_id: "b3st2skm"
+                                        };
+                                        //send facebook tracking info
+                                        window._fbq = window._fbq || [];
+                                        window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+
+
+                                        if (!_gaw.loaded) {
+                                            var adWordsInjectable =
+                                                'var google_conversion_id = 941009161;' +
+                                                'var google_conversion_language = "en";' +
+                                                'var google_conversion_format = "3";' +
+                                                'var google_conversion_color = "ffffff";' +
+                                                'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
+                                                'var google_remarketing_only = false;';
+
+                                            var gaw_vars = document.createElement('script');
+                                            gaw_vars.type = 'text/javascript';
+                                            gaw_vars.innerText = adWordsInjectable;
+                                            document.getElementsByTagName('head')[0].appendChild(gaw_vars);
+
+                                            var gaw_scr = document.createElement('script');
+                                            gaw_scr.type = 'text/javascript';
+                                            gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
+                                            document.getElementsByTagName('head')[0].appendChild(gaw_scr);
+
+                                            _gaw.loaded = true;
+                                        }
+                                        //TODO: setTimeout?
+                                        window.location = data.accountUrl;
+                                    } else {
+                                        window.location = data.accountUrl;
+                                    }
+
+                                } else {
+                                    scope.isFormValid = false;
+                                    if (err.message === 'card_declined') {
+                                        angular.element("#card_number .error").html('There was an error charging your card.');
+                                        angular.element("#card_number").addClass('has-error');
+                                        angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                    }
+                                    scope.showFooter(true);
+                                }
+                            });
+                        }
+
+                    });
+
+                });
+            };
+
+            scope.validateFormVersion2 = function() {
+
+                scope.isFormValid = false;
+
+                if (!scope.newAccount.email) {
+                    scope.checkEmailExists(scope.newAccount);
+                    return;
+                }
+
+                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
+                    scope.checkPasswordLength(scope.newAccount);
+                    return;
+                }
+
+                if (!scope.newAccount.businessName) {
+                    scope.checkDomainExists(scope.newAccount);
+                    return;
+                }
+
+                scope.newAccount.card = {
+                    number: angular.element('#number').val(),
+                    cvc: angular.element('#cvc').val(),
+                    exp_month: parseInt(angular.element('#expiry').val().split('/')[0]),
+                    exp_year: parseInt(angular.element('#expiry').val().split('/')[1])
+                };
+
+                var cc_name = angular.element('#name').val();
+
+                if (!scope.newAccount.card.number || !scope.newAccount.card.cvc || !scope.newAccount.card.exp_month || !scope.newAccount.card.exp_year) {
+                    //|| !cc_name
+                    //hightlight card in red
+                    scope.checkCardNumber();
+                    scope.checkCardExpiry();
+                    scope.checkCardCvv();
+                    return;
+                }
+                scope.checkCoupon();
+                if (!scope.couponIsValid) {
+                    return;
+                }
+
+                scope.isFormValid = true;
+
+                return true;
+            }
+
+            scope.createAccountVersion1 = function(newAccount) {
                 //validate
                 //email
                 scope.isFormValid = false;

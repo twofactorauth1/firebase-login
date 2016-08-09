@@ -1,4 +1,5 @@
-<link href='//fonts.googleapis.com/css?family=Raleway:700,300' rel='stylesheet' type='text/css'>
+<link href="//fonts.googleapis.com/css?family=Raleway:700,300" rel="stylesheet" type="text/css">
+<link href="/js/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="js/libs_misc/crypto/hmac-sha256.js" />
 <script type="text/javascript" src="js/libs_misc/crypto/enc-base64-min.js" />
 <script type="text/javascript" src="js/libs/skeuocard/lib/js/jquery.card.js" />
@@ -15,20 +16,20 @@
         </div>
         <div class="top-signup account-info-signup">
             <div class="inner-page">
-                <div class="padding-10 signup-getting-started">
+                <div class="padding-15 signup-getting-started">
                     <h2 class="center text-bold margin-bottom-5">Getting Started</h2>
                     <h3 class="center">We just need some information.</h3>
                 </div>
-                <div class="signup-body well">
-                    <div class="section-title pull-left margin-bottom-20">
+                <div class="signup-body">
+                    <div class="section-title pull-left">
                         <span>Select a Plan</span>
                         <br>
                         <span class="sign-up-medium-text">Pick the plan that works for you, no contract required:</span>
                     </div>
                     <div class="clearfix"></div>
                     <div class="features-wrap">
-                        <div class="col-sm-6">
-                            <div class="feature-block selected-plan">
+                        <div class="col-sm-6 padding-top-15">
+                            <div class="feature-block" ng-click="newAccount.plan = 'ALLINONE'" ng-class="{ 'selected-plan': newAccount.plan === 'ALLINONE' }">
                                 <div class="">
                                     <div class="">
                                         <div class="center"><br></div>
@@ -75,8 +76,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6" >
-                            <div class="feature-block">
+                        <div class="col-sm-6 padding-top-15">
+                            <div class="feature-block" ng-click="newAccount.plan = 'MANAGEDSERVICES'" ng-class="{ 'selected-plan': newAccount.plan === 'MANAGEDSERVICES' }">
                                 <div class="">
                                     <div class="" style="">
                                         <div>
@@ -123,7 +124,10 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="form-group padding-top-20">
-                            <input type="checkbox" value=""><span class="sign-up-medium-text">  I want web site build, blog setup and setup of first email campaign!</span>
+                            <label for="signup-plan-checkbox" class="text-normal">
+                                <input id="signup-plan-checkbox" type="checkbox" value="">
+                                <span class="sign-up-medium-text margin-left-5">I want web site build, blog setup and setup of first email campaign!</span>
+                            </label>
                             <div style="display:inline-block" class=" padding-top-10">
                                 <span class="sign-up-small-text">* Setup fee includes web site build, blog setup and setup of first email campaign!</span>
                             </div>
@@ -134,22 +138,22 @@
                     <div class="clearfix"></div>
                     <hr>
                     <div class="row margin-top-20" >
-                        <form name="card-details" action="#" class="form-group col-xs-12 mb0 has-feedback" data-card-container="#card-container" data-values="cardValues" data-card data-options="cardOptions" data-messages="cardMessages">
+                        <form name="card-details" action="#" class="form-group mb0 has-feedback" data-card-container="#card-container" data-values="cardValues" data-card data-options="cardOptions" data-messages="cardMessages">
                         <div class="section-title padding-bottom-10">
                             <span>Basic Information</span>
                         </div>
                         <!-- NAME -->
-                        <div id="fullName" class="form-group col-xs-12 has-feedback" style="padding-left:0">
+                        <div id="fullName" class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback">
                             <input class="form-control" type="text" ng-model="newAccount.fullName" placeholder="Name" name="fullName"/>
                             <span class="glyphicon form-control-feedback"></span>
                             <span class="error help-block" />
                         </div>
                         <!-- EMAIL AND PASSWORD -->
-                        <div id="email" class="form-group col-xs-12 has-feedback" ng-hide="tmpAccount.tempUser" style="padding-left:0">
+                        <div id="email" class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback" ng-hide="tmpAccount.tempUser" style="padding-left:0">
                             <input class="form-control" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" name="email" placeholder="Email Address"/>
                             <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
                         </div>
-                        <div id="password" class="form-group col-xs-12 has-feedback" ng-hide="newAccount.hidePassword" style="padding-left:0">
+                        <div id="password" class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback" ng-hide="newAccount.hidePassword" style="padding-left:0">
                             <input class="form-control" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" placeholder="Password"/>
                             <span class="glyphicon form-control-feedback"></span>
                             <span class="error help-block" />
@@ -159,7 +163,7 @@
 
                         <!-- Business Name -->
                         <div id="business-name"
-                             class="form-group col-xs-12 has-feedback"
+                             class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback"
                              ng-class="{'has-error': !validBusinessName,
                               'has-success': domainExistsAlready!==undefined && !domainExistsAlready}" style="padding-left:0">
                             <div class="row-fluid business-domain">
@@ -175,13 +179,10 @@
                                        style="width:100%"/>
                                     <span class="input-group-addon">.indigenous.io</span>
                                 </div>
-                                
+
                             </div>
 
                             <div class="clearfix"></div>
-                            <span class="glyphicon form-control-feedback"
-                                  ng-class="{'glyphicon-remove': !validBusinessName,
-                                    'glyphicon-ok': domainExistsAlready!==undefined && !domainExistsAlready}"></span>
                             <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
                             <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
                             <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong>. You can change it at any time.</span>
@@ -192,24 +193,24 @@
                         <div class="section-title padding-bottom-10">
                             <span>Payment Information</span>
                         </div>
-                        
-                        <div class="col-xs-12 col-sm-6">
+
+                        <div class="col-sm-5 signup-payment-information">
 
                             <div class="row">
                                 <div id="card_number" class="form-group small-6">
-                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="" class="form-control">
+                                    <input placeholder="Card number" type="text" name="number" id="number" ng-blur="checkCardNumber()" class="form-control">
                                     <span class="glyphicon form-control-feedback"></span>
                                     <span class="error help-block" />
                                 </div>
                             </div>
                             <div class="row">
                                 <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-left:0">
-                                    <input placeholder="MM/YYYY" ng-blur="" type="text" id="expiry" name="expiry" class="form-control" style="width:100%;padding-right:0px">
+                                    <input placeholder="MM/YYYY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control" style="width:100%;padding-right:0px">
                                     <span class="glyphicon form-control-feedback"></span>
                                     <span class="error help-block" />
                                 </div>
                                 <div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback" style="padding-right:0">
-                                    <input placeholder="CVC" ng-blur="" type="text" id="cvc" name="cvc" class="form-control" style="width:100%; padding-right:0px">
+                                    <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control" style="width:100%; padding-right:0px">
                                     <span class="glyphicon form-control-feedback"></span>
                                     <span class="error help-block" />
                                 </div>
@@ -224,22 +225,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-6">
+                        <div class="col-xs-12 col-sm-7 margin-top-20 padding-right-0 padding-left-0">
                             <div id="card-container"></div>
+                            <img class="padding-top-10 pull-right signup-credit-cards" src="/images/signup-credit-cards.png" />
                         </div>
 
                         <div class="clearfix margin-bottom-10"></div>
                         <hr>
-                        <div class=" padding-bottom-10 center">
-                            <span class="sign-up-medium-text ">Satisfaction Guaranteed</span>
+                        <div class="padding-bottom-20 center">
+                            <img class="center padding-15" src="/images/signup-lock.png" />
+                            <div class="sign-up-medium-text ">Satisfaction Guaranteed</div>
                         </div>
                         <!-- BUY -->
-                        <div class="submit-signup center">
-                            <a type="button" style="cursor:pointer;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #48b1cc), color-stop(1, #48b1cc));background:-moz-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:-webkit-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:-o-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:-ms-linear-gradient(top, #48b1cc 5%, #48b1cc 100%);background:linear-gradient(to bottom, #48b1cc 5%, #48b1cc 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#48b1cc', endColorstr='#48b1cc',GradientType=0);background-color:#%1;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #48b1cc;display:inline-block;color:#ffffff;font-family:;font-size:16px;font-weight:bold;font-style:%1;padding:10px 30px;text-decoration:none;text-shadow:0px 1px 1px #48b1cc;" ng-click="createAccountWithoutCC(newAccount)"> SIGN UP</a>
+                        <div class="submit-signup center padding-bottom-20">
+                            <a type="button" class="signup-btn-v2" ng-click="createAccount(newAccount)">SIGN UP</a>
                             <span class="help-block" ng-show='havingNetworkIssue'>Something went wrong during the creation of your account. Please try again.</span>
+                            <span class="error text-red help-block" ng-if='isFormValid === false'>Please fill in all required fields.</span>
                         </div>
-                        <p class="center margin-top-10">By clicking this button you agree to our <a href="/legal">Terms of Service</a>.</p>
-                        <p class="center margin-top-10"><a href="/legal#privacy-policy">Privacy Policy</a>: We hate SPAM and promise to keep your information safe.</p>
+                        <p class="center margin-top-10">By clicking this button you agree to our <a href="/legal" class="text-nowrap">Terms of Service</a>.</p>
+                        <p class="center margin-top-10"><a href="/legal#privacy-policy" class="text-nowrap">Privacy Policy</a>: We hate SPAM and promise to keep your information safe.</p>
                     </form>
                     </div>
                 </div>
@@ -339,7 +343,8 @@
 <script type="text/javascript">
     card = $('form[name="card-details"]').card({
         container: '#card-container',
-        width:275,
+        width: 290,
+        // formatting: false,
         formSelectors:{
             nameInput:'input[name="fullName"]'
         }

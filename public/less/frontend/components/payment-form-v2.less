@@ -21,6 +21,27 @@
         padding: 30px 0;
         background: transparent;
         border: 0;
+
+        @media (max-width: 768px) {
+            padding-top: 100px;
+            padding-bottom: 100px;
+        }
+
+    }
+    .signup-btn-v2 {
+        cursor:pointer;
+        background:linear-gradient(to bottom, #48b1cc 5%, #48b1cc 100%);
+        border-radius:6px;
+        border:1px solid #48b1cc;
+        display:inline-block;
+        color:#ffffff;
+        font-family:;
+        font-size:16px;
+        font-weight:bold;
+        font-style:%1;
+        padding:10px 30px;
+        text-decoration:none;
+        text-shadow:0px 1px 1px #48b1cc;
     }
     .fa-check {
         color: #27ae60;
@@ -211,10 +232,55 @@
         .signup-getting-started{
             background-color: #f5f5f5;
         }
-        .signup-body{
+        .signup-body {
             background: white;
             border-radius: 0;
-            padding-left: 30px;
+            padding: 15px;
+
+            @media (min-width: 768px) {
+                padding: 15px 30px;
+            }
+
+            hr {
+                // margin-left: -15px;
+            }
+
+            .signup-payment-information {
+                @media (max-width: 768px) {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+            }
+
+            form[name="card-details"] {
+                @media (min-width: 768px) {
+                    padding: 15px;
+                }
+            }
+
+            .jp-card-container {
+
+                transform: none!important;
+                left: -12px;
+
+                @media (max-width: 768px) {
+                    transform: scale(.9)!important;
+                }
+
+                @media (min-width: 768px) {
+                    left: 12px;
+                }
+
+            }
+
+            .signup-credit-cards {
+                @media (max-width: 768px) {
+                    padding-right: 10px;
+                }
+            }
+
+
+
         }
     }
     .business-domain .input-group{
@@ -223,6 +289,13 @@
             border-radius: 0;
         }
     }
+
+    .business-domain span:first-of-type {
+        @media (max-width: 768px) {
+            display: none; //allows for domain to fit on small screens
+        }
+    }
+
     #card-container{
         @media screen and (min-width: 768px) {
             margin-top: -22px;
@@ -232,8 +305,13 @@
         .feature-block{
             background: rgb(28, 43, 54);
             border-radius: 5px;
-            margin-left:-15px;
             color: rgb(255, 255, 255);
+            margin-left: -15px;
+
+            @media screen and (max-width: 768px) {
+                margin-right: -15px;
+            }
+
             .plan-title{
                 font-size: 28px;
             }
@@ -272,7 +350,7 @@
     }
     .sign-up-small-text{
         font-size: 14px !important;
-        color: #d3d3d3;
+        color: #a8a8a8;
     }
     .payment-signup {
         &:after {
@@ -311,7 +389,7 @@
         }
         input {
             color: #007fbc;
-            font-size: 14px;
+            font-size: 16px;
             &:focus {
                 border: 1px solid #4bafca;
                 -webkit-box-shadow: 0px 0px 0 3px #e0f1fc;
@@ -589,3 +667,4 @@
         right: 50%;
     }
 }
+
