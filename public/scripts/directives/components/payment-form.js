@@ -908,7 +908,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 //console.dir(coupon);
                 //console.log(scope.newAccount.coupon);
                 if (coupon) {
-                    PaymentService.validateCoupon(coupon, function(data) {
+                    PaymentService.validateIndigenousCoupon(coupon, function(data) {
                         console.log('data ', data);
                         scope.currentCoupon = data;
                         scope.checkingCoupon = false;
