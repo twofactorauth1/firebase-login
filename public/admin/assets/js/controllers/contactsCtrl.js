@@ -390,10 +390,25 @@
 
 
         returnedContact.bestEmail = $scope.checkBestEmail(returnedContact);
+
+        var tempTags = [];
+        var tagLabel = "";
+        _.each(returnedContact.tags, function (tag) {
+           tagLabel = _.findWhere($scope.contactTags, { data: tag });
+            if(tagLabel)
+              tempTags.push(tagLabel.label);
+            else
+              tempTags.push(tag);
+        });
+        if(tempTags)
+          returnedContact.tempTags = _.uniq(tempTags);
+
+
         $scope.contacts.unshift(returnedContact);
         $scope.incrementContactTags(returnedContact);
         toaster.pop('success', 'Contact Successfully Added');
         $scope.minRequirements = true;
+
       });
     };
 

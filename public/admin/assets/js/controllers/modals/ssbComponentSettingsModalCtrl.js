@@ -1032,13 +1032,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       })
         
 
-      WebsiteService.getEmails(true, function (emails) {
-        $timeout(function () {
-          $scope.emailLoaded = true;
-        }, 0);
+      WebsiteService.getEmails(false, function (emails) {
+        
         console.log("Emails loaded");
 
         $scope.emails = emails;
+        $scope.emailLoaded = true;
 
         //select the default email for simple form as welcome-aboard
         if ($scope.component && $scope.component.type === 'simple-form' && !$scope.component.emailId) {
