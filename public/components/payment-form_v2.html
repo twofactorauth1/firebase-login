@@ -222,7 +222,7 @@
                                     <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
                                     <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
                                     <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
-                                    <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
+                                    <span class="success help-block" ng-if="newAccount.coupon && couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
                                 </div>
                             </div>
                         </div>
@@ -306,7 +306,7 @@
                     <input class="form-control input-lg" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }" />
                     <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
                     <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
-                    <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
+                    <span class="success help-block" ng-if="newAccount.coupon && couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
                 </div>
                 <div class="clearfix mb15"></div>
                 <div>
