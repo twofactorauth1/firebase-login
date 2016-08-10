@@ -123,7 +123,9 @@ module.exports = {
 
     createCampaign: function(campaignObj, fn) {
         var self = this;
-        self.log.debug('>> createCampaign');
+        var accountId = campaignObj.get('accountId');
+        var userId = campaignObj.get('modified').by;
+        self.log.debug(accountId, userId, '>> createCampaign');
         var contactIdAry = [];
         var initialStatus = $$.m.Campaign.status.DRAFT;
         if(campaignObj.get('contacts')) {
@@ -138,28 +140,28 @@ module.exports = {
         campaignObj.set('status', $$.m.Campaign.status.DRAFT);
         campaignDao.saveOrUpdate(campaignObj, function(err, value){
             if(err) {
-                self.log.error('Error creating campaign: ' + err);
+                self.log.error(accountId, userId, 'Error creating campaign: ' + err);
                 return fn(err, null);
             } else {
                 if(contactIdAry.length > 0) {
                     self.bulkAddContactToCampaign(contactIdAry, value.id(), value.get('accountId'), function(err, campaign){
                         if(err) {
-                            self.log.error('Error adding contacts to campaign:', err);
+                            self.log.error(accountId, userId, 'Error adding contacts to campaign:', err);
                             return fn(err);
                         }
                         if(campaign.get('status') !== initialStatus) {
                             campaign.set('status', initialStatus);
                             self.updateCampaign(campaign, function(err, updatedCampaign){
                                 if(err) {
-                                    self.log.error('Error updating campaign status:', err);
+                                    self.log.error(accountId, userId, 'Error updating campaign status:', err);
                                     return fn(err);
                                 } else {
-                                    self.log.debug('<< createCampaign');
+                                    self.log.debug(accountId, userId, '<< createCampaign');
                                     return fn(null, updatedCampaign);
                                 }
                             });
                         } else {
-                            self.log.debug('<< createCampaign');
+                            self.log.debug(accountId, userId, '<< createCampaign');
                             return fn(null, campaign);
                         }
                     });
@@ -168,16 +170,16 @@ module.exports = {
                     campaignObj.set('status', initialStatus);
                     self.updateCampaign(campaignObj, function(err, updatedCampaign){
                         if(err) {
-                            self.log.error('Error updating campaign status:', err);
+                            self.log.error(accountId, userId, 'Error updating campaign status:', err);
                             return fn(err);
                         } else {
-                            self.log.debug('<< createCampaign');
+                            self.log.debug(accountId, userId, '<< createCampaign');
                             return fn(null, updatedCampaign);
                         }
                     });
                 }
                 else {
-                    self.log.debug('<< createCampaign');
+                    self.log.debug(accountId, userId, '<< createCampaign');
                     return fn(null, value);
                 }
             }
@@ -216,7 +218,8 @@ module.exports = {
 
     updateCampaign: function(campaignObj, fn) {
         var self = this;
-        self.log.debug('>> updateCampaign');
+        var accountId = campaignObj.get('accountId');
+        self.log.debug(accountId, null, '>> updateCampaign');
         /*
          * Get the campaign.  If the status is RUNNING, return an error
          * If the new status is RUNNING, kick off the steps
@@ -231,10 +234,10 @@ module.exports = {
 
         campaignDao.findOne(query, $$.m.Campaign, function(err, campaign){
             if(err || !campaign) {
-                self.log.error('Error finding campaign:', err);
+                self.log.error(accountId, null, 'Error finding campaign:', err);
                 return fn(err);
             } else if(campaign.get('status') === $$.m.Campaign.status.RUNNING){
-                self.log.warn('Attempted to update a running campaign');
+                self.log.warn(accountId, null, 'Attempted to update a running campaign');
                 return fn('Attempted to update a running campaign');
             } else {
                 var contactIdAry = [];
@@ -248,17 +251,17 @@ module.exports = {
                 }
                 campaignDao.saveOrUpdate(campaignObj, function(err, updatedCampaign){
                     if(err) {
-                        self.log.error('Error updating campaign: ' + err);
+                        self.log.error(accountId, null, 'Error updating campaign: ' + err);
                         return fn(err, null);
                     } else {
                         if(contactIdAry.length > 0) {
                             self.bulkReplaceContactsInCampaign(contactIdAry, campaignId, accountId, function (err, campaign) {
                                 if (err) {
-                                    self.log.error('Error adding contacts to campaign:', err);
+                                    self.log.error(accountId, null, 'Error adding contacts to campaign:', err);
                                     return fn(err);
                                 } else {
                                     //we can return here.  We have deleted existing flows and created new (correct) ones.
-                                    self.log.debug('<< updateCampaign');
+                                    self.log.debug(accountId, null, '<< updateCampaign');
                                     fn(null, updatedCampaign);
                                     if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
                                         //kick off the flows
@@ -268,7 +271,7 @@ module.exports = {
                                 }
                             });
                         } else {
-                            self.log.debug('<< updateCampaign');
+                            self.log.debug(accountId, null, '<< updateCampaign');
                             fn(null, updatedCampaign);
                             /*
                              * check if we need to update flows.
@@ -289,7 +292,7 @@ module.exports = {
                             if(updateNeeded === true) {
                                 campaignDao.findMany({campaignId:campaignId, accountId: accountId}, $$.m.CampaignFlow, function(err, flows){
                                     if(err) {
-                                        self.log.error('Error updating flows.  Campaign steps will NOT start.', err);
+                                        self.log.error(accountId, null, 'Error updating flows.  Campaign steps will NOT start.', err);
                                         return;
                                     } else {
                                         async.eachSeries(flows, function(flow, cb){
@@ -299,7 +302,7 @@ module.exports = {
                                             });
                                         }, function done(err){
                                             if(err) {
-                                                self.log.error('Error updating flow steps.  Campaign steps will NOT start.', err);
+                                                self.log.error(accountId, null, 'Error updating flow steps.  Campaign steps will NOT start.', err);
                                             } else {
                                                 if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
                                                     //kick off the flows
@@ -479,7 +482,7 @@ module.exports = {
     handleStep: function(campaignFlow, stepNumber, fn) {
 
         var self = this;
-        self.log.debug('>> handleStep (' + stepNumber + ')');
+        self.log.debug('>> handleStep (' + stepNumber + ') for flow [' + campaignFlow.id() + ']');
 
         var step = campaignFlow.get('steps')[stepNumber];
         self.log.debug('>> getSteps ', campaignFlow.get('steps'));
@@ -2033,8 +2036,9 @@ module.exports = {
 
     _startCampaignFlows: function(campaign) {
         var self = this;
-        self.log.debug('>> _startCampaignFlows');
         var accountId = campaign.get('accountId');
+        self.log.debug(accountId, null, '>> _startCampaignFlows');
+
         var campaignId = campaign.id();
         var query = {
             accountId:accountId,
@@ -2043,22 +2047,23 @@ module.exports = {
 
         campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flows){
             if(err || !flows) {
-                self.log.error('Error finding flows for campaign [' + campaign.id() + ']:', err);
+                self.log.error(accountId, null, 'Error finding flows for campaign [' + campaign.id() + ']:', err);
                 return;
             } else {
                 async.eachSeries(flows, function startFlow(flow, cb){
                     self.handleStep(flow, 0, function(err, value){
                         if(err) {
-                            self.log.error('Error handling step of campaign: ' + err);
-                            self.log.debug('This error was for the flow', flow);
+                            self.log.error(accountId, null, 'Error handling step of campaign: ' + err);
+                            self.log.debug(accountId, null, 'This error was for the flow', flow);
+                            cb();
                         } else {
-                            self.log.debug('<< addContactToCampaign');
+                            self.log.debug(accountId, null, '<< handleStep');
                             cb();
                         }
                     });
                 }, function done(err){
                     self.updateCampaignStatus(accountId, campaignId, function(err, value){
-                        self.log.debug('<< _startCampaignFlows');
+                        self.log.debug(accountId, null, '<< _startCampaignFlows');
                         return;
                     });
 

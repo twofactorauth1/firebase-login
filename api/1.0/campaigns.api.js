@@ -60,8 +60,10 @@ _.extend(api.prototype, baseApi.prototype, {
     createCampaign: function (req, resp) {
 
         var self = this;
-        self.log.debug('>> createCampaign');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> createCampaign');
+
 
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -85,9 +87,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateCampaign: function(req, resp) {
         var self = this;
-        self.log.debug('>> updateCampaign');
-        var campaignId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateCampaign');
+        var campaignId = req.params.id;
+
 
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -106,7 +110,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 campaignObj.set('modified', modified);
                 campaignManager.updateCampaign(campaignObj, function(err, value){
-                    self.log.debug('<< updateCampaign');
+                    self.log.debug(accountId, userId, '<< updateCampaign');
                     self.sendResultOrError(resp, err, value, "Error updating campaign");
                     self.createUserActivity(req, 'UPDATE_CAMPAIGN', null, null, function(){});
                 });
