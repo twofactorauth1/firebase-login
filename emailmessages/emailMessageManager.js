@@ -101,9 +101,10 @@ var emailMessageManager = {
     sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId,
                                 contactId, vars, stepSettings, emailId, fn) {
         var self = this;
-        self.log.debug('>> sendCampaignEmail');
+        self.log.debug(accountId, null, '>> sendCampaignEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
             if (isUnsubscribed == true) {
+                self.log.debug(accountId, null, 'Skipping email for [' + toAddress + '] on campaign [' + campaignId + '] because contact has unsubscribed.' );
                 fn(null, 'skipping email for user on unsubscribed list');
             } else {
                 self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
@@ -210,10 +211,10 @@ var emailMessageManager = {
                                     //send the email
                                     sendgrid.send(email, function(err, json) {
                                         if (err) {
-                                            self.log.error('Error sending email:', err);
+                                            self.log.error(accountId, null, 'Error sending email:', err);
                                             return fn(err);
                                         } else {
-                                            self.log.debug('<< sendCampaignEmail');
+                                            self.log.debug(accountId, null, '<< sendCampaignEmail');
                                             return fn(null, json);
                                         }
                                     });
@@ -1149,7 +1150,7 @@ var emailMessageManager = {
         }
         dao.saveOrUpdate(emailmessage, function(err, value){
             if(err) {
-                log.error('Error storing emailmessage:', err);
+                log.error(accountId, userId, 'Error storing emailmessage:', err);
                 //set a couple fields on emailmessage and return it
                 emailmessage.set('_id', $$.u.idutils.generateUUID());
                 emailmessage.set('created', {date:new Date()});
