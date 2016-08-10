@@ -641,6 +641,7 @@
                 vm.state.campaign.steps[0].settings.bcc = email.bcc;
                 vm.state.campaign.steps[0].settings.subject = email.subject;
                 vm.state.campaign.steps[0].settings.vars = email.vars;
+                vm.state.email = angular.copy(email);
             } else {
                 var indexInEmailList = _.findIndex(vm.state.emails, {
                     _id: email._id
