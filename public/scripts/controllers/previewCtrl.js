@@ -46,6 +46,7 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
         };
 
         previewPagesService($scope.websiteId, function (err, data) {
+            $scope.$emit('external.scripts.page.data', {page: data});
             console.log('previewPagesService ', data);
             if (err) {
                 console.warn('no page found', $location.$$path);
@@ -56,22 +57,25 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
                 }
 
             } else {
-                $scope.page = data;
-                $rootScope.title = $scope.page.title;
-                $rootScope.pageHandle = $scope.page.handle;
-                $scope.sections = data.sections;
-                checkIntercom(data);
-                angular.element(document).ready(function () {
-                    setTimeout(function () {
-                        var locId = $location.$$hash;
-                        if (locId) {
-                            var element = document.getElementById(locId);
-                            if (element) {
-                                $document.scrollToElementAnimated(element, 0, 1000);
+                $timeout(function() {
+                    $scope.page = data;
+                    $rootScope.title = $scope.page.title;
+                    $rootScope.pageHandle = $scope.page.handle;
+                    $scope.sections = data.sections;
+                    checkIntercom(data);
+                    angular.element(document).ready(function () {
+                        setTimeout(function () {
+                            var locId = $location.$$hash;
+                            if (locId) {
+                                var element = document.getElementById(locId);
+                                if (element) {
+                                    $document.scrollToElementAnimated(element, 0, 1000);
+                                }
                             }
-                        }
-                    }, 3000);
-                })
+                        }, 3000);
+                    })
+                }, 500);
+                
             }
         });
     }
