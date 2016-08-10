@@ -286,20 +286,21 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             scope.validateFormVersion2 = function() {
 
                 scope.isFormValid = false;
+                var checkIfFormValid = true;
 
                 if (!scope.newAccount.email) {
                     scope.checkEmailExists(scope.newAccount);
-                    return;
+                    checkIfFormValid = false;
                 }
 
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
                     scope.checkPasswordLength(scope.newAccount);
-                    return;
+                    checkIfFormValid = false;
                 }
 
                 if (!scope.newAccount.businessName) {
                     scope.checkDomainExists(scope.newAccount);
-                    return;
+                    checkIfFormValid = false;;
                 }
 
                 scope.newAccount.card = {
@@ -317,16 +318,22 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     scope.checkCardNumber();
                     scope.checkCardExpiry();
                     scope.checkCardCvv();
-                    return;
+                    checkIfFormValid = false;
                 }
                 scope.checkCoupon();
                 if (!scope.couponIsValid) {
-                    return;
+                    checkIfFormValid = false;
                 }
 
-                scope.isFormValid = true;
+                if(checkIfFormValid){
+                    scope.isFormValid = true;
+                    return true;
+                }
+                else{
+                    return false;
+                }
 
-                return true;
+                
             }
 
             scope.createAccountVersion1 = function(newAccount) {
