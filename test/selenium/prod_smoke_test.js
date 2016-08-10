@@ -10,6 +10,8 @@ var webdriver = require('selenium-webdriver'),
     By = webdriver.By,
     until = webdriver.until;
 
+var chromeDriver = require('selenium-webdriver/chrome');
+
 var driver = null;
 
 module.exports = {
@@ -24,7 +26,7 @@ module.exports = {
     preGroup: function(test) {
         console.log('initializing');
         driver = new webdriver.Builder()
-            .forBrowser('firefox')
+            .forBrowser('chrome')
             .build();
         test.done();
     },

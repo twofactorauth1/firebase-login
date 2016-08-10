@@ -151,7 +151,7 @@ main(){
         echo "Put back test dependencies"
         #We have already removed test deps.  Lets put them back.
         npm install
-        npm install selenium-webdriver
+        npm install selenium-webdriver@2.53.2
         echo "Waiting for deploy to finish"
 
         interval=10; timeout=600; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
