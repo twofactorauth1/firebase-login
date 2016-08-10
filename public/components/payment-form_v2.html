@@ -155,6 +155,7 @@
                         </div>
                         <div id="password" class="form-group col-xs-12 padding-left-0 padding-right-0 has-feedback" ng-hide="newAccount.hidePassword" style="padding-left:0">
                             <input class="form-control" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" placeholder="Password"/>
+                            <span class="help-block" ng-if="passwordIsValid === false">Your password must be at least 6 characters.</span>
                             <span class="glyphicon form-control-feedback"></span>
                             <span class="error help-block" />
                         </div>
