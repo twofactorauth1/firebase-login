@@ -331,6 +331,7 @@
                 vm.state.contacts = contacts;
                 ContactService.getAllContactTags(contacts, function (tags) {
                     contactTags = tags;
+                    vm.state.contactTags = angular.copy(tags);
                 });
                 var _tags = [];
                 vm.state.allContacts = [];
