@@ -168,9 +168,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             scope.createAccountVersion2 = function(newAccount) {
 
                 if (!scope.validateFormVersion2()) {
+                    scope.requiredFieldsFilled = false;
                     return;
                 }
-
+                scope.requiredFieldsFilled = true;
                 var tmpAccount = scope.tmpAccount;
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
                 tmpAccount.business = tmpAccount.business || {};
