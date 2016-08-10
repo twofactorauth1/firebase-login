@@ -3,10 +3,21 @@
  *
  * */
 'use strict';
-mainApp.service('paymentService', ['$http', 'ENV',
-  function ($http, ENV) {
+mainApp.service('paymentService', ['$http', 'ENV', '$timeout',
+  function ($http, ENV, $timeout) {
     var baseUrl = '/api/1.0/';
-    Stripe.setPublishableKey(ENV.stripeKey);
+
+    (function waitForStripe() {
+
+        console.debug('wait for stripe');
+
+        if (typeof Stripe !== "function") {
+            return $timeout(waitForStripe, 50);
+        }
+
+        Stripe.setPublishableKey(ENV.stripeKey);
+
+    }());
 
     this.getStripeCardToken = function (cardInput, fn) {
       Stripe.card.createToken(cardInput, function (status, response) {
