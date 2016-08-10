@@ -13,7 +13,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
             if (scope.component.version === 2) {
                 //TODO: set true plan _id's
-                scope.newAccount.plan = 'ALLINONE'
+                scope.newAccount.plan = scope.component.productIds['ALLINONE']
             }
 
             scope.emailValidation = formValidations.email;
@@ -333,7 +333,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     return false;
                 }
 
-                
+
             }
 
             scope.createAccountVersion1 = function(newAccount) {

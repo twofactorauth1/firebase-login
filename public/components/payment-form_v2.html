@@ -29,7 +29,7 @@
                     <div class="clearfix"></div>
                     <div class="features-wrap">
                         <div class="col-sm-6 padding-top-15">
-                            <div class="feature-block" ng-click="newAccount.plan = 'ALLINONE'" ng-class="{ 'selected-plan': newAccount.plan === 'ALLINONE' }">
+                            <div class="feature-block" ng-click="newAccount.plan = component.productIds['ALLINONE']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['ALLINONE'] }">
                                 <div class="">
                                     <div class="">
                                         <div class="center"><br></div>
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 padding-top-15">
-                            <div class="feature-block" ng-click="newAccount.plan = 'MANAGEDSERVICES'" ng-class="{ 'selected-plan': newAccount.plan === 'MANAGEDSERVICES' }">
+                            <div class="feature-block" ng-click="newAccount.plan = component.productIds['MANAGEDSERVICES']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['MANAGEDSERVICES'] }">
                                 <div class="">
                                     <div class="" style="">
                                         <div>
