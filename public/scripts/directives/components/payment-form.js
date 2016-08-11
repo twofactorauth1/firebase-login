@@ -302,9 +302,15 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     checkIfFormValid = false;
                 }
 
-                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
-                    scope.checkPasswordLength(scope.newAccount);
+                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {                    
                     checkIfFormValid = false;
+                }
+
+                if(!scope.newAccount.hidePassword && scope.newAccount.password) {
+                    scope.checkPasswordLength(scope.newAccount);
+                    if(!scope.passwordIsValid) {
+                        checkIfFormValid = false;
+                    }
                 }
 
                 if (!scope.newAccount.businessName) {
