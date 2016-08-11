@@ -13,7 +13,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
             if (scope.component.version === 2) {
                 //TODO: set true plan _id's
-                scope.newAccount.plan = scope.component.productIds['ALLINONE']
+                scope.newAccount.plan = scope.component.productIds['ALLINONE'];
+                scope.newAccount.addSignupFee = true;
             }
 
             scope.emailValidation = formValidations.email;
@@ -172,6 +173,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     return;
                 }
                 scope.requiredFieldsFilled = true;
+                scope.loading = true;
                 var tmpAccount = scope.tmpAccount;
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
                 tmpAccount.business = tmpAccount.business || {};
@@ -194,7 +196,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             scope.$apply(function() {
                                 scope.isFormValid = false;
                                 scope.showFooter(true);
-                            })
+                                scope.loading = false;
+                            });
                             switch (error.param) {
                                 case "number":
                                     angular.element("#card_number .error").html(error.message);
@@ -218,6 +221,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             newUser.anonymousId = window.analytics.user().anonymousId();
                             newUser.permanent_cookie = ipCookie("permanent_cookie");
                             newUser.fingerprint = new Fingerprint().get();
+                            newUser.setupFee = 0;
+                            if(newAccount.addSignupFee === true) {
+                                newUser.setupFee = 50000;//$500.00
+                            }
 
                             UserService.initializeUser(newUser, function(err, data) {
                                 if (data && data.accountUrl) {
@@ -239,7 +246,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                         window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
 
 
-                                        if (!_gaw.loaded) {
+                                        if (!_gaw || !_gaw.loaded) {
                                             var adWordsInjectable =
                                                 'var google_conversion_id = 941009161;' +
                                                 'var google_conversion_language = "en";' +
@@ -260,14 +267,17 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                                             _gaw.loaded = true;
                                         }
+                                        scope.loading = false;
                                         //TODO: setTimeout?
                                         window.location = data.accountUrl;
                                     } else {
+                                        scope.loading = false;
                                         window.location = data.accountUrl;
                                     }
 
                                 } else {
                                     scope.isFormValid = false;
+                                    scope.loading = false;
                                     if (err.message === 'card_declined') {
                                         angular.element("#card_number .error").html('There was an error charging your card.');
                                         angular.element("#card_number").addClass('has-error');
