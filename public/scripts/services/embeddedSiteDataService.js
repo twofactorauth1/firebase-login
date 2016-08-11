@@ -41,8 +41,8 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
             path = "signup";
         }
 
-        if (path === '/signup2') {
-            path = "signup2";
+        if (path === '/trial') {
+            path = "trial";
         }
 
         if (path.indexOf("blog/") > -1) {
