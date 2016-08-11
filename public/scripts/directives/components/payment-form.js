@@ -307,12 +307,13 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     checkIfFormValid = false;
                 }
 
+                scope.checkPasswordLength(scope.newAccount);
+                
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {                    
                     checkIfFormValid = false;
                 }
 
-                if(!scope.newAccount.hidePassword && scope.newAccount.password) {
-                    scope.checkPasswordLength(scope.newAccount);
+                if(!scope.newAccount.hidePassword && scope.newAccount.password) {                    
                     if(!scope.passwordIsValid) {
                         checkIfFormValid = false;
                     }
