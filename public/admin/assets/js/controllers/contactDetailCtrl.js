@@ -224,6 +224,15 @@
             return str;
         };
 
+
+        function checkIfAddressExists(address){
+            var _exists = false;
+            if(address.address || address.address2 || address.city || address.state || address.zip || address.country) {
+                _exists = true;
+            }
+            return _exists;
+        }
+
         /*
          * @refreshMap
          * -
@@ -234,6 +243,7 @@
                 var formattedAddress = angular.copy($scope.contact.details[0].addresses[0]);
                 formattedAddress.address2 = '';
                 $scope.ip_geo_address = $scope.displayAddressFormat(formattedAddress);
+
                 $scope.city = $scope.contact.details[0].addresses[0].city;
                 $scope.loadingMap = false;
             }
@@ -260,6 +270,16 @@
                     }
                 });
             } else {
+                if(!$scope.ip_geo_address.length && $scope.contact_data){
+                    $scope.location.lat = "";
+                    $scope.location.lon = "";
+                    $scope.contact_data.details[0].addresses[0].lat = "";
+                    $scope.contact_data.details[0].addresses[0].lon = "";
+                    if ($scope.markers && $scope.markers.mainMarker) {
+                        $scope.markers.mainMarker.lat = "";
+                        $scope.markers.mainMarker.lon = "";
+                    }
+                }
                 if (fn) {
                     fn(true);
                 }
@@ -280,7 +300,7 @@
                 //TODO: use contact.fingerprint to get address from session_events.maxmind
             } else {
                 //contact has address and lat/lon
-                if (_firstAddress.lat && _firstAddress.lon) {
+                if (_firstAddress.lat && _firstAddress.lon && checkIfAddressExists(_firstAddress)) {
                     $scope.originalContact = angular.copy($scope.contact);
                     $scope.showMap(_firstAddress.lat, _firstAddress.lon);
                 } else {
