@@ -186,7 +186,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         password: newAccount.password,
                         email: newAccount.email,
                         accountToken: data.token,
-                        coupon: newAccount.coupon
+                        coupon: newAccount.coupon,
+                        first: newAccount.first,
+                        middle: newAccount.middle,
+                        last: newAccount.last
                     };
 
                     PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
@@ -308,7 +311,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 }
 
                 scope.checkPasswordLength(scope.newAccount);
-                
+
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {                    
                     checkIfFormValid = false;
                 }
