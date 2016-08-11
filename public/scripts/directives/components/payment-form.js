@@ -173,6 +173,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     return;
                 }
                 scope.requiredFieldsFilled = true;
+                scope.showFooter(false);
                 scope.loading = true;
                 var tmpAccount = scope.tmpAccount;
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
@@ -187,8 +188,6 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         accountToken: data.token,
                         coupon: newAccount.coupon
                     };
-
-                    scope.showFooter(false);
 
                     PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
                         if (error) {
@@ -303,9 +302,15 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     checkIfFormValid = false;
                 }
 
-                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
-                    scope.checkPasswordLength(scope.newAccount);
+                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {                    
                     checkIfFormValid = false;
+                }
+
+                if(!scope.newAccount.hidePassword && scope.newAccount.password) {
+                    scope.checkPasswordLength(scope.newAccount);
+                    if(!scope.passwordIsValid) {
+                        checkIfFormValid = false;
+                    }
                 }
 
                 if (!scope.newAccount.businessName) {
