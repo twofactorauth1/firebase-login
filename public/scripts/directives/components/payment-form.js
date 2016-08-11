@@ -213,6 +213,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     angular.element("#card_cvc").addClass('has-error');
                                     angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
                                     break;
+                                case "exp_month":
+                                    angular.element("#card_expiry .error").html(error.message);
+                                    angular.element("#card_expiry").addClass('has-error');
+                                    angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                                    break;
                             }
                         } else {
                             newUser.cardToken = token;
