@@ -220,7 +220,10 @@
                                 <!-- Coupon DETAILS -->
                                 <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'has-success': couponIsValid && !checkingCoupon && newAccount.coupon}" style="padding-left:0; padding-right:0">
                                     <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
-                                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'glyphicon glyphicon-ok': couponIsValid && newAccount.coupon, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
+                                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'glyphicon glyphicon-ok': couponIsValid && newAccount.coupon && !checkingCoupon}"></span>
+
+                                    <span class="coupon-spinner" ng-class="{'fa fa-2x fa-spinner fa-spin':checkingCoupon}"></span>
+
                                     <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon">Invalid Coupon</span>
                                     <span class="success help-block" ng-if="newAccount.coupon && couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
                                 </div>
