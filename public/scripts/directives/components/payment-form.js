@@ -189,7 +189,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         coupon: newAccount.coupon,
                         first: newAccount.first,
                         middle: newAccount.middle,
-                        last: newAccount.last
+                        last: newAccount.last,
+                        existingUser: newAccount.existingUser
                     };
 
                     PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
