@@ -236,6 +236,13 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                             UserService.initializeUser(newUser, function(err, data) {
                                 if (data && data.accountUrl) {
+
+                                    function redirect() {
+                                        scope.loading = false;
+                                        //TODO: setTimeout?
+                                        window.location = data.accountUrl;
+                                    }
+
                                     console.log('$location ', $location);
                                     console.log('data.accountUrl ', data.accountUrl);
                                     //we don't want to record purchases in non-prod environments
@@ -254,7 +261,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                         window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
 
 
-                                        if (!_gaw || !_gaw.loaded) {
+                                        if (typeof _gaw === "undefined") {
                                             var adWordsInjectable =
                                                 'var google_conversion_id = 941009161;' +
                                                 'var google_conversion_language = "en";' +
@@ -269,18 +276,17 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             document.getElementsByTagName('head')[0].appendChild(gaw_vars);
 
                                             var gaw_scr = document.createElement('script');
+                                            gaw_scr.onload = function() {
+                                                redirect();
+                                            }
                                             gaw_scr.type = 'text/javascript';
                                             gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
                                             document.getElementsByTagName('head')[0].appendChild(gaw_scr);
 
-                                            _gaw.loaded = true;
                                         }
-                                        scope.loading = false;
-                                        //TODO: setTimeout?
-                                        window.location = data.accountUrl;
+
                                     } else {
-                                        scope.loading = false;
-                                        window.location = data.accountUrl;
+                                        redirect();
                                     }
 
                                 } else {
@@ -313,11 +319,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                 scope.checkPasswordLength(scope.newAccount);
 
-                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {                    
+                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
                     checkIfFormValid = false;
                 }
 
-                if(!scope.newAccount.hidePassword && scope.newAccount.password) {                    
+                if(!scope.newAccount.hidePassword && scope.newAccount.password) {
                     if(!scope.passwordIsValid) {
                         checkIfFormValid = false;
                     }
