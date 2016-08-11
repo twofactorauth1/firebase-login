@@ -45,7 +45,8 @@
           });
           if(!_.find(data.socialAccounts, function(cred){return cred.type === 'st'})){
               //add the credential from the account.
-              data.socialAccounts.push(stripe);
+              if(stripe)
+                data.socialAccounts.push(stripe);
           }
           $scope.socialAccounts = data.socialAccounts;
           $scope.checkForIntegration();
