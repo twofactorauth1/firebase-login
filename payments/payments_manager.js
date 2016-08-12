@@ -155,10 +155,13 @@ module.exports = {
                 self.log.error(accountId, userId, 'Error listing invoices:', err);
                 return fn(err);
             } else {
+                //self.log.debug('Filtering invoices by [' + subscriptionId + ']', invoices );
+
                 var filteredInvoices = [];
                 invoices = invoices || {};
                 _.each(invoices.data, function(invoice){
-                    if(invoice.lines.data[0].id === subscriptionId) {
+                    //self.log.debug('line:', invoice.lines.data[0]);
+                    if(invoice.lines.data[0].id === subscriptionId || invoice.subscription === subscriptionId) {
                         filteredInvoices.push(invoice);
                     } else {
                         //self.log.debug(accountId, userId, 'filtering: ', invoice);
