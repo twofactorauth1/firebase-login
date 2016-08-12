@@ -907,18 +907,35 @@ module.exports = {
             campaignId: campaignId,
             contactId: contactId
         };
-
-        campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+        campaignDao.exists(query, $$.m.Campaign, function(err, value){
             if(err) {
-                self.log.error('Error deleting campaign flow: ' + err);
+                self.log.error('Error getting campaign:', err);
                 return fn(err, null);
-            } else {
-                self.updateCampaignParticipants(accountId, campaignId, function(){
-                    self.log.debug('<< cancelRunning Campaign');
-                    return fn(null, value);
+            } else if(value === true) {
+               campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+                    if(err) {
+                        self.log.error('Error deleting campaign flow: ' + err);
+                        return fn(err, null);
+                    } else {
+                        self.updateCampaignParticipants(accountId, campaignId, function(err, value){
+                            if(err) {
+                                self.log.error('Error updating Campaign Participants: ' + err);
+                                return fn(err, null);
+                            }
+                            else{
+                                self.log.debug('<< cancelRunning Campaign');
+                                return fn(null, value);
+                            }
+
+                        });
+                    }
                 });
             }
+            else{
+                return fn(null, value);
+            }
         });
+
     },
 
     getContactsForCampaign: function(accountId, campaignId, fn) {

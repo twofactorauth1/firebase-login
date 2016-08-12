@@ -68,7 +68,7 @@
                 </div>
                 <div class="col-sm-8">
                     <div class='pull-right'>
-                        <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.uiState.dataLoaded || vm.state.campaign.status.toLowerCase() === 'cancelled'" ng-click='vm.saveAsDraftFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
+                        <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.uiState.dataLoaded || vm.state.campaign.status.toLowerCase() === 'cancelled' || !vm.state.campaign.name" ng-click='vm.saveAsDraftFn()' class="btn btn-primary padding-right-10 margin-bottom-5">
                             <i class="ti-save"></i>
                             <span>Save</span>
                         </button>
@@ -80,7 +80,7 @@
                             <i class="ti-location-arrow"></i>
                             <span>Send Test</span>
                         </button>
-                        <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn()" ng-click='vm.activateCampaignFn()' class="btn btn-success padding-right-10 margin-bottom-5">
+                        <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn() || !vm.state.campaign.name" ng-click='vm.activateCampaignFn()' class="btn btn-success padding-right-10 margin-bottom-5">
                             <i class="ti-power-off"></i>
                             <span>Activate Campaign</span>
                         </button>

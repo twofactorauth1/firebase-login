@@ -619,6 +619,7 @@
             }
 
             EmailCampaignService.createCampaign(campaign).then(function(res) {
+                vm.uiState.closeModal();
                 console.log('EmailCampaignService.createCampaign created', res.data.name);
                 $location.path('/emails/campaigns/' + res.data._id);
             }).catch(function(err) {
