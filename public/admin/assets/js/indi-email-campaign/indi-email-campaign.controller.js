@@ -272,6 +272,7 @@
                                 vm.state.campaign = angular.extend(vm.state.campaign, res.data);
                                 vm.state.campaignOriginal = angular.copy(vm.state.campaign);
                                 vm.state.originalRecipients = angular.copy(vm.state.recipients);
+                                vm.uiState.delivery.originalDate = angular.copy(vm.uiState.delivery.date);
                                 vm.uiState.dataLoaded = true;
                                 vm.uiState.disableEditing = false;
                                 if (isActivation) {
