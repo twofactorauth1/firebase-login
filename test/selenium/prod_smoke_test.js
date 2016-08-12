@@ -98,7 +98,7 @@ module.exports = {
 
             driver.isElementPresent(By.id('business-name')).then(function(el){test.ok(el, 'Business signup field missing.');});
 
-            driver.isElementPresent(By.linkText('CREATE ACCOUNT')).then(
+            driver.isElementPresent(By.linkText('SIGN UP')).then(
                 function(el){
                     test.ok(el, 'Signup Button missing.');
                     test.done();
