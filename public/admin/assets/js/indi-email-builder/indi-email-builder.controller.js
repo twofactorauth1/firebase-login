@@ -40,6 +40,7 @@
             addComponent: addComponentFn,
             delete: deleteFn,
             duplicateEmail: duplicateEmailFn,
+            updateEmailCache: updateEmailCache,
             componentTypes: [{
                     title: 'Header',
                     type: 'email-header',
@@ -423,11 +424,16 @@
                     vm.uiState.dataLoaded = true;
                     vm.state.pendingEmailChanges = false;
                     toaster.pop('success', 'Email saved');
+                    vm.uiState.updateEmailCache(res.data, true);
                 });
             } else {
                 vm.uiState.allowRedirect = false;
                 toaster.pop('warning', 'Mandatory field should not be blank');
             }
+        }
+
+        function updateEmailCache(email, update){
+            WebsiteService.updateEmailCache(email, update);
         }
 
         $window.clickandInsertImageButton = function(editor) {
@@ -515,7 +521,7 @@
                         vm.uiState.dataLoaded = true;
                         vm.state.saveLoading = false;
                         toaster.pop('Warning', 'Email cloned.');
-                        WebsiteService.updateEmailCache(email);
+                        vm.uiState.updateEmailCache(email, false);
                         vm.uiState.navigation.loadEmail(email._id);
                     });
                 }
