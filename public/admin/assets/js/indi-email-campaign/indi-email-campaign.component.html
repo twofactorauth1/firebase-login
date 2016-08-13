@@ -182,7 +182,7 @@
                                 ng-disabled="vm.uiState.disableEditing">
                                 <ui-select-match
                                     placeholder="Select an email template">
-                                    {{$select.selected.title}} (subject:{{$select.selected.subject}})
+                                    {{$select.selected.title}} (subject:{{vm.state.campaign.steps[0].settings.subject}})
                                 </ui-select-match>
                                 <ui-select-choices repeat="email._id as email in vm.state.emails | propsFilter: {title: $select.search}">
                                     <div ng-bind-html="email.title | highlight: $select.search"></div>
