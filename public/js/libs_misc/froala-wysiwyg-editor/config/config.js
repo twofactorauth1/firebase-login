@@ -211,7 +211,8 @@ $.FroalaEditor.build = _.memoize(function(type) {
           text: 'Facebook',
           href: 'https://facebook.com',
           target: '_blank'
-        }]
+        }],
+        VIDEO_EMBED_REGEX: /^\W*((<iframe.*)|(<embed.*))\W*/i
     };
 
     if (type === 'ssbBlogEditor') {

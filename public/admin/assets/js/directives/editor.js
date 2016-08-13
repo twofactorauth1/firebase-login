@@ -217,7 +217,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.commands.before', function (e, editor, cmd, param1, param2) {
                      if(cmd === 'videoInsertEmbed'){
                         if($.FE)
-                            $.FE.VIDEO_EMBED_REGEX = /^\W*((<iframe.*)|(<embed.*))\W*/i; 
+                            $.FE.VIDEO_EMBED_REGEX = froalaConfig.VIDEO_EMBED_REGEX; 
                      }
                        
 
