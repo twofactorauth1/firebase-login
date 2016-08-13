@@ -1054,7 +1054,10 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
       CampaignService.getCampaigns(function (campaigns) {
         console.log('campaigns >>> ', campaigns);
-        $scope.campaigns = campaigns;
+        // Canceled campaigns should not included in the list
+        $scope.campaigns = _.filter(campaigns, function (obj) {
+          return obj.status !== 'CANCELLED'
+        });
       });
 
       /*
