@@ -214,7 +214,10 @@
             }
 
             var _campaignId;
-            if (!vm.component.campaignId) {
+
+            var sendEmailId = vm.component.sendEmail === "true";
+
+            if (!vm.component.campaignId || sendEmailId) {
                 vm.component.campaignId = '';
             } else {
                 _campaignId = vm.component.campaignId;

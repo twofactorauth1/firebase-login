@@ -123,8 +123,10 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           skipWelcomeEmail = true;
         }
 
+        var sendEmailId = scope.component.sendEmail === "true";
+
         var _campaignId;
-        if (!scope.component.campaignId) {
+        if (!scope.component.campaignId || sendEmailId) {
           scope.component.campaignId = '';
         } else {
           _campaignId = scope.component.campaignId;

@@ -165,8 +165,10 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
           skipWelcomeEmail = true;
         }
 
+        var sendEmailId = vm.component.sendEmail === "true";
+
         var _campaignId;
-        if (!vm.component.campaignId) {
+        if (!vm.component.campaignId || sendEmailId) {
           vm.component.campaignId = '';
         } else {
           _campaignId = vm.component.campaignId;
