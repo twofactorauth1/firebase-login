@@ -773,6 +773,8 @@
                                 console.log('email saved');
                                 toaster.pop('success', 'Email Saved', 'The email was saved successfully.');
                                 vm.state.saveLoading = false;
+                                if(response.data)
+                                    vm.uiState.updateEmailCache(response.data, true);
                                 vm.uiState.navigation.loadEmail(email._id);
                                 EmailBuilderService.getEmails();
                                 vm.state.pendingEmailChanges = false;
