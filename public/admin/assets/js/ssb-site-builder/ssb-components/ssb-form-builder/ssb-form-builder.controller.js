@@ -20,17 +20,17 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
 
 	vm.fieldStyle = fieldStyle;
 	vm.inputStyle = inputStyle;
-    vm.inputContainerStyle = inputContainerStyle;
+  vm.inputContainerStyle = inputContainerStyle;
 	vm.buttonStyle = buttonStyle;
 	vm.formStyle = formStyle;
-    vm.addCustomField = addCustomField;
-    vm.addPattern = addPattern;
-    vm.checkDuplicateEmail = checkDuplicateEmail;
-    vm.formValidations = formValidations;
+  vm.addCustomField = addCustomField;
+  vm.addPattern = addPattern;
+  vm.checkDuplicateEmail = checkDuplicateEmail;
+  vm.formValidations = formValidations;
 
-    vm.nthRow = 'nth-row';
+  vm.nthRow = 'nth-row';
 
-    vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
+  vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
 
 
 	function fieldClass(field){
@@ -174,6 +174,11 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
           _campaignId = vm.component.campaignId;
         }
 
+        var _campaignTags = [];
+        if (_campaignObj && angular.isDefined(_campaignObj.searchTags) && _campaignObj.searchTags.tags.length) {
+          _campaignTags = _.uniq(_.pluck(_campaignObj.searchTags.tags, 'data'));
+        }
+
         var first_name = "";
         var last_name = "";
 
@@ -206,6 +211,7 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
             addresses: []
           }],
           campaignId: _campaignId,
+          campaignTags: _campaignTags,
           emailId: vm.component.emailId,
           sendEmail: vm.component.sendEmail,
           skipWelcomeEmail: skipWelcomeEmail,
@@ -303,8 +309,21 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude,
       };
 
 
+  function getCampaings(){
+    if(vm.component.campaignId){
+      if($injector.has("campaignService")){
+        campaignService = $injector.get("campaignService");
+        campaignService.getCampaign(vm.component.campaignId, function(data) {
+          _campaignObj = data;
+        });
+      }      
+    }
+  }
+
 	function init(element) {
-		vm.element = element;
+    vm.element = element;
+    var _campaignObj = null;
+    getCampaings();
 	}
 
 }
