@@ -275,6 +275,73 @@ var securityManager = {
 
     },
 
+    verifySubscriptionWithoutSettingSessionVariables: function(req, cb) {
+        var self = this;
+        log.trace('>> verifySubscriptionWithoutSettingSessionVariables');
+        if(disabled === true) {
+            //req.session.subprivs = defaultSubscriptionPrivs;
+            log.debug('<< verifySubscriptionWithoutSettingSessionVariables (disabled)');
+            return cb(null, true);
+        }
+
+        //check if session has property(subName) --> return if present
+        if(req.session.subName !== undefined && req.session.subprivs) {
+            log.trace('<< verifySubscriptionWithoutSettingSessionVariables(true[' + req.session.subName + '])');
+            return cb(null, true);
+        }
+
+        //get account by ID from session req.session.accountId
+        accountDao.getAccountByID(req.session.accountId, function(err, account){
+            if(err) {
+                log.error('Error getting account: ' + err);
+                return cb(err, null);
+            }
+            if(account === null) {
+                log.warn('Could not find account for id: ' + req.session.accountId);
+                return cb(null, false);
+            }
+            var billing = account.get('billing');
+            if(self._isEvergreen(billing)) {
+                log.trace('<< verifySubscriptionWithoutSettingSessionVariables(evergreen: ' + req.session.accountId + ')');
+                return cb(null, true);
+            }
+            if(self._isWithinTrial(billing)) {
+                log.trace('<< verifySubscriptionWithoutSettingSessionVariables(freetrial: ' + req.session.accountId + ')');
+                return cb(null, true);
+            }
+
+            if(!billing.subscriptionId) {
+                log.debug('No subscription found for account: ' + req.session.accountId);
+                return cb(null, false);
+            }
+            //if no verification OR verification older than 24 hours
+            stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
+                if(err || !subscription) {
+                    log.error('Error getting stripe subscription: ' + err);
+                    return cb(err, false);
+                } else if(subscription.status === 'active' || subscription.status === 'trialing') {
+
+                    var planId = subscription.plan.id;
+                    var planName = subscription.plan.name;
+                    subscriptionPrivilegeDao.getByPlanId(req.session.accountId, planId, function(err, subPrivs){
+                        if(err || !subPrivs) {
+                            log.error('Error getting subscription privileges for plan [' + planId + ']: ' + err);
+                            return cb(err, false);
+                        }
+
+                        log.trace('<< verifySubscriptionWithoutSettingSessionVariables(true)');
+                        return cb(null, true);
+                    });
+                } else {
+                    //TODO: If the sub is expired, put in privs here
+                    log.warn('The subscription for account ' + req.session.accountId + ' appears to be expired.');
+                    return cb(null, false);
+                }
+            });
+        });
+
+    },
+
     addBillingInfoToAccount: function(accountId, customerId, subscriptionId, planId, userId, fn) {
         var self = this;
         log.debug('>> addBillingInfoToAccount');

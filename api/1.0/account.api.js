@@ -36,7 +36,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //GET
         //app.get(this.url(''), this.isAuthApi, this.getCurrentAccount.bind(this));
-        app.get(this.url(''), this.getCurrentAccount.bind(this)); //Temp Added
+        app.get(this.url(''), this.setup.bind(this), this.getCurrentAccount.bind(this));
 
         app.get(this.url('billing'), this.isAuthApi.bind(this), this.getCurrentAccountBilling.bind(this));
         app.post(this.url('billing'), this.isAuthApi.bind(this), this.updateCurrentAccountBilling.bind(this));
@@ -69,10 +69,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     self.log.debug(accountId, userId, '<< getCurrentAccount');
                     self._addTrialDaysToAccount(value);
-
-                    //no security for now.  Currently can be called without authentication.
-                    //return self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_ACCOUNT, resp, value.toJSON('public'));
-                    return resp.send(value.toJSON('public'));
+                    self.sm.verifySubscriptionWithoutSettingSessionVariables(req, function(err, isValid){
+                        if(isValid === false) {
+                            value.set('locked_sub', true);
+                        }
+                        return resp.send(value.toJSON('public'));
+                    });
                 }
             } else {
                 return self.wrapError(resp, 500, null, err, value);
