@@ -181,7 +181,7 @@
                                 ng-disabled="vm.uiState.disableEditing">
                                 <ui-select-match
                                     placeholder="Select an email template">
-                                    {{$select.selected.title}} (subject:{{$select.selected.subject}})
+                                    {{$select.selected.title}} (subject:{{vm.state.campaign.steps[0].settings.subject}})
                                 </ui-select-match>
                                 <ui-select-choices repeat="email._id as email in vm.state.emails | propsFilter: {title: $select.search}">
                                     <div ng-bind-html="email.title | highlight: $select.search"></div>
@@ -268,7 +268,7 @@
                                         <label class="text-muted">Select individuals from your contact list</label>
                                         <div class="well well-sm">
                                             <ui-select class="contact-list" multiple ng-model="vm.uiState.selectedContacts.individuals" on-select="vm.contactSelectedFn($select)" on-remove="vm.contactRemovedFn($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
-                                                <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
+                                                <ui-select-match placeholder="Select Contacts..."><span tooltip-placement="top" tooltip="{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})" class="panel-title text-white" ng-text-truncate="($item.first || '') + ' ' + ($item.last || '') + ' (' + $item.details[0].emails[0].email + ')'" ng-tt-chars-threshold="30" ng-tt-no-toggling></span></ui-select-match>
                                                 <ui-select-choices repeat="contact._id as contact in vm.state.contacts | filter:$select.search">
                                                     <span class="pull-left">
                                                         <img ng-src="contact.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="contact">

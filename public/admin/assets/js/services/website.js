@@ -200,10 +200,22 @@
       }
     };
 
-    this.updateEmailCache = function(email){
+    this.updateEmailCache = function(email, update){
       var _emails = emailcache.get('emails');
       if (_emails) {
-        _emails.push(email);
+        if(update){
+          var _matchingEmailIndex = _.findIndex(_emails, function (_email) {
+            return _email._id === email._id;
+          });
+
+          if(_matchingEmailIndex > -1){
+            _emails[_matchingEmailIndex] = email;
+          }
+        }
+        else{
+          _emails.push(email);  
+        }
+        
         emailcache.put('emails', _emails);
       }
     }

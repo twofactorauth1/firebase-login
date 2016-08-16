@@ -131,7 +131,9 @@
                                             </ul>
                                         </div>
                                         <div class="panel-body">
-                                            <p><strong>Name: </strong> <span class="pull-right">{{campaign.name || '--' | titleCase }}</span></p>
+                                            <p><strong>Name: </strong><span tooltip-placement="top" tooltip="{{campaign.name | titleCase}}" ng-text-truncate="campaign.name | titleCase" ng-tt-chars-threshold="20" ng-tt-no-toggling>
+                                            
+                                            </span></p>
                                              <div class="clearfix margin-bottom-5"></div>
                                             <p><strong>Type: </strong> <span class="pull-right">{{campaign.type | titleCase}}</span></p>
                                             <div class="clearfix margin-bottom-5"></div>

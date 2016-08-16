@@ -39,6 +39,7 @@ function ssbEmailBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $
                         toaster.pop('success', 'Email Saved', 'The email was saved successfully.');
                         vm.state.saveLoading = false;
                         vm.state.pendingEmailChanges = false;
+                        vm.uiState.updateEmailCache(response.data, true);
                     })
                 }).catch(function(error) {
                     var message = error.data ? error.data.message : 'The email was not saved. Please try again.';

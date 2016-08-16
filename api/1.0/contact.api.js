@@ -608,6 +608,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;
                 var tagSet = campaignId ? req.body.campaignTags : [];
+                if(!tagSet){
+                    tagSet = [];
+                }
                 var emailId = req.body.emailId;
                 var sendEmail = req.body.sendEmail;
                 var fromContactName = req.body.fromName;

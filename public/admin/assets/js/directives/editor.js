@@ -214,6 +214,13 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                         // $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
 
+                    }).on('froalaEditor.commands.before', function (e, editor, cmd, param1, param2) {
+                     if(cmd === 'videoInsertEmbed'){
+                        if($.FE)
+                            $.FE.VIDEO_EMBED_REGEX = froalaConfig.VIDEO_EMBED_REGEX; 
+                     }
+                       
+
                     }).on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
 
                         if (editor.popups.areVisible()) {
