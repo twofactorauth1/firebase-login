@@ -1,0 +1,285 @@
+[class*="ssb-theme-"] {
+    .ssb-page-section-layout-nav-hero {
+        .ssb-theme-btn {
+            line-height: 1em;
+            vertical-align: middle;
+            padding: 1em;
+        }
+    }
+
+    /*
+     * Common for all versions
+    */
+
+    .ssb-page-section-layout-nav-hero {
+
+        .ssb-media-query-small-only({
+            // padding: 0 0 2em 0!important;
+        });
+
+        .ssb-theme-btn * {
+            display: inline-block;
+            line-height: 1.2;
+        }
+
+        .ssb-hero-sub-header [ssb-text-component] {
+            font-size: 30px;
+        }
+
+        .flex-container-absolute-column .navigation-header{
+            min-width:100%;
+        }
+
+        .flex-container-absolute-column .ssb-nav-hero-text{
+            margin-top: inherit;
+        }
+
+        
+
+        [navigation-component]{
+            flex: inherit !important;
+            min-width:100%;
+            z-index: 2 !important;
+        }
+
+    }
+
+    .ssb-page-section-layout-nav-hero [ssb-text-component] {
+        width: 100%;        
+        text-align: center;
+    }
+
+    .ssb-page-section-layout-nav-hero [ssb-text-component] p {
+        font-size: initial;
+        line-height: initial;
+    }
+
+    .ssb-page-section-layout-nav-hero > [ssb-text-component] {
+        width: 100%;
+        position: relative;
+        transform: none;
+        margin: 0;
+        max-width: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+
+        .ssb-media-query-small-only({
+
+            padding: 30px 15px!important;
+
+            .element-wrap {
+                width: 80%;
+                margin: 0 auto;
+            }
+        });
+
+        .ssb-media-query-medium({
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 75%;
+        });
+    }
+
+    .ssb-page-section-layout-nav-hero [ssb-image-component] {
+
+        .ssb-media-query-small-only({
+            background: no-repeat 0 0;
+            background-size: cover;
+            min-height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 0!important;
+
+            img {
+                display: none;
+            }
+        });
+
+        .ssb-media-query-medium({
+
+            position: relative;
+            background: transparent!important;
+
+        });
+
+    }
+
+    .ssb-page-section-layout-blur-image [ssb-image-component] img {
+        filter: blur(5px);
+    }
+
+    .ssb-page-section-layout-nav-hero .ssb-hero-main-header [ssb-text-component] {
+        //font-size set in ssb-themes.less default
+    }
+
+    .ssb-page-section-layout-nav-hero .ssb-hero-sub-header [ssb-text-component] {
+        .ssb-media-query-xsmall-only({
+            [style] {
+                font-size: 8vw!important;
+            }
+        });
+    }
+
+    .ssb-page-section-layout-nav-hero .flex-container-absolute-column {
+        margin: 35px 15px;
+        justify-content: flex-start;
+    }
+
+    .ssb-page-section-layout-nav-hero [social-link-component] {
+        max-width: 100%;
+        z-index: 2 !important;
+    }
+
+    .ssb-page-section-layout-nav-hero-v1,
+    .ssb-page-section-layout-nav-hero-v2,
+    .ssb-page-section-layout-nav-hero-v3,
+    .ssb-page-section-layout-nav-hero-v4 {
+
+        [ssb-text-component] {
+
+            bottom: auto;
+
+            .ssb-media-query-small-only({
+                padding: 30px 15px!important;
+                min-height: 244px!important;
+            });
+        }
+
+    }
+
+    
+
+    /*
+     * layout-hero-v5
+    */
+    .ssb-page-section-layout-nav-hero-v2 {
+
+        .flex-container-absolute-column {
+            top:0;
+        }
+
+    }
+
+    .ssb-page-section-layout-nav-hero-v2 [testimonials-component] {
+
+        div.title {
+            display: none;
+        }
+        .testimonial-row {
+            // display: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            // bottom: 40%;
+            bottom: 50%;
+            transform: translateY(calc(~"50% - 50px"));
+            z-index: 999;
+            .name, .text, .site{
+                display: none !important;
+            }
+            .slide-title, .slide-subtitle{
+                display: none !important;
+            }
+        }
+
+        .slick-slider {
+            width: 100% !important;
+            .slick-slide{
+                display: none !important;
+                min-height:360px;
+                div.img.blank-img{
+                    padding-top: 10px;
+                    .element-wrap{
+                        padding: 5px;
+                    }
+                }
+            }
+            .slick-slide.slick-current.slick-active{
+                left:0 !important;
+                display:block !important;
+            }
+        }
+
+        .edit-wrap {
+            margin: 0;
+        }
+
+        .carousel-caption {
+            padding: 0;
+            max-width: 100%!important;
+        }
+
+        .slick-dots {
+
+            width: 100%!important;
+            z-index: 1;
+            bottom: 30px!important;
+            margin: 0;
+            max-width: 100%!important;
+
+            li button:before{
+                opacity: 0.6;
+                color: #FFF;
+                border: 4px solid #000;
+                border-radius: 50%;
+                font-size: 8px;
+                line-height: 10px;
+                width: 15px;
+                height: 15px;
+            }
+            li.slick-active button:before{
+                color: #00FFFF;
+            }
+
+
+        }
+
+        .testimonials {
+            margin:0 !important;
+            padding:0 !important;
+        }
+
+        .testimonial-wrap {
+            .single-testimonial {
+                border: 0 !important;
+
+                .fr-wrapper .fr-element {
+                    padding: 0;
+                }
+
+            }
+            .single-testimonial:hover {
+                .add-addtional {
+                    bottom: 0 !important;
+                    padding: 0px 10px 0px !important;
+                }
+            }
+        }
+
+        .slick-slide .img img {
+
+            width: 100%;
+
+            @media screen and (max-width: 767px) {
+                width: 200%;
+                max-width: none;
+                transform: translateX(-25%);
+            }
+
+        }
+
+        .container.inner-page {
+            @media screen and (max-width: 767px) {
+                padding: 0!important;
+            }
+        }
+
+    }
+
+}
