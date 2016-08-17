@@ -42,7 +42,7 @@
             </span>
         </label>
     </div>
-    <div ng-if="!vm.isHero">
+    <div ng-if="!vm.isHero && vm.component.title !== 'Nav + Hero'">
         <div class="form-group" ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div ng-if="vm.isHero">
+    <div ng-if="vm.isHero || vm.component.title === 'Nav + Hero'">
         <div class="form-group" ng-init="switch=true" disabled ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
