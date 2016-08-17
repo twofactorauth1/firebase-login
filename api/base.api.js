@@ -442,6 +442,29 @@ _.extend(apiBase.prototype, {
         }
     },
 
+    getStripeTokenFromAccountObject: function(accountObj, req, fn) {
+        var self = this;
+        self.log.debug('>> getStripeTokenFromAccountObj');
+
+        if(req.session.stripeAccessToken) {
+            return fn(null, req.session.stripeAccessToken);
+        } else {
+            var credentials = accountObj.get('credentials');
+            var creds = null;
+            _.each(credentials, function (cred) {
+                if (cred.type === 'stripe') {
+                    creds = cred;
+                }
+            });
+            if(creds && creds.accessToken) {
+                req.session.stripeAccessToken = creds.accessToken;
+                return fn(null, req.session.stripeAccessToken);
+            } else {
+                return fn(null, null);
+            }
+        }
+    },
+
     getStripeTokenFromUnAuthenticatedAccount: function(req, fn) {
         var self = this;
         self.log.debug('>> getStripeTokenFromUnAuthenticatedAccount');

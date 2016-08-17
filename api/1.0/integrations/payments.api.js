@@ -1811,25 +1811,34 @@ _.extend(api.prototype, baseApi.prototype, {
     getUpcomingInvoice: function(req, resp) {
 
         var self = this;
-        self.log.debug('>> getUpcomingInvoice');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getUpcomingInvoice');
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                self.getStripeTokenFromAccount(req, function(err, accessToken){
-                    var accountId = parseInt(self.accountId(req));
-                    if(accessToken === null && accountId != appConfig.mainAccountID) {
-                        return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting account:', err);
+                        return self.sendResultOrError(resp, err, null, "Error retrieving upcoming invoice.", 404);
+                    } else {
+                        self.getStripeTokenFromAccountObject(account, req, function(err, accessToken){
+                            if(accessToken === null && accountId != appConfig.mainAccountID) {
+                                return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                            }
+                            var customerId = req.params.id;
+                            var subscriptionId = account.get('billing').subscriptionId;
+
+                            stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
+
+                                self.log.debug('<< getUpcomingInvoice');
+                                return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
+                            });
+                        });
                     }
-                    var customerId = req.params.id;
-                    var subscriptionId = req.body.subscriptionId;
-
-                    stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
-
-                        self.log.debug('<< getUpcomingInvoice');
-                        return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
-                    });
                 });
+
 
             }
         });
@@ -1838,17 +1847,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getMyUpcomingInvoice: function(req, resp) {
         var self = this;
-        self.log.debug('>> getMyUpcomingInvoice');
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getMyUpcomingInvoice');
+
         accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 self.log.error('Error getting account by ID:', err);
                 return self.wrapError(resp, 500, 'Error getting invoice', 'There was an error getting upcoming invoices', '');
             } else {
                 var customerId = account.get('billing').stripeCustomerId;
-                var subscriptionId = req.body.subscriptionId;
+                var subscriptionId = account.get('billing').subscriptionId;
                 stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
-                    self.log.debug('<< getMyUpcomingInvoice');
+                    self.log.debug(accountId, userId, '<< getMyUpcomingInvoice');
                     return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
                 });
             }
