@@ -1178,12 +1178,14 @@ _.extend(api.prototype, baseApi.prototype, {
     createCard: function(req, resp) {
 
         var self = this;
-        self.log.debug('>> createCard');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> createCard');
         /*
          * Customers are stored on the main account.  No accessToken needed.
          */
 
-        var accountId = parseInt(self.accountId(req));
+
 
         var customerId = req.params.id;
 
@@ -1196,12 +1198,20 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.wrapError(resp, 400, null, "Invalid cardToken parameter.");
                 }
                 self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    stripeDao.updateStripeCustomer(customerId, null, cardToken, null, null, null, null, null, accessToken, function(err, value){
+                        self.log.debug(accountId, userId, '<< createCard');
+                        self.sendResultOrError(resp, err, value, "Error creating card");
+                        self.createUserActivity(req, 'CREATE_STRIPE_CARD', null, {customerId: customerId}, function(){});
+                        return;
+                    });
+                    /*
                     stripeDao.createStripeCard(customerId, cardToken, accessToken, function(err, value){
                         self.log.debug('<< createCard');
                         self.sendResultOrError(resp, err, value, "Error creating card");
                         self.createUserActivity(req, 'CREATE_STRIPE_CARD', null, {customerId: customerId}, function(){});
                         return;
                     });
+                    */
                 });
             }
         });
