@@ -89,6 +89,25 @@
 			</li>
 		</ul>
 	</li>
+    <li ng-class="{'active open':$state.includes('app.customers')}" ng-if="account._id == 6">
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="ti-id-badge"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.customers.MAIN"> Customers </span>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active">
+                <a ui-sref="app.customers">
+                    <span class="title" translate="sidebar.nav.contacts.MANAGE"> Manage </span>
+                </a>
+            </li>
+        </ul>
+    </li>
 	<li ng-class="{'active open':$state.includes('app.products', 'app.orders')}">
 		<a href="javascript:void(0)">
 			<div class="item-content">
