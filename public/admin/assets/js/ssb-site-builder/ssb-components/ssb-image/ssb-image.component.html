@@ -1,3 +1,15 @@
 <div>
-<img class="img-responsive" ng-src="{{vm.component.src}}" alt="{{(vm.component.src) ? vm.component.alttext : ''}}"/>
+	<div ng-if="vm.component.version != 2">
+		<img class="img-responsive" ng-src="{{vm.component.src}}" alt="{{(vm.component.src) ? vm.component.alttext : ''}}"/>
+	</div>
+	<div class="nav-header-div" ng-if="vm.component.version == 2" ng-class="{parallax:vm.component.parallax}"
+	     {{vm.component.parallax ? parallax-background : ""}}
+	     ng-attr-parallax-ratio="{{vm.component.parallax ? '0.4' : '1'}}"
+	     style='
+	        background: url("{{vm.component.src}}");
+	        background-size: cover;
+	        background-repeat: no-repeat;'> 		
+		 <img ng-src="{{vm.component.src}}" style="visibility: hidden; opcaity: 0;">		
+	</div>
 </div>
+
