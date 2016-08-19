@@ -301,6 +301,19 @@
                 <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
             </div>
 
+            <div ng-if="component.bg.img.overlay" class="form-group ssb-spectrum-color-picker-small">
+                 <div class="ssb-spectrum-color-picker-background-container">
+                     <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+                     <i class="fa fa-eyedropper" />
+                 </div>
+                 <label for="colorpicker">
+                     Overlay color
+                     <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect.">
+                         <i class="fa fa-info-circle" />
+                     </span>
+                 </label>
+             </div>
+
             <div class="form-group" ng-if="component.bg.img.overlay">
                 <div>
                     <label for="bg_overlay_opacity">Overlay opacity</label>
