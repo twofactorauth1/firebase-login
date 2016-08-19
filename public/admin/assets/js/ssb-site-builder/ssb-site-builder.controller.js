@@ -41,6 +41,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.savePost = savePost;
     vm.updateColumnLayout = updateColumnLayout;
     vm.setDefaultSpacing = setDefaultSpacing;
+    vm.isNavHero = isNavHero;
 
     vm.uiState = {
         loading: 0,
@@ -151,7 +152,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         updateColumnLayout: vm.updateColumnLayout,
 
-        setDefaultSpacing: vm.setDefaultSpacing 
+        setDefaultSpacing: vm.setDefaultSpacing,
+
+        isNavHero: vm.isNavHero
 
     };
 
@@ -998,6 +1001,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function isBlogPage(page) {
         return page.handle === 'blog-list' || page.handle === 'blog-post';
+    }
+
+    function isNavHero(section){
+        return section && section.title && section.title.toLowerCase() === "nav + hero";
     }
 
     function isBlogEditMode() {

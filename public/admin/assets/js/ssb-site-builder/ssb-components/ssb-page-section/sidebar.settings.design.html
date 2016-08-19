@@ -42,7 +42,7 @@
             </span>
         </label>
     </div>
-    <div ng-if="!vm.isHero && vm.component.title !== 'Nav + Hero'">
+    <div ng-if="!vm.isHero && !vm.uiState.isNavHero(vm.component)">
         <div class="form-group" ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
@@ -70,7 +70,7 @@
         </div>
     </div>
 
-    <div ng-if="vm.isHero || vm.component.title === 'Nav + Hero'">
+    <div ng-if="vm.isHero || vm.uiState.isNavHero(vm.component)">
         <div class="form-group" ng-init="switch=true" disabled ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
@@ -264,7 +264,7 @@
                 <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
             </div>
 
-            <div class="form-group" ng-show="vm.component.title === 'Nav + Hero' && component.components[0].src">
+            <div class="form-group" ng-show="vm.uiState.isNavHero(vm.component) && component.components[0].src">
                 <label for="bg_parallax">
                     Parallax
                     <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image.">
@@ -301,19 +301,6 @@
                 <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
             </div>
 
-            <div ng-if="component.bg.img.overlay" class="form-group ssb-spectrum-color-picker-small">
-                <div class="ssb-spectrum-color-picker-background-container">
-                    <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
-                    <i class="fa fa-eyedropper" />
-                </div>
-                <label for="colorpicker">
-                    Overlay color
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect.">
-                        <i class="fa fa-info-circle" />
-                    </span>
-                </label>
-            </div>
-
             <div class="form-group" ng-if="component.bg.img.overlay">
                 <div>
                     <label for="bg_overlay_opacity">Overlay opacity</label>
@@ -329,10 +316,55 @@
                         rz-slider-options="{floor: 0, ceil: 100, step: 10}">
                     </rzslider>
                 </div>
-            </div>
+            </div>              
         </div>
     </div>
 </div>
+
+<div ng-if="(vm.uiState.isNavHero(vm.component) || vm.isHero) && component.components[0].type === 'testimonials'">
+    <h4 class="ssb-sidebar-sub-heading-separator">Slider Effects</h4>
+    <div class="row padding-10">
+        <div class="form-group">
+            <label for="bg_overlay">
+            Show Overlay to slider
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to slider.">
+                <i class="fa fa-info-circle" />
+            </span>
+            </label>
+            <switch ng-model="component.components[0].slider.showOverlay" class="pull-right"></switch>
+        </div>
+        <div ng-if="component.components[0].slider.showOverlay" class="form-group ssb-spectrum-color-picker-small">
+            <div class="ssb-spectrum-color-picker-background-container">
+                <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.components[0].slider.overlay.color"></spectrum-colorpicker>
+                <i class="fa fa-eyedropper" />
+            </div>
+            <label>
+                Overlay color of slider
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect of slider.">
+                    <i class="fa fa-info-circle" />
+                </span>
+            </label>
+        </div>
+
+        <div ng-if="component.components[0].slider.showOverlay" class="form-group">
+            <div>
+                <label>
+                    Overlay opacity of slider
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity to slider images.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+            </div>
+            <div>
+                <rzslider
+                    class="slider-opacity"
+                    name="bg-opacity"
+                    rz-slider-model="component.components[0].slider.overlay.opacity" rz-slider-options="{floor: 0, ceil: 100, step: 10}">
+                </rzslider>
+            </div>
+        </div>
+    </div>    
+</div>  
 <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/border.settings.html' "></div>
 <div ng-if="component.layoutModifiers.columns.columnsNum" data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/column.border.settings.html' "></div>
 
