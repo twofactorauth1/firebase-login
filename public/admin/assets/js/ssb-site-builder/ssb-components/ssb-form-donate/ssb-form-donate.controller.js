@@ -86,6 +86,8 @@
 
         vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
 
+        vm._campaignObj = null;
+
 
         function fieldClass(field) {
             var classString = 'col-sm-12';
@@ -224,8 +226,8 @@
             }
 
             var _campaignTags = [];
-            if (_campaignObj && angular.isDefined(_campaignObj.searchTags) && _campaignObj.searchTags.tags.length) {
-              _campaignTags = _.uniq(_.pluck(_campaignObj.searchTags.tags, 'data'));
+            if (vm._campaignObj && angular.isDefined(vm._campaignObj.searchTags) && vm._campaignObj.searchTags.tags.length) {
+              _campaignTags = _.uniq(_.pluck(vm._campaignObj.searchTags.tags, 'data'));
             }
 
             var first_name = "";
@@ -924,7 +926,7 @@
               if($injector.has("campaignService")){
                 campaignService = $injector.get("campaignService");
                 campaignService.getCampaign(vm.component.campaignId, function(data) {
-                  _campaignObj = data;
+                  vm._campaignObj = data;
                 });
               }      
             }
@@ -956,8 +958,7 @@
                 vm.setInitialCheckoutState();
 
             }
-
-            var _campaignObj = null;
+            
             getCampaings();
         }
 

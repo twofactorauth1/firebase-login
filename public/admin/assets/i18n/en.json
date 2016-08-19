@@ -96,6 +96,9 @@
         "MANAGE": "Manage",
         "SETTINGS": "Contact Settings"
       },
+      "customers": {
+          "MAIN": "Customers"
+      },
       "commerce": {
         "MAIN": "Commerce",
         "PRODUCTS": "Products",

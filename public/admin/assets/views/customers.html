@@ -1,0 +1,209 @@
+<div class="contacts" ng-controller="CustomersCtrl">
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.contacts.MAIN"></h1>
+                <span ng-if="customers" class="mainDescription">There are currently {{customers.length || 0}} customers. ({{displayedCustomers.length || 0}} in filtered view)</span>
+            </div>
+        </div>
+    </section>
+    <div st-table="displayedCustomers" st-sort-table st-safe-src="customers">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group">
+                                        <div class="col-xs-6 col-md-6 padding-left-0 padding-right-30">
+                                            <span class="input-icon">
+                                        <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
+                                        <i class="ti-search"></i>
+                                    </span>
+                                        </div>
+                                        <div class="col-xs-3 col-md-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterContacts()">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                        <div class="col-xs-3 col-md-3 padding-right-0">
+                                            <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
+                                                <ui-select-match placeholder="Actions">
+                                                    <small ng-bind-html="$select.selected.label"></small>
+                                                </ui-select-match>
+                                                <ui-select-choices repeat="action in bulkActionChoices |  orderBy:'label' | filter: $select.search">
+                                                    <small ng-bind-html="action.label | highlight: $select.search"></small>
+                                                </ui-select-choices>
+                                            </ui-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="visible-xs clearfix margin-bottom-15"></div>
+                                <div class="col-xs-12 col-sm-6 row margin-bottom-0 pull-right">
+
+
+                                    <div class="form-group margin-bottom-0 margin-right-5 pull-right">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="exportContactsFn()">
+                                            <span ng-bind-html='exportText'></span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group margin-bottom-0 margin-right-5 pull-right hidden">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-import" ng-click="openModal('contact-templates')">
+                                            <span>Templates</span>
+                                        </button>
+                                    </div>
+                                    <div class="button-group pull-right margin-right-5 hidden">
+                                        <span class="dropdown" dropdown on-toggle="toggled(open)">
+                                        <p class="margin-bottom-0">
+                                        <button type="button" class="btn btn-wide btn-info btn-o dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                            Columns <span class="caret"></span>
+                                        </button>
+                                        </p>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.photo" ng-click="preventClick($event)" /> Photo</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.name" ng-click="preventClick($event)" /> Name</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.category" ng-click="preventClick($event)" /> Category</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.email" ng-click="preventClick($event)" /> Email</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.address" ng-click="preventClick($event)" /> Address</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.social" ng-click="preventClick($event)" /> Social</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.created" ng-click="preventClick($event)" /> Created</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
+                                                <input type="checkbox" ng-model="column.modified" ng-click="preventClick($event)" /> Modified</span>
+                                            </li>
+                                        </ul>
+                                        </span>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="btn-group tableView">
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+            <div class="panel panel-transparent row margin-bottom-0">
+                <div class="panel-body">
+                    <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedCustomers">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                            <tr>
+                                <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
+                                <th st-sort="_id" ng-show="column._id" ng-class="{'column-width': tableView == 'grid'}">Account ID</th>
+                                <th st-sort="subdomain" ng-show="column.subdomain" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Subdomain</th>
+                                <th st-sort="customDomain" ng-show="column.customDomain" ng-class="{'column-width': tableView == 'grid'}">Custom Domain</th>
+                                <th st-sort="signupDate" ng-show="column.signupDate" ng-class="{'column-width': tableView == 'grid'}">Signup Date</th>
+                                <th st-sort="trialDays" ng-show="column.trialDays" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}">Trial Days Remaining</th>
+                                <th st-sort="plan" ng-show="column.plan" ng-class="{'column-width': tableView == 'grid'}">Plan</th>
+
+                                <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
+                            </tr>
+                            <tr ng-if="showFilter">
+                                <th class="column-width" ng-show="column.name">
+
+                                </th>
+                                <th class="column-width" ng-show="column.name">
+                                    <input st-search="_id" placeholder="Contact ID" class="form-control" type="search" />
+                                </th>
+                                <th class="column-width" ng-show="column.photo">
+                                    <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterContact.photo.selected.value" />
+                                    <ui-select ng-model="filterContact.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
+                                        <ui-select-match placeholder="Select Photo">
+                                            <small ng-bind-html="$select.selected.name"></small>
+                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPicture', 'photo')"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="option in contactPhotoOptions">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="option.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
+                                <th class="column-width" ng-show="column.name">
+                                    <input st-search="first" placeholder="First Name" class="form-control" type="search" />
+                                </th>
+                                <th class="column-width" ng-show="column.name">
+                                    <input st-search="last" placeholder="Last Name" class="form-control" type="search" />
+                                </th>
+                                <th class="column-width" ng-show="column.tags">
+                                    <input st-search="tempTags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterContact.type.selected.label" />
+                                    <ui-select ng-model="filterContact.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
+                                        <ui-select-match placeholder="Select Type">
+                                            <small ng-bind-html="$select.selected.label"></small>
+                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="tag in contactTags |  orderBy:'label' | filter: $select.search">
+                                            <small ng-bind-html="tag.label | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
+                                <th class="column-width" ng-show="column.email">
+                                    <input st-search="email" placeholder="Email" class="form-control" type="search" />
+                                </th>
+                                <!-- Need to add custom filter -->
+                                <th class="column-width" ng-show="column.address">
+                                    <input st-search="address" placeholder="Address" class="form-control hidden" type="search" />
+                                </th>
+                                <th class="column-width" ng-show="column.phone">
+                                    <input st-search="phone" placeholder="Phone" class="form-control hidden" type="search" />
+                                </th>
+                                <th ng-show="column.social">
+                                </th>
+                                <th ng-show="column.created">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
+                                <td ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-click='customerSelectClickFn($event, customer)' ng-class='{"fa-check-circle": customer.isSelected, "fa-circle-o": !customer.isSelected}'></i></td>
+                                <td ng-show="column._id"><strong>Account ID: </strong>{{customer._id}}</td>
+                                <td ng-show="column.subdomain"><strong>Subdomain: </strong>{{customer.subdomain}}</td>
+                                <td ng-show="column.customDomain"><strong>Custom Domain: </strong> <span ng-text-truncate="customer.customDomain" ng-tt-chars-threshold="25" ng-tt-no-toggling></span><span ng-if="!customer.customDomain">--</span></td>
+                                <td ng-show="column.signupDate"><strong>Signup Date: </strong>{{customer.billing.signupDate | date:'M/d/yy'}}</td>
+                                <td ng-show="column.trialDays"><strong>Trial Days: </strong>{{customer.trialDaysRemaining}}</td>
+                                <td ng-show="column.plan" class="hidden-xs"><strong>Plan: </strong> {{customer.billing.plan}}</td>
+
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="9">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="!customers"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div data-ng-include=" 'assets/views/partials/new-contact-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/import-contact-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/tags-bulk-action-modal.html' "></div>

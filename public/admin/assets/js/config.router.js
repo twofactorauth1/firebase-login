@@ -122,6 +122,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Contacts',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'contactService', 'papaParse', 'string_score', 'importContactModalCtrl')
+    }).state('app.customers', {
+        url: '/customers',
+        templateUrl: "/admin/assets/views/customers.html",
+        title: 'Customers',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('customersCtrl', 'customerService')
     }).state('app.singleContact', {
         url: '/contacts/:contactId',
         templateUrl: "/admin/assets/views/contact-detail.html",

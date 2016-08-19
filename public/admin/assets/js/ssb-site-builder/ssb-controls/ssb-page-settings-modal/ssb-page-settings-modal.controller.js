@@ -73,11 +73,11 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                     closeOnCancel: true
                     }, function (isConfirm) {
                     if (isConfirm) {
-                    vm.page.homePage = true;
-                    angular.element('.modal.in').show();
+                        vm.page.homePage = true;
+                        angular.element('.modal.in').show();
                     } else {
-                    angular.element('.modal.in').show();
-                    vm.page.homePage = false;
+                        angular.element('.modal.in').show();
+                        vm.page.homePage = false;
                     }
                 })
             }
@@ -162,6 +162,19 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                                     }
                                 }, 0);
                             }
+                            // Reset page handle of selected page in editor if setting page is set as home page
+                            else if(vm.page.homePage && vm.parentVm.state.page.handle === 'index' && vm.page._id !== vm.parentVm.state.page._id){
+                                var pendingPageChanges = angular.copy(vm.parentVm.state.pendingPageChanges);
+                                var _editorPage = _.find(pages.data, function (page) {
+                                    return page._id === vm.parentVm.state.page._id;
+                                });
+                                if(_editorPage){
+                                    vm.parentVm.state.page.handle = _editorPage.handle;
+                                    $timeout(function() {
+                                        vm.parentVm.state.pendingPageChanges = pendingPageChanges;
+                                    }, 500);
+                                }
+                            }
                             vm.parentVm.closeModal();
                         }
                     })
@@ -170,7 +183,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
             }).catch(function(err) {
                 vm.saveLoading = false;
                 if(err.message)
-                    toaster.pop('error', error.message);
+                    toaster.pop('error', err.message);
                 else
                     toaster.pop('error', "Setting not saved", "Error while saving page settings");
             })
@@ -181,7 +194,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         return (
             SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
                 console.log('website saved');
-                if (vm.parentVm.state.account.showhide.userScripts && vm.parentVm.state.website.resources.toggles.userScripts) {
+                if (vm.parentVm.state.account && vm.parentVm.state.account.showhide && vm.parentVm.state.account.showhide.userScripts && vm.parentVm.state.website.resources.toggles.userScripts) {
                     SimpleSiteBuilderService.updateScriptResource(vm.parentVm.state.website).then(function(response) {
                         vm.parentVm.state.website = response.data;
                     });

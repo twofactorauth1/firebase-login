@@ -30,7 +30,10 @@
     <div class="testimonial-wrap {{isEditing ? 'editing' : ''}}" style="position: relative;">
         <div ng-if="dataLoaded" class="carousel-caption" ind-slider='{ slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  speed:{{component.slider.speed}}, slidesToScroll:1, autoplay:{{autoplay}}, autoplaySpeed:{{component.slider.autoPlayInterval}}, fade: true, accessibility:{{accessibility}} }'>
             <div ng-repeat="testimonial in component.testimonials" class="col-sm-12 testimonials single-testimonial">
+                <div ng-if="component.slider.showOverlay" class="bg" ng-style="{'background': component.slider.overlay.color, opacity: component.slider.overlay.opacity === 0 ? component.slider.overlay.opacity : component.slider.overlay.opacity/100 || 0}" style="z-index: 3;">                    
+                </div>
                 <div class="img" ng-class="{'blank-img': !testimonial.img}">
+                    
                     <div elem ng-model="testimonial.img"></div>
                 </div>
                 <div class="row testimonial-row">
