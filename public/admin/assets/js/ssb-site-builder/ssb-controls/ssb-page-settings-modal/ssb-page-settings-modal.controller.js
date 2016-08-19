@@ -162,6 +162,19 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                                     }
                                 }, 0);
                             }
+                            // Reset page handle of selected page in editor if setting page is set as home page
+                            else if(vm.page.homePage && vm.parentVm.state.page.handle === 'index' && vm.page._id !== vm.parentVm.state.page._id){
+                                var pendingPageChanges = angular.copy(vm.parentVm.state.pendingPageChanges);
+                                var _editorPage = _.find(pages.data, function (page) {
+                                    return page._id === vm.parentVm.state.page._id;
+                                });
+                                if(_editorPage){
+                                    vm.parentVm.state.page.handle = _editorPage.handle;
+                                    $timeout(function() {
+                                        vm.parentVm.state.pendingPageChanges = pendingPageChanges;
+                                    }, 500);
+                                }
+                            }
                             vm.parentVm.closeModal();
                         }
                     })
