@@ -86,6 +86,8 @@
 
         vm.isEditing = $scope.$parent.vm && $scope.$parent.vm.uiState;
 
+        vm._campaignObj = null;
+
 
         function fieldClass(field) {
             var classString = 'col-sm-12';
