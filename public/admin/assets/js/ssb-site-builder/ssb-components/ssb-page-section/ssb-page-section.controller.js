@@ -326,8 +326,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
 
             if(!fixedColumn && parseInt(vm.section.layoutModifiers.columns.columnsNum) > 1){            
+                var element = angular.element(".inner-component-style." + component.type + "" + component._id);
                 if (vm.section.columnBorder && vm.section.columnBorder.show && vm.section.columnBorder.color) {
-                    var element = angular.element(".inner-component-style." + component.type + "" + component._id);
+                    
                     if(element){
                         element.css({
                             'border-color':  vm.section.columnBorder.color,
@@ -337,6 +338,13 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         })
                     }
                 }
+                else{
+                    if(element){
+                        element.css({
+                            'border': 'none'
+                        })
+                    }
+                }                    
             }
             
         }
