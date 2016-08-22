@@ -70,7 +70,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< getCurrentAccount');
                     self._addTrialDaysToAccount(value);
                     self.sm.verifySubscriptionWithoutSettingSessionVariables(req, function(err, isValid){
-                        if(isValid === false) {
+                        if(isValid === false && accountId !== appConfig.mainAccountID) {
                             value.set('locked_sub', true);
                         }
                         return resp.send(value.toJSON('public'));
