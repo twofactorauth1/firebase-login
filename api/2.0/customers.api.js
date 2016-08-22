@@ -27,7 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listCustomers.bind(this));
-
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomer.bind(this));
 
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
 
@@ -62,6 +62,23 @@ _.extend(api.prototype, baseApi.prototype, {
             });
         }
 
+    },
+
+    getCustomer: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCustomer');
+        var customerId = parseInt(req.params.id);
+
+        if(accountId === appConfig.mainAccountID) {
+            manager.getMainCustomer(accountId, userId, customerId, function(err, customer){
+                self.log.debug(accountId, userId, '<< getCustomer');
+                self.sendResultOrError(resp, err, customer, 'Error getting customer');
+            });
+        } else {
+            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+        }
     }
 
 

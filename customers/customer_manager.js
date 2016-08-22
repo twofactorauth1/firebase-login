@@ -7,9 +7,11 @@
 
 var dao = require('./dao/customer.dao');
 var accountDao = require('../dao/account.dao');
+var userManager = require('../dao/user.manager');
 
 var log = $$.g.getLogger('customer_manager');
 var appConfig = require('../configs/app.config');
+var async = require('async');
 
 module.exports = {
 
@@ -51,84 +53,42 @@ module.exports = {
 
     },
 
-    getComponentData: function(accountId, userId, type, key, fn){
+    getMainCustomer: function(accountId, userId, customerId, fn) {
         var self = this;
-        self.log.debug(accountId, userId, '>> getComponentData');
-        var query = {
-            accountId:accountId,
-            type:type,
-            key:key
-        };
+        self.log.debug(accountId, userId, '>> getMainCustomer');
 
-        dao.findOne(query, $$.m.ComponentData, function(err, value){
-            if(err) {
-                self.log.error(accountId, userId, 'Error finding component data:', err);
-                return fn(err);
-            } else {
-                self.log.debug(accountId, userId, '<< getComponentData');
-                return fn(null, value);
-            }
-        });
-    },
-
-    saveComponentData: function(accountId, userId, type, key, componentData, fn) {
-        var self = this;
-        self.log.debug(accountId, userId, '>> saveComponentData');
-        var query = {
-            accountId:accountId,
-            type:type,
-            key:key
-        };
-        dao.findOne(query, $$.m.ComponentData, function(err, value){
-            if(err) {
-                self.log.error(accountId, userId, 'Error finding component data:', err);
-                return fn(err);
-            } else if(value){
-                componentData.id(value.id());
-                componentData.set('created', value.get('created'));
-                componentData.set('modified', {date:new Date(), by:userId});
-                dao.saveOrUpdate(componentData, function(err, savedData){
-                    if(err) {
-                        self.log.error(accountId, userId, 'Error saving data:', err);
-                        return fn(err);
-                    } else {
-                        self.log.debug(accountId, userId, '<< saveComponentData');
-                        return fn(null, savedData);
-                    }
+        async.waterfall([
+            function(cb) {
+                accountDao.getAccountByID(customerId, function(err, account){
+                    cb(err, account);
                 });
-            } else {
-                componentData.set('created', {date:new Date(), by:userId});
-                componentData.set('modified', {date:new Date(), by:userId});
-                dao.saveOrUpdate(componentData, function(err, savedData){
+            },
+            function(account, cb) {
+                userManager.getUserAccounts(customerId, function(err, users){
                     if(err) {
-                        self.log.error(accountId, userId, 'Error saving data:', err);
-                        return fn(err);
+                        cb(err);
                     } else {
-                        self.log.debug(accountId, userId, '<< saveComponentData');
-                        return fn(null, savedData);
+                        var userAry = [];
+                        _.each(users, function(user){
+                            userAry.push(user.toJSON('public', {accountId:customerId}));
+                        });
+                        account.set('users', userAry);
+                        cb(null, account);
                     }
+
                 });
             }
-        });
-    },
-
-    deleteComponentData: function(accountId, userId, type, key, fn) {
-        var self = this;
-        self.log.debug(accountId, userId, '>> deleteComponentData');
-        var query = {
-            accountId:accountId,
-            type:type,
-            key:key
-        };
-        dao.remove(query, $$.m.ComponentData, function(err, value){
+        ], function(err, customer){
             if(err) {
-                self.log.error(accountId, userId, 'Error removing data:', err);
+                self.log.error(accountId, userId, 'Error getting customer:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< deleteComponentData');
-                return fn(null, value);
+                self.log.debug(accountId, userId, '<< getMainCustomer');
+                return fn(null, customer);
             }
+
         });
+
     }
 
 
