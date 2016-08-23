@@ -13,7 +13,7 @@
         var basePageAPIUrl = '/api/1.0/cms/page/';
         var baseComponentAPIUrl = '/api/1.0/cms/component/';
         var baseTemplateAPIUrl = '/api/1.0/cms/template/';
-        var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
+        var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/';
         var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
         var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
         var baseSiteTemplateAPIUrlv2 = '/api/2.0/cms/sitetemplates/';
@@ -221,7 +221,7 @@
             fn.finally(function() {
                 ssbService.loading.value = ssbService.loading.value - 1;
                 console.info('service | loading -1 : ' + ssbService.loading.value);
-            })
+            });
             return fn;
         }
 
@@ -288,7 +288,7 @@
         }
 
         function loadDataFromPage(scriptId) {
-
+            console.log('loadDataFromPage:' + scriptId);
             var data = $(scriptId).html();
 
             var unescapeMap = {
@@ -369,7 +369,7 @@
                     method: 'POST',
                     data: angular.toJson(page)
                 }).success(isSettings ? success : successPage).error(errorPage))
-            )
+            );
         }
 
         /**
@@ -408,7 +408,7 @@
                   method: 'POST',
                   data: { templateId: templateId }
                 }).success(success).error(error))
-            )
+            );
 
             function success(data) {
                 console.log('SimpleSiteBuilderService requested page created');
@@ -672,7 +672,7 @@
                     "pl": "0",
                     "pr": "0"
                 }
-            }
+            };
 
             return getComponent(section, version).then(function(component) {
                 sectionDefault.components = [component.data];
@@ -704,7 +704,7 @@
 
             function success(data) {
                 ssbService.platformSections = data;
-                console.log('SimpleSiteBuilderService requested getPlatformSections: ' + data);
+                //console.log('SimpleSiteBuilderService requested getPlatformSections: ' + data);
             }
 
             function error(error) {
@@ -862,7 +862,7 @@
           return (
             ssbRequest($http({
               url: baseSiteTemplateAPIUrlv2,
-              method: 'GET',
+              method: 'GET'
             }).success(success).error(error))
           )
 

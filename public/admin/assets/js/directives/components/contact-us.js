@@ -2,207 +2,203 @@
 /*global app, moment, angular, window, CKEDITOR, L*/
 /*jslint unparam:true*/
 app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeout', '$window', function (AccountService, GeocodeService, $timeout, $window) {
-  return {
-    scope: {
-      component: '=',
-      control: '=?',
-      ssbEditor: '='
-    },
-    templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs) {
-      scope.isEditing = true;
-      if (!scope.component.map) {
-        scope.component.map = {};
-        if (!scope.component.map.zoom) {
-          scope.component.map.zoom = 10;
-        }
-      }
-      if(!scope.component.custom)
-      {
-        scope.component.custom = {
-          hours: true, address: true
-        };
-      }
-      if(!scope.component.boxProperties)
-      {
-        scope.component.boxProperties = {};
-      }
-
-      // Set bg image show always false for contact component
-
-      if(!angular.isDefined(scope.component.bg))
-        scope.component.bg = {};
-      if(!angular.isDefined(scope.component.bg.img))
-        scope.component.bg.img = {};
-      if(!angular.isDefined(scope.component.bg.img.show)) {
-        scope.component.bg.img.show = false;
-      }
-
-      function hexToRgb(hex, opacity) {
-        var c;
-        opacity = angular.isDefined(opacity) ? opacity : 1;
-        c = hex.substring(1).split('');
-        if(c.length== 3){
-            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-        }
-        c= '0x'+c.join('');
-        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+ opacity +')';
-      };
-      scope.$watch('component.boxColor', function (newValue, oldValue) {
-        if (newValue && scope.component.boxColor) {
-          scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
-        }
-        else{
-          scope.boxColor = null;
-        }
-      });
-      scope.$watch('component.boxOpacity', function (newValue, oldValue) {
-        if (angular.isDefined(newValue) && scope.component.boxColor) {
-          scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
-        }
-      });
-
-      scope.setBusinessDetails = function(is_address, fn)
-      {
-        if(is_address){
-          if (scope.account.business.addresses && scope.account.business.addresses.length > -1) {
-           angular.copy(scope.account.business.addresses[0], scope.component.location);
-          }
-        }
-        else if (scope.account.business.hours) {
-          angular.copy(scope.account.business.hours, scope.component.hours);
-          var _splitHours = scope.account.business.splitHours;
-          scope.component.splitHours = _splitHours;
-        }
-        fn();
-      }
-
-      scope.reloadMap = function()
-      {
-         google.maps.event.trigger(scope.map, 'resize');
-         scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
-      }
-
-      scope.updateContactUsAddress = function () {
-        setTimeout(function () {
-          scope.$apply(function () {
-               scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
-          });
-          if (scope.component.location.lat && scope.component.location.lon) {
-            scope.reloadMap();
-          } else {
-              GeocodeService.validateAddress(scope.component.location, null, function (data, results) {
-                if (data && results.length === 1) {
-                  scope.component.location.lat = results[0].geometry.location.lat();
-                  scope.component.location.lon = results[0].geometry.location.lng();
-                  scope.reloadMap();
+    return {
+        scope: {
+            component: '=',
+            control: '=?',
+            ssbEditor: '='
+        },
+        templateUrl: '/components/component-wrap.html',
+        link: function (scope, element, attrs) {
+            scope.isEditing = true;
+            if (!scope.component.map) {
+                scope.component.map = {};
+                if (!scope.component.map.zoom) {
+                    scope.component.map.zoom = 10;
                 }
-                else{
-                  GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
-                    if (data.lat && data.lon) {
-                      scope.component.location.lat = data.lat;
-                      scope.component.location.lon = data.lon;
-                      scope.reloadMap();
-                    }
-                  })
-                }
-              });
             }
-        }, 500);
-      };
-      scope.$on('mapInitialized', function(event, map) {
-        scope.map = map;
-        google.maps.event.trigger(scope.map, 'resize');
-        scope.map.setCenter(new google.maps.LatLng(51, 0));
-      });
+            if (!scope.component.custom) {
+                scope.component.custom = {
+                    hours: true, address: true
+                };
+            }
+            if (!scope.component.boxProperties) {
+                scope.component.boxProperties = {};
+            }
 
-        // if (!scope.control) {
-        //     scope.control = {};
-        // }
+            // Set bg image show always false for contact component
 
-        scope.control.refreshMap = function () {
-          if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
-            scope.setBusinessDetails(true, function () {
-                scope.updateContactUsAddress();
+            if (!angular.isDefined(scope.component.bg))
+                scope.component.bg = {};
+            if (!angular.isDefined(scope.component.bg.img))
+                scope.component.bg.img = {};
+            if (!angular.isDefined(scope.component.bg.img.show)) {
+                scope.component.bg.img.show = false;
+            }
+
+            function hexToRgb(hex, opacity) {
+                var c;
+                opacity = angular.isDefined(opacity) ? opacity : 1;
+                c = hex.substring(1).split('');
+                if (c.length == 3) {
+                    c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+                }
+                c = '0x' + c.join('');
+                return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
+            };
+            scope.$watch('component.boxColor', function (newValue, oldValue) {
+                if (newValue && scope.component.boxColor) {
+                    scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
+                }
+                else {
+                    scope.boxColor = null;
+                }
             });
-          } else {
-            scope.updateContactUsAddress();
-          }
-        };
-
-        scope.control.refreshHours = function () {
-          if (!scope.component.custom.hours)
-            scope.setBusinessDetails(false, function () {
-              console.log("hours refreshed");
+            scope.$watch('component.boxOpacity', function (newValue, oldValue) {
+                if (angular.isDefined(newValue) && scope.component.boxColor) {
+                    scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
+                }
             });
-        };
 
+            scope.setBusinessDetails = function (is_address, fn) {
+                if (is_address) {
+                    if (scope.account.business.addresses && scope.account.business.addresses.length > -1) {
+                        angular.copy(scope.account.business.addresses[0], scope.component.location);
+                    }
+                }
+                else if (scope.account.business.hours) {
+                    angular.copy(scope.account.business.hours, scope.component.hours);
+                    var _splitHours = scope.account.business.splitHours;
+                    scope.component.splitHours = _splitHours;
+                }
+                fn();
+            };
 
-        scope.$parent.$watchGroup(['ckeditorLoaded', 'vm.uiState.loaded'], function (newValue, oldValue) {
-            if (newValue[0] || newValue[1] && scope.component.visibility) {
-                AccountService.getAccount(function (account) {
+            scope.reloadMap = function () {
+                google.maps.event.trigger(scope.map, 'resize');
+                scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
+            }
 
-                    scope.account = account;
-
-                    if (!scope.component.custom.hours) {
-                        scope.setBusinessDetails(false, function () {
-                            console.log("hours refreshed");
+            scope.updateContactUsAddress = function () {
+                setTimeout(function () {
+                    scope.$apply(function () {
+                        scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
+                    });
+                    if (scope.component.location.lat && scope.component.location.lon) {
+                        scope.reloadMap();
+                    } else {
+                        GeocodeService.validateAddress(scope.component.location, null, function (data, results) {
+                            if (data && results.length === 1) {
+                                scope.component.location.lat = results[0].geometry.location.lat();
+                                scope.component.location.lon = results[0].geometry.location.lng();
+                                scope.reloadMap();
+                            }
+                            else {
+                                GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
+                                    if (data.lat && data.lon) {
+                                        scope.component.location.lat = data.lat;
+                                        scope.component.location.lon = data.lon;
+                                        scope.reloadMap();
+                                    }
+                                })
+                            }
                         });
                     }
+                }, 500);
+            };
+            scope.$on('mapInitialized', function (event, map) {
+                scope.map = map;
+                google.maps.event.trigger(scope.map, 'resize');
+                scope.map.setCenter(new google.maps.LatLng(51, 0));
+            });
 
-                    if ((!scope.component.location.address &&
-                        !scope.component.location.address2 &&
-                        !scope.component.location.city &&
-                        !scope.component.location.state &&
-                        !scope.component.location.zip) ||
-                        !scope.component.custom.address) {
+            // if (!scope.control) {
+            //     scope.control = {};
+            // }
 
-                        scope.setBusinessDetails(true, function () {
+            scope.control.refreshMap = function () {
+                if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+                    scope.setBusinessDetails(true, function () {
+                        scope.updateContactUsAddress();
+                    });
+                } else {
+                    scope.updateContactUsAddress();
+                }
+            };
+
+            scope.control.refreshHours = function () {
+                if (!scope.component.custom.hours)
+                    scope.setBusinessDetails(false, function () {
+                        console.log("hours refreshed");
+                    });
+            };
+
+
+            scope.$parent.$watchGroup(['ckeditorLoaded', 'vm.uiState.loaded'], function (newValue, oldValue) {
+                if (newValue[0] || newValue[1] && scope.component.visibility) {
+                    AccountService.getAccount(function (account) {
+
+                        scope.account = account;
+
+                        if (!scope.component.custom.hours) {
+                            scope.setBusinessDetails(false, function () {
+                                console.log("hours refreshed");
+                            });
+                        }
+
+                        /*
+                         * If we have a custom address OR we have ANY address fields, update the contact us address.
+                         * Otherwise, attempt to copy from the Business details
+                         */
+                        if(scope.component.custom.address ||
+                                scope.component.location.address ||
+                                scope.component.location.address2 ||
+                                scope.component.location.city ||
+                                scope.component.location.state ||
+                                scope.component.location.zip) {
                             $timeout(function () {
                                 scope.updateContactUsAddress();
                             }, 500);
-                        });
+                        } else {
+                            scope.setBusinessDetails(true, function () {
+                                $timeout(function () {
+                                    scope.updateContactUsAddress();
+                                }, 500);
+                            });
+                        }
+                    });
+                }
+            });
 
-                    } else {
+            scope.$on("angular-resizable.resizeEnd", function (event, args) {
+                var calculated_size = args;
+                if (calculated_size.width === false) {
+                    scope.component.boxProperties.height = calculated_size.height;
+                } else if (calculated_size.height === false) {
+                    scope.component.boxProperties.width = calculated_size.width;
+                }
+            });
 
-                        $timeout(function () {
-                            scope.updateContactUsAddress();
-                        }, 500);
-                    }
+            scope.calcMaxWidth = function (element) {
+                var el = angular.element("." + element);
+                if (el.length) {
+                    var w = el.width();
+                    // - 100 margin-left
+                    // -50 margin right
+                    return (w - 100 - 50) + 'px';
+                }
+            };
 
-                });
-            }
-        });
+            angular.element($window).bind('resize', function () {
+                if (scope.map) {
+                    $timeout(function () {
+                        google.maps.event.trigger(scope.map, 'resize');
+                    }, 500);
+                }
+            });
 
-        scope.$on("angular-resizable.resizeEnd", function (event, args) {
-            var calculated_size = args;
-            if (calculated_size.width === false) {
-                scope.component.boxProperties.height = calculated_size.height;
-            } else if (calculated_size.height === false) {
-                scope.component.boxProperties.width = calculated_size.width;
-            }
-        });
-
-        scope.calcMaxWidth = function(element){
-            var el = angular.element("."+element);
-            if(el.length){
-                var w = el.width();
-                // - 100 margin-left
-                // -50 margin right
-                return (w - 100 - 50) + 'px';
-            }
         }
 
-        angular.element($window).bind('resize', function () {
-            if(scope.map){
-                $timeout(function () {
-                    google.maps.event.trigger(scope.map, 'resize');
-                }, 500);
-            }
-        });
-
-    }
-
-  };
+    };
 
 }]);
