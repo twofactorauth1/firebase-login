@@ -14,38 +14,38 @@ var CURRENT_SCHEME = 2;
 
 var user = $$.m.ModelBase.extend({
 
-  defaults: function () {
-    return {
-      _id: null,
-      username: "",
-      email: "",
-      first: "",
-      last: "",
-      gender: null, //m|f
-      birthday: "",
-      _v: "0.1",
+    defaults: function () {
+        return {
+            _id: null,
+            username: "",
+            email: "",
+            first: "",
+            last: "",
+            gender: null, //m|f
+            birthday: "",
+            _v: "0.1",
 
-      created: {
-        by: null, //this is a nullable ID value, if created by an existing user, this will be populated.
-        date: "", //Date created
-        strategy: "", // lo|fb|tw|li|etc.  See $$.constants.social.types
-        isNew: false //If this is a brand new user, mark this as true, the application code will modify it later as necessary
-      },
+            created: {
+                by: null, //this is a nullable ID value, if created by an existing user, this will be populated.
+                date: "", //Date created
+                strategy: "", // lo|fb|tw|li|etc.  See $$.constants.social.types
+                isNew: false //If this is a brand new user, mark this as true, the application code will modify it later as necessary
+            },
 
 
-      /**
-       * @profilePhotos
-       *
-       * [{
-       *  default:true|false,
-       *  url:"" //URL
-       *  type:"" //  lo|fb|tw|go|li|cc
-       * }]
-       */
-      profilePhotos: [],
+            /**
+             * @profilePhotos
+             *
+             * [{
+             *  default:true|false,
+             *  url:"" //URL
+             *  type:"" //  lo|fb|tw|go|li|cc
+             * }]
+             */
+            profilePhotos: [],
 
-      /**
-       * [{
+            /**
+             * [{
        *  accountId:int,
        *  username:string,
        *  password:string
@@ -76,11 +76,11 @@ var user = $$.m.ModelBase.extend({
        *
        *  baggage: {}
        * }]
-       */
-      accounts: [],
+             */
+            accounts: [],
 
-      /**
-       * [{
+            /**
+             * [{
        *  type:int,
        *  username:string,
        *  password:string,     //Local only
@@ -91,12 +91,12 @@ var user = $$.m.ModelBase.extend({
        *  scope:string,
        *  baggage: {}
        * }]
-       */
-      credentials: [],
+             */
+            credentials: [],
 
 
-      /**
-       * [{
+            /**
+             * [{
        *   _id:"",
        *   socialId:"",  //The social Id from where these details came
        *   type:int,     //The social network from where this information originated, or local
@@ -146,499 +146,499 @@ var user = $$.m.ModelBase.extend({
        *      username: "", the social networks username
        *   }]
        * }]
-       */
-      details: [],
-      stripeId: "", //stripe CustomerID if available.  This is separate from login credentials
-      user_preferences: {
-        default_contact_address: {
-          address1: '',
-          address2: '',
-          city: '',
-          state: '',
-          zip: '',
-          country: ''
-        },
-        website_default_tab: '',
-        indi_default_tab: '',
-        tasks: {
-            sign_up: 'finished',
-            profile_business: 'not_started',
-            billing: 'not_started',
-            single_page: 'not_started',
-            integrations: 'not_started',
-            customers: 'not_started',
-            social_feed: 'not_started',
-            single_post: 'not_started',
-            commerce: 'not_started',
-            single_product: 'not_started',
-            dashboard: 'not_started'
-        },
-        welcome_alert: {
-          initial: false,
-          editwebsite: false,
-          commerce: false,
-          contact: false,
-          dashboard: false,
-          marketing: false,
-          marketingsingle: false
-        }
-      },
-      app_preferences: {
-        account: {
-          default_tab: "account_information"
-        }
-      },
-      intercomHash:""
-    };
-  },
+             */
+            details: [],
+            stripeId: "", //stripe CustomerID if available.  This is separate from login credentials
+            user_preferences: {
+                default_contact_address: {
+                    address1: '',
+                    address2: '',
+                    city: '',
+                    state: '',
+                    zip: '',
+                    country: ''
+                },
+                website_default_tab: '',
+                indi_default_tab: '',
+                tasks: {
+                    sign_up: 'finished',
+                    profile_business: 'not_started',
+                    billing: 'not_started',
+                    single_page: 'not_started',
+                    integrations: 'not_started',
+                    customers: 'not_started',
+                    social_feed: 'not_started',
+                    single_post: 'not_started',
+                    commerce: 'not_started',
+                    single_product: 'not_started',
+                    dashboard: 'not_started'
+                },
+                welcome_alert: {
+                    initial: false,
+                    editwebsite: false,
+                    commerce: false,
+                    contact: false,
+                    dashboard: false,
+                    marketing: false,
+                    marketingsingle: false
+                }
+            },
+            app_preferences: {
+                account: {
+                    default_tab: "account_information"
+                }
+            },
+            intercomHash: ""
+        };
+    },
 
 
-  transients: {
-      deepCopy: true,
-      public: [
-          function (json, options) {
-              if (json.credentials != null) {
-                  json.credentials.forEach(function (creds) {
-                      delete creds.password;
-                      delete creds.accessToken;
-                      delete creds.accessTokenSecret;
-                      delete creds.refreshToken;
-                  });
-              }
+    transients: {
+        deepCopy: true,
+        public: [
+            function (json, options) {
+                if (json.credentials != null) {
+                    json.credentials.forEach(function (creds) {
+                        delete creds.password;
+                        delete creds.accessToken;
+                        delete creds.accessTokenSecret;
+                        delete creds.refreshToken;
+                    });
+                }
 
-              if (json.accounts != null) {
-                  if (options && options.accountId) {
-                      //Remove all but this account
-                      var account = _.findWhere(json.accounts, {
-                          accountId: options.accountId
-                      });
-                      json.accounts = account != null ? [account] : [];
-                  }
+                if (json.accounts != null) {
+                    if (options && options.accountId) {
+                        //Remove all but this account
+                        var account = _.findWhere(json.accounts, {
+                            accountId: options.accountId
+                        });
+                        json.accounts = account != null ? [account] : [];
+                    }
 
-                  json.accounts.forEach(function (account) {
-                      delete account.permissions;
+                    json.accounts.forEach(function (account) {
+                        delete account.permissions;
 
-                      if (account.credentials != null) {
-                          account.credentials.forEach(function (creds) {
-                              delete creds.password;
-                              delete creds.accessToken;
-                              delete creds.accessTokenSecret;
-                          });
-                      }
-                  });
-              }
+                        if (account.credentials != null) {
+                            account.credentials.forEach(function (creds) {
+                                delete creds.password;
+                                delete creds.accessToken;
+                                delete creds.accessTokenSecret;
+                            });
+                        }
+                    });
+                }
 
-          }
-      ],
-    manage: [function (json, options) {
-      if (json.credentials != null) {
-        json.credentials.forEach(function (creds) {
-          delete creds.password;
-          delete creds.accessToken;
-          delete creds.refreshToken;
-        });
-      }
+            }
+        ],
+        manage: [function (json, options) {
+            if (json.credentials != null) {
+                json.credentials.forEach(function (creds) {
+                    delete creds.password;
+                    delete creds.accessToken;
+                    delete creds.refreshToken;
+                });
+            }
 
-      if (json.accounts != null) {
+            if (json.accounts != null) {
 
-        if (options && options.accountId) {
-          //Remove all but this account
-          var account = _.findWhere(json.accounts, {
-            accountId: options.accountId
-          });
-          json.accounts = account != null ? [account] : [];
-        }
+                if (options && options.accountId) {
+                    //Remove all but this account
+                    var account = _.findWhere(json.accounts, {
+                        accountId: options.accountId
+                    });
+                    json.accounts = account != null ? [account] : [];
+                }
 
-        json.accounts.forEach(function (account) {
-          //delete account.permissions;
+                json.accounts.forEach(function (account) {
+                    //delete account.permissions;
 
-          if (account.credentials != null) {
-            account.credentials.forEach(function (creds) {
-              delete creds.password;
-              delete creds.accessToken;
-            });
-          }
-        });
-      }
+                    if (account.credentials != null) {
+                        account.credentials.forEach(function (creds) {
+                            delete creds.password;
+                            delete creds.accessToken;
+                        });
+                    }
+                });
+            }
         }]
-  },
+    },
 
 
-  serializers: {
-    db: function (json) {
-      if (json.username != null) {
-        json._username = json.username.toLowerCase();
-      }
+    serializers: {
+        db: function (json) {
+            if (json.username != null) {
+                json._username = json.username.toLowerCase();
+            }
 
-      for (var i = 0; i < json.accounts.length; i++) {
-        for (var j = 0; j < json.accounts[i].credentials.length; j++) {
-          if (json.accounts[i].credentials[j].username != null) {
-            json.accounts[i].credentials[j]._username = json.accounts[i].credentials[j].username.toLowerCase();
-          }
+            for (var i = 0; i < json.accounts.length; i++) {
+                for (var j = 0; j < json.accounts[i].credentials.length; j++) {
+                    if (json.accounts[i].credentials[j].username != null) {
+                        json.accounts[i].credentials[j]._username = json.accounts[i].credentials[j].username.toLowerCase();
+                    }
+                }
+            }
+            if (!String.isNullOrEmpty(json.accountUrl)) {
+                json.accountUrl = json.accountUrl.toLowerCase();
+            }
         }
-      }
-      if (!String.isNullOrEmpty(json.accountUrl)) {
-        json.accountUrl = json.accountUrl.toLowerCase();
-      }
-    }
 
-  },
+    },
 
 
-  initialize: function (options) {
+    initialize: function (options) {
 
-  },
-
-
-  //region HELPERS
-  fullName: function () {
-    if (this.get("first") != null) {
-      return this.get("first") + this.get("last") == null ? "" : (" " + this.get("last"));
-    } else {
-      return this.get("username");
-    }
-  },
-  //endregion
+    },
 
 
-  //region Profile
-  updateProfileInformation: function (email, firstName, lastName, gender, birthday, overwrite) {
-    var obj = {
-      email: email,
-      first: firstName,
-      last: lastName,
-      gender: gender,
-      birthday: birthday
-    };
-
-    for (var key in obj) {
-      if (!String.isNullOrEmpty(obj[key]) && (overwrite || String.isNullOrEmpty(this.get(key)))) {
-        this.set(key, obj[key]);
-      }
-    }
-  },
-  //endregion
-
-
-  //region DETAILS
-  getDetails: function (type) {
-    var details = this.get("details");
-    if (details == null) {
-      details = [];
-      this.set({
-        details: details
-      });
-    }
-
-    return _.find(details, function (_detail) {
-      return _detail.type === type;
-    });
-  },
-
-
-  getOrCreateDetails: function (type) {
-    var detail = this.getDetails(type);
-
-    if (detail == null) {
-      detail = {
-        _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-        type: type,
-        emails: [],
-        photo: "",
-        phones: [],
-        addresses: []
-      };
-
-      this.get("details").push(detail);
-    }
-
-    return detail;
-  },
-
-
-  updateWebsites: function (type, websites) {
-    var details = this.getOrCreateDetails(type);
-
-    if (websites != null) {
-      details.websites = details.websites || [];
-      if (_.isString(websites)) {
-        if (details.websites.indexOf(websites) == -1) {
-          details.websites.push(websites);
+    //region HELPERS
+    fullName: function () {
+        if (this.get("first") != null) {
+            return this.get("first") + this.get("last") == null ? "" : (" " + this.get("last"));
+        } else {
+            return this.get("username");
         }
-      } else {
-        for (var i = 0; i < websites.length; i++) {
-          if (details.websites.indexOf(websites[i]) == -1) {
-            details.websites.push(websites[i]);
-          }
+    },
+    //endregion
+
+
+    //region Profile
+    updateProfileInformation: function (email, firstName, lastName, gender, birthday, overwrite) {
+        var obj = {
+            email: email,
+            first: firstName,
+            last: lastName,
+            gender: gender,
+            birthday: birthday
+        };
+
+        for (var key in obj) {
+            if (!String.isNullOrEmpty(obj[key]) && (overwrite || String.isNullOrEmpty(this.get(key)))) {
+                this.set(key, obj[key]);
+            }
         }
-      }
-    }
-  },
+    },
+    //endregion
 
 
-  createOrUpdatePhone: function (type, phoneType, phoneNumber, isDefault) {
-    var details = this.getOrCreateDetails(type);
+    //region DETAILS
+    getDetails: function (type) {
+        var details = this.get("details");
+        if (details == null) {
+            details = [];
+            this.set({
+                details: details
+            });
+        }
 
-    details.phones = details.phones || [];
-    var phones = details.phones;
-
-    if (isDefault === true) {
-      phones.forEach(function (phone) {
-        phone.default = false;
-      });
-    }
-
-    var phone = _.findWhere(phones, {
-      type: phoneType,
-      number: phoneNumber
-    });
-    if (phone == null) {
-      phone = {
-        _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-        type: phoneType,
-        number: phoneNumber,
-        default: isDefault
-      };
-      phones.push(phone);
-    } else {
-      phone.default = isDefault;
-    }
-  },
-
-
-  createOrUpdateAddress: function (type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaultShipping, defaultBilling) {
-    var existing, details = this.getOrCreateDetails(type);
-
-    details.addresses = details.addresses || [];
-
-    //first check displayName, as that may be all we have
-    existing = _.findWhere(details.addresses, {
-      displayName: displayName
-    });
-
-    if (existing != null || !String.isNullOrEmpty(address)) {
-      if (existing == null) {
-        existing = _.findWhere(details.addresses, {
-          address: address
+        return _.find(details, function (_detail) {
+            return _detail.type === type;
         });
-      }
+    },
 
-      if (existing != null) {
-        //We already have it, lets try to merge in remainder of details only if current address is empty
-        existing.type = existing.type || "o";
-        existing.address2 = String.isNullOrEmpty(existing.address2) ? address2 : existing.address2;
-        existing.city = String.isNullOrEmpty(existing.city) ? city : existing.city;
-        existing.state = String.isNullOrEmpty(existing.state) ? state : existing.state;
-        existing.country = String.isNullOrEmpty(existing.country) ? country : existing.country;
-        existing.countryCode = String.isNullOrEmpty(existing.countryCode) ? countryCode : existing.countryCode;
-        existing.displayName = String.isNullOrEmpty(existing.displayName) ? displayName : existing.displayName;
-        existing.lat = String.isNullOrEmpty(existing.lat) ? lat : existing.lat;
-        existing.lon = String.isNullOrEmpty(existing.lon) ? lat : existing.lon;
-      }
-    }
 
-    if (existing == null) {
-      existing = _.findWhere(details.addresses, {
-        zip: zip,
-        type: type
-      });
+    getOrCreateDetails: function (type) {
+        var detail = this.getDetails(type);
 
-      //We have matched on zip code, if we have no existing address, lets try to fill it in.
-      if (existing != null && String.isNullOrEmpty(existing.address)) {
-        existing.type = existing.type || "o";
-        existing.address = address;
-        existing.address2 = String.isNullOrEmpty(address2) ? existing.address2 : address2;
-        existing.city = String.isNullOrEmpty(city) ? existing.city : city;
-        existing.state = String.isNullOrEmpty(state) ? existing.state : state;
-        existing.country = String.isNullOrEmpty(country) ? existing.country : country;
-        existing.countryCode = String.isNullOrEmpty(countryCode) ? existing.countryCode : countryCode;
-        existing.displayName = String.isNullOrEmpty(displayName) ? existing.displayName : displayName;
-        existing.lat = String.isNullOrEmpty(lat) ? existing.lat : lat;
-        existing.lon = String.isNullOrEmpty(lon) ? existing.lat : lon;
-        if (defaultShipping) {
-          existing.defaultShipping = true;
+        if (detail == null) {
+            detail = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: type,
+                emails: [],
+                photo: "",
+                phones: [],
+                addresses: []
+            };
+
+            this.get("details").push(detail);
         }
-        if (defaultBilling) {
-          existing.defaultBilling = true;
+
+        return detail;
+    },
+
+
+    updateWebsites: function (type, websites) {
+        var details = this.getOrCreateDetails(type);
+
+        if (websites != null) {
+            details.websites = details.websites || [];
+            if (_.isString(websites)) {
+                if (details.websites.indexOf(websites) == -1) {
+                    details.websites.push(websites);
+                }
+            } else {
+                for (var i = 0; i < websites.length; i++) {
+                    if (details.websites.indexOf(websites[i]) == -1) {
+                        details.websites.push(websites[i]);
+                    }
+                }
+            }
         }
-      }
-    }
-
-    if (existing == null) {
-      //we haven't found a matching address, lets add it
-      var addressObj = {};
-      addressObj.type = addressType || "o";
-      addressObj.address = address;
-      addressObj.address2 = address2;
-      addressObj.city = city;
-      addressObj.state = state;
-      addressObj.country = country;
-      addressObj.countryCode = countryCode;
-      addressObj.displayName = displayName;
-      addressObj.lat = lat;
-      addressObj.lon = lon;
-      addressObj.defaultShipping = defaultShipping;
-      addressObj.defaultBilling = defaultBilling;
-
-      details.addresses.push(addressObj);
-    }
-  },
+    },
 
 
-  updateSocialInfo: function (type, username, numFriends, numFollowers, numFavorites) {
-    var details = this.getOrCreateDetails(type);
+    createOrUpdatePhone: function (type, phoneType, phoneNumber, isDefault) {
+        var details = this.getOrCreateDetails(type);
 
-    if (username != null) {
-      details.username = username;
-    }
+        details.phones = details.phones || [];
+        var phones = details.phones;
 
-    if (numFriends != null) {
-      details.numFriends = numFriends;
-    }
+        if (isDefault === true) {
+            phones.forEach(function (phone) {
+                phone.default = false;
+            });
+        }
 
-    if (numFollowers != null) {
-      details.numFollowers = numFollowers;
-    }
-
-    if (numFavorites != null) {
-      details.numFavorites = numFavorites;
-    }
-  },
-
-
-  createOrUpdateImAccount: function (type, imAccountType, username) {
-    var details = this.getOrCreateDetails(type);
-
-    details.imAccounts = details.imAccounts || [];
-
-    var imAccount = _.findWhere(details.imAccounts, {
-      type: imAccountType
-    });
-    if (imAccount == null) {
-      imAccount = {
-        _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-        type: imAccountType,
-        username: username
-      };
-
-      details.imAccounts.push(imAccount);
-    } else {
-      if (!String.isNullOrEmpty(username)) {
-        imAccount.username = username;
-      }
-    }
-  },
+        var phone = _.findWhere(phones, {
+            type: phoneType,
+            number: phoneNumber
+        });
+        if (phone == null) {
+            phone = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: phoneType,
+                number: phoneNumber,
+                default: isDefault
+            };
+            phones.push(phone);
+        } else {
+            phone.default = isDefault;
+        }
+    },
 
 
-  createOrUpdateSocialNetwork: function (type, socialNetworkType, socialId, username) {
-    var details = this.getOrCreateDetails(type);
+    createOrUpdateAddress: function (type, addressType, address, address2, city, state, zip, country, countryCode, displayName, lat, lon, defaultShipping, defaultBilling) {
+        var existing, details = this.getOrCreateDetails(type);
 
-    details.socialNetworks = details.socialNetworks || [];
+        details.addresses = details.addresses || [];
 
-    var network = _.findWhere(details.socialNetworks, {
-      type: socialNetworkType
-    });
-    if (network == null) {
-      network = {
-        _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-        type: socialNetworkType,
-        socialId: socialId,
-        username: username
-      };
+        //first check displayName, as that may be all we have
+        existing = _.findWhere(details.addresses, {
+            displayName: displayName
+        });
 
-      details.socialNetworks.push(network);
-    } else {
-      if (!String.isNullOrEmpty(socialId)) {
-        network.socialId = socialId;
-      }
+        if (existing != null || !String.isNullOrEmpty(address)) {
+            if (existing == null) {
+                existing = _.findWhere(details.addresses, {
+                    address: address
+                });
+            }
 
-      if (!String.isNullOrEmpty(username)) {
-        network.username = username;
-      }
-    }
-  },
-  //endregion
+            if (existing != null) {
+                //We already have it, lets try to merge in remainder of details only if current address is empty
+                existing.type = existing.type || "o";
+                existing.address2 = String.isNullOrEmpty(existing.address2) ? address2 : existing.address2;
+                existing.city = String.isNullOrEmpty(existing.city) ? city : existing.city;
+                existing.state = String.isNullOrEmpty(existing.state) ? state : existing.state;
+                existing.country = String.isNullOrEmpty(existing.country) ? country : existing.country;
+                existing.countryCode = String.isNullOrEmpty(existing.countryCode) ? countryCode : existing.countryCode;
+                existing.displayName = String.isNullOrEmpty(existing.displayName) ? displayName : existing.displayName;
+                existing.lat = String.isNullOrEmpty(existing.lat) ? lat : existing.lat;
+                existing.lon = String.isNullOrEmpty(existing.lon) ? lat : existing.lon;
+            }
+        }
 
+        if (existing == null) {
+            existing = _.findWhere(details.addresses, {
+                zip: zip,
+                type: type
+            });
 
-  //region PHOTO
-  addOrUpdatePhoto: function (socialType, url, isDefault) {
-    var photos = this.get("profilePhotos");
-    if (photos == null) {
-      photos = [];
-      this.set({
-        profilePhotos: photos
-      });
-    }
+            //We have matched on zip code, if we have no existing address, lets try to fill it in.
+            if (existing != null && String.isNullOrEmpty(existing.address)) {
+                existing.type = existing.type || "o";
+                existing.address = address;
+                existing.address2 = String.isNullOrEmpty(address2) ? existing.address2 : address2;
+                existing.city = String.isNullOrEmpty(city) ? existing.city : city;
+                existing.state = String.isNullOrEmpty(state) ? existing.state : state;
+                existing.country = String.isNullOrEmpty(country) ? existing.country : country;
+                existing.countryCode = String.isNullOrEmpty(countryCode) ? existing.countryCode : countryCode;
+                existing.displayName = String.isNullOrEmpty(displayName) ? existing.displayName : displayName;
+                existing.lat = String.isNullOrEmpty(lat) ? existing.lat : lat;
+                existing.lon = String.isNullOrEmpty(lon) ? existing.lat : lon;
+                if (defaultShipping) {
+                    existing.defaultShipping = true;
+                }
+                if (defaultBilling) {
+                    existing.defaultBilling = true;
+                }
+            }
+        }
 
-    var photo = this.getPhoto(socialType);
+        if (existing == null) {
+            //we haven't found a matching address, lets add it
+            var addressObj = {};
+            addressObj.type = addressType || "o";
+            addressObj.address = address;
+            addressObj.address2 = address2;
+            addressObj.city = city;
+            addressObj.state = state;
+            addressObj.country = country;
+            addressObj.countryCode = countryCode;
+            addressObj.displayName = displayName;
+            addressObj.lat = lat;
+            addressObj.lon = lon;
+            addressObj.defaultShipping = defaultShipping;
+            addressObj.defaultBilling = defaultBilling;
 
-    if (photo != null) {
-      photo.url = url.replace(/^https?:/,'');
-      photo.default = isDefault;
-    } else {
-      photo = {
-        type: socialType,
-        url: url.replace(/^https?:/,''),
-        default: isDefault
-      };
-    }
-
-    this.setPhoto(photo);
-  },
-
-
-  getPhoto: function (socialType) {
-    var photos = this.get("profilePhotos");
-    if (photos == null || photos.length === 0) {
-      return null;
-    }
-
-    return _.findWhere(photos, {
-      type: socialType
-    }) || null;
-  },
-
-
-  getDefaultPhoto: function () {
-    var photos = this.get("profilePhotos");
-    if (photos == null || photos.length === 0) {
-      return null;
-    }
-
-    if (photos.length == 1) {
-      return photos[0];
-    }
-
-    var defaultPhoto = _.findWhere(photos, {
-      default: true
-    });
-    return defaultPhoto || photos[0];
-  },
+            details.addresses.push(addressObj);
+        }
+    },
 
 
-  setPhoto: function (photo) {
-    var photos = this.get("profilePhotos");
-    if (photos == null) {
-      photos = [];
-      this.set({
-        photos: photos
-      });
-    }
+    updateSocialInfo: function (type, username, numFriends, numFollowers, numFavorites) {
+        var details = this.getOrCreateDetails(type);
 
-    var photoSet = false;
-    for (var i = 0; i < photos.length; i++) {
-      if (photos[i].type == photo.type) {
-        photos[i] = photo;
-        photoSet = true;
-      } else if (photo.default === true) {
-        photos[i].default = false;
-      }
-    }
+        if (username != null) {
+            details.username = username;
+        }
 
-    if (photoSet === false) {
-      photos.push(photo);
-    }
-  },
+        if (numFriends != null) {
+            details.numFriends = numFriends;
+        }
+
+        if (numFollowers != null) {
+            details.numFollowers = numFollowers;
+        }
+
+        if (numFavorites != null) {
+            details.numFavorites = numFavorites;
+        }
+    },
+
+
+    createOrUpdateImAccount: function (type, imAccountType, username) {
+        var details = this.getOrCreateDetails(type);
+
+        details.imAccounts = details.imAccounts || [];
+
+        var imAccount = _.findWhere(details.imAccounts, {
+            type: imAccountType
+        });
+        if (imAccount == null) {
+            imAccount = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: imAccountType,
+                username: username
+            };
+
+            details.imAccounts.push(imAccount);
+        } else {
+            if (!String.isNullOrEmpty(username)) {
+                imAccount.username = username;
+            }
+        }
+    },
+
+
+    createOrUpdateSocialNetwork: function (type, socialNetworkType, socialId, username) {
+        var details = this.getOrCreateDetails(type);
+
+        details.socialNetworks = details.socialNetworks || [];
+
+        var network = _.findWhere(details.socialNetworks, {
+            type: socialNetworkType
+        });
+        if (network == null) {
+            network = {
+                _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                type: socialNetworkType,
+                socialId: socialId,
+                username: username
+            };
+
+            details.socialNetworks.push(network);
+        } else {
+            if (!String.isNullOrEmpty(socialId)) {
+                network.socialId = socialId;
+            }
+
+            if (!String.isNullOrEmpty(username)) {
+                network.username = username;
+            }
+        }
+    },
+    //endregion
+
+
+    //region PHOTO
+    addOrUpdatePhoto: function (socialType, url, isDefault) {
+        var photos = this.get("profilePhotos");
+        if (photos == null) {
+            photos = [];
+            this.set({
+                profilePhotos: photos
+            });
+        }
+
+        var photo = this.getPhoto(socialType);
+
+        if (photo != null) {
+            photo.url = url.replace(/^https?:/, '');
+            photo.default = isDefault;
+        } else {
+            photo = {
+                type: socialType,
+                url: url.replace(/^https?:/, ''),
+                default: isDefault
+            };
+        }
+
+        this.setPhoto(photo);
+    },
+
+
+    getPhoto: function (socialType) {
+        var photos = this.get("profilePhotos");
+        if (photos == null || photos.length === 0) {
+            return null;
+        }
+
+        return _.findWhere(photos, {
+            type: socialType
+        }) || null;
+    },
+
+
+    getDefaultPhoto: function () {
+        var photos = this.get("profilePhotos");
+        if (photos == null || photos.length === 0) {
+            return null;
+        }
+
+        if (photos.length == 1) {
+            return photos[0];
+        }
+
+        var defaultPhoto = _.findWhere(photos, {
+            default: true
+        });
+        return defaultPhoto || photos[0];
+    },
+
+
+    setPhoto: function (photo) {
+        var photos = this.get("profilePhotos");
+        if (photos == null) {
+            photos = [];
+            this.set({
+                photos: photos
+            });
+        }
+
+        var photoSet = false;
+        for (var i = 0; i < photos.length; i++) {
+            if (photos[i].type == photo.type) {
+                photos[i] = photo;
+                photoSet = true;
+            } else if (photo.default === true) {
+                photos[i].default = false;
+            }
+        }
+
+        if (photoSet === false) {
+            photos.push(photo);
+        }
+    },
     //endregion
 
 
@@ -672,12 +672,12 @@ var user = $$.m.ModelBase.extend({
      *
      * @param password ENCRYPTED
      */
-    updateAllLocalCredentials: function(password) {
+    updateAllLocalCredentials: function (password) {
         var self = this;
         self.createOrUpdateLocalCredentials(password);
 
         var accountIds = self.getAllAccountIds();
-        _.each(accountIds, function(accountId){
+        _.each(accountIds, function (accountId) {
             var credentials = self.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
             credentials.password = password;
             credentials.scheme = CURRENT_SCHEME;
@@ -705,60 +705,60 @@ var user = $$.m.ModelBase.extend({
 
     },
 
-    updateLocalAccountCredentialsAndScheme: function(accountId, newPassword, newScheme) {
+    updateLocalAccountCredentialsAndScheme: function (accountId, newPassword, newScheme) {
         var credentials = this.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
         credentials.password = newPassword;
         credentials.scheme = newScheme;
     },
 
 
-  createOrUpdateSocialCredentials: function (socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope) {
-    console.log('user.js >> createOrUpdateSocialCredentials');
-    console.log('refreshToken is ' + refreshToken);
-    var creds = this.getCredentials(socialType);
-    if (creds == null) {
-      creds = {scheme: CURRENT_SCHEME};
-    }
-    creds.type = socialType;
-    creds.socialId = socialId;
-    creds.accessToken = accessToken;
-    if (socialType == $$.constants.social.types.TWITTER) {
-      creds.accessTokenSecret = refreshToken;
-    } else {
-      creds.refreshToken = refreshToken;
-    }
-    if (expires != null && expires > 0) {
-      creds.expires = new Date().getTime() + (expires * 1000);
-    }
-    creds.username = username;
-    creds.socialUrl = socialUrl;
-    creds.scope = scope;
-    return this._setCredentials(creds, false);
-  },
+    createOrUpdateSocialCredentials: function (socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope) {
+        console.log('user.js >> createOrUpdateSocialCredentials');
+        console.log('refreshToken is ' + refreshToken);
+        var creds = this.getCredentials(socialType);
+        if (creds == null) {
+            creds = {scheme: CURRENT_SCHEME};
+        }
+        creds.type = socialType;
+        creds.socialId = socialId;
+        creds.accessToken = accessToken;
+        if (socialType == $$.constants.social.types.TWITTER) {
+            creds.accessTokenSecret = refreshToken;
+        } else {
+            creds.refreshToken = refreshToken;
+        }
+        if (expires != null && expires > 0) {
+            creds.expires = new Date().getTime() + (expires * 1000);
+        }
+        creds.username = username;
+        creds.socialUrl = socialUrl;
+        creds.scope = scope;
+        return this._setCredentials(creds, false);
+    },
 
 
-  getCredentials: function (type) {
-    var credentials = this.get("credentials");
-    for (var i = 0; i < credentials.length; i++) {
-      if (credentials[i].type == type) {
-        return credentials[i];
-      }
-    }
-    return null;
-  },
+    getCredentials: function (type) {
+        var credentials = this.get("credentials");
+        for (var i = 0; i < credentials.length; i++) {
+            if (credentials[i].type == type) {
+                return credentials[i];
+            }
+        }
+        return null;
+    },
 
-  removeCredentials: function (type) {
-    var credentials = this.get('credentials');
-    var targetIndex = -1;
-    for (var i = 0; i < credentials.length; i++) {
-      if (credentials[i].type === type) {
-        targetIndex = i;
-      }
-    }
-    if (targetIndex !== -1) {
-      credentials.splice(targetIndex, 1);
-    }
-  },
+    removeCredentials: function (type) {
+        var credentials = this.get('credentials');
+        var targetIndex = -1;
+        for (var i = 0; i < credentials.length; i++) {
+            if (credentials[i].type === type) {
+                targetIndex = i;
+            }
+        }
+        if (targetIndex !== -1) {
+            credentials.splice(targetIndex, 1);
+        }
+    },
 
 
     /**
@@ -837,82 +837,82 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-  _verifyPasswordForCredentials: function (credentials, password, accountId, fn) {
-    if (credentials === null) {
-      return fn("No login credentials found");
-    }
+    _verifyPasswordForCredentials: function (credentials, password, accountId, fn) {
+        if (credentials === null) {
+            return fn("No login credentials found");
+        }
 
-    if (credentials.hasOwnProperty("password")) {
-      var encryptedPass = credentials.password;
+        if (credentials.hasOwnProperty("password")) {
+            var encryptedPass = credentials.password;
 
-      this._verifyPassword(password, encryptedPass, credentials.scheme, accountId, function (err, value) {
-        if (err) {
-          return fn(err, value);
-        } else if (value === false) {
-          return fn(null, false);
+            this._verifyPassword(password, encryptedPass, credentials.scheme, accountId, function (err, value) {
+                if (err) {
+                    return fn(err, value);
+                } else if (value === false) {
+                    return fn(null, false);
+                } else {
+                    return fn(null, true);
+                }
+            });
         } else {
-          return fn(null, true);
+            return fn("No password property found to verify password");
         }
-      });
-    } else {
-      return fn("No password property found to verify password");
-    }
-  },
-  //endregion
+    },
+    //endregion
 
 
-  //region User Accounts
-  getPermissionsForAccount: function (accountId) {
-    var userAccount = this.getUserAccount(accountId);
-    if (userAccount == null) {
-      return [];
-    }
-
-    return userAccount.permissions || [];
-  },
-
-
-  getUserAccount: function (accountId) {
-    var accounts = this.get("accounts");
-    if (accounts == null) {
-      return null;
-    }
-
-    for (var i = 0; i < accounts.length; i++) {
-      if (accounts[i].accountId == accountId) {
-        return accounts[i];
-      }
-    }
-    return null;
-  },
-
-
-  getAllAccountIds: function () {
-    var accounts = this.get("accounts");
-    if (accounts == null) {
-      return [];
-    }
-
-    return _.pluck(accounts, "accountId");
-  },
-
-  removeAccount: function (accountId) {
-    var accounts = this.get('accounts');
-    if (accounts == null) {
-      return this;
-    }
-    /*_.each(accounts, function(account, index, list){
-        if(account.accountId === accountId) {
-
+    //region User Accounts
+    getPermissionsForAccount: function (accountId) {
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount == null) {
+            return [];
         }
-    });*/
 
-    var updatedAccounts = _.filter(accounts, function (account) {
-      return account.accountId !== accountId
-    });
-    this.set('accounts', updatedAccounts);
-    return this;
-  },
+        return userAccount.permissions || [];
+    },
+
+
+    getUserAccount: function (accountId) {
+        var accounts = this.get("accounts");
+        if (accounts == null) {
+            return null;
+        }
+
+        for (var i = 0; i < accounts.length; i++) {
+            if (accounts[i].accountId == accountId) {
+                return accounts[i];
+            }
+        }
+        return null;
+    },
+
+
+    getAllAccountIds: function () {
+        var accounts = this.get("accounts");
+        if (accounts == null) {
+            return [];
+        }
+
+        return _.pluck(accounts, "accountId");
+    },
+
+    removeAccount: function (accountId) {
+        var accounts = this.get('accounts');
+        if (accounts == null) {
+            return this;
+        }
+        /*_.each(accounts, function(account, index, list){
+         if(account.accountId === accountId) {
+
+         }
+         });*/
+
+        var updatedAccounts = _.filter(accounts, function (account) {
+            return account.accountId !== accountId
+        });
+        this.set('accounts', updatedAccounts);
+        return this;
+    },
 
 
     /**
@@ -928,7 +928,7 @@ var user = $$.m.ModelBase.extend({
             password = null;
         }
 
-        if(password !== null) {
+        if (password !== null) {
             var userAccount = {
                 accountId: accountId,
                 username: username,
@@ -1077,254 +1077,254 @@ var user = $$.m.ModelBase.extend({
     },
 
 
-  getUserAccountBaggage: function (accountId, key) {
-    var userAccount = this.getUserAccount(accountId);
+    getUserAccountBaggage: function (accountId, key) {
+        var userAccount = this.getUserAccount(accountId);
 
-    userAccount.baggage = userAccount.baggage || {};
+        userAccount.baggage = userAccount.baggage || {};
 
-    if (key != null) {
-      if (userAccount.baggage[key] == null) {
-        userAccount.baggage[key] = {};
-      }
-      return userAccount.baggage[key];
-    }
-    return userAccount.baggage;
-  },
-
-
-  getUserAccountCredentials: function (accountId, type) {
-    var userAccount = this.getUserAccount(accountId);
-    if (userAccount != null) {
-      var credentials = userAccount.credentials;
-      for (var i = 0; i < credentials.length; i++) {
-        if (credentials[i].type == type) {
-          return credentials[i];
+        if (key != null) {
+            if (userAccount.baggage[key] == null) {
+                userAccount.baggage[key] = {};
+            }
+            return userAccount.baggage[key];
         }
-      }
-    }
-    return null;
-  },
-  //endregion
+        return userAccount.baggage;
+    },
 
 
-  //region EMAIL SOURCES
-  /**
-   * Retrieve Email Source By Id
-   *
-   * @param id
-   * @returns EmailSource object, or null
-   */
-  getEmailSource: function (id) {
-    var emailSources = this.getAllEmailSources();
-    return _.findWhere(emailSources, {
-      _id: id
-    });
-  },
+    getUserAccountCredentials: function (accountId, type) {
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount != null) {
+            var credentials = userAccount.credentials;
+            for (var i = 0; i < credentials.length; i++) {
+                if (credentials[i].type == type) {
+                    return credentials[i];
+                }
+            }
+        }
+        return null;
+    },
+    //endregion
 
 
-  /**
-   * @param accountId - optional paramater
-   *
-   * @returns Array of EmailSource objects.
-   */
-  getAllEmailSources: function (accountId) {
-    var emailSources = [];
-
-    var userAccounts = [];
-    if (accountId != null) {
-      var userAccount = this.getUserAccount(accountId);
-      if (userAccount != null) {
-        userAccounts.push(userAccount);
-      }
-    } else {
-      userAccounts = this.get("accounts");
-    }
-
-    if (userAccounts === null || userAccounts.length === 0) {
-      return null;
-    }
-    for (var i = 0, l = userAccounts.length; i < l; i++) {
-      if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
-        emailSources = emailSources.concat(userAccounts[i].emailSources);
-      }
-    }
-    return emailSources;
-  },
-
-
-  getEmailSourceByType: function (accountId, type) {
-    var emailSources = this.getAllEmailSources;
-    var userAccount = this.getUserAccount(accountId);
-    if (userAccount === null || userAccount.emailSources === null || userAccount.emailSources.length === 0) {
-      return null;
-    }
-
-    return _.findWhere(userAccount.emailSources, {
-      type: type
-    });
-  },
-
-
-  createOrUpdateEmailSource: function (accountId, type, providerId, label, primaryEmail) {
-    var userAccount = this.getUserAccount(accountId);
-    if (userAccount == null) {
-      throw Error("User account does not exist with AccountID: " + accountId + " for user: " + this.id());
-    }
-
-    var emailSources = userAccount.emailSources;
-    if (emailSources == null) {
-      emailSources = [];
-      userAccount.emailSources = emailSources;
-    }
-
-    var emailSource = _.findWhere(emailSources, {
-      type: type
-    });
-    if (emailSource == null) {
-      emailSource = {
-        _id: $$.u.idutils.generateUniqueAlphaNumeric(),
-        accountId: accountId,
-        type: type,
-        providerId: providerId,
-        label: label,
-        primaryEmail: primaryEmail
-      };
-
-      emailSources.push(emailSource);
-    } else {
-      if (!String.isNullOrEmpty(providerId)) {
-        emailSource.providerId = providerId;
-      }
-      if (!String.isNullOrEmpty(label)) {
-        emailSource.labeel = label;
-      }
-      if (!String.isNullOrEmpty(primaryEmail)) {
-        emailSource.primaryEmail = primaryEmail;
-      }
-    }
-
-    return emailSource;
-  },
-
-
-  createOrUpdateMailboxForSource: function (sourceId, email, emailType, label, emailServer, port) {
-    var emailSource = this.getEmailSource(sourceId);
-    if (emailSource == null) {
-      return null;
-    }
-
-    var mailboxes = emailSource.mailboxes;
-    if (mailboxes == null) {
-      mailboxes = [];
-      emailSource.mailboxes = mailboxes;
-    }
-
-    var mailbox = _.findWhere(mailboxes, {
-      email: email
-    });
-
-    if (mailbox == null) {
-      mailbox = {
-        _id: $$.u.idutils.generateUniqueAlphaNumeric(),
-        email: email
-      };
-      mailboxes.push(mailbox);
-    }
-
-    if (!String.isNullOrEmpty(label)) {
-      mailbox.label = label;
-    }
-    if (!String.isNullOrEmpty(emailType)) {
-      mailbox.emailType = emailType;
-    }
-    if (!String.isNullOrEmpty(emailServer)) {
-      mailbox.emailServer = emailServer;
-    }
-    if (port != null && port > 0) {
-      mailbox.port = port;
-    }
-
-    return mailbox;
-  },
-
-
-  removeEmailSource: function (id) {
-    var userAccounts = this.get("accounts");
-    if (userAccounts === null || userAccounts.length === 0) {
-      return null;
-    }
-
-    for (var i = 0, l = userAccounts.length; i < l; i++) {
-      if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
-        var emailSource = _.findWhere(userAccounts[i].emailSources, {
-          _id: id
+    //region EMAIL SOURCES
+    /**
+     * Retrieve Email Source By Id
+     *
+     * @param id
+     * @returns EmailSource object, or null
+     */
+    getEmailSource: function (id) {
+        var emailSources = this.getAllEmailSources();
+        return _.findWhere(emailSources, {
+            _id: id
         });
-        if (emailSource != null) {
-          userAccounts[i].emailSources = _.without(userAccounts[i].emailSources, emailSource);
-          return;
+    },
+
+
+    /**
+     * @param accountId - optional paramater
+     *
+     * @returns Array of EmailSource objects.
+     */
+    getAllEmailSources: function (accountId) {
+        var emailSources = [];
+
+        var userAccounts = [];
+        if (accountId != null) {
+            var userAccount = this.getUserAccount(accountId);
+            if (userAccount != null) {
+                userAccounts.push(userAccount);
+            }
+        } else {
+            userAccounts = this.get("accounts");
         }
-      }
-    }
-  },
+
+        if (userAccounts === null || userAccounts.length === 0) {
+            return null;
+        }
+        for (var i = 0, l = userAccounts.length; i < l; i++) {
+            if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                emailSources = emailSources.concat(userAccounts[i].emailSources);
+            }
+        }
+        return emailSources;
+    },
 
 
-  removeMailboxForSource: function (id, email) {
-    var emailSource = this.getEmailSource(id);
+    getEmailSourceByType: function (accountId, type) {
+        var emailSources = this.getAllEmailSources;
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount === null || userAccount.emailSources === null || userAccount.emailSources.length === 0) {
+            return null;
+        }
 
-    if (emailSource === null || emailSource.mailboxes === null || emailSource.mailboxes.length === 0) {
-      return;
-    }
-
-    var mailbox = _.findWhere(emailSource.mailboxes, {
-      email: email
-    });
-    if (mailbox != null) {
-      emailSource.mailboxes = _.without(emailSource.mailboxes, [mailbox]);
-    }
-  },
-  //endregion
+        return _.findWhere(userAccount.emailSources, {
+            type: type
+        });
+    },
 
 
-  //region PASSWORD RECOVERY
-  setPasswordRecoverToken: function () {
-    var token = $$.u.idutils.generateUniqueAlphaNumeric();
-    this.set({
-      passRecover: token,
-      passRecoverExp: new Date().getTime() + $$.u.dateutils.DAY_IN_SEC * 1000
-    });
-    return token;
-  },
+    createOrUpdateEmailSource: function (accountId, type, providerId, label, primaryEmail) {
+        var userAccount = this.getUserAccount(accountId);
+        if (userAccount == null) {
+            throw Error("User account does not exist with AccountID: " + accountId + " for user: " + this.id());
+        }
+
+        var emailSources = userAccount.emailSources;
+        if (emailSources == null) {
+            emailSources = [];
+            userAccount.emailSources = emailSources;
+        }
+
+        var emailSource = _.findWhere(emailSources, {
+            type: type
+        });
+        if (emailSource == null) {
+            emailSource = {
+                _id: $$.u.idutils.generateUniqueAlphaNumeric(),
+                accountId: accountId,
+                type: type,
+                providerId: providerId,
+                label: label,
+                primaryEmail: primaryEmail
+            };
+
+            emailSources.push(emailSource);
+        } else {
+            if (!String.isNullOrEmpty(providerId)) {
+                emailSource.providerId = providerId;
+            }
+            if (!String.isNullOrEmpty(label)) {
+                emailSource.labeel = label;
+            }
+            if (!String.isNullOrEmpty(primaryEmail)) {
+                emailSource.primaryEmail = primaryEmail;
+            }
+        }
+
+        return emailSource;
+    },
 
 
-  clearPasswordRecoverToken: function () {
-    this.clear("passRecover");
-    this.clear("passRecoverExp");
-  },
-  //endregion
+    createOrUpdateMailboxForSource: function (sourceId, email, emailType, label, emailServer, port) {
+        var emailSource = this.getEmailSource(sourceId);
+        if (emailSource == null) {
+            return null;
+        }
+
+        var mailboxes = emailSource.mailboxes;
+        if (mailboxes == null) {
+            mailboxes = [];
+            emailSource.mailboxes = mailboxes;
+        }
+
+        var mailbox = _.findWhere(mailboxes, {
+            email: email
+        });
+
+        if (mailbox == null) {
+            mailbox = {
+                _id: $$.u.idutils.generateUniqueAlphaNumeric(),
+                email: email
+            };
+            mailboxes.push(mailbox);
+        }
+
+        if (!String.isNullOrEmpty(label)) {
+            mailbox.label = label;
+        }
+        if (!String.isNullOrEmpty(emailType)) {
+            mailbox.emailType = emailType;
+        }
+        if (!String.isNullOrEmpty(emailServer)) {
+            mailbox.emailServer = emailServer;
+        }
+        if (port != null && port > 0) {
+            mailbox.port = port;
+        }
+
+        return mailbox;
+    },
 
 
-  //region TOKEN AUTHENTICATION
-  setAuthToken: function (expirationSeconds) {
-    if (expirationSeconds == null) {
-      expirationSeconds = 120;
-    }
-    var token = $$.u.idutils.generateUniqueAlphaNumeric();
-    this.set({
-      authToken: token,
-      authTokenExp: new Date().getTime() + expirationSeconds * 1000
-    });
-    return token;
-  },
+    removeEmailSource: function (id) {
+        var userAccounts = this.get("accounts");
+        if (userAccounts === null || userAccounts.length === 0) {
+            return null;
+        }
+
+        for (var i = 0, l = userAccounts.length; i < l; i++) {
+            if (userAccounts[i].emailSources != null && userAccounts[i].emailSources.length > 0) {
+                var emailSource = _.findWhere(userAccounts[i].emailSources, {
+                    _id: id
+                });
+                if (emailSource != null) {
+                    userAccounts[i].emailSources = _.without(userAccounts[i].emailSources, emailSource);
+                    return;
+                }
+            }
+        }
+    },
 
 
-  clearAuthToken: function () {
-    this.clear("authToken");
-    this.clear("authTokenExp");
-  },
-  //endregion
+    removeMailboxForSource: function (id, email) {
+        var emailSource = this.getEmailSource(id);
+
+        if (emailSource === null || emailSource.mailboxes === null || emailSource.mailboxes.length === 0) {
+            return;
+        }
+
+        var mailbox = _.findWhere(emailSource.mailboxes, {
+            email: email
+        });
+        if (mailbox != null) {
+            emailSource.mailboxes = _.without(emailSource.mailboxes, [mailbox]);
+        }
+    },
+    //endregion
 
 
-  //region Encryption
+    //region PASSWORD RECOVERY
+    setPasswordRecoverToken: function () {
+        var token = $$.u.idutils.generateUniqueAlphaNumeric();
+        this.set({
+            passRecover: token,
+            passRecoverExp: new Date().getTime() + $$.u.dateutils.DAY_IN_SEC * 1000
+        });
+        return token;
+    },
+
+
+    clearPasswordRecoverToken: function () {
+        this.clear("passRecover");
+        this.clear("passRecoverExp");
+    },
+    //endregion
+
+
+    //region TOKEN AUTHENTICATION
+    setAuthToken: function (expirationSeconds) {
+        if (expirationSeconds == null) {
+            expirationSeconds = 120;
+        }
+        var token = $$.u.idutils.generateUniqueAlphaNumeric();
+        this.set({
+            authToken: token,
+            authTokenExp: new Date().getTime() + expirationSeconds * 1000
+        });
+        return token;
+    },
+
+
+    clearAuthToken: function () {
+        this.clear("authToken");
+        this.clear("authTokenExp");
+    },
+    //endregion
+
+
+    //region Encryption
     /**
      * @deprecated for _encryptPasswordAsync
      * @param password
@@ -1336,28 +1336,28 @@ var user = $$.m.ModelBase.extend({
         return crypto.hash(password);
     },
 
-    encryptPasswordAsync: function(password, fn) {
+    encryptPasswordAsync: function (password, fn) {
         passwordLib(password).hash(fn);
     },
 
 
     _verifyPassword: function (password, encryptedPassword, scheme, accountId, fn) {
         var self = this;
-        if(!scheme || scheme===1) {
-            crypto.verify(password, encryptedPassword, function(err, value){
-                if(err) {
+        if (!scheme || scheme === 1) {
+            crypto.verify(password, encryptedPassword, function (err, value) {
+                if (err) {
                     return fn(err, value);
-                } else if(value === true) {
+                } else if (value === true) {
                     //update the password.
-                    passwordLib(password).hash(function(error, hash) {
-                        if(accountId === null) {
+                    passwordLib(password).hash(function (error, hash) {
+                        if (accountId === null) {
                             self.updateLocalCredentialsAndScheme(hash, 2);
                         } else {
                             self.updateLocalAccountCredentialsAndScheme(accountId, hash, 2);
                         }
 
-                        $$.dao.UserDao.saveOrUpdate(self, function(err, savedUser){
-                            if(err) {
+                        $$.dao.UserDao.saveOrUpdate(self, function (err, savedUser) {
+                            if (err) {
                                 return fn(err, value);
                             } else {
                                 return fn(null, value);
@@ -1368,7 +1368,7 @@ var user = $$.m.ModelBase.extend({
                     return fn(err, value);
                 }
             });
-        } else if(scheme === 2) {
+        } else if (scheme === 2) {
             passwordLib(password).verifyAgainst(encryptedPassword, fn);
         } else {
             console.log('No scheme on credentials');
@@ -1377,12 +1377,12 @@ var user = $$.m.ModelBase.extend({
     }
     //endregion
 }, {
-  db: {
-    storage: "mongo",
-    table: "users",
-    idStrategy: "increment",
-    cache: true
-  }
+    db: {
+        storage: "mongo",
+        table: "users",
+        idStrategy: "increment",
+        cache: true
+    }
 });
 
 $$.m.User = user;
