@@ -174,7 +174,8 @@ _.extend(view.prototype, BaseView.prototype, {
             function(value, pages, cb) {
                 var pageHolder = {};
                 _.each(pages, function(page){
-                    pageHolder[page.get('handle')] = page.toJSON('frontend');
+                    // We should not add page to sitedata while Preview the page 
+                    //pageHolder[page.get('handle')] = page.toJSON('frontend');
                     pageHolder['/preview/' + pageId ] = page.toJSON('frontend');
                 });
 

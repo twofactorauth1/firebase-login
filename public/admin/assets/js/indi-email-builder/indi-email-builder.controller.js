@@ -233,11 +233,14 @@
             console.time('angular.equals for email');
             if (email && vm.state.originalEmail && vm.pageChanged(email, vm.state.originalEmail)) {
                 console.timeEnd('angular.equals for email');
-                vm.state.pendingEmailChanges = true;
-                console.log("Email changed");
-                if (vm.uiState && vm.uiState.selectedEmail) {
-                    vm.uiState.selectedEmail = vm.state.email;
-                }
+                $timeout(function() {
+                    vm.state.pendingEmailChanges = true;
+                    console.log("Email changed");
+                    if (vm.uiState && vm.uiState.selectedEmail) {
+                        vm.uiState.selectedEmail = vm.state.email;
+                    } 
+                }, 0);
+                
             } else {
                 vm.state.pendingEmailChanges = false;
             }
