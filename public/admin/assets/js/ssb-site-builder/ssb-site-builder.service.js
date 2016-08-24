@@ -1223,7 +1223,7 @@
                    }
                 }
             }
-            
+
             return _duplicate;
         }
 
@@ -1264,7 +1264,7 @@
                 return angular.isDefined(window.WebFont);
             }, function(newValue, oldValue) {
                 if (newValue) {
-                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two'];
+                    var defaultFamilies = ['Roboto', 'Roboto Condensed', 'Roboto Slab', 'Oswald', 'Montserrat', 'Droid Serif', 'Open Sans', 'Open Sans Condensed', 'Lato', 'Raleway', 'Quicksand', 'Ubuntu', 'Merriweather', 'Quattrocento', 'Lora', 'Playfair Display', 'Pacifico', 'Satisfy', 'Parisienne', 'Petit Formal Script', 'Indie Flower', 'Shadows Into Light Two', 'Amatic SC', 'Delius Swash Caps', 'Itim', 'Neucha', 'Patrick Hand SC', 'Schoolbell'];
                     if (theme.name && theme.hasCustomFonts) {
                       var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
                       if(defaultFamilies.indexOf(_fontStack) === -1)
@@ -1344,24 +1344,24 @@
             return {
                 "'Arial',Helvetica,sans-serif": "Arial",
                 "'Amatic SC', cursive": "Amatic SC",
-                "'Delius Swash Caps', cursive": 'Delius Swash Caps',                
+                "'Delius Swash Caps', cursive": 'Delius Swash Caps',
                 "'Droid Serif',serif": 'Droid Serif',
                 "'Georgia',serif": "Georgia",
                 "'Helvetica Neue', Helvetica, Arial, sans-serif": "Helvetica Neue",
                 "'Impact',Charcoal,sans-serif": "Impact",
                 "'Indie Flower', cursive": 'Indie Flower',
-                "'Itim', cursive": 'Itim',                
+                "'Itim', cursive": 'Itim',
                 "'Lato',sans-serif": 'Lato',
                 "'Lora',serif": 'Lora',
                 "'Merriweather',serif": 'Merriweather',
                 "'Montserrat',sans-serif": 'Montserrat',
-                "'Neucha',cursive": 'Neucha',                
+                "'Neucha',cursive": 'Neucha',
                 "'Open Sans Condensed',sans-serif": 'Open Sans Condensed',
                 "'Open Sans',sans-serif": 'Open Sans',
                 "'Oswald',sans-serif": 'Oswald',
                 "'Pacifico',cursive" : 'Pacifico',
                 "'Parisienne', cursive": 'Parisienne',
-                "'Patrick Hand SC', cursive": 'Patrick Hand SC',                
+                "'Patrick Hand SC', cursive": 'Patrick Hand SC',
                 "'Playfair Display',serif": 'Playfair Display',
                 "'Petit Formal Script', cursive": 'Petit Formal Script',
                 "'Quattrocento',serif": 'Quattrocento',
@@ -1371,7 +1371,7 @@
                 "'Roboto Slab',serif": 'Roboto Slab',
                 "'Roboto',sans-serif": 'Roboto',
                 "'Satisfy', cursive": 'Satisfy',
-                "'Schoolbell', cursive": 'Schoolbell',                
+                "'Schoolbell', cursive": 'Schoolbell',
                 "'Shadows Into Light Two', cursive": 'Shadows Into Light Two',
                 "'Tahoma',Geneva,sans-serif": "Tahoma",
                 "'Times New Roman',Times,serif": "Times New Roman",
@@ -1879,7 +1879,7 @@
             });
         }
 
-        
+
 
         (function init() {
 
