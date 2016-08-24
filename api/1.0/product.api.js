@@ -9,6 +9,7 @@ var baseApi = require('../base.api');
 var productManager = require('../../products/product_manager');
 var orderManager = require('../../orders/order_manager');
 var appConfig = require('../../configs/app.config');
+var emailMessageManager = require('../../emailmessages/emailMessageManager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -171,17 +172,36 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateProduct: function(req, res) {
         var self = this;
-        self.log.debug('>> updateProduct');
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateProduct');
 
         console.dir(req.body);
         var product = new $$.m.Product(req.body);
+        /*
+         * Add some debugging for product issue
+         */
+        if(product.get('status') !== 'active') {
+            self.log.warn(accountId, userId, 'Product status not active');
+            var text = 'The following product was modified:';
+            var data = {
+                accountId: accountId,
+                userId: userId,
+                req:req.body,
+                product:product,
+                date: new Date()
+            };
+            emailMessageManager.notifyAdmin('productapi@indigenous.io', 'kyle@indigenous.io', null, 'Product Status change', text, data, function(err, value){
+
+            });
+        }
         var productId = req.params.id;
         product.set('_id', productId);
 
         product.attributes.modified.date = new Date();
-        product.attributes.modified.by = self.userId(req);
+        product.attributes.modified.by = userId;
         productManager.getProduct(productId, function(err, savedProduct){
-            var accountId = savedProduct.get('accountId');
+
             self.checkPermissionForAccount(req, self.sc.privs.MODIFY_PRODUCT, accountId, function(err, isAllowed) {
                 if (isAllowed !== true) {
                     return self.send403(res);

@@ -611,6 +611,50 @@ var emailMessageManager = {
 
     },
 
+    notifyAdmin: function(from, to, cc, subject, text, data, fn) {
+        var self = this;
+
+        self.log.debug('>> notifyAdmin');
+
+        if(!to) {
+            to = 'admin@indigenous.io';
+        }
+        if(!from) {
+            from = 'admin@indigenous.io';
+        }
+
+        var params = {
+            smtpapi:  new sendgrid.smtpapi(),
+            to:       [to],
+            from:     from,
+            cc:       cc,
+            fromname: 'Admin Notification',
+            subject:  subject,
+            date:     moment().toISOString(),
+            category: 'server'
+        };
+        var msg = text || '';
+        if(data) {
+            try {
+                msg += '\n' +  JSON.stringify(data);
+                self.log.debug('msg is:', msg);
+            } catch(Exception){
+                self.log.error('Exception stringifying data:', Exception);
+            }
+        }
+        params.text = msg;
+        var email = new sendgrid.Email(params);
+        sendgrid.send(email, function(err, json) {
+            if (err) {
+                self.log.error('Error sending email:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< sendAccountWelcomeEmail');
+                return fn(null, json);
+            }
+        });
+    },
+
     getMessageInfo: function(messageId, fn) {
         //TODO: this
         fn();
