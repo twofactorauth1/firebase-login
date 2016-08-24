@@ -1006,9 +1006,11 @@ var copyutil = {
                                 sectionData.accountId = 0;
                                 sectionData.siteTemplateRef = siteTemplate._id;
                                 sectionData.enabled = false;
-                                // Ensure that no global section for accountId 0
-                                section[0].global = false;
-
+                                // Ensure that no global section for accountId 0 except global header
+                                if(section[0].globalHeader !== true){
+                                    section[0].global = false;
+                                }
+                                
                                 sectionsCollection.save(sectionData, function(err, savedSection){
                                     return _cb(err);
                                 });
