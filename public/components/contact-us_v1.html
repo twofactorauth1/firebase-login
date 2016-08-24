@@ -1,10 +1,11 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="row contact-panel-{{component._id}}">
         <div class="map-wrap {{isEditing ? 'editing' : ''}}">
-            <div ng-class="{'no-info' : !contactAddress && !component.contact.phone && !component.showHours}" class="widget-weather-mobile visible-xs" style="{{component.splitHours ? 'width:30%' : ''}}" ng-if="!component.hideBusinessInfo">
-                <div class="panel-body" >
-                    <div class="row" >
-                        <div class="col-xs-12 no-offset-top temp" data-edit tab-active="address" data-id="{{component._id}}">
+            <div ng-class="{'no-info' : !contactAddress && !component.contact.phone && !component.showHours}" class="widget-weather-mobile visible-xs" ng-if="!component.hideBusinessInfo">
+                <div class="panel-body address-hours-container" >
+                    <div class="row " >
+                            <div class="col-xs-12 no-offset-top temp address-hours-inner-box" data-edit tab-active="address" data-id="{{component._id}}" ng-style="{'background' : component.boxColor
+                            }">
                             <div >
                             <span class="blocked" ng-bind-html="contactAddress | unsafe"></span>
                             <a class="contact-tel" href="tel:{{component.contact.phone}}"><span class="blocked" ng-bind-html="component.contact.phone"></span></a>
