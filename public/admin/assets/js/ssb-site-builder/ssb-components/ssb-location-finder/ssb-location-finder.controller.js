@@ -137,9 +137,18 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     function initIcons() {
 
-        vm.helmsMarkerIcon = {
-            url: '/images/indi-location-marker-small-helms.png'
-        };
+        if(vm.component.isHelm === false){
+            vm.helmsMarkerIcon = {
+                url: '/images/indi-location-marker.default.png'
+            };
+        }
+        else{
+            vm.helmsMarkerIcon = {
+                url: '/images/indi-location-marker-small-helms.png'
+            };
+        }
+
+        
 
         vm.searchBasisMarkerIcon = {
             url: '/images/indi-location-marker-home.png'
@@ -360,27 +369,30 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     }
 
     function addStaticLocations() {
-
-        var staticLocations = [{
-            name: 'Helms Brewing Co',
-            address: '5640 Kearny Mesa Road',
-            address2: '',
-            city: 'San Diego',
-            state: 'CA',
-            zip: '92111',
-            lat: 32.837377,
-            lng: -117.138966
-        },
-        {
-            name: 'Tasting Room',
-            address: '4896 Newport Ave',
-            address2: '',
-            city: 'San Diego',
-            state: 'CA',
-            zip: '92107',
-            lat: 32.7458203,
-            lng: -117.24903540000003
-        }];
+        var staticLocations = vm.component.staticLocations;
+        if(!staticLocations){
+            staticLocations = [{
+                name: 'Helms Brewing Co',
+                address: '5640 Kearny Mesa Road',
+                address2: '',
+                city: 'San Diego',
+                state: 'CA',
+                zip: '92111',
+                lat: 32.837377,
+                lng: -117.138966
+            },
+            {
+                name: 'Tasting Room',
+                address: '4896 Newport Ave',
+                address2: '',
+                city: 'San Diego',
+                state: 'CA',
+                zip: '92107',
+                lat: 32.7458203,
+                lng: -117.24903540000003
+            }];
+        }
+        
 
         staticLocations.forEach(function(location, index) {
 
@@ -403,7 +415,6 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             }), index === 0); //trigger click on first static location
 
         });
-
 
     }
 
