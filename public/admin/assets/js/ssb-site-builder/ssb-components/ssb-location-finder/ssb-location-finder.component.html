@@ -83,7 +83,7 @@
 
                 <div>
                     <ul class="ssb-location-result-item-list">
-                        <li><b>{{result.name}}</b></li>
+                        <li><b ng-bind-html="result.name"></b></li>
                         <li>{{result.address}}</li>
                         <li>{{result.address2}}</li>
                         <li>{{result.city}}, {{result.state}} {{result.zip}}</li>
