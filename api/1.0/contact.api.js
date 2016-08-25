@@ -121,7 +121,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         contactId = parseInt(contactId);
-        var accountId = parseInt(self.currentAccountId(req));
+        var accountId = parseInt(self.accountId(req));
 
         contactDao.getContactById(accountId, contactId, function(err, value) {
             self.log.debug('<< getContactById');
