@@ -1,33 +1,33 @@
 <style>
-    .navigation-v4 .navbar-default .navbar-nav.nav-align{
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-align{
         text-align:{{component.nav.align}} !important;
     }
-    .navigation-v4 .navbar-default .navbar-nav.nav-font-size > li > a{
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-size > li > a{
         font-size:{{component.nav.font.size}}px !important;
     }
-    .navigation-v4 .navbar-default .navbar-nav.nav-font-family > li > a{
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-family > li > a{
         font-family:{{component.nav.font.family}} !important;
     }
     .navbar-collapse.navbgcolor {
         background-color: {{component.nav.hoverbg}} !important;
     }
-    .navigation-v4 .navbar ul.navbar-nav li:hover {
+    .navigation-v4.nav-header-{{component._id}} .navbar ul.navbar-nav li:hover {
         border-bottom: 4px solid {{component.nav.hover}}!important;
     }
-    .navigation-v4 .navbar ul.navbar-nav li a.active {
+    .navigation-v4.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
         color: {{component.activetxtcolor}}!important;
         background-color: {{component.nav.pressed.bg.color}}
     }
-    .navigation-v4 .navbar-default .navbar-nav > li > a:hover, .navigation-v4 .navbar-default .navbar-nav > li > a:focus{
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:hover, .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:focus{
         background-color: {{component.nav.hoverbg || 'transparent'}};
         color: {{component.nav.hover}}  !important;
     }
-    .navigation-v4 .navbar-default .navbar-nav > li > a{
+    .navigation-v4.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a{
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
     }
 </style>
-<div ng-class="component.type+'-v'+component.version">
+<div ng-class="component.type+'-v'+component.version" class="nav-header-{{component._id}}">
     <nav class="navbar navbar-default" role="navigation">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
