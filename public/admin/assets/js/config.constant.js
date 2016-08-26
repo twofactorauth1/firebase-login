@@ -544,6 +544,7 @@ app.constant('JS_REQUIRES', {
     'contactsCtrl': 'assets/js/controllers/contactsCtrl.js',
     'contactDetailCtrl': 'assets/js/controllers/contactDetailCtrl.js',
     'customersCtrl': 'assets/js/controllers/customersCtrl.js',
+    'customerDetailCtrl': 'assets/js/controllers/customerDetailCtrl.js',
     'productsCtrl': 'assets/js/controllers/productsCtrl.js',
     'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',
     'iconsCtrl': 'assets/js/controllers/iconsCtrl.js',

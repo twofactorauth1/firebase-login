@@ -134,6 +134,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Single Contact',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('contactDetailCtrl', 'contactService', 'ngMap', 'offset','assetsService', 'toasterService', 'orderService')
+    }).state('app.singleCustomer', {
+        url: '/customers/:customerId',
+        templateUrl: "/admin/assets/views/customer-detail.html",
+        title: 'Single Customer',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('customerDetailCtrl','ngMap', 'customerService', 'toasterService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',

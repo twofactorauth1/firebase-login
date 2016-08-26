@@ -47,6 +47,24 @@
             }
         };
 
+        this.getCustomer = function(id, fn) {
+            var apiUrl = [baseUrl, id].join('/');
+            var data = this.getCache().get(id);
+            var cache = this.getCache();
+            if(data) {
+                fn(data);
+            } else {
+                $http({
+                    url: apiUrl,
+                    method: 'GET'
+                }).success(function (data) {
+                    cache.put(id, data);
+                    fn(null, data);
+                }).error(function(err){
+                    fn(err);
+                });
+            }
+        };
 
 
 
