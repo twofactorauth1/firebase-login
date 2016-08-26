@@ -14,19 +14,37 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
 
         $scope.addUnderNavSetting = function (masthead_id, fn) {
             var data = {
-                allowUndernav: false,
+                allowUndernav : false,
                 navComponent: null
             };
-            $scope.components = $scope.page.components;
+
             if ($scope.components && $scope.components.length > 0) {
                 $scope.components.forEach(function (value, index) {
                     if (value && value.type === 'masthead' && value._id == masthead_id) {
                         if (index != 0 && $scope.components[index - 1].type == "navigation") {
                             data.allowUndernav = true;
-                            data.navComponent = $scope.components[index - 1];
-                        } else
+                            data.navComponent =  $scope.components[index - 1];
+                        } else {
                             data.allowUndernav = false;
+                        }
                     }
+                });
+            } else if ($scope.sections && $scope.sections.length > 0) {
+                $scope.sections.forEach(function (sectionValue, sectionIndex) {
+                    sectionValue.components.forEach(function (value, index) {
+                        if (value && value.type === 'masthead' && value._id == masthead_id) {
+                            var navComponent = _.findWhere($scope.sections[sectionIndex - 1].components, { type: 'navigation' });
+                            if (
+                                sectionIndex != 0 &&
+                                navComponent !== undefined
+                            ) {
+                                data.allowUndernav = true;
+                                data.navComponent = navComponent;
+                            } else {
+                                data.allowUndernav = false;
+                            }
+                        }
+                    });
                 });
             }
             fn(data);

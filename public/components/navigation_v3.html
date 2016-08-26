@@ -1,37 +1,37 @@
 <style>
-    .navigation-v3 .navbar-default .navbar-nav.nav-align{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-align{
         text-align:{{component.nav.align}} !important;
     }
-    .navigation-v3 .navbar-default .navbar-nav.nav-font-size > li > a{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-size > li > a{
         font-size:{{component.nav.font.size}}px !important;
     }
-    .navigation-v3 .navbar-default .navbar-nav.nav-font-family > li > a{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav.nav-font-family > li > a{
         font-family:{{component.nav.font.family}} !important;
     }
-    .navigation-v3 .navbar-default .navbar-nav > li > a:hover{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:hover{
         background-color: {{component.nav.hoverbg}} !important;
         color: {{component.nav.hover}}!important;
     }
-    .navigation-v3 .navbar-default.navbgcolor {
+    .navigation-v3.nav-header-{{component._id}} .navbar-default.navbgcolor {
         background: {{component.nav.bg}}!important;
     }
-    .navigation-v3 .navbar ul.navbar-nav li:hover, .navigation-v3 .navbar ul.navbar-nav li:focus {
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li:hover, .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li:focus {
         border-bottom: 4px solid {{component.nav.hover}}!important;
     }
-    .navigation-v3 .navbar ul.navbar-nav li a.active {
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
          color: {{component.activetxtcolor}}!important;
          background-color: {{component.nav.pressed.bg.color}};
     }
-    .navigation-v3 .navbar ul.navbar-nav li {
+    .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li {
         border-bottom: 4px solid transparent;
     }
-    .navigation-v3 .navbar-default .navbar-nav > li > a{
+    .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a{
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
     }
 
 </style>
-<div ng-class="component.type+'-v'+component.version">
+<div ng-class="component.type+'-v'+component.version" class="nav-header-{{component._id}}">
     <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox, 'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" role="navigation">
         <div class="container">
         <div class="col-sm-3">

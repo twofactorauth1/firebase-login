@@ -281,6 +281,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                             }
                         }
                     })
+                    // .on('froalaEditor.video.inserted', function (e, editor, $video) {
+                    //       var videoSource = $video.contents().get(0).src;
+                    //       $video.html('<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="' + videoSource +'" frameborder="0" allowfullscreen></iframe></div>');
+                    // })
                     $(elem).froalaEditor('events.on', 'keydown', function (e) {
 
                         // if enter key is pressed inside of button

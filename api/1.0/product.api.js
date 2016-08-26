@@ -263,6 +263,11 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    /**
+     * No Security.
+     * @param req
+     * @param resp
+     */
     getProductOrders: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.currentAccountId(req));
