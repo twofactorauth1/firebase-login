@@ -1,0 +1,206 @@
+<div class="customer-detail" ng-controller="CustomerDetailCtrl">
+    <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="contactSaveFn()" save-page-check="!pageSaving"></indig-navprompt>
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">{{ data.subdomain || 'No Contact Name'}} </h1>
+                <span class="mainDescription">{{displayCustomerTags()}}</span>
+            </div>
+        </div>
+    </section>
+    <div class="col-xs-12">
+        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5" ng-click="backToCustomers()">
+            Back to Customers
+        </button>
+    </div>
+    <div class="container-fluid container-fullw">
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <tabset class="tabbable">
+                        <tab heading="Overview" select="resizeMap()">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="user-left">
+                                        <div class="center">
+                                            <h4>{{customer.customDomain}}</h4>
+                                            <div class="user-image">
+                                                <img ng-src="{{ customer.business.logo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
+                                            </div>
+
+                                        </div>
+                                        <div class="map margin-bottom-15">
+                                            <span class="text-bold">Location</span>
+                                            <hr class="margin-top-5">
+                                            <map zoom="10" center="{{location.lat}}, {{location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
+                                                <marker position="{{location.lat}}, {{location.lon}}"></marker>
+                                            </map>
+                                            <div class="load1 csspinner height-155" ng-if="loadingMap"></div>
+                                            <div class="height-155" ng-if="!loadingMap && !location.lat">
+                                                <h4 class="center text-bold no-location">No Location</h4></div>
+                                        </div>
+
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Primary User Information</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Email:</td>
+                                                    <td>
+                                                        <a href="mailto:{{primaryUser.email}}">{{primaryUser.email}}</a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Name:</td>
+                                                    <td>
+                                                        {{primaryUser.first}} {{primaryUser.last}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ID:</td>
+                                                    <td>
+                                                        {{primaryUser._id}}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Website:</td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="http://{{contact.details[0].websites[0].website}}">{{contact.details[0].websites[0].website}}</a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Company:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{contact.details[0].company}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <table class="table table-condensed hidden">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Interactions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Page Views</td>
+                                                    <td>18</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Page View</td>
+                                                    <td><a href="">/hello-there</a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Avg. Time on Site</td>
+                                                    <td>1:21</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Last Logged In</td>
+                                                    <td>56 min</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="panel-body panel-white">
+                                        <div class="panel-heading border-light">
+                                            <h4 class="panel-title">Account <span class="text-bold">Users</span></h4>
+                                            <table class="table table-primary margin-bottom-0">
+                                                <thead>
+                                                <tr class="ng-scope">
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Username</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-if="!customer.users || customer.users.length <= 0">
+                                                    <td colspan="6">
+                                                        <h4 class="text-center margin-top-30 margin-bottom-30">No Users</h4>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="user in customer.users">
+                                                    <td>
+                                                        {{user._id}}
+                                                    </td>
+                                                    <td>{{user.first}} {{user.last}}</td>
+                                                    <td>{{user.username}}</td>
+                                                    <td class="table-action">
+                                                        <a ng-click="userEditFn(user._id)"><i class="fa fa-pencil"></i></a>
+                                                        <a ng-click="userDeleteFn(user._id, true, true)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="panel panel-white" id="notes">
+                                        <div class="panel-heading border-light">
+                                            <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
+                                            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                                        </div>
+                                        <div class="panel-wrapper" collapse="notes" ng-init="notes=false">
+                                            <div class="panel-body no-padding">
+                                                <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                                                    <li ng-repeat="note in contact.notes">
+                                                        <div class="col-xs-2">
+                                                            <img src="{{note.user_profile_photo ? note.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
+                                                        </div>
+                                                        <div class="col-xs-10">
+                                                            <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
+                                                            <span>{{note.note}}</span>
+                                                        </div>
+                                                        <div class="clearfix"></div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="panel-footer border-light">
+                                                <label for="newNote"> New Note</label>
+                                                <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote.text"></textarea>
+                                                <button type="button" ng-disabled="!(newNote.text)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote(newNote.text)">
+                                                    <span>Add</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="panel panel-white space20 hidden">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">Recent Tweets</h4>
+                                        </div>
+                                        <div class="panel-body">
+                                            <ul class="ltwt">
+                                                <li class="ltwt_tweet">
+                                                    <p class="ltwt_tweet_text">
+                                                        <a href class="text-info">
+                                                        @Shakespeare
+                                                    </a> Some are born great, some achieve greatness, and some have greatness thrust upon them.
+                                                    </p>
+                                                    <span class="block text-light"><i class="fa fa-fw fa-clock-o"></i> 2 minuts ago</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
+
+
+                    </tabset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
