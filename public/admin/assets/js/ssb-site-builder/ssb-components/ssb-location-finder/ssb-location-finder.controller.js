@@ -32,8 +32,6 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.locationMarkerIcon = {};
     vm.clusterOptions = {};
     vm.geolocationEnabled = false;
-    vm.mapCenterLocation = new google.maps.LatLng(32.837377, -117.138966); //helms
-
     vm.helmsMarker = {};
     vm.searchBasisMarker = {};
 
@@ -54,6 +52,13 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.getDirectionsLink = getDirectionsLink;
     vm.onDestroy = onDestroy;
     vm.addStaticLocations = addStaticLocations;
+
+    // Chris - my bad..
+    if(vm.component.isHelm === false){
+        vm.mapCenterLocation = new google.maps.LatLng(38.873452, -77.003743); // ice cream jubilee
+    } else {
+        vm.mapCenterLocation = new google.maps.LatLng(32.837377, -117.138966); // helms
+    }
 
     $scope.$watch('vm.loading', function(val) {
         if (!val) {
@@ -148,7 +153,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             };
         }
 
-        
+
 
         vm.searchBasisMarkerIcon = {
             url: '/images/indi-location-marker-home.png'
@@ -392,7 +397,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
                 lng: -117.24903540000003
             }];
         }
-        
+
 
         staticLocations.forEach(function(location, index) {
 
