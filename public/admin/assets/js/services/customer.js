@@ -4,6 +4,7 @@
 (function (angular) {
     app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', '$q', function ($http, $rootScope, $cacheFactory, $q) {
         var baseUrl = '/api/2.0/customers';
+        var adminUrl = '/api/1.0/admin';
 
         this.getCache = function () {
             var cache = $cacheFactory.get('CustomerService');
@@ -64,6 +65,18 @@
                     fn(err);
                 });
             }
+        };
+
+        this.extendTrial = function(id, newLength, fn) {
+            var apiUrl = [adminUrl, 'account', id, 'trial', newLength].join('/');
+            $http({
+                url:apiUrl,
+                method: 'POST'
+            }).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
         };
 
 

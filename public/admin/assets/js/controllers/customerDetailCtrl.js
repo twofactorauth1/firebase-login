@@ -25,6 +25,10 @@
                     $scope.primaryUser = _.find(customer.users, function(user){return user._id === customer.ownerUser});
                     console.log('primaryUser:', $scope.primaryUser);
                 }
+                if(!customer.trialDaysRemaining) {
+                    var endDate = moment(customer.billing.signupDate).add(customer.billing.trialLength, 'days');
+                    customer.trialDaysRemaining =  endDate.diff(moment(), 'days');
+                }
             });
 
         };
@@ -141,12 +145,18 @@
 
         $scope.editTrialDays = function() {
             console.log('setting trial length to ', $scope.newTrialLength);
+            customerService.extendTrial($scope.customer._id, $scope.newTrialLength, function(err, customer){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    var endDate = moment(customer.billing.signupDate).add(customer.billing.trialLength, 'days');
+                    $scope.customer.trialDaysRemaining = endDate.diff(moment(), 'days');
+                    $scope.customer.locked_sub = customer.locked_sub;
+                    $scope.closeModal();
+                }
+            });
         };
 
-        $scope.calculateExpiration = function(days) {
-            console.log('days:', days);
-            return 'never';
-        };
 
         $scope.openSimpleModal = function (modal) {
             var _modal = {
