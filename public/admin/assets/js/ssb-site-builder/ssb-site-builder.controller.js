@@ -557,6 +557,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.isDuplicateGlobalHeader = false;
         }
 
+        $timeout(function() {
+            $(window).trigger('resize');
+        }, 100);
+
     }
 
     function updateActiveComponent(index) {
