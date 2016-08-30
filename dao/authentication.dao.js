@@ -37,13 +37,8 @@ var dao = {
             if (account !== true && (account == null || account.id() == null || account.id() == 0 ) ) {
                 log.info("No account found with username: " + username);
                 return fn("Account not found", "No account found at this location");
-            }
-
-
-
-
-            //We are at the main indigenous level application, not at a custom subdomain
-            else if (parsedHost.subdomain !== 'main' && (account === true || account.id() === appConfig.mainAccountID) ) {
+            } else if (parsedHost.subdomain !== 'main' && (account === true || account.id() === appConfig.mainAccountID) ) {
+                //We are at the main indigenous level application, not at a custom subdomain
                 log.info("Logging into main App");
                 req.session.accountId = 0;
                 userDao.getUserByUsername(username, function (err, value) {
@@ -61,7 +56,7 @@ var dao = {
                                     log.info("Incorrect password");
                                     return fn("Incorrect password", "Incorrect password");
                                 } else {
-
+                                    req.session.permissions = user.getPermissionsForAccount(appConfig.mainAccountID);
                                     if(user.getAllAccountIds().length > 1) {
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
@@ -138,6 +133,7 @@ var dao = {
                                         log.info("Incorrect password");
                                         return fn("Incorrect password", "Incorrect password");
                                     } else {
+                                        req.session.permissions = user.getPermissionsForAccount(account.id());
                                         log.info("Authentication succeeded");
                                         req.session.accountId = account.id();
                                         req.session.subdomain = account.get('subdomain');

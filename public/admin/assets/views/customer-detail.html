@@ -39,7 +39,31 @@
                                             <div class="height-155" ng-if="!loadingMap && !location.lat">
                                                 <h4 class="center text-bold no-location">No Location</h4></div>
                                         </div>
-
+                                        <table class="table table-condensed">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Account Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Signup Date:</td>
+                                                    <td>{{customer.billing.signupDate | date:'M/d/yy'}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Trial Days Remaining</td>
+                                                    <td>{{customer.trialDaysRemaining}}  <a ng-click="openSimpleModal('edit-trial-days-modal')"><i class="fa fa-pencil"></i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Account Locked</td>
+                                                    <td>{{customer.locked_sub}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Gross Revenue</td>
+                                                    <td>{{(customer.chargeDetails.totalCharges) | currency:"$" }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                         <table class="table table-condensed">
                                             <thead>
                                                 <tr>
@@ -84,31 +108,7 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <table class="table table-condensed hidden">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan="3">Interactions</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Page Views</td>
-                                                    <td>18</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Last Page View</td>
-                                                    <td><a href="">/hello-there</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Avg. Time on Site</td>
-                                                    <td>1:21</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Last Logged In</td>
-                                                    <td>56 min</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+
 
                                     </div>
                                 </div>
@@ -127,7 +127,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr ng-if="!customer.users || customer.users.length <= 0">
-                                                    <td colspan="6">
+                                                    <td colspan="4">
                                                         <h4 class="text-center margin-top-30 margin-bottom-30">No Users</h4>
                                                     </td>
                                                 </tr>
@@ -138,9 +138,54 @@
                                                     <td>{{user.first}} {{user.last}}</td>
                                                     <td>{{user.username}}</td>
                                                     <td class="table-action">
-                                                        <a ng-click="userEditFn(user._id)"><i class="fa fa-pencil"></i></a>
-                                                        <a ng-click="userDeleteFn(user._id, true, true)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                                        <a ng-click="openEditUserModal(user._id)"><i class="fa fa-pencil"></i></a>
+                                                        <a ng-click="removeUserFromAccount(user._id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
                                                     </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <div class="form-group margin-bottom-0 pull-right">
+                                                            <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="openSimpleModal('new-user-modal')">
+                                                                <span>Add New User</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="form-group margin-bottom-0 margin-right-5 pull-right hidden">
+                                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openModal('import-contact-modal', 'importContactModalCtrl','md')">
+                                                                <span>Add Existing User</span>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                    <div class="panel-body panel-white">
+                                        <div class="panel-heading border-light">
+                                            <h4 class="panel-title">Account <span class="text-bold">Invoices</span></h4>
+                                            <table class="table table-primary margin-bottom-0">
+                                                <thead>
+                                                <tr class="ng-scope">
+                                                    <th>From / To</th>
+                                                    <th>Amount</th>
+                                                    <th>Attempts</th>
+                                                    <th>Paid</th>
+                                                    <th>Date</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr ng-if="!customer.invoices || customer.invoices.length <= 0">
+                                                    <td colspan="6">
+                                                        <h4 class="text-center margin-top-30 margin-bottom-30">No Invoices</h4>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="invoice in customer.invoices">
+                                                    <td>{{invoice.period_start | date:'M/d/yy'}} / {{invoice.period_end | date:'M/d/yy'}}</td>
+                                                    <td>{{invoice.total / 100 | currency:'$'}}</td>
+                                                    <td>{{invoice.attempt_count}}</td>
+                                                    <td>{{invoice.paid}}</td>
+                                                    <td>{{invoice.date | date: 'M/d/yy'}}</td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -204,3 +249,6 @@
         </div>
     </div>
 </div>
+<div data-ng-include=" 'assets/views/partials/edit-trial-days-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/new-user-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
