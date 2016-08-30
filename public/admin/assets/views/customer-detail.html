@@ -127,7 +127,7 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr ng-if="!customer.users || customer.users.length <= 0">
-                                                    <td colspan="6">
+                                                    <td colspan="4">
                                                         <h4 class="text-center margin-top-30 margin-bottom-30">No Users</h4>
                                                     </td>
                                                 </tr>
@@ -138,12 +138,27 @@
                                                     <td>{{user.first}} {{user.last}}</td>
                                                     <td>{{user.username}}</td>
                                                     <td class="table-action">
-                                                        <a ng-click="userEditFn(user._id)"><i class="fa fa-pencil"></i></a>
-                                                        <a ng-click="userDeleteFn(user._id, true, true)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                                        <a ng-click="openEditUserModal(user._id)"><i class="fa fa-pencil"></i></a>
+                                                        <a ng-click="removeUserFromAccount(user._id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <div class="form-group margin-bottom-0 pull-right">
+                                                            <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="openSimpleModal('new-user-modal')">
+                                                                <span>Add New User</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="form-group margin-bottom-0 margin-right-5 pull-right hidden">
+                                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openModal('import-contact-modal', 'importContactModalCtrl','md')">
+                                                                <span>Add Existing User</span>
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
+
                                         </div>
                                     </div>
                                     <div class="panel-body panel-white">
@@ -235,3 +250,5 @@
     </div>
 </div>
 <div data-ng-include=" 'assets/views/partials/edit-trial-days-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/new-user-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>

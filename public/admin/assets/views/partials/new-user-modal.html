@@ -1,0 +1,28 @@
+<script type="text/ng-template" id="new-user-modal">
+
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">New User</h3>
+    </div>
+    <div class="modal-body contact-modal bg-white">
+        <form action="#" name="form" role="form" id="form">
+            <div class="form-group">
+                <label class="">Username</label>
+                <input id="input-username" class="form-control" ng-model="$parent.newuser.username" placeholder="Email Address" type="text">
+            </div>
+            <div class="form-group">
+                <label class="">Password</label>
+                <input id="input-password" class="form-control" ng-model="$parent.newuser.password" placeholder="Password" type="password">
+            </div>
+
+        </form>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="!$parent.newuser.username || !$parent.newuser.password" ng-click="addNewUser()">Add New User</button>
+    </div>
+
+</script>

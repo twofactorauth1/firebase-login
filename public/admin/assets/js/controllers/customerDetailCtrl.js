@@ -23,7 +23,7 @@
                 $scope.getMapData();
                 if(customer.ownerUser) {
                     $scope.primaryUser = _.find(customer.users, function(user){return user._id === customer.ownerUser});
-                    console.log('primaryUser:', $scope.primaryUser);
+                    //console.log('primaryUser:', $scope.primaryUser);
                 }
                 if(!customer.trialDaysRemaining) {
                     var endDate = moment(customer.billing.signupDate).add(customer.billing.trialLength, 'days');
@@ -118,8 +118,8 @@
             $scope.location.lat = parseFloat(_lat);
             $scope.location.lon = parseFloat(_lon);
             $scope.loadingMap = false;
-            console.log('$scope.location:', $scope.location);
-            console.log('$scope.loadingMap', $scope.loadingMap);
+            //console.log('$scope.location:', $scope.location);
+            //console.log('$scope.loadingMap', $scope.loadingMap);
             if ($scope.markers && $scope.markers.mainMarker) {
                 $scope.markers.mainMarker.lat = parseFloat(_lat);
                 $scope.markers.mainMarker.lon = parseFloat(_lon);
@@ -154,6 +154,52 @@
                     $scope.customer.locked_sub = customer.locked_sub;
                     $scope.customer.billing.trialLength = customer.billing.trialLength;
                     $scope.closeModal();
+                }
+            });
+        };
+
+        $scope.addNewUser = function() {
+            console.log('Adding the following:', $scope.newuser);
+            customerService.addNewUser($scope.customer._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    $scope.customer.users.push(newuser);
+                    $scope.closeModal();
+                }
+            });
+        };
+
+        $scope.removeUserFromAccount = function(userId) {
+            customerService.removeUserFromAccount($scope.customer._id, userId, function(err, data){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    $scope.customer.users = _.filter($scope.customer.users, function(user){
+                        if(user._id !== userId) {
+                            return true;
+                        }
+                    });
+                }
+            });
+        };
+
+        $scope.openEditUserModal = function(userId) {
+            $scope.currentUserId = userId;
+            $scope.openSimpleModal('edit-password-modal');
+        };
+        $scope.closeEditUserModal = function() {
+            $scope.currentUserId = null;
+            $scope.closeModal();
+        };
+
+        $scope.setUserPassword = function(userId) {
+            customerService.setUserPassword(userId, $scope.edituser.password1, function(err, data){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('info', 'Successfully changed password');
+                    $scope.closeEditUserModal();
                 }
             });
         };

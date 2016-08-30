@@ -79,6 +79,38 @@
             });
         };
 
+        this.addNewUser = function(id, username, password, fn) {
+            var apiUrl = [adminUrl, 'user', 'account', id].join('/');
+            var body = {
+                username:username,
+                password:password
+            };
+            $http.post(apiUrl, body).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
+        this.removeUserFromAccount = function(id, userId, fn) {
+            var apiUrl = [adminUrl, 'user', 'account', id, 'user', userId].join('/');
+            $http.delete(apiUrl).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
+        this.setUserPassword = function(userId, password, fn) {
+            var apiUrl = [adminUrl, 'user', userId, 'password'].join('/');
+            var body = {password:password};
+            $http.post(apiUrl, body).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
 
 
     }]);

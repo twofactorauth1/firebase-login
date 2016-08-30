@@ -190,6 +190,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         if(self.userId(req) === 1 || self.userId(req)===4) {
             fn(null, true);
+        } else if(_.contains(req.session.permissions, 'manager')){
+            fn(null, true);
         } else {
             fn(null, false);
         }
