@@ -139,6 +139,51 @@
             //$window.history.back();
         };
 
+        $scope.editTrialDays = function() {
+            console.log('setting trial length to ', $scope.newTrialLength);
+        };
+
+        $scope.calculateExpiration = function(days) {
+            console.log('days:', days);
+            return 'never';
+        };
+
+        $scope.openSimpleModal = function (modal) {
+            var _modal = {
+                templateUrl: modal,
+                scope: $scope,
+                keyboard: false,
+                backdrop: 'static'
+            };
+            $scope.modalInstance = $modal.open(_modal);
+            $scope.modalInstance.result.then(null, function () {
+                angular.element('.sp-container').addClass('sp-hidden');
+            });
+        };
+
+        /*
+         * @closeModal
+         * -
+         */
+
+        $scope.closeModal = function () {
+            $scope.modalInstance.close();
+            $scope.socailList = false;
+            $scope.groupList = false;
+        };
+
+        $scope.$watch('customer.billing.trialLength', function(newValue){
+            if($scope.customer && $scope.customer.billing) {
+                $scope.currentTrialExpiration = moment($scope.customer.billing.signupDate).add(newValue, 'days').format('MM/DD/YYYY');
+            }
+        });
+
+        $scope.$watch('newTrialLength', function(newValue){
+            if($scope.customer && $scope.customer.billing) {
+                $scope.newTrialExpiration = moment($scope.customer.billing.signupDate).add(newValue, 'days').format('MM/DD/YYYY');
+            }
+        });
+
         $scope.ip_geo_address = '';
         $scope.location = {};
         $scope.loadingMap = true;

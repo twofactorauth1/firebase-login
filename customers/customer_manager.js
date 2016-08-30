@@ -8,6 +8,7 @@
 var dao = require('./dao/customer.dao');
 var accountDao = require('../dao/account.dao');
 var userManager = require('../dao/user.manager');
+var paymentsManager = require('../payments/payments_manager');
 
 var log = $$.g.getLogger('customer_manager');
 var appConfig = require('../configs/app.config');
@@ -60,7 +61,21 @@ module.exports = {
         async.waterfall([
             function(cb) {
                 accountDao.getAccountByID(customerId, function(err, account){
-                    cb(err, account);
+                    if(account) {
+                        var billing = account.get('billing') || {};
+                        var trialDays = billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
+                        var endDate = moment(billing.signupDate).add(trialDays, 'days');
+
+                        var trialDaysRemaining = endDate.diff(moment(), 'days');
+                        if(trialDaysRemaining < 0) {
+                            trialDaysRemaining = 0;
+                        }
+                        account.set('trialDaysRemaining', trialDaysRemaining);
+                        cb(err, account);
+                    } else {
+                        cb('account not found', null);
+                    }
+
                 });
             },
             function(account, cb) {
@@ -72,11 +87,71 @@ module.exports = {
                         _.each(users, function(user){
                             userAry.push(user.toJSON('public', {accountId:customerId}));
                         });
-                        account.set('users', userAry);
+                        if(account) {
+                            account.set('users', userAry);
+                        }
+
                         cb(null, account);
                     }
 
                 });
+            },
+            function(account, cb) {
+                paymentsManager.listInvoicesForAccount(account, null, null, null, null, null, function(err, invoices){
+                    if(err) {
+                        cb(err);
+                    } else {
+                        account.set('invoices', invoices.data);
+                        _.each(invoices.data, function(invoice){
+                            invoice.period_start = moment.unix(invoice.period_start).toDate();
+                            invoice.period_end = moment.unix(invoice.period_end).toDate();
+                            invoice.date = moment.unix(invoice.date).toDate();
+                        });
+                        self.log.debug('invoices:', invoices);
+                        cb(null, account);
+                    }
+                });
+            },
+            function(account, cb) {
+                //this is too slow.  hardcode testing data:
+                var testing = false;
+                if(testing) {
+                    var totalCharges = 3135.75;
+                    account.set('chargeDetails', {totalCharges:totalCharges});
+                    cb(null, account);
+                } else {
+                    paymentsManager.listChargesForAccount(account, null, null, null, null, null, function(err, charges){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            //self.log.debug('charges:', charges);
+                            var flatCharges = _.flatten(charges.data);
+                            account.set('charges', flatCharges);
+                            var totalCharges = 0;
+                            var totalRefunds = 0;
+                            var totalFees = 0;
+                            _.each(flatCharges, function(charge){
+                                //self.log.debug('charge:', charge);
+                                totalCharges += charge.amount || 0;
+                                totalRefunds += charge.amount_refunded || 0;
+                                totalFees += charge.fee || 0;
+                            });
+                            if(totalCharges > 0) {
+                                totalCharges = totalCharges / 100;
+                            }
+                            if(totalRefunds > 0) {
+                                totalRefunds = totalRefunds / 100;
+                            }
+                            if(totalFees > 0) {
+                                totalFees = totalFees / 100;
+                            }
+                            account.set('chargeDetails', {totalCharges:totalCharges, totalRefunds:totalRefunds, totalFees: totalFees});
+                            cb(null, account);
+                        }
+                    });
+                }
+
+
             }
         ], function(err, customer){
             if(err) {

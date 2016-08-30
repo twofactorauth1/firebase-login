@@ -174,6 +174,31 @@ module.exports = {
             }
 
         });
+    },
+
+    listChargesForAccount: function(account, created, endingBefore, limit, startingAfter, userId, fn) {
+        var self = this;
+        self.log = log;
+        var accountId = account.id();
+        self.log.debug(accountId, userId, '>> listChargesForAccount');
+
+        var customerId = account.get('billing').stripeCustomerId;
+        if(!customerId || customerId === '') {
+            self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
+            return fn('No stripe customerId found');
+        }
+        //if no limit is passed, assume 0
+        var _limit = limit || 0;
+
+        stripeDao.listStripeCharges(created, customerId, endingBefore, _limit, startingAfter, null, function(err, charges){
+            if(err) {
+                self.log.error(accountId, userId, 'Error listing charges:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< listChargesForAccount');
+                return fn(null, charges);
+            }
+        });
     }
 
 
