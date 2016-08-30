@@ -26,13 +26,14 @@ app.directive('errSrc', function () {
         }
       });
 
-      element.bind('error', function () {
-        if (scope.errSrc.length > 0) {
+      element.bind('error', function () {        
+        if (scope.errSrc.length > 0 && !scope.errContact) {
           element.attr('src', scope.errSrc);
         } else {
           element.hide();
           var contentTr = angular.element('<div class="animated bounce two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
           contentTr.insertAfter(element);
+          element.attr('src', scope.errSrc);
         }
       });
 

@@ -196,7 +196,7 @@
                                 <td ng-show='displayedContacts.length'><i class="fa fa-2x" ng-click='contactSelectClickFn($event, contact)' ng-class='{"fa-check-circle": contact.isSelected, "fa-circle-o": !contact.isSelected}'></i></td>
                                 <td ng-show="column.name"><strong>Contact ID: </strong>{{contact._id}}</td>
                                 <td class="center" ng-show="column.photo && tableView == 'list'">
-                                    <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail screenshot" alt="image">
+                                    <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="/admin/assets/images/default-user.png" err-contact="contact" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="contact.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first">--</span></td>
                                 <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="contact.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.last">--</span></td>
