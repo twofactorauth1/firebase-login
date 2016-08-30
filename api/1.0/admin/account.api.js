@@ -42,15 +42,17 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.error('Error getting account:', err);
                         self.wrapError(resp, 500, 'Error getting account', 'Error getting account');
                     } else {
-                        account.get('billing').trialLength = newLength;
-                        if(account.get('locked_sub') === true) {
-                            //check for trial length and unlock
-                            var billing = account.get('billing');
-                            var endDate = moment(billing.signupDate).add(billing.trialLength, 'days');
-                            var trialDaysRemaining = endDate.diff(moment(), 'days');
-                            if(trialDaysRemaining > 0) {
-                                account.set('locked_sub', false);
-                            }
+                        var billing = account.get('billing');
+                        billing.trialLength = newLength;
+
+                        //check for trial length and unlock/lock appropriately
+
+                        var endDate = moment(billing.signupDate).add(billing.trialLength, 'days');
+                        var trialDaysRemaining = endDate.diff(moment(), 'days');
+                        if(trialDaysRemaining > 0) {
+                            account.set('locked_sub', false);
+                        } else {
+                            account.set('locked_sub', true);
                         }
                         accountDao.saveOrUpdate(account, function(err, savedAccount){
                             self.log.debug(null, userId, '<< updateTrialLength');

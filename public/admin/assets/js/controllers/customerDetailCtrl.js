@@ -152,6 +152,7 @@
                     var endDate = moment(customer.billing.signupDate).add(customer.billing.trialLength, 'days');
                     $scope.customer.trialDaysRemaining = endDate.diff(moment(), 'days');
                     $scope.customer.locked_sub = customer.locked_sub;
+                    $scope.customer.billing.trialLength = customer.billing.trialLength;
                     $scope.closeModal();
                 }
             });
