@@ -209,7 +209,7 @@ var dao = {
                                 value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                                 return self.saveOrUpdate(value, function(err, value) {
                                     if (!err) {
-
+                                        req.session.permissions = value.getPermissionsForAccount(appConfig.mainAccountID);
                                         if(value.getAllAccountIds().length > 1) {
                                             req.session.accounts = value.getAllAccountIds();
                                             req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
@@ -248,6 +248,7 @@ var dao = {
                         });
                     } else {
                         value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
+                        req.session.permissions = value.getPermissionsForAccount(appConfig.mainAccountID);
                         if(value.getAllAccountIds().length > 1) {
                             req.session.accounts = value.getAllAccountIds();
                             req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
@@ -291,6 +292,7 @@ var dao = {
                     }
                 });
             } else {
+
                 req.session.accountId = account.id();
                 req.session.unAuthAccountId = account.id();
                 req.session.subdomain = account.get('subdomain');
@@ -321,7 +323,7 @@ var dao = {
                                 fn("User not found for account and social profile", "User not found");
                                 fn = req = null; return;
                             }
-
+                            req.session.permissions = value.getPermissionsForAccount(appConfig.mainAccountID);
                             value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
                             self.saveOrUpdate(value, function(err, value) {
                                 if (!err) {
@@ -338,6 +340,7 @@ var dao = {
                         });
                     } else {
                         value.createOrUpdateSocialCredentials(socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope);
+                        req.session.permissions = value.getPermissionsForAccount(appConfig.mainAccountID);
                         self.saveOrUpdate(value, fn);
                         fn = req = null;
                     }
