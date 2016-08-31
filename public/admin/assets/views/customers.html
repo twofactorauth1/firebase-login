@@ -116,7 +116,7 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
-                                <th st-sort="_id" ng-show="column._id" ng-class="{'column-width': tableView == 'grid'}">Account ID</th>
+                                <th st-sort="_id" st-sort-default="reverse" ng-show="column._id" ng-class="{'column-width': tableView == 'grid'}">Account ID</th>
                                 <th st-sort="subdomain" ng-show="column.subdomain" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Subdomain</th>
                                 <th st-sort="customDomain" ng-show="column.customDomain" ng-class="{'column-width': tableView == 'grid'}">Custom Domain</th>
                                 <th st-sort="signupDate" ng-show="column.signupDate" ng-class="{'column-width': tableView == 'grid'}">Signup Date</th>
