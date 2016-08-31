@@ -191,7 +191,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-style: ' + section.border.style + ';';
             styleString += 'border-radius: ' + section.border.radius + '%;';
         }
-
+        setUpFroalaVideoSize(section);
 
         return styleString;
     }
@@ -502,7 +502,21 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         return $sce.trustAsResourceUrl(url);
     }
 
-   
+    function setUpFroalaVideoSize(section){
+        if(section){
+            var sectionElement = angular.element("#section_"+ section._id);
+            if(sectionElement.length){
+                var iframes = sectionElement.find(".fr-video>iframe");
+                if(iframes.length){
+                    _.each(iframes, function(iframe){
+                        var width = $(iframe).width();
+                        var height = (width/16)*9;
+                        $(iframe).height(height + "px");
+                    })
+                }
+            }
+        }
+    }
 
     function setupVideoBackground() {
 
