@@ -14,7 +14,7 @@ function ssbFormDonateComponent() {
       componentClass: '&',
       component: '='
     },
-    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-form-donate/ssb-form-donate.component.html',
+    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/shared/ssb-component-wrap.html',
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
   		ctrl.init(element);
