@@ -52,7 +52,8 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Trial Days Remaining</td>
-                                                    <td>{{customer.trialDaysRemaining}}  <a ng-click="openSimpleModal('edit-trial-days-modal')"><i class="fa fa-pencil"></i></a></td>
+                                                    <td ng-if="customer.billing.plan == 'NO_PLAN_ARGUMENT'">{{customer.trialDaysRemaining}}  <a ng-click="openSimpleModal('edit-trial-days-modal')"><i class="fa fa-pencil"></i></a></td>
+                                                    <td ng-if="customer.billing.plan != 'NO_PLAN_ARGUMENT'">NA</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Account Locked</td>

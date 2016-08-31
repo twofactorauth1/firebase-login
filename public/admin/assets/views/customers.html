@@ -116,7 +116,7 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedCustomers.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
-                                <th st-sort="_id" ng-show="column._id" ng-class="{'column-width': tableView == 'grid'}">Account ID</th>
+                                <th st-sort="_id" st-sort-default="reverse" ng-show="column._id" ng-class="{'column-width': tableView == 'grid'}">Account ID</th>
                                 <th st-sort="subdomain" ng-show="column.subdomain" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Subdomain</th>
                                 <th st-sort="customDomain" ng-show="column.customDomain" ng-class="{'column-width': tableView == 'grid'}">Custom Domain</th>
                                 <th st-sort="signupDate" ng-show="column.signupDate" ng-class="{'column-width': tableView == 'grid'}">Signup Date</th>
@@ -186,7 +186,8 @@
                                 <td ng-show="column.subdomain"><strong>Subdomain: </strong>{{customer.subdomain}}</td>
                                 <td ng-show="column.customDomain"><strong>Custom Domain: </strong> <span ng-text-truncate="customer.customDomain" ng-tt-chars-threshold="25" ng-tt-no-toggling></span><span ng-if="!customer.customDomain">--</span></td>
                                 <td ng-show="column.signupDate"><strong>Signup Date: </strong>{{customer.billing.signupDate | date:'M/d/yy'}}</td>
-                                <td ng-show="column.trialDays"><strong>Trial Days: </strong>{{customer.trialDaysRemaining}}</td>
+                                <td ng-show="column.trialDays" ng-if="customer.billing.plan == 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>{{customer.trialDaysRemaining}}</td>
+                                <td ng-show="column.trialDays" ng-if="customer.billing.plan != 'NO_PLAN_ARGUMENT'"><strong>Trial Days: </strong>NA</td>
                                 <td ng-show="column.plan" class="hidden-xs"><strong>Plan: </strong> {{customer.billing.plan}}</td>
 
                             </tr>

@@ -114,7 +114,7 @@ module.exports = {
             },
             function(account, cb) {
                 //this is too slow.  hardcode testing data:
-                var testing = true;
+                var testing = false;
                 if(testing) {
                     var totalCharges = 3135.75;
                     account.set('chargeDetails', {totalCharges:totalCharges});
