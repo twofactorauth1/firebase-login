@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", "$location", "$state", "$window", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster, $location, $state, $window) {
+  app.controller('IntegrationsCtrl', ["$scope", "$rootScope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", "$location", "$state", "$window", "$timeout", function ($scope, $rootScope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster, $location, $state, $window, $timeout) {
 
     /*
      * Global Variables
@@ -24,6 +24,9 @@
         var stripe = _.find(account.credentials, function (cred) {
           return cred.type === 'stripe';
         });
+
+        var isPaypalEnabled = account && account.commerceSettings && account.commerceSettings.paypal;
+        $scope.socialAccounts = null;
         SocialConfigService.getAllSocialConfig(function (data) {
           if (stripe) {
             stripe.accountType = "account";
@@ -32,6 +35,9 @@
             //the stripe account is part of the social config
             //data.socialAccounts.push(stripe);
           }
+
+
+          
           _.each(data.socialAccounts, function (socialAccount) {
             //get profile/page info
             if (socialAccount.type === 'fb') {
@@ -48,8 +54,20 @@
               if(stripe)
                 data.socialAccounts.push(stripe);
           }
-          $scope.socialAccounts = data.socialAccounts;
-          $scope.checkForIntegration();
+
+          if (isPaypalEnabled) {
+            var paypal = {};
+            paypal.accountType = "account";
+            paypal.id = Math.uuid(8);
+            paypal.type = $scope.credentialTypes.PAYPAL;
+            data.socialAccounts.push(paypal);
+          }
+          
+          $timeout(function() {
+            $scope.socialAccounts = data.socialAccounts;
+            $scope.checkForIntegration();
+          }, 0);
+          
           console.log();
         });
       });
@@ -96,10 +114,14 @@
      */
 
     $scope.disconnectSocial = function (sa, index) {
+      var displayText = "Do you want to disconnect this social network?";
+      if(sa.type === $scope.credentialTypes.PAYPAL){
+          displayText = "Do you want to disconnect Paypal?";
+      }
       console.log('disconnectSocial >>>');
       SweetAlert.swal({
         title: "Are you sure?",
-        text: "Do you want to disconnect this social network?",
+        text: displayText,
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
@@ -119,7 +141,18 @@
               $scope.socialAccounts.splice(index, 1);
               $scope.account = account;
             });
-          } else {
+          }
+          else if(sa.type === $scope.credentialTypes.PAYPAL) {
+            if(!$scope.account.commerceSettings){
+              $scope.account.commerceSettings = {};
+            }
+            $scope.account.commerceSettings.paypal = false;
+            AccountService.updateAccount($scope.account, function (account) {
+              $scope.socialAccounts.splice(index, 1);
+              $scope.account = account;
+            });
+          }
+          else {
             SocialConfigService.deleteSocialConfigEntry(sa.id, function () {
               SocialConfigService.getAllSocialConfig(function (data) {
                 $scope.socialAccounts.splice(index, 1);
@@ -192,6 +225,10 @@
       }
       $window.location = _redirectUrl;
     };
+
+    $rootScope.$on('$refreshSocialAccounts', function (event, args) {
+       $scope.getAccount();
+    });
 
   }]);
 }(angular));

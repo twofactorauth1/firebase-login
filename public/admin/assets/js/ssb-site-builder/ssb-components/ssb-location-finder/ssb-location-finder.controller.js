@@ -62,7 +62,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     $scope.$watch('vm.loading', function(val) {
         if (!val) {
-            vm.submitBtn.button('reset');
+            resetSearchButton();
         }
     });
 
@@ -214,6 +214,9 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
             });
 
+        }
+        else{            
+            resetSearchButton();
         }
 
     }
@@ -421,6 +424,10 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
         });
 
+    }
+
+    function resetSearchButton(){
+        vm.submitBtn.button('reset');
     }
 
     function init(element) {

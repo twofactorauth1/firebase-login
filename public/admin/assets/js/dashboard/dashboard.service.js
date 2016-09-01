@@ -43,6 +43,25 @@
             'SocialMedia'
         ];
 
+        dashboardService.imageGallery = [
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_1.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_2.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_3.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_4.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_5.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_6.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_7.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_8.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_9.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_10.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_11.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_12.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_13.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_14.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_15.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_16.jpg",
+            "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_17.jpg"
+        ],
 
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
@@ -218,13 +237,14 @@
 
         }
 
+        
+
 		(function init() {
 
             dashboardService.getAccount();
             dashboardService.getAnalytics();
             dashboardService.getWorkstreams();
             dashboardService.numberPolling++;
-
 		})();
 
 

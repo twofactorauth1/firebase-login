@@ -49,6 +49,14 @@
             overflow: inherit;
         }
 
+        @media only screen and (max-width: 767px) {
+            max-width: 100%;
+            ul[ng-sortable]{
+                padding: 0;
+                padding-top: 10px;
+            }
+        }
+
     }
 
     .left-block {
@@ -115,6 +123,7 @@
                 }
             }
         }
+
     }
 
 }
