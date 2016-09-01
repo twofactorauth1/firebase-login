@@ -21,7 +21,8 @@
     $scope.getAccount = function () {
       AccountService.getAccount(function (account) {
         $scope.account = account;
-        var stripe = _.find(account.credentials, function (cred) {
+        var originalAccount = angular.copy(account);
+        var stripe = _.find(originalAccount.credentials, function (cred) {
           return cred.type === 'stripe';
         });
 
@@ -57,8 +58,6 @@
 
           if (isPaypalEnabled) {
             var paypal = {};
-            paypal.accountType = "account";
-            paypal.id = Math.uuid(8);
             paypal.type = $scope.credentialTypes.PAYPAL;
             data.socialAccounts.push(paypal);
           }
