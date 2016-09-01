@@ -122,8 +122,19 @@
             })
         }
 
-        (function init() {
+        function sectionBGStyle(image) {
+            var styleString = ' ';                         
+            styleString += 'background-image: url("' + image + '")';
+            vm.sectionBGStyle = styleString;
+        } 
 
+        $scope.$watch(function() { return DashboardService.imageGallery; }, function(images){
+            var randIndex = _.random(0, images.length);
+            var dashboardBGImage = images[randIndex];   
+            sectionBGStyle(dashboardBGImage);
+        });
+
+        (function init() {
 
         })();
 
