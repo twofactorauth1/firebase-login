@@ -381,6 +381,7 @@ app.constant('userConstant', {
     STRIPE: "st",
     GOOGLE: "go",
     FULL_CONTACT: "fc",
+    PAYPAL: 'pp'
   },
 
   detail_types: {

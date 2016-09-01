@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window', 'SweetAlert', 'pageConstant', function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window, SweetAlert, pageConstant) {
+  app.controller('SettingsCtrl', ["$scope", "$rootScope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window', 'SweetAlert', 'pageConstant', function ($scope, $rootScope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window, SweetAlert, pageConstant) {
     $scope.keywords = [];
 
     console.log($location.absUrl().replace('main', 'hey'));
@@ -185,6 +185,9 @@
                         }
                     });
                 });
+                
+                $rootScope.$broadcast('$refreshSocialAccounts');
+
             }
 
         });
