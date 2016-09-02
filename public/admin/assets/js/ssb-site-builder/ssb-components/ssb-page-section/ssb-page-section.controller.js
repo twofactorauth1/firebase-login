@@ -36,6 +36,15 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
     });
 
+
+    $scope.$watch('vm.section.bg.video.show', function (display) {
+        if (vm.section && vm.section.bg && vm.section.bg.video && vm.section.bg.video.id && vm.section.bg.video.id && display) {
+            $timeout(function() {
+                vm.setupVideoBackground();
+            }, 0);
+        }
+    });
+
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
     function sectionClass(section) {

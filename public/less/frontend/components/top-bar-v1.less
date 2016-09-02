@@ -105,7 +105,8 @@
         position: relative;
     }
     .left-block.edit-mode {
-        padding: 20px;
+        // padding-top: 10px;
+        // padding-bottom: 10px;
     }
     .left-block:hover {
 
@@ -117,9 +118,15 @@
         &:hover {
             .left-block {
                 border: 3px dashed rgba(0, 0, 0, 0.4);
+                padding-right: 20px;
                 +.add-addtional {
                     display: block;
                     font-size: 28px;
+                    display: block;
+                    width: 40px;
+                    height: 40px;
+                    padding: 5px !important;
+                    right: 10px !important;
                 }
             }
         }

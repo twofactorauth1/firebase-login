@@ -129,9 +129,12 @@
         } 
 
         $scope.$watch(function() { return DashboardService.imageGallery; }, function(images){
-            var randIndex = _.random(0, images.length);
-            var dashboardBGImage = images[randIndex];   
-            sectionBGStyle(dashboardBGImage);
+            if(images){
+                var randIndex = _.random(0, images.length);
+                var dashboardBGImage = images[randIndex];   
+                sectionBGStyle(dashboardBGImage);
+            }
+            
         });
 
         (function init() {

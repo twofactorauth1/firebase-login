@@ -242,7 +242,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
 
             } else if (event.event === 'unsubscribe') {
-
+                emailMessageManager.handleUnsubscribe(event, function(err, value){});
                 contactDao.findContactsByEmail(event.accountId, event.email, function(err, contactAry){
                     if(err) {
                         self.log.error('Error finding contact for [' + event.email + '] and [' + event.accountId + ']');
