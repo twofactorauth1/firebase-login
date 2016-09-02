@@ -22,6 +22,8 @@ var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var serialize = require('node-serialize');
 var sanitizeHtml = require('sanitize-html');
 
+require('./model/unsubscription');
+
 
 var emailMessageManager = {
 
