@@ -818,7 +818,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
                     var changedPath = jsondiff1[i].path;
-                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath)) {
+                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2)) {
 
                         console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -918,6 +918,32 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
 
         return ret;
+    };
+
+    function isDataCompiledChanged(diff1, diff2) {
+        if(diff1 &&
+                diff2 &&
+                angular.isDefined(diff1) &&
+                angular.isDefined(diff1.indexOf) &&
+                diff1.indexOf('data-compiled') !== -1 &&
+                angular.isDefined(diff2) &&
+                angular.isDefined(diff2.indexOf) &&
+                diff2.indexOf('data-compiled') !== -1)
+            {
+                var dataCompileId1 = diff1.indexOf('data-compiled');
+                var dataCompileId1End = dataCompileId1 + 52;
+                var replace1 = diff1.slice(dataCompileId1, dataCompileId1End);
+
+                var compareString1 = diff1.replace(replace1, "");
+
+                var dataCompileId2 = diff2.indexOf('data-compiled');
+                var dataCompileId2End = dataCompileId2 + 52;
+                var replace2 = diff2.slice(dataCompileId2, dataCompileId2End);
+
+                var compareString2 = diff2.replace(replace2, "");
+
+                return angular.equals(compareString1, compareString2);
+            }
     };
 
     // function checkStateNavigation(event, toState, toParams, fromState, fromParams, options) {
