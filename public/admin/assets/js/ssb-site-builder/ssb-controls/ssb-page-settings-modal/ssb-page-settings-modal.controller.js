@@ -15,17 +15,36 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     vm.isBlogPage = false;
 
     function duplicatePage(){
-        vm.saveLoading = true;
-        saveWebsite().then(function(){
-            SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
-                SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
-                    vm.parentVm.closeModal();
-                    vm.saveLoading = false;
-                    vm.parentVm.uiState.navigation.loadPage(page.data._id);
+        angular.element('.modal.in').hide();
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "Do you want to create a duplicate page?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            closeOnConfirm: true,
+            closeOnCancel: true
+            }, function (isConfirm) {
+            if (isConfirm) {
+                angular.element('.modal.in').show();
+                vm.saveLoading = true;
+                saveWebsite().then(function(){
+                    SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
+                        SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
+                            vm.parentVm.closeModal();
+                            vm.saveLoading = false;
+                            vm.parentVm.uiState.navigation.loadPage(page.data._id);
+                        })
+                       
+                    });
                 })
-               
-            });
-        })
+            } else {
+                angular.element('.modal.in').show();
+            }
+        });
+        
     }
 
     function hideFromMenu(){
