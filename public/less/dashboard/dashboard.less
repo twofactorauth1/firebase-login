@@ -26,10 +26,6 @@
 
     }
 
-    .image-grid {
-        background: rgba(0, 0, 0, 0.4);
-    }
-
     .dohy-dashboard-inner {
         background-color: black;
         background-image: url('//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_12.jpg');
@@ -41,6 +37,15 @@
         min-height: 100vh;
         margin: 0 -15px;
         background-attachment: fixed;
+        position: relative;
+        .dohy-dashboard-layer {
+            background: rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
 
         .indi-help-text{
             color: #f3f3f3;
