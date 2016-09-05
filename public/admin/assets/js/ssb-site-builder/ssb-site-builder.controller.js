@@ -934,13 +934,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 var dataCompileId1End = dataCompileId1 + 52;
                 var replace1 = diff1.slice(dataCompileId1, dataCompileId1End);
 
-                var compareString1 = diff1.replace(replace1, "");
+                var compareString1 = diff1.replace(replace1, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");
 
                 var dataCompileId2 = diff2.indexOf('data-compiled');
                 var dataCompileId2End = dataCompileId2 + 52;
                 var replace2 = diff2.slice(dataCompileId2, dataCompileId2End);
 
-                var compareString2 = diff2.replace(replace2, "");
+                var compareString2 = diff2.replace(replace2, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");;
 
                 return angular.equals(compareString1, compareString2);
             }
