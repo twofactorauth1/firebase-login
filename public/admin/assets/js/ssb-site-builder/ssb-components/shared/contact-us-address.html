@@ -28,14 +28,14 @@
     </span>
 </p>
 <div ng-if="vm.showAddress || !vm.component.custom.address" class="row">
-    <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
+    <div class="form-group col-sm-6" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-address">
             Address
             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="location-address" ng-disabled="!vm.component.custom.address" ng-blur="vm.updateContactUsAddress()" class="form-control" ng-model="vm.component.location.address">
     </div>
-    <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
+    <div class="form-group col-sm-6" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-address2">
             Address2
             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
@@ -44,7 +44,7 @@
     </div>
 </div>
 <div ng-if="vm.showAddress || !vm.component.custom.address" class="row">
-    <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
+    <div class="form-group col-sm-4" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-city">
             City
             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
@@ -52,7 +52,7 @@
         <input id="location-city" ng-disabled="!vm.component.custom.address" ng-change="vm.checkIfAddess(true)" ng-blur="vm.updateContactUsAddress()" class="form-control" type="text" ng-model="vm.component.location.city">
         <div class="error"></div>
     </div>
-    <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
+    <div class="form-group col-sm-4" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-state">
             State
             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
@@ -60,7 +60,7 @@
         <input id="location-state" ng-disabled="!vm.component.custom.address" ng-change="vm.checkIfAddess(true)" ng-blur="vm.updateContactUsAddress()" class="form-control" type="text" ng-model="vm.component.location.state">
         <div class="error"></div>
     </div>
-    <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
+    <div class="form-group col-sm-4" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-zip">
             Zip Code
             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
