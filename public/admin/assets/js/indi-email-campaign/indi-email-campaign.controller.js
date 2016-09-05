@@ -650,6 +650,7 @@
                 });
                 vm.state.emails[indexInEmailList] = email;
             }
+
         }
 
         function deleteCampaignFn() {

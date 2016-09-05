@@ -22,6 +22,8 @@ var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var serialize = require('node-serialize');
 var sanitizeHtml = require('sanitize-html');
 
+require('./model/unsubscription');
+
 
 var emailMessageManager = {
 
@@ -848,6 +850,28 @@ var emailMessageManager = {
                 }
             }
         });
+    },
+
+    handleUnsubscribe: function(event, fn) {
+        var self = this;
+        self.log.debug('>> handleUnsubscribe');
+        var unsubscription = new $$.m.Unsubscription({
+            emailAddress: event.email,
+            event:event
+        });
+        dao.saveOrUpdate(unsubscription, function(err, value){
+            if(err) {
+                self.log.error('Error handling unsubscribe:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< handleUnsubscribe');
+                return fn(null, value);
+            }
+        });
+    },
+
+    isAddressUnsubscribed: function(emailAddress, fn) {
+
     },
 
     addEvent: function(messageId, event, fn) {
