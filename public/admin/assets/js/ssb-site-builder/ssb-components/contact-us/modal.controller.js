@@ -50,6 +50,7 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
                 $timeout(function () {
                     $scope.$apply(function () {
                         vm.errorMapData = true;
+                        vm.parentVm.uiState.componentControl.refreshMap();
                         //angular.copy(vm.originalContactMap,vm.component.location);
                     });
                 }, 0);
