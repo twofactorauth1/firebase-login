@@ -937,17 +937,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 angular.isDefined(diff2.indexOf) &&
                 diff2.indexOf('data-compiled') !== -1)
             {
-                var dataCompileId1 = diff1.indexOf('data-compiled');
-                var dataCompileId1End = dataCompileId1 + 52;
-                var replace1 = diff1.slice(dataCompileId1, dataCompileId1End);
-
-                var compareString1 = diff1.replace(replace1, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");
-
-                var dataCompileId2 = diff2.indexOf('data-compiled');
-                var dataCompileId2End = dataCompileId2 + 52;
-                var replace2 = diff2.slice(dataCompileId2, dataCompileId2End);
-
-                var compareString2 = diff2.replace(replace2, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");;
+                var regex =  /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g ;
+                var compareString1 = diff1.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");                
+                var compareString2 = diff2.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");;
 
                 return angular.equals(compareString1, compareString2);
             }
