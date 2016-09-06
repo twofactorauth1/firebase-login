@@ -48,7 +48,7 @@
         </div>
       </div>
       <div class="row billing-shipping" ng-if="checkoutModalState == 2">
-        <div class="col-sm-8 col-xs-12 information">
+        <div class="col-sm-8 col-xs-12 information margin-top-15">
           <ul class="nav nav-tabs hidden">
             <li class="active">
               <a href="#billing" data-toggle="tab">
@@ -274,7 +274,7 @@
         </div>
         <div ng-show='stripeInfo' ng-class='{"col-sm-6": paypalInfo, "col-sm-12": !paypalInfo}'>
           <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
-            <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="setCheckoutState(false, 3)">
+            <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false" ng-click="setCheckoutState(false, 3)">
               <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
               <h3 class="StepTitle margin-top-10">Credit Card</h3>
               <p class="text-small">

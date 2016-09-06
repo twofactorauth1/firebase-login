@@ -191,7 +191,7 @@
             }
 
             var customFields = _.filter(vm.component.contactInfo, function (x) {
-                return x.custom == true;
+                return x.custom == true || x.name === 'message';
             });
 
             var extra = [];
@@ -199,6 +199,7 @@
             customFields.forEach(function (c, i) {
                 extra.push({name: c.name, label: c.label, value: vm.formBuilder[c.name] || null});
             });
+
 
             var formatted = {
                 fingerprint: fingerprint,
