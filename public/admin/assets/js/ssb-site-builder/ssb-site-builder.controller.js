@@ -900,19 +900,26 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      */
     function dataIsPublishedDate(diff1, diff2, path) {
         var ret = false;
-        var isPublishDate = false;
+        var isPublished = false;
+        var isPublishedBy = false;
         if(path){
             if(path.indexOf("published") > -1){
-                isPublishDate = true;
+                isPublished = true;
+                if(path.indexOf("by") > -1){
+                    isPublishedBy = true;
+                }
             }
         }
-        if (diff1 && isPublishDate) {
+        if (diff1 && isPublished) {
             if (diff1.length < 30 && diff1.indexOf(':') !== -1 && diff1.indexOf('-') !== -1) {
                 if (moment(diff1).isValid()) {
                     ret = true;
                 }
             }
             else if(diff1.date && !diff2){
+                ret = true;
+            }
+            else if(isPublishedBy){
                 ret = true;
             }
         }
