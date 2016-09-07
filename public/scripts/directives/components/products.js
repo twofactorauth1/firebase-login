@@ -1304,6 +1304,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 return isValid
             };
 
+            scope.isImage = function(src) {
+                var isIcon = src.indexOf("fa-") === 0;
+                return !isIcon;
+            }
+
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie_' + $scope.component._id;
