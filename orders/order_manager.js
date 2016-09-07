@@ -1063,6 +1063,11 @@ module.exports = {
             //save info on order
             function updateOrder(savedOrder, paypalInfo, callback) {
                 order.set('payment_details', paypalInfo);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                savedOrder.set('modified', modified);
                 dao.saveOrUpdate(savedOrder, function(err, savedOrder) {
                   if (err) {
                     log.error(accountId, userId, 'Error updating order: ' + err);
