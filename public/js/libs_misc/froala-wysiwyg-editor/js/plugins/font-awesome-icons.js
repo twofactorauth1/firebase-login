@@ -62,7 +62,7 @@
 
         function g(d) {
             selectedIcon = d;
-            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span class='fa fa-" + d + "'><span class='my-icon-space'>&#8202;</span></span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span class='fa fa-" + d + "'>&#8202;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
         }
 
         function h() {
@@ -133,13 +133,13 @@
                 if (isAwesomeIcon) {
                     if (selectedFontSize && selectedColor) {
                         $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
-                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "; font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'><span class='my-icon-space'>&#8202;</span></span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "; font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&#8202;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedFontSize) {
                         $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
-                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'><span class='my-icon-space'>&#8202;</span></span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='font-size: " + selectedFontSize + "px' class='fa fa-" + selectedIcon + "'>&#8202;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     } else if (selectedColor) {
                         $(getSelectionParentElement()).parents('.fr-fontAwesomeIcon').detach();
-                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "' class='fa fa-" + selectedIcon + "'><span class='my-icon-space'>&#8202;</span></span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+                        b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span style='color:" + selectedColor + "' class='fa fa-" + selectedIcon + "'>&#8202;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
                     }
                 }
             })
