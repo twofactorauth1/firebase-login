@@ -842,7 +842,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 $('.modal #card_name .error').html(error.message);
                                 $('.modal #card_name').addClass('has-error');
                                 $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
-
+                                break;
+                            default:
+                                $('.modal #card_number .error').html('There was an error processing your payment information.  Please check the details and try again.');
+                                $('.modal #card_number').addClass('has-error');
+                                $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
+                                break;
                         }
                         scope.checkoutModalState = 3;
                         return;
