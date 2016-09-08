@@ -157,7 +157,7 @@
                 ipCookie = $injector.get("ipCookie");
 
             var fingerprint = new Fingerprint().get();
-            var sessionId = ipCookie("session_cookie").id;
+            var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
             var skipWelcomeEmail;
 
@@ -225,7 +225,7 @@
                 activity: {
                     activityType: 'CONTACT_FORM',
                     note: vm.formBuilder.Message || "Contact form data.",
-                    sessionId: ipCookie("session_cookie").id,
+                    sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
                     contact: vm.formBuilder
                 },
                 extra: extra
