@@ -1082,5 +1082,15 @@
             $location.path('/commerce/orders/' + orderId);
         }
 
+
+        $scope.getters = {
+            total: function (value) {
+                return parseFloat(value.total) || 0.00;
+            },
+            items: function (value) {
+                return value.line_items ? value.line_items.length : 0;
+            }
+    };
+
     }]);
 }(angular));
