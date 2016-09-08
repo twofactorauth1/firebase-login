@@ -462,7 +462,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
         }
 
-        if (component.border && component.border.show && component.border.color) {
+        if (component.border && component.border.show && component.border.color && component.visibility !== false) {
             styleString += 'border-color: ' + component.border.color + ';';
             styleString += 'border-width: ' + component.border.width + 'px;';
             styleString += 'border-style: ' + component.border.style + ';';
