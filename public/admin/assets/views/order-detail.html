@@ -202,7 +202,7 @@
                                         <address>
                                             <strong>{{order.billing_address.company}}</strong>
                                             <br> {{order.billing_address.address_1}}<span ng-if='order.billing_address.address_2'>,</span> {{order.billing_address.address_2}}
-                                            <br> {{order.billing_address.city}} <span ng-if='order.billing_address.city'>,</span> {{order.billing_address.state}} {{order.billing_address.postcode}}
+                                            <br> {{order.billing_address.city}}<span ng-if='order.billing_address.city'>,</span> {{order.billing_address.state}} {{order.billing_address.postcode}}
                                             <br>
                                             <span ng-if="order.billing_address.phone"><span class="fa fa-phone"></span> {{order.billing_address.phone}}</span>
                                         </address>
