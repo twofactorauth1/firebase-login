@@ -57,8 +57,8 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		    	"currency": "Currency",		    	
 		    	"line_items": "Line Items",		    	
 		    	"total_line_items_quantity": "Total Line Items Quantity",
-		    	"billing_address": "Billing Address",
-		    	"shipping_address": "Shipping Address",
+		    	"billing_address": "Billing Details",
+		    	"shipping_address": "Shipping Details",
 		    	"notes": "Notes"
 		    }
 		    
@@ -180,28 +180,41 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 
 		function getAddress(obj){
 			var _address = "";
-			if(obj.hasOwnProperty("address_1")){
+			if(Object.keys(obj).length){
 				if(obj.company){
-					_address+= obj.company + '\r\n';
+					_address+= obj.company || "" + '\r\n';
 				}
 				if(obj.address_1 && !obj.address_2){
-					_address+= obj.address_1 + '\r\n';
+					_address+= obj.address_1 || "" + '\r\n';
 				}
 				else if(obj.address_1 && obj.address_2){
-					_address+= obj.address_1 + ", " + obj.address_2 + '\r\n';
+					_address+= (obj.address_1 || "") + ", " + (obj.address_2 || "") + '\r\n';
 				}
 				else if(!obj.address_1 && obj.address_2){
-					_address+= obj.address_2 + '\r\n';
+					_address+= obj.address_2 || "" + '\r\n';
 				}
 				if(obj.city){
-					_address+= obj.city;
+					_address+= obj.city || "";
 				}
 				if(obj.city && (obj.state || obj.postcode)){
-					_address+= ', ' + obj.state + " " + obj.postcode;
+					_address+= ', ' + (obj.state || "") + " " + (obj.postcode || "");
 				}
 				else if(!obj.city && (obj.state || obj.postcode)){
-					_address+= obj.state + " " + obj.postcode;
-				}			
+					_address+= (obj.state || "") + " " + (obj.postcode || "");
+				}
+
+				if(obj.phone){
+					_address+= '\r\n' + obj.phone || "";
+				}
+
+				if(obj.first_name || obj.last_name){
+					_address+= '\r\n' + '\r\n' + ((obj.first_name || "") + " " + (obj.last_name || "")).trim();
+				}
+
+
+				if(obj.email){
+					_address+= '\r\n' + obj.email || "";
+				}		
 				          
 			}
 			return _address.trim();  
