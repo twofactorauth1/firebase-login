@@ -206,8 +206,13 @@
     };
 
     $scope.setOrderCustomer = function(order){
+        order.contact_email = ""
         if(order && order.customer){
            order.customerDetailedName = (order.customer.first || "") + " " + (order.customer.last || "") + " (" + order.customer._id + ")";
+            
+            if (order.customer.details && order.customer.details[0] && order.customer.details[0].emails && order.customer.details[0].emails.length > 0) {
+                order.contact_email = order.customer.details[0].emails[0].email;
+            }
         }
     }
 
