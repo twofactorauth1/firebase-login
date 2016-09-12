@@ -560,6 +560,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         var link = links[index];
         updateParentPageSettings(link.linkTo.type, link.linkTo.data, false);
         links.splice(index, 1);
+        if(!$scope.customnav && (link.linkTo.type === 'page' || link.linkTo.type === 'home')){
+          SimpleSiteBuilderService.setDeletedPageFromLinkList(link.linkTo.data);
+        }
       }
     });
 

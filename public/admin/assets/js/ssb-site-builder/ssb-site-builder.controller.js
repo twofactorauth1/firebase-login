@@ -43,6 +43,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.setDefaultSpacing = setDefaultSpacing;
     vm.isNavHero = isNavHero;
 
+
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -486,6 +487,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                     console.log('page saved');
                                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                                     vm.state.saveLoading = false;
+                                    SimpleSiteBuilderService.saveOtherPageLinks();
                                 })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;
@@ -516,6 +518,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                 console.log('page saved');
                                 toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                                 vm.state.saveLoading = false;
+                                SimpleSiteBuilderService.saveOtherPageLinks();
                             })
                         })
                     }).catch(function(err) {
@@ -1056,6 +1059,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                             console.log('page saved');
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                             vm.state.saveLoading = false;
+                            SimpleSiteBuilderService.saveOtherPageLinks();
                             vm.uiState.navigation.loadPage(page._id);
                             SimpleSiteBuilderService.getPages();
                         })
