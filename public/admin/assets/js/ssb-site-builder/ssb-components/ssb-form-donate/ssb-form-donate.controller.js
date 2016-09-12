@@ -738,6 +738,7 @@
                             console.log('order, ', order);
                             //vm.parseFBShare();
                             vm.checkoutModalState = 5;
+                            vm.isAnonymous = false;
                             // vm.formBuilder = {};
                         });
                     });
