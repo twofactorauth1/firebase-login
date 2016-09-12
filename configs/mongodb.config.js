@@ -21,6 +21,10 @@ var prodString = "mongodb://indiapp:1ndigenous2015!@lighthouse.0.mongolayer.com:
 //var connectionString = prodString;
 //TEST
 var connectionString = testString;
+var testHost = 'lighthouse.1.mongolayer.com';
+var testPort = '10303';
+var testUsername = 'indiweb-test';
+var testPassword = 'testing123';
 
 /*
  * Override the connection string with an environment variable
@@ -35,5 +39,9 @@ if (process.env.MONGO_CONNECT != null) {
 module.exports = {
     MONGODB_CONNECT: connectionString,
     PROD_MONGODB_CONNECT: prodString,
-    TEST_MONGODB_CONNECT: testString
+    TEST_MONGODB_CONNECT: testString,
+    TEST_HOST: testHost,
+    TEST_PORT: testPort,
+    TEST_USER: testUsername,
+    TEST_PASS: testPassword
 };

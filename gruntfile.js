@@ -639,6 +639,16 @@ module.exports = function(grunt) {
         dbcopyutil.addAccountIdToPageEvents( done);
     });
 
+    grunt.registerTask('archiveDB', 'Archive DB', function(){
+        var done = this.async();
+        var dbArchiveUtil = require('./utils/dbarchiveutil');
+
+        dbArchiveUtil.archiveDB(done);
+
+    });
+
+    
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
