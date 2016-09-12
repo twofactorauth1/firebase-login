@@ -22,7 +22,7 @@
                 <hr />
                 <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
                     <fieldset ng-disabled="vm.isAnonymous">
-                        <div class="form-donate-layout-cart" ng-switch="vm.component.layout">
+                        <div class="form-donate-layout-cart" ng-class="{'one-row-layout': vm.component.formSettings.fieldsPerRow == 1}" ng-switch="vm.component.layout">
                             <div ng-switch-when="1" class="donate-flex-container form-layout-1 input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="control-label">{{val.label || val.type}}</label>
