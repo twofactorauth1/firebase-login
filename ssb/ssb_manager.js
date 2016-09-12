@@ -1651,6 +1651,10 @@ module.exports = {
                                                         numberToRemove = 1;
                                                     }
                                                 });
+                                                // Case when page don't have existing footer
+                                                if(numberToRemove === 0){
+                                                    insertAt = pageSections.length;
+                                                }
                                                 pageSections.splice(insertAt, numberToRemove, section);
                                             } else {
 
