@@ -233,7 +233,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
                         
 
-                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove'){
+                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove' || cmd === 'imageSetAlt'){
                             scope.updateFroalaContent(editor);
                         }
 

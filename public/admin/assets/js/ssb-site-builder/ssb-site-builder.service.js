@@ -87,6 +87,9 @@
         ssbService.checkAndSetGlobalHeader = checkAndSetGlobalHeader;
         ssbService.checkDuplicateGlobalHeader = checkDuplicateGlobalHeader;
         ssbService.getTempComponent = getTempComponent;
+        ssbService.deletedNavLinks = [];
+        ssbService.setDeletedPageFromLinkList = setDeletedPageFromLinkList;
+        ssbService.saveOtherPageLinks = saveOtherPageLinks;
 
         /**
          * This represents the category sorting for the add content panel
@@ -418,6 +421,28 @@
                 console.error('SimpleSiteBuilderService page creation error: ', JSON.stringify(error));
             }
 
+        }
+
+
+        function saveOtherPageLinks() {
+            function success(data) {                
+                resetDeletedPageLinkList();
+                console.log('SimpleSiteBuilderService requested pages saved' + data);
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService pages save error: ', JSON.stringify(error));
+            }
+            if(ssbService.deletedNavLinks.length){
+                return (
+                    ssbRequest($http({
+                        url: basePageAPIUrlv2 + "update/linked/navigation",
+                        method: 'POST',
+                        data: angular.toJson(ssbService.deletedNavLinks)
+                    }).success(success).error(errorPage))
+            );
+            }
+            
         }
 
         /**
@@ -1878,6 +1903,19 @@
             return getComponent(component, component.version || 1).then(function(result) {
                 return result.data;
             });
+        }
+
+        function setDeletedPageFromLinkList(handle){
+            // Special case for blog link
+            if(handle === "blog")
+            {
+                handle = "blog-list";
+            }
+            ssbService.deletedNavLinks.push(handle);
+        }
+
+        function resetDeletedPageLinkList(){
+            ssbService.deletedNavLinks = [];   
         }
 
 

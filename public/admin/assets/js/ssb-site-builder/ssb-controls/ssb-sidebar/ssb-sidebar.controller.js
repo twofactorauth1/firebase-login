@@ -460,6 +460,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                                     console.log('page saved');
                                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                                     vm.state.saveLoading = false;
+                                    SimpleSiteBuilderService.saveOtherPageLinks();
                                 })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;
@@ -489,6 +490,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                             console.log('page saved');
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                             vm.state.saveLoading = false;
+                            SimpleSiteBuilderService.saveOtherPageLinks();
                         })
                     }).catch(function(err) {
                         toaster.pop('error', 'Error', 'The page was not saved. Please try again.');

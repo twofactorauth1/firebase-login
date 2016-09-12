@@ -32,13 +32,6 @@ env_check(){
         export ENV_NAME="indiwebTestB-env"
         export APP_NAME="indiweb-test-b"
         export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
-    elif [ "$1" = "angular-upgrade" ]; then
-        export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
-        export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
-        export AWS_DEFAULT_REGION="us-west-1"
-        export ENV_NAME="indiwebTestAngular-env"
-        export APP_NAME="indiweb-test-b"
-        export S3_BUCKET="elasticbeanstalk-us-west-1-213805526570"
 	else
 		on_err "No environment specified"
 	fi	
@@ -66,13 +59,6 @@ main(){
 	    export APP_DESCRIPTION="Test Build"
 	    echo $APP_DESCRIPTION
 	    cp public/robots-test.txt public/robots.txt
-	elif [ "$1" = "angular-upgrade" ]; then
-        echo "Generating constants for development."
-    	grunt ngconstant:development || on_err "$_"
-    	cp public/admin/assets/js/config.js public/js/scripts/config.js
-    	export APP_DESCRIPTION="Test Build"
-    	echo $APP_DESCRIPTION
-    	cp public/robots-test.txt public/robots.txt
 	else
 		echo "No environment specified.  No constants"
 	fi
@@ -121,29 +107,7 @@ main(){
 
 	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
 
-	# update the asia env if necessary
-	if [ "$1" = "master" ]; then
-	    echo Updating Asia
-	    export AWS_DEFAULT_REGION="ap-southeast-1"
-        export ENV_NAME="indigeweb-asia-env"
-        export S3_BUCKET="elasticbeanstalk-ap-southeast-1-213805526570"
-        export ASIA_APP_NAME="indigeweb-asia-env"
-        echo "Uploading to Asia"
-        aws s3 cp ${APP_NAME}-${APP_VERSION}.zip s3://${S3_BUCKET}/${APP_NAME}-${APP_VERSION}.zip	|| on_err "$_"
-        echo "Checking for old revisions to clean up..."
-        LIMIT_REVISIONS=100
-        aws elasticbeanstalk describe-application-versions --application-name "${ASIA_APP_NAME}" --output text \
-          --query 'ApplicationVersions[*].[VersionLabel,DateCreated,Description]' | \
-          grep -vi sample | tail -n +${LIMIT_REVISIONS} | \
-          while read ver date desc; do aws elasticbeanstalk delete-application-version --application-name "${ASIA_APP_NAME}" --version-label "${ver}" --delete-source-bundle; done
-
-        # create a new version and update the environment to use this version
-        aws elasticbeanstalk create-application-version --application-name "${ASIA_APP_NAME}" --version-label "${APP_VERSION}" --description "${APP_DESCRIPTION}" --source-bundle S3Bucket="${S3_BUCKET}",S3Key="${APP_NAME}-${APP_VERSION}.zip"	|| on_err "$_"
-
-        interval=5; timeout=90; while [[ ! `aws elasticbeanstalk describe-environments --environment-name "${ENV_NAME}" | grep -i status | grep -i ready > /dev/null` && $timeout > 0 ]]; do sleep $interval; timeout=$((timeout - interval)); done
-
-        [ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
-	fi
+	
 
 	# Testing?
 

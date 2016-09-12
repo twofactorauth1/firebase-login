@@ -1651,6 +1651,10 @@ module.exports = {
                                                         numberToRemove = 1;
                                                     }
                                                 });
+                                                // Case when page don't have existing footer
+                                                if(numberToRemove === 0){
+                                                    insertAt = pageSections.length;
+                                                }
                                                 pageSections.splice(insertAt, numberToRemove, section);
                                             } else {
 
@@ -3938,6 +3942,32 @@ module.exports = {
             } else {
                 self.log.debug(accountId, userId, '<< createDuplicateEmail');
                 fn(null, emailObj);
+            }
+        });
+    },
+
+    updateLinkPages:function(accountId, pagesArr, userId, fn) {
+        var self = this;
+        
+        var query = {accountId:accountId, handle: {'$in': pagesArr}, latest:true};
+
+        pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding pages:', err);
+                cb(err);
+            } else {
+                self.log.debug('Found:', pages);
+                _.each(pages, function(page){                    
+                    page.set('mainmenu', false);
+                });
+                pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, updatedPages){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error updating pages:', err);
+                    }
+                    else{
+                        fn(null, updatedPages);
+                    }
+                });
             }
         });
     }

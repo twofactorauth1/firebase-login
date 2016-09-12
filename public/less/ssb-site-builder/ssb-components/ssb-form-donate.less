@@ -110,10 +110,15 @@
         flex-flow: row wrap;
     }
 
-    .billing-shipping .form-group {
-        flex: 1 0 50%;
-        flex-direction: column;
-        padding: 0 15px 0 0;
+    .billing-shipping {
+        .form-group {
+            flex: 1 0 50%;
+            flex-direction: column;
+            padding: 0 15px 0 0;
+        }
+        .one-row-layout .form-group {
+            padding-right: 0;
+        }
     }
 
     .billing-shipping .form-group:nth-child(2n+2) {
