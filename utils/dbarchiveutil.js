@@ -23,15 +23,29 @@ var archiveUtil = {
     archiveDB: function(cb) {
         var self = this;
         self.log.debug('>> archiveDB');
+        /*
+         * Test Config
+         */
+        //var dbConnect = mongoConfig.TEST_MONGODB_CONNECT;
+        //var dbName = 'test_indigenous';
+        //var dbHost = mongoConfig.TEST_HOST;
+        //var dbPort = mongoConfig.TEST_PORT;
+        //var dbUser = mongoConfig.TEST_USER;
+        //var dbPass = mongoConfig.TEST_PASS;
 
-        var dbConnect = mongoConfig.TEST_MONGODB_CONNECT;
-        var dbName = 'test_indigenous';
-        var dbHost = mongoConfig.TEST_HOST;
-        var dbPort = mongoConfig.TEST_PORT;
-        var dbUser = mongoConfig.TEST_USER;
-        var dbPass = mongoConfig.TEST_PASS;
+        /*
+         * Prod Config
+         */
+        var dbConnect = mongoConfig.PROD_MONGODB_CONNECT;
+        var dbName = 'prod_indigenous';
+        var dbHost = mongoConfig.PROD_HOST;
+        var dbPort = mongoConfig.PROD_PORT;
+        var dbUser = mongoConfig.PROD_USER;
+        var dbPass = mongoConfig.PROD_PASS;
 
         var last3Months = moment().add(-3, 'months').toDate();
+        var last6Months = moment().add(-6, 'months').toDate();
+        var last12Months = moment().add(-12, 'months').toDate();
 
         async.waterfall([
             function archiveErrors(callback){
@@ -44,21 +58,31 @@ var archiveUtil = {
                         self.log.error('Error archiving collection:', err);
                         callback(err);
                     } else {
-                        self.callMongoDump(archiveCollectionName, dbName, dbHost, dbPort, dbUser, dbPass, 'archive', function(err, value){
-                            if(err) {
-                                self.log.error('Error calling mongodump:', err);
-                                callback(err);
-                            } else {
-                                self.dropCollection(archiveCollectionName, dbConnect, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error dropping collection:', err);
-                                        callback(err);
+                        if(archiveCollectionName) {
+                            self.callMongoDump(archiveCollectionName, dbName, dbHost, dbPort, dbUser, dbPass, 'archive', function(err, value){
+                                if(err) {
+                                    self.log.error('Error calling mongodump:', err);
+                                    callback(err);
+                                } else {
+                                    if(archiveCollectionName) {
+                                        self.dropCollection(archiveCollectionName, dbConnect, function(err, value){
+                                            if(err) {
+                                                self.log.error('Error dropping collection:', err);
+                                                callback(err);
+                                            } else {
+                                                callback();
+                                            }
+                                        });
                                     } else {
                                         callback();
                                     }
-                                });
-                            }
-                        });
+
+                                }
+                            });
+                        } else {
+                            callback();
+                        }
+
                     }
                 });
             },
@@ -72,21 +96,111 @@ var archiveUtil = {
                         self.log.error('Error archiving collection:', err);
                         callback(err);
                     } else {
-                        self.callMongoDump(archiveCollectionName, dbName, dbHost, dbPort, dbUser, dbPass, 'archive', function(err, value){
-                            if(err) {
-                                self.log.error('Error calling mongodump:', err);
-                                callback(err);
-                            } else {
-                                self.dropCollection(archiveCollectionName, dbConnect, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error dropping collection:', err);
-                                        callback(err);
+                        if(archiveCollectionName) {
+                            self.callMongoDump(archiveCollectionName, dbName, dbHost, dbPort, dbUser, dbPass, 'archive', function(err, value){
+                                if(err) {
+                                    self.log.error('Error calling mongodump:', err);
+                                    callback(err);
+                                } else {
+                                    if(archiveCollectionName) {
+                                        self.dropCollection(archiveCollectionName, dbConnect, function(err, value){
+                                            if(err) {
+                                                self.log.error('Error dropping collection:', err);
+                                                callback(err);
+                                            } else {
+                                                callback();
+                                            }
+                                        });
                                     } else {
                                         callback();
                                     }
-                                });
-                            }
-                        });
+
+                                }
+                            });
+                        } else {
+                            callback();
+                        }
+                    }
+                });
+            },
+            function purgePingEvents(callback) {
+                self.log.debug('purging the ping_events collection');
+                var query = {server_time: {$lt: last3Months.getTime()}};
+                self.purgeCollection('ping_events', query, dbConnect, function(err, value){
+                    callback();
+                });
+            },
+            function archivePageEvents(callback) {
+                self.log.debug('archiving the page_events collection');
+                //keep the last three months;
+                var query = {'server_date': {$lt:last12Months.getTime()}};
+                var collectionName = 'page_events';
+                self.archiveCollection(collectionName, query, dbConnect, function(err, archiveCollectionName){
+                    if(err) {
+                        self.log.error('Error archiving collection:', err);
+                        callback(err);
+                    } else {
+                        if(archiveCollectionName) {
+                            self.callMongoDump(archiveCollectionName, dbName, dbHost, dbPort, dbUser, dbPass, 'archive', function(err, value){
+                                if(err) {
+                                    self.log.error('Error calling mongodump:', err);
+                                    callback(err);
+                                } else {
+                                    if(archiveCollectionName) {
+                                        self.dropCollection(archiveCollectionName, dbConnect, function(err, value){
+                                            if(err) {
+                                                self.log.error('Error dropping collection:', err);
+                                                callback(err);
+                                            } else {
+                                                callback();
+                                            }
+                                        });
+                                    } else {
+                                        callback();
+                                    }
+
+                                }
+                            });
+                        } else {
+                            callback();
+                        }
+
+                    }
+                });
+            },
+            function archiveCampaignFlow(callback) {
+                self.log.debug('archiving the campaign_flow collection');
+
+                var query = {'created.date': {$lt:last12Months}};
+                var collectionName = 'campaign_flow';
+                self.archiveCollection(collectionName, query, dbConnect, function(err, archiveCollectionName){
+                    if(err) {
+                        self.log.error('Error archiving collection:', err);
+                        callback(err);
+                    } else {
+                        if(archiveCollectionName) {
+                            self.callMongoDump(archiveCollectionName, dbName, dbHost, dbPort, dbUser, dbPass, 'archive', function(err, value){
+                                if(err) {
+                                    self.log.error('Error calling mongodump:', err);
+                                    callback(err);
+                                } else {
+                                    if(archiveCollectionName) {
+                                        self.dropCollection(archiveCollectionName, dbConnect, function(err, value){
+                                            if(err) {
+                                                self.log.error('Error dropping collection:', err);
+                                                callback(err);
+                                            } else {
+                                                callback();
+                                            }
+                                        });
+                                    } else {
+                                        callback();
+                                    }
+                                }
+                            });
+                        } else {
+                            callback();
+                        }
                     }
                 });
             },
@@ -100,9 +214,20 @@ var archiveUtil = {
         });
     },
 
+    purgeCollection: function(collectionName, queryForDocsToPurge, dbConnect, cb) {
+        var self = this;
+        self.log.debug('>> purgeCollection');
+        var db = mongoskin.db(dbConnect, {safe:true});
+        var sourceCollection = db.collection(collectionName);
+        sourceCollection.remove(queryForDocsToPurge, function(err, result){
+            self.log.debug('<< purgeCollection');
+            cb(err, result);
+        });
+    },
 
     archiveCollection: function(collectionName, queryForDocsToArchive, dbConnect, cb) {
         var self = this;
+        self.log.debug('>> archiveCollection(' + collectionName + ')');
         var db = mongoskin.db(dbConnect, {safe:true});
 
         var sourceCollection = db.collection(collectionName);
@@ -115,84 +240,89 @@ var archiveUtil = {
         var idArray = [];
         sourceCollection.find(queryForDocsToArchive).toArray(function(err, docs){
             //console.log('Found:', docs);
-            async.each(docs, function(doc, callback){
-                docArray.push(doc);
-                idArray.push(doc._id);
+            if(err) {
+                self.log.error('Error during query:', err);
+                cb(err);
+            } else {
+                self.log.debug('found ' + docs.length + ' records to archive');
+                if(docs.length === 0) {
+                    cb(null);
+                } else {
+                    async.each(docs, function(doc, callback){
+                        docArray.push(doc);
+                        idArray.push(doc._id);
 
-                counter ++;
-                if( counter % x == 0){
-                    targetCollection.insert(docArray, function(err, result){
-                        if(err) {
-                            console.log('error inserting:', err);
-                        }
-                        //console.log('inserted array:', result);
-                        docArray = [];
-                        sourceCollection.remove({_id: {$in:idArray}}, function(err, result){
-                            if(err) {
-                                console.log('error removing:', err);
-                            }
-                            //console.log('removed array:', result);
-                            idArray = [];
+                        counter ++;
+                        if( counter % x == 0){
+                            targetCollection.insert(docArray, function(err, result){
+                                if(err) {
+                                    self.log.error('error inserting:', err);
+                                }
+                                //console.log('inserted array:', result);
+                                docArray = [];
+                                sourceCollection.remove({_id: {$in:idArray}}, function(err, result){
+                                    if(err) {
+                                        self.log.error('error removing:', err);
+                                    }
+                                    //console.log('removed array:', result);
+                                    idArray = [];
+                                    callback();
+                                });
+                            });
+                        } else {
                             callback();
-                        });
-                    });
-                } else {
-                    callback();
-                }
-            }, function(err){
-                console.log('done:', err);
-                if(docArray && docArray.length > 0) {
-                    targetCollection.insert(docArray, function(err, result){
-                        if(err) {
-                            console.log('error inserting:', err);
                         }
-                        //console.log('inserted array:', result);
-                        docArray = [];
-                        sourceCollection.remove({_id: {$in:idArray}}, function(err, result){
-                            if(err) {
-                                console.log('error removing:', err);
-                            }
-                            //console.log('removed array:', result);
+                    }, function(err){
+                        self.log.debug('done:', err);
+                        if(docArray && docArray.length > 0) {
+                            targetCollection.insert(docArray, function(err, result){
+                                if(err) {
+                                    self.log.error('error inserting:', err);
+                                }
+                                //console.log('inserted array:', result);
+                                docArray = [];
+                                sourceCollection.remove({_id: {$in:idArray}}, function(err, result){
+                                    if(err) {
+                                        self.log.error('error removing:', err);
+                                    }
+                                    //console.log('removed array:', result);
+                                    cb(null, targetCollectionName);
+                                });
+                            });
+                        } else {
+                            self.log.debug('nothing to do here.');
                             cb(null, targetCollectionName);
-                        });
+                        }
+
                     });
-                } else {
-                    console.log('nothing to do here.');
-                    cb(null, targetCollectionName);
                 }
 
-            });
-
-
-
+            }
         });
-
-
-
-        //mongodump the archive collection
-
-        //drop the archive collection
-
-        //upload the dumped collection to s3
-
-
     },
 
     callMongoDump: function(collectionName, dbName, host, port, username, password, outputDir, cb) {
+        var self = this;
+        self.log.debug('>> callMongoDump(' + collectionName + ')');
         var cmd = 'mongodump --host ' + host + ' --port ' + port + ' --username ' + username +
             ' --password ' + password + ' --collection ' + collectionName + ' --db ' + dbName + ' --out ' + outputDir;
 
         exec(cmd, function(err, stout, stderr){
-            console.log(stout);
+            //console.log(stout);
+            self.log.debug('<< callMongoDump');
             cb();
         });
     },
 
     dropCollection: function(collectionName, dbConnect, cb) {
+        var self = this;
+        self.log.debug('>> dropCollection(' + collectionName + ')');
         var db = mongoskin.db(dbConnect, {safe:true});
         db.dropCollection(collectionName, function(err, value){
-            console.log('got error:', err);
-            console.log('got value: ', value);
+            if(err) {
+                self.log.error('Error:', err);
+            }
+            self.log.debug('<< dropCollection');
             cb();
         });
     },

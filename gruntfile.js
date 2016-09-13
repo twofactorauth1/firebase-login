@@ -647,7 +647,7 @@ module.exports = function(grunt) {
 
     });
 
-    
+
 
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');

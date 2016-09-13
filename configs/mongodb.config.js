@@ -26,6 +26,11 @@ var testPort = '10303';
 var testUsername = 'indiweb-test';
 var testPassword = 'testing123';
 
+var prodHost = 'lighthouse.0.mongolayer.com';
+var prodPort = '10188';
+var prodUsername = 'indiapp';
+var prodPassword = '1ndigenous2015!';
+
 /*
  * Override the connection string with an environment variable
  */
@@ -43,5 +48,9 @@ module.exports = {
     TEST_HOST: testHost,
     TEST_PORT: testPort,
     TEST_USER: testUsername,
-    TEST_PASS: testPassword
+    TEST_PASS: testPassword,
+    PROD_HOST: prodHost,
+    PROD_PORT: prodPort,
+    PROD_USER: prodUsername,
+    PROD_PASS: prodPassword
 };
