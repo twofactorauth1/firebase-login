@@ -672,6 +672,7 @@
                     if (isConfirm) {
                         EmailCampaignService.deleteCampaign(vm.state.campaign).then(function (data) {
                             toaster.pop('success', "Campaign cancelled.", "The " + vm.state.campaign.name + " campaign was cancelled successfully.");
+                            resetDirtyFn();
                             $timeout(function () {
                                 $location.path('/marketing/campaigns');
                             }, 500)
