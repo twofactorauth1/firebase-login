@@ -2,6 +2,7 @@ var mongoConfig = require('../configs/mongodb.config');
 var _ = require('underscore');
 var mongoskin = require('mongoskin');
 var async = require('async');
+var fs = require('fs');
 
 var utils = require('./commonutils');
 require('../configs/log4js.config').configure();
@@ -14,6 +15,7 @@ if (typeof $ == 'undefined') {
 }
 _.extend($, deferred);
 var s3Config = require('../configs/aws.config');
+var AWS = require('aws-sdk');
 
 var archiveUtil = {
 
@@ -328,6 +330,7 @@ var archiveUtil = {
     },
 
     uploadToS3: function(dirName, s3Key, s3Secret, s3Region, s3Bucket, cb) {
+        /*
         var s3 = require('s3');
 
         var client = s3.createClient({
@@ -370,6 +373,54 @@ var archiveUtil = {
             console.log("done uploading");
             cb();
         });
+        */
+        var self = this;
+        var s3client = new AWS.S3({accessKeyId: s3Key, secretAccessKey:s3Secret, region:s3Region, params:{Bucket:s3Bucket}});
+
+        var uploadFile = function(filename, s3, fn) {
+            self.log.debug('Uploading file ' + filename);
+            var body = fs.createReadStream(filename);
+            s3.putObject({Bucket: s3Bucket, Key: filename, Body: body}).on('httpUploadProgress', function(evt) { console.log(evt); })
+                .on('httpDone', function(){self.log.debug('done.');fn();})
+                .send(function(err, data) { console.log(err, data) });
+        };
+        var uploadDir = function(dirname, s3, fn) {
+            self.log.debug('Uploading directory: ' + dirname);
+            fs.readdir(dirname, function(err, files){
+                if(err) {
+                    self.log.error('Error reading directory:', err);
+                    fn(er);
+                } else {
+                    async.eachSeries(files, function(file, callback){
+                        fs.stat(dirname + '/' + file, function(err, stats){
+                            if(err) {
+                                callback(err);
+                            } else {
+                                if(stats.isDirectory()) {
+                                    uploadDir(dirname + '/' + file, s3, callback);
+                                } else {
+                                    uploadFile(dirname + '/' + file, s3, callback);
+                                }
+                            }
+                        });
+                    }, function(err){
+                        if(err) {
+                            self.log.error('Error uploading directory:', err);
+                            fn(err);
+                        } else {
+                            self.log.debug('Done uploading directory ' + dirname);
+                            fn(null);
+                        }
+                    });
+                }
+            });
+        };
+        uploadDir(dirName, s3client, function(){
+            self.log.debug('Returning.');
+            cb();
+        });
+
+
     }
 
 

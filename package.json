@@ -8,7 +8,7 @@
   "dependencies": {
     "amdefine": "0.1.0",
     "async": "~0.2.10",
-    "aws-sdk": "~2.0.0-rc9",
+    "aws-sdk": "2.6.1",
     "bcrypt": ">=0.7.5",
     "cheerio": "^0.20.0",
     "close.io": "0.0.3",
@@ -118,7 +118,6 @@
     "karma-spec-reporter": "0.0.26",
     "pem": "1.8.1",
     "phantomjs": "^2.1.7",
-    "s3": "^4.4.0",
     "stripe-debug": "^2.0.0",
     "supertest": "0.13.0"
   },
