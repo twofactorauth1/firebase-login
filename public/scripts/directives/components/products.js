@@ -1244,6 +1244,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
                 dgFlow.startFlow($location.absUrl());
                 scope.close();
+                angular.element("body").hide();
+                $timeout(function () {
+                    angular.element("body").show();
+                }, 3000);
             };
 
             scope.deleteOrderFn = function (order) {

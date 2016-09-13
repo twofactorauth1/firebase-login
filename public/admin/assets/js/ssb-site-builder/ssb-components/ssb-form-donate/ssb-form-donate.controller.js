@@ -565,6 +565,10 @@
             });
             dgFlow.startFlow($location.absUrl());
             vm.closeModalFn();
+            angular.element("body").hide();
+            $timeout(function () {
+                angular.element("body").show();
+            }, 3000);
         }
 
         function checkCardNumber() {
