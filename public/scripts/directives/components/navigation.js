@@ -5,6 +5,7 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
         },
         templateUrl: '/components/component-wrap.html',
         controller: function ($scope, websiteService, accountService, $compile) {
+            $scope.navbarId = _.random(0, 1000);
             $scope.$watch('component', function(){
                 if (!angular.isDefined($scope.component.shownavbox)) {
                     $scope.component.shownavbox = true;
