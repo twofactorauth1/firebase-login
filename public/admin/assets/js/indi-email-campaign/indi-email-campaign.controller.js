@@ -72,6 +72,7 @@
         vm.uiState.hstep = 1;
         vm.uiState.mstep = 1;
         vm.uiState.tableView = 'list';
+        vm.uiState.allowRedirect = true;
         vm.uiState.triggers = [{
             name: 'Sign Up',
             icon: 'fa-paper-plane',
@@ -229,6 +230,7 @@
         }
 
         function saveAsDraftFn(isActivation) {
+            vm.uiState.allowRedirect = true;
             vm.uiState.dataLoaded = false;
             var fn = EmailCampaignService.updateCampaign;
 
@@ -260,6 +262,7 @@
                         toaster.pop('warning', 'Campaign name already exists');
                         vm.uiState.dataLoaded = true;
                         vm.uiState.disableEditing = false;
+                        vm.uiState.allowRedirect = false;
                         return;
                     }
                     if (isActivation) {
