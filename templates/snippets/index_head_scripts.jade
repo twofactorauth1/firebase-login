@@ -146,7 +146,7 @@ if posts
         window.indigenous = window.indigenous || {};
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
-        window.indigenous.precache.siteData.posts = !{JSON.stringify(posts)};
+        window.indigenous.precache.siteData.posts = !{JSON.stringify(posts)};        
 
 if post
     script(type="text/javascript").
@@ -154,3 +154,11 @@ if post
         window.indigenous.precache = window.indigenous.precache || {};
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         window.indigenous.precache.siteData.post = !{JSON.stringify(post)};
+
+if website
+    script(type="text/javascript").
+        window.indigenous = window.indigenous || {};
+        window.indigenous.precache = window.indigenous.precache || {};
+        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
+        window.indigenous.precache.siteData.linkList = !{JSON.stringify(website.linkLists)};
+

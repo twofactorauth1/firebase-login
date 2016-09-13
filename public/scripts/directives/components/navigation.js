@@ -6,6 +6,10 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
         templateUrl: '/components/component-wrap.html',
         controller: function ($scope, websiteService, accountService, $compile) {
             $scope.navbarId = _.random(0, 1000);
+            $scope.website = {};
+            if(window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.linkList){
+                $scope.website.linkLists = window.indigenous.precache.siteData.linkList;
+            }
             $scope.$watch('component', function(){
                 if (!angular.isDefined($scope.component.shownavbox)) {
                     $scope.component.shownavbox = true;
