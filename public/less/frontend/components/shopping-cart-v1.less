@@ -1,6 +1,7 @@
 /********** Shopping Cart **********/
 
     .order-line-items {
+        border-right: 1px solid #eee;
         padding: 0;
         .line-item-header {
           .price {
@@ -91,7 +92,11 @@
         margin-top: 0;
       }
       .modal-body {
-      padding: 0 10px;
+        padding: 0 10px;
+        max-height: 450px;
+        height: 450px;
+        overflow-y: scroll;
+        overflow-x: hidden;
       }
     }
 
@@ -104,8 +109,12 @@
     }
 
     .order-summary {
+      @media screen and (min-width: 768px) {
+          min-height: 450px;
+      }
+      margin-left: -1px;
       padding: 1px 15px;
-      min-height: 376px;
+      
       border-left: 1px solid #eee;
       h4 {
         margin: 30px 0;
