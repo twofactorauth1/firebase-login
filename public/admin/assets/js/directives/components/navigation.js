@@ -28,6 +28,7 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$time
 
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
+      $scope.navbarId = _.random(0, 1000);
       $scope.isSinglePost = $scope.$parent.isSinglePost;
       if (!$scope.website) {
         if ($scope.$parent.website) {

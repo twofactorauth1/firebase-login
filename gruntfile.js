@@ -639,6 +639,23 @@ module.exports = function(grunt) {
         dbcopyutil.addAccountIdToPageEvents( done);
     });
 
+    grunt.registerTask('archiveDB', 'Archive DB', function(){
+        var done = this.async();
+        var dbArchiveUtil = require('./utils/dbarchiveutil');
+
+        dbArchiveUtil.archiveDB(done);
+
+    });
+
+    grunt.registerTask('s3UP', '(re)Upload archive to S3', function() {
+        var done = this.async();
+        var dbArchiveUtil = require('./utils/dbarchiveutil');
+        var s3Config = require('./configs/aws.config');
+        dbArchiveUtil.uploadToS3('archive', s3Config.AWS_ACCESS_KEY, s3Config.AWS_SECRET_ACCESS_KEY, s3Config.AWS_REGION, s3Config.BUCKETS.DB_ARCHIVES, done);
+    });
+
+
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');

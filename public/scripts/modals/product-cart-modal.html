@@ -4,9 +4,9 @@
       <button type="button" class="close" ng-click='close()' aria-hidden="true">&times;</button>
       <h4 class="modal-title"><i class="fa fa-shopping-cart"></i> My Cart</h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" stop-event="touchend" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
       <div class="shopping-cart" ng-if="checkoutModalState == 1">
-        <div class="order-line-items height-400" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true" ng-class="{'col-sm-8':cartDetails.length > 0, 'col-sm-12': cartDetails.length <= 0}">
+        <div class="order-line-items" ng-class="{'col-sm-8':cartDetails.length > 0, 'col-sm-12': cartDetails.length <= 0}">
           <div class="mb15"></div>
             <form name='itemQuantityForm'>
               <ul>
@@ -242,14 +242,14 @@
           <div data-ng-include=" '../views/partials/order-summary.html' "></div>
         </div>
       </div>
-      <div class="row processing" style="height:400px" ng-if="checkoutModalState == 4">
+      <div class="row processing" style="" ng-if="checkoutModalState == 4">
         <h3 style="margin-top: 110px;text-align: center;">Order Processing</h3>
         <div class="text-center">
           <span class="fa fa-spinner fa-spin fa-4x"></span>
         </div>
         <div style="margin-bottom:30px"></div>
       </div>
-      <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 5">
+      <div class="row thank-you" style="" ng-if="checkoutModalState == 5">
         <h3 class="center mb20">Thank you for your Purchase.</h3>
         <p class="center">You will be receiving an order summary by email shortly.</p>
         <div class="clearfix" style="margin-bottom:30px"></div>
@@ -257,7 +257,7 @@
           <span class="fa fa-check-circle fa-5x text-green"></span>
         </div>
       </div>
-      <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 6">
+      <div class="row thank-you" style="" ng-if="checkoutModalState == 6">
         <h3 class="center mb20">Payment Choice</h3>
         <div class="alert alert-danger" ng-show='showPaypalErrorMsg'>Try again with paypal or use Credit Card?</div>
         <div ng-show='paypalInfo' ng-class='{"col-sm-6": stripeInfo, "col-sm-12": !stripeInfo}'>
@@ -285,7 +285,7 @@
         </div>
         <div class="clearfix" style="margin-bottom:30px"></div>
       </div>
-      <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 7">
+      <div class="row thank-you" style="" ng-if="checkoutModalState == 7">
 
         <h3 class="center mb20">Paypal Payment</h3>
         <form action="{{paypalURL}}" target="_self" class="center standard">

@@ -49,7 +49,8 @@ module.exports = {
         THEMES: "indigenous-themes",
         ACCOUNT_WEBSITES: "indigenous-account-websites",
         ASSETS: 'indigenous-digital-assets',
-        SCREENSHOTS: 'indigenous-screenshots'
+        SCREENSHOTS: 'indigenous-screenshots',
+        DB_ARCHIVES: 'indigenous-db-archives'
     },
     "accessKeyId":AWS_ACCESS_KEY,
     "secretAccessKey":AWS_SECRET_ACCESS_KEY,
