@@ -32,7 +32,7 @@
             <div ng-repeat="testimonial in component.testimonials" class="col-sm-12 testimonials single-testimonial">
                 <div ng-if="component.slider.showOverlay" class="bg slider-overlay-bg" ng-style="{'background': component.slider.overlay.color, opacity: component.slider.overlay.opacity === 0 ? component.slider.overlay.opacity : component.slider.overlay.opacity/100 || 0}">                    
                 </div>
-                <div class="img" ng-class="{'blank-img': !testimonial.img}">
+                <div class="img component-slider-image" ng-class="{'blank-img': !testimonial.img}">
                     
                     <div elem ng-model="testimonial.img"></div>
                 </div>
