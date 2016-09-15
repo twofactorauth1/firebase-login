@@ -201,8 +201,23 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-radius: ' + section.border.radius + '%;';
         }
         setUpFroalaVideoSize(section);
+        resizeSliderImagesToFullHeight(section);
+
 
         return styleString;
+    }
+
+
+    function resizeSliderImagesToFullHeight(section){
+        if(section){
+            var sectionElement = angular.element("#section_"+ section._id)
+            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")){
+                var innerSectionElement = sectionElement.find(".nav-hero-inner-component");
+                if(innerSectionElement.length){
+                    sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", innerSectionElement.height() + 120);                    
+                }
+            }
+        }
     }
 
     function sectionBGStyle(section) {
