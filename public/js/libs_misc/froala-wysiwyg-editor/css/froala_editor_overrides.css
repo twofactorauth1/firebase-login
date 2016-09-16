@@ -15,3 +15,9 @@ a.fr-command[data-param1='PRE'] {
     width: inherit;
     height: inherit;
 }
+.fr-view img.fr-dib.fr-fir{
+	    margin-right: 0 !important;
+}
+.fr-view img.fr-dib.fr-fil{
+	    margin-left: 0 !important;
+}
