@@ -1129,8 +1129,8 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'productSettings'];
-            var keysToOmitComponent = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'productSettings'];
+            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
+            var keysToOmitComponent = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
             var newComponents = angular.copy(newSection.components);
 
             var newComponentsOrder =  getComponentSortOrder(newComponents, newSection); // ['componentType1', 'componentType2', ...]
@@ -1170,9 +1170,15 @@
                     return componentOrder[section.type] && parseInt(componentOrder[section.type], 10)
                 }).value();
             }
+            else if(checkIfDiffrentLenthSection(newSection)){
+                newSection.components = _.map(newComponents, function(c, index) {
+                    var component = _.findWhere(oldComponents, { type: c.type });
+                    return $.extend({}, c, _.omit(component || oldComponents[index], keysToOmitComponent));
+                });
+            }
             else{
                 newSection.components = _.map(newComponents, function(c, index) {
-                    return $.extend({}, c, _.omit(oldComponents[index], keysToOmitComponent));
+                   return $.extend({}, c, _.omit(oldComponents[index], keysToOmitComponent));
                 });
             }
 
@@ -1916,6 +1922,10 @@
 
         function resetDeletedPageLinkList(){
             ssbService.deletedNavLinks = [];   
+        }
+
+        function checkIfDiffrentLenthSection(section){
+            return section && section.title === 'Donate Button';
         }
 
 
