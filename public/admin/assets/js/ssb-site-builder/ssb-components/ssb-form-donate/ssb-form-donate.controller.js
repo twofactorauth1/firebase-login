@@ -402,7 +402,7 @@
                 extra.push({
                     name: c.name,
                     label: c.label,
-                    value: vm.formBuilder[c.name] || null
+                    value: c.name ? vm.formBuilder[c.name] || vm.formBuilder[c.name.toLowerCase()] : null
                 });
             });
 
