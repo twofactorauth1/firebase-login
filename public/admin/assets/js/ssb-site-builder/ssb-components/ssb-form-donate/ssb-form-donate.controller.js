@@ -88,6 +88,7 @@
 
         vm._campaignObj = null;
 
+        vm.setDonationAmount = setDonationAmount;
 
         function fieldClass(field) {
             var classString = 'col-sm-12';
@@ -935,6 +936,11 @@
                 });
               }      
             }
+        }
+
+        function setDonationAmount(amount){
+            if(amount)
+                vm.formBuilder.amount = parseFloat(amount);
         }
 
         function init(element) {
