@@ -64,6 +64,17 @@
                     <section class="ssb-blog-post-list-item">
                         <div class="ssb-blog-post-toggles">
                             <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
+                                <button style="cursor: default;"
+                                    type="button"
+                                    class="btn btn-default"
+                                    tooltip-placement="top"
+                                    tooltip-append-to-body="true"
+                                    tooltip-html-unsafe="Status - {{post.post_status}}">
+
+                                    <i ng-if="post.post_status === 'PUBLISHED'" class="fa fa-globe"></i>
+                                    <i ng-if="post.post_status === 'DRAFT'" class="fa fa-folder-open-o"></i>
+
+                                </button>
 
                                 <button
                                     type="button"
@@ -77,6 +88,8 @@
                                     <i ng-if="!post.featured" class="fa fa-star-o"></i>
 
                                 </button>
+
+                                
 
                             </div>
                         </div>

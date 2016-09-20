@@ -11,6 +11,7 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
     var vm = this;
 
     vm.init = init;
+    vm.featureImageStyle = featureImageStyle;
     vm.initData = initData;
 
     function initData() {
@@ -19,6 +20,15 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
            vm.post = posts[0];
 
     }
+
+    function featureImageStyle(url){
+        var styleString = " ";
+        if(url){
+            styleString += 'background-image: url("' + url + '");';
+        }
+    }
+
+    
 
     function init(element) {
         vm.element = element;
