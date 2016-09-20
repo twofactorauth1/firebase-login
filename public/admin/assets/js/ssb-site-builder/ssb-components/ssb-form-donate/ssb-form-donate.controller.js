@@ -88,6 +88,7 @@
 
         vm._campaignObj = null;
 
+        vm.setDonationAmount = setDonationAmount;
 
         function fieldClass(field) {
             var classString = 'col-sm-12';
@@ -402,7 +403,7 @@
                 extra.push({
                     name: c.name,
                     label: c.label,
-                    value: vm.formBuilder[c.name] || null
+                    value: c.name ? vm.formBuilder[c.name] || vm.formBuilder[c.name.toLowerCase()] : null
                 });
             });
 
@@ -935,6 +936,11 @@
                 });
               }      
             }
+        }
+
+        function setDonationAmount(amount){
+            if(amount)
+                vm.formBuilder.amount = parseFloat(amount);
         }
 
         function init(element) {

@@ -212,9 +212,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if(section){
             var sectionElement = angular.element("#section_"+ section._id)
             if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")){
-                var innerSectionElement = sectionElement.find(".nav-hero-inner-component");
-                if(innerSectionElement.length){
-                    sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", innerSectionElement.height() + 120);                    
+                var innerSectionHeaderElement = sectionElement.find(".navigation-header");
+                var innerSectionTextElement = sectionElement.find(".ssb-nav-hero-text");
+                if(innerSectionHeaderElement.length && innerSectionTextElement.length){                     
+                    sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", innerSectionHeaderElement.height() + innerSectionTextElement.height() + 120);                    
                 }
             }
         }
