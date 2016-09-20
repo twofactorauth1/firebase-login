@@ -20,7 +20,7 @@
 
             <div ng-if="vm.compactView" class="ssb-blog-byline">
                 <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
-                    {{Date.parse(vm.post.publish_date) || vm.post.created.date | date: 'MMM dd, yyyy'}}
+                    {{vm.getPublishedDate(vm.post.publish_date) || vm.post.created.date | date: 'MMM dd, yyyy'}}
                 </time>
             </div>
 

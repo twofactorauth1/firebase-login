@@ -12,6 +12,7 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
 
     vm.init = init;
     vm.featureImageStyle = featureImageStyle;
+    vm.getPublishedDate = getPublishedDate;
     vm.initData = initData;
 
     function initData() {
@@ -28,6 +29,11 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
         }
     }
 
+    function getPublishedDate(dateValue){        
+        if(dateValue){
+            return Date.parse(dateValue);
+        }
+    }
     
 
     function init(element) {
