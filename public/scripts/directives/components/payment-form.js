@@ -315,7 +315,6 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     } else {
                         scope.isFormValid = false;
                         scope.showFooter(true);
-                        scope.havingNetworkIssue = true;
                         scope.requiredFieldsFilled = false;
                     }
 
