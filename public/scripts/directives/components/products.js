@@ -48,6 +48,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.numItems = CartDetailsService.items.length;
                 scope.cartDetails = CartDetailsService.items;
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
+                
+                if(scope.cartDetails && scope.cartDetails.length)
+                    CartDetailsService.calculateTotalCharges();
+                
             }, true);
 
 
