@@ -48,6 +48,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.numItems = CartDetailsService.items.length;
                 scope.cartDetails = CartDetailsService.items;
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
+                
+                if(scope.cartDetails && scope.cartDetails.length)
+                    CartDetailsService.calculateTotalCharges();
+                
             }, true);
 
 
@@ -332,7 +336,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.checkBillingCity(city);
                 scope.checkBillingPhone(phone);
                 scope.shippingPostCodeChanged(zip);
-
+                angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
                 if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
                 }
@@ -752,6 +756,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.makeCartPayment = function() {
+                angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
                 scope.failedOrderMessage = '';
                 scope.checkoutModalState = 4;
                 var expiry = _.compact($('.modal #expiry').map( function(){ return $(this).val(); }).get())[0];
@@ -1333,6 +1338,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
                 $scope.checkoutModalState = state;
+                angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
         }
     };

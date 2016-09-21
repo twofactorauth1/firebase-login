@@ -46,7 +46,7 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                                     return scope.savePageCheck
                                 }, function (newValue) {
                                     if (newValue && scope.allowRedirect) {
-                                        if (angular.isDefined(scope.customRedirectUrl)) {
+                                        if (angular.isDefined(scope.customRedirectUrl) && scope.customRedirectUrl) {
                                             $location.url(scope.customRedirectUrl);
                                         }
                                         else{
@@ -66,7 +66,7 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                         } else {
                             scope.resetDirty && scope.resetDirty();
                             SweetAlert.swal("Not Saved!", "Unsaved data was discarded.", "success");
-                            if (angular.isDefined(scope.customRedirectUrl)) {
+                            if (angular.isDefined(scope.customRedirectUrl) && scope.customRedirectUrl) {
                                 $location.url(scope.customRedirectUrl);
                             }
                             else{
