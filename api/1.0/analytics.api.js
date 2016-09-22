@@ -66,6 +66,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/newVsReturning'), this.isAuthAndSubscribedApi.bind(this), this.newVsReturningReport.bind(this));
         app.get(this.url('reports/pageAnalytics'), this.isAuthAndSubscribedApi.bind(this), this.pageAnalyticsReport.bind(this));
         app.get(this.url('reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allReports.bind(this));
+        app.get(this.url('reports/userAgents'), this.isAuthApi.bind(this), this.getUserAgentsReport.bind(this));
     },
 
 
@@ -1114,6 +1115,35 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         analyticsManager.pageAnalyticsReport(accountId, userId, start, end,function(err, value){
             self.log.debug(accountId, userId, '<< pageAnalyticsReport');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    getUserAgentsReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getUserAgentsReport');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+        }
+
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            self.log.debug('start:', start);
+        }
+        analyticsManager.getUserAgentReport(accountId, userId, start, end, function(err, value){
+            self.log.debug(accountId, userId, '<< getUserAgentsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
     },

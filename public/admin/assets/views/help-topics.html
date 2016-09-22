@@ -10,7 +10,7 @@
 <!-- end: PAGE TITLE -->
 <!-- start: CONTENT -->
 <div ng-controller="HelpTopicsCtrl">
-    <div ng-show="topicsLoaded">
+    <div ng-show="topicsLoaded" class="help-topic-container">
         <div class="search-topics container-fluid container-fullw bg-white" ng-if="!showSingle">
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 margin-bottom-15 no-padding">
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="container-fluid container-fullw bg-white" ng-if="!showSingle">
-            <div ct-fullheight="window" data-ct-fullheight-exclusion="header, .search-topics, #page-title" class="bg-white row">
+            <div class="bg-white row">
                 <div class="row">
                     <div class="col-sm-8 col-sm-offset-2">
                         <div class="row">

@@ -7,7 +7,7 @@
             </button>
             <h3 class="modal-title">Import Contacts</h3>
         </div>
-        <div class="modal-body bg-white" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}">
+        <div class="modal-body bg-white" stop-event="touchend" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}">
             <div ng-if="!uploadingCsv && csvResults.length <= 0">
                 <p class="help-block">Import your contacts from one of the options below.</p>
                 <div class="row">

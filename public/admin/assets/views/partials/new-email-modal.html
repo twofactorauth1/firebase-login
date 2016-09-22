@@ -7,7 +7,7 @@
         <h3 class="modal-title">New Email Template</h3>
     </div>
     <form name="newEmailForm" ng-submit="createNewEmail(newEmail)" novalidate>
-        <div class="modal-body bg-white" style="max-height:500px;">
+        <div class="modal-body bg-white" stop-event="touchend" style="max-height:500px;">
             <span class="help-block">Add the duplicate email details below with a new title.</span>
             <div class="form-group" ng-class="{ 'has-error' : newEmailForm.title.$invalid && !newEmailForm.title.$pristine }">
                 <label>Title* </label>

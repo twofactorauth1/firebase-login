@@ -12,15 +12,15 @@ var config = require('./app.config');
  */
 var localString = "mongodb://localhost/test_indigenous";
 var testString = "mongodb://indiweb-test:testing123@lighthouse.1.mongolayer.com:10303,lighthouse.0.mongolayer.com:10303/test_indigenous?replicaSet=set-54f7c735c346b1d3bf0005b0";
-var prodString = "mongodb://indiapp:1ndigenous2015!@lighthouse.0.mongolayer.com:10188/prod_indigenous";
+var prodString = "mongodb://indiapp:1ndigenous2015!@lighthouse.1.mongolayer.com:10188/prod_indigenous";
 
 //LOCAL
 //var connectionString = localString;
 
 //PROD
-//var connectionString = prodString;
+var connectionString = prodString;
 //TEST
-var connectionString = testString;
+//var connectionString = testString;
 var testHost = 'lighthouse.1.mongolayer.com';
 var testPort = '10303';
 var testUsername = 'indiweb-test';

@@ -17,83 +17,169 @@
                     <div class="panel panel-transparent row margin-bottom-0">
                         <div class="panel-body">
                             <form role="form" class="ng-pristine ng-valid row">
-                                <div class="col-xs-8">
-                                    <div class="form-group">
-                                        <div class="col-xs-6 padding-left-0 padding-right-0">
-                                            <span class="input-icon">
-                                                <input type="text" st-search placeholder="Search by contacts, items, total..." id="form-field-14" class="form-control">
-                                                <i class="ti-search"></i>
+                                <div class="hidden-xs">
+                                    <div class="col-xs-9">
+                                        <div class="form-group">
+                                            <div class="col-xs-6 padding-left-0 padding-right-0">
+                                                <span class="input-icon">
+                                                    <input type="text" st-search placeholder="Search by contacts, items, total..." id="form-field-14" class="form-control">
+                                                    <i class="ti-search"></i>
+                                                </span>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                 <button st-export style="min-width:100px;" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-export margin-left-5 ng-click-active pull-right hidden-xs">
+                                                    <span>Export</span>
+                                                </button>
+                                                <button st-export type="button" style="min-width:100px;" class="btn btn-o btn-info ti-export margin-left-5 ng-click-activ pull-right visible-xs-block">
+                                                </button>
+                                                <button style="min-width:100px;" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right hidden-xs" ng-click="showFilter = !showFilter">
+                                                    <span>Filter</span>
+                                                </button>
+                                                <button style="min-width:100px;" type="button" class="btn btn-o btn-info ti-filter ng-click-activ pull-right visible-xs-block" ng-click="showFilter = !showFilter">
+                                                </button>
+                                                <button style="min-width:100px;" type="button" class="hidden btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-times ng-click-active pull-right" ng-click="clearFilters()">
+                                                    <span>Clear Filter</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <div class="button-group pull-right margin-right-5 hidden">
+                                            <span class="dropdown" dropdown on-toggle="toggled(open)">
+                                            <p class="margin-bottom-0">
+                                            <button type="button" class="btn btn-wide btn-info btn-o dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                                Columns <span class="caret"></span>
+                                            </button>
+                                            </p>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.order_id" ng-click="preventClick($event)" /> ID</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.photo" ng-click="preventClick($event)" /> Photo</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.name" ng-click="preventClick($event)" /> Name</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.category" ng-click="preventClick($event)" /> Category</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.email" ng-click="preventClick($event)" /> Email</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.address" ng-click="preventClick($event)" /> Address</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.social" ng-click="preventClick($event)" /> Social</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.created" ng-click="preventClick($event)" /> Created</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.modified" ng-click="preventClick($event)" /> Modified</span>
+                                                </li>
+                                            </ul>
                                             </span>
                                         </div>
-                                        <div class="col-xs-6">
-                                             <button st-export style="min-width:100px;" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-export margin-left-5 ng-click-active pull-right hidden-xs">
-                                                <span>Export</span>
-                                            </button>
-                                            <button st-export type="button" style="min-width:100px;" class="btn btn-o btn-info ti-export margin-left-5 ng-click-activ pull-right visible-xs-block">
-                                            </button>
-                                            <button style="min-width:100px;" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right hidden-xs" ng-click="showFilter = !showFilter">
-                                                <span>Filter</span>
-                                            </button>
-                                            <button style="min-width:100px;" type="button" class="btn btn-o btn-info ti-filter ng-click-activ pull-right visible-xs-block" ng-click="showFilter = !showFilter">
-                                            </button>
-                                            <button style="min-width:100px;" type="button" class="hidden btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-times ng-click-active pull-right" ng-click="clearFilters()">
-                                                <span>Clear Filter</span>
-                                            </button>
+                                        <div class="form-group">
+                                            <div class="btn-group tableView">
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-4">
-                                    <div class="button-group pull-right margin-right-5 hidden">
-                                        <span class="dropdown" dropdown on-toggle="toggled(open)">
-                                        <p class="margin-bottom-0">
-                                        <button type="button" class="btn btn-wide btn-info btn-o dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                                            Columns <span class="caret"></span>
-                                        </button>
-                                        </p>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.order_id" ng-click="preventClick($event)" /> Order ID</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.photo" ng-click="preventClick($event)" /> Photo</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.name" ng-click="preventClick($event)" /> Name</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.category" ng-click="preventClick($event)" /> Category</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.email" ng-click="preventClick($event)" /> Email</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.address" ng-click="preventClick($event)" /> Address</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.social" ng-click="preventClick($event)" /> Social</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.created" ng-click="preventClick($event)" /> Created</span>
-                                            </li>
-                                            <li>
-                                                <span class="small">
-                                                <input type="checkbox" ng-model="column.modified" ng-click="preventClick($event)" /> Modified</span>
-                                            </li>
-                                        </ul>
-                                        </span>
+                                <div class="visible-xs">
+                                    <div class="col-xs-12">
+                                        <div class="form-group">
+                                            <div class="col-xs-7 padding-left-0 padding-right-0">
+                                                <span class="input-icon">
+                                                    <input type="text" st-search placeholder="Search by contacts, items, total..." id="form-field-14" class="form-control">
+                                                    <i class="ti-search"></i>
+                                                </span>
+                                            </div>
+                                            <div class="col-xs-5">
+                                                 <button st-export style="min-width:100px;" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-export margin-left-5 ng-click-active pull-right hidden-xs">
+                                                    <span>Export</span>
+                                                </button>
+                                                <button st-export type="button" style="min-width:100px;" class="btn btn-o btn-info ti-export margin-left-5 ng-click-activ pull-right visible-xs-block">
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="btn-group tableView">
-                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
-                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                    <div class="col-xs-12 padding-top-10">
+                                        <div class="button-group pull-right margin-right-5 hidden">
+                                            <span class="dropdown" dropdown on-toggle="toggled(open)">
+                                            <p class="margin-bottom-0">
+                                            <button type="button" class="btn btn-wide btn-info btn-o dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                                Columns <span class="caret"></span>
+                                            </button>
+                                            </p>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.order_id" ng-click="preventClick($event)" /> ID</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.photo" ng-click="preventClick($event)" /> Photo</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.name" ng-click="preventClick($event)" /> Name</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.category" ng-click="preventClick($event)" /> Category</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.email" ng-click="preventClick($event)" /> Email</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.address" ng-click="preventClick($event)" /> Address</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.social" ng-click="preventClick($event)" /> Social</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.created" ng-click="preventClick($event)" /> Created</span>
+                                                </li>
+                                                <li>
+                                                    <span class="small">
+                                                    <input type="checkbox" ng-model="column.modified" ng-click="preventClick($event)" /> Modified</span>
+                                                </li>
+                                            </ul>
+                                            </span>
+                                        </div>
+                                        <div class="form-group col-xs-6">
+                                            <button style="min-width:100px;" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-left hidden-xs" ng-click="showFilter = !showFilter">
+                                                        <span>Filter</span>
+                                                    </button>
+                                                    <button style="min-width:100px;" type="button" class="btn btn-o btn-info ti-filter ng-click-activ pull-left visible-xs-block" ng-click="showFilter = !showFilter">
+                                                    </button>
+                                                    <button style="min-width:100px;" type="button" class="hidden btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-times ng-click-active pull-left" ng-click="clearFilters()">
+                                                        <span>Clear Filter</span>
+                                                    </button>
+                                        </div>            
+                                        <div class="form-group col-xs-6">
+                                            <div class="btn-group pull-right">
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -109,7 +195,7 @@
                     <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="orders">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">Order ID</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">ID</th>
                                 <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="status">Status</th>
                                 <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Contact</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" >(Qty) Items</th>
@@ -121,7 +207,7 @@
                             <tr ng-if="showFilter">
                                 <th class="column-width">
                                     <div class="input-group">
-                                        <input st-search="order_id" placeholder="Order ID" class="form-control" type="search" />
+                                        <input st-search="order_id" placeholder="ID" class="form-control" type="search" />
                                     </div>
                                 </th>
                                 <th class="column-width">
@@ -165,7 +251,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="order in displayedOrders" ui-sref='app.commerce.orderdetailedit({orderId: order._id})'>
-                                <td class="hidden-xs"><strong>Order ID:</strong> {{order.order_id}}</td>
+                                <td class="hidden-xs"><strong>ID:</strong> {{order.order_id}}</td>
                                 <td ng-class="{'center': tableView == 'list'}"><strong>Status:</strong>
                                     <span ng-if="tableView == 'list'" class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"
