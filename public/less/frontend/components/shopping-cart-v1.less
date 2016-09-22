@@ -93,13 +93,12 @@
       }
       .modal-body {
         padding: 0 10px;
-        max-height: 450px;
-        height: 450px;
+        min-height: 200px;
+        height: calc(~"100vh - 150px");
         overflow-y: auto;
         overflow-x: hidden;
         @media screen and (max-width: 767px) {
-          max-height: 400px;
-          height: 400px;
+          height: calc(~"100vh - 140px");
         }
       }
     }
