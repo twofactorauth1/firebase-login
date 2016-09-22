@@ -125,10 +125,10 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th ng-class="{'column-width': tableView == 'grid'}" ng-click='selectAllClickFn($event)' ng-show='displayedContacts.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": selectAllChecked, "fa-circle-o": !selectAllChecked}'></i></th>
-                                <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Contact ID</th>
+                                <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">ID</th>
                                 <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
-                                <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
-                                <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
+                                <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First</th>
+                                <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last</th>
                                 <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}">Tags</th>
                                 <th st-sort="bestEmail" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
                                 <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
@@ -142,7 +142,7 @@
 
                                 </th>
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="_id" placeholder="Contact ID" class="form-control" type="search" />
+                                    <input st-search="_id" placeholder="ID" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.photo">
                                     <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterContact.photo.selected.value" />
@@ -158,10 +158,10 @@
                                     </ui-select>
                                 </th>
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="first" placeholder="First Name" class="form-control" type="search" />
+                                    <input st-search="first" placeholder="First" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="last" placeholder="Last Name" class="form-control" type="search" />
+                                    <input st-search="last" placeholder="Last" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.tags">
                                     <input st-search="tempTags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterContact.type.selected.label" />
@@ -194,12 +194,12 @@
                         <tbody>
                             <tr ng-repeat="contact in displayedContacts" ng-click="viewSingle(contact)">
                                 <td ng-show='displayedContacts.length'><i class="fa fa-2x" ng-click='contactSelectClickFn($event, contact)' ng-class='{"fa-check-circle": contact.isSelected, "fa-circle-o": !contact.isSelected}'></i></td>
-                                <td ng-show="column.name"><strong>Contact ID: </strong>{{contact._id}}</td>
+                                <td ng-show="column.name"><strong>ID: </strong>{{contact._id}}</td>
                                 <td class="center" ng-show="column.photo && tableView == 'list'">
                                     <img ng-src="{{ contact.photo }}" id="contact_photo_{{contact._id}}" err-src="/admin/assets/images/default-user.png" err-contact="contact" class="img-thumbnail screenshot" alt="image">
                                 </td>
-                                <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="contact.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first">--</span></td>
-                                <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="contact.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.last">--</span></td>
+                                <td ng-show="column.name"><strong>First: </strong> <span ng-text-truncate="contact.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.first">--</span></td>
+                                <td ng-show="column.name"><strong>Last: </strong> <span ng-text-truncate="contact.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!contact.last">--</span></td>
                                 <td ng-show="column.tags"><strong>Tags: </strong>
                                     <span ng-text-truncate="contactTagsFn(contact) || '--'" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
                                 <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="contact.bestEmail"><a href="mailto:{{contact.bestEmail}}"><span ng-text-truncate="contact.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
