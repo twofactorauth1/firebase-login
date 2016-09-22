@@ -76,6 +76,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignObj.set('created', createdObj);
                 campaignObj.set('modified', createdObj);
                 campaignManager.createCampaign(campaignObj, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating campaign:', err);
+                    }
                     self.log.debug('<< createCampaign');
                     self.sendResultOrError(resp, err, value, "Error creating campaign");
                     self.createUserActivity(req, 'CREATE_CAMPAIGN', null, null, function(){});
