@@ -331,7 +331,7 @@ module.exports = {
 
     duplicateCampaign: function(accountId, campaignId, campaignName, userId, fn) {
         var self = this;
-        self.log.debug('>> duplicateCampaign');
+        self.log.debug(accountId, userId, '>> duplicateCampaign');
         campaignDao.findOne({accountId:accountId, _id:campaignId}, $$.m.Campaign, function(err, campaign){
             if(err) {
                 self.log.error('Error finding campaign:', err);
@@ -354,12 +354,12 @@ module.exports = {
                 });
                 campaignDao.saveOrUpdate(campaign, function(err, savedCampaign){
                     if(err) {
-                        self.log.error('Error saving campaign:', err);
+                        self.log.error(accountId, userId, 'Error saving campaign:', err);
                         return fn(err);
                     } else {
                         self.getContactsForCampaign(accountId, campaignId, function (err, contacts) {
                             if (err) {
-                                self.log.error('Error getting campaign contacts:', err);
+                                self.log.error(accountId, userId, 'Error getting campaign contacts:', err);
                                 return fn(err);
                             } else {
                                 var contactIdAry = [];
@@ -370,10 +370,10 @@ module.exports = {
 
                                 self.bulkAddContactToCampaign(contactIdAry, savedCampaign.get('_id'), accountId, function(err) {
                                     if (err) {
-                                        self.log.error('Error updating campaign contacts:', err);
+                                        self.log.error(accountId, userId, 'Error updating campaign contacts:', err);
                                         return fn(err);
                                     } else {
-                                        self.log.debug('<< duplicateCampaign');
+                                        self.log.debug(accountId, userId, '<< duplicateCampaign');
                                         return fn(null, savedCampaign);
                                     }
                                 });

@@ -483,17 +483,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
     duplicateCampaign: function(req, resp) {
         var self = this;
-        self.log.debug('>> duplicateCampaign');
+        var userId = self.userId(req);
         var accountId = parseInt(self.accountId(req));
+        self.log.debug(accountId, userId, '>> duplicateCampaign');
+
         var campaignId = req.params.id;
         var campaignName = req.body['name'] + ' (copy)';
-        var userId = self.userId(req);
+
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 campaignManager.duplicateCampaign(accountId, campaignId, campaignName, userId, function(err, campaign){
-                    self.log.debug('<< duplicateCampaign');
+                    self.log.debug(accountId, userId, '<< duplicateCampaign');
                     self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
                 });
             }
