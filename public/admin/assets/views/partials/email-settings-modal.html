@@ -4,7 +4,7 @@
         <h4 class="modal-title">Email Settings</h4>
     </div>
     <form name="emailSettingForm" novalidate>
-        <div class="modal-body bg-white" style="max-height:500px;overflow:auto">
+        <div class="modal-body bg-white" stop-event="touchend" style="max-height:500px;overflow:auto">
             <span class="help-block">Modify the settings of the email.</span>
             <div class="form-group" ng-class="{ 'has-error' : emailSettingForm.title.$invalid && !emailSettingForm.title.$pristine }">
                 <label>Title* </label>

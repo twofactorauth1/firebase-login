@@ -4,7 +4,7 @@
         <h4 class="modal-title">Send Test Email</h4>
     </div>
     <form name="testEmailForm" novalidate>
-        <div class="modal-body bg-white" style="max-height:500px;overflow:auto">
+        <div class="modal-body bg-white" stop-event="touchend" style="max-height:500px;overflow:auto">
             <span class="help-block">Enter recipient email. For more send options, create a <a ng-click="vm.uiState.createCampaign();">campaign</a>.</span>
             <div class="form-group" ng-class="{ 'has-error' : testEmailForm.email.$invalid && !testEmailForm.email.$pristine }">
                 <label>Email*</label>

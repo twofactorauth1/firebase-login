@@ -6,7 +6,7 @@
         </button>
         <h3 class="modal-title"><span ng-if="!templateDetails">Select Template</span></h3>
     </div>
-    <div class="modal-body pages-modal ssb-pages-modal bg-white no-padding pages-padding-top">
+    <div class="modal-body pages-modal ssb-pages-modal bg-white no-padding pages-padding-top" stop-event="touchend">
         <div>
             <div ng-repeat="template in vm.state.templates">
                 <div class="single-type margin-bottom-15" ng-click="vm.createPage(template)">
