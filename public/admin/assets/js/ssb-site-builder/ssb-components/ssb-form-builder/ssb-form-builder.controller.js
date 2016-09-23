@@ -157,7 +157,7 @@
                 ipCookie = $injector.get("ipCookie");
 
             var fingerprint = new Fingerprint().get();
-            var sessionId = ipCookie("session_cookie").id;
+            var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
             var skipWelcomeEmail;
 
@@ -191,7 +191,7 @@
             }
 
             var customFields = _.filter(vm.component.contactInfo, function (x) {
-                return x.custom == true;
+                return x.custom == true || x.name === 'message';
             });
 
             var extra = [];
@@ -199,6 +199,7 @@
             customFields.forEach(function (c, i) {
                 extra.push({name: c.name, label: c.label, value: vm.formBuilder[c.name] || null});
             });
+
 
             var formatted = {
                 fingerprint: fingerprint,
@@ -224,7 +225,7 @@
                 activity: {
                     activityType: 'CONTACT_FORM',
                     note: vm.formBuilder.Message || "Contact form data.",
-                    sessionId: ipCookie("session_cookie").id,
+                    sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
                     contact: vm.formBuilder
                 },
                 extra: extra

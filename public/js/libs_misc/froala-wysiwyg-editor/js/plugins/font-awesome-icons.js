@@ -62,7 +62,7 @@
 
         function g(d) {
             selectedIcon = d;
-            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "<span class='fa fa-" + d + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
+            b.html.insert('<span class="fr-fontAwesomeIcon fr-emoticon">' + "&nbsp;<span class='fa fa-" + d + "'>&nbsp;</span>" + "</span>" + a.FroalaEditor.MARKERS, true);
         }
 
         function h() {

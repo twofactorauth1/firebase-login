@@ -201,8 +201,24 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             styleString += 'border-radius: ' + section.border.radius + '%;';
         }
         setUpFroalaVideoSize(section);
+        resizeSliderImagesToFullHeight(section);
+
 
         return styleString;
+    }
+
+
+    function resizeSliderImagesToFullHeight(section){
+        if(section){
+            var sectionElement = angular.element("#section_"+ section._id)
+            if(sectionElement.hasClass("ssb-page-section-layout-nav-hero-v2")){
+                var innerSectionHeaderElement = sectionElement.find(".navigation-header");
+                var innerSectionTextElement = sectionElement.find(".ssb-nav-hero-text");
+                if(innerSectionHeaderElement.length && innerSectionTextElement.length){                     
+                    sectionElement.find(".single-testimonial .component-slider-image img").css("min-height", innerSectionHeaderElement.height() + innerSectionTextElement.height() + 120);                    
+                }
+            }
+        }
     }
 
     function sectionBGStyle(section) {
@@ -462,7 +478,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             }
         }
 
-        if (component.border && component.border.show && component.border.color) {
+        if (component.border && component.border.show && component.border.color && component.visibility !== false) {
             styleString += 'border-color: ' + component.border.color + ';';
             styleString += 'border-width: ' + component.border.width + 'px;';
             styleString += 'border-style: ' + component.border.style + ';';

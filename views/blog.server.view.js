@@ -189,6 +189,14 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources = value.website.resources || {};
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+
+                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                    value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                }
+                else{
+                    value.website.resources.userScripts.global = {};
+                }
+                
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -518,6 +526,8 @@ _.extend(view.prototype, BaseView.prototype, {
                     pageHolder[page.get('handle')] = page.toJSON('frontend');
                 });
 
+                website.resources.toggles && website.resources.toggles.userScripts
+
                 data.pages = pageHolder;
                 data.account = value;
                 data.canonicalUrl = pageHolder[handle].canonicalUrl || null;
@@ -527,6 +537,12 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources = value.website.resources || {};
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                    value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                }
+                else{
+                    value.website.resources.userScripts.global = {};
+                }
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {
@@ -727,6 +743,14 @@ _.extend(view.prototype, BaseView.prototype, {
                 value.website.resources = value.website.resources || {};
                 value.website.resources.userScripts = value.website.resources.userScripts || {};
                 value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                
+                if(value.website.resources.toggles && value.website.resources.toggles.userScripts){
+                    value.website.resources.userScripts.global = value.website.resources.userScripts.global || {};
+                }
+                else{
+                    value.website.resources.userScripts.global = {};
+                }
+
                 if(pageHolder[handle]) {
                     data.title = pageHolder[handle].title || value.website.title;
                 } else {

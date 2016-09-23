@@ -95,7 +95,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     SocialConfigService.importGoogleContactsForGroup($scope.tempGoogleAccount.id, groupId.id, function () {
       $scope.closeModal();
       $scope.minRequirements = true;
-      toaster.pop('success', "Your Google contacts are being imported in the background.");
+      toaster.pop('success', "Your Google contacts are being imported in the background. Please refresh the page to see newly imported contacts");
     });
     $scope.tempGoogleAccount = null;
     $scope.socailList = false;

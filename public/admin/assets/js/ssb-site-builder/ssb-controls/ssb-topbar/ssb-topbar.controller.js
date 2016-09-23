@@ -43,6 +43,7 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                         }
                         vm.state.saveLoading = false;
+                        SimpleSiteBuilderService.saveOtherPageLinks();
                     })
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');

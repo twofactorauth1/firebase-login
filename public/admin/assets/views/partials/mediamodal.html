@@ -6,7 +6,7 @@
                     <span class="fa fa-image"></span> Media Manager
                 </h4>
         </div>
-        <div class="modal-body bg-white">
+        <div class="modal-body bg-white" stop-event="touchend">
             <div class="row filemanager {{showType}}" ng-if="uploader.queue.length <= 0 && !editingImage">
                 <ul class="filemanager-options">
                     <li class="checked">

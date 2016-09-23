@@ -154,6 +154,13 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
       {
         $location.path('/commerce/products');
       }
+
+      scope.isImage = function(src) {
+          var isIcon = src.indexOf("fa-") === 0;
+          return !isIcon;
+      }
+
+
     }
   };
 }]);

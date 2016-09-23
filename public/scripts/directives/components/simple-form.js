@@ -115,7 +115,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         scope.userExists = false;
         scope.isBusy = true;
         var fingerprint = new Fingerprint().get();
-        var sessionId = ipCookie("session_cookie").id;
+        var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
         var skipWelcomeEmail;
 
@@ -158,7 +158,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           activity: {
             activityType: 'CONTACT_FORM',
             note: scope.user.message || "Contact form data.",
-            sessionId: ipCookie("session_cookie").id,
+            sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
             contact: scope.user
           }
         };

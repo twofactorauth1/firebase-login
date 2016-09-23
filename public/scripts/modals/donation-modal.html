@@ -7,11 +7,11 @@
                                     <span>Complete your donation</span>
                                 </h4>
         </div>
-        <div class="modal-body">
+        <div class="modal-body" stop-event="touchend">
             <div class='donate-step billing-shipping' ng-show="vm.checkoutModalState == 1">
                 <h3 class="donate-step-header">Choose a donation amount below</h3>
                 <div class='donate-flex-container'>
-                    <button ng-repeat="amount in vm.component.productSettings.donateButtons track by $index" ng-if="amount > 0" class="flex-item btn ssb-theme-btn donate-amount-btn" ng-class="{ 'active': vm.formBuilder.amount == amount }" ng-click="vm.formBuilder.amount = amount">
+                    <button ng-repeat="amount in vm.component.productSettings.donateButtons track by $index" ng-if="amount > 0" class="flex-item btn ssb-theme-btn donate-amount-btn" ng-class="{ 'active': vm.formBuilder.amount == amount }" ng-click="vm.setDonationAmount(amount)">
                         {{amount | currency:undefined:0}}
                     </button>
                     <div class="flex-break">
@@ -22,7 +22,7 @@
                 <hr />
                 <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
                     <fieldset ng-disabled="vm.isAnonymous">
-                        <div class="form-donate-layout-cart" ng-switch="vm.component.layout">
+                        <div class="form-donate-layout-cart" ng-class="{'one-row-layout': vm.component.formSettings.fieldsPerRow == 1}" ng-switch="vm.component.layout">
                             <div ng-switch-when="1" class="donate-flex-container form-layout-1 input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="flex-item form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <label class="control-label">{{val.label || val.type}}</label>
@@ -197,7 +197,7 @@
 
             <div class="donate-step processing" ng-show="vm.checkoutModalState == 6">
                 <h3 class="center donate-step-header mb20">Donation Processing...</h3>
-                <div class="text-center padding-20">
+                <div class="text-center padding-20 donate-step-processing-icon">
                     <span class="fa fa-spinner fa-spin fa-4x"></span>
                 </div>
                 <div style="margin-bottom:30px"></div>

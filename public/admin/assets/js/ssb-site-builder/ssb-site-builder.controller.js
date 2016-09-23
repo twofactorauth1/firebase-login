@@ -43,6 +43,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.setDefaultSpacing = setDefaultSpacing;
     vm.isNavHero = isNavHero;
 
+
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -486,6 +487,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                     console.log('page saved');
                                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                                     vm.state.saveLoading = false;
+                                    SimpleSiteBuilderService.saveOtherPageLinks();
                                 })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;
@@ -516,6 +518,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                 console.log('page saved');
                                 toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                                 vm.state.saveLoading = false;
+                                SimpleSiteBuilderService.saveOtherPageLinks();
                             })
                         })
                     }).catch(function(err) {
@@ -818,7 +821,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
                     var changedPath = jsondiff1[i].path;
-                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath)) {
+                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2)) {
 
                         console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -900,13 +903,17 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      */
     function dataIsPublishedDate(diff1, diff2, path) {
         var ret = false;
-        var isPublishDate = false;
+        var isPublished = false;
+        var isPublishedBy = false;
         if(path){
             if(path.indexOf("published") > -1){
-                isPublishDate = true;
+                isPublished = true;
+                if(path.indexOf("by") > -1){
+                    isPublishedBy = true;
+                }
             }
         }
-        if (diff1 && isPublishDate) {
+        if (diff1 && isPublished) {
             if (diff1.length < 30 && diff1.indexOf(':') !== -1 && diff1.indexOf('-') !== -1) {
                 if (moment(diff1).isValid()) {
                     ret = true;
@@ -915,9 +922,30 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             else if(diff1.date && !diff2){
                 ret = true;
             }
+            else if(isPublishedBy){
+                ret = true;
+            }
         }
 
         return ret;
+    };
+
+    function isDataCompiledChanged(diff1, diff2) {
+        if(diff1 &&
+                diff2 &&
+                angular.isDefined(diff1) &&
+                angular.isDefined(diff1.indexOf) &&
+                diff1.indexOf('data-compiled') !== -1 &&
+                angular.isDefined(diff2) &&
+                angular.isDefined(diff2.indexOf) &&
+                diff2.indexOf('data-compiled') !== -1)
+            {
+                var regex =  /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g ;
+                var compareString1 = diff1.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");                
+                var compareString2 = diff2.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");;
+
+                return angular.equals(compareString1, compareString2);
+            }
     };
 
     // function checkStateNavigation(event, toState, toParams, fromState, fromParams, options) {
@@ -1031,6 +1059,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                             console.log('page saved');
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                             vm.state.saveLoading = false;
+                            SimpleSiteBuilderService.saveOtherPageLinks();
                             vm.uiState.navigation.loadPage(page._id);
                             SimpleSiteBuilderService.getPages();
                         })

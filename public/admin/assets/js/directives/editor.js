@@ -153,6 +153,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     froalaConfig.placeholderText = attrs.placeholder;
                 }
 
+
+
                 $timeout(function() {
 
                     $(elem).on('froalaEditor.initialized', function(e, editor) {
@@ -172,13 +174,21 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     //compile special elements
                     scope.compileEditorElements(editor, true);
 
+
+                    //var placeholderText = angular.copy(froalaConfig.placeholderText);
+                    if(attrs.placeholder && editor.$placeholder){
+                        editor.$placeholder.text(attrs.placeholder);
+                    }
+
                 }).froalaEditor(froalaConfig)
 
                     .on('froalaEditor.contentChanged', function(e, editor) {
                         scope.updateFroalaContent(editor);
                         // $(elem).froalaEditor('html.cleanEmptyTags');
                     }).on('froalaEditor.click', function(e, editor, clickEvent) {
-
+                        if(attrs.placeholder && editor.$placeholder){
+                            editor.$placeholder.text(attrs.placeholder);
+                        }
                     }).on('froalaEditor.keydown', function(e, editor, keydown) {
                         scope.updateFroalaContent(editor);
                     }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
@@ -233,7 +243,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
                         
 
-                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove'){
+                        if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove' || cmd === 'imageSetAlt'){
                             scope.updateFroalaContent(editor);
                         }
 
@@ -241,9 +251,12 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                        editor.selection.save();
                     })
                     .on('froalaEditor.paste.before', function (e, editor) {
-                        editor.selection.restore();
+                        editor.selection.restore();                        
                     })
                     .on('froalaEditor.blur', function (e, editor) {
+                        if(attrs.placeholder && editor.$placeholder){
+                            editor.$placeholder.text(attrs.placeholder);
+                        }
                         //hide any currently shown toolbar
                         $('.fr-toolbar').removeClass('ssb-froala-active-editor');
                         editor.selection.save();

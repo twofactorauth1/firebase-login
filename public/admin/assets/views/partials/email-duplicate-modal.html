@@ -4,7 +4,7 @@
         <h4 class="modal-title">Duplicate Email</h4>
     </div>
     <form name="dupEmailForm" ng-submit="createDuplicateEmail(dupEmailForm.$valid)" novalidate>
-        <div class="modal-body bg-white" style="max-height:500px;">
+        <div class="modal-body bg-white" stop-event="touchend" style="max-height:500px;">
             <span class="help-block">Add the duplicate email details below with a new title.</span>
             <div class="form-group" ng-class="{ 'has-error' : dupEmailForm.title.$invalid && !dupEmailForm.title.$pristine }">
                 <label>Title* </label>

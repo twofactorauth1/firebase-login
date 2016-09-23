@@ -1298,7 +1298,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.getStripeTokenFromAccount(req, function(err, accessToken){
                     stripeDao.listStripeCards(customerId, accessToken, function(err, value){
                         self.log.debug('<< listCards');
-                        return self.sendResultOrError(resp, err, value, "Error listing cards");
+                        var errCode = 500;
+
+                        if(err && err.message.indexOf('No such customer') != -1) {
+                            errCode = 404;
+                        }
+                        return self.sendResultOrError(resp, err, value, "Error listing cards", errCode);
                     });
                 });
             }

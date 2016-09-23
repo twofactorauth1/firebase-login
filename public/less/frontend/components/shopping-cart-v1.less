@@ -1,6 +1,7 @@
 /********** Shopping Cart **********/
 
     .order-line-items {
+        border-right: 1px solid #eee;
         padding: 0;
         .line-item-header {
           .price {
@@ -91,7 +92,14 @@
         margin-top: 0;
       }
       .modal-body {
-      padding: 0 10px;
+        padding: 0 10px;
+        min-height: 200px;
+        height: calc(~"100vh - 185px");
+        overflow-y: auto;
+        overflow-x: hidden;
+        @media screen and (max-width: 767px) {
+          height: calc(~"100vh - 140px");
+        }
       }
     }
 
@@ -104,8 +112,12 @@
     }
 
     .order-summary {
+      @media screen and (min-width: 768px) {
+          min-height: 450px;
+      }
+      margin-left: -1px;
       padding: 1px 15px;
-      min-height: 376px;
+      
       border-left: 1px solid #eee;
       h4 {
         margin: 30px 0;

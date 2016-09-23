@@ -7,7 +7,10 @@
 
     <div ng-if="vm.post" class="ssb-media">
 
-        <div ng-if="vm.post.featured_image" class="ssb-media-left">
+        <div ng-if="vm.post.featured_image && vm.compactView" class="ssb-media-left blog-post-image-container" style="background-image: url('{{vm.post.featured_image}}');" >
+        </div>
+
+        <div ng-if="vm.post.featured_image && !vm.compactView" class="ssb-media-left">
             <a href="/blog/{{vm.post.post_url}}" target="_self">
                 <img itemprop="thumbnailUrl" class="img-responsive blog-post-image" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
             </a>
@@ -17,15 +20,20 @@
 
             <div ng-if="vm.compactView" class="ssb-blog-byline">
                 <time datetime="{{vm.post.publish_date || vm.post.created.date | date: 'YYYY-MM-DDTHH:mm:ss:Z'}}" itemprop="datePublished">
-                    {{vm.post.publish_date || vm.post.created.date | date: 'MM/dd/yyyy'}}
+                    {{vm.getPublishedDate(vm.post.publish_date) || vm.post.created.date | date: 'MMM dd, yyyy'}}
                 </time>
+            </div>
+
+            <div ng-if="vm.compactView" class="padding-top-10 padding-bottom-5">
+                <h3 class="media-heading" itemprop="name headline">               
+                    <strong ng-if="vm.compactView">
+                        {{vm.post.display_title || vm.post.post_title}}
+                    </strong>
+                </h3>
             </div>
 
             <h1 class="media-heading" itemprop="name headline">
                 <a ng-if="!vm.compactView" ng-class="{'ssb-theme-btn' : vm.post.display_title || vm.post.post_title}" class="btn btn-link" href="/blog/{{vm.post.post_url}}" target="_self">
-                    {{vm.post.display_title || vm.post.post_title}}
-                </a>
-                <a ng-if="vm.compactView" class="btn btn-link" href="/blog/{{vm.post.post_url}}">
                     {{vm.post.display_title || vm.post.post_title}}
                 </a>
             </h1>

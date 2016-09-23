@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="product-details-modal">
 
-<div class="products-v1">
+<div class="products-v1" id="product-details-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true" ng-click="closeProductDetailsModal();">&times;</button>
         <h4 class="modal-title"> Product Detail</h4>
@@ -9,7 +9,9 @@
         <div class="col-sm-6">
             <div class="product-img">
                 <div ng-if="selectedProduct.is_image" class="img-wrap">
-                    <img ng-src="{{selectedProduct.icon}}" class="img-responsive">
+                                
+                    <img ng-if="isImage(selectedProduct.icon)" ng-src="{{selectedProduct.icon}}" class="img-responsive">
+                    <img ng-if="!isImage(selectedProduct.icon)" class="img-responsive" src="/images/default-media.png"/>
                 </div>
                 <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">
                     <i ng-style="{'color':component.iconColor}" class="fa {{selectedProduct.icon}} fa-5x"></i>
@@ -81,7 +83,7 @@
                     </div>
                 </tab>
                 <tab heading="Additional Information">
-                    <p class="description">{{selectedProduct.description}}</p>
+                    <p class="description product-info-desc">{{selectedProduct.description}}</p>
                 </tab>
             </tabset>
         </div>

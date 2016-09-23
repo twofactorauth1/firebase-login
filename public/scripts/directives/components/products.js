@@ -48,6 +48,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.numItems = CartDetailsService.items.length;
                 scope.cartDetails = CartDetailsService.items;
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
+                
+                if(scope.cartDetails && scope.cartDetails.length)
+                    CartDetailsService.calculateTotalCharges();
+                
             }, true);
 
 
@@ -332,7 +336,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.checkBillingCity(city);
                 scope.checkBillingPhone(phone);
                 scope.shippingPostCodeChanged(zip);
-
+                angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
                 if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
                 }
@@ -752,6 +756,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.makeCartPayment = function() {
+                angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
                 scope.failedOrderMessage = '';
                 scope.checkoutModalState = 4;
                 var expiry = _.compact($('.modal #expiry').map( function(){ return $(this).val(); }).get())[0];
@@ -842,7 +847,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 $('.modal #card_name .error').html(error.message);
                                 $('.modal #card_name').addClass('has-error');
                                 $('.modal #card_name .glyphicon').addClass('glyphicon-remove');
-
+                                break;
+                            default:
+                                $('.modal #card_number .error').html('There was an error processing your payment information.  Please check the details and try again.');
+                                $('.modal #card_number').addClass('has-error');
+                                $('.modal #card_number .glyphicon').addClass('glyphicon-remove');
+                                break;
                         }
                         scope.checkoutModalState = 3;
                         return;
@@ -1239,6 +1249,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
                 dgFlow.startFlow($location.absUrl());
                 scope.close();
+                angular.element("body").hide();
+                $timeout(function () {
+                    angular.element("body").show();
+                }, 3000);
             };
 
             scope.deleteOrderFn = function (order) {
@@ -1304,6 +1318,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 return isValid
             };
 
+            scope.isImage = function(src) {
+                var isIcon = src.indexOf("fa-") === 0;
+                return !isIcon;
+            }
+
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie_' + $scope.component._id;
@@ -1319,6 +1338,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
                 $scope.checkoutModalState = state;
+                angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
         }
     };

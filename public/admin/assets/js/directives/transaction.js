@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('indigewebTransactionLabel', ['OrderService', function(OrderService) {
+app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", "$rootScope", function(OrderService, DashboardService, $rootScope) {
     return {
         restrict: 'E',
         template: '{{label}}',
@@ -47,6 +47,21 @@ app.directive('indigewebTransactionLabel', ['OrderService', function(OrderServic
             OrderService.getOrders(function(orders) {
                 updateLogicFn(orders);
             });
+
+            $rootScope
+                .$on('$locationChangeSuccess',
+                    function () {
+                        var loaded = false;
+                        scope.$watch(function() { return DashboardService.state.analytics && DashboardService.state.analytics.revenue && DashboardService.state.analytics.revenue.YTDTotalOrders }, function(state, oldState) {
+                            if(state && state !== oldState && !loaded){
+                                loaded = true;
+                                OrderService.getOrders(function(orders) {
+                                    updateLogicFn(orders);
+                                });
+                            }
+                        }) 
+                    })
+            
         }
     }
 }]);

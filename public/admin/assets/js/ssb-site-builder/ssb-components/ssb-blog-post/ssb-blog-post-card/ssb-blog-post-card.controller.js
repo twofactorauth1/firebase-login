@@ -11,6 +11,8 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
     var vm = this;
 
     vm.init = init;
+    vm.featureImageStyle = featureImageStyle;
+    vm.getPublishedDate = getPublishedDate;
     vm.initData = initData;
 
     function initData() {
@@ -19,6 +21,20 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
            vm.post = posts[0];
 
     }
+
+    function featureImageStyle(url){
+        var styleString = " ";
+        if(url){
+            styleString += 'background-image: url("' + url + '");';
+        }
+    }
+
+    function getPublishedDate(dateValue){        
+        if(dateValue){
+            return Date.parse(dateValue);
+        }
+    }
+    
 
     function init(element) {
         vm.element = element;

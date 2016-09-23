@@ -203,12 +203,11 @@
 
         .slick-slider {
             width: 100% !important;
-            .slick-track{
-                min-height: 500px;
+            .testimonial-blank-slide{
+                min-height: 500px !important;
             }
             .slick-slide{
                 display: none !important;
-                min-height:360px;
                 div.img.blank-img{
                     padding-top: 10px;
                     .element-wrap{
@@ -236,7 +235,7 @@
             width: 100%!important;
             z-index: 1;
             bottom: 30px!important;
-            margin: 0;
+            margin: 0 !important;
             max-width: 100%!important;
 
             li button:before{
@@ -269,6 +268,11 @@
                     padding: 0;
                 }
 
+                .slider-overlay-bg{
+                    min-height: 500px;
+                    max-height: 100%;
+                }
+
             }
             .single-testimonial:hover {
                 .add-addtional {
@@ -284,7 +288,7 @@
 
             @media screen and (max-width: 767px) {
                 width: 200%;
-                max-width: none;
+                max-width: none !important;
                 transform: translateX(0%);
                 min-height: 600px;
             }

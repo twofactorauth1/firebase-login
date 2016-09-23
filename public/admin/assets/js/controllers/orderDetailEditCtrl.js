@@ -264,7 +264,9 @@
              */
             $scope.navToCustomer = function (cust) {
                 if ($stateParams.orderId) {
+                    
                     var cust_url = '/contacts/' + cust._id;
+                    $scope.customRedirectUrl = cust_url + "?order=true&id="+$scope.order._id;
                     $location.url(cust_url).search({
                         order: "true",
                         id: $scope.order._id

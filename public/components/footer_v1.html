@@ -6,7 +6,7 @@
             <p class="col-xs-12 col-sm-4 powered-by {{website.settings.footerlink ? ' ' : 'text-right'}}">
 
                 <a class="footer-link" ng-if="website.settings.footerlink" href="{{!website.settings.footerlink && website.settings.footerLinkText != '' ? website.settings.footerLinkURL : '//www.indigenous.io'}}"><img class="footer-logo" src="/images/footer-logo.png"></a>
-                <a class="footer-link" ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
+                <a class="footer-link padding-bottom-15" ng-if="!website.settings.footerlink && website.settings.footerLinkText != ''" href="{{website.settings.footerLinkURL}}" rel="nofollow">{{website.settings.footerLinkText}}</a>
                 <a class="footer-link" ng-if="website.settings.footerlink" href="//www.indigenous.io" rel="nofollow">Powered by  Indigenous</a>
             </p>
             <!-- <p class="col-sm-4 powered-by text-right" ng-if="!website.settings.footerlink">

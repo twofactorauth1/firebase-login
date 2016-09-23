@@ -88,6 +88,7 @@
 
         vm._campaignObj = null;
 
+        vm.setDonationAmount = setDonationAmount;
 
         function fieldClass(field) {
             var classString = 'col-sm-12';
@@ -207,7 +208,7 @@
                 ipCookie = $injector.get("ipCookie");
 
             var fingerprint = new Fingerprint().get();
-            var sessionId = ipCookie("session_cookie").id;
+            var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
             var skipWelcomeEmail;
 
@@ -270,7 +271,7 @@
                 activity: {
                     activityType: 'CONTACT_FORM',
                     note: vm.formBuilder.Message || "Contact form data.",
-                    sessionId: ipCookie("session_cookie").id,
+                    sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id: null,
                     contact: vm.formBuilder
                 }
             };
@@ -359,7 +360,7 @@
             }
 
             var fingerprint = new Fingerprint().get();
-            var sessionId = ipCookie("session_cookie").id;
+            var sessionId = ipCookie("session_cookie") ? ipCookie("session_cookie").id : null;
 
             var skipWelcomeEmail;
 
@@ -402,7 +403,7 @@
                 extra.push({
                     name: c.name,
                     label: c.label,
-                    value: vm.formBuilder[c.name] || null
+                    value: c.name ? vm.formBuilder[c.name] || vm.formBuilder[c.name.toLowerCase()] : null
                 });
             });
 
@@ -428,7 +429,7 @@
                 activity: {
                     activityType: 'DONATE_FORM',
                     note: vm.formBuilder.Message || "Donate form data.",
-                    sessionId: ipCookie("session_cookie").id,
+                    sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
                     contact: vm.formBuilder
                 },
                 extra: extra
@@ -565,6 +566,10 @@
             });
             dgFlow.startFlow($location.absUrl());
             vm.closeModalFn();
+            angular.element("body").hide();
+            $timeout(function () {
+                angular.element("body").show();
+            }, 3000);
         }
 
         function checkCardNumber() {
@@ -738,6 +743,7 @@
                             console.log('order, ', order);
                             //vm.parseFBShare();
                             vm.checkoutModalState = 5;
+                            vm.isAnonymous = false;
                             // vm.formBuilder = {};
                         });
                     });
@@ -930,6 +936,11 @@
                 });
               }      
             }
+        }
+
+        function setDonationAmount(amount){
+            if(amount)
+                vm.formBuilder.amount = parseFloat(amount);
         }
 
         function init(element) {

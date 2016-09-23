@@ -33,7 +33,7 @@
             <!-- Brand and toggle get grouped for better mobile display -->
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-class="{'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" ng-style="{'background' : component.nav.bg }">
+            <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}" ng-class="{'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" ng-style="{'background' : component.nav.bg }">
                 <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align}" class="nav navbar-nav navbar-right" data-edit="{ 'type': 'component' }" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
                       <a data-ng-show="link.linkTo.type == 'section'" ng-attr-target="{{link.linkTo.page === 'blog' ? '_self' : undefined || undefined}}" data-ng-if="link.linkTo.page === currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
@@ -43,7 +43,7 @@
                     </li>
                 </ul>
             </div>
-            <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-style="{'background' : component.nav.bg }">
+            <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-{{navbarId}}" ng-style="{'background' : component.nav.bg }">
                 <ul ng-class="{'nav-font-size':component.nav.font.size, 'nav-font-family':component.nav.font.family, 'nav-align': component.nav.align}" class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' " data-edit="{ 'type': 'component' }">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
                       <a data-ng-show="link.linkTo.type == 'section'" ng-attr-target="{{link.linkTo.page === 'blog' ? '_self' : undefined || undefined}}"  data-ng-if="link.linkTo.page === currentpage.handle" data-ng-href="{{link.linkTo|generateURLforLinks}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
@@ -57,7 +57,7 @@
 
               <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1">
+                        data-target="#bs-example-navbar-collapse-{{navbarId}}">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>

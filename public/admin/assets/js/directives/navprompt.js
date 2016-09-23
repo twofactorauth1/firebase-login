@@ -10,7 +10,8 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
             myState: '@myState',
             savePage: '&',
             savePageCheck: "=",
-            allowRedirect: "=?"
+            allowRedirect: "=?",
+            customRedirectUrl: '@customRedirectUrl'
         },
         link: function (scope, elem, attrs) {
             if (!angular.isDefined(scope.allowRedirect)) {
@@ -18,9 +19,13 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
             }
 
 
+
+
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 if (scope.myState && $state.$current.name === scope.myState && scope.checkIfDirty && scope.checkIfDirty()) {
                     event.preventDefault();
+
+                    
                     SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data. Do you want to save it before navigating to a new page?",
@@ -41,12 +46,17 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                                     return scope.savePageCheck
                                 }, function (newValue) {
                                     if (newValue && scope.allowRedirect) {
-                                        $state.go(toState, toParams, {
+                                        if (angular.isDefined(scope.customRedirectUrl) && scope.customRedirectUrl) {
+                                            $location.url(scope.customRedirectUrl);
+                                        }
+                                        else{
+                                            $state.go(toState, toParams, {
                                                 notify: false
                                             })
                                             .then(function () {
                                                 $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
                                             })
+                                        }                                        
                                     }
                                 }, true);
                             }
@@ -56,12 +66,17 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                         } else {
                             scope.resetDirty && scope.resetDirty();
                             SweetAlert.swal("Not Saved!", "Unsaved data was discarded.", "success");
-                            $state.go(toState, toParams, {
+                            if (angular.isDefined(scope.customRedirectUrl) && scope.customRedirectUrl) {
+                                $location.url(scope.customRedirectUrl);
+                            }
+                            else{
+                                $state.go(toState, toParams, {
                                     notify: false
                                 })
                                 .then(function () {
                                     $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
                                 })
+                            }                            
                         }
                     });
                 }

@@ -1097,5 +1097,42 @@ module.exports = {
         }
 
         return zeroedResultAry;
+    },
+
+    getUserAgentReport: function(accountId, userId, start, end, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getUserAgentReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{
+                    browserName:'$user_agent.browser.name',
+                    //browserVersion:'$user_agent.browser.version',
+                    osName:'$user_agent.os.name',
+                    //osVersion:'$user_agent.os.version'
+                },
+                count: {$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            var sortedResults = _.sortBy(value, function(result){return result.count;});
+            self.log.debug(accountId, userId, '<< getUserAgentReport');
+            fn(err, sortedResults);
+        });
     }
 };

@@ -63,6 +63,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
         app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPage.bind(this));//get page
         app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));//update page
+        app.post(this.url('pages/update/linked/navigation'), this.isAuthAndSubscribedApi.bind(this), this.updateLinkPages.bind(this));//update page
         app.post(this.url('pages/:id/publish'), this.isAuthAndSubscribedApi.bind(this), this.publishPage.bind(this));//publish page
         app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));//delete page
         app.post(this.url('websites/:websiteId/duplicate/page'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePage.bind(this));//create duplicate page
@@ -397,6 +398,29 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
     },
+
+    updateLinkPages: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateLinkPages');        
+        var _pages = req.body;
+        //updatedPage.set('_id', pageId);//make sure we don't change the ID
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                
+                ssbManager.updateLinkPages(accountId, _pages, self.userId(req), function(err, pages){
+                    self.sendResultOrError(resp, err, pages, "Error updating page");
+                    //self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
+                });
+            }
+        });
+    },
+
+
 
     publishPage: function(req, resp) {
         var self = this;
