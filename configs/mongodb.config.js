@@ -18,9 +18,9 @@ var prodString = "mongodb://indiapp:1ndigenous2015!@lighthouse.1.mongolayer.com:
 //var connectionString = localString;
 
 //PROD
-var connectionString = prodString;
+//var connectionString = prodString;
 //TEST
-//var connectionString = testString;
+var connectionString = testString;
 var testHost = 'lighthouse.1.mongolayer.com';
 var testPort = '10303';
 var testUsername = 'indiweb-test';
