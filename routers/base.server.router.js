@@ -493,6 +493,13 @@ _.extend(baseRouter.prototype, {
         }
     },
 
+    authenticatedAccountId: function(req) {
+        try {
+            return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
+        }catch(exception) {
+            return null;
+        }
+    },
 
     accountId: function(req) {
         try {
