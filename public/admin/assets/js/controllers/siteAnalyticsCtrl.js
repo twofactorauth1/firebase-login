@@ -617,5 +617,12 @@
             }
         };
 
+
+        $scope.displayDatePicker = function(){
+            $timeout(function() {
+                angular.element('.deshboard-date-picker').click();
+            }, 0);
+        }
+
     }]);
 }(angular));
