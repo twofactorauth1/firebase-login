@@ -26,6 +26,11 @@
             endDate: moment().format()
         };
 
+
+        $scope.displayDatePicker = function(){
+            $('.deshboard-date-picker').click();
+        }
+
         var dateSwitch = false;
         $scope.$watch('selectedDate', function () {
             $scope.date.startDate = moment($scope.selectedDate.startDate).format();
@@ -364,6 +369,9 @@
                 }
             }
         };
+
+
+
 
     }]);
 }(angular));

@@ -98,7 +98,20 @@
         overflow-y: auto;
         overflow-x: hidden;
         @media screen and (max-width: 767px) {
-          height: calc(~"100vh - 140px");
+          height: calc(~"100vh - 160px");
+        }
+      }
+      .modal-footer{
+        @media screen and (max-width: 767px) {
+          padding-bottom: 54px;
+        }        
+      }
+      .line-wrap-tax{
+        @media screen and (max-width: 767px) {
+          width: 100%;
+          .line-wrap-text{
+            float: right;
+          }
         }
       }
     }
@@ -161,3 +174,14 @@
       }
 
     }
+
+
+.product-cart-modal-dialog{
+    @media screen and (max-width: 767px) {
+      margin: 0;
+      .modal-content{
+        border: 0;
+        border-radius: 0;
+      }
+    }
+}

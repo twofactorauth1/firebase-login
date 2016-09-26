@@ -336,8 +336,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.checkBillingCity(city);
                 scope.checkBillingPhone(phone);
                 scope.shippingPostCodeChanged(zip);
-                angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
-                if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
+                
+                if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {                                        
                     return;
                 }
 
@@ -353,6 +353,18 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                 }
             };
+
+
+            scope.scrollToElement = function(){
+                $timeout(function() {
+                    if($(".form-group.has-error").eq(0).length){
+                        $(".form-group.has-error").eq(0)[0].scrollIntoView();
+                    }
+                    else{
+                        angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
+                    }
+                }, 0);
+            }
 
             /*
              * @updateSelectedProduct
@@ -1278,6 +1290,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     container: '#card-wrapper-' + scope.component._id
                 });
                 console.log('card setup');
+                angular.element("#cart-checkout-modal").parents(".modal-dialog").addClass("product-cart-modal-dialog");
               }, 200);
             };
 
