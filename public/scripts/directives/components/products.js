@@ -1278,6 +1278,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     container: '#card-wrapper-' + scope.component._id
                 });
                 console.log('card setup');
+                angular.element("#cart-checkout-modal").parents(".modal-dialog").addClass("product-cart-modal-dialog");
               }, 200);
             };
 
