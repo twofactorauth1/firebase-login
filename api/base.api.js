@@ -15,6 +15,7 @@ var urlUtils = require('../utils/urlutils');
 var logger = global.getLogger("base.api");
 var userActivityManager = require('../useractivities/useractivity_manager');
 var accountDao = require("../dao/account.dao");
+var middleware = require('../common/sharedMiddleware');
 
 //this flag instructs the securitymanager to verify the subscription.
 var verifySubscription = true;
@@ -82,7 +83,11 @@ _.extend(apiBase.prototype, {
     },
 
 
-    setup: function(req,resp, next) {
+    setup: function(req, resp, next){
+      return middleware.setup(req, resp, next);
+    },
+
+    __setup: function(req,resp, next) {
         var self = this;
         self.nocache(resp);
         accountDao.getAccountByHost(req.get("host"), function(err, value) {

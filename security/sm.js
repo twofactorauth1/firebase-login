@@ -275,7 +275,7 @@ var securityManager = {
 
     },
 
-    verifySubscriptionWithoutSettingSessionVariables: function(req, cb) {
+    verifySubscriptionWithoutSettingSessionVariables: function(req, accountId, cb) {
         var self = this;
         log.trace('>> verifySubscriptionWithoutSettingSessionVariables');
         if(disabled === true) {
@@ -291,27 +291,27 @@ var securityManager = {
         }
 
         //get account by ID from session req.session.accountId
-        accountDao.getAccountByID(req.session.accountId, function(err, account){
+        accountDao.getAccountByID(accountId, function(err, account){
             if(err) {
                 log.error('Error getting account: ' + err);
                 return cb(err, null);
             }
             if(account === null) {
-                log.warn('Could not find account for id: ' + req.session.accountId);
+                log.warn('Could not find account for id: ' + accountId);
                 return cb(null, false);
             }
             var billing = account.get('billing');
             if(self._isEvergreen(billing)) {
-                log.trace('<< verifySubscriptionWithoutSettingSessionVariables(evergreen: ' + req.session.accountId + ')');
+                log.trace('<< verifySubscriptionWithoutSettingSessionVariables(evergreen: ' + accountId + ')');
                 return cb(null, true);
             }
             if(self._isWithinTrial(billing)) {
-                log.trace('<< verifySubscriptionWithoutSettingSessionVariables(freetrial: ' + req.session.accountId + ')');
+                log.trace('<< verifySubscriptionWithoutSettingSessionVariables(freetrial: ' + accountId + ')');
                 return cb(null, true);
             }
 
             if(!billing.subscriptionId) {
-                log.debug('No subscription found for account: ' + req.session.accountId);
+                log.debug('No subscription found for account: ' + accountId);
                 return cb(null, false);
             }
             //if no verification OR verification older than 24 hours
@@ -323,9 +323,9 @@ var securityManager = {
 
                     var planId = subscription.plan.id;
                     var planName = subscription.plan.name;
-                    subscriptionPrivilegeDao.getByPlanId(req.session.accountId, planId, function(err, subPrivs){
+                    subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
                         if(err || !subPrivs) {
-                            log.error('Error getting subscription privileges for plan [' + planId + ']: ' + err);
+                            log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
                             return cb(err, false);
                         }
 
@@ -334,7 +334,7 @@ var securityManager = {
                     });
                 } else {
                     //TODO: If the sub is expired, put in privs here
-                    log.warn('The subscription for account ' + req.session.accountId + ' appears to be expired.');
+                    log.warn('The subscription for account ' + accountId + ' appears to be expired.');
                     return cb(null, false);
                 }
             });
