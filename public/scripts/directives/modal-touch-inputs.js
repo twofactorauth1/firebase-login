@@ -5,7 +5,7 @@ app.directive('stopEvent', function () {
     restrict: 'A',
     link: function (scope, element, attr) {
       element.on(attr.stopEvent, function (e) {
-        //e.stopPropagation();
+        e.stopPropagation();
       });
     }
   };
