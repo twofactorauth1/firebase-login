@@ -98,16 +98,22 @@
         overflow-y: auto;
         overflow-x: hidden;
         @media screen and (max-width: 767px) {
-          height: calc(~"100vh - 180px");
+          height: calc(~"100vh - 160px");
         }
       }
       .modal-footer{
         @media screen and (max-width: 767px) {
-          padding-bottom: 74px;
-        }
-        
+          padding-bottom: 54px;
+        }        
       }
-
+      .line-wrap-tax{
+        @media screen and (max-width: 767px) {
+          width: 100%;
+          .line-wrap-text{
+            float: right;
+          }
+        }
+      }
     }
 
     .empty-cart {
