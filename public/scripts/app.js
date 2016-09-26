@@ -14,7 +14,7 @@ var mainApp = angular
         'ngResource',
         'ngRoute',
         'ngSanitize',
-        'ngTouch',
+        
         'ngMask',
         'angular-parallax',
         'config',
