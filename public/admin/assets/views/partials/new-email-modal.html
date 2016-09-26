@@ -6,7 +6,7 @@
         </button>
         <h3 class="modal-title">New Email Template</h3>
     </div>
-    <form name="newEmailForm" ng-submit="createNewEmail(newEmail)" novalidate>
+    <form name="newEmailForm" novalidate>
         <div class="modal-body bg-white" stop-event="touchend" style="max-height:500px;">
             <span class="help-block">Add the duplicate email details below with a new title.</span>
             <div class="form-group" ng-class="{ 'has-error' : newEmailForm.title.$invalid && !newEmailForm.title.$pristine }">
@@ -32,7 +32,7 @@
         </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-info" ng-disabled="newEmailForm.$invalid" type="submit"><i class="fa fa-clone"></i> Create New Email</button>
+            <button class="btn btn-info" ng-disabled="newEmailForm.$invalid" ng-click = "createNewEmail(newEmail)"><i class="fa fa-clone"></i> Create New Email</button>
         </div>
     </form>
 </script>
