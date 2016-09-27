@@ -435,7 +435,7 @@
                                         <th class="center">Price</th>
                                         <th class="center">Qty</th>
                                         <th class="center">Total</th>
-                                        <th class="center" ng-hide='isDonationOrderFn()'>Discount</th>
+                                        <th class="center hidden-xs" ng-hide='isDonationOrderFn()'>Discount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -466,7 +466,7 @@
                                             <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
                                             <span ng-if="item.discount && item.discount > 0"><s>{{(item.on_sale ? item.sale_price : item.regular_price) | currency}}</s> {{item.total | currency}}</span>
                                         </td>
-                                        <td class="center" ng-hide='isDonationOrderFn()'>
+                                        <td class="center hidden-xs" ng-hide='isDonationOrderFn()'>
                                             <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>
                                             <div ng-if="item[$index].editing">
                                                 <label>Discount</label>
@@ -476,7 +476,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                            <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-8 col-xs-offset-4">
                                 <div class="panel panel-default panel-transparent">
                                     <div class="panel-body">
                                         <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{order.subtotal | currency}}</span></p>

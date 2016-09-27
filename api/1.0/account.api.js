@@ -57,9 +57,14 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
 
+    /**
+     * No security here
+     * @param req
+     * @param resp
+     */
     getCurrentAccount: function(req, resp) {
         var self = this;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> getCurrentAccount');
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
@@ -70,12 +75,17 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     self.log.debug(accountId, userId, '<< getCurrentAccount');
                     self._addTrialDaysToAccount(value);
-                    self.sm.verifySubscriptionWithoutSettingSessionVariables(req, function(err, isValid){
-                        if(isValid === false && accountId !== appConfig.mainAccountID) {
-                            value.set('locked_sub', true);
-                        }
+                    if(accountId !== appConfig.mainAccountID) {
+                        self.sm.verifySubscriptionWithoutSettingSessionVariables(req, accountId, function(err, isValid){
+                            if(isValid === false && accountId !== appConfig.mainAccountID) {
+                                value.set('locked_sub', true);
+                            }
+                            return resp.send(value.toJSON('public'));
+                        });
+                    } else {
                         return resp.send(value.toJSON('public'));
-                    });
+                    }
+
                 }
             } else {
                 return self.wrapError(resp, 500, null, err, value);

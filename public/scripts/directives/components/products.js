@@ -55,6 +55,20 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             }, true);
 
 
+
+            scope.setInnerHeight = function(){
+                var styleString = " ";
+                if($(window).width() < 768){
+                    var header = $("#cart-checkout-modal .modal-header").outerHeight();
+                    var footer = $("#cart-checkout-modal .modal-footer:not('.ng-hide')").eq(0).outerHeight();
+                    var win = $(window).height();
+                    var calcHeight = win - (header + footer);
+                    styleString += " height:" + calcHeight + "px;";
+                    return styleString;
+                }
+            }
+
+
             /*
              * @filterTags
              * - if component has tags filter them or return the _product
@@ -1291,6 +1305,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 });
                 console.log('card setup');
                 angular.element("#cart-checkout-modal").parents(".modal-dialog").addClass("product-cart-modal-dialog");
+
               }, 200);
             };
 
@@ -1332,7 +1347,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.isImage = function(src) {
-                var isIcon = src.indexOf("fa-") === 0;
+                var isIcon = src && src.indexOf("fa-") === 0;
                 return !isIcon;
             }
 
@@ -1353,6 +1368,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $scope.checkoutModalState = state;
                 angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
+
+            
         }
     };
 }]);

@@ -34,6 +34,12 @@
         h1,h2,h3,h4,h5,p {
             line-height: 20px;
         }
+        h1 span,h2 span,h3 span,h4 span,h5 span {
+            line-height: normal;
+        }
+        h1[class^="ssb-editor-style-line-height-"] span,h2[class^="ssb-editor-style-line-height-"] span,h3[class^="ssb-editor-style-line-height-"] span,h4[class^="ssb-editor-style-line-height-"] span,h5[class^="ssb-editor-style-line-height-"] span {
+            line-height: inherit;
+        }
     }
     ul {
         color: white;

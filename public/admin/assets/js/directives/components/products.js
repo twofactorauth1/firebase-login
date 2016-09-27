@@ -156,7 +156,7 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
       }
 
       scope.isImage = function(src) {
-          var isIcon = src.indexOf("fa-") === 0;
+          var isIcon = src && src.indexOf("fa-") === 0;
           return !isIcon;
       }
 

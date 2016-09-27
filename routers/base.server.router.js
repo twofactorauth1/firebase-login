@@ -13,6 +13,7 @@ var urlUtils = require('../utils/urlutils.js');
 var accountDao = require("../dao/account.dao");
 var appConfig = require('../configs/app.config');
 var userActivityManager = require('../useractivities/useractivity_manager');
+var middleware = require('../common/sharedMiddleware');
 
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
@@ -42,8 +43,15 @@ _.extend(baseRouter.prototype, {
         }
     },
 
+    setup: function(req, resp, next){
+        return middleware.setup(req, resp, next);
+    },
 
-    setup: function(req, resp, next) {
+    setupForPages: function(req, resp, next){
+        return middleware.setupForPages(req, resp, next);
+    },
+
+    __setup: function(req, resp, next) {
         //TODO: Cache Account By Host
         var self = this;
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
@@ -69,7 +77,7 @@ _.extend(baseRouter.prototype, {
 
     },
 
-    setupForPages: function(req, resp, next) {
+    __setupForPages: function(req, resp, next) {
         //TODO: Cache Account By Host
         var self = this;
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
@@ -485,6 +493,13 @@ _.extend(baseRouter.prototype, {
         }
     },
 
+    authenticatedAccountId: function(req) {
+        try {
+            return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
+        }catch(exception) {
+            return null;
+        }
+    },
 
     accountId: function(req) {
         try {

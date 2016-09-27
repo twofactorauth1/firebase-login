@@ -93,7 +93,7 @@ var urlutils = {
         var returnObj = {
             'isMainApp': isMainApp,
             'subdomain': subdomain,
-            'domain': domain,
+            'domain': domain+ '.' + obj.tld,
             'environment': environment
         };
         _log.trace('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain );
