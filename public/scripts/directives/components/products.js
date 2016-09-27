@@ -1332,7 +1332,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.isImage = function(src) {
-                var isIcon = src.indexOf("fa-") === 0;
+                var isIcon = src && src.indexOf("fa-") === 0;
                 return !isIcon;
             }
 
