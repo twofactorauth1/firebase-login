@@ -4,7 +4,7 @@
       <button type="button" class="close" ng-click='close()' aria-hidden="true">&times;</button>
       <h4 class="modal-title"><i class="fa fa-shopping-cart"></i> My Cart</h4>
     </div>
-    <div class="modal-body" stop-event="touchend" ng-attr-style="{{setInnerHeight()}}">
+    <div class="modal-body" stop-event="touchend">
       <div class="shopping-cart" ng-if="checkoutModalState == 1">
         <div class="order-line-items" ng-class="{'col-sm-8':cartDetails.length > 0, 'col-sm-12': cartDetails.length <= 0}">
           <div class="mb15"></div>

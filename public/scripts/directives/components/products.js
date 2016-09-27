@@ -62,11 +62,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     var header = $("#cart-checkout-modal .modal-header").outerHeight();
                     var footer = $("#cart-checkout-modal .modal-footer:not('.ng-hide')").eq(0).outerHeight();
                     var win = $(window).height();
-                    var calcHeight = win - (header + footer) - 10;
+                    var calcHeight = win - (header + footer);
                     styleString += " height:" + calcHeight + "px;";
                     return styleString;
                 }
-                
             }
 
 
