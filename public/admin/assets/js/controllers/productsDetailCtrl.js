@@ -1190,6 +1190,12 @@
       });
     };
 
+    $scope.displayDatePicker = function(){
+        $timeout(function() {
+            angular.element('.deshboard-date-picker').click();
+        }, 0);
+    }
+
     $scope.init = (function(){
       $scope.getProduct().then(function(data) {
         return $scope.getEmails();
