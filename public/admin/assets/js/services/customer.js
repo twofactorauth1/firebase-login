@@ -5,6 +5,7 @@
     app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', '$q', function ($http, $rootScope, $cacheFactory, $q) {
         var baseUrl = '/api/2.0/customers';
         var adminUrl = '/api/1.0/admin';
+        var awsUrl = '/api/1.0/integrations/aws';
 
         this.getCache = function () {
             var cache = $cacheFactory.get('CustomerService');
@@ -111,6 +112,24 @@
             });
         };
 
+        this.viewNameServers = function(domain, fn) {
+            var apiUrl = [awsUrl, 'route53', domain, 'nameservers'].join('/');
+            $http.get(apiUrl).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
+        this.addDomainToAccount = function(domain, accountId, fn) {
+            //route53/:domain/account/:accountId
+            var apiUrl = [awsUrl, 'route53', domain, 'account', accountId].join('/');
+            $http.put(apiUrl).success(function(data){
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        }
 
 
     }]);

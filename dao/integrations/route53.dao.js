@@ -11,6 +11,17 @@ var crypto = require('crypto');
 var appConfig = require('../../configs/app.config');
 var AWS = require('aws-sdk');
 var tldtools = require('tldtools').init();
+var Route53 = require('nice-route53');
+
+var testELB = 'dualstack.indigeweb-test-686685960.us-west-1.elb.amazonaws.com.';
+var testZone = 'Z368ELLRRE2KJ0';
+var prodELB = 'dualstack.awseb-e-5-awsebloa-in3ormrduuju-210822443.us-west-1.elb.amazonaws.com.';
+var prodZone = 'Z368ELLRRE2KJ0';
+
+var r53 = new Route53({
+    accessKeyId     : awsConfigs.accessKeyId,
+    secretAccessKey : awsConfigs.secretAccessKey
+});
 
 var dao = {
 
@@ -27,7 +38,7 @@ var dao = {
             secretAccessKey: awsConfigs.secretAccessKey,
             endpoint: awsConfigs.route53Endpoint,
             region: awsConfigs.route53Region
-        }
+        };
         var route53domains = new AWS.Route53Domains(options);
         var params = {
             DomainName: name
@@ -43,6 +54,104 @@ var dao = {
                 fn(null, data);
             }
         });
+    },
+
+    getNameServers: function(accountId, userId, domain, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getNameServers');
+        r53.zoneInfo(domain, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting zone info:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getNameServers', value);
+                return fn(null, value.nameServers);
+            }
+        });
+    },
+
+    addDomainConfig: function(accountId, userId, domain, indiAccountId, indiSubdomain, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> addDomainConfig');
+        var args = {
+            name: domain,
+            comment: "Domain for " + indiSubdomain + " [" + indiAccountId + ']'
+        };
+
+
+        r53.createZone(args, function(err, zone){
+            if(err) {
+                self.log.error('Error creating zone:', err);
+                fn(err);
+            } else {
+                var options = {
+                    accessKeyId: awsConfigs.accessKeyId,
+                    secretAccessKey: awsConfigs.secretAccessKey
+                };
+                var aliasTarget = {
+                    EvaluateTargetHealth: false
+                };
+                if(appConfig.nonProduction === true) {
+                    aliasTarget.DNSName = testELB;
+                    aliasTarget.HostedZoneId = testZone;
+                } else {
+                    aliasTarget.DNSName = prodELB;
+                    aliasTarget.HostedZoneId = prodZone;
+                }
+                var params = {
+                    ChangeBatch: { /* required */
+                        Changes: [ /* required */
+                            {
+                                Action: 'CREATE', /* required */
+                                ResourceRecordSet: { /* required */
+                                    Name: domain, /* required */
+                                    Type: 'A', /* required */
+                                    AliasTarget: aliasTarget
+                                }
+                            },
+                            {
+                                Action: 'CREATE', /* required */
+                                ResourceRecordSet: { /* required */
+                                    Name: 'www.' + domain, /* required */
+                                    Type: 'CNAME', /* required */
+                                    TTL: 600,
+                                    ResourceRecords: [
+                                        {
+                                            Value: domain /* required */
+                                        }
+                                        /* more items */
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    HostedZoneId: zone.zoneId
+                };
+                self.log.debug('About to get the route53 obj with', options);
+                var route53 = new AWS.Route53(options);
+                self.log.debug('About to call changeResourceRecordSets with params', JSON.stringify(params));
+                route53.changeResourceRecordSets(params, function(err, data) {
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error adding ALIAS:', err);
+                    }
+                    self.log.debug(accountId, userId, '<< addDomainConfig');
+                    return fn(null, zone);
+
+                });
+                /*
+                 args = {
+                 zoneId : zone.zoneId,
+                 name   : 'www.' + domain,
+                 type   : 'CNAME',
+                 ttl    : 600,
+                 values : [
+                 domain
+                 ]
+                 };
+                 */
+            }
+        });
+
     },
 
     addCNAMERecord: function(domain, name, value, fn) {
