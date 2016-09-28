@@ -105,6 +105,7 @@
         vm.duplicateFn = duplicateFn;
         vm.updateCampaignEmailSettingsFn = updateCampaignEmailSettingsFn;
         vm.deleteCampaignFn = deleteCampaignFn;
+        vm.cancelCampaignFn = cancelCampaignFn;
         vm.canActivateFn = canActivateFn;
         vm.tagToContactFn = tagToContactFn;
         vm.createContactDataFn = createContactDataFn;
@@ -659,6 +660,33 @@
         function deleteCampaignFn() {
             SweetAlert.swal({
                     title: "Are you sure?",
+                    text: "Do you want to delete this campaign?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete campaign!",
+                    cancelButtonText: "No, do not delete campaign!",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        EmailCampaignService.deleteCampaign(vm.state.campaign).then(function (data) {
+                            toaster.pop('success', "Campaign deleted.", "The " + vm.state.campaign.name + " campaign was deleted successfully.");
+                            resetDirtyFn();
+                            $timeout(function () {
+                                $location.path('/marketing/campaigns');
+                            }, 500)
+                        });
+                    } else {
+                        SweetAlert.swal("Not Deleted", "The campaign was not deleted.", "error");
+                    }
+                });
+        };
+
+        function cancelCampaignFn() {
+            SweetAlert.swal({
+                    title: "Are you sure?",
                     text: "Do you want to cancel this campaign?",
                     type: "warning",
                     showCancelButton: true,
@@ -670,7 +698,7 @@
                 },
                 function (isConfirm) {
                     if (isConfirm) {
-                        EmailCampaignService.deleteCampaign(vm.state.campaign).then(function (data) {
+                        EmailCampaignService.cancelCampaign(vm.state.campaign).then(function (data) {
                             toaster.pop('success', "Campaign cancelled.", "The " + vm.state.campaign.name + " campaign was cancelled successfully.");
                             resetDirtyFn();
                             $timeout(function () {

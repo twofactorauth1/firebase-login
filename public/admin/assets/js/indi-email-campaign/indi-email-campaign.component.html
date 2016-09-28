@@ -59,10 +59,19 @@
                             type="button"
                             ng-disabled="!vm.uiState.dataLoaded"
                             ng-if="vm.uiState.disableEditing || vm.state.campaign.status.toLowerCase() !== 'cancelled'"
-                            ng-click='vm.deleteCampaignFn()'
+                            ng-click='vm.cancelCampaignFn()'
                             class="btn btn-o btn-danger margin-left-5"
                             tooltip-placement="bottom"
                             tooltip-html-unsafe="Cancel this campaign.">
+                            <i class="ti-na"></i>
+                        </button>
+                        <button
+                            type="button"
+                            ng-disabled="!vm.uiState.dataLoaded"
+                            ng-click='vm.deleteCampaignFn()'
+                            class="btn btn-o btn-danger margin-left-5"
+                            tooltip-placement="bottom"
+                            tooltip-html-unsafe="Delete this campaign.">
                             <i class="ti-trash"></i>
                         </button>
                     </div>

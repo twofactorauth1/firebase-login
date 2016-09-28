@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/statistics/reconcile'), this.isAuthAndSubscribedApi.bind(this), this.reconcileCampaignStatistics.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));
+        app.delete(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelCampaign.bind(this));
         app.get(this.url(':id/campaigns/:title'), this.isAuthAndSubscribedApi.bind(this), this.checkIfCampaignExists.bind(this));
         app.get(this.url('campaigns/exists/:title'), this.isAuthAndSubscribedApi.bind(this), this.checkIfCampaignExists.bind(this));
 
@@ -181,6 +182,29 @@ _.extend(api.prototype, baseApi.prototype, {
      * @param resp
      */
     deleteCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> deleteCampaign');
+        var campaignId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.deleteCampaign(campaignId, accountId, function(err, value){
+                    if(err) {
+                        self.wrapError(resp, 500, err, "Error deleting campaign");
+                    } else {
+                        self.log.debug('<< deleteCampaign');
+                        self.send200(resp);
+                        self.createUserActivity(req, 'DELETE_CAMPAIGN', null, null, function(){});
+                    }
+                });
+            }
+        });
+    },
+
+    cancelCampaign: function(req, resp) {
         var self = this;
         self.log.debug('>> cancelRunningCampaign');
         var campaignId = req.params.id;

@@ -902,6 +902,45 @@ module.exports = {
         });
     },
 
+
+    /**
+     * This method will delete any campaign_flow objects and campaign.
+     * @param campaignId
+     * @param accountId
+     * @param fn
+     */
+    deleteCampaign: function(campaignId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> deleteCampaign');
+        var query = {
+            accountId: accountId,
+            campaignId: campaignId
+        };
+
+        campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+            if(err) {
+                self.log.error('Error deleting campaign flow: ' + err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< delete Campaign');
+                query = {
+                    accountId: accountId,
+                    _id: campaignId
+                };
+                campaignDao.removeByQuery(query, $$.m.Campaign, function(err, value){
+                    if(err) {
+                        self.log.error('Error deleting campaign: ' + err);
+                        return fn(err, null);
+                    }
+                    else{
+                        fn(null, value);
+                    }
+                })
+
+            }
+        });
+    },
+
     /**
      * This method will cancel a campaign flow for a particular contact
      * @param accountId
