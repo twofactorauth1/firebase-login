@@ -98,6 +98,7 @@ var dao = {
                     aliasTarget.DNSName = prodELB;
                     aliasTarget.HostedZoneId = prodZone;
                 }
+                //TODO: "v=spf1 a mx include:sendgrid.net ~all"
                 var params = {
                     ChangeBatch: { /* required */
                         Changes: [ /* required */
@@ -120,6 +121,19 @@ var dao = {
                                             Value: domain /* required */
                                         }
                                         /* more items */
+                                    ]
+                                }
+                            },
+                            {
+                                Action: 'CREATE',
+                                ResourceRecordSet: {
+                                    Name: domain,
+                                    Type: 'TXT',
+                                    TTL: 600,
+                                    ResourceRecords: [
+                                        {
+                                            Value: '"v=spf1 a mx include:sendgrid.net ~all"'
+                                        }
                                     ]
                                 }
                             }
