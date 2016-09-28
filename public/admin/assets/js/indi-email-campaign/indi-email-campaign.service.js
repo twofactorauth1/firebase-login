@@ -23,6 +23,7 @@
         campaignService.cancelCampaignForContact = cancelCampaignForContact;
         campaignService.duplicateCampaign = duplicateCampaign;
         campaignService.deleteCampaign = deleteCampaign;
+        campaignService.cancelCampaign = cancelCampaign;
         campaignService.checkIfDuplicateCampaign = checkIfDuplicateCampaign;
 
         /**
@@ -72,6 +73,22 @@
             return campaignRequest(
                 $http({
                     url: [baseCampaignAPIv1, campaign._id].join('/'),
+                    method: "DELETE"
+                }).success(success).error(error)
+            )
+        }
+
+        function cancelCampaign(campaign) {
+
+            function success(data) {}
+
+            function error(error) {
+                console.error('EmailCampaignService cancelCampaign error: ', JSON.stringify(error));
+            }
+
+            return campaignRequest(
+                $http({
+                    url: [baseCampaignAPIv1, campaign._id, 'cancel'].join('/'),
                     method: "DELETE"
                 }).success(success).error(error)
             )
@@ -137,8 +154,10 @@
             function error(error) {
                 console.error('EmailCampaignService getCampaign error: ', JSON.stringify(error));
             }
-
-            return campaignRequest($http.get([baseCampaignAPIv1, id, 'campaigns', title].join('/')).success(success).error(error));
+            if(id)
+                return campaignRequest($http.get([baseCampaignAPIv1, id, 'campaigns', title].join('/')).success(success).error(error));
+            else
+                return campaignRequest($http.get([baseCampaignAPIv1, 'campaigns', 'exists', title].join('/')).success(success).error(error));
         }
 
         /**

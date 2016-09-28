@@ -3,9 +3,10 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", "$window", '$state', 'AccountService', function ($scope, $timeout, $location, toaster, $filter, $modal, CampaignService, $window, $state, AccountService) {
+  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", "$window", '$state', 'AccountService', 'EmailCampaignService', 'WebsiteService', function ($scope, $timeout, $location, toaster, $filter, $modal, CampaignService, $window, $state, AccountService, EmailCampaignService, WebsiteService) {
 
     $scope.Math = $window.Math;
+    $scope.newCampaign = {};
     // $route.reload();
 
     /*
@@ -32,6 +33,10 @@
       $scope.account = _account;
     });
 
+    WebsiteService.getEmails(null, function (data) {
+      $scope.emails = data;
+    });
+
     $scope.viewSingle = function (campaign) {
       // var tableState = $scope.getSortOrder();
       // $state.current.sort = tableState.sort;
@@ -49,6 +54,74 @@
         } else {
             return ret;
         }
+    };
+
+    $scope.openCampaignModal = function (size) {
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'new-campaign-modal',
+            size: size,
+            keyboard: false,
+            backdrop: 'static',
+            scope: $scope
+        });
+    };
+
+
+    $scope.createCampaignFn =function(newCampaign) {
+        $scope.saveLoading = true;
+        var selectedEmail = _.findWhere($scope.emails, {
+            _id: newCampaign.emailId
+        });
+        var campaign = {
+            "name": newCampaign.name,
+            "type": "onetime",
+            "status": "DRAFT",
+            "visibility": 1,
+            "startDate": "",
+            "steps": [{
+                "type": "email",
+                "trigger": null,
+                "index": 1,
+                "settings": {
+                    "emailId": selectedEmail._id,
+                    "offset": "",
+                    "fromEmail": selectedEmail.fromEmail,
+                    "fromName": selectedEmail.fromName,
+                    "replyTo": selectedEmail.replyTo,
+                    "bcc": selectedEmail.bcc,
+                    "subject": selectedEmail.subject,
+                    "vars": [],
+                    "sendAt": {}
+                }
+            }],
+            "searchTags": {
+                "operation": "set",
+                "tags": []
+            },
+            "contactTags": [],
+        }
+        EmailCampaignService.checkIfDuplicateCampaign(null, campaign.name).then(function (response) {
+          if(response.data){
+              toaster.pop('warning', 'Campaign name already exists');
+              $scope.saveLoading = false;
+              return;
+          }
+          else{
+            EmailCampaignService.createCampaign(campaign).then(function(res) {
+                $scope.cancel();
+                console.log('EmailCampaignService.createCampaign created', res.data.name);
+                $location.path('/emails/campaigns/' + res.data._id);
+            }).catch(function(err) {
+                $scope.saveLoading = false;
+                console.error('EmailCampaignService.createCampaign error', JSON.stringify(err));
+            });
+          }
+      });
+    }
+
+
+    $scope.cancel = function () {
+      $scope.modalInstance.close();
     };
 
   }]);

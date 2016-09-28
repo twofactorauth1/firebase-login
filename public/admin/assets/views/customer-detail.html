@@ -3,7 +3,7 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">{{ data.subdomain || 'No Contact Name'}} </h1>
+                <h1 class="mainTitle">{{ data.subdomain || 'No Customer Name'}} </h1>
                 <span class="mainDescription">{{displayCustomerTags()}}</span>
             </div>
         </div>
@@ -63,6 +63,40 @@
                                                     <td>Gross Revenue</td>
                                                     <td>{{(customer.chargeDetails.totalCharges) | currency:"$" }}</td>
                                                 </tr>
+                                                
+                                                <tr>
+                                                    <td>Subdomain:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{customer.subdomain}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Custom Domain:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{customer.customDomain}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Website :</td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="http://{{contact.details[0].websites[0].website}}">{{contact.details[0].websites[0].website}}</a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Company:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{contact.details[0].company}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">
@@ -90,23 +124,7 @@
                                                         {{primaryUser._id}}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Website:</td>
-                                                    <td>
-                                                        <div>
-                                                            <a href="http://{{contact.details[0].websites[0].website}}">{{contact.details[0].websites[0].website}}</a>
-                                                            <br>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Company:</td>
-                                                    <td>
-                                                        <div>
-                                                            {{contact.details[0].company}}
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
 
@@ -194,7 +212,7 @@
                                     </div>
                                     <div class="panel panel-white" id="notes">
                                         <div class="panel-heading border-light">
-                                            <h4 class="panel-title">Contact <span class="text-bold">Notes</span></h4>
+                                            <h4 class="panel-title">Customer <span class="text-bold">Notes</span></h4>
                                             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                                         </div>
                                         <div class="panel-wrapper" collapse="notes" ng-init="notes=false">
