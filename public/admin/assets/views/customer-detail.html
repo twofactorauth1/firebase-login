@@ -63,6 +63,40 @@
                                                     <td>Gross Revenue</td>
                                                     <td>{{(customer.chargeDetails.totalCharges) | currency:"$" }}</td>
                                                 </tr>
+                                                
+                                                <tr>
+                                                    <td>Subdomain:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{customer.subdomain}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Custom Domain:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{customer.customDomain}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Website :</td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="http://{{contact.details[0].websites[0].website}}">{{contact.details[0].websites[0].website}}</a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Company:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{contact.details[0].company}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                         <table class="table table-condensed">
@@ -90,23 +124,7 @@
                                                         {{primaryUser._id}}
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Website:</td>
-                                                    <td>
-                                                        <div>
-                                                            <a href="http://{{contact.details[0].websites[0].website}}">{{contact.details[0].websites[0].website}}</a>
-                                                            <br>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Company:</td>
-                                                    <td>
-                                                        <div>
-                                                            {{contact.details[0].company}}
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                
                                             </tbody>
                                         </table>
 
