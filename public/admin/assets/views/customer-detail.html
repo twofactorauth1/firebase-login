@@ -78,7 +78,14 @@
                                                         <div>
                                                             {{customer.customDomain}}
                                                         </div>
+                                                        <div class="pull-right">
+                                                            <a ng-click="getNameServers(customer.customDomain)"><i class="fa fa-binoculars"></i></a>
+                                                            <a ng-click="openSimpleModal('add-domain-modal')"><i class="fa fa-pencil"></i></a>
+                                                        </div>
                                                     </td>
+                                                </tr>
+                                                <tr ng-if="nameservers">
+                                                    <td colspan="2"><div ng-repeat="ns in nameservers"><span class="text-bold">{{ns}}</span><br></div></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Website :</td>
@@ -271,3 +278,4 @@
 <div data-ng-include=" 'assets/views/partials/edit-trial-days-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/new-user-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/add-domain-modal.html' "></div>

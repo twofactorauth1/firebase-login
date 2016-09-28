@@ -46,6 +46,7 @@
     "moment": "2.6.0",
     "mongoskin": "1.4.4",
     "newrelic": "^1.14.1",
+    "nice-route53": "^1.0.3",
     "node-rss": "^1.0.5",
     "node-serialize": "0.0.4",
     "node-twitter-api": "^1.5.0",

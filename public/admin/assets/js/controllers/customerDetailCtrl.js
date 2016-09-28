@@ -204,6 +204,35 @@
             });
         };
 
+        $scope.getNameServers = function(domain) {
+            if(!domain) {
+                toaster.pop('info', 'No custom domain to lookup.');
+            } else {
+                customerService.viewNameServers(domain, function(err, data){
+                    if(err) {
+                        toaster.pop('warning', err.message);
+                    } else {
+                        $scope.nameservers = data;
+                    }
+                });
+            }
+
+        };
+
+        $scope.addCustomDomain = function() {
+            var domain = $scope.customer.customDomain;
+            var accountId = $scope.customer._id;
+            customerService.addDomainToAccount(domain, accountId, function(err, data){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    console.log('Response:', data);
+                    $scope.nameservers = data.nameServers;
+                }
+                $scope.closeModal();
+            });
+        };
+
 
         $scope.openSimpleModal = function (modal) {
             var _modal = {
