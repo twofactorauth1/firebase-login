@@ -137,8 +137,10 @@
             function error(error) {
                 console.error('EmailCampaignService getCampaign error: ', JSON.stringify(error));
             }
-
-            return campaignRequest($http.get([baseCampaignAPIv1, id, 'campaigns', title].join('/')).success(success).error(error));
+            if(id)
+                return campaignRequest($http.get([baseCampaignAPIv1, id, 'campaigns', title].join('/')).success(success).error(error));
+            else
+                return campaignRequest($http.get([baseCampaignAPIv1, 'campaigns', 'exists', title].join('/')).success(success).error(error));
         }
 
         /**

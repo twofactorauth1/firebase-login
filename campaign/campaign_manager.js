@@ -88,12 +88,22 @@ module.exports = {
     checkIfCampaignExists: function (accountId, campaignId, title, fn) {
         var self = this;
         self.log.debug('>> getCampaign');
-        var query = {
-                accountId: accountId,
-                name: title,
-                _id : { $ne: campaignId }
+            var query = {};
+            if(campaignId){
+                query = {
+                    accountId: accountId,
+                    name: title,
+                    _id : { $ne: campaignId }
+                }
             }
-        campaignDao.exists(query, $$.m.Campaign, function(err, value){
+            else{
+                query = {
+                    accountId: accountId,
+                    name: new RegExp('^'+ title +'$', "i")
+                }
+            }
+            
+            campaignDao.exists(query, $$.m.Campaign, function(err, value){
             if(err) {
                 self.log.error('Error getting campaign:', err);
                 return fn(err, null);

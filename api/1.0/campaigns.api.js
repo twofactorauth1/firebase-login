@@ -36,6 +36,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));
         app.get(this.url(':id/campaigns/:title'), this.isAuthAndSubscribedApi.bind(this), this.checkIfCampaignExists.bind(this));
+        app.get(this.url('campaigns/exists/:title'), this.isAuthAndSubscribedApi.bind(this), this.checkIfCampaignExists.bind(this));
 
         app.post(this.url(':id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.addContactToCampaign.bind(this));
         app.post(this.url(':id/contacts'), this.isAuthAndSubscribedApi.bind(this), this.bulkAddContactToCampaign.bind(this));

@@ -207,7 +207,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/campaigns.html",
         title: 'Campaigns',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('campaignsCtrl', 'campaignService')
+        resolve: loadSequence('campaignsCtrl', 'campaignService', 'propsFilter')
     }).state('app.marketing.createcampaign', {
         url: '/campaigns/create-campaign',
         templateUrl: "/admin/assets/views/create-campaign.html",
