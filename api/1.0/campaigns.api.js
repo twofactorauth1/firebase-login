@@ -246,7 +246,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     checkIfCampaignExists: function (req, resp) {
         var self = this;
-        var title = req.params.title;
+        var title = decodeURIComponent(req.params.title);
         console.log(req.params);
         var accountId = parseInt(self.accountId(req));
         self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {

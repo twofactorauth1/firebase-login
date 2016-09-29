@@ -155,9 +155,9 @@
                 console.error('EmailCampaignService getCampaign error: ', JSON.stringify(error));
             }
             if(id)
-                return campaignRequest($http.get([baseCampaignAPIv1, id, 'campaigns', title].join('/')).success(success).error(error));
+                return campaignRequest($http.get([baseCampaignAPIv1, id, 'campaigns', encodeURIComponent(title)].join('/')).success(success).error(error));
             else
-                return campaignRequest($http.get([baseCampaignAPIv1, 'campaigns', 'exists', title].join('/')).success(success).error(error));
+                return campaignRequest($http.get([baseCampaignAPIv1, 'campaigns', 'exists', encodeURIComponent(title)].join('/')).success(success).error(error));
         }
 
         /**

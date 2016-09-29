@@ -83,6 +83,10 @@
         justify-content: center;
         font-size: 2em;
         font-weight: bold;
+        @media screen and (max-width: 767px) {
+            margin: 0 8px 8px 0;
+            font-size: 1.4em;
+        }
     }
 
     .billing-shipping .donate-amount-btn.active {
@@ -255,4 +259,8 @@
 }
 .editable-donate-btn-form{
     min-width:100px;
+}
+.donation-component-modal.modal{
+    position: fixed !important;
+    bottom:0 !important;
 }

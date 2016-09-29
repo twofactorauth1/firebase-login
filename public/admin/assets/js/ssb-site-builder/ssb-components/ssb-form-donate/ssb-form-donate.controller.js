@@ -919,6 +919,7 @@
                 container: '#card-wrapper-' + vm.component._id
               });
               console.log('card setup');
+              angular.element("#donation-modal-component").parents(".modal").addClass("donation-component-modal");
             }, 200);
         };
 
