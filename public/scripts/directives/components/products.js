@@ -1321,6 +1321,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     size: 'lg',
                     scope: scope
                 });
+                $timeout(function () {
+                    angular.element("#product-details-content").parents(".modal").addClass("product-details-cart-modal");
+                }, 200);
+
             };
 
             scope.closeProductDetailsModal = function() {
