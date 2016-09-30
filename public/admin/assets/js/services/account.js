@@ -33,6 +33,22 @@
       return deferred.promise;
     };
 
+
+    this.getUpdatedAccount = function (fn) {
+      var apiUrl = baseUrl;
+      $http.get(apiUrl + '?hash_id=' + Math.random())
+        .success(function (data) {
+          if (fn) {
+            console.log('resolve >>> ');
+            fn(data);
+          }
+        })
+        .error(function (err) {
+          console.warn('END:Account Service with ERROR');
+          fn(err, null);
+        });
+    };
+
     //:id/setting
     this.updateAccount = function (account, fn) {
       var apiUrl = baseUrl + [account._id].join('/');

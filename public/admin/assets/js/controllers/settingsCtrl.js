@@ -51,16 +51,16 @@
     };
 
 
-    AccountService.getAccount(function (account) {
-        $scope.account = account;
-            $scope.originalAccount = angular.copy(account);
-            if (!account.commerceSettings) {
-                account.commerceSettings = {
-                taxes: true,
-                taxbased: '',
-                taxnexus: ''
-            };
-        }
+    AccountService.getUpdatedAccount(function (account) {
+      $scope.account = account;
+          $scope.originalAccount = angular.copy(account);
+          if (!account.commerceSettings) {
+              account.commerceSettings = {
+              taxes: true,
+              taxbased: '',
+              taxnexus: ''
+          };
+      }
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
