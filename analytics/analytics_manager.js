@@ -14,6 +14,7 @@ var segmentConfig = require('../configs/segmentio.config');
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var async = require('async');
+var accountDao = require('../dao/account.dao');
 
 module.exports = {
 
@@ -1125,8 +1126,30 @@ module.exports = {
                 _.each(value, function(result){
                     result['url.path'] = result._id;
                 });
-                self.log.debug(accountId, userId, '<< trafficSourcesReport');
-                fn(null, value);
+                if(isAggregate === true) {
+                    accountDao.findMany({_id:{$exists:true}}, $$.m.Account, function(err, accounts){
+                        if(err) {
+                            self.log.error('Error finding accounts:', err);
+                            return fn(null, value);
+                        } else {
+                            var map = {};
+                            _.each(accounts, function(account){
+                                map[account.id()] = account.get('subdomain');
+                            });
+                            _.each(value, function(result){
+                                result['id'] = result['url.path'];
+                                result['url.path'] = map[result['url.path']];
+                            });
+                            self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                            fn(null, value);
+                        }
+
+                    });
+                } else {
+                    self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                    fn(null, value);
+                }
+
             }
         });
     },

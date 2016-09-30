@@ -91,6 +91,7 @@
 
                     if (singleRow['url.path']) {
                         subObj.page = singleRow['url.path'];
+                        subObj.accountId = singleRow['id'];
                         subObj.pageviews = singleRow.pageviews;
                         subObj.avgTime = Math.abs(singleRow.avgTimeOnPage) / 1000;
                         subObj.uniquePageviews = singleRow.uniquePageviews;

@@ -211,7 +211,7 @@
                     <table class="table table-hover margin-bottom-0">
                         <thead>
                             <tr>
-                                <th>AccountID</th>
+                                <th>Account Name</th>
                                 <th class="center">Page Views</th>
                                 <th class="center">Unique Page Views</th>
                                 <th class="center">Avg. Time on Page</th>
@@ -221,7 +221,7 @@
                             <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'|limitTo:25">
                                 <td>
                                     {{topPage.page}}
-                                    <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>
+                                    <a href="#/customers/{{topPage.accountId}}" >({{topPage.accountId}})</a>
                                 </td>
                                 <td class="center">{{topPage.pageviews}}</td>
                                 <td class="center">{{topPage.uniquePageviews}}</td>
