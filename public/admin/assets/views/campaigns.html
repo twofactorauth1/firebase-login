@@ -63,9 +63,9 @@
                                 <th st-sort="name" translate="tableFields.NAME">Name</th>
                                 <th st-sort="type" translate="tableFields.TYPE">Type</th>
                                 <th st-sort="statistics.participants" translate="campaign.PARTICIPANTS">Participants</th>
-                                <th st-sort="statistics.emailsSent" translate="campaign.SENTRATE">Sent</th>
-                                <th st-sort="statistics.emailsOpened" translate="campaign.OPENRATE">Opens</th>
-                                <th st-sort="statistics.emailsClicked" translate="campaign.CLICKRATE">Clicks</th>
+                                <th class="hidden-xs" st-sort="statistics.emailsSent" translate="campaign.SENTRATE">Sent</th>
+                                <th class="hidden-xs" st-sort="statistics.emailsOpened" translate="campaign.OPENRATE">Opens</th>
+                                <th class="hidden-xs" st-sort="statistics.emailsClicked" translate="campaign.CLICKRATE">Clicks</th>
                                 <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
                             </tr>
                             <tr ng-if="showFilter">
@@ -198,9 +198,9 @@
                                 <td ng-if="tableView != 'grid'" class=""><strong>Title: </strong> <span ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Participants: </strong><span class=" text-bold">{{campaign.statistics.participants || 0}}</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Opened: </strong><span class=" text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span></td>
+                                <td class="hidden-xs"  ng-if="tableView != 'grid'"><strong>Sent: </strong><span class=" text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsSent, campaign.statistics.participants)}}%)</span></td>
+                                <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Opened: </strong><span class=" text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span></td>
+                                <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span></td>
                                 <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
                                 <!-- <td ng-if="tableView != 'grid'" class="center">
                                     <div class="dropdown">

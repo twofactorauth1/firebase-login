@@ -10,7 +10,7 @@
     //account API call for object population
     //account API call for object population
 
-    AccountService.getAccount(function (account) {
+    AccountService.getUpdatedAccount(function (account) {
         $scope.account = account;
         $scope.setDefaults();
         $scope.actualAccount = angular.copy(account);
