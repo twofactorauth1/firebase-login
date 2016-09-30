@@ -233,7 +233,7 @@ module.exports = {
         dao.saveOrUpdate(pingEvent, fn);
     },
 
-    getVisitorReports: function(accountId, userId, startDate, endDate, fn) {
+    getVisitorReports: function(accountId, userId, startDate, endDate, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorReports');
@@ -251,6 +251,9 @@ module.exports = {
 
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
         var group1 = {
             $group: {
@@ -329,7 +332,7 @@ module.exports = {
 
     },
 
-    getVisitorLocationsReport: function(accountId, userId, startDate, endDate, fn) {
+    getVisitorLocationsReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorLocationsReport');
@@ -346,6 +349,9 @@ module.exports = {
 
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group1 = {
@@ -365,7 +371,7 @@ module.exports = {
         });
     },
 
-    getVisitorDeviceReport: function(accountId, userId, startDate, endDate, fn) {
+    getVisitorDeviceReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
 
         var self = this;
         self.log = _log;
@@ -383,6 +389,9 @@ module.exports = {
 
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group1 = {
@@ -410,7 +419,7 @@ module.exports = {
     },
 
 
-    getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, fn) {
+    getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getUserReport');
@@ -427,6 +436,9 @@ module.exports = {
 
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group1 = {
@@ -511,7 +523,7 @@ module.exports = {
 
     },
 
-    getPageViewsReport: function(accountId, userId, start, end, previousStart, previousEnd, fn) {
+    getPageViewsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getPageViewsReport');
@@ -527,6 +539,9 @@ module.exports = {
 
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
         var group = {
             $group: {
@@ -599,7 +614,7 @@ module.exports = {
 
     },
 
-    getSessionsReport:function(accountId, userId, start, end, previousStart, previousEnd, fn) {
+    getSessionsReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getSessionsReport');
@@ -616,6 +631,9 @@ module.exports = {
 
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group1 = {
@@ -699,7 +717,7 @@ module.exports = {
 
     },
 
-    sessionLengthReport: function(accountId, userId, start, end, previousStart, previousEnd, fn) {
+    sessionLengthReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> sessionLengthReport');
@@ -716,6 +734,9 @@ module.exports = {
                 session_length: {$gte:5000}
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group1 = {
@@ -882,7 +903,7 @@ module.exports = {
 
     },
 
-    trafficSourcesReport: function(accountId, userId, start, end, fn) {
+    trafficSourcesReport: function(accountId, userId, start, end, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> trafficSourcesReport');
@@ -898,6 +919,9 @@ module.exports = {
                 fingerprint:{$ne:0}
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group = {
@@ -922,7 +946,7 @@ module.exports = {
         });
     },
 
-    newVsReturningReport: function(accountId, userId, start, end, fn) {
+    newVsReturningReport: function(accountId, userId, start, end, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> newVsReturningReport');
@@ -938,6 +962,9 @@ module.exports = {
                 fingerprint:{$ne:0}
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group1 = {
@@ -976,7 +1003,7 @@ module.exports = {
         });
     },
 
-    pageAnalyticsReport: function(accountId, userId, start, end, fn) {
+    pageAnalyticsReport: function(accountId, userId, start, end, isAggregate, fn) {
         /*
          var params2 = {
          event_collection: 'page_data',
@@ -1018,40 +1045,77 @@ module.exports = {
         self.log.debug(accountId, userId, '>> pageAnalyticsReport');
 
         var stageAry = [];
-        var match = {
-            $match:{
-                accountId:accountId,
-                server_time_dt:{
-                    $gte:start,
-                    $lte:end
+        if(isAggregate === true) {
+            var match = {
+                $match:{
+                    server_time_dt:{
+                        $gte:start,
+                        $lte:end
+                    }
                 }
-            }
-        };
-        stageAry.push(match);
+            };
+            stageAry.push(match);
 
-        var group1 = {
-            $group:{
-                _id: {
-                    path: '$url.path',
-                    sessionId: '$session_id'
-                },
-                pageviews:{$sum:1},
-                timeOnPage:{$sum:'$timeOnPage'},
-                avgTimeOnPage:{$avg:'$timeOnPage'}
-            }
-        };
-        stageAry.push(group1);
+            var group1 = {
+                $group:{
+                    _id: {
+                        path: '$accountId',
+                        sessionId: '$session_id'
+                    },
+                    pageviews:{$sum:1},
+                    timeOnPage:{$sum:'$timeOnPage'},
+                    avgTimeOnPage:{$avg:'$timeOnPage'}
+                }
+            };
+            stageAry.push(group1);
 
-        var group2 = {
-            $group: {
-                _id: '$_id.path',
-                uniquePageviews: {$sum:1},
-                pageviews: {$sum:'$pageviews'},
-                timeOnPage: {$sum:'$timeOnPage'},
-                avgTimeOnPage:{$avg:'$avgTimeOnPage'}
-            }
-        };
-        stageAry.push(group2);
+            var group2 = {
+                $group: {
+                    _id: '$_id.path',
+                    uniquePageviews: {$sum:1},
+                    pageviews: {$sum:'$pageviews'},
+                    timeOnPage: {$sum:'$timeOnPage'},
+                    avgTimeOnPage:{$avg:'$avgTimeOnPage'}
+                }
+            };
+            stageAry.push(group2);
+        } else {
+            var match = {
+                $match:{
+                    accountId:accountId,
+                    server_time_dt:{
+                        $gte:start,
+                        $lte:end
+                    }
+                }
+            };
+            stageAry.push(match);
+
+            var group1 = {
+                $group:{
+                    _id: {
+                        path: '$url.path',
+                        sessionId: '$session_id'
+                    },
+                    pageviews:{$sum:1},
+                    timeOnPage:{$sum:'$timeOnPage'},
+                    avgTimeOnPage:{$avg:'$timeOnPage'}
+                }
+            };
+            stageAry.push(group1);
+
+            var group2 = {
+                $group: {
+                    _id: '$_id.path',
+                    uniquePageviews: {$sum:1},
+                    pageviews: {$sum:'$pageviews'},
+                    timeOnPage: {$sum:'$timeOnPage'},
+                    avgTimeOnPage:{$avg:'$avgTimeOnPage'}
+                }
+            };
+            stageAry.push(group2);
+        }
+
 
         dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
             if(err) {
@@ -1099,7 +1163,7 @@ module.exports = {
         return zeroedResultAry;
     },
 
-    getUserAgentReport: function(accountId, userId, start, end, fn) {
+    getUserAgentReport: function(accountId, userId, start, end, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getUserAgentReport');
@@ -1114,6 +1178,9 @@ module.exports = {
                 }
             }
         };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
         stageAry.push(match);
 
         var group1 = {
@@ -1121,7 +1188,7 @@ module.exports = {
                 _id:{
                     browserName:'$user_agent.browser.name',
                     //browserVersion:'$user_agent.browser.version',
-                    osName:'$user_agent.os.name',
+                    osName:'$user_agent.os.name'
                     //osVersion:'$user_agent.os.version'
                 },
                 count: {$sum:1}
@@ -1133,6 +1200,66 @@ module.exports = {
             var sortedResults = _.sortBy(value, function(result){return result.count;});
             self.log.debug(accountId, userId, '<< getUserAgentReport');
             fn(err, sortedResults);
+        });
+    },
+
+    getDailyActiveUsers: function(accountId, userId, start, end, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getDailyActiveUsers');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                activityType:'LOGIN',
+                start:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        stageAry.push(match);
+        var group1 = {
+            $group: {
+                _id:{
+                    userId:'$userId',
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$start" }}
+                },
+                count: {$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        var group2 = {
+            $group: {
+                _id: '$_id.yearMonthDay',
+                total:{$sum:1}
+            }
+        };
+        stageAry.push(group2);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.UserActivity, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting DAU:', err);
+                return fn(err);
+            } else {
+                var resultAry = [];
+                _.each(value, function (entry) {
+                    var result = {
+                        total: entry.total,
+                        timeframe: {
+                            start: entry._id
+                        }
+                    };
+                    result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                    resultAry.push(result);
+                });
+                resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                self.log.debug(accountId, userId, '<< getDailyActiveUsers');
+                return fn(null, resultAry);
+            }
+
         });
     }
 };

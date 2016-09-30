@@ -441,9 +441,9 @@
                                 <tbody>
                                     <tr ng-repeat="item in order.line_items">
                                         <td width="40">
-                                            <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" />
+                                            <img ng-if="item.product.is_image" ng-src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" err-src="/images/default-media.png"//>
                                             <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}" popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"></span>
-                                            <span popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" ng-if="!item.product.icon" class="fa fa-cube"></span>
+                                            <span popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" ng-if="!item.product.icon && !item.product.is_image" class="fa fa-cube"></span>
                                         </td>
                                         <td>
                                             {{item.product.sku}}
@@ -535,7 +535,7 @@
     </form>
 </div>
 <script type="text/ng-template" id="productImage.html">
-    <img src="{{item.product.icon}}" width="150" />
+    <img ng-src="{{item.product.icon}}" width="150" err-src="/images/default-media.png"/>
 </script>
 <script type="text/ng-template" id="productIcon.html">
     <icon class="fa {{item.product.icon}}" style="font-size: 75px">
