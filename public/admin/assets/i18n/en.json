@@ -98,7 +98,7 @@
       },
       "customers": {
           "MAIN": "Customers",
-          "ANALYTICS": "Customer Analytics"
+          "ANALYTICS": "Platform Analytics"
       },
       "commerce": {
         "MAIN": "Commerce",
