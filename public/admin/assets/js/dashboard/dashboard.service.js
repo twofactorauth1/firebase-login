@@ -203,7 +203,7 @@
                 console.error('DashboardService getAccount:', JSON.stringify(error));
             }
             return (
-                dashRequest($http.get(baseAccountAPIUrl).success(success).error(error))
+                dashRequest($http.get(baseAccountAPIUrl + '?hash_id=' + Math.random()).success(success).error(error))
             );
         }
 
