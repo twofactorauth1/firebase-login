@@ -366,6 +366,12 @@
             });
         };
 
+        this.runAdminMongoReports = function(date, account, fn) {
+            SiteAnalyticsService.runAdminReports(date.startDate, date.endDate, function(data){
+                fn(data);
+            });
+        };
+
         this.runReports = function (date, account, fn) {
             var self = this;
             var hostname = this.getHostName(account);
@@ -496,7 +502,7 @@
             return pageDepthConfig;
         };
 
-        this.analyticsOverview = function (readyPageviewsData, sessionsData, readyVisitorsData, fn) {
+        this.analyticsOverview = function (readyPageviewsData, sessionsData, readyVisitorsData, dailyActiveUsersData, fn) {
             var analyticsOverviewConfig = {
                 options: {
                     chart: {
@@ -564,6 +570,9 @@
                  }
                  */
             };
+            if(dailyActiveUsersData) {
+                analyticsOverviewConfig.series.push({name: 'Daily Active Users', data:dailyActiveUsersData});
+            }
             fn(analyticsOverviewConfig);
         };
 

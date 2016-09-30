@@ -2,7 +2,7 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "SiteAnalyticsService", "$timeout", function ($scope, $modal, SiteAnalyticsService, $timeout) {
+    app.controller('customerAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout) {
 
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
@@ -25,11 +25,6 @@
             startDate: moment().subtract(29, 'days').format(),
             endDate: moment().format()
         };
-
-
-        $scope.displayDatePicker = function(){
-            $('.deshboard-date-picker').click();
-        }
 
         var dateSwitch = false;
         $scope.$watch('selectedDate', function () {
@@ -78,23 +73,62 @@
         };
 
 
+        UserService.getAccount(function (account) {
+            $scope.analyticsAccount = account;
+            $scope.runAnalyticsReports();
+        });
+
         $scope.runAnalyticsReports = function () {
+            console.log('runAnalyticsReports');
+            ChartAnalyticsService.runAdminMongoReports($scope.date, $scope.analyticsAccount, function (data) {
+                //console.log('ABOUT TO COMPARE!!!\n\n\n\n\n');
+                //console.log('Legacy Data:', $scope.legacyData);
+                console.log('New Data:', data);
+                var formattedTopPages = [];
+                var pagedformattedTopPages;
+                _.each(data.pageAnalyticsReport, function (singleRow) {
+                    var subObj = {};
 
-            SiteAnalyticsService.runReports(function(){
+                    if (singleRow['url.path']) {
+                        subObj.page = singleRow['url.path'];
+                        subObj.pageviews = singleRow.pageviews;
+                        subObj.avgTime = Math.abs(singleRow.avgTimeOnPage) / 1000;
+                        subObj.uniquePageviews = singleRow.uniquePageviews;
+                        //TODO
+                        //subObj.entrances = singleRow['entrances'];
+                        //subObj.bounceRate = singleRow['bounces']/singleRow['pageviews'];
+                        //subObj.exitRate = self.calculatePercentage(singleRow['exits'], currentTotalPageviews);
+                    }
+                    if (subObj) {
+                        formattedTopPages.push(subObj);
+                    }
+                });
 
-            });
-
-            ChartAnalyticsService.runPagedReports($scope.date, $scope.analyticsAccount, function (data) {
-                $scope.formattedTopPages = _.reject(data.formattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});
-                $scope.pagedformattedTopPages = _.reject(data.pagedformattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});
-            });
-
-            ChartAnalyticsService.runReports($scope.date, $scope.analyticsAccount, function (data) {
-                $scope.setReportData(data);
+                //pagedformattedTopPages = formattedTopPages.slice(0, 15);  // don't bother shortening list (UI does)
+                pagedformattedTopPages = formattedTopPages;
+                data.formattedTopPages = formattedTopPages;
+                data.pagedformattedTopPages = pagedformattedTopPages;
+                $scope.formattedTopPages = _.reject(formattedTopPages, function (analytics) {
+                    return !angular.isDefined(analytics.page)
+                });
+                $scope.pagedformattedTopPages = _.reject(pagedformattedTopPages, function (analytics) {
+                    return !angular.isDefined(analytics.page)
+                });
+                $scope.setNewReportData(data);
             });
         };
 
+
+
+        /**
+         *
+         * @param result2 - userReport current month
+         * @param result3 - userReport previous month
+         */
         $scope.visitorDataReport = function (result2, result3) {
+            console.log('visitor data report:');
+            console.log('result2:', result2);
+            console.log('result3:', result3);
             var visitorsData = [];
             var currentTotalVisitors = 0;
             _.each(result2, function (visitor) {
@@ -105,7 +139,7 @@
                 subArr.push(value);
                 visitorsData.push(subArr);
             });
-
+            console.log('visitorsData:', visitorsData);
             $scope.visitorsData = visitorsData;
 
             var vistorsPreviousData = 0;
@@ -114,12 +148,12 @@
                 vistorsPreviousData += value;
             });
 
-            var visitorsPercent = ChartAnalyticsService.calculatePercentage(vistorsPreviousData, currentTotalVisitors);
+            var visitorsPercent = ChartAnalyticsService.calculatePercentChange(vistorsPreviousData, currentTotalVisitors);
 
-            $scope.$apply(function () {
+            //$scope.$apply(function () {
                 $scope.visitors = currentTotalVisitors;
                 $scope.visitorsPercent = visitorsPercent;
-            });
+            //});
         };
 
         $scope.locationReportData = function (result0) {
@@ -154,12 +188,23 @@
                 });
             }
 
-            $scope.$apply(function () {
+            //$scope.$apply(function () {
                 $scope.locationData = locationData;
-            });
+            //});
         };
 
-        $scope.contentInteractionsReportData = function (result8, result10, result11) {
+        /**
+         * This is plotting (non-bounce) visitor count on site vs. bounce visitor time on site
+         * slr.nonBounceAvg, slr.bounceAvg, slr.previousMonthBounceCount
+         * @param result8 - nonBounceAvg
+         * @param result10 - bounceAvg
+         * @param result11 - previousMonthBounceCount
+         */
+        $scope.contentInteractionsReportData = function (result8, result10, previousMonthBounceCount) {
+            console.log('contentInteractionsReportData:');
+            console.log('nonBounceAvg:', result8);
+            console.log('bounceAvg:', result10);
+            console.log('previousMonthBounceCount:', previousMonthBounceCount);
             // ----------------------------------------
             // Average Visit Duration
             // ----------------------------------------
@@ -167,7 +212,7 @@
             var avgSessionData = [];
             _.each(result8, function (session) {
                 var subArr = [];
-                var value = session.value || 0;
+                var value = session.count || session.value || 0;
                 subArr.push(new Date(session.timeframe.start).getTime());
                 subArr.push(value);
                 avgSessionData.push(subArr);
@@ -183,7 +228,7 @@
             var _totalBounces = 0;
             _.each(result10, function (bounce) {
                 var subArr = [];
-                var value = bounce.value || 0;
+                var value = bounce.count || bounce.value || 0;
                 _totalBounces += value;
                 subArr.push(new Date(bounce.timeframe.start).getTime());
                 subArr.push(value);
@@ -198,14 +243,212 @@
             });
 
 
-            var bouncesPercent = ChartAnalyticsService.calculatePercentage(_totalBounces, result11);
-            $scope.$apply(function () {
+            var bouncesPercent = ChartAnalyticsService.calculatePercentChange(previousMonthBounceCount, _totalBounces);
+            //$scope.$apply(function () {
                 $scope.bounces = _totalBounces;
                 $scope.bouncesPercent = bouncesPercent;
+            //});
+        };
+
+
+
+        $scope.setNewReportData = function(results) {
+            var desktop = 0;
+            var mobile = 0;
+            _.each(results.visitorDeviceReport.result, function(device){
+                var category = device['user_agent.device'];
+                if(category === 'desktop') {
+                    desktop = device.result;
+                } else if (category === 'mobile') {
+                    mobile = device.result;
+                }
             });
+            $scope.desktop = desktop;
+            $scope.mobile = mobile;
+
+            $scope.device_data_loaded = true;
+
+            // ----------------------------------------
+            // Visitors
+            // ----------------------------------------
+
+            $scope.visitorDataReport(results.userReport.currentMonth, results.userReport.previousMonth);
+
+            // ----------------------------------------
+            // Pageviews Metric
+            // ----------------------------------------
+
+            var pageviewsData = [];
+            var currentTotalPageviews = 0;
+            _.each(results.pageViewsReport.currentMonth, function (pageView) {
+                var subArr = [];
+                var value = pageView.value || 0;
+                currentTotalPageviews += value;
+                subArr.push(new Date(pageView.timeframe.start).getTime());
+                subArr.push(value);
+                pageviewsData.push(subArr);
+            });
+
+            $scope.pageviews = currentTotalPageviews;
+            $scope.pageviewsData = pageviewsData;
+
+            var dauData = [];
+            _.each(results.dau, function(dau){
+                var subArr = [];
+                var value = dau.total || 0;
+                subArr.push(new Date(dau.timeframe.start).getTime());
+                subArr.push(value);
+                dauData.push(subArr);
+            });
+            $scope.dauData = dauData;
+
+            var pageviewsPreviousData = 0;
+            _.each(results.pageViewsReport.previousMonth, function (pageView) {
+                var value = pageView.value || 0;
+                pageviewsPreviousData += value;
+            });
+
+            $scope.pageviewsPreviousData = pageviewsPreviousData;
+
+            var pageviewsPercent = ChartAnalyticsService.calculatePercentChange(pageviewsPreviousData, currentTotalPageviews);
+            $scope.pageviewsPercent = pageviewsPercent;
+
+            // ----------------------------------------
+            // Sessions
+            // ----------------------------------------
+
+
+            var _sessionsData = [];
+            var _totalSessions = 0;
+            _.each(results.sessionsReport.currentMonth, function (session) {
+                var subArr = [];
+                var value = session.total || session.value || 0;
+                _totalSessions += value;
+                subArr.push(new Date(session.timeframe.start).getTime());
+                subArr.push(value);
+                _sessionsData.push(subArr);
+            });
+            $scope.sessions = _totalSessions;
+            $scope.sessionsData = _sessionsData;
+
+
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, function (data) {
+                //$scope.$apply(function () {
+                    $scope.analyticsOverviewConfig = data;
+                //});
+                $scope.analyticsOverviewConfig.loading = false;
+            });
+
+            var sessionsPreviousData = 0;
+            _.each(results.sessionsReport.previousMonth, function (previousSession) {
+                var value = previousSession.total || previousSession.value || 0;
+                sessionsPreviousData += value;
+            });
+            console.log('Calculate percent change sessions:');
+            var sessionsPercent = ChartAnalyticsService.calculatePercentChange(sessionsPreviousData, _totalSessions);
+            console.log('total:' + _totalSessions + ', prev:' + sessionsPreviousData + ', percent:' + sessionsPercent);
+            $scope.sessionsPercent = sessionsPercent;
+
+            var slr = results.sessionLengthReport;//slr = SessionLengthReport
+            var secsToConv = 0;
+            if (slr.currentMonthAverage) {
+                secsToConv = (slr.currentMonthAverage / 1000);
+            }
+
+            var visitDuration = ChartAnalyticsService.secToTime(secsToConv);
+
+            if (slr.previousMonthAverage === null) {
+                slr.previousMonthAverage = 0;
+            }
+
+            $scope.visitDuration = visitDuration;
+
+            var previousVisitDuration = slr.previousMonthAverage;
+
+            var visitDurationPercent = ChartAnalyticsService.calculatePercentChange(previousVisitDuration, slr.currentMonthAverage);
+            $scope.visitDurationPercent = visitDurationPercent;
+
+            //8 = sessionLengthReport, 10=bounceReport, 11=NOTbouncePreviousReport ... previousMonthBounceCount
+            $scope.contentInteractionsReportData(slr.nonBounceAvg, slr.bounceAvg, slr.previousMonthBounceCount);
+
+            // ======================================
+            // Traffic Sources
+            // ======================================
+
+            $scope.trafficSourceData = results.trafficSourcesReport;
+
+            // ======================================
+            // New vs. Returning Customers
+            // ======================================
+
+            var newCustomers = ['New'];
+            var returningCustomers = ['Returning'];
+            _.each(results.newVsReturningReport, function(result){
+                if(result._id === 'new') {
+                    newCustomers.push(result.count);
+                } else if(result._id === 'returning') {
+                    returningCustomers.push(result.count);
+                }
+            });
+            var newVsReturning = [
+                newCustomers,
+                returningCustomers
+            ];
+
+            $scope.newVsReturning = newVsReturning;
+
+            ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
+                $scope.newVsReturningConfig = data;
+                $scope.newVsReturningConfig.loading = false;
+            });
+
+
+            // ======================================
+            // Content
+            // Time on Site, Bounces
+            // ======================================
+
+            var locationData = [];
+            if (results.visitorLocationsReport) {
+                var _formattedLocations = [];
+                _.each(results.visitorLocationsReport, function (loc) {
+                    if (loc['ip_geo_info.province']) {
+                        _formattedLocations.push(loc);
+                    }
+                });
+                $scope.mostPopularState = _.max(_formattedLocations, function (o) {
+                    return o.result;
+                });
+                _.each(results.visitorLocationsReport, function (location) {
+                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                    if (_geo_info) {
+                        var subObj = {};
+                        subObj.code = _geo_info;
+                        subObj.value = location.result;
+                        var locationExists = _.find(locationData, function (loc) {
+                            return loc.code === location.code;
+                        });
+                        if (!locationExists && subObj.value) {
+                            locationData.push(subObj);
+                        }
+                    }
+                });
+            }
+
+
+            $scope.locationData = locationData;
+
+
+            $scope.displayVisitors = $scope.visitors > 0;
+
+            $scope.renderAnalyticsCharts();
+
         };
 
         $scope.setReportData = function (results) {
+            console.log('setReportData - results:', results);
+            $scope.legacyData = results;
+            $scope.runNewReports();
             var desktop, mobile;
             _.each(results[1].result, function (device) {
                 var category = device['user_agent.device'];
@@ -313,7 +556,6 @@
             $scope.visitDurationPercent = visitDurationPercent;
 
 
-
             $scope.contentInteractionsReportData(results[8].result, results[10].result, results[11].result);
 
             // ======================================
@@ -361,17 +603,25 @@
                 $timeout(function () {
                     var location_data = angular.copy($scope.locationData);
                     ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all']);
-                }, 100);
+                }, 200);
                 if (!$scope.displayVisitors) {
                     console.log('no visitors');
                     // var deshBlockUI = blockUI.instances.get('deshboardBlock');
                     // deshBlockUI.start("There haven't been any new visitors to your site yet. Once they do that data will be displayed here. To increase your site visitors you should add a social post.");
                 }
+            } else {
+                $timeout(function(){
+                    $scope.renderAnalyticsCharts();
+                }, 100);
             }
         };
 
 
-
+        $scope.displayDatePicker = function(){
+            $timeout(function() {
+                angular.element('.deshboard-date-picker').click();
+            }, 0);
+        }
 
     }]);
 }(angular));
