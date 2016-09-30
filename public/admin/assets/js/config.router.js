@@ -128,6 +128,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Customers',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('customersCtrl', 'customerService')
+    }).state('app.customeranalytics', {
+        url: '/customers/analytics',
+        templateUrl: "/admin/assets/views/customer-analytics.html",
+        title: 'Customer Analytics',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'secTotime', 'dateRangePicker')
     }).state('app.singleContact', {
         url: '/contacts/:contactId',
         templateUrl: "/admin/assets/views/contact-detail.html",

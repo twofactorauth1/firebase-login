@@ -10,7 +10,9 @@
     function SiteAnalyticsService($rootScope, $compile, $http, $q, $timeout, AccountService) {
         var saService = {};
         var baseAnalyticsAPIUrl = '/api/1.0/analytics/reports';
+        var adminAnalyticsAPIUrl = '/api/1.0/analytics/admin/reports';
         saService.runReports = runReports;
+        saService.runAdminReports = runAdminReports;
         saService.loading = {value:0};
 
 
@@ -46,6 +48,19 @@
             }
 
             return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDate + '&end=' + endDate).success(success).error(error));
+        }
+
+        function runAdminReports(startDate, endDate, fn) {
+            function success(data) {
+                saService.reports = data;
+                fn(data);
+            }
+
+            function error(error) {
+                console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
+            }
+
+            return saRequest($http.get(adminAnalyticsAPIUrl + '/all?start=' + startDate + '&end=' + endDate).success(success).error(error));
         }
 
 

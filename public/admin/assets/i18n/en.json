@@ -97,7 +97,8 @@
         "SETTINGS": "Contact Settings"
       },
       "customers": {
-          "MAIN": "Customers"
+          "MAIN": "Customers",
+          "ANALYTICS": "Platform Analytics"
       },
       "commerce": {
         "MAIN": "Commerce",
