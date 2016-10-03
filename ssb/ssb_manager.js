@@ -2044,7 +2044,7 @@ module.exports = {
                 if(updatedPage.get("hideFromVisitors") === true){
                     pageDao.removePublishedPage(accountId, updatedPage.id(), function(err){
                         if(err) {
-                            self.log.error(accountId, userId,'Error publishing page:', err);
+                            self.log.error(accountId, userId,'Error removing page:', err);
                             cb(err);
                         }
                         else{
