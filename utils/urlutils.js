@@ -42,7 +42,7 @@ var urlutils = {
             var obj = tldtools.extract('http://' + host);
 
             //replace 'www' (and a trailing '.' if its there) from the beginning of the string with an empty string
-            subdomain = obj.subdomain.replace(/^www\.?/gi, '');
+            subdomain = obj.subdomain.replace(/^(www\.)?/gi, '');
             if(subdomain === '' && obj.domain === defaultHost) {
                 subdomain = null;
                 isMainApp = true;
