@@ -40,9 +40,10 @@ var urlutils = {
         if(host) {
             //tldtools wants a fully-qualified domain... we need to add http.
             var obj = tldtools.extract('http://' + host);
-
+            //_log.debug('before:', obj.subdomain);
             //replace 'www' (and a trailing '.' if its there) from the beginning of the string with an empty string
-            subdomain = obj.subdomain.replace(/^(www\.)?/gi, '');
+            subdomain = obj.subdomain.replace(/^www$/gi, '').replace(/^www\./gi, '');
+            //_log.debug('after:', subdomain);
             if(subdomain === '' && obj.domain === defaultHost) {
                 subdomain = null;
                 isMainApp = true;
@@ -59,7 +60,6 @@ var urlutils = {
                 } else {
                     modifier = subdomain;
                 }
-
                 var matchedEnvironment = _.filter(globalEnvironments.split(','), function(_env){return modifier === _env});
                 if(matchedEnvironment && matchedEnvironment.length > 0) {
                     //_log.debug('environment: ' + matchedEnvironment);

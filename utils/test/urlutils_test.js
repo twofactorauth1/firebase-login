@@ -42,6 +42,11 @@ exports.urlutils_test = {
             isMainApp: false,
             subDomain: 'stuff'
         };
+        self.testUrls[7] = {
+            host: 'wwwreneremington.indigenous.io',
+            isMainApp: false,
+            subDomain: 'wwwreneremington'
+        };
         /*
         self.testUrls[7] = {
             host: 'www.kyle-miller.com',
