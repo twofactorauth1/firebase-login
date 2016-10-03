@@ -123,6 +123,12 @@ var page = $$.m.ModelBase.extend({
             status:'PUBLISHED',
 
             /**
+             * when set on hide page from visitors at front end
+             */
+
+            hideFromVisitors: false,
+
+            /**
              * Created by data
              *
              * @property created

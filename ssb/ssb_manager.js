@@ -2036,6 +2036,26 @@ module.exports = {
                     cb(null, updatedPage, updatedSections);
                 }
 
+            },
+            // Check if hideFromVisitors flag is true then remove page from published page
+            function RemovePublishedPage(updatedPage, updatedSections, cb) {
+                checkTime = moment();
+                timingLog.warn('RemovePublishedPage: ' + checkTime.diff(startTime));
+                if(updatedPage.get("hideFromVisitors") === true){
+                    pageDao.removePublishedPage(accountId, updatedPage.id(), function(err){
+                        if(err) {
+                            self.log.error(accountId, userId,'Error removing page:', err);
+                            cb(err);
+                        }
+                        else{
+                            cb(null, updatedPage, updatedSections);
+                        }
+                    }); 
+                }
+                else
+                {
+                    cb(null, updatedPage, updatedSections);
+                }                
             }
 
         ], function done(err, updatedPage, updatedSections){
