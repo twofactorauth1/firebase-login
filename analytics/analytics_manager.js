@@ -960,7 +960,9 @@ module.exports = {
                     $gte:start,
                     $lte:end
                 },
-                fingerprint:{$ne:0}
+                fingerprint:{$ne:0},
+                permanent_tracker: {$ne:null},
+                new_visitor: {$ne:null}
             }
         };
         if(isAggregate === true) {
