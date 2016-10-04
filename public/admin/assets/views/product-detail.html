@@ -23,7 +23,7 @@
                             <button type="button" ng-click="cloneProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="cloneLoading">
                               <span><i ng-class="{'fa fa-spin fa-spinner':cloneLoading}"></i> Clone</span>
                             </button>
-                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="saveLoading || (product.on_sale && productDetail.$invalid && !productDetail.$pristine )">
+                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="saveLoading || (product.on_sale && productDetail.$invalid && !productDetail.$pristine ) || checkFulfillmentEmail()">
                                 <span><i ng-class="{'fa fa-spin fa-spinner':saveLoading}"></i> Save</span>
                             </button>
                             <!-- <a ladda="ldloading.expand_right" class="btn btn-wide btn-primary" data-style="expand-right" ng-click="clickBtn('expand-right')">
