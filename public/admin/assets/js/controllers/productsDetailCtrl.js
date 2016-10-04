@@ -866,9 +866,6 @@
      */
     $scope.changeCurrentEmail = function (selectedEmail) {
       $scope.emailToSend = selectedEmail;
-      if((!$scope.emailToSend.productId || ($scope.product && $scope.emailToSend.productId !== $scope.product._id)))
-        $scope.emailToSend.bcc = ""
-      $scope.confirmOverrideExistingEmails();
     };
 
 
@@ -891,7 +888,7 @@
         $scope.emails = angular.copy(_emails);
         $scope.originalEmails = angular.copy(_emails);
 
-        $scope.setEmailDefaults($scope.product.name || '');
+        //$scope.setEmailDefaults($scope.product.name || '');
 
         matchedEmail = $scope.emails.filter(emailMatch)[0];
         if (emailId && matchedEmail) {
@@ -950,82 +947,6 @@
         $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       }
     }
-
-
-    $scope.confirmOverrideExistingEmails = function(){
-      if((!$scope.emailToSend.productId || ($scope.product && $scope.emailToSend.productId !== $scope.product._id)) && $scope.selectedEmail.type != 'new'){
-          SweetAlert.swal({
-          title: "How would you like to use the selected email?",
-          text: "You are saving changes to an email used by more than one product OR campaign. Do you wish to update the existing email (altering all products OR campaigns) or create and update a copy specific to this product?",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Save edits to existing email",
-          cancelButtonText: "Create a copy",
-          closeOnConfirm: true,
-          closeOnCancel: true
-        }, function (isConfirm) {
-          if (isConfirm) {
-            $timeout(function() {
-              $scope.$apply(function () {
-                $scope.isProductDirty.dirty = true;
-                $scope.existingEmail.replace = true;
-              })
-            },0)
-
-            if($scope.product.emailSettings && !$scope.product.emailSettings.emailId && $scope.emailToSendPrevious){
-              $scope.product.emailSettings.emailId = $scope.emailToSendPrevious._id;
-              $scope.emailToSend.title = $scope.emailToSendPrevious.title;
-            }
-            $scope.checkEmailTitle($scope.emailToSend.title);
-          }
-          else {
-            $timeout(function() {
-              $scope.$apply(function () {
-                $scope.isProductDirty.dirty = true;
-                $scope.existingEmail.replace = false;
-              })
-            },0)
-            $scope.emailToSend.title = $scope.product.name + " " + moment().toDate().getTime();
-            $scope.emailToSend.productId = null;
-            $scope.selectedEmail.type = 'new';
-            $scope.checkEmailTitle($scope.emailToSend.title);
-          }
-        })
-      }
-    }
-
-    $scope.$watchGroup(['emailToSend.fromName', 'emailToSend.fromEmail', 'emailToSend.replyTo', 'emailToSend.bcc', 'emailToSend.subject'], function(newValue, oldValue){
-       if(newValue && $scope.actualEmailToSend && !angular.equals($scope.actualEmailToSend, $scope.emailToSend) && !$scope.existingEmail.replace && $scope.selectedEmail.type != 'new'){
-          $scope.confirmOverrideExistingEmails();
-       }
-    });
-
-    $scope.setProductDirty = function(){
-      if($scope.selectedEmail.type != 'new' && !$scope.existingEmail.replace){
-        if(!$scope.isProductDirty.dirty){
-          $timeout(function() {
-            $scope.$apply(function () {
-              $scope.isProductDirty.dirty = true;
-              $scope.confirmOverrideExistingEmails();
-            })
-          },0)
-        }
-      }
-    }
-
-    CKEDITOR.on("instanceReady", function (ev) {
-      ev.editor.on('key', function () {
-        if(!$scope.isProductDirty.dirty){
-          $scope.setProductDirty();
-        }
-      });
-      ev.editor.on('change', function () {
-        if(!$scope.isProductDirty.dirty){
-          $scope.setProductDirty();
-        }
-      });
-    })
 
     $scope.fullscreen = false;
 
@@ -1194,6 +1115,21 @@
         $timeout(function() {
             angular.element('.deshboard-date-picker').click();
         }, 0);
+    }
+
+    $scope.checkFulfillmentEmail= function(){
+      var returnValue = false;
+      if($scope.product && $scope.product.fulfillment_email){
+        if($scope.product.emailSettings && $scope.product.emailSettings.emailId)
+        {
+          returnValue = false;
+        }
+        else{
+          returnValue = true;
+        }
+      }
+      return returnValue;
+      
     }
 
     $scope.init = (function(){

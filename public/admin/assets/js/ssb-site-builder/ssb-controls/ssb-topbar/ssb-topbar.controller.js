@@ -101,6 +101,7 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
     function publishPage() {
         vm.state.saveLoading = true;
         vm.state.publishLoading = true;
+        vm.state.page.hideFromVisitors = false;
         var save = vm.savePage();
 
         if (save.then) {

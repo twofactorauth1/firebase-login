@@ -434,7 +434,7 @@
                                         <th>Item</th>
                                         <th class="center">Price</th>
                                         <th class="center">Qty</th>
-                                        <th class="center">Total</th>
+                                        <th class="center hidden-xs">Total</th>
                                         <th class="center hidden-xs" ng-hide='isDonationOrderFn()'>Discount</th>
                                         <th></th>
                                     </tr>
@@ -463,7 +463,7 @@
                                                 <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.quantity" ng-change="calculateTotals()" />
                                             </div>
                                         </td>
-                                        <td class="center">
+                                        <td class="center hidden-xs">
                                             <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
                                             <span ng-if="item.discount && item.discount > 0"><s>{{(item.on_sale ? item.sale_price : item.regular_price) | currency}}</s> {{item.total | currency}}</span>
                                         </td>

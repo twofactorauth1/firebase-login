@@ -92,7 +92,7 @@ module.exports = {
             if(campaignId){
                 query = {
                     accountId: accountId,
-                    name: title,
+                    name: new RegExp('^'+ title +'$', "i"),
                     _id : { $ne: campaignId }
                 }
             }

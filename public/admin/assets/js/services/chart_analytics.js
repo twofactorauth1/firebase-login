@@ -802,5 +802,16 @@
             }
         };
 
+/*
+        (function init() {
+
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false
+                }
+            });
+
+        })();
+*/
     }]);
 }(angular));
