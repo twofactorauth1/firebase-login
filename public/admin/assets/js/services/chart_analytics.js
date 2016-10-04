@@ -802,7 +802,7 @@
             }
         };
 
-
+/*
         (function init() {
 
             Highcharts.setOptions({
@@ -812,6 +812,6 @@
             });
 
         })();
-
+*/
     }]);
 }(angular));
