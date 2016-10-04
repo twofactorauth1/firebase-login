@@ -434,7 +434,7 @@
                                         <th>Item</th>
                                         <th class="center">Price</th>
                                         <th class="center">Qty</th>
-                                        <th class="center">Total</th>
+                                        <th class="center hidden-xs">Total</th>
                                         <th class="center hidden-xs" ng-hide='isDonationOrderFn()'>Discount</th>
                                     </tr>
                                 </thead>
@@ -455,7 +455,7 @@
                                             <span ng-if='!item.on_sale'>{{item.regular_price | currency}}</span>
                                             <span ng-if='item.on_sale'><s>{{item.regular_price | currency}}</s> {{item.sale_price | currency}}</span>
                                         </td>
-                                        <td class="center">
+                                        <td class="center hidden-xs">
                                             <span ng-if="!item[$index].editing">{{item.quantity}}</span>
                                             <div ng-if="item[$index].editing">
                                                 <label>Quantity</label>
