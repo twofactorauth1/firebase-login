@@ -1174,7 +1174,7 @@ module.exports = {
             zeroedResultAry.push(result);
             currentDate = moment(result.timeframe.start).add(1, 'days').format('YYYY-MM-DD');
         });
-        while(moment(currentDate).isBefore(moment(lastDate)) || moment(currentDate).isSame(moment(lastDate))) {
+        while(moment(currentDate).isBefore(moment(lastDate)) || moment(currentDate).isSame(moment(lastDate), 'day')) {
             zeroedResultAry.push({
                 timeframe:{
                     start : currentDate,
