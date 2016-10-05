@@ -802,6 +802,56 @@
             }
         };
 
+        this.userAgentChart = function (userAgents, fn) {
+            var userAgentChartConfig = {
+                options: {
+                    chart: {
+                        height: 300
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'User Agents',
+                        data: userAgents
+                    }
+                ],
+                yAxis: {
+                    title: {
+                        text: 'Visitors'
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            };
+
+            fn(userAgentChartConfig);
+        };
+
 /*
         (function init() {
 

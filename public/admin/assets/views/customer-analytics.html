@@ -236,5 +236,22 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4" id="useragents">
+            <div id="userAgentData" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">User Agents</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="uaData" ng-init="uaData=false" class="panel-wrapper">
+                    <div class="panel-body height-350 no-padding">
+                        <div class="new-vs-returning-wrap" ng-if="!userAgentConfig.loading">
+                            <highchart config="userAgentConfig" id="useragent-chart"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>

@@ -434,6 +434,35 @@
                         }
                     }
                 });
+
+
+            }
+
+            // ======================================
+            // User Agent Pie Chart
+            // ======================================
+            var userAgentData = [];
+            var browserMap = {};
+            if(results.userAgents) {
+                _.each(results.userAgents, function(obj){
+                    var browser = obj._id.browserName;
+                    var count = obj.count;
+                    if(browserMap[browser]) {
+                        browserMap[browser] += count;
+                    } else {
+                        browserMap[browser] = count;
+                    }
+                });
+                console.log('browserMap:', browserMap);
+                userAgentData = userAgentData.concat(_.pairs(browserMap));
+                userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
+                console.log('userAgentData', userAgentData);
+                $scope.userAgentData = userAgentData;
+
+                ChartAnalyticsService.userAgentChart(userAgentData, function(config){
+                    $scope.userAgentConfig = config;
+                    $scope.userAgentConfig.loading = false;
+                });
             }
 
 
