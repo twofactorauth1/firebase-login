@@ -42,6 +42,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.updateColumnLayout = updateColumnLayout;
     vm.setDefaultSpacing = setDefaultSpacing;
     vm.isNavHero = isNavHero;
+    vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
 
 
     vm.uiState = {
@@ -90,6 +91,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         sortableListAddContentConfig: {
             sort: false,
             // forceFallback: true,
+            disabled: vm.isSortableDisabled,
             group: {
                 name: 'section',
                 pull: 'clone',

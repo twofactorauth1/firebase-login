@@ -121,7 +121,7 @@
                                     <div class="row margin-top-5" ng-show="billingEdit">
                                         <div class="col-xs-12">
                                             <div class="form-group">
-                                                <button class="btn btn-info btn-o btn-wide" ng-click="customerSync('billing')" ng-if="selectedCustomer">Customer Sync</button>
+                                                <button style="z-index: 10;" class="btn btn-info btn-o btn-wide" ng-click="customerSync('billing')" ng-if="selectedCustomer">Customer Sync</button>
                                             </div>
                                         </div>
 
@@ -234,7 +234,7 @@
                                                 </label>
                                             </div>
                                             <div class="col-sm-6 col-xs-12 padding-left-0 margin-bottom-15">
-                                                <button class="btn btn-info btn-o btn-wide pull-left" ng-click="customerSync('shipping')" ng-if="selectedCustomer">Customer Sync</button>
+                                                <button style="z-index: 10;" class="btn btn-info btn-o btn-wide pull-left" ng-click="customerSync('shipping')" ng-if="selectedCustomer">Customer Sync</button>
                                             </div>
                                         </div>
                                         <div ng-if="!billing.sameAsBilling">
@@ -497,20 +497,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-footer border-light">
-                            <div class="pull-right">
-                                <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
-                                    <span>Add Product</span>
-                                </button>
-                                <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
-                                <span>Add Fee</span>
-                            </button>
-                            <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addShipping()">
-                                <span>Add Shipping</span>
-                            </button> -->
-                            </div>
-                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
