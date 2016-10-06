@@ -5,7 +5,7 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
         restrict: 'E',
         template: '{{label}}',
         link: function(scope, element, attrs) {
-            scope.label = 'order';
+            //scope.label = 'order';
             scope.hasOrder = false;
             scope.hasDonation = false;
 
