@@ -46,8 +46,9 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-
-            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDate + '&end=' + endDate).success(success).error(error));
+            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
         function runAdminReports(startDate, endDate, fn) {
@@ -59,8 +60,9 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-
-            return saRequest($http.get(adminAnalyticsAPIUrl + '/all?start=' + startDate + '&end=' + endDate).success(success).error(error));
+            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            return saRequest($http.get(adminAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
 
