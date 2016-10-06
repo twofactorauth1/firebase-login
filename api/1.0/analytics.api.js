@@ -810,14 +810,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.getVisitorReports(accountId, userId, start, end, false, function(err, value){
@@ -839,14 +839,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -869,14 +869,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -899,14 +899,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -939,14 +939,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -979,14 +979,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1019,14 +1019,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1058,14 +1058,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, function(err, value){
@@ -1087,14 +1087,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.newVsReturningReport(accountId, userId, start, end, false, function(err, value){
@@ -1116,14 +1116,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, function(err, value){
@@ -1145,14 +1145,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.getUserAgentReport(accountId, userId, start, end, false, function(err, value){
@@ -1174,14 +1174,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1244,14 +1244,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1279,14 +1279,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1314,14 +1314,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1348,14 +1348,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1383,14 +1383,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1423,14 +1423,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1463,14 +1463,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1503,14 +1503,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1541,13 +1541,13 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1574,13 +1574,13 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1607,13 +1607,13 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1640,13 +1640,13 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1674,14 +1674,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');

@@ -5,7 +5,7 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
         restrict: 'E',
         template: '{{label}}',
         link: function(scope, element, attrs) {
-            scope.label = 'order';
+            
             scope.hasOrder = false;
             scope.hasDonation = false;
 
@@ -19,6 +19,7 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
                         }
                     });
                 });
+
                 if (scope.hasOrder && scope.hasDonation) {
                     scope.label = 'transaction';
                 } else if (scope.hasOrder && !scope.hasDonation) {
@@ -26,7 +27,10 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
                 } else if (!scope.hasOrder && scope.hasDonation) {
                     scope.label = 'donation';
                 }
-
+                //Safe case when nothing from above
+                else{
+                    scope.label = 'order';
+                }
                 if (attrs.plural) {
                     scope.label = scope.label + 's';
                 }
