@@ -53,7 +53,7 @@
         this.getSingleProduct = function(productId, fn) {
             var deferred = $q.defer();
             var apiUrl = baseUrl + ['products', productId].join('/');
-            $http.get(apiUrl)
+            $http.get(apiUrl + '?hash_id=' + Math.random())
             .success(function(data, status, headers, config) {
                 deferred.resolve(fn(data));
             }).error(function (err) {
