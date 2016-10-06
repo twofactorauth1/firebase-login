@@ -17,7 +17,7 @@
         this.getProductsWithSort = function(sort, fn) {
             var apiUrl = baseUrl + ['products'].join('/');
             $http({
-                url: apiUrl,
+                url: apiUrl + '?hash_id=' + Math.random(),
                 params: {
                     sortFields: _.keys(sort),
                     sortDirections: _.values(sort)
