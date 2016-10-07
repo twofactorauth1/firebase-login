@@ -244,9 +244,50 @@
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div collapse="uaData" ng-init="uaData=false" class="panel-wrapper">
-                    <div class="panel-body height-350 no-padding">
+                    <div class="panel-body height-400 no-padding">
                         <div class="new-vs-returning-wrap" ng-if="!userAgentConfig.loading">
                             <highchart config="userAgentConfig" id="useragent-chart"></highchart>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-12 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{topBrowser || '--'}}</span>
+                                    <strong class="text-muted">{{browserPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-white col-sm-8" id="overview" ng-class="{'load1 csspinner': !revenueConfig.options}">
+            <div class="panel-heading border-light">
+                <h4 class="panel-title text-primary">Revenue <span class="text-bold">Overview</span></h4>
+                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+            </div>
+            <div collapse="overview" ng-init="overview=false" class="panel-wrapper">
+                <div class="panel-body">
+                    <div class="height-350">
+                        <highchart config="revenueConfig" id="revenue-chart"></highchart>
+                    </div>
+                </div>
+                <div class="panel-footer border-light">
+                    <div class="row">
+                        <div class="col-xs-6 text-center border-right border-dark">
+                            <div class="rate">
+                                <span class="value">{{orderCount || '--'}}</span>
+                                <i class="fa" ng-class="{'fa-caret-up text-green': ordersPercent > 0, 'fa-caret-down text-red': ordersPercent < 0}"></i><strong class="text-muted">{{ordersPercent || '--'}}</strong><span class="percentage">%</span>
+                            </div>
+                            Orders
+                        </div>
+                        <div class="col-xs-6 text-center border-right border-dark">
+                            <div class="rate">
+                                <span class="value">{{revenue || '--'}}</span>
+                                <i class="fa" ng-class="{'fa-caret-up text-green': revenuePercent > 0, 'fa-caret-down text-red': revenuePercent < 0}"></i><strong class="text-muted">{{revenuePercent || '--'}}</strong><span class="percentage">%</span>
+                            </div>
+                            Revenue
                         </div>
                     </div>
                 </div>
