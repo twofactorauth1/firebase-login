@@ -219,6 +219,16 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     function changeButtonDesign(version) {
         var button = vm.uiState.activeElement;
+        
+        var elementId = vm.uiState.activeElement._id.replace("button-element_", "");
+        if(elementId){
+            var selectedButton = $(".ssb-theme-btn[data-compiled='"+elementId+"']");
+            if(selectedButton.length === 1){
+                $(selectedButton).removeClass(function(i, c) {
+                    return c.match(/ssb-theme-btn-style-\d+/g) && c.match(/ssb-theme-btn-style-\d+/g).join(" ");
+                });
+            }
+        }
         button.version = version;
     }
 

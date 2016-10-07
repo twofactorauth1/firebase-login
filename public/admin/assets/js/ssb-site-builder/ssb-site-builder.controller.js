@@ -78,8 +78,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 if(vm.uiState.draggedSection)
                     SimpleSiteBuilderService.getSection(vm.uiState.draggedSection, vm.uiState.draggedSection.version || 1).then(function(response) {
                         if (response) {
-                            response = SimpleSiteBuilderService.checkAndSetGlobalHeader(response);
-                            vm.state.page.sections[evt.newIndex] = response;
+                            var formattedSection = SimpleSiteBuilderService.setTempUUIDForSection(response);
+                            formattedSection = SimpleSiteBuilderService.checkAndSetGlobalHeader(formattedSection);
+                            vm.state.page.sections[evt.newIndex] = formattedSection;
                         }
                     });
             },
