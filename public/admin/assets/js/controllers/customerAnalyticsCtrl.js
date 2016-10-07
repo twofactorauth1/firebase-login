@@ -495,7 +495,7 @@
 
 
             $scope.revenueData = revenueChartData;
-            $scope.revenue = currentTotalRevenue;
+            $scope.revenue = parseFloat(currentTotalRevenue).toFixed(2);
             $scope.orderCount = currentTotalCount;
 
             var revenuePreviousData = 0;
