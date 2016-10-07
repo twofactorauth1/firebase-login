@@ -15,6 +15,7 @@ var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var async = require('async');
 var accountDao = require('../dao/account.dao');
+var orderDao = require('../orders/dao/order.dao');
 
 module.exports = {
 
@@ -1283,6 +1284,104 @@ module.exports = {
                 resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                 self.log.debug(accountId, userId, '<< getDailyActiveUsers');
                 return fn(null, resultAry);
+            }
+
+        });
+    },
+
+    getRevenueByMonth: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getRevenueByMonth');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                account_id:accountId,
+                created_at:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.account_id;
+        }
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{ $dateToString: { format: "%Y-%m-%d", date: "$created_at" }},
+                count: {$sum:1},
+                totals: {$push:'$total'}
+            }
+        };
+        stageAry.push(group1);
+
+        async.waterfall([
+            function(cb){
+                orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, value){
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var total = 0;
+                        _.each(entry.totals, function(_total){
+                            if(!isNaN(parseFloat(_total)) && isFinite(_total)) {
+                                total+= parseFloat(_total);
+                            }
+                        });
+                        var result = {
+                            total: total,
+                            count: entry.count,
+                            timeframe: {
+                                start: entry._id
+                            }
+                        };
+                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    cb(err, resultAry);
+                });
+            },
+            function(currentMonth, cb) {
+                stageAry[0].$match.created_at.$gte = previousStart;
+                stageAry[0].$match.created_at.$lte = previousEnd;
+                orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, value){
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var total = 0;
+                        _.each(entry.totals, function(_total){
+                            if(!isNaN(parseFloat(_total)) && isFinite(_total)) {
+                                total+= parseFloat(_total);
+                            }
+                        });
+                        var result = {
+                            total: total,
+                            count: entry.count,
+                            timeframe: {
+                                start: entry._id
+                            }
+                        };
+                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    var results = {
+                        currentMonth:currentMonth,
+                        prevMonth:resultAry
+                    };
+                    cb(err, results);
+                });
+            }
+        ], function(err, results){
+            if(err) {
+                self.log.error(accountId, userId, 'Error in getRevenueByMonth:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getRevenueByMonth');
+                fn(err, results);
             }
 
         });

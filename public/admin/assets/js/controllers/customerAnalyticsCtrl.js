@@ -444,6 +444,7 @@
             var userAgentData = [];
             var browserMap = {};
             if(results.userAgents) {
+                var browserTotal = 0;
                 _.each(results.userAgents, function(obj){
                     var browser = obj._id.browserName;
                     var count = obj.count;
@@ -452,12 +453,17 @@
                     } else {
                         browserMap[browser] = count;
                     }
+                    browserTotal+= count;
                 });
                 console.log('browserMap:', browserMap);
                 userAgentData = userAgentData.concat(_.pairs(browserMap));
                 userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
                 console.log('userAgentData', userAgentData);
                 $scope.userAgentData = userAgentData;
+                var uadLength = userAgentData.length -1;
+                $scope.topBrowser = userAgentData[uadLength][0];
+                var browserPercent = Math.floor((userAgentData[uadLength][1] / browserTotal) * 100);
+                $scope.browserPercent = browserPercent;
 
                 ChartAnalyticsService.userAgentChart(userAgentData, function(config){
                     $scope.userAgentConfig = config;
@@ -465,6 +471,60 @@
                 });
             }
 
+            // ======================================
+            // Revenue
+            // ======================================
+            var revenueChartData = {
+                xData: [],
+                amountData: [],
+                orderData: []
+            };
+            var currentTotalRevenue = 0;
+            var currentTotalCount = 0;
+            _.each(results.revenueReport.currentMonth, function(rev){
+                revenueChartData.xData.push(new Date(rev.timeframe.start).getTime());
+                var amt = rev.total || 0;
+                var cnt = rev.count || 0;
+                revenueChartData.amountData.push(amt);
+                revenueChartData.orderData.push(cnt);
+                currentTotalRevenue+= amt;
+                currentTotalCount+= cnt;
+            });
+
+
+
+
+            $scope.revenueData = revenueChartData;
+            $scope.revenue = currentTotalRevenue;
+            $scope.orderCount = currentTotalCount;
+
+            var revenuePreviousData = 0;
+            var ordersPreviousData = 0;
+            _.each(results.revenueReport.prevMonth, function (rev) {
+                var value = rev.total || 0;
+                revenuePreviousData += value;
+                var cnt = rev.count || 0;
+                ordersPreviousData += cnt;
+            });
+
+            $scope.revenuePreviousData = revenuePreviousData;
+
+            var revenuePercent = ChartAnalyticsService.calculatePercentChange(revenuePreviousData, currentTotalRevenue);
+            $scope.revenuePercent = revenuePercent;
+
+            var ordersPercent = ChartAnalyticsService.calculatePercentChange(ordersPreviousData, currentTotalCount);
+            $scope.ordersPercent = ordersPercent;
+
+            ChartAnalyticsService.revenueOverview($scope.revenueData, function (data) {
+                $scope.revenueConfig = data;
+                $scope.revenueConfig.loading = false;
+            });
+
+
+
+            //=======================================
+            // Cleanup
+            //=======================================
 
             $scope.locationData = locationData;
 
