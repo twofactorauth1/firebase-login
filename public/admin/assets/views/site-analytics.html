@@ -237,5 +237,65 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div id="useragents" class="col-xs-12 col-sm-4">
+            <div id="ua" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">User Agents</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="ua" ng-init="ua=false" >
+                    <div class="panel-body no-padding">
+                        <div class="new-vs-returning-wrap">
+                            <highchart config="userAgentConfig" id="useragent-chart"></highchart>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <div class="rate">
+                                    <span class="value">{{topBrowser || '--'}}</span>
+                                    <strong class="text-muted">{{browserPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-8" >
+            <div id="rev" class="panel panel-white" ng-class="{'load1 csspinner': !revenueConfig.options}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Revenue <span class="text-bold">Overview</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="rev" ng-init="rev=false">
+                    <div class="panel-body">
+                        <div class="rev-wrap">
+                            <highchart config="revenueConfig" id="revenue-chart"></highchart>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-6 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{orderCount || '--'}}</span>
+                                    <i class="fa" ng-class="{'fa-caret-up text-green': ordersPercent > 0, 'fa-caret-down text-red': ordersPercent < 0}"></i><strong class="text-muted">{{ordersPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                                Orders
+                            </div>
+                            <div class="col-xs-6 text-center">
+                                <div class="rate">
+                                    <span class="value">{{revenue || '--'}}</span>
+                                    <i class="fa" ng-class="{'fa-caret-up text-green': revenuePercent > 0, 'fa-caret-down text-red': revenuePercent < 0}"></i><strong class="text-muted">{{revenuePercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                                Revenue
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>

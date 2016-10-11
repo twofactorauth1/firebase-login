@@ -65,7 +65,147 @@
             return saRequest($http.get(adminAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
+        this.userAgentChart = function (userAgents, fn) {
+            var userAgentChartConfig = {
+                options: {
+                    chart: {
+                        height: 300
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'User Agents',
+                        data: userAgents
+                    }
+                ],
+                yAxis: {
+                    title: {
+                        text: 'Visitors'
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            };
 
+            fn(userAgentChartConfig);
+        };
+
+        this.revenueOverview = function (ordersData, fn) {
+            var revenueConfig = {
+                options: {
+                    chart: {
+                        spacing: [25, 25, 25, 25]
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: null
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            marker: {
+                                enabled: true,
+                                radius: 3
+                            }
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        format: "{value:%b %d}"
+                    },
+                    categories: ordersData.xData
+                },
+                yAxis: [{
+                    labels: {
+                        format: '{value}'
+
+                    },
+                    title: {
+                        text: 'Number Orders'
+                    },
+                    opposite: true
+                },
+                    {
+                        title: {
+                            text: 'Revenue'
+                        },
+                        labels: {
+                            format: '${value} USD'
+                        }
+                    }],
+                series: [
+                    {
+                        name: 'Orders',
+                        type: 'bar',
+                        yAxis: 0,
+                        data: ordersData.orderData,
+                        tooltip: {
+                            valueSuffix: ' orders'
+                        }
+
+                    },
+                    {
+                        name: 'Revenue',
+                        type: 'spline',
+                        yAxis: 1,
+                        data: ordersData.amountData,
+                        tooltip: {
+                            valueSuffix: ' usd',
+                            valuePrefix: '$'
+                        }
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+                /*
+                 func: function (chart) {
+
+                 }
+                 */
+            };
+
+            fn(revenueConfig);
+        };
 
         (function init() {
 
