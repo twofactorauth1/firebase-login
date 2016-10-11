@@ -1225,6 +1225,12 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             pageAnalyticsReport: function(callback) {
                 analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, callback);
+            },
+            userAgents: function(callback) {
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, callback);
+            },
+            revenueReport: function(callback) {
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, callback);
             }
         }, function(err, results){
             self.log.debug(accountId, userId, '<< allReports');
