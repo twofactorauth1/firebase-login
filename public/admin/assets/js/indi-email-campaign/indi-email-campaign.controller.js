@@ -203,10 +203,10 @@
                 var _emails = vm.uiState.selectedContacts.newEmails;
                 _.each(_emails, function (email) {
                     var contact = _.findWhere(vm.state.contacts, {
-                        email: email.text
+                        email: email.text.toLowerCase()
                     });
                     if (!contact) {
-                        var tempContact = vm.createContactDataFn(email.text);
+                        var tempContact = vm.createContactDataFn(email.text.toLowerCase());
                         promises.push(ContactService.createContact(tempContact));
                     } else {
                         contactsArr.push(contact._id);
@@ -256,7 +256,7 @@
 
             //processing custom emails for contact
 
-           
+
             EmailCampaignService.checkIfDuplicateCampaign(vm.state.campaign._id, vm.state.campaign.name)
                 .then(function (response) {
                     if(response.data){
@@ -297,8 +297,8 @@
                         });
                     }
             );
-            
-            
+
+
         }
 
         function sendTestFn(address) {
