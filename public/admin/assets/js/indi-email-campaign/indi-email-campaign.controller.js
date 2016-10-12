@@ -522,20 +522,21 @@
         }
 
         function checkContactExistsFn(email) {
-            var matchingRecipient = _.find(vm.state.recipients, function (recipient) {
-                if (recipient.details && recipient.details[0] && recipient.details[0].emails && recipient.details[0].emails[0] && recipient.details[0].emails[0].email) {
-                    return (recipient.details[0].emails[0].email).toLowerCase() === email.text;
+            if(email){
+                var matchingRecipient = _.find(vm.state.recipients, function (recipient) {
+                    if (recipient.details && recipient.details[0] && recipient.details[0].emails && recipient.details[0].emails[0] && recipient.details[0].emails[0].email) {
+                        return (recipient.details[0].emails[0].email).toLowerCase() === email.text;
+                    }
+                });
+                var matchingContact = _.find(vm.state.contacts, function (contact) {
+                    if (contact.details && contact.details[0] && contact.details[0].emails && contact.details[0].emails[0] && contact.details[0].emails[0].email) {
+                        return (contact.details[0].emails[0].email).toLowerCase() === email.text;
+                    }
+                });
+                if (matchingRecipient || matchingContact) {
+                    return false;
                 }
-            });
-            var matchingContact = _.find(vm.state.contacts, function (contact) {
-                if (contact.details && contact.details[0] && contact.details[0].emails && contact.details[0].emails[0] && contact.details[0].emails[0].email) {
-                    return (contact.details[0].emails[0].email).toLowerCase() === email.text;
-                }
-            });
-            if (matchingRecipient || matchingContact) {
-                return false;
             }
-
             return true;
         }
 

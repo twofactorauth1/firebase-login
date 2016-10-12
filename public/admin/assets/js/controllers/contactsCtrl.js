@@ -551,10 +551,14 @@
     // };
 
     $scope.bulkActionSelectFn = function () {
+        var selectedContacts = $scope.selectedContactsFn();
+        var deleteMessage = "Do you want to delete the "+ selectedContacts.length + " contact?";
+        if(selectedContacts.length > 1)
+          deleteMessage = "Do you want to delete the "+ selectedContacts.length + " contacts?";
         if ($scope.bulkActionChoice.action.data == 'delete') {
             SweetAlert.swal({
                 title: "Are you sure?",
-                text: "Do you want to delete the filtered contacts?",
+                text: deleteMessage,
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -565,7 +569,7 @@
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    var selectedContacts = $scope.selectedContactsFn();
+                    
                     var contactPromises = [];
 
                     selectedContacts.forEach(function(sc, sci) {

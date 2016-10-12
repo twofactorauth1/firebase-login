@@ -194,6 +194,7 @@
     // position: static;
     // overflow: auto;
     z-index: 5;
+    min-width: 100%;
 
     .container.inner-page {
         // padding: 10px!important;
@@ -213,6 +214,13 @@
     visibility: hidden;
 }
 
+.blog-list-section.ssb-fixed-clone-element {
+    .ssb-section-layout.ssb-section-section{
+        position: relative;
+        visibility: hidden;
+    }
+}
+
 .main-include {
     overflow: hidden;
 }
@@ -220,6 +228,11 @@
 .no-component-vertical-space .inner-page {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+}
+
+
+.ssb-page-section.ssb-section-layout.ssb-section-section{
+    clear: left;
 }
 
 
