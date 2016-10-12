@@ -194,6 +194,7 @@
     // position: static;
     // overflow: auto;
     z-index: 5;
+    min-width: 100%;
 
     .container.inner-page {
         // padding: 10px!important;
@@ -206,14 +207,11 @@
     width: 100%;
 }
 
-.ssb-fixed-clone-element { 
-    visibility: hidden;   
-    .ssb-section-layout{
-        position: relative;
-        z-index: 1;
-        pointer-events: none;
-        visibility: hidden;
-    }
+.ssb-fixed-clone-element {
+    position: relative;
+    z-index: 1;
+    pointer-events: none;
+    visibility: hidden;
 }
 
 .main-include {
@@ -223,6 +221,11 @@
 .no-component-vertical-space .inner-page {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+}
+
+
+.ssb-page-section.ssb-section-layout.ssb-section-section{
+    clear: left;
 }
 
 
