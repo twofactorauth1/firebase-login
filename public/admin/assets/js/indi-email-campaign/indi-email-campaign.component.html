@@ -301,8 +301,7 @@
                                                 add-on-paste="true"
                                                 placeholder="Add an email"
                                                 add-on-comma="true"
-                                                allowed-tags-pattern="^[-A-Za-z0-9~!$%^&*_=+}{\'?]+(\.[-A-Za-z0-9~!$%^&*_=+}{\'?]+)*@([a-zA-Z0-9_][-a-zA-Z0-9_]*(\.[-a-zA-Z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-zA-Z][a-zA-Z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$"
-                                                on-tag-adding="vm.checkContactExistsFn($tag.toLowerCase())">
+                                                on-tag-adding="vm.checkContactExistsFn($tag)">
                                             </tags-input>
                                         </div>
                                     </tab>

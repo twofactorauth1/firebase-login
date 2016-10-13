@@ -2,9 +2,9 @@
 
     app.controller('EmailCampaignController', indiEmailCampaignController);
 
-    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant', 'editableOptions', 'SweetAlert', '$location', '$q'];
+    indiEmailCampaignController.$inject = ['$scope', 'EmailBuilderService', '$stateParams', '$state', 'toaster', 'AccountService', 'WebsiteService', '$modal', '$timeout', '$document', '$window', 'EmailCampaignService', 'ContactService', 'userConstant', 'editableOptions', 'SweetAlert', '$location', '$q', 'formValidations'];
     /* @ngInject */
-    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant, editableOptions, SweetAlert, $location, $q) {
+    function indiEmailCampaignController($scope, EmailBuilderService, $stateParams, $state, toaster, AccountService, WebsiteService, $modal, $timeout, $document, $window, EmailCampaignService, ContactService, userConstant, editableOptions, SweetAlert, $location, $q, formValidations) {
 
         console.info('email-campaign directive init...');
 
@@ -110,7 +110,7 @@
         vm.tagToContactFn = tagToContactFn;
         vm.createContactDataFn = createContactDataFn;
         vm.contactTagsFn = contactTagsFn;
-
+        vm.formValidations = formValidations;
 
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
@@ -523,21 +523,32 @@
 
         function checkContactExistsFn(email) {
             if(email){
+                var regex = formValidations.email;
+                var regexValue = regex.test(email.text);
+
+                if(!regexValue){
+                    return false;
+                }
+
                 var matchingRecipient = _.find(vm.state.recipients, function (recipient) {
                     if (recipient.details && recipient.details[0] && recipient.details[0].emails && recipient.details[0].emails[0] && recipient.details[0].emails[0].email) {
-                        return (recipient.details[0].emails[0].email).toLowerCase() === email.text;
+                        return (recipient.details[0].emails[0].email).toLowerCase() === email.text.toLowerCase();
                     }
                 });
                 var matchingContact = _.find(vm.state.contacts, function (contact) {
                     if (contact.details && contact.details[0] && contact.details[0].emails && contact.details[0].emails[0] && contact.details[0].emails[0].email) {
-                        return (contact.details[0].emails[0].email).toLowerCase() === email.text;
+                        return (contact.details[0].emails[0].email).toLowerCase() === email.text.toLowerCase();
                     }
                 });
                 if (matchingRecipient || matchingContact) {
                     return false;
                 }
+
+                return true;
             }
-            return true;
+            else{
+                return false;
+            }
         }
 
         function updateSendNowFn(value) {
