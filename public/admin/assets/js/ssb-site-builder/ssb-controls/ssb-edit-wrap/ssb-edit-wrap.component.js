@@ -386,6 +386,9 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                     }
 
+                    if(isTouchDevice)
+                        handleComponentPartialAreaMouseOver(e);
+
                     var hasComponentChildMouseOver = el.find('[data-edit]').length > 0;
 
                     //let section handle clicks if the component has [data-edit] areas to surface menu

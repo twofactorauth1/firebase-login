@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderThemeBtnController', ssbThemeBtnController);
 
-ssbThemeBtnController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$compile','SimpleSiteBuilderService'];
+ssbThemeBtnController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$compile', '$window', 'SimpleSiteBuilderService'];
 /* @ngInject */
-function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude, $sce, $timeout, $compile, SimpleSiteBuilderService) {
+function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude, $sce, $timeout, $compile, $window, SimpleSiteBuilderService) {
 
     var vm = this;
     var elementId = '';
@@ -490,14 +490,23 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     }
 
     function positionEditControl() {
+        var windowWidth = angular.element($window).width();
+
+        
+
         var container = document.querySelector('.ssb-site-builder-container') || document.querySelector('.email-builder-container');
         var top = 0;
         var left = 0;
         var topbarHeight = 125;
         var sidebarWidth = 140;
+
         var scrollTop = container.scrollTop;
         var topOffset = 35;
         var leftOffset = 35;
+        if (windowWidth < 768) {
+            sidebarWidth = 0;
+            leftOffset = 20;
+        }
         var compiledEl = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
         var compiledEditControl = SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId);
 
