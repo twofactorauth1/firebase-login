@@ -28,7 +28,7 @@
 .fr-popup .fr-icon-set > span.fr-selected-icon::after {
   color: #ffffff;
   content: "\f00c";
-  font-family: FontAwesome;
+  font-family: FontAwesome !important;
   font-size: 13px;
   font-weight: 400;
   line-height: 20px;
