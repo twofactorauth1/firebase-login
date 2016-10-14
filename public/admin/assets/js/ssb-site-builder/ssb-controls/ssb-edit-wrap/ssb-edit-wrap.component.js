@@ -28,8 +28,6 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                     element.on('mouseleave', handleSectionOrComponentMouseLeave);
 
-                    $(element).on('touchstart', handleTouchStart);
-
                     $(element).on('click', handleClick);
 
                     $(element).on('mouseover', '[data-edit]', handleComponentPartialAreaMouseOver);
@@ -39,12 +37,6 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     $(element).on('click', '[data-edit]', handleComponentPartialAreaClick);
 
                 })();
-
-                function handleTouchStart(e){
-                    handleMouseOver(e);
-                    handleClick(e);
-                }
-                
 
                 function handleMouseOver(e) {
 
