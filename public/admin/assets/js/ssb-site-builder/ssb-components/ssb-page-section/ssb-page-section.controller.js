@@ -70,11 +70,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 if (section.layoutModifiers.fixed) {
 
                     classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
-                    classString += ' ssb-fixed sticky';
+                    if(vm.elementLoaded){
+                        classString += ' ssb-fixed sticky';
 
-                    if (vm.index === 0) {
-                        classString += ' ssb-fixed-first-element';
+                        if (vm.index === 0) {
+                            classString += ' ssb-fixed-first-element';
+                        }
                     }
+                    
 
                 }
                 if(section.layoutModifiers.columns && section.layoutModifiers.columns.columnsNum){
@@ -497,6 +500,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 new StickyState(vm.element[0]);
             }, 2000);
         }
+        vm.elementLoaded = true;
     }
 
     function sectionHasFooter(section) {
@@ -618,7 +622,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
             $timeout(function() {
                 vm.setFixedPosition();
-            }, 1000);
+            }, 200);
         }
 
     }
