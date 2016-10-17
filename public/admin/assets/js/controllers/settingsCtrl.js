@@ -171,6 +171,9 @@
                     SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
                         $scope.saveLoading = false;
                         toaster.pop('success', " Website Settings saved.");
+                        if(!angular.equals($scope.account, $scope.originalAccount)){
+                            $rootScope.$broadcast('$refreshAccountSettings', $scope.account);
+                        }                        
                         if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
                             var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
                             $window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
