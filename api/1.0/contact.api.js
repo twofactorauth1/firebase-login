@@ -638,22 +638,38 @@ _.extend(api.prototype, baseApi.prototype, {
 
                         var toAddress = value.get('business').emails[0].email;
                         var toName = '';
-                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
+                        /*
+                         * Asynchronously send to each email in business.emails
+                         */
+                        var ccAry = [];
+                        var emails = value.get('business').emails;
+                        if(emails.length > 1) {
+                            for(var i=1; i<emails.length; i++) {
+                                ccAry.push(emails[i].email);
+                            }
+                        }
+                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, ccAry, function(err, value){
                             self.log.debug('email sent');
                         });
 
-                    }
-                    else if(emailPreferences.new_contacts === true && req.body.activity){
+                    } else if(emailPreferences.new_contacts === true && req.body.activity){
                         var accountEmail = null;
 
                         if(value && value.get("business") && value.get("business").emails && value.get("business").emails[0] && value.get("business").emails[0].email) {
                             self.log.debug('user email: ', value.get("business").emails[0].email);
                             accountEmail = value.get("business").emails[0].email;
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                            var ccAry = [];
+                            var emails = value.get('business').emails;
+                            if(emails.length > 1) {
+                                for(var i=1; i<emails.length; i++) {
+                                    ccAry.push(emails[i].email);
+                                }
+                            }
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry);
                         } else{
                             userDao.getUserAccount(value.id(), function(err, user){
                                 accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null);
                             })
                         }
 
@@ -1219,7 +1235,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
@@ -1244,7 +1260,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var vars = [];
 
 
-                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
+                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

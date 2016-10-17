@@ -231,7 +231,7 @@ var emailMessageManager = {
     },
 
     sendOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId, vars,
-                             emailId, fn) {
+                             emailId, ccAry, fn) {
         var self = this;
         self.log.debug('>> sendOrderEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
@@ -264,6 +264,9 @@ var emailMessageManager = {
                 }
                 if(toName && toName.length > 0) {
                     params.toname = toName;
+                }
+                if(ccAry && ccAry.length > 0) {
+                    params.cc = ccAry;
                 }
 
                 self._safeStoreEmail(params, accountId, null, emailId, function(err, emailmessage){
@@ -371,7 +374,7 @@ var emailMessageManager = {
 
     },
 
-    sendNewCustomerEmail: function(toAddress, toName, accountId, vars, fn) {
+    sendNewCustomerEmail: function(toAddress, toName, accountId, vars, ccArray, fn) {
         var self = this;
         self.log.debug('>> sendNewCustomerEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
@@ -439,7 +442,7 @@ var emailMessageManager = {
 
     },
 
-    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
+    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, fn) {
         var self = this;
         self.log.debug('>> sendBasicEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
@@ -469,6 +472,9 @@ var emailMessageManager = {
                     }
                     if(toName && toName.length > 0) {
                         params.toname = toName;
+                    }
+                    if(ccAry && ccAry.length > 0) {
+                        params.cc = ccAry;
                     }
 
                     self._safeStoreEmail(params, accountId, null, emailId, function(err, emailmessage){
@@ -1205,6 +1211,7 @@ var emailMessageManager = {
             userId:userId,
             sender:sendgridParam.from,
             receiver:sendgridParam.to,
+            cc: sendgridParam.cc,
             content:sendgridParam.html,
             subject:sendgridParam.subject,
             emailId: emailId,

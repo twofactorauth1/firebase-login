@@ -606,7 +606,14 @@ module.exports = {
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
                         var emailPageHandle = isDonation ? 'new-donation' : 'new-order';
+                        //TODO: add cc emails here
+                        var ccAry = [];
 
+                        if(business.emails.length > 1) {
+                            for(var i=1; i<business.emails.length; i++) {
+                                ccAry.push(business.emails[i].email);
+                            }
+                        }
                         cmsManager.getEmailPage(accountId, emailPageHandle, function(err, email){
                             if(err || !email) {
                                 log.warn('No ' + (isDonation ? 'NEW_DONATION' : 'NEW_ORDER') + ' email receipt sent: ' + err);
@@ -629,7 +636,7 @@ module.exports = {
                                                 log.debug(accountId, userId, 'juiced - one ' + _html);
                                                 html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             }
-                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
                                         });
@@ -653,7 +660,7 @@ module.exports = {
                                             html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         }
 
-                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
+                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function(){
                                             callback(null, account, updatedOrder);
                                         });
                                     });
@@ -677,7 +684,7 @@ module.exports = {
                                                     html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                 }
 
-                                                emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function(){
                                                     log.debug(accountId, userId, 'Admin Notification Sent');
                                                 });
                                             });

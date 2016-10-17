@@ -1208,6 +1208,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         section.spacing.default = value ? false : true;
     }
 
+
+    $scope.$on('$refreshAccountSettings', function(event, account) {
+        if(account && account._id){
+            vm.state.account = account;
+        }
+    });
+
     function init(element) {
 
         vm.element = element;

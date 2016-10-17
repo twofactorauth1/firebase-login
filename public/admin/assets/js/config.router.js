@@ -73,7 +73,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/site-analytics.html",
         title: 'Site Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'chartAnalyticsService')
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "/admin/assets/views/pages.html",
@@ -133,7 +133,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/customer-analytics.html",
         title: 'Customer Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'secTotime', 'dateRangePicker')
+        resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker')
     }).state('app.singleContact', {
         url: '/contacts/:contactId',
         templateUrl: "/admin/assets/views/contact-detail.html",
