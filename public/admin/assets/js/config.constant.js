@@ -687,7 +687,11 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/highcharts-release/adapters/standalone-framework.js', '../js/libs/highcharts-release/highcharts.js', '../js/libs/highcharts-ng/dist/highcharts-ng.min.js']
   },{
     name: 'highmaps',
-    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js', '../js/libs_misc/highmaps/us-all.js']
+    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js']
+  }
+  ,{
+    name: 'highmaps-lib',
+    files: ['../js/libs_misc/highmaps/us-all.js']
   },{
     name: 'truncate',
     files: ['../js/libs/angular-truncate/src/truncate.js']
