@@ -16,6 +16,7 @@ var contactActivityManager = require('../contactactivities/contactactivity_manag
 var async = require('async');
 var accountDao = require('../dao/account.dao');
 var orderDao = require('../orders/dao/order.dao');
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 
 module.exports = {
 
@@ -130,24 +131,6 @@ module.exports = {
             }
         });
     },
-    /*
-    linkUsers: function(oldId, newId, fn) {
-        var self = this;
-        _log.debug('>> linkUsers');
-        analytics.alias({
-            previousId: oldId,
-            userId: newId
-        }, function(err, value){
-            if(err) {
-                _log.error('Error calling segment to link users: ' + err);
-            } else {
-                _log.debug('Linked users: ' + value);
-            }
-            _log.debug('<< linkUsers');
-            fn(null, value);
-        });
-    },
-    */
 
     storeSessionEvent: function(sessionEvent, fn) {
         var self = this;
@@ -419,7 +402,6 @@ module.exports = {
             fn(err, result);
         });
     },
-
 
     getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
@@ -733,7 +715,7 @@ module.exports = {
                     $lte:end
                 },
                 fingerprint:{$ne:0},
-                session_length: {$gte:5000}
+                session_length: {$gte:5000, $lte:360000}
             }
         };
         if(isAggregate === true) {
@@ -1055,7 +1037,8 @@ module.exports = {
                     server_time_dt:{
                         $gte:start,
                         $lte:end
-                    }
+                    },
+                    timeOnPage:{$gte:0, $lte:3600000}
                 }
             };
             stageAry.push(match);
@@ -1386,5 +1369,88 @@ module.exports = {
             }
 
         });
+    },
+
+    getOSReport: function(accountId, userId, start, end, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getOSReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{
+                    osName:'$user_agent.os.name',
+                    osVersion:'$user_agent.os.version'
+                },
+                count: {$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            var sortedResults = _.sortBy(value, function(result){return result.count;});
+            self.log.debug(accountId, userId, '<< getOSReport');
+            fn(err, sortedResults);
+        });
+    },
+
+    getCampaignEmailsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getCampaignEmailsReport');
+
+        var campaignsByDayStageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                sendDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        campaignsByDayStageAry.push(match);
+
+        var group = {
+            $group:{
+                _id:{
+                    campaignId:'$batchId',
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$start" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        campaignsByDayStageAry.push(group);
+
+        var opensByDayStageAry = [];
+        var opensMatch = {
+            $match:{
+                accountId:accountId,
+                openDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+
+
     }
 };
