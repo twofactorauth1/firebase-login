@@ -1,7 +1,7 @@
 <article itemscope="" itemtype="http://schema.org/BlogPosting">
 
     <div ng-if="vm.post">
-        <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="center margin-top-30 img-responsive" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
+        <img ng-if="vm.post.featured_image" itemprop="thumbnailUrl" class="center margin-top-30 img-responsive" ng-src="{{vm.getFeaturedImageUrl(vm.post.featured_image)}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
 
         <h1 itemprop="name headline">
             {{vm.post.post_title}}
