@@ -12,7 +12,7 @@
 
         <div ng-if="vm.post.featured_image && !vm.compactView" class="ssb-media-left">
             <a href="/blog/{{vm.post.post_url}}" target="_self">
-                <img itemprop="thumbnailUrl" class="img-responsive blog-post-image" ng-src="{{vm.post.featured_image}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
+                <img itemprop="thumbnailUrl" class="img-responsive blog-post-image" ng-src="{{vm.getFeaturedImageUrl(vm.post.featured_image)}}" alt="{{(vm.post.post_excerpt) ? vm.post.post_excerpt : ''}}"/>
             </a>
         </div>
 

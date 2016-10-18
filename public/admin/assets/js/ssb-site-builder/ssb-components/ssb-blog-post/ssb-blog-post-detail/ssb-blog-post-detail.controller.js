@@ -12,6 +12,7 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
 
     vm.init = init;
     vm.initData = initData;
+    vm.getFeaturedImageUrl = getFeaturedImageUrl;
 
     function initData() {
         window.indigenous.precache = window.indigenous.precache || {};
@@ -24,6 +25,12 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
             vm.post = posts[0];
         }
         // vm.post.post_content.replace('&lt;!-- more --&gt;', '');
+    }
+
+    function getFeaturedImageUrl(url){
+        if(url){
+            return url.replace(/^(http|https):/i, "");
+        }
     }
 
     function init(element) {

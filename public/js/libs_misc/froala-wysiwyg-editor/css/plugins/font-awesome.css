@@ -51,3 +51,7 @@
 .fr-popup.fr-inline.icon-popup{  
   width:75%;
 }
+
+.fr-fontAwesomeIcon.fr-emoticon span.fa{
+  font-family: FontAwesome !important;
+}

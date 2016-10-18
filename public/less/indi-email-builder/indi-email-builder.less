@@ -330,6 +330,21 @@ div[class^="spacing-"] {
 .indi-email-builder-editor-container {
     // flex: 1;
     // overflow: scroll;
+
+     @media (max-width: 767px) {
+        margin-left: 10px;
+        margin-right: 10px;
+        .email-builder-main .components{
+            table{
+                width: 100%;
+                td.templateColumnContainer {
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+            }
+        }
+    }
+
 }
 
 .indi-email-bg-btn {

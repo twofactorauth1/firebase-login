@@ -14,6 +14,7 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
     vm.featureImageStyle = featureImageStyle;
     vm.getPublishedDate = getPublishedDate;
     vm.initData = initData;
+    vm.getFeaturedImageUrl = getFeaturedImageUrl;
 
     function initData() {
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('script#indigenous-precache-sitedata-posts');
@@ -32,6 +33,12 @@ function ssbBlogPostCardComponentController($scope, $attrs, $filter, $location, 
     function getPublishedDate(dateValue){        
         if(dateValue){
             return Date.parse(dateValue);
+        }
+    }
+
+    function getFeaturedImageUrl(url){
+        if(url){
+            return url.replace(/^(http|https):/i, "");
         }
     }
     
