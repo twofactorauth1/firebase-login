@@ -607,7 +607,8 @@
                     var tag = _.findWhere(vm.contactCounts, {
                         uniqueTag: tag
                     });
-                    vm.toggleSelectionFn(tag.matchingTag);
+                    if(tag)
+                        vm.toggleSelectionFn(tag.matchingTag);
                 }
             });
             vm.uiState.dataLoaded = true;
