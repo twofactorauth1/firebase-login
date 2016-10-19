@@ -236,6 +236,7 @@
             </div>
         </div>
     </div>
+    <div class="clearfix"></div>
     <div class="row">
         <div id="useragents" class="col-xs-12 col-sm-4">
             <div id="ua" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
@@ -262,7 +263,35 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-8" >
+        <div id="osData" class="col-xs-12 col-sm-4">
+            <div id="os" class="panel panel-white " ng-class="{'load1 csspinner': !osData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Operating Systems</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="os" ng-init="os=false" >
+                    <div class="panel-body no-padding">
+                        <div class="new-vs-returning-wrap">
+                            <highchart config="osConfig" id="os-chart"></highchart>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <div class="rate">
+                                    <span class="value">{{topOS || '--'}}</span>
+                                    <strong class="text-muted">{{osPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div clss="row">
+        <div class="col-sm-12" >
             <div id="rev" class="panel panel-white" ng-class="{'load1 csspinner': !revenueConfig.options}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">Revenue <span class="text-bold">Overview</span></h4>

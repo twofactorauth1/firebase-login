@@ -393,4 +393,10 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     });
   };
 
+  $scope.validateAsset = function(data){
+    if(!data){
+      return "Please fill this field";
+    }
+  }
+
 }]);

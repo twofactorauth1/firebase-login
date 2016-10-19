@@ -1073,7 +1073,8 @@ module.exports = {
                     server_time_dt:{
                         $gte:start,
                         $lte:end
-                    }
+                    },
+                    timeOnPage:{$gte:0, $lte:3600000}
                 }
             };
             stageAry.push(match);

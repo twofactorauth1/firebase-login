@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             <h5 class="fm-title">
-                                    <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)'><span ng-text-truncate="asset.filename" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></a>
+                                    <a editable-text='asset.filename' e-required e-placeholder='Enter name' onaftersave='m.onAssetUpdateCallback(asset)' onbeforesave="validateAsset($data)"><span ng-text-truncate="asset.filename" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></a>
                                 </h5>
                             <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                         </div>

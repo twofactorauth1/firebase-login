@@ -472,6 +472,39 @@
             }
 
             // ======================================
+            // OS Pie Chart
+            // ======================================
+            var osData = [];
+            var osMap = {};
+            if(results.osReport) {
+                var osTotal = 0;
+                _.each(results.osReport, function(obj){
+                    var os = obj._id.osName;
+                    if(os === 'undefined' || os === undefined) {
+                        os = 'Unknown';
+                    }
+                    var count = obj.count;
+                    if(osMap[os]) {
+                        osMap[os] += count;
+                    } else {
+                        osMap[os] = count;
+                    }
+                    osTotal += count;
+                });
+                osData = osData.concat(_.pairs(osMap));
+                osData = _.sortBy(osData, function(pair){return pair[1];});
+                $scope.osData = osData;
+                var osLength = osData.length - 1;
+                $scope.topOS = osData[osLength][0];
+                var osPercent = Math.floor((osData[osLength][1] / osTotal) * 100);
+                $scope.osPercent = osPercent;
+
+                ChartAnalyticsService.osChart(osData, function(config){
+                    $scope.osConfig = config;
+                    $scope.osConfig.loading = false;
+                });
+            }
+            // ======================================
             // Revenue
             // ======================================
             var revenueChartData = {

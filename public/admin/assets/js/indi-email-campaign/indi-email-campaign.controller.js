@@ -18,6 +18,8 @@
 
         editableOptions.theme = 'bs3';
 
+        vm.getTagLabel = getTagLabel;
+
         vm.state.campaignId = $stateParams.id;
         vm.state.campaign = {
             "name": "",
@@ -592,18 +594,22 @@
 
         function loadSavedTagsFn() {
             vm.uiState.dataLoaded = false;
-            _.each(vm.state.campaign.contactTags, function (tag) {
-                var tagLabel = _.findWhere(contactTags, {
-                    data: tag
-                });
-                if (tagLabel) {
-                    tag = tagLabel.label;
+            _.each(vm.state.campaign.contactTags, function (tag) {  
+                if (tag && tag === 'No Tag')
+                    vm.toggleSelectionFn(tag);
+                else{
+                    var tagLabel = _.findWhere(contactTags, {
+                        data: tag
+                    });
+                    if (tagLabel) {
+                        tag = tagLabel.label;
+                    }
+                    var tag = _.findWhere(vm.contactCounts, {
+                        uniqueTag: tag
+                    });
+                    if(tag)
+                        vm.toggleSelectionFn(tag.matchingTag);
                 }
-                var tag = _.findWhere(vm.contactCounts, {
-                    uniqueTag: tag
-                });
-                if (tag)
-                    vm.toggleSelectionFn(tag.matchingTag);
             });
             vm.uiState.dataLoaded = true;
         }
@@ -752,6 +758,10 @@
 
         function contactTagsFn(contact) {
             return ContactService.contactTags(contact);
+        }
+
+        function getTagLabel(label){
+            return label === 'No Tag' ? '(no tag)' : label
         }
 
         function init(element) {

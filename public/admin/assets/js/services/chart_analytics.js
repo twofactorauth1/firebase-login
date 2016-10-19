@@ -66,6 +66,9 @@
             if (oldval === 0 && newval === 0) {
                 return 0;
             }
+            if (oldval === 0) {
+                return "(n/a)";
+            }
             //percent change is new-old/old
             var result = ((newval - oldval) / oldval) * 100;
             return Math.round(result * 100) / 100;
@@ -850,6 +853,56 @@
             };
 
             fn(userAgentChartConfig);
+        };
+
+        this.osChart = function (osData, fn) {
+            var osChartConfig = {
+                options: {
+                    chart: {
+                        height: 300
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'OS',
+                        data: osData
+                    }
+                ],
+                yAxis: {
+                    title: {
+                        text: 'Visitors'
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            };
+
+            fn(osChartConfig);
         };
 
         this.revenueOverview = function (ordersData, fn) {
