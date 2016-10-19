@@ -314,7 +314,7 @@
                             </div>
                             <div class="col-xs-6 text-center">
                                 <div class="rate">
-                                    <span class="value">{{(revenue | currency:"$":0) || '--'}} USD</span>
+                                    <span class="value">{{(revenue | currency:"$":0) || '--'}}</span>
                                     <i class="fa" ng-class="{'fa-caret-up text-green': revenuePercent > 0, 'fa-caret-down text-red': revenuePercent < 0}"></i><strong class="text-muted">{{revenuePercent || '--'}}</strong><span class="percentage">%</span>
                                 </div>
                                 Revenue
