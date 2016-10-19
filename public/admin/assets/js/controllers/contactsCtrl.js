@@ -594,12 +594,12 @@
               });
         }
 
-        if ($scope.bulkActionChoice.action.data == 'tags') {
+        if ($scope.bulkActionChoice.action && $scope.bulkActionChoice.action.data == 'tags') {
             $scope.bulkActionChoice = {};
             $scope.openSimpleModal('tags-bulk-action-modal');
         }
 
-        if ($scope.bulkActionChoice.action.data == 'export') {
+        if ($scope.bulkActionChoice.action && $scope.bulkActionChoice.action.data == 'export') {
           ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
           $scope.bulkActionChoice = null;
           $scope.bulkActionChoice = {};
