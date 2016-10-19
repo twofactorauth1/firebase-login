@@ -1813,6 +1813,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 },
                 revenueReport: function(callback) {
                     analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                },
+                osReport: function(callback) {
+                    analyticsManager.getOSReport(accountId, userId, start, end, true, callback);
                 }
             }, function(err, results){
                 self.log.debug(accountId, userId, '<< allAdminReports');
