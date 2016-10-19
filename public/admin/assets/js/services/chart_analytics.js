@@ -66,6 +66,9 @@
             if (oldval === 0 && newval === 0) {
                 return 0;
             }
+            if (oldval === 0) {
+                return "(n/a)";
+            }
             //percent change is new-old/old
             var result = ((newval - oldval) / oldval) * 100;
             return Math.round(result * 100) / 100;
