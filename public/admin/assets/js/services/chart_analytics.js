@@ -979,7 +979,7 @@
                         yAxis: 1,
                         data: ordersData.amountData,
                         tooltip: {
-                            valueSuffix: ' usd',
+                            valueSuffix: ' USD',
                             valuePrefix: '$'
                         }
                     }
