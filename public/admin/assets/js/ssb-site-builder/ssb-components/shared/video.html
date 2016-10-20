@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="member-name">
             Video Type
-            <span tooltip-placement="right" tooltip-html-unsafe="Select video type."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="right" tooltip-html="Select video type."><i class="fa fa-info-circle" /></span>
         </label>
         <select id="member-name" class="form-control" ng-model="component.videoType">
             <option value="youtube">YouTube</option>
@@ -12,7 +12,7 @@
     </div>
     <div class="form-group" ng-hide="component.videoType == 'html5'">
         <label for="member-name">Video URL</label>
-        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL."><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Add video URL."><i class="fa fa-info-circle" /></span>
         <input id="member-name" class="form-control" type="text" ng-model="component.video">
     </div>
 </div>
@@ -20,42 +20,42 @@
     <div class="form-group" ng-show="component.videoType == 'html5'">
         <label for="member-name">
             MP4 URL
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add Mp4 video URL."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Add Mp4 video URL."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="member-name" class="form-control" type="text" ng-model="component.videoMp4">
     </div>
     <div class="form-group" ng-show="component.videoType == 'html5'">
         <label for="member-name">
             WEBM URL
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add Webm video URL."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Add Webm video URL."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="member-name" class="form-control" type="text" ng-model="component.videoWebm">
     </div>
     <div class="form-group" ng-hide="component.videoType == 'html5'">
         <label for="colorpicker">
             Auto Play
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set auto play video"><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Set auto play video"><i class="fa fa-info-circle" /></span>
         </label>
         <switch id="splitd" ng-model="component.videoAutoPlay" class="pull-right"></switch>
     </div>
     <div class="form-group" ng-show="component.videoType == 'youtube'">
         <label for="colorpicker">
             Controls
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Show/hide video player controls."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Show/hide video player controls."><i class="fa fa-info-circle" /></span>
         </label>
         <switch id="splitHours" ng-model="component.videoControls" class="pull-right"></switch>
     </div>
     <div class="form-group" ng-show="component.videoType == 'youtube'">
         <label for="colorpicker">
             Branding
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Youtube video branding."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Youtube video branding."><i class="fa fa-info-circle" /></span>
         </label>
         <switch id="splitHours" ng-model="component.videoBranding" class="pull-right"></switch>
     </div>
     <div class="form-group" ng-show="component.videoType == 'html5'">
         <label for="member-name">
             Start Video Image URL
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set start video image URL."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Set start video image URL."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="member-name" class="form-control" type="text" ng-model="component.videoImage">
     </div>

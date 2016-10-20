@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="colorpicker">
             Visibility
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Show/hide component."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Show/hide component."><i class="fa fa-info-circle" /></span>
         </label>
         <switch ng-model="vm.component.visibility" class="pull-right" ng-change="saveComponentChanges()"></switch>
     </div>
@@ -20,7 +20,7 @@
     <div class="form-group">
         <label for="colorpicker">
             Image Position
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Set image position to left/right."><i class="fa fa-info-circle" /></span>
         </label>
         <select ng-model="vm.component.imagePosition" ng-change="saveComponent(true)" class="form-control">
             <option value="left">Left</option>
@@ -31,7 +31,7 @@
 <!-- <hr></hr>
     <div class="form-group">
         <label for="component-title">Version</label>
-        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="The version of the vm.component."><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="The version of the vm.component."><i class="fa fa-info-circle" /></span>
         <select ng-model="vm.component.version" ng-change="saveComponentChanges()" class="form-control margin-bottom-0">
             <option ng-repeat="version in componentVersions track by $index" value="{{version}}" ng-selected="{{version == vm.component.version}}">{{version}}</option>
         </select>

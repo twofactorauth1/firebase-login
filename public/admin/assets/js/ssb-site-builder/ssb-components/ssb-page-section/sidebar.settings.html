@@ -47,7 +47,7 @@
         class="ssb-sidebar-item-icon ssb-move-section-up display-ib ti-arrow-up"
         ng-click="vm.moveSection('up', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
-        tooltip-html-unsafe="Move section up"
+        tooltip-html="Move section up"
         tooltip-append-to-body="true">
     </div>
     <div
@@ -55,21 +55,21 @@
         class="ssb-sidebar-item-icon ssb-move-section-down display-ib ti-arrow-down"
         ng-click="vm.moveSection('down', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
-        tooltip-html-unsafe="Move section down"
+        tooltip-html="Move section down"
         tooltip-append-to-body="true">
     </div>
     <div
         class="ssb-sidebar-item-icon ssb-move-section-rename ti-pencil display-ib"
         ng-click="vm.state.editSection = true; vm.editSectionName('edit_section_name')"
         tooltip-placement="bottom"
-        tooltip-html-unsafe="Rename section"
+        tooltip-html="Rename section"
         tooltip-append-to-body="true">
     </div>
     <div
         class="ssb-sidebar-item-icon ssb-move-section-visibility display-ib ti-eye"
         ng-click="vm.hideSectionFromPage(vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
-        tooltip-html-unsafe="Show/hide section"
+        tooltip-html="Show/hide section"
         tooltip-append-to-body="true">
     </div>
     <div
@@ -77,14 +77,14 @@
         ng-click="vm.duplicateSection(vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
-        tooltip-html-unsafe="Duplicate section"
+        tooltip-html="Duplicate section"
         tooltip-append-to-body="true">
     </div>
     <div
         class="ssb-sidebar-item-icon ssb-move-section-remove fa fa-trash-o display-ib"
         ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
         tooltip-placement="bottom"
-        tooltip-html-unsafe="Remove section"
+        tooltip-html="Remove section"
         tooltip-append-to-body="true">
     </div>
 </div>

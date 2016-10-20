@@ -148,13 +148,13 @@
                             <div class="panel panel-transparent  margin-bottom-0">
                                 <div class="panel-body padding-top-0">
                                         <div class="form-group">
-                                            <label tooltip-placement="top" tooltip-html-unsafe="A unique alphanumeric identifier that refers to a particular product, used for inventory management">
+                                            <label tooltip-placement="top" tooltip-html="A unique alphanumeric identifier that refers to a particular product, used for inventory management">
                                                 SKU <i class="fa fa-info-circle" />
                                             </label>
                                             <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
                                         </div>
                                         <div class="form-group" ng-class="{ 'has-error' : productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine }" ng-hide='product.type == productTypes.DONATION'>
-                                            <label tooltip-placement="top" tooltip-html-unsafe="The price a customer sees until you enable a sale">
+                                            <label tooltip-placement="top" tooltip-html="The price a customer sees until you enable a sale">
                                                 Regular Price <i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">
@@ -165,7 +165,7 @@
                                         </div>
                                         <div>
                                             <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
-                                                <label tooltip-placement="top" tooltip-html-unsafe="To enable to specify dates of sale">
+                                                <label tooltip-placement="top" tooltip-html="To enable to specify dates of sale">
                                                     On Sale <i class="fa fa-info-circle" />
                                                 </label>
                                                 <div class="input-group">
@@ -173,7 +173,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group" ng-if="product.on_sale" ng-class="{ 'has-error' : productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine }">
-                                                <label tooltip-placement="top" tooltip-html-unsafe="The price the customer sees while a sale is enabled">
+                                                <label tooltip-placement="top" tooltip-html="The price the customer sees while a sale is enabled">
                                                     Sale Price <i class="fa fa-info-circle" />
                                                 </label>
                                                 <div class="input-group">
@@ -183,7 +183,7 @@
                                                 <p ng-show="productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine" class="help-block">Sale Price cannot be more than regular price</p>
                                             </div>
                                             <div class="form-group" ng-if="product.on_sale">
-                                                <label tooltip-placement="top" tooltip-html-unsafe="The dates of the sale">
+                                                <label tooltip-placement="top" tooltip-html="The dates of the sale">
                                                     Sale Dates <i class="fa fa-info-circle" />
                                                 </label>
                                                 <div class="input-group">
@@ -194,7 +194,7 @@
                                             </div>
                                         </div>
                                         <!-- <div class="form-group">
-                                            <label tooltip-placement="top" tooltip-html-unsafe="the price at which you purchase or create a product">
+                                            <label tooltip-placement="top" tooltip-html="the price at which you purchase or create a product">
                                                 Cost <i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">
@@ -203,7 +203,7 @@
                                             </div>
                                         </div> -->
                                         <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
-                                            <label tooltip-placement="top" tooltip-html-unsafe="To specify and send a fulfillment email when this item is ordered (scroll down)">
+                                            <label tooltip-placement="top" tooltip-html="To specify and send a fulfillment email when this item is ordered (scroll down)">
                                                 Fulfillment Email? <i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">
@@ -211,7 +211,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
-                                            <label tooltip-placement="top" tooltip-html-unsafe="To make this item taxable (See Taxes in Settings for more configuration)">
+                                            <label tooltip-placement="top" tooltip-html="To make this item taxable (See Taxes in Settings for more configuration)">
                                                 Taxable <i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">

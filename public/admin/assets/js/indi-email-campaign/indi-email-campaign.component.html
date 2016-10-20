@@ -62,7 +62,7 @@
                             ng-click='vm.cancelCampaignFn()'
                             class="btn btn-o btn-danger margin-left-5"
                             tooltip-placement="bottom"
-                            tooltip-html-unsafe="Cancel this campaign.">
+                            tooltip-html="Cancel this campaign.">
                             <i class="ti-na"></i>
                         </button>
                         <button
@@ -71,7 +71,7 @@
                             ng-click='vm.deleteCampaignFn()'
                             class="btn btn-o btn-danger margin-left-5"
                             tooltip-placement="bottom"
-                            tooltip-html-unsafe="Delete this campaign.">
+                            tooltip-html="Delete this campaign.">
                             <i class="ti-trash"></i>
                         </button>
                     </div>
@@ -246,7 +246,7 @@
                                 ui-sref='app.emailEditor({id: vm.state.campaign.steps[0].settings.emailId})'
                                 class="btn btn-primary margin-top-15"
                                 tooltip-placement="top"
-                                tooltip-html-unsafe="Make changes to this email in the editor."
+                                tooltip-html="Make changes to this email in the editor."
                                 ng-disabled="vm.uiState.disableEditing || !vm.state.campaign.steps[0].settings.emailId">
                                 <i class="fa fa-pencil-square-o"></i>
                                 <span> Edit email content</span>

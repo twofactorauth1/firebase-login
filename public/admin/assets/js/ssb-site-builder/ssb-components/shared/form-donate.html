@@ -8,7 +8,7 @@
         </div>
         <label ng-if="vm.donationProductTags.length">
             Select Donation
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="donation product to use"><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="donation product to use"><i class="fa fa-info-circle" /></span>
         </label>
         <ui-select ng-if="vm.donationProductTags.length" ng-model="vm.component.productSettings.product" theme="bootstrap" ng-disabled="disabled">
             <ui-select-match placeholder="Select product...">{{$select.selected.label}}</ui-select-match>
@@ -24,7 +24,7 @@
     <div class="form-group">
         <label>
             Goal amount
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set a goal for this donation campaign."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Set a goal for this donation campaign."><i class="fa fa-info-circle" /></span>
         </label>
         <div class="ssb-sidebar-text-input-default">
             <input type="text" ng-model="vm.component.productSettings.goal" min="0">
@@ -33,21 +33,21 @@
     <div class="form-group">
         <label>
             Time period
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Limit this donation campaign to a certain time period."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Limit this donation campaign to a certain time period."><i class="fa fa-info-circle" /></span>
         </label>
         <switch name="uniqueemail" ng-model="vm.component.productSettings.timePeriod.enabled" class="pull-right"></switch>
     </div>
     <div class="form-group" ng-if="vm.component.productSettings.timePeriod.enabled">
         <label>
             From
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Start date for donation campaign."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Start date for donation campaign."><i class="fa fa-info-circle" /></span>
         </label>
         <input type="text" class="form-control" datepicker-popup="MMM dd, yyyy" ng-model="vm.component.productSettings.timePeriod.startDate" show-button-bar='false' is-open="vm.startCalOpened" close-text="Close" ng-focus="vm.openCal($event, 'start')" />
     </div>
     <div class="form-group" ng-if="vm.component.productSettings.timePeriod.enabled">
         <label>
             To
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="End date for donation campaign."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="End date for donation campaign."><i class="fa fa-info-circle" /></span>
         </label>
         <input type="text" class="form-control" datepicker-popup="MMM dd, yyyy" ng-model="vm.component.productSettings.timePeriod.endDate" show-button-bar='false' is-open="vm.endCalOpened" close-text="Close" ng-focus="vm.openCal($event, 'end')" />
     </div>
@@ -55,7 +55,7 @@
 
 <h4 class="ssb-sidebar-sub-heading-separator">
     AMOUNT BUTTONS
-    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Your visitors are presented with quick selection buttons for the following amounts."><i class="fa fa-info-circle" style="font-size: 11px;vertical-align:top;"/></span>
+    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Your visitors are presented with quick selection buttons for the following amounts."><i class="fa fa-info-circle" style="font-size: 11px;vertical-align:top;"/></span>
 </h4>
 <div class="form-builder row padding-10">
     <div class="form-group">
@@ -102,7 +102,7 @@
 
 <h4 class="ssb-sidebar-sub-heading-separator">
     CONTACT INFORMATION
-    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Customize the contact information collected from donations."><i class="fa fa-info-circle" style="font-size: 11px;vertical-align:top;"/></span>
+    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Customize the contact information collected from donations."><i class="fa fa-info-circle" style="font-size: 11px;vertical-align:top;"/></span>
 </h4>
 
 <div class="form-builder row padding-10">

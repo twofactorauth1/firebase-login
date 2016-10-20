@@ -1,21 +1,21 @@
 <div class="form-group" ng-init="showBusinessInfo = !vm.component.hideBusinessInfo">
     <label for="custom-address">
         Show Business Info
-        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business info ( Address and hours)."><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-html="Show/hide business info ( Address and hours)."><i class="fa fa-info-circle" /></span>
     </label>
     <switch ng-model="showBusinessInfo" ng-change="vm.setContactShowInfo(vm.component, showBusinessInfo)" class="pull-right"></switch>
 </div>
 <div class="form-group">
     <label for="custom-address">
         Custom Address
-        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom address."><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-html="Show/hide custom address."><i class="fa fa-info-circle" /></span>
     </label>
     <switch id="custom-address" ng-model="vm.component.custom.address" class="pull-right" ng-change="vm.saveComponent(true)"></switch>
 </div>
 <div ng-if="vm.component.custom.address" class="form-group">
     <label for="location-address">
         Add Address
-        <span tooltip-placement="top" tooltip-html-unsafe="Address Suggestions"><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-html="Address Suggestions"><i class="fa fa-info-circle" /></span>
     </label>
     <input id="autocomplete-place" ng-disabled="!vm.component.custom.address" class="form-control" g-places-autocomplete ng-model="vm.place.address">
 </div>
@@ -31,14 +31,14 @@
     <div class="form-group col-sm-6" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-address">
             Address
-            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-html="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="location-address" ng-disabled="!vm.component.custom.address" ng-blur="vm.updateContactUsAddress()" class="form-control" ng-model="vm.component.location.address">
     </div>
     <div class="form-group col-sm-6" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-address2">
             Address2
-            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-html="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="location-address2" ng-disabled="!vm.component.custom.address" ng-change="vm.checkIfAddess(true)" ng-blur="vm.updateContactUsAddress()" class="form-control" type="text" ng-model="vm.component.location.address2">
     </div>
@@ -47,7 +47,7 @@
     <div class="form-group col-sm-4" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-city">
             City
-            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-html="Contact Us City."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="location-city" ng-disabled="!vm.component.custom.address" ng-change="vm.checkIfAddess(true)" ng-blur="vm.updateContactUsAddress()" class="form-control" type="text" ng-model="vm.component.location.city">
         <div class="error"></div>
@@ -55,7 +55,7 @@
     <div class="form-group col-sm-4" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-state">
             State
-            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-html="Contact Us State."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="location-state" ng-disabled="!vm.component.custom.address" ng-change="vm.checkIfAddess(true)" ng-blur="vm.updateContactUsAddress()" class="form-control" type="text" ng-model="vm.component.location.state">
         <div class="error"></div>
@@ -63,7 +63,7 @@
     <div class="form-group col-sm-4" ng-class="{'has-error':vm.errorMapData}">
         <label for="location-zip">
             Zip Code
-            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-html="Contact Us zip code."><i class="fa fa-info-circle" /></span>
         </label>
         <input id="location-zip" ng-disabled="!vm.component.custom.address" ng-change="vm.checkIfAddess(true)" ng-blur="vm.updateContactUsAddress()" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="vm.component.location.zip">
     </div>
@@ -71,7 +71,7 @@
 <div class="form-group">
     <label for="contact-phone">
         Phone number
-        <span tooltip-placement="top" tooltip-html-unsafe="Contact Us Phone number."><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-html="Contact Us Phone number."><i class="fa fa-info-circle" /></span>
     </label>
     <input id="contact-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control" type="text" ng-model="vm.component.contact.phone">
 </div>
