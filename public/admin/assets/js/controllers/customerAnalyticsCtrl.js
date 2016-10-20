@@ -524,9 +524,6 @@
                 currentTotalCount+= cnt;
             });
 
-
-
-
             $scope.revenueData = revenueChartData;
             $scope.revenue = parseFloat(currentTotalRevenue).toFixed(2);
             $scope.orderCount = currentTotalCount;
@@ -553,7 +550,50 @@
                 $scope.revenueConfig.loading = false;
             });
 
+            // ======================================
+            // Emails
+            // ======================================
 
+            var emailsData = [];
+            _.each(results.emailsReport.emails, function(email){
+                var subArr = [];
+                var value = email.total || 0;
+                subArr.push(new Date(email.timeframe.start).getTime());
+                subArr.push(value);
+                emailsData.push(subArr);
+            });
+
+            var campaignsData = [];
+            _.each(results.emailsReport.campaigns, function(campaign){
+                var subArr = [];
+                var value = campaign.total || 0;
+                subArr.push(new Date(campaign.timeframe.start).getTime());
+                subArr.push(value);
+                campaignsData.push(subArr);
+            });
+
+            var opensData = [];
+            _.each(results.emailsReport.opens, function(open){
+                var subArr = [];
+                var value = open.total || 0;
+                subArr.push(new Date(open.timeframe.start).getTime());
+                subArr.push(value);
+                opensData.push(subArr);
+            });
+
+            var clicksData = [];
+            _.each(results.emailsReport.clicks, function(click){
+                var subArr = [];
+                var value = click.total || 0;
+                subArr.push(new Date(click.timeframe.start).getTime());
+                subArr.push(value);
+                clicksData.push(subArr);
+            });
+
+            ChartAnalyticsService.emailsOverview(emailsData, campaignsData, opensData, clicksData, function(data){
+                $scope.emailsOverviewConfig = data;
+                $scope.emailsOverviewConfig.loading = false;
+            });
 
             //=======================================
             // Cleanup

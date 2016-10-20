@@ -325,5 +325,23 @@
             </div>
         </div>
     </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-sm-12" >
+            <div id="rev" class="panel panel-white" ng-class="{'load1 csspinner': !emailsOverviewConfig.options}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Campaigns And Emails <span class="text-bold">Overview</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="rev" ng-init="rev=false">
+                    <div class="panel-body">
+                        <div class="rev-wrap">
+                            <highchart config="emailsOverviewConfig" id="emails-chart"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>

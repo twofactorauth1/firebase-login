@@ -579,6 +579,82 @@
             fn(analyticsOverviewConfig);
         };
 
+        this.emailsOverview = function (emailsData, campaignsData, opensData, clicksData, fn) {
+            var emailsOverviewConfig = {
+                options: {
+                    chart: {
+                        spacing: [25, 25, 25, 25]
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: null
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            marker: {
+                                enabled: true,
+                                radius: 3
+                            }
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        format: "{value:%b %d}"
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    // max: Math.max.apply(Math, lineData) + 100,
+                    title: {
+                        text: ''
+                    }
+                },
+                series: [
+                    {
+                        name: 'Emails',
+                        data: emailsData
+                    },
+                    {
+                        name: 'Opens',
+                        data: opensData
+                    },
+                    {
+                        name: 'Clicks',
+                        data: clicksData
+                    },
+                    {
+                        name: 'Campaigns',
+                        data: campaignsData
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+                /*
+                 func: function (chart) {
+
+                 }
+                 */
+            };
+
+            fn(emailsOverviewConfig);
+        };
+
         this.timeOnSite = function (timeOnSiteData, bouncesData, fn) {
             var timeonSiteConfig = {
                 options: {
