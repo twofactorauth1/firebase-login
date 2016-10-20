@@ -339,6 +339,25 @@
                             <highchart config="emailsOverviewConfig" id="emails-chart"></highchart>
                         </div>
                     </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-4 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{(totalEmails | number) || '--'}}</span> Emails
+                                </div>
+                            </div>
+                            <div class="col-xs-4 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{(totalOpens | number) || '--'}}</span> Opens
+                                </div>
+                            </div>
+                            <div class="col-xs-4 text-center">
+                                <div class="rate">
+                                    <span class="value">{{(totalClicks | number) || '--'}}</span> Clicks
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

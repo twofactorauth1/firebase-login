@@ -555,11 +555,13 @@
             // ======================================
 
             var emailsData = [];
+            var totalEmails = 0;
             _.each(results.emailsReport.emails, function(email){
                 var subArr = [];
                 var value = email.total || 0;
                 subArr.push(new Date(email.timeframe.start).getTime());
                 subArr.push(value);
+                totalEmails += value;
                 emailsData.push(subArr);
             });
 
@@ -569,30 +571,38 @@
                 var value = campaign.total || 0;
                 subArr.push(new Date(campaign.timeframe.start).getTime());
                 subArr.push(value);
+
                 campaignsData.push(subArr);
             });
 
             var opensData = [];
+            var totalOpens = 0;
             _.each(results.emailsReport.opens, function(open){
                 var subArr = [];
                 var value = open.total || 0;
                 subArr.push(new Date(open.timeframe.start).getTime());
                 subArr.push(value);
+                totalOpens += value;
                 opensData.push(subArr);
             });
 
             var clicksData = [];
+            var totalClicks = 0;
             _.each(results.emailsReport.clicks, function(click){
                 var subArr = [];
                 var value = click.total || 0;
                 subArr.push(new Date(click.timeframe.start).getTime());
                 subArr.push(value);
+                totalClicks += value;
                 clicksData.push(subArr);
             });
 
             ChartAnalyticsService.emailsOverview(emailsData, campaignsData, opensData, clicksData, function(data){
                 $scope.emailsOverviewConfig = data;
                 $scope.emailsOverviewConfig.loading = false;
+                $scope.totalEmails = totalEmails;
+                $scope.totalOpens = totalOpens;
+                $scope.totalClicks = totalClicks;
             });
 
             //=======================================
