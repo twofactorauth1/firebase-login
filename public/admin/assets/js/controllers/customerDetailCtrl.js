@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout) {
+    app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, UserService) {
 
         /*
          * @getCustomer
@@ -29,6 +29,8 @@
                     var endDate = moment(customer.billing.signupDate).add(customer.billing.trialLength, 'days');
                     customer.trialDaysRemaining =  endDate.diff(moment(), 'days');
                 }
+
+                $scope.matchUsers(customer);
             });
 
         };
@@ -57,7 +59,7 @@
                             //save updated lat/lon
                             _firstAddress.lat = parseFloat(data.lat);
                             _firstAddress.lon = parseFloat(data.lon);
-                            //$scope.contactSaveFn(true);
+                            //$scope.customerSaveFn(true);
 
                             $scope.showMap(data.lat, data.lon);
                         }
@@ -276,7 +278,55 @@
         $scope.data = {
             subdomain: ''
         };
+
+        UserService.getUsers(function (users) {
+            $scope.users = users;
+        });
+
         $scope.getCustomer();
+
+        /*
+         * @addNote
+         * add a note to an order
+         */
+
+        $scope.newNote = {};
+
+        $scope.addNote = function (_note) {
+            
+            customerService.addCustomerNotes($scope.customer._id, _note, function (customer) {
+                if(customer && customer._id){
+                    toaster.pop('success', 'Notes Added.');
+                    $scope.matchUsers(customer);
+                    $scope.newNote = {};
+                }
+            });
+        };
+
+        /*
+         * @matchUsers
+         * match users to the notes
+         */
+        $scope.matchUsers = function (customer) {
+            var notes = customer.notes;
+            if (notes && notes.length > 0 && $scope.users && $scope.users.length) {
+
+                _.each(notes, function (_note) {
+                    var matchingUser = _.find($scope.users, function (_user) {
+                        return _user._id === _note.user_id;
+                    });
+
+                    // This code is used to show related user profile image in notes
+
+                    if (matchingUser) {
+                        _note.user = matchingUser;
+                        if (matchingUser.profilePhotos && matchingUser.profilePhotos[0])
+                            _note.user_profile_photo = matchingUser.profilePhotos[0];
+                    }
+                });
+                $scope.customerNotes = notes;
+            }
+        };
 
 
     }]);

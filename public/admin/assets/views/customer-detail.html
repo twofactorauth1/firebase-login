@@ -225,7 +225,7 @@
                                         <div class="panel-wrapper" collapse="notes" ng-init="notes=false">
                                             <div class="panel-body no-padding">
                                                 <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                                                    <li ng-repeat="note in contact.notes">
+                                                    <li ng-repeat="note in customerNotes">
                                                         <div class="col-xs-2">
                                                             <img src="{{note.user_profile_photo ? note.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
                                                         </div>

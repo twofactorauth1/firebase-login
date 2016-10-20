@@ -131,6 +131,16 @@
             });
         }
 
+        this.addCustomerNotes = function(id, notes, fn){
+            var apiUrl = [baseUrl, 'customer', id, 'notes'].join('/');
+            var body = {notes:notes};
+            $http.post(apiUrl, body).success(function(data){
+                fn(data);
+            }).error(function(err){
+                fn(err);
+            });
+        }
+
 
     }]);
 }(angular));
