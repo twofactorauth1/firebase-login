@@ -16,7 +16,7 @@
         $scope.productTypeOptions = ProductConstant.product_types.dp;
 
         $scope.checkPaymentAccountExistsFn = function (cb) {
-            AccountService.getAccount(function (account) {
+            AccountService.getUpdatedAccount(function (account) {
                 var stripe = _.find(account.credentials, function (cred) {
                     return cred.type === 'stripe';
                 });
