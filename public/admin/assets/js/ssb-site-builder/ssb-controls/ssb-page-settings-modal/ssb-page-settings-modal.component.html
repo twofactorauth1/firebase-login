@@ -127,7 +127,7 @@
                         <div class="mb10"></div>
                         <div class='form-group' ng-if='vm.parentVm.state.website.resources.toggles.userScripts'>
                           <label>Scripts</label>
-                          <span tooltip-placement="bottom" tooltip-html="Add script snippets for your page"><i class="fa fa-info-circle" /></span>
+                          <span tooltip-placement="bottom" tooltip-html-unsafe="Add script snippets for your page"><i class="fa fa-info-circle" /></span>
                           <textarea class='form-control' ng-model='vm.parentVm.state.website.resources.userScripts[vm.page.handle === "blog-list" ? "blog": vm.page.handle].original'></textarea>
                         </div>
                     </div>
@@ -145,9 +145,9 @@
     <div class="clearfix"></div>
     <div ng-class="{'disabled' : vm.loading || vm.saveLoading}" class="modal-footer ssb-footer-page-settings-modal">
         <ul class="list-unstyled page-settings">
-            <li ng-if="!vm.isBlogPage"><a tooltip-placement="bottom" tooltip-html="Create a duplicate page" href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
-            <li ng-hide="vm.isBlogPage && vm.page.handle === 'blog-post'"><a tooltip-placement="bottom" tooltip-html="Hide this page from main menu" ng-click="vm.hideFromMenu()" href="javascript:void(0)"><i class="fa fa-eye"></i> Hide</a></li>
-            <li ng-if="!vm.isBlogPage"><a tooltip-placement="bottom" tooltip-html="Delete this page" href="javascript:void(0)" ng-click="vm.deletePage()" ><i class="fa fa-trash"></i> Delete</a></li>
+            <li ng-if="!vm.isBlogPage"><a tooltip-placement="bottom" tooltip-html-unsafe="Create a duplicate page" href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
+            <li ng-hide="vm.isBlogPage && vm.page.handle === 'blog-post'"><a tooltip-placement="bottom" tooltip-html-unsafe="Hide this page from main menu" ng-click="vm.hideFromMenu()" href="javascript:void(0)"><i class="fa fa-eye"></i> Hide</a></li>
+            <li ng-if="!vm.isBlogPage"><a tooltip-placement="bottom" tooltip-html-unsafe="Delete this page" href="javascript:void(0)" ng-click="vm.deletePage()" ><i class="fa fa-trash"></i> Delete</a></li>
         </ul>
         <div class="pull-right">
             <button class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>

@@ -10,7 +10,7 @@
             <div class="form-group">
                 <label for="component-title">
                     Custom Nav
-                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-html="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
                 </label>
                 <switch ng-model="component.customnav" class="pull-right" ng-change="saveComponent()"></switch>
             </div>

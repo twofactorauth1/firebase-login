@@ -4,7 +4,7 @@
         <div class="form-group">
             <label>
                 Fields per row
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
                 <input type="text" ng-model="component.formSettings.fieldsPerRow" min="1" max="{{component.fields.length || 5}}" touchspin>
@@ -13,7 +13,7 @@
         <div class="form-group">
             <label>
                 Row spacing
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="top/bottom margin between rows"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="top/bottom margin between rows"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
                 <input type="text" ng-model="component.formSettings.spacing.mb" min="0" max="500" touchspin>
@@ -23,7 +23,7 @@
         <div class="form-group">
             <label>
                 Col Spacing
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
                 <input type="text" ng-model="component.formSettings.spacing.pr" min="10" max="500" touchspin>
@@ -33,7 +33,7 @@
         <div class="form-group">
             <label>
                 Field alignment
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="left, center, right"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-0">
                 <button type="button" ng-repeat="option in alignmentOptions" ng-click="component.formSettings.align = option" ng-model="component.formSettings.align" class="btn text-capitalize" ng-class="{'active': option == component.formSettings.align }">{{option}}</button>
@@ -43,7 +43,7 @@
         <div class="form-group">
             <label>
                 Button alignment
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="left, center, right"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="btn-group ssb-sidebar-btn-group ssb-sidebar-btn-group-small-top margin-bottom-0">
                 <button type="button" ng-repeat="option in alignmentOptions" ng-click="component.btn.align = option" ng-model="component.btn.align" class="btn text-capitalize" ng-class="{'active': option == component.btn.align }">{{option}}</button>
@@ -56,7 +56,7 @@
         <div class="form-group" ng-repeat="field in component.fields">
             <label>
                 Show "{{field.name | titleCase}}" field
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="show '{{field.name | titleCase}}' field on form"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show '{{field.name | titleCase}}' field on form"><i class="fa fa-info-circle" /></span>
             </label>
             <switch name="chk_{{field.name}}" ng-model="field.value" class="pull-right"></switch>
         </div>
@@ -64,7 +64,7 @@
         <div class="form-group customer-tags">
             <label class="block">
                 Add tag to contact
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Add a contact tag on signup"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add a contact tag on signup"><i class="fa fa-info-circle" /></span>
             </label>
             <ui-select tagging="vm.tagToCustomer" tagging-match-to-key="label" multiple ng-model="component.tags" theme="bootstrap" ng-disabled="disabled">
                 <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
@@ -77,7 +77,7 @@
         <div class="form-group">
             <label>
                 Unique email check
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Enforced unique check on email for contact creation"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Enforced unique check on email for contact creation"><i class="fa fa-info-circle" /></span>
             </label>
             <switch name="uniqueemail" ng-model="component.uniqueEmail" class="pull-right"></switch>
         </div>
@@ -88,7 +88,7 @@
         <div class="form-group">
             <label>
                 On Submit Message
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="success message on submit"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="success message on submit"><i class="fa fa-info-circle" /></span>
             </label>
             <textarea id="successMessage" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="component.formSettings.successMessage"></textarea>
         </div>
@@ -96,7 +96,7 @@
         <div class="form-group">
             <label>
                 On Error Message
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="error message on submit"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="error message on submit"><i class="fa fa-info-circle" /></span>
             </label>
 
             <textarea id="errorMessage" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="component.formSettings.errorMessage"></textarea>
@@ -109,7 +109,7 @@
                 <div class="col-sm-12">
                     <label class="block">
                         After Signup Event
-                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Select the communication you would like intitiated"><i class="fa fa-info-circle" /></span>
+                        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select the communication you would like intitiated"><i class="fa fa-info-circle" /></span>
                     </label>
                     <div class="radio radio-inline clip-radio radio-primary">
                         <input type="radio" id="radio3" name="vertical" value="true" ng-model="component.sendEmail">
@@ -128,7 +128,7 @@
             <div class="margin-bottom-5" ng-if="component.sendEmail == 'true'">
                 <label for="link-page">
                     Select Email
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Template for email"><i class="fa fa-info-circle" /></span>
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Template for email"><i class="fa fa-info-circle" /></span>
                 </label>
                 <div ng-if="emails">
                     <ui-select ng-model="component.emailId" theme="bootstrap">
@@ -147,7 +147,7 @@
             <div class="margin-bottom-5" ng-if="component.sendEmail == 'false'">
                 <label for="link-page">
                     Select Autoresponder Campaign
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Campaign Selection"><i class="fa fa-info-circle" /></span>
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Campaign Selection"><i class="fa fa-info-circle" /></span>
                 </label>
                 <div ng-if="emails">
                     <ui-select ng-model="component.campaignId" theme="bootstrap">
@@ -170,7 +170,7 @@
             <div class="form-group" ng-class="{'margin-bottom-0': !component.redirect}">
                 <label for="redirect">
                     Redirect
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html="Redirect after submission"><i class="fa fa-info-circle" /></span>
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Redirect after submission"><i class="fa fa-info-circle" /></span>
                 </label>
                 <switch name="redirect" ng-model="component.redirect" class="pull-right"></switch>
             </div>

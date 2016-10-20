@@ -25,7 +25,7 @@
         ng-click="vm.moveSection('up', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
-        tooltip-html="Move section up"
+        tooltip-html-unsafe="Move section up"
         tooltip-append-to-body="true">
     </div>
 
@@ -35,7 +35,7 @@
         ng-click="vm.moveSection('down', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
-        tooltip-html="Move section down"
+        tooltip-html-unsafe="Move section down"
         tooltip-append-to-body="true">
     </div>
 
@@ -44,7 +44,7 @@
         ng-click="vm.duplicateSection(vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
-        tooltip-html="Duplicate section"
+        tooltip-html-unsafe="Duplicate section"
         tooltip-append-to-body="true">
     </div>
 
@@ -54,7 +54,7 @@
         ng-click="vm.removeSectionFromPage(vm.sectionIndex)"
         tooltip-animation="false"
         tooltip-placement="bottom"
-        tooltip-html="Remove section"
+        tooltip-html-unsafe="Remove section"
         tooltip-append-to-body="true">
     </div>
 

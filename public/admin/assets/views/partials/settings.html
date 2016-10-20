@@ -118,17 +118,17 @@
                         <div class="col-sm-6 col-xs-12">
                             <div class="form-group">
                                 <label>Title</label>
-                                <span tooltip-placement="right" tooltip-html="Title will appear in search engine results, browser tab and bookmarks."><i class="fa fa-info-circle" /></span>
+                                <span tooltip-placement="right" tooltip-html-unsafe="Title will appear in search engine results, browser tab and bookmarks."><i class="fa fa-info-circle" /></span>
                                 <input type="text" class="form-control" ng-model="website.title" />
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
-                                <span tooltip-placement="right" tooltip-html="Description will appear in search engine results."><i class="fa fa-info-circle" /></span>
+                                <span tooltip-placement="right" tooltip-html-unsafe="Description will appear in search engine results."><i class="fa fa-info-circle" /></span>
                                 <textarea type="text" class="form-control" ng-model="website.seo.description"></textarea>
                             </div>
                             <div class="form-group">
                                 <label>Keywords</label>
-                                <span tooltip-placement="right" tooltip-html="Use a comma to separate keywords for search engine indexing."><i class="fa fa-info-circle" /></span>
+                                <span tooltip-placement="right" tooltip-html-unsafe="Use a comma to separate keywords for search engine indexing."><i class="fa fa-info-circle" /></span>
                                 <tags-input min-length="1" ng-model="website.seo.keywords"></tags-input>
                             </div>
                         </div>
@@ -240,7 +240,7 @@
                     <form class="col-sm-6 form-horizontal">
                         <div class="form-group">
                             <label>Enable Blog</label>
-                            <span tooltip-placement="bottom" tooltip-html="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
+                            <span tooltip-placement="bottom" tooltip-html-unsafe="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
                             <switch ng-model="account.showhide.blog" ng-change="toggleEnableBlog(account.showhide.blog)" class="pull-right"></switch>
                         </div>
                         <div class="clearfix"></div>
@@ -251,12 +251,12 @@
                       <form class="col-sm-6 form-horizontal">
                           <div class="form-group">
                               <label>Enable Scripts</label>
-                              <span tooltip-placement="bottom" tooltip-html="Enable third party scripts your website"><i class="fa fa-info-circle" /></span>
+                              <span tooltip-placement="bottom" tooltip-html-unsafe="Enable third party scripts your website"><i class="fa fa-info-circle" /></span>
                               <switch ng-model="website.resources.toggles.userScripts" class="pull-right"></switch>
                           </div>
                           <div class='form-group' ng-if='website.resources.toggles.userScripts'>
                             <label>Global Scripts</label>
-                            <span tooltip-placement="bottom" tooltip-html="Add script snippets for your website globally"><i class="fa fa-info-circle" /></span>
+                            <span tooltip-placement="bottom" tooltip-html-unsafe="Add script snippets for your website globally"><i class="fa fa-info-circle" /></span>
                             <textarea class='form-control' ng-model='website.resources.userScripts.global.original'></textarea>
                           </div>
                           <div class="clearfix"></div>
@@ -273,7 +273,7 @@
                     <form class="col-sm-6 form-horizontal">
                         <div class="form-group">
                             <label>Enable Taxes</label>
-                            <span tooltip-placement="bottom" tooltip-html="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
+                            <span tooltip-placement="bottom" tooltip-html-unsafe="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
                             <switch ng-model="account.commerceSettings.taxes" class="pull-right"></switch>
                         </div>
                         <div class="clearfix"></div>
@@ -286,7 +286,7 @@
                             </div>
                             <div ng-if="account.commerceSettings.taxbased !== 'business_location'" class="form-group">
                                 <label>Sales are Taxable Only in (States):</label>
-                                <span tooltip-placement="right" tooltip-html="Unless specified otherwise, all locations are assumed to be taxable."><i class="fa fa-info-circle" /></span>
+                                <span tooltip-placement="right" tooltip-html-unsafe="Unless specified otherwise, all locations are assumed to be taxable."><i class="fa fa-info-circle" /></span>
                                 <tags-input min-length="2" placeholder="State(s)" ng-model="account.commerceSettings.taxnexus"></tags-input>
                             </div>
                         </div>

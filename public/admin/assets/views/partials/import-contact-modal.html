@@ -115,9 +115,9 @@
                                                 </label>
                                                 <div class="col-sm-1 field-status">
                                                     <div ng-if="column.match">
-                                                        <p class="text-small text-danger" ng-if="column.errorRows.length > 0"> <span tooltip-placement="top" tooltip-html="{{column.errorRows.length}} Errors" class="fa fa-times fa-2x"></span>
+                                                        <p class="text-small text-danger" ng-if="column.errorRows.length > 0"> <span tooltip-placement="top" tooltip-html-unsafe="{{column.errorRows.length}} Errors" class="fa fa-times fa-2x"></span>
                                                         </p>
-                                                        <p class="text-small text-success" ng-if="column.errorRows.length <= 0"><span tooltip-placement="top" tooltip-html="Zero Errors" class="fa fa-check-circle-o fa-2x"></span>
+                                                        <p class="text-small text-success" ng-if="column.errorRows.length <= 0"><span tooltip-placement="top" tooltip-html-unsafe="Zero Errors" class="fa fa-check-circle-o fa-2x"></span>
                                                         </p>
                                                     </div>
                                                 </div>

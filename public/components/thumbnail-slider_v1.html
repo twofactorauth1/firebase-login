@@ -19,9 +19,9 @@
                                     </a>
                                     </div>
                                     <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromThumbnail($index, $parent.$parent.$index)">
-                                        <button class="btn-delete-single-image"><i class='fa fa-trash' tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html="Delete this slide."></i></button>
+                                        <button class="btn-delete-single-image"><i class='fa fa-trash' tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this slide."></i></button>
                                     </div>
-                                    <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html="Add another slide." ng-click="addImageFromMedia(component._id, $index, false, $parent.$parent.$index)">
+                                    <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another slide." ng-click="addImageFromMedia(component._id, $index, false, $parent.$parent.$index)">
                                         <a href="">
                                             <i class="fa fa-plus"></i>
                                         </a>

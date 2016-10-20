@@ -69,7 +69,7 @@
                                     class="btn btn-default"
                                     tooltip-placement="top"
                                     tooltip-append-to-body="true"
-                                    tooltip-html="Status - {{post.post_status}}">
+                                    tooltip-html-unsafe="Status - {{post.post_status}}">
 
                                     <i ng-if="post.post_status === 'PUBLISHED'" class="fa fa-globe"></i>
                                     <i ng-if="post.post_status === 'DRAFT'" class="fa fa-folder-open-o"></i>
@@ -81,7 +81,7 @@
                                     class="btn btn-default"
                                     tooltip-placement="top"
                                     tooltip-append-to-body="true"
-                                    tooltip-html="Toggle Featured"
+                                    tooltip-html-unsafe="Toggle Featured"
                                     ng-click="vm.toggleFeatured(post)">
 
                                     <i ng-if="post.featured" class="fa fa-star"></i>
@@ -94,13 +94,13 @@
                             </div>
                         </div>
                         <div class="ssb-blog-post-action-buttons">
-                            <button class="btn btn-default" tooltip-placement="top" tooltip-html="Create duplicate post" ng-click="vm.duplicatePost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="Create duplicate post" ng-click="vm.duplicatePost(post)">
                                 <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
                             </button>
-                            <button class="btn btn-default" tooltip-placement="top" tooltip-html="View post" ng-click="vm.viewPost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="View post" ng-click="vm.viewPost(post)">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                             </button>
-                            <button class="btn btn-default" tooltip-placement="top" tooltip-html="Delete post" ng-click="vm.deletePost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="Delete post" ng-click="vm.deletePost(post)">
                                 <i class="fa fa-trash"></i><span class="sr-only">Delete</span>
                             </button>
                             <button class="btn btn-primary" ng-click="vm.editPost(post)">
@@ -162,7 +162,7 @@
                     ng-repeat="page in vm.state.pages track by $index"
                     ng-class="{ 'active-page': page._id === vm.state.page._id }"
                     class="ssb-page-section-settings-item">
-                    <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html="Page Settings"></div>
+                    <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
                     <div class="panel-group">
                         <div class="ssb-sidebar-sortable-item panel panel-default">
                             <div class="panel-heading">
@@ -228,7 +228,7 @@
                                 ng-click="vm.toggleFeatured(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
-                                tooltip-html="Toggle Featured">
+                                tooltip-html-unsafe="Toggle Featured">
 
                                 <i ng-if="vm.state.post.featured" class="fa fa-star"></i>
                                 <i ng-if="!vm.state.post.featured" class="fa fa-star-o"></i>
