@@ -1282,7 +1282,7 @@ module.exports = {
         var match = {
             $match:{
                 account_id:accountId,
-                status:{$nin:['failed']},
+                status:{$nin:['failed', 'pending_payment']},
                 created_at:{
                     $gte:start,
                     $lte:end
