@@ -167,7 +167,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-if="vm.uiState.whenToSend !== 'now'" ng-class="{'disabled': vm.uiState.disableEditing}">
+                        <div class="well bg-white margin-bottom-20 delivery-selector" ng-if="vm.uiState.whenToSend !== 'now'" ng-class="{'disabled': vm.uiState.disableEditing}">
                             <datepicker ng-model="vm.uiState.delivery.date" min-date="vm.uiState.delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
                             <div class="clearfix"></div>
                             <timepicker ng-model="vm.uiState.delivery.date" hour-step="vm.uiState.hstep" minute-step="vm.uiState.mstep" min="vm.uiState.delivery.minDate" class="center"></timepicker>
