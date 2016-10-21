@@ -264,6 +264,11 @@
 
 
         $scope.setNewReportData = function(results) {
+            if(moment($scope.date.endDate).diff(moment($scope.date.startDate), 'days') <=7) {
+                ChartAnalyticsService.setGraunularity('hours');
+            } else {
+                ChartAnalyticsService.setGraunularity('days');
+            }
             var desktop = 0;
             var mobile = 0;
             _.each(results.visitorDeviceReport.result, function(device){

@@ -254,6 +254,15 @@
 
 
         $scope.setNewReportData = function(results) {
+            /*
+             * set the granularity of labels in ChartService
+             */
+
+            if(moment($scope.date.endDate).diff(moment($scope.date.startDate), 'days') <=7) {
+                ChartAnalyticsService.setGraunularity('hours');
+            } else {
+                ChartAnalyticsService.setGraunularity('days');
+            }
             var desktop = 0;
             var mobile = 0;
             _.each(results.visitorDeviceReport.result, function(device){
@@ -331,6 +340,7 @@
             });
             $scope.sessions = _totalSessions;
             $scope.sessionsData = _sessionsData;
+
 
 
             ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, function (data) {

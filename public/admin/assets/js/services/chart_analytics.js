@@ -354,6 +354,13 @@
         var timeframePreviousEnd = moment().subtract(30, 'days').format(); //TODO: 30d ago
         var interval = "daily";
 
+        this.setGraunularity = function(granularity) {
+            this.granularity = 'days';
+            if(granularity==='hours') {
+                this.granularity = 'hours';
+            }
+        };
+
         //reports
 
         this.queryReports = function (date, _hostname, _hostnameAry) {
@@ -519,7 +526,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
@@ -576,6 +583,10 @@
             if(dailyActiveUsersData) {
                 analyticsOverviewConfig.series.push({name: 'Daily Active Users', data:dailyActiveUsersData});
             }
+            if(this.granularity === 'hours') {
+                analyticsOverviewConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                analyticsOverviewConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
             fn(analyticsOverviewConfig);
         };
 
@@ -593,7 +604,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
@@ -651,7 +662,10 @@
                  }
                  */
             };
-
+            if(this.granularity === 'hours') {
+                emailsOverviewConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                emailsOverviewConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
             fn(emailsOverviewConfig);
         };
 
@@ -670,7 +684,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
@@ -715,6 +729,10 @@
                     enabled: false
                 }
             };
+            if(this.granularity === 'hours') {
+                timeonSiteConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                timeonSiteConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
             fn(timeonSiteConfig);
         };
 
@@ -995,7 +1013,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
@@ -1069,7 +1087,10 @@
                  }
                  */
             };
-
+            if(this.granularity === 'hours') {
+                revenueConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                revenueConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
             fn(revenueConfig);
         };
 
