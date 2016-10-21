@@ -60,7 +60,7 @@
                         <div class="clearfix mb15"></div>
                         <div ng-show="formSuccess" ng-if="component.formSettings.successMessage">
                             <div class="row thank-you animated" ng-class="{fadeOut: !formSuccess, tada: formSuccess}">
-                                <h3 class="center mb20" ng-bind-html="component.formSettings.successMessage || 'Thank You for Submitting!'"></h3>
+                                <h3 class="center mb20" ng-bind-html="component.formSettings.successMessage"></h3>
                             </div>
                         </div>
                          <div ng-show="formError">
