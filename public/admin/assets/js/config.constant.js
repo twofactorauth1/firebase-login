@@ -528,7 +528,7 @@ app.constant('JS_REQUIRES', {
     // 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
     "bootstrap-confirmation": ['../js/libs/bootstrap-confirmation/bootstrap-confirmation.js'],
     'uuid': '../js/libs_misc/uuid.js',
-    // 'ckeditor': '../js/libs_misc/ckeditor/ckeditor.js',
+    
     'papaParse': '../js/libs/papaparse/papaparse.min.js',
     'string_score': '../js/libs/string_score/string_score.min.js',
 
@@ -551,7 +551,7 @@ app.constant('JS_REQUIRES', {
     'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',
     'iconsCtrl': 'assets/js/controllers/iconsCtrl.js',
     'vAccordionCtrl': 'assets/js/controllers/vAccordionCtrl.js',
-    'ckeditorCtrl': 'assets/js/controllers/ckeditorCtrl.js',
+    
     'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
