@@ -24,7 +24,7 @@
                                         </span>
                                             </div>
                                             <div class="col-xs-3 col-md-3 padding-right-0">
-                                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterContacts()">
+                                                <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterCustomers()">
                                                     <span>Filter</span>
                                                 </button>
                                             </div>
@@ -114,7 +114,7 @@
                                             </span>
                                         </div>
                                         <div class="col-xs-5">
-                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterContacts()">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterCustomers()">
                                                 <span>Filter</span>
                                             </button>
                                         </div>
@@ -169,56 +169,17 @@
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter">
-                                <th class="column-width" ng-show="column.name">
+                                <th class="column-width">
 
                                 </th>
-                                <th class="column-width" ng-show="column.name">
-                                    <input st-search="_id" placeholder="Contact ID" class="form-control" type="search" />
+                                <th class="column-width">
+                                    <input st-search="_id" placeholder="ID" class="form-control" type="search" />
                                 </th>
-                                <th class="column-width" ng-show="column.photo">
-                                    <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterContact.photo.selected.value" />
-                                    <ui-select ng-model="filterContact.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
-                                        <ui-select-match placeholder="Select Photo">
-                                            <small ng-bind-html="$select.selected.name"></small>
-                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchPicture', 'photo')"></span>
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="option in contactPhotoOptions">
-                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
-                                            <small ng-bind-html="option.name | highlight: $select.search"></small>
-                                        </ui-select-choices>
-                                    </ui-select>
+                                <th class="column-width">
+                                    <input st-search="subdomain" placeholder="Subdomain" class="form-control" type="search" />
                                 </th>
-                                <th class="column-width" ng-show="column.name">
-                                    <input st-search="first" placeholder="First Name" class="form-control" type="search" />
-                                </th>
-                                <th class="column-width" ng-show="column.name">
-                                    <input st-search="last" placeholder="Last Name" class="form-control" type="search" />
-                                </th>
-                                <th class="column-width" ng-show="column.tags">
-                                    <input st-search="tempTags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterContact.type.selected.label" />
-                                    <ui-select ng-model="filterContact.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
-                                        <ui-select-match placeholder="Select Type">
-                                            <small ng-bind-html="$select.selected.label"></small>
-                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')"></span>
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="tag in contactTags |  orderBy:'label' | filter: $select.search">
-                                            <small ng-bind-html="tag.label | highlight: $select.search"></small>
-                                        </ui-select-choices>
-                                    </ui-select>
-                                </th>
-                                <th class="column-width" ng-show="column.email">
-                                    <input st-search="email" placeholder="Email" class="form-control" type="search" />
-                                </th>
-                                <!-- Need to add custom filter -->
-                                <th class="column-width" ng-show="column.address">
-                                    <input st-search="address" placeholder="Address" class="form-control hidden" type="search" />
-                                </th>
-                                <th class="column-width" ng-show="column.phone">
-                                    <input st-search="phone" placeholder="Phone" class="form-control hidden" type="search" />
-                                </th>
-                                <th ng-show="column.social">
-                                </th>
-                                <th ng-show="column.created">
+                                <th class="column-width hidden-xs">
+                                    <input st-search="customDomain" placeholder="Custom Domain" class="form-control" type="search" />
                                 </th>
                             </tr>
                         </thead>
