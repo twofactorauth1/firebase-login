@@ -222,7 +222,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorReports');
-
+        var granularity = self._determineGranularity(startDate, endDate);
 
         var stageAry = [];
         var match = {
@@ -248,6 +248,9 @@ module.exports = {
                 }
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {$group:{_id:"$_id.yearMonthDay", visits:{$sum:1} }};
@@ -269,11 +272,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        }
                         cb(null, resultAry);
                     }
                 });
@@ -294,11 +305,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        }
                         cb(null, newVisitorResults, resultAry);
                     }
                 });
@@ -407,6 +426,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getUserReport');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -433,6 +453,9 @@ module.exports = {
                 }
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {
@@ -458,11 +481,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
                         cb(null, resultAry);
                     }
                 });
@@ -483,11 +515,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, currentMonth, resultAry);
                     }
                 });
@@ -511,6 +552,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getPageViewsReport');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -533,6 +575,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            group.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group);
 
         async.waterfall([
@@ -550,11 +595,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
+
                         cb(null, resultAry);
                     }
                 });
@@ -575,11 +629,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, currentMonth, resultAry);
                     }
                 });
@@ -602,6 +665,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getSessionsReport');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -628,6 +692,9 @@ module.exports = {
                 }
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {
@@ -653,11 +720,21 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
+
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
+
                         cb(null, resultAry);
                     }
                 });
@@ -678,11 +755,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousEnd).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
+
                         cb(null, currentMonth, resultAry);
                     }
                 });
@@ -705,7 +791,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> sessionLengthReport');
-
+        var granularity = self._determineGranularity(start, end);
         var stageAry = [];
         var match = {
             $match:{
@@ -730,6 +816,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         async.waterfall([
@@ -748,11 +837,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
                         cb(null, resultAry);
                     }
                 });
@@ -776,11 +873,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0,count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
                         //self.log.debug('results:', value);
                         cb(null, nonBounceAvg, resultAry);
                     }
@@ -806,11 +911,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0,count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, nonBounceAvg, bounceAvg, resultAry);
                     }
                 });
@@ -833,11 +946,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, nonBounceAvg, bounceAvg, prevNonBounceAvg, resultAry);
                     }
                 });
@@ -1173,6 +1294,38 @@ module.exports = {
         return zeroedResultAry;
     },
 
+    _zeroMissingHours: function(resultAry, blankResult, firstDate, lastDate) {
+        var currentDate = firstDate;
+        var zeroedResultAry = [];
+        _.each(resultAry, function(result){
+            while(moment(currentDate).isBefore(result.timeframe.start)) {
+
+                zeroedResultAry.push({
+                    timeframe:{
+                        start : currentDate,
+                        end : moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm')
+                    }
+                });
+                zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+                currentDate = moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+            }
+            zeroedResultAry.push(result);
+            currentDate = moment(result.timeframe.start).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        });
+        while(moment(currentDate).isBefore(moment(lastDate)) || moment(currentDate).isSame(moment(lastDate), 'hour')) {
+            zeroedResultAry.push({
+                timeframe:{
+                    start : currentDate,
+                    end : moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm')
+                }
+            });
+            zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+            currentDate = moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        }
+
+        return zeroedResultAry;
+    },
+
     getUserAgentReport: function(accountId, userId, start, end, isAggregate, fn) {
         var self = this;
         self.log = _log;
@@ -1217,6 +1370,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getDailyActiveUsers');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -1238,6 +1392,9 @@ module.exports = {
                 count: {$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {
@@ -1261,11 +1418,19 @@ module.exports = {
                             start: entry._id
                         }
                     };
-                    result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                    if(granularity === 'hours') {
+                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                    } else {
+                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                    }
                     resultAry.push(result);
                 });
                 resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                if(granularity === 'hours') {
+                    resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                } else {
+                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                }
                 self.log.debug(accountId, userId, '<< getDailyActiveUsers');
                 return fn(null, resultAry);
             }
@@ -1277,6 +1442,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getRevenueByMonth');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -1301,6 +1467,9 @@ module.exports = {
                 totals: {$push:'$total'}
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         async.waterfall([
@@ -1321,11 +1490,19 @@ module.exports = {
                                 start: entry._id
                             }
                         };
-                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        }
                         resultAry.push(result);
                     });
                     resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
                     cb(err, resultAry);
                 });
             },
@@ -1348,11 +1525,19 @@ module.exports = {
                                 start: entry._id
                             }
                         };
-                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        }
                         resultAry.push(result);
                     });
                     resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                    }
                     var results = {
                         currentMonth:currentMonth,
                         prevMonth:resultAry
@@ -1414,6 +1599,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getCampaignEmailsReport');
+        var granularity = self._determineGranularity(start, end);
 
         var campaignsByDayStageAry = [];
         var match = {
@@ -1440,6 +1626,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            group.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         campaignsByDayStageAry.push(group);
         var group2 = {
             $group:{
@@ -1473,6 +1662,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            emailsGroup.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         emailsByDayStageAry.push(emailsGroup);
 
         var opensByDayStageAry = [];
@@ -1497,6 +1689,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            opensGroup.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         opensByDayStageAry.push(opensGroup);
 
         var clicksByDayStageAry = [];
@@ -1521,6 +1716,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            clicksGroup.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         clicksByDayStageAry.push(clicksGroup);
 
         async.parallel({
@@ -1534,11 +1732,19 @@ module.exports = {
                                 start: entry._id.yearMonthDay
                             }
                         };
-                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
                         resultAry.push(result);
                     });
                     resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
                     cb(err, resultAry);
                 });
             },
@@ -1552,11 +1758,19 @@ module.exports = {
                                 start: entry._id.yearMonthDay
                             }
                         };
-                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
                         resultAry.push(result);
                     });
                     resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
                     cb(err, resultAry);
                 });
             },
@@ -1570,11 +1784,19 @@ module.exports = {
                                 start: entry._id.yearMonthDay
                             }
                         };
-                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
                         resultAry.push(result);
                     });
                     resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
                     cb(err, resultAry);
                 });
             },
@@ -1588,11 +1810,19 @@ module.exports = {
                                 start: entry._id.yearMonthDay
                             }
                         };
-                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
                         resultAry.push(result);
                     });
                     resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
                     cb(err, resultAry);
                 });
             }
@@ -1601,5 +1831,16 @@ module.exports = {
             return fn(err, results);
         });
 
+    },
+
+    /*
+     * If duration is 7 days or less, granularity will be 'hours'.  Else 'days'
+     */
+    _determineGranularity: function(startDate, endDate) {
+        if(moment(endDate).diff(moment(startDate), 'days') <=7) {
+            return 'hours';
+        } else {
+            return 'days';
+        }
     }
 };

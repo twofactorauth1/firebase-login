@@ -519,7 +519,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
@@ -593,7 +593,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
@@ -670,7 +670,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
@@ -995,7 +995,7 @@
                         text: ''
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        headerFormat: '<b>{point.x:%b %d %H:%M}</b><br>',
                         pointFormat: '<b class="text-center">{point.y}</b>'
                     },
                     legend: {
