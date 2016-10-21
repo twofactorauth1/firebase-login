@@ -45,7 +45,7 @@
                                 <div sectionId = "{{section._id}}" ng-repeat="section in vm.uiState.componentTypes | orderBy:['title', 'version'] | filter:{ filter: componentFilter.lowercase }" ng-if="componentFilter.lowercase != 'all' && componentFilter.lowercase != 'featured'" class="ssb-sidebar-add-section margin-bottom-15 ssb-sidebar-layout-version" ng-click="vm.uiState.addComponent(section);vm.uiState.openSidebarPanel = '';" >
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">
-                                            <a href>
+                                            <a>
                                                 <span
                                                     style=" background-image: url('{{section.preview}}');height: 190px;cursor: move;cursor: -webkit-grabbing;">
                                                 </span>
@@ -70,7 +70,7 @@
                                 <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.componentTypes | orderBy:['title', 'version']" ng-if="componentFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.uiState.addComponent(section);vm.uiState.openSidebarPanel = '';">
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">
-                                            <a href>
+                                            <a>
                                                 <span style="  background: url('{{section.preview}}');background-size: cover;height: 115px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;cursor: move;cursor: -webkit-grabbing;"></span>
                                             </a>
                                         </div>
