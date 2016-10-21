@@ -176,3 +176,11 @@ table.grid thead tr{
 .table.grid > tbody > tr > td, .table.bg-white > tbody > tr > td{
     cursor: pointer;
 }
+
+.table.bg-white{
+    @media (max-width: 767px) {
+        input.form-control[st-search], input.form-control.ui-select-search{
+            min-width: 70px;
+        }
+    }    
+}

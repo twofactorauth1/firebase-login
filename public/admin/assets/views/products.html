@@ -127,7 +127,7 @@
                                 </ui-select-choices>
                             </ui-select>
                         </th>
-                        <th>
+                        <th class="hidden-xs">
                             <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterProduct.status.selected.data" />
                             <ui-select ng-model="filterProduct.status.selected" on-select="triggerInput('#searchStatus', true)" theme="bootstrap">
                                 <ui-select-match placeholder="Select Status">
@@ -142,7 +142,7 @@
                         <th>
                             <input st-search="name" placeholder="Name" class="form-control" type="search" />
                         </th>
-                        <th>
+                        <th class="hidden-xs">
                             <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterProduct.type.selected.data" />
                             <ui-select ng-model="filterProduct.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
                                 <ui-select-match placeholder="Select Type">
@@ -154,7 +154,7 @@
                                 </ui-select-choices>
                             </ui-select>
                         </th>
-                        <th>
+                        <th class="hidden-xs">
                             <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
                         </th>
                     </tr>
