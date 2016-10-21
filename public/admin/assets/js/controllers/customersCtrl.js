@@ -91,6 +91,11 @@
         };
 
 
+        $scope.filterCustomers = function () {
+          $scope.showFilter = !$scope.showFilter;
+        };
+
+
 
         /*
          * @column

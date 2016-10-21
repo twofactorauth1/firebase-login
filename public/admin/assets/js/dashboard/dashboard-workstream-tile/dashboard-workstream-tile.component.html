@@ -60,7 +60,7 @@
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
                         ng-class="{ 'workstream-block-complete': block.complete }"
                         tooltip-placement="right"
-                        tooltip-html-unsafe="{{block.helpText}}">
+                        tooltip="{{block.helpText}}">
 
                         {{block.name}}
 
@@ -74,7 +74,7 @@
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
                         tooltip-placement="right"
                         ng-click="vm.callAliasMethod(block.alias)"
-                        tooltip-html-unsafe="{{block.helpText}}">
+                        tooltip="{{block.helpText}}">
 
                         {{block.name}}
 
@@ -82,7 +82,7 @@
                         <i ng-if="block.complete" class="fa fa-check-circle"></i>
 
                     </a>
-                    <span tooltip-placement="right" tooltip-html-unsafe="This is an optional block and not required to unlock analytics" class="workstream-block-optional" ng-if="!block.complete && block.optional">(Optional)</span>
+                    <span tooltip-placement="right" tooltip="This is an optional block and not required to unlock analytics" class="workstream-block-optional" ng-if="!block.complete && block.optional">(Optional)</span>
 
                     <ul class="workstream-block-help-links list-unstyled">
                         <li ng-repeat="link in block.helpLinks track by $index">

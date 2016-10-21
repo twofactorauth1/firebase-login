@@ -9,7 +9,7 @@
     <!-- <div class="form-group ssb-spectrum-color-picker-small"  ng-hide="component.type == 'social-link'">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.txtcolor"></spectrum-colorpicker>
         <br />
-        <label for="colorpicker">Text <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Text color of component."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Text <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Text color of component."><i class="fa fa-info-circle" /></span></label>
     </div> -->
 
     <div class="form-group ssb-spectrum-color-picker-small">
@@ -19,7 +19,7 @@
         </div>
         <label>
             Fill color
-            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Background color of component.">
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Background color of component.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
@@ -28,7 +28,7 @@
     <div class="form-group">
         <label for="bg_hide" class="margin-bottom-0">
             Show image
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background image of component.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
@@ -44,7 +44,7 @@
     <div class="form-group ssb-background-image-picker" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
         <label for="bg_hide" class="margin-bottom-0">
             Select image
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select an image to use as a background.">
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Select an image to use as a background.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
@@ -56,7 +56,7 @@
         <div>
             <label for="bg_position">
                 Image Fit
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Background image position.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -65,7 +65,7 @@
             <input type="radio" id="fit-cover" name="inline" value="cover" ng-model="component.bg.img.fit">
             <label for="fit-cover">
                 Cover
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will fill container, cropping any extra width or height.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background image will fill container, cropping any extra width or height.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -74,7 +74,7 @@
             <input type="radio" id="fit-height" name="inline" value="height" ng-model="component.bg.img.fit">
             <label for="fit-height">
                 Height
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will take up full height of container.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background image will take up full height of container.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -83,7 +83,7 @@
             <input type="radio" id="fit-width" name="inline" value="width" ng-model="component.bg.img.fit">
             <label for="fit-width">
                 Width
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will take up full width of container.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background image will take up full width of container.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -94,7 +94,7 @@
         <div>
             <label for="bg_position">
                 Image position
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Background image position.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -147,7 +147,7 @@
         </div>
         <label>
             Box fill color
-            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Background color of contact box.">
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Background color of contact box.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
@@ -160,12 +160,12 @@
     <div class="form-group ssb-spectrum-color-picker-small" ng-if="component.type == 'simple-form'">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.color"></spectrum-colorpicker>
         <br />
-        <label for="colorpicker">Button Text <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set text color of submit button."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Button Text <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set text color of submit button."><i class="fa fa-info-circle" /></span></label>
     </div>
     <div class="form-group ssb-spectrum-color-picker-small">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.bgcolor"></spectrum-colorpicker>
         <br />
-        <label for="colorpicker">Button BG <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set color of submit button."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Button BG <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set color of submit button."><i class="fa fa-info-circle" /></span></label>
     </div>
 </div> -->
 
@@ -173,12 +173,12 @@
     <div class="form-group ssb-spectrum-color-picker-small">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.color"></spectrum-colorpicker>
         <br />
-        <label for="colorpicker">Hover Text Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set text color of button when hovered."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Hover Text Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set text color of button when hovered."><i class="fa fa-info-circle" /></span></label>
     </div>
     <div class="form-group ssb-spectrum-color-picker-small">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.bgcolor"></spectrum-colorpicker>
         <br />
-        <label for="colorpicker">Hover Background Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set the background color of the button when hovered."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Hover Background Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set the background color of the button when hovered."><i class="fa fa-info-circle" /></span></label>
     </div>
 </div> -->
 
@@ -186,12 +186,12 @@
     <div class="form-group ssb-spectrum-color-picker-small">
         <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
         <br />
-        <label for="colorpicker">Title Box BG <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background color of title and description box."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Title Box BG <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Background color of title and description box."><i class="fa fa-info-circle" /></span></label>
     </div>
     <div class="form-group ssb-spectrum-color-picker-small">
         <spectrum-colorpicker format="'rgb'" options="vm.spectrum.options" ng-model="component.iconColor"></spectrum-colorpicker>
         <br />
-        <label for="colorpicker">Icon Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Icon Color <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set color of product icons."><i class="fa fa-info-circle" /></span></label>
     </div>
 </div>
 
@@ -205,7 +205,7 @@
         <div class="form-group">
             <label for="txt_size">
                 Text Size
-               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+               <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="horizontal space between fields"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
                 <input type="text" ng-model="component.formSettings.formTextSize" min="6" max="96" touchspin>
@@ -215,7 +215,7 @@
         <div class="form-group">
             <label for="input_txt_size">
                 Input Text Size
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="horizontal space between fields"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-7 pull-right">
                 <input type="text" ng-model="component.formSettings.inputTextSize" min="6" max="96" touchspin>
@@ -225,7 +225,7 @@
         <div class="form-group">
             <label>
                 Font
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="font family for entire form"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for entire form"><i class="fa fa-info-circle" /></span>
             </label>
             <select ng-model="component.formSettings.formFontFamily" class="form-control margin-bottom-0">
                 <option value="">--Select--</option>
@@ -236,7 +236,7 @@
         <div class="form-group">
             <label>
                 Input text font
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="font family for input fields"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for input fields"><i class="fa fa-info-circle" /></span>
             </label>
             <select ng-model="component.formSettings.inputFontFamily" class="form-control margin-bottom-0">
                 <option value="">--Select--</option>
@@ -248,7 +248,7 @@
             <div>
                 <label>
                     Box opacity
-                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set contact box opacity.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Set contact box opacity.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -269,7 +269,7 @@
     <div class="form-group">
         <label for="post-order">
             Post Order
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Post order."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Post order."><i class="fa fa-info-circle" /></span>
         </label>
         <div class="col-xs-7 pull-right">
             <select class="chosen-select form-control" ng-model="component.postorder" ng-change="saveComponent(true)">
@@ -291,7 +291,7 @@
         <div class="ssb-wide-input">
             <label>
                 Text Size
-                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Text size of menu.">
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Text size of menu.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -302,7 +302,7 @@
             <div>
                 <label>
                     Font
-                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Font Family of menu.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Font Family of menu.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -326,7 +326,7 @@
         <div class="form-group" ng-show="component.bg.img.show" ng-if="component.type != 'navigation'">
             <label for="bg_blur">
                 Blur background
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
             </label>
             <switch ng-model="component.bg.img.blur" class="pull-right"></switch>
         </div>
@@ -334,21 +334,21 @@
         <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show">
             <label for="bg_parallax" ng-if="component.type != 'navigation'">
                 Parallax
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image."><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove Parallax (depth-effect) to background image."><i class="fa fa-info-circle" /></span>
             </label>
             <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
         </div>
 
         <div class="form-group" ng-if="component.type == 'masthead'" ng-show="component.bg.img.show">
             <label for="bg_overlay">Under Nav</label>
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
             <switch ng-model="component.bg.img.undernav" class="pull-right"></switch>
         </div>
 
         <div class="form-group" ng-if="component.type == 'masthead' && component.bg.img.undernav" ng-show="component.bg.img.show">
             <label for="bg_fullscreen">
                 Full Screen
-                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Switch Masthead background to fullscreen.">
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Switch Masthead background to fullscreen.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -358,7 +358,7 @@
         <div class="form-group">
             <label for="bg_overlay">
                 Add overlay
-                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to background image.">
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add/remove Overlay to background image.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -373,7 +373,7 @@
             </div>
             <label>
                 Overlay color
-                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect.">
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add color to Overlay effect.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -383,7 +383,7 @@
             <div>
                 <label>
                     Overlay opacity
-                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Set Overlay opacity.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -401,7 +401,7 @@
             <div>
                 <label>
                     Box opacity
-                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set contact box opacity.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Set contact box opacity.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -428,7 +428,7 @@
     <div class="form-group">
         <label for="colorpicker">
             Image Position
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set image position to left/right."><i class="fa fa-info-circle" /></span>
         </label>
         <select ng-model="component.imagePosition" ng-change="saveComponent(true)" class="form-control">
             <option value="left">Left</option>

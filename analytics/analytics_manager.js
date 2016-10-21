@@ -1282,7 +1282,7 @@ module.exports = {
         var match = {
             $match:{
                 account_id:accountId,
-                status:{$nin:['failed']},
+                status:{$nin:['failed', 'pending_payment']},
                 created_at:{
                     $gte:start,
                     $lte:end
@@ -1419,6 +1419,7 @@ module.exports = {
         var match = {
             $match:{
                 accountId:accountId,
+                batchId:{$ne:null},
                 sendDate:{
                     $gte:start,
                     $lte:end
@@ -1434,24 +1435,171 @@ module.exports = {
             $group:{
                 _id:{
                     campaignId:'$batchId',
-                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$start" }}
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$sendDate" }}
                 },
                 count:{$sum:1}
             }
         };
         campaignsByDayStageAry.push(group);
+        var group2 = {
+            $group:{
+                _id:{
+                    yearMonthDay:'$_id.yearMonthDay'
+                },
+                count:{$sum:1}
+            }
+        };
+        campaignsByDayStageAry.push(group2);
 
-        var opensByDayStageAry = [];
-        var opensMatch = {
+        var emailsByDayStageAry = [];
+        var emailsMatch = {
             $match:{
                 accountId:accountId,
-                openDate:{
+                sendDate:{
                     $gte:start,
                     $lte:end
                 }
             }
         };
+        if(isAggregate === true) {
+            delete emailsMatch.$match.accountId;
+        }
+        emailsByDayStageAry.push(emailsMatch);
+        var emailsGroup = {
+            $group:{
+                _id:{
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$sendDate" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        emailsByDayStageAry.push(emailsGroup);
 
+        var opensByDayStageAry = [];
+        var opensMatch = {
+            $match:{
+                accountId:accountId,
+                openedDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete opensMatch.$match.accountId;
+        }
+        opensByDayStageAry.push(opensMatch);
+        var opensGroup = {
+            $group:{
+                _id:{
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$openedDate" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        opensByDayStageAry.push(opensGroup);
+
+        var clicksByDayStageAry = [];
+        var clicksMatch = {
+            $match:{
+                accountId:accountId,
+                clickedDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete clicksMatch.$match.accountId;
+        }
+        clicksByDayStageAry.push(clicksMatch);
+        var clicksGroup = {
+            $group:{
+                _id:{
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$clickedDate" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        clicksByDayStageAry.push(clicksGroup);
+
+        async.parallel({
+            campaigns: function campaigns(cb){
+                dao.aggregateWithCustomStages(campaignsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    cb(err, resultAry);
+                });
+            },
+            emails: function emails(cb) {
+                dao.aggregateWithCustomStages(emailsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    cb(err, resultAry);
+                });
+            },
+            opens: function opens(cb){
+                dao.aggregateWithCustomStages(opensByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    cb(err, resultAry);
+                });
+            },
+            clicks: function clicks(cb){
+                dao.aggregateWithCustomStages(clicksByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    cb(err, resultAry);
+                });
+            }
+        }, function(err, results){
+            self.log.debug(accountId, userId, '<< getCampaignEmailsReport');
+            return fn(err, results);
+        });
 
     }
 };

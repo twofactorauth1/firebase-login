@@ -82,6 +82,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/reports/userAgents'), this.isAuthApi.bind(this), this.getAdminUserAgentsReport.bind(this));
         app.get(this.url('admin/reports/revenue'), this.isAuthAndSubscribedApi.bind(this), this.getAdminRevenue.bind(this));
         app.get(this.url('admin/reports/os'), this.isAuthAndSubscribedApi.bind(this), this.getAdminOSReport.bind(this));
+        app.get(this.url('admin/reports/emails'), this.isAuthAndSubscribedApi.bind(this), this.getAdminEmailsReport.bind(this));
         app.get(this.url('admin/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allAdminReports.bind(this));
     },
 
@@ -1740,6 +1741,44 @@ _.extend(api.prototype, baseApi.prototype, {
         }
     },
 
+    getAdminEmailsReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getAdminEmailsReport (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
+        var previousEnd = start;
+
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+                self.log.debug(accountId, userId, '<< getAdminEmailsReport');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
     allAdminReports: function(req, resp) {
         var self = this;
         var userId = self.userId(req);
@@ -1816,6 +1855,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 },
                 osReport: function(callback) {
                     analyticsManager.getOSReport(accountId, userId, start, end, true, callback);
+                },
+                emailsReport: function(callback) {
+                    analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
                 }
             }, function(err, results){
                 self.log.debug(accountId, userId, '<< allAdminReports');

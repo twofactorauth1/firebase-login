@@ -196,7 +196,7 @@
                                 <th ng-if="displayedContacts.length" class="column-width" ng-show="column.name">
 
                                 </th>
-                                <th class="column-width" ng-show="column.name">
+                                <th class="column-width hidden-xs" ng-show="column.name">
                                     <input st-search="_id" placeholder="ID" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.photo">
@@ -218,7 +218,7 @@
                                 <th class="column-width" ng-show="column.name">
                                     <input st-search="last" placeholder="Last" class="form-control" type="search" />
                                 </th>
-                                <th class="column-width" ng-show="column.tags">
+                                <th class="column-width hidden-xs" ng-show="column.tags">
                                     <input st-search="tempTags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterContact.type.selected.label" />
                                     <ui-select ng-model="filterContact.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
@@ -230,19 +230,19 @@
                                         </ui-select-choices>
                                     </ui-select>
                                 </th>
-                                <th class="column-width" ng-show="column.email">
+                                <th class="column-width hidden-xs" ng-show="column.email">
                                     <input st-search="email" placeholder="Email" class="form-control" type="search" />
                                 </th>
                                 <!-- Need to add custom filter -->
-                                <th class="column-width" ng-show="column.address">
+                                <th class="column-width hidden-xs" ng-show="column.address">
                                     <input st-search="address" placeholder="Address" class="form-control hidden" type="search" />
                                 </th>
-                                <th class="column-width" ng-show="column.phone">
+                                <th class="column-width hidden-xs" ng-show="column.phone">
                                     <input st-search="phone" placeholder="Phone" class="form-control hidden" type="search" />
                                 </th>
-                                <th ng-show="column.social">
+                                <th class="hidden-xs" ng-show="column.social">
                                 </th>
-                                <th ng-show="column.created">
+                                <th class="hidden-xs" ng-show="column.created">
                                 </th>
                             </tr>
                         </thead>

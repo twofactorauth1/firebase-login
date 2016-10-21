@@ -46,11 +46,11 @@
                     <br/>
                 </div>
                 <div ng-if="isEditing" class="delete-pricing-table center"  ng-click="deletePricingTable(component._id,$index)">
-                    <button class="btn-delete-pricing-table" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this table.">
+                    <button class="btn-delete-pricing-table" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this table.">
                         <i class='fa fa-trash'></i>
                     </button>
                 </div>
-                <div ng-if="isEditing" ng-click="addPricingTable(component._id,$index)" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another table.">
+                <div ng-if="isEditing" ng-click="addPricingTable(component._id,$index)" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another table.">
                     <a href="">
                         <i class="fa fa-plus"></i>
                     </a>
