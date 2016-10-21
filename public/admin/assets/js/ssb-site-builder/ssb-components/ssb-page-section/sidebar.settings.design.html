@@ -4,7 +4,7 @@
         <div class="form-group">
             <label>
                 Number of columns
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="number of columns to show per row. "><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="number of columns to show per row. "><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-6 pull-right">
                 <input type="text" ng-model="component.layoutModifiers.columns.columnsNum" min="1" max="6" ng-change="vm.uiState.updateColumnLayout(component)" touchspin>
@@ -14,7 +14,7 @@
         <div class="form-group">
             <label>
                 Column Spacing
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="space between columns"><i class="fa fa-info-circle" /></span>
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="space between columns"><i class="fa fa-info-circle" /></span>
             </label>
             <div class="col-xs-6 pull-right">
                 <input type="text" ng-model="component.layoutModifiers.columns.columnsSpacing" step="10" min="0" max="500" touchspin>
@@ -28,7 +28,7 @@
 <div class="row padding-10">
     <!-- <div class="form-group ssb-spectrum-color-picker-small">
         <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="component.txtcolor"></spectrum-colorpicker>
-        <label for="colorpicker">Text <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span></label>
+        <label for="colorpicker">Text <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Text color of section."><i class="fa fa-info-circle" /></span></label>
     </div> -->
     <div class="form-group ssb-spectrum-color-picker-small">
         <div class="ssb-spectrum-color-picker-background-container">
@@ -37,7 +37,7 @@
         </div>
         <label>
             Fill color
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background color of section.">
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background color of section.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
@@ -46,7 +46,7 @@
         <div class="form-group" ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background image of component.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -61,7 +61,7 @@
         <div class="form-group ssb-background-image-picker" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
             <label for="bg_hide" class="margin-bottom-0">
                 Select image
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select an image to use as a background.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Select an image to use as a background.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -74,7 +74,7 @@
         <div class="form-group" ng-init="switch=true" disabled ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background image of component.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background image of component.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -92,7 +92,7 @@
         <div class="form-group ssb-background-image-picker" ng-if="component.components[0].src">
             <label for="bg_hide" class="margin-bottom-0">
                 Select image
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Select an image to use as a background.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Select an image to use as a background.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -117,7 +117,7 @@
         <div>
             <label for="bg_position">
                 Image fit
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Background image position.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -126,7 +126,7 @@
             <input type="radio" id="fit-cover" name="inline" value="cover" ng-model="component.bg.img.fit">
             <label for="fit-cover">
                 Cover
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will fill container, cropping any extra width or height.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background image will fill container, cropping any extra width or height.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -135,7 +135,7 @@
             <input type="radio" id="fit-height" name="inline" value="height" ng-model="component.bg.img.fit">
             <label for="fit-height">
                 Height
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will take up full height of container.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background image will take up full height of container.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -144,7 +144,7 @@
             <input type="radio" id="fit-width" name="inline" value="width" ng-model="component.bg.img.fit">
             <label for="fit-width">
                 Width
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Background image will take up full width of container.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Background image will take up full width of container.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -155,7 +155,7 @@
         <div>
             <label for="bg_position">
                 Image position
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Background image position.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Background image position.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -185,7 +185,7 @@
     <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail || component.components[0].type === 'ssb-blog-post-list'">
         <label class="margin-bottom-0">
             Show video
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="show/hide background video of component.">
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background video of component.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
@@ -195,7 +195,7 @@
         <div>
             <label for="member-name">
                 Video Type
-                <span tooltip-placement="right" tooltip-html-unsafe="Select video type.">
+                <span tooltip-placement="right" tooltip="Select video type.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -209,7 +209,7 @@
         <div>
             <label for="video-url-vimeo">
                 Video URL
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add video URL.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -225,7 +225,7 @@
         <div>
             <label for="video-url-youtube">
                 Video URL
-                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add video URL.">
+                <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add video URL.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -248,7 +248,7 @@
             <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
                 <label for="bg_blur">
                     Blur background
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove blur effect to background image.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove blur effect to background image.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -257,7 +257,7 @@
             <div class="form-group" ng-show="component.bg.img.show && !component.bg.video.show && !vm.component.components[0].src">
                 <label for="bg_parallax" ng-if="component.type != 'navigation'">
                     Parallax
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove Parallax (depth-effect) to background image.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -267,7 +267,7 @@
             <div class="form-group" ng-show="vm.uiState.isNavHero(vm.component) && component.components[0].src">
                 <label for="bg_parallax">
                     Parallax
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove Parallax (depth-effect) to background image.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -276,7 +276,7 @@
             <!-- <div class="form-group">
                 <label for="bg_overlay">
                     Under nav
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Make Masthead go underneath nav.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Make Masthead go underneath nav.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -285,7 +285,7 @@
             <div class="form-group">
                 <label for="bg_fullscreen">
                     Full Screen
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Switch Masthead background to fullscreen.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Switch Masthead background to fullscreen.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -294,7 +294,7 @@
             <div class="form-group">
                 <label for="bg_overlay">
                     Add overlay
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to background image.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add/remove Overlay to background image.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>
@@ -308,7 +308,7 @@
                  </div>
                  <label for="colorpicker">
                      Overlay color
-                     <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect.">
+                     <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Add color to Overlay effect.">
                          <i class="fa fa-info-circle" />
                      </span>
                  </label>
@@ -317,7 +317,7 @@
             <div class="form-group" ng-if="component.bg.img.overlay">
                 <div>
                     <label for="bg_overlay_opacity">Overlay opacity</label>
-                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set Overlay opacity.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </div>
@@ -340,7 +340,7 @@
         <div class="form-group">
             <label for="bg_overlay">
             Show Overlay to slider
-            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add/remove Overlay to slider.">
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add/remove Overlay to slider.">
                 <i class="fa fa-info-circle" />
             </span>
             </label>
@@ -353,7 +353,7 @@
             </div>
             <label>
                 Overlay color of slider
-                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add color to Overlay effect of slider.">
+                <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add color to Overlay effect of slider.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
@@ -363,7 +363,7 @@
             <div>
                 <label>
                     Overlay opacity of slider
-                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Set Overlay opacity to slider images.">
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Set Overlay opacity to slider images.">
                         <i class="fa fa-info-circle" />
                     </span>
                 </label>

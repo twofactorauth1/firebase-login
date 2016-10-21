@@ -23,10 +23,10 @@
                         <div elem ng-model="image.title"></div>
                     </div>
                     <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromGallery($index)">
-                        <button class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this image."><i class='fa fa-trash'></i></button>
+                        <button class="ng-scope btn-delete-single-image" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this image."><i class='fa fa-trash'></i></button>
                     </div>
                     <div ng-if="isEditing" class="center" ng-click="addImageFromMedia(component._id, $index, false)" >
-                        <a class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add another image."><i class='fa fa-plus'></i></a>
+                        <a class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another image."><i class='fa fa-plus'></i></a>
                     </div>
 
                 </div>
