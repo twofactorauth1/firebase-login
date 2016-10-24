@@ -263,6 +263,44 @@
                 </div>
             </div>
         </div>
+        <div class="col-xs-12 col-sm-4" id="user-agent-table">
+            <div id="userAgentsTable" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">User Agents</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="userAgentsTable" ng-init="userAgents=false" class="panel-wrapper">
+                    <div class="panel-body no-padding height-300 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                        <div class="table-responsive">
+                            <table class="table table-hover margin-bottom-0">
+                                <thead>
+                                <tr>
+                                    <th>User Agent</th>
+                                    <th>Count</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="ua in userAgentTableData">
+                                    <td><span ng-text-truncate="ua[0]" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                                    <td>{{ua[1] | number}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <div class="rate">
+                                    <span class="value">{{userAgentTableData[0][0] || '--'}}</span>
+                                    <strong class="text-muted">{{browserPercent || '--'}}</strong><span class="percentage">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="osData" class="col-xs-12 col-sm-4">
             <div id="os" class="panel panel-white " ng-class="{'load1 csspinner': !osData}">
                 <div class="panel-heading border-light">
