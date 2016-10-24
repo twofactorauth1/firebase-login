@@ -283,7 +283,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                             accountId: contact.get('accountId'),
                                             contactId: contact.id(),
                                             activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                            start: event.timestamp
+                                            start: new Date()
                                         });
                                         contactActivityManager.createActivity(activity, function(err, value){});
                                     }
@@ -302,7 +302,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                     accountId: contact.get('accountId'),
                                     contactId: contact.id(),
                                     activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                    start: event.timestamp
+                                    start: new Date()
                                 });
                                 contactActivityManager.createActivity(activity, function(err, value){});
                             }
