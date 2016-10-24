@@ -192,7 +192,7 @@
                                 <th class="hidden-xs" st-sort-default="{{order}}" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
-                            <tr ng-if="showFilter">
+                            <tr ng-if="showFilter" class="filter-row-header">
                                 <th ng-if="displayedContacts.length" class="column-width" ng-show="column.name">
 
                                 </th>

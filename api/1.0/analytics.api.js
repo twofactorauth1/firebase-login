@@ -283,7 +283,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                             accountId: contact.get('accountId'),
                                             contactId: contact.id(),
                                             activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                            start: event.timestamp
+                                            start: new Date()
                                         });
                                         contactActivityManager.createActivity(activity, function(err, value){});
                                     }
@@ -302,7 +302,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                     accountId: contact.get('accountId'),
                                     contactId: contact.id(),
                                     activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                    start: event.timestamp
+                                    start: new Date()
                                 });
                                 contactActivityManager.createActivity(activity, function(err, value){});
                             }
@@ -791,6 +791,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pingEvent.set('session_id', req.params.id);
         pingEvent.set('server_time', new Date().getTime());
         pingEvent.set('server_time_dt', new Date());
+        pingEvent.set('accountId', self.currentAccountId(req));
         analyticsManager.storePingEvent(pingEvent, function(err){
             if(err) {
                 self.log.error('Error saving ping event: ' + err);

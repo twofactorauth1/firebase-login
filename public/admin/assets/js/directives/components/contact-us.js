@@ -1,5 +1,5 @@
 'use strict';
-/*global app, moment, angular, window, CKEDITOR, L*/
+/*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
 app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeout', '$window', function (AccountService, GeocodeService, $timeout, $window) {
     return {
@@ -134,7 +134,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
             };
 
 
-            scope.$parent.$watchGroup(['ckeditorLoaded', 'vm.uiState.loaded'], function (newValue, oldValue) {
+            scope.$parent.$watchGroup(['vm.uiState.loaded'], function (newValue, oldValue) {
                 if (newValue[0] || newValue[1] && scope.component.visibility) {
                     AccountService.getAccount(function (account) {
 
