@@ -119,8 +119,12 @@ _.extend(api.prototype, baseApi.prototype, {
         var user = req.user;
 
         userDao.getById(user.id(), function(err, value) {
-           if (!err) {
-               return resp.send(value.toJSON("public"));
+           if (!err && value) {
+               var json = value.toJSON("public");
+               if(json && json.profilePhotos && json.profilePhotos[0] && json.profilePhotos[0].url) {
+                   json.profilePhotos[0] = json.profilePhotos[0].url;
+               }
+               return resp.send(json);
            } else {
                return self.wrapError(resp, 500, null, err, value);
            }

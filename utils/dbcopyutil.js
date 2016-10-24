@@ -1449,7 +1449,8 @@ var copyutil = {
     addAccountIdToPageEvents: function(fn) {
         var query = {
             accountId:{$exists:false},
-            server_time_dt:{$gte:new Date('2016-04-01 00:00:00.000Z')}
+            'url.domain':{$in:['www.indigenous.io', 'indigenous.io']},
+            server_time_dt:{$gte:new Date('2015-05-15 00:00:00.000Z'), $lte: new Date('2015-07-25 00:00:00.000Z')}
         };
 
         var srcDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
@@ -1464,18 +1465,27 @@ var copyutil = {
                 async.eachLimit(pageEvents, 20, function(pageEvent, cb){
                     var domain = pageEvent.url.domain;
                     var accountQuery = {};
-                    if(domain.indexOf('www') === 0) {
+                    if(domain.indexOf('www') === 0 || domain.indexOf('indigenous') < 0) {
                         var customDomain = domain.replace('www.', '');
+                        if(domain === 'events.sipofcolor.com') {
+                            customDomain = 'sipofcolor.com';
+                        }
+                        if(customDomain === 'unwindwellness.com') {
+                            customDomain = 'unwind-dc.com'
+                        }
                         if (customDomain === 'indigenous.local' || customDomain === 'test.indigenous.io' || customDomain === 'indigenous.io') {
                             accountQuery = {_id:6};
                         } else {
-                            accountQuery = {customDomain : customDomain};
+                            accountQuery = {customDomain : customDomain.toLowerCase()};
                         }
 
                         console.log('Custom domain query:', accountQuery);
                     } else {
                         var subdomain = domain.substring(0, domain.indexOf('.'));
                         accountQuery = {subdomain:subdomain};
+                        if(subdomain === 'indigenous' && domain==='indigenous.io') {
+                            accountQuery = {_id:6}
+                        }
                         console.log('subdomain query:', accountQuery);
 
                     }
