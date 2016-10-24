@@ -1,5 +1,5 @@
 'use strict';
-/*global app, moment, angular, window, CKEDITOR*/
+/*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
   app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations) {

@@ -536,12 +536,11 @@ app.constant('JS_REQUIRES', {
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
     'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
-    'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
+    
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
-    'customerAnalyticsCtrl': 'assets/js/controllers/customerAnalyticsCtrl.js',
-    'editorCtrl': 'assets/js/controllers/editorCtrl.js',
+    'customerAnalyticsCtrl': 'assets/js/controllers/customerAnalyticsCtrl.js',    
     'billingCtrl': 'assets/js/controllers/billingCtrl.js',
-    'postsCtrl': 'assets/js/controllers/postsCtrl.js',
+    
     'socialFeedCtrl': 'assets/js/controllers/socialFeedCtrl.js',
     'contactsCtrl': 'assets/js/controllers/contactsCtrl.js',
     'contactDetailCtrl': 'assets/js/controllers/contactDetailCtrl.js',
@@ -563,7 +562,7 @@ app.constant('JS_REQUIRES', {
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'campaignsCtrl': 'assets/js/controllers/campaignsCtrl.js',
-    'createCampaignCtrl': 'assets/js/controllers/createCampaignCtrl.js',
+    
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
