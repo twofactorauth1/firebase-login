@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", "$location", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie, $location) {
+    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", "$location", "$timeout", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie, $location, $timeout) {
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
         $scope.showPages = 15;
