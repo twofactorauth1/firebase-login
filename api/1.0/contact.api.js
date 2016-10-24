@@ -619,7 +619,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 var uniqueEmail = req.body.uniqueEmail;
                 console.log('req.body ', req.body);
 
-
+                if (!contact_type || !contact_type.length) {
+                    
+                    tagSet.push('ld');
+                } else {
+                    tagSet = tagSet.concat(contact_type);
+                }
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
                         self.log.error('Error checking for existing contact: ' + err);
@@ -665,11 +670,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                     ccAry.push(emails[i].email);
                                 }
                             }
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry);
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet);
                         } else{
                             userDao.getUserAccount(value.id(), function(err, user){
                                 accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null);
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet);
                             })
                         }
 
@@ -685,11 +690,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     contact.set('accountId', value.id());
                     self.log.debug('contact_type ', contact_type);
                     if (!contact_type || !contact_type.length) {
-                        contact.set('type', 'ld');
-                        tagSet.push('ld');
+                        contact.set('type', 'ld');                       
                     } else {
-                        contact.set('type', 'ld');
-                        tagSet = tagSet.concat(contact_type);
+                        contact.set('type', 'ld');                        
                     }
                     contact.set('tags', _.uniq(tagSet));
                     if(contact.get('fingerprint')) {
@@ -1235,13 +1238,27 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
         var text = [];
          for(var attributename in fields){
             text.push("<b>"+attributename+"</b>: "+fields[attributename]);
+        }
+
+        if(tagSet && tagSet.length){
+            var tags = _.map(tagSet, function (x) {
+            var tag = _.findWhere($$.constants.contact.contact_types.dp, {data: x});
+              if (tag) {
+                return tag.label;
+              } else {
+                return x;
+              }
+            });
+            if(tags && tags.length){                
+                text.push("<b>tags</b>: "+tags.join(", "));
+            }
         }
         self.log.debug(fields);
         self.log.debug('accountEmail ', accountEmail);
