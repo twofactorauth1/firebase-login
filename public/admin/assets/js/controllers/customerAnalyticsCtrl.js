@@ -479,6 +479,9 @@
                     $scope.userAgentConfig = config;
                     $scope.userAgentConfig.loading = false;
                 });
+
+                $scope.userAgentTableData = userAgentData.reverse();
+                console.log('userAgentTableData:', $scope.userAgentTableData);
             }
 
             // ======================================
