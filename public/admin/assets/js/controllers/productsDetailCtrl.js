@@ -647,8 +647,9 @@
 
     $scope.checkIfDirty = function(){
       var isDirty = false;
-      if(($scope.originalProduct && !angular.equals($scope.originalProduct, $scope.product)) || checkIfTagsChanged())
-        isDirty = true;
+      if($scope.originalProduct)
+        if((!angular.equals($scope.originalProduct, $scope.product)) || checkIfTagsChanged())
+          isDirty = true;
       return isDirty;
     }
     $scope.resetDirty = function(){
