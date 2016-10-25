@@ -465,7 +465,7 @@
                 $scope.userAgentData = userAgentData;
                 var uadLength = userAgentData.length -1;
                 $scope.topBrowser = userAgentData[uadLength][0];
-                var browserPercent = Math.floor((userAgentData[uadLength][1] / browserTotal) * 100);
+                var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
                 $scope.browserPercent = browserPercent;
 
                 ChartAnalyticsService.userAgentChart(userAgentData, function(config){

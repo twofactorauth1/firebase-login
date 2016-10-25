@@ -276,13 +276,13 @@
                                 <thead>
                                 <tr>
                                     <th>User Agent</th>
-                                    <th>Count</th>
+                                    <th>Percentage(%)</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="ua in userAgentTableData">
                                     <td><span ng-text-truncate="ua[0]" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                                    <td>{{ua[1] | number}}</td>
+                                    <td>{{Math.round((ua[1] / browserTotal) * 100) + '%'  || '--' }}</td>
                                 </tr>
                                 </tbody>
                             </table>
