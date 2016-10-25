@@ -115,5 +115,35 @@
         };
 
 
+        $scope.selectAllClickFn = function ($event) {
+            $event.stopPropagation();
+            if ($scope.selectAllChecked) {
+                $scope.selectAllChecked = false;
+            } else {
+                $scope.selectAllChecked = true;
+            }
+            $scope.displayedCustomers.forEach(function(customer, index) {
+                customer.isSelected = $scope.selectAllChecked;
+            });
+        };
+
+
+        $scope.customerSelectClickFn = function ($event, customer) {
+            $event.stopPropagation();
+            if (customer.isSelected) {
+                customer.isSelected = false;
+            } else {
+                customer.isSelected = true;
+            }
+        };
+
+        $scope.clearSelectionFn = function () {
+            $scope.selectAllChecked = false;
+            $scope.displayedCustomers.forEach(function(customer, index) {
+                customer.isSelected = $scope.selectAllChecked;
+            });
+        };
+
+
     }]);
 }(angular));
