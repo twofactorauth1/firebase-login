@@ -14,6 +14,22 @@
                 });
         };
 
+        this.getOrdersWithoutCustomers = function(fn) {
+            var apiUrl = baseUrl + 'nocustomers';
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
+        this.getOrderAndDonationStatus = function(fn) {
+            var apiUrl = baseUrl + 'types';
+            $http.get(apiUrl)
+                .success(function (data, status, headers, config) {
+                    fn(data);
+                });
+        };
+
         this.getCustomerOrders = function (customerId, fn) {
             var apiUrl = baseUrl + ['customer', customerId].join('/');
             $http.get(apiUrl)

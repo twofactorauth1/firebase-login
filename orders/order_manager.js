@@ -1649,6 +1649,50 @@ module.exports = {
         });
     },
 
+    listOrdersByAccountWithoutCustomers: function(accountId, fn){
+        var userId = null;
+        log.debug(accountId, userId, '>> listOrdersByAccountWithoutCustomers');
+        var query = {
+            account_id: accountId
+        };
+
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            if(err) {
+                log.error(accountId, userId, 'Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< listOrdersByAccountWithoutCustomers');
+                return fn(null, orders);
+            }
+        });
+    },
+
+    listOrderTypes: function(accountId, fn) {
+        var userId = null;
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> listOrderTypes');
+
+        var orderQuery = {account_id:accountId};
+        var donationQuery = {account_id:accountId, 'line_items.type':'DONATION'};
+        async.parallel({
+            orders: function(cb){
+                dao.exists(orderQuery, $$.m.Order, cb);
+            },
+            donations: function(cb){
+                dao.exists(donationQuery, $$.m.Order, cb);
+            }
+        }, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error listing types:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< listOrderTypes');
+                return fn(null, value);
+            }
+        });
+    },
+
     listOrdersByCustomer: function(customerId, accountId, fn) {
         var userId = null;
         log.debug(accountId, userId, '>> listOrdersByCustomer ', customerId, accountId);
