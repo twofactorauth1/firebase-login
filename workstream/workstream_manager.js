@@ -62,7 +62,8 @@ module.exports = {
                 } else {
                     cb(null, workstreams);
                 }
-            },
+            }
+            /*
             function getCompletedBlocks(workstreams, cb){
                 self._getCompletedBlocks(accountId, function(err, completedBlocks){
                     if(err) {
@@ -112,6 +113,7 @@ module.exports = {
 
 
             }
+            */
         ], function done(err, workstreams){
             if(err) {
                 self.log.error('Error listing workstreams:', err);
