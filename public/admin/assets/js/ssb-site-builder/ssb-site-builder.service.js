@@ -1578,7 +1578,7 @@
             var duplicateSection = angular.copy(section);
 
             duplicateSection._id = ssbService.getTempUUID();
-
+            duplicateSection.anchor = duplicateSection._id;
             if (duplicateSection.components.length) {
                 duplicateSection.components.forEach(function(component) {
                     component._id = ssbService.getTempUUID();
