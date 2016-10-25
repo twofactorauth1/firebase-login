@@ -178,7 +178,7 @@
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div collapse="trafficSources" ng-init="trafficSources=false" class="panel-wrapper">
-                    <div class="panel-body no-padding height-350 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                    <div class="panel-body height-350 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                         <div class="table-responsive">
                             <table class="table table-hover margin-bottom-0">
                                 <thead>
@@ -206,7 +206,7 @@
             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
         </div>
         <div class="panel-wrapper" collapse="pageanalytics" ng-init="pageanalytics=false">
-            <div class="panel-body">
+            <div class="panel-body panel-scroll">
                 <div class="table-responsive">
                     <table class="table table-hover margin-bottom-0">
                         <thead>
@@ -244,7 +244,7 @@
                     <h4 class="panel-title text-primary">User Agents</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div class="panel-wrapper" collapse="ua" ng-init="ua=false" >
+                <div class="panel-wrapper height-375" collapse="ua" ng-init="ua=false" >
                     <div class="panel-body no-padding">
                         <div class="new-vs-returning-wrap">
                             <highchart config="userAgentConfig" id="useragent-chart"></highchart>
@@ -269,33 +269,23 @@
                     <h4 class="panel-title text-primary">User Agents</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div collapse="userAgentsTable" ng-init="userAgents=false" class="panel-wrapper">
-                    <div class="panel-body no-padding height-300 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                <div collapse="userAgentsTable" ng-init="userAgents=false" class="panel-wrapper" style="height:373px;">
+                    <div class="panel-body panel-scroll height-375" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                         <div class="table-responsive">
                             <table class="table table-hover margin-bottom-0">
                                 <thead>
                                 <tr>
                                     <th>User Agent</th>
-                                    <th>Count</th>
+                                    <th>Percentage(%)</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr ng-repeat="ua in userAgentTableData">
                                     <td><span ng-text-truncate="ua[0]" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                                    <td>{{ua[1] | number}}</td>
+                                    <td>{{Math.round((ua[1] / browserTotal) * 100) + '%'  || '--' }}</td>
                                 </tr>
                                 </tbody>
                             </table>
-                        </div>
-                    </div>
-                    <div class="panel-footer border-light">
-                        <div class="row">
-                            <div class="col-xs-12 text-center">
-                                <div class="rate">
-                                    <span class="value">{{userAgentTableData[0][0] || '--'}}</span>
-                                    <strong class="text-muted">{{browserPercent || '--'}}</strong><span class="percentage">%</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -307,7 +297,7 @@
                     <h4 class="panel-title text-primary">Operating Systems</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div class="panel-wrapper" collapse="os" ng-init="os=false" >
+                <div class="panel-wrapper height-375" collapse="os" ng-init="os=false" >
                     <div class="panel-body no-padding">
                         <div class="new-vs-returning-wrap">
                             <highchart config="osConfig" id="os-chart"></highchart>
@@ -371,9 +361,9 @@
                     <h4 class="panel-title text-primary">Campaigns And Emails <span class="text-bold">Overview</span></h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div class="panel-wrapper" collapse="rev" ng-init="rev=false">
+                <div class="panel-wrapper" collapse="campaigns" ng-init="campaigns=false">
                     <div class="panel-body">
-                        <div class="rev-wrap">
+                        <div class="campaigns-wrap">
                             <highchart config="emailsOverviewConfig" id="emails-chart"></highchart>
                         </div>
                     </div>

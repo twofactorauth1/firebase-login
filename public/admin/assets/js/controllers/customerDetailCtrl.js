@@ -279,11 +279,9 @@
             subdomain: ''
         };
 
-        UserService.getUsers(function (users) {
-            $scope.users = users;
-        });
 
-        $scope.getCustomer();
+
+        
 
         /*
          * @addNote
@@ -327,6 +325,17 @@
                 $scope.customerNotes = notes;
             }
         };
+
+
+        (function init() {
+
+            UserService.getUsers(function (users) {
+                $scope.users = users;
+            });
+
+            $scope.getCustomer();
+
+        })();
 
 
     }]);

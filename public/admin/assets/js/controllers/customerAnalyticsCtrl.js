@@ -25,6 +25,7 @@
             startDate: moment().subtract(29, 'days').format(),
             endDate: moment().format()
         };
+        $scope.Math = Math;
 
         var dateSwitch = false;
         $scope.$watch('selectedDate', function () {
@@ -463,8 +464,9 @@
                     } else {
                         browserMap[browser] = count;
                     }
-                    browserTotal+= count;
+                    browserTotal+= count;                    
                 });
+                $scope.browserTotal = browserTotal;
                 console.log('browserMap:', browserMap);
                 userAgentData = userAgentData.concat(_.pairs(browserMap));
                 userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
@@ -472,7 +474,7 @@
                 $scope.userAgentData = userAgentData;
                 var uadLength = userAgentData.length -1;
                 $scope.topBrowser = userAgentData[uadLength][0];
-                var browserPercent = Math.floor((userAgentData[uadLength][1] / browserTotal) * 100);
+                var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
                 $scope.browserPercent = browserPercent;
 
                 ChartAnalyticsService.userAgentChart(userAgentData, function(config){

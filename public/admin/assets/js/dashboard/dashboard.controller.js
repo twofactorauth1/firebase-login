@@ -8,7 +8,7 @@
 
         vm.state = {
             account: $scope.account
-        }
+        };
 
         vm.uiState = {
             openWorkstream: { _id: undefined }
@@ -42,7 +42,7 @@
             var completeWorkstreams = [];
             var completeBlocks = 0;
             var incompleteBlocks = 0;
-            var analyticsWidgets = []
+            var analyticsWidgets = [];
             //var unlockedAnalyticsWidgets = []
 
             _.each(vm.state.workstreams, function(workstream){
@@ -52,7 +52,7 @@
                 _.each(analyticsWidgetsCopy, function(analytic){
                     analytic.completed = workstream.unlocked && workstream.completed;
                     analyticsWidgets.push(analytic);
-                })
+                });
 
                 completeBlocks = workstream.blocks.filter(function(block) { return block.complete; }).length;
                 incompleteBlocks = workstream.blocks.filter(function(block) { return !block.complete; }).length;
@@ -119,7 +119,7 @@
             DashboardService.updateAccount(vm.state.account).then(function(response){
                 toaster.pop('success', 'Business Logo', 'The logo was updated successfully.');
                 console.log('Account logo updated');
-            })
+            });
         }
 
         function sectionBGStyle(image) {

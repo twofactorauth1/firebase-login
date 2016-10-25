@@ -10,15 +10,13 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
             scope.hasDonation = false;
 
             var updateLogicFn = function(orders) {
-                orders.forEach(function(order, index) {
-                    order.line_items.forEach(function(item, index) {
-                        if (item.type == 'DONATION') {
-                            scope.hasDonation = true;
-                        } else {
-                            scope.hasOrder = true;
-                        }
-                    });
-                });
+                if(orders.donations === true) {
+                    scope.hasDonation = true;
+                }
+                if(orders.orders === true) {
+                    scope.hasOrder = true;
+                }
+                
 
                 if (scope.hasOrder && scope.hasDonation) {
                     scope.label = 'transaction';
@@ -48,7 +46,9 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
                 }
             };
 
-            OrderService.getOrders(function(orders) {
+            console.warn('calling getOrders');
+            OrderService.getOrderAndDonationStatus(function(orders) {
+                console.warn('Called getOrders');
                 updateLogicFn(orders);
             });
 
@@ -59,12 +59,12 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
                         scope.$watch(function() { return DashboardService.state.analytics && DashboardService.state.analytics.revenue && DashboardService.state.analytics.revenue.YTDTotalOrders }, function(state, oldState) {
                             if(state && state !== oldState && !loaded){
                                 loaded = true;
-                                OrderService.getOrders(function(orders) {
+                                OrderService.getOrderAndDonationStatus(function(orders) {
                                     updateLogicFn(orders);
                                 });
                             }
                         }) 
-                    })
+                    });
             
         }
     }

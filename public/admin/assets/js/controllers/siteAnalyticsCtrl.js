@@ -26,6 +26,8 @@
             endDate: moment().format()
         };
 
+        $scope.Math = Math;
+
         var dateSwitch = false;
         $scope.$watch('selectedDate', function () {
             $scope.date.startDate = moment($scope.selectedDate.startDate).format();
@@ -458,6 +460,7 @@
                     }
                     browserTotal+= count;
                 });
+                $scope.browserTotal = browserTotal;
                 console.log('browserMap:', browserMap);
                 userAgentData = userAgentData.concat(_.pairs(browserMap));
                 userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
@@ -465,13 +468,16 @@
                 $scope.userAgentData = userAgentData;
                 var uadLength = userAgentData.length -1;
                 $scope.topBrowser = userAgentData[uadLength][0];
-                var browserPercent = Math.floor((userAgentData[uadLength][1] / browserTotal) * 100);
+                var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
                 $scope.browserPercent = browserPercent;
 
                 ChartAnalyticsService.userAgentChart(userAgentData, function(config){
                     $scope.userAgentConfig = config;
                     $scope.userAgentConfig.loading = false;
                 });
+
+                $scope.userAgentTableData = userAgentData.reverse();
+                console.log('userAgentTableData:', $scope.userAgentTableData);
             }
 
             // ======================================
