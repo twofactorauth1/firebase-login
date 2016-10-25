@@ -54,7 +54,7 @@
             var data = this.getCache().get(id);
             var cache = this.getCache();
             if(data) {
-                fn(data);
+                fn(null, data);
             } else {
                 $http({
                     url: apiUrl,
