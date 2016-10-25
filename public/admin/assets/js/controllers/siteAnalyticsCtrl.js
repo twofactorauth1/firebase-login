@@ -26,6 +26,8 @@
             endDate: moment().format()
         };
 
+        $scope.Math = Math;
+
         var dateSwitch = false;
         $scope.$watch('selectedDate', function () {
             $scope.date.startDate = moment($scope.selectedDate.startDate).format();
@@ -458,6 +460,7 @@
                     }
                     browserTotal+= count;
                 });
+                $scope.browserTotal = browserTotal;
                 console.log('browserMap:', browserMap);
                 userAgentData = userAgentData.concat(_.pairs(browserMap));
                 userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
@@ -472,6 +475,9 @@
                     $scope.userAgentConfig = config;
                     $scope.userAgentConfig.loading = false;
                 });
+
+                $scope.userAgentTableData = userAgentData.reverse();
+                console.log('userAgentTableData:', $scope.userAgentTableData);
             }
 
             // ======================================

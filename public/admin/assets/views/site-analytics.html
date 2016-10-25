@@ -238,7 +238,7 @@
         </div>
     </div>
     <div class="row">
-        <div id="useragents" class="col-xs-12 col-sm-4">
+        <div id="useragents" class="col-xs-12 col-sm-6">
             <div id="ua" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">User Agents</h4>
@@ -263,7 +263,35 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-8" >
+        <div class="col-xs-12 col-sm-6" id="user-agent-table">
+            <div id="userAgentsTable" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">User Agents</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="userAgentsTable" ng-init="userAgents=false" class="panel-wrapper">
+                    <div class="panel-body panel-scroll height-375" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                        <div class="table-responsive">
+                            <table class="table table-hover margin-bottom-0">
+                                <thead>
+                                <tr>
+                                    <th>User Agent</th>
+                                    <th>Percentage(%)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="ua in userAgentTableData">
+                                    <td><span ng-text-truncate="ua[0]" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                                    <td>{{Math.round((ua[1] / browserTotal) * 100) + '%'  || '--' }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12" >
             <div id="rev" class="panel panel-white" ng-class="{'load1 csspinner': !revenueConfig.options}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">Revenue <span class="text-bold">Overview</span></h4>

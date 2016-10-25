@@ -464,9 +464,9 @@
                     } else {
                         browserMap[browser] = count;
                     }
-                    browserTotal+= count;
-                    $scope.browserTotal = browserTotal
+                    browserTotal+= count;                    
                 });
+                $scope.browserTotal = browserTotal;
                 console.log('browserMap:', browserMap);
                 userAgentData = userAgentData.concat(_.pairs(browserMap));
                 userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
