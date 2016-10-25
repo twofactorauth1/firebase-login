@@ -463,7 +463,8 @@ module.exports = {
         var startOfYear= moment().startOf('year').toDate();
         var query = {
             account_id:accountId,
-            created_at: {$gte: startOfYear}
+            created_at: {$gte: startOfYear},
+            status: {$ne: 'failed'}
         };
         var groupCriteria = {
             _id:{month: {$month:'$created_at'}}
