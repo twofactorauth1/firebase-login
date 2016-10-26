@@ -395,6 +395,31 @@ module.exports = {
         });
     },
 
+    activateCampaign: function(accountId, userId, campaignId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> activateCampaign');
+        var query = {
+            _id: campaignId,
+            accountId: accountId
+        };
+        campaignDao.findOne(query, $$.m.Campaign, function(err, campaign){
+            if(err || !campaign) {
+                self.log.error(accountId, userId, 'Error finding campaign:', err);
+                return fn(err);
+            } else if(campaign.get('status') === $$.m.Campaign.status.RUNNING){
+                self.log.warn(accountId, userId, 'Attempted to activate a running campaign');
+                return fn('Attempted to activate a running campaign');
+            } else {
+                campaign.set('status', $$.m.Campaign.status.RUNNING);
+                campaignDao.saveOrUpdate(campaign, function(err, updatedCampaign){
+                    self.log.debug(accountId, userId, '<< activateCampaign');
+                    fn(err, updatedCampaign);
+                    self._startCampaignFlows(updatedCampaign);
+                });
+            }
+        });
+    },
+
     addContactToCampaign: function(contactId, campaignId, accountId, fn) {
         var self = this;
         self.log.debug('>> addContactToCampaign');

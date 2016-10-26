@@ -30,6 +30,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createCampaign.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateCampaign.bind(this));
         app.post(this.url(':id/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.duplicateCampaign.bind(this));
+        app.post(this.url(':id/activate'), this.isAuthAndSubscribedApi.bind(this), this.activateCampaign.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
         app.get(this.url(':id/statistics'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignStatistics.bind(this));
         app.get(this.url(':id/statistics/reconcile'), this.isAuthAndSubscribedApi.bind(this), this.reconcileCampaignStatistics.bind(this));
@@ -525,6 +526,25 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.duplicateCampaign(accountId, campaignId, campaignName, userId, function(err, campaign){
                     self.log.debug(accountId, userId, '<< duplicateCampaign');
                     self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
+                });
+            }
+        });
+    },
+
+    activateCampaign: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        self.log.debug(accountId, userId, '>> activateCampaign [' + campaignId + ']');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.activateCampaign(accountId, userId, campaignId, function(err, campaign){
+                    self.log.debug(accountId, userId, '<< activateCampaign');
+                    self.sendResultOrError(resp, err, campaign, 'Error activating campaign');
                 });
             }
         });
