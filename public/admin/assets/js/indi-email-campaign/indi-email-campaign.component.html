@@ -90,7 +90,7 @@
                             <i class="ti-location-arrow"></i>
                             <span>Send Test</span>
                         </button>
-                        <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn() || !vm.state.campaign.name" ng-click='vm.activateCampaignFn()' class="btn btn-success padding-right-10 margin-bottom-5">
+                        <button type="button" ng-if="!vm.uiState.disableEditing" ng-disabled="!vm.canActivateFn() || !vm.state.campaign.name" ng-click='vm.activateCampaignFn()' class="btn btn-success padding-right-10 margin-bottom-5" tooltip="Campaign must have all changes saved before activation.">
                             <i class="ti-power-off"></i>
                             <span>Activate Campaign</span>
                         </button>

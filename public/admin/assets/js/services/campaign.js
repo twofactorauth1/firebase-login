@@ -73,6 +73,19 @@
             });
         };
 
+        this.activateCampaign = function (campaign, fn) {
+            var apiUrl = baseUrl + campaign._id + '/activate';
+            $http({
+                url: apiUrl,
+                method: "POST",
+                data: campaign
+            }).success(function (data) {
+                fn(data);
+            }).error(function (error) {
+                console.error('CampaignService: activateCampaign error >>> ', error);
+            });
+        };
+
         this.cancelCampaignForContact = function (campaign, contactId, fn) {
             var apiUrl = baseUrl + [campaign._id, 'contact', contactId].join('/');
             $http({
