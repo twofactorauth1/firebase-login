@@ -368,10 +368,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.originalPages = angular.copy(pages);
       vm.state.pages = angular.copy(pages);
 
-      //filter blog pages and coming soon
+      //filter blog pages and signup
       if (pages) {
         vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post"
-            || page.handle === "coming-soon" || page.handle === "signup"
+            || page.handle === "signup"
         });
       }
       if(vm.state.website) {
@@ -944,7 +944,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 diff2.indexOf('data-compiled') !== -1)
             {
                 var regex =  /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g ;
-                var compareString1 = diff1.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");                
+                var compareString1 = diff1.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");
                 var compareString2 = diff2.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");;
 
                 return angular.equals(compareString1, compareString2);
@@ -1173,18 +1173,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var component = section.components[0];
 
                     SimpleSiteBuilderService.getTempComponent(component).then(function(data){
-                        while(_diff !== 0){                            
+                        while(_diff !== 0){
                             data._id = SimpleSiteBuilderService.getTempUUID();
-                            data.anchor = data._id; 
+                            data.anchor = data._id;
                             var _newComponent = angular.copy(data);
-                            if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.indexOf("last") > -1){                                
-                                section.components.splice(section.components.length - 1, 0, _newComponent);                                     
+                            if(section.layoutModifiers.columns.ignoreColumns && section.layoutModifiers.columns.ignoreColumns.indexOf("last") > -1){
+                                section.components.splice(section.components.length - 1, 0, _newComponent);
                             }
                             else{
                                 section.components.push(_newComponent);
                             }
                             _diff--;
-                        }  
+                        }
                     })
                 }
                 // To Do
@@ -1229,7 +1229,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         setupBreakpoints();
         $rootScope.app.layout.isSidebarClosed = true;
-        
+
         $rootScope.app.layout.isMinimalAdminChrome = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
