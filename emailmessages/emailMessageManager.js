@@ -558,7 +558,7 @@ var emailMessageManager = {
                                         self.log.error('Error sending email:', err);
                                         return fn(err);
                                     } else {
-                                        self.log.debug('<< sendAccountWelcomeEmail');
+                                        self.log.debug('<< sendTestEmail');
                                         return fn(null, json);
                                     }
                                 });
