@@ -1125,7 +1125,7 @@ var emailMessageManager = {
                 }
             ],
             "from": {
-                "email": fromAddress
+                "email": from
             },
             "headers": {},
             "personalizations": [
@@ -1137,7 +1137,7 @@ var emailMessageManager = {
 
                     "to": [
                         {
-                            "email": toAddress
+                            "email": to
                         }
                     ]
                 }
@@ -1186,7 +1186,7 @@ var emailMessageManager = {
                         self.log.error('Error sending email:', err);
                         return fn(err);
                     } else {
-                        self.log.debug(accountId, null, '<< sendMailReplacement');
+                        self.log.debug(null, null, '<< sendMailReplacement');
                         return fn(null, response);
                     }
                 });
