@@ -134,8 +134,7 @@
                 var start = new Date(now.getFullYear(), 0, 0);
                 var diff = now - start;
                 var oneDay = 1000 * 60 * 60 * 24;
-                var dayOfYear = Math.floor(diff / oneDay); // get # of day in the year 0-366
-                //var randIndex = _.random(0, images.length); // <- the old way
+                var dayOfYear = Math.floor(diff / oneDay);
                 var moduloIndex = dayOfYear % images.length;
                 var dashboardBGImage = images[moduloIndex];
                 sectionBGStyle(dashboardBGImage);
