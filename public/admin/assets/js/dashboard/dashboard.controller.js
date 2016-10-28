@@ -123,18 +123,23 @@
         }
 
         function sectionBGStyle(image) {
-            var styleString = ' ';                         
+            var styleString = ' ';
             styleString += 'background-image: url("' + image + '")';
             vm.sectionBGStyle = styleString;
-        } 
+        }
 
         $scope.$watch(function() { return DashboardService.imageGallery; }, function(images){
             if(images){
-                var randIndex = _.random(0, images.length);
-                var dashboardBGImage = images[randIndex];   
+                var now = new Date();
+                var start = new Date(now.getFullYear(), 0, 0);
+                var diff = now - start;
+                var oneDay = 1000 * 60 * 60 * 24;
+                var dayOfYear = Math.floor(diff / oneDay); // get # of day in the year 0-366
+                //var randIndex = _.random(0, images.length); // <- the old way
+                var moduloIndex = dayOfYear % images.length;
+                var dashboardBGImage = images[moduloIndex];
                 sectionBGStyle(dashboardBGImage);
             }
-            
         });
 
         (function init() {
