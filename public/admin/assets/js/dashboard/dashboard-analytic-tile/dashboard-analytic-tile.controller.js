@@ -130,20 +130,12 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         return ret;
     }
 
-    function hideIfNotImplemented() {
-
-        if (vm.uiDetails.data === undefined) {
-            vm.element.parent().hide()
-        }
-
-    }
     $scope.$watch(function() { return DashboardService.state.analytics }, function(state, oldState) {
         if(state && state !== oldState){
             vm.uiDetails = vm.analyticMap();
         }
     })
-
-
+    
     function init(element) {
 
         vm.element = element;
