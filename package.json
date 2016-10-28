@@ -70,7 +70,7 @@
     "rss": "^1.2.1",
     "sanitize-html": "^1.11.4",
     "schedule-drone": "^0.1.0",
-    "sendgrid": "^2.0.0",
+    "sendgrid": "^4.7.1",
     "slug": "^0.9.1",
     "sticky-state": "^1.4.3",
     "stripe": "~2.4.0",

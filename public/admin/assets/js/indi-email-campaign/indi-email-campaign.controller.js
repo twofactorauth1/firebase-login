@@ -26,22 +26,16 @@
             "type": "onetime",
             "status": "DRAFT",
             "startDate": "", //not used on autoresponder
-            "steps": [{
-                "type": "email",
-                "trigger": null,
-                "index": 1,
-                "settings": {
-                    "emailId": "",
-                    "offset": "", //in minutes
-                    "fromEmail": "",
-                    "fromName": '',
-                    "replyTo": '',
-                    "bcc": '',
-                    "subject": '',
-                    "vars": [],
-                    "sendAt": {},
-                }
-            }],
+            "emailSettings":{
+                "emailId": "",
+                "fromEmail": "",
+                "fromName": '',
+                "replyTo": '',
+                "bcc": '',
+                "subject": '',
+                "vars": [],
+                "sendAt": {}
+            },
             "searchTags": {
                 operation: "set",
                 tags: []
@@ -116,11 +110,11 @@
 
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
-            if (vm.state.campaign.steps) {
+            if(vm.state.campaign.emailSettings) {
                 if (vm.state.campaign.type === 'autoresponder') {
-                    vm.state.campaign.steps[0].trigger = 'SIGNUP';
+                    vm.state.campaign.emailSettings.trigger = 'SIGNUP';
                 } else {
-                    vm.state.campaign.steps[0].trigger = null;
+                    vm.state.campaign.emailSettings.trigger = null;
                 }
             }
         });
@@ -253,7 +247,10 @@
             sendAt.day = moment.utc(vm.uiState.delivery.date).get('date');
             sendAt.hour = moment.utc(vm.uiState.delivery.date).get('hour');
             sendAt.minute = moment.utc(vm.uiState.delivery.date).get('minute');
-            vm.state.campaign.steps[0].settings.sendAt = sendAt;
+            if(vm.state.campaign.emailSettings) {
+                vm.state.campaign.emailSettings.sendAt = sendAt;
+            }
+
 
             vm.state.campaign.contactTags = vm.getSelectedTagsFn();
             vm.removeContactsFromCampaignFn();
@@ -674,17 +671,17 @@
         function updateCampaignEmailSettingsFn(change) {
             var email = vm.state.email;
 
-            if (change) {
+            if(change && vm.state.campaign.emailSettings){
                 email = _.findWhere(vm.state.emails, {
-                    _id: vm.state.campaign.steps[0].settings.emailId
+                    _id: vm.state.campaign.emailSettings.emailId
                 });
-                vm.state.campaign.steps[0].settings.emailId = email._id;
-                vm.state.campaign.steps[0].settings.fromEmail = email.fromEmail;
-                vm.state.campaign.steps[0].settings.fromName = email.fromName;
-                vm.state.campaign.steps[0].settings.replyTo = email.replyTo;
-                vm.state.campaign.steps[0].settings.bcc = email.bcc;
-                vm.state.campaign.steps[0].settings.subject = email.subject;
-                vm.state.campaign.steps[0].settings.vars = email.vars;
+                vm.state.campaign.emailSettings.emailId = email._id;
+                vm.state.campaign.emailSettings.fromEmail = email.fromEmail;
+                vm.state.campaign.emailSettings.fromName = email.fromName;
+                vm.state.campaign.emailSettings.replyTo = email.replyTo;
+                vm.state.campaign.emailSettings.bcc = email.bcc;
+                vm.state.campaign.emailSettings.subject = email.subject;
+                vm.state.campaign.emailSettings.vars = email.vars;
                 vm.state.email = angular.copy(email);
             } else {
                 var indexInEmailList = _.findIndex(vm.state.emails, {
@@ -810,8 +807,8 @@
 
                         var campaign = res.data;
 
-                        if (campaign.steps[0].settings.emailId) {
-                            EmailBuilderService.getEmail(campaign.steps[0].settings.emailId)
+                        if(campaign.emailSettings.emailId){
+                            EmailBuilderService.getEmail(campaign.emailSettings.emailId)
                                 .then(function (res) {
                                     vm.state.email = res.data;
                                     vm.state.campaign = angular.extend(vm.state.campaign, campaign);
@@ -822,7 +819,7 @@
 
                                     WebsiteService.getEmails(null, function (data) {
                                         vm.state.emails = data;
-                                        vm.updateCampaignEmailSettingsFn()
+                                        vm.updateCampaignEmailSettingsFn();
                                         vm.state.campaignOriginal = angular.copy(campaign);
                                         console.info('campaign obj', vm.state.campaign);
                                     });
@@ -834,8 +831,11 @@
                         }
 
 
+                        var sendAtDateISOString = null;
+                        if(campaign.emailSettings) {
+                            sendAtDateISOString = moment.utc(campaign.emailSettings.sendAt).subtract('months', 1).toISOString();
+                        }
 
-                        var sendAtDateISOString = moment.utc(campaign.steps[0].settings.sendAt).subtract('months', 1).toISOString();
                         var localMoment = moment(sendAtDateISOString);
 
                         if (vm.state.campaign.type === 'onetime') {

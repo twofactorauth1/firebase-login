@@ -359,32 +359,11 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.error('Could not update campaign with key [' + key + ']:', err);
                             cb();
                         } else {
-                            var stats = campaign.get('statistics');
-                            if(updates.sent) {
-                                stats.emailsSent += updates.sent;
-                            }
-                            if(updates.opened) {
-                                stats.emailsOpened += updates.opened;
-                            }
-                            if(updates.clicked) {
-                                stats.emailsClicked += updates.clicked;
-                            }
-                            if(updates.bounced) {
-                                stats.emailsBounced += updates.bounced;
-                            }
 
-                            var modified = {
-                                date: new Date(),
-                                by: 'ADMIN'
-                            };
-                            campaign.set('modified', modified);
-                            //TODO: updateCampaignStatistics
-                            //campaignManager.updateCampaign(campaign, cb);
                             var accountId = campaign.get('accountId');
                             var campaignId = campaign.id();
-                            var statistics = stats;
                             var userId = 0;
-                            campaignManager.updateCampaignStatistics(accountId, campaignId, statistics, userId, cb);
+                            campaignManager.atomicUpdateCampaignStatistics(accountId, campaignId, updates, userId, cb);
                         }
                     });
                 }, function(err){

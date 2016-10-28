@@ -139,9 +139,9 @@
                             <p>Send an automated response for the following events. More events coming soon.</p>
                             <div class="row margin-bottom-30">
                                 <div class="col-xs-12" ng-repeat="trigger in vm.uiState.triggers">
-                                    <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel - light - grey pulse',false:'panel - white'}[trigger == vm.state.campaign.steps[0].trigger]">
-                                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.state.campaign.steps[0].trigger = trigger.value">
-                                            <span ng-class="{'text-nephritis': vm.state.campaign.steps[0].trigger == trigger.value, 'text-muted': vm.state.campaign.steps[0].trigger != trigger.value, 'fa fa-check fa-2x': vm.state.campaign.steps[0].trigger == trigger.value}" class="text-nephritis" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                    <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel - light - grey pulse',false:'panel - white'}[trigger == vm.state.campaign.emailSettings.trigger]">
+                                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.state.campaign.emailSettings.trigger = trigger.value">
+                                            <span ng-class="{'text-nephritis': vm.state.campaign.emailSettings.trigger == trigger.value, 'text-muted': vm.state.campaign.emailSettings.trigger != trigger.value, 'fa fa-check fa-2x': vm.state.campaign.emailSettings.trigger == trigger.value}" class="text-nephritis" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
                                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
                                             <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
                                         </div>
@@ -185,13 +185,13 @@
                         <div ng-if="vm.state.emails.length">
 
                             <ui-select
-                                ng-model="vm.state.campaign.steps[0].settings.emailId"
+                                ng-model="vm.state.campaign.emailSettings.emailId"
                                 theme="bootstrap"
                                 on-select="vm.updateCampaignEmailSettingsFn(true)"
                                 ng-disabled="vm.uiState.disableEditing">
                                 <ui-select-match
                                     placeholder="Select an email template">
-                                    {{$select.selected.title}} (subject:{{vm.state.campaign.steps[0].settings.subject}})
+                                    {{$select.selected.title}} (subject:{{vm.state.campaign.emailSettings.subject}})
                                 </ui-select-match>
                                 <ui-select-choices repeat="email._id as email in vm.state.emails | propsFilter: {title: $select.search}">
                                     <div ng-bind-html="email.title | highlight: $select.search"></div>
@@ -205,34 +205,34 @@
                                 <label class="control-label text-bold">
                                     From Name
                                 </label>
-                                <span editable-text="vm.state.campaign.steps[0].settings.fromName">{{vm.state.campaign.steps[0].settings.fromName || "From Name"}}</span>
+                                <span editable-text="vm.state.campaign.emailSettings.fromName">{{vm.state.campaign.emailSettings.fromName || "From Name"}}</span>
                             </div>
                             <div class="form-group margin-bottom-0">
                                 <label class="control-label text-bold">
                                     From Email
                                 </label>
-                                <span editable-email="vm.state.campaign.steps[0].settings.fromEmail" e-required onbeforesave="validateEmail($data)">{{vm.state.campaign.steps[0].settings.fromEmail || "From Email"}}</span>
+                                <span editable-email="vm.state.campaign.emailSettings.fromEmail" e-required onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.fromEmail || "From Email"}}</span>
                             </div>
                             <div class="form-group margin-bottom-0">
                                 <label class="control-label text-bold">
                                     Reply To
                                 </label>
-                                <span editable-email="vm.state.campaign.steps[0].settings.replyTo" onbeforesave="validateEmail($data)">{{vm.state.campaign.steps[0].settings.replyTo || "Reply To"}}</span>
+                                <span editable-email="vm.state.campaign.emailSettings.replyTo" onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.replyTo || "Reply To"}}</span>
                             </div>
                             <div class="form-group margin-bottom-0">
                                 <label class="control-label text-bold">
                                     Bcc
                                 </label>
-                                <span editable-email="vm.state.campaign.steps[0].settings.bcc" onbeforesave="validateEmail($data)">{{vm.state.campaign.steps[0].settings.bcc || "Bcc"}}</span>
+                                <span editable-email="vm.state.campaign.emailSettings.bcc" onbeforesave="validateEmail($data)">{{vm.state.campaign.emailSettings.bcc || "Bcc"}}</span>
                             </div>
                             <div class="form-group margin-bottom-0">
                                 <label class="control-label text-bold">
                                     Subject
                                 </label>
-                                <span editable-text="vm.state.campaign.steps[0].settings.subject" onbeforesave="analyzeSubject($data)">{{vm.state.campaign.steps[0].settings.subject || "Subject"}}</span>
+                                <span editable-text="vm.state.campaign.emailSettings.subject" onbeforesave="analyzeSubject($data)">{{vm.state.campaign.emailSettings.subject || "Subject"}}</span>
                                 <div class="clearfix"></div>
                             </div>
-                            <div class="form-group margin-bottom-10" ng-if="vm.state.campaign.steps[0].settings.subject" ng-show="subjectScore">
+                            <div class="form-group margin-bottom-10" ng-if="vm.state.campaign.emailSettings.subject" ng-show="subjectScore">
                                 <label> <a href="#" style="color:#858585" ng-click="openModal('subject-score-modal')">Subject Strength <span class="fa fa-info-circle"></span></a></label>
                                 <label class="pull-right text-bold" ng-class="{'text-danger': subjectScore<25, 'text-warning': subjectScore>=25 && subjectScore<50, 'text-info': subjectScore>=50 && subjectScore<75, 'text-nephritis': subjectScore>=75}">
                                     <span ng-if="subjectScore<30">Weak</span>
@@ -243,11 +243,11 @@
                             </div>
 
                             <a
-                                ui-sref='app.emailEditor({id: vm.state.campaign.steps[0].settings.emailId})'
+                                ui-sref='app.emailEditor({id: vm.state.campaign.emailSettings.emailId})'
                                 class="btn btn-primary margin-top-15"
                                 tooltip-placement="top"
                                 tooltip="Make changes to this email in the editor."
-                                ng-disabled="vm.uiState.disableEditing || !vm.state.campaign.steps[0].settings.emailId">
+                                ng-disabled="vm.uiState.disableEditing || !vm.state.campaign.emailSettings.emailId">
                                 <i class="fa fa-pencil-square-o"></i>
                                 <span> Edit email content</span>
                             </a>

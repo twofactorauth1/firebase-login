@@ -23,7 +23,7 @@
           });
         });
       });
-    }
+    };
 
     fetchCampaigns();
 
@@ -78,28 +78,23 @@
             "status": "DRAFT",
             "visibility": 1,
             "startDate": "",
-            "steps": [{
-                "type": "email",
-                "trigger": null,
-                "index": 1,
-                "settings": {
-                    "emailId": selectedEmail._id,
-                    "offset": "",
-                    "fromEmail": selectedEmail.fromEmail,
-                    "fromName": selectedEmail.fromName,
-                    "replyTo": selectedEmail.replyTo,
-                    "bcc": selectedEmail.bcc,
-                    "subject": selectedEmail.subject,
-                    "vars": [],
-                    "sendAt": {}
-                }
-            }],
+            "emailSettings": {
+                "emailId": selectedEmail._id,
+                "offset": "",
+                "fromEmail": selectedEmail.fromEmail,
+                "fromName": selectedEmail.fromName,
+                "replyTo": selectedEmail.replyTo,
+                "bcc": selectedEmail.bcc,
+                "subject": selectedEmail.subject,
+                "vars": [],
+                "sendAt": {}
+            },
             "searchTags": {
                 "operation": "set",
                 "tags": []
             },
-            "contactTags": [],
-        }
+            "contactTags": []
+        };
         EmailCampaignService.checkIfDuplicateCampaign(null, campaign.name).then(function (response) {
           if(response.data){
               toaster.pop('warning', 'Campaign name already exists');
@@ -117,7 +112,7 @@
             });
           }
       });
-    }
+    };
 
 
     $scope.cancel = function () {
