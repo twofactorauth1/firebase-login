@@ -2562,14 +2562,11 @@ module.exports = {
                 fn(err);
             } else {
                 self.log.debug('Stats before: ', campaign.get('statistics'));
-                self.updateCampaignParticipants(campaign.get('accountId'), campaignId, function(err, updatedCampaign){
-                    stats.participants = updatedCampaign.get('statistics').participants;
-                    campaign.set('statistics', stats);
-                    self.log.debug('Stats after: ', campaign.get('statistics'));
-                    self.log.debug('<< reconcileCampaignStatistics');
-                    campaignDao.saveOrUpdate(campaign, fn);
-                });
-
+                stats.participants = emailMessages.length;
+                campaign.set('statistics', stats);
+                self.log.debug('Stats after: ', campaign.get('statistics'));
+                self.log.debug('<< reconcileCampaignStatistics');
+                campaignDao.saveOrUpdate(campaign, fn);
             }
         });
     }
