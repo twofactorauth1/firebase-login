@@ -337,6 +337,11 @@ module.exports = {
     atomicUpdateCampaignStatistics: function(accountId, campaignId, statistics, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> atomicUpdateCampaignStatistics');
+        statistics.sent = statistics.sent || 0;
+        statistics.clicked = statistics.clicked || 0;
+        statistics.opened = statistics.opened || 0;
+        statistics.bounced = statistics.bounced || 0;
+        self.log.debug(accountId, userId, 'updating with:', statistics);
         var modified = {
             date: new Date(),
             by: userId
@@ -1212,6 +1217,7 @@ module.exports = {
         });
     },
 
+    //TODO: this logic may need to change.
     _updateStatusForCampaignObj: function(campaign, fn) {
         var self = this;
         self.log.debug('>> _updateStatusForCampaignObj');
