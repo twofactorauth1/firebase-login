@@ -93,7 +93,7 @@
                                             </li>
                                             <li>
                                                 <span class="small">
-                                                <input type="checkbox" ng-model="column.social" ng-click="preventClick($event)" /> Social</span>
+                                            <input type="checkbox" ng-model="column.unsubscribed" ng-click="preventClick($event)" /> Unsubscribed</span>
                                             </li>
                                             <li>
                                                 <span class="small">
@@ -115,7 +115,7 @@
                                     </div>
                                 </div>
                                 <div class="visible-xs">
-                                    <div class="col-xs-12 padding-0">                                        
+                                    <div class="col-xs-12 padding-0">
                                         <div class="col-xs-7">
                                             <span class="input-icon">
                                                 <input type="text" st-search placeholder="Search by name, email, phone..." id="form-field-14" class="form-control">
@@ -128,9 +128,9 @@
                                             </button>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-xs-12 padding-0 padding-top-10">
-                                        <div class="col-xs-8"> 
+                                        <div class="col-xs-8">
 
                                                 <button type="button" style="min-width:60px;" class="btn btn-o btn-info ti-import margin-left-5 ng-click-active" ng-click="openModal('import-contact-modal', 'importContactModalCtrl','md')">
                                                 </button>
@@ -138,7 +138,7 @@
                                                 <button type="button" style="min-width:60px;" class="btn btn-o btn-info ti-export margin-left-5 ng-click-active" ng-click="exportContactsFn()">
                                                 </button>
                                         </div>
-                                          
+
                                         <div class="col-xs-4">
                                             <button type="button" class="btn btn-warning btn-scroll btn-scroll-top ti ti-plus pull-right" ng-click="openSimpleModal('new-contact-modal')">
                                                 <span>New Contact</span>
@@ -156,8 +156,8 @@
                                                     <small ng-bind-html="action.label | highlight: $select.search"></small>
                                                 </ui-select-choices>
                                             </ui-select>
-                                        </div>    
-                                    
+                                        </div>
+
                                         <div class="form-group col-xs-6">
                                             <div class="btn-group tableView">
                                                 <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
@@ -188,7 +188,7 @@
                                 <th st-sort="bestEmail" ng-show="column.email" class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}">Email</th>
                                 <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
                                 <th class="hidden-xs center" st-sort="getters.phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
-                                <th class="hidden-xs" st-sort="getters.social" ng-show="column.social" ng-class="{'column-width': tableView == 'grid'}">Social</th>
+                                <th class="hidden-xs" st-sort="getters.unsubscribed" ng-show="column.unsubscribed" ng-class="{'column-width': tableView == 'grid'}">Unsub</th>
                                 <th class="hidden-xs" st-sort-default="{{order}}" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
@@ -240,7 +240,7 @@
                                 <th class="column-width hidden-xs" ng-show="column.phone">
                                     <input st-search="phone" placeholder="Phone" class="form-control hidden" type="search" />
                                 </th>
-                                <th class="hidden-xs" ng-show="column.social">
+                                <th class="hidden-xs" ng-show="column.unsubscribed">
                                 </th>
                                 <th class="hidden-xs" ng-show="column.created">
                                 </th>
@@ -264,18 +264,7 @@
                                     <span ng-if="!contact.details[0].addresses[0]">--</span>
                                 </td>
                                 <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{contact.details[0].phones[0].number || '--'}}">{{contact.details[0].phones[0].number || '--'}}</a></td>
-                                <td ng-show="column.social" class="hidden-xs"><strong>Social: </strong>
-                                    <ul class="social">
-                                        <li ng-if="contact.hasFacebookId"><i class="fa fa-facebook-square"></i>
-                                        </li>
-                                        <li ng-if="contact.hasTwitterId"><i class="fa fa-twitter-square"></i>
-                                        </li>
-                                        <li ng-if="contact.hasLinkedInId"><a ng-href="{{contact.linkedInUrl}}" target="_blank"><i class="fa fa-linkedin-square"></i></a>
-                                        </li>
-                                        <li ng-if="contact.hasGoogleId"><i class="fa fa-google-plus-square"></i>
-                                        </li>
-                                    </ul>
-                                </td>
+                                <td ng-show="column.unsubscribed" class="hidden-xs"><strong>Unsub: </strong> <span ng-if="contact.unsubscribed">{{contact.unsubscribed}}</span><span ng-if="!contact.unsubscribed">--</span></td>
                                 <td ng-show="column.created" class="hidden-xs"><strong>Created: </strong> {{contact.created.date | date:'MMM d yy' || '--'}}</td>
                             </tr>
                         </tbody>
