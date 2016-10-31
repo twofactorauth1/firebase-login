@@ -117,6 +117,9 @@
       address: function (value) {
         return value.bestAddress
       },
+      unsubscribed: function (value) {
+        return value.unsubscribed
+      },
       social: function (value) {
         if (value.hasLinkedInId) {
           return 1;
@@ -221,7 +224,8 @@
       "tags": true,
       "email": true,
       "address": true,
-      "social": true,
+      "social": false,
+      "unsubscribed" : true,
       "phone": true,
       "created": true,
       "modified": true
@@ -569,7 +573,7 @@
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    
+
                     var contactPromises = [];
 
                     selectedContacts.forEach(function(sc, sci) {
