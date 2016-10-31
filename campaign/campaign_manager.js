@@ -348,7 +348,7 @@ module.exports = {
         };
         var query = {_id:campaignId, accountId:accountId};
         var modification = {$inc: {
-            'statistics.emailsSet': statistics.sent,
+            'statistics.emailsSent': statistics.sent,
             'statistics.emailsClicked':statistics.clicked,
             'statistics.emailsOpened': statistics.opened,
             'statistics.emailsBounced':statistics.bounced}
