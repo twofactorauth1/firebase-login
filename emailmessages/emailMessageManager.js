@@ -337,11 +337,11 @@ var emailMessageManager = {
                 if(maxSendTime.isBefore(moment.unix(send_at))) {
                     //schedule the email
                     self.log.debug('Scheduling email');
-                    if(request.body.personalizations.length > 1000) {
+                    if(personalizations.length > 1000) {
                         var code = 'var emailJson, uniqueArgs, send_at;';
                         var i,j,temparray,chunk = 1000;
-                        for (i=0,j=request.body.personalizations.length; i<j; i+=chunk) {
-                            temparray = request.body.personalizations.slice(i,i+chunk);
+                        for (i=0,j=personalizations.length; i<j; i+=chunk) {
+                            temparray = personalizations.slice(i,i+chunk);
                             // do whatever
                             request.body.personalizations = temparray;
                             code += 'emailJSON = ' + serialize.serialize(request.body) + ';';
@@ -387,20 +387,25 @@ var emailMessageManager = {
                 } else {
                     //send the email
                     self.log.debug('Sending:', JSON.stringify(request.body));
-
-                    if(personalizations.length > 1000) {
+                    var maxPersonalizations = 1000;
+                    if(personalizations.length > maxPersonalizations) {
                         var requestAry = [];
-                        var i,j,temparray,chunk = 1000;
-                        for (i=0,j=request.body.personalizations.length; i<j; i+=chunk) {
-                            temparray = request.body.personalizations.slice(i,i+chunk);
+                        var i,j,temparray,chunk = maxPersonalizations;
+                        for (i=0,j=personalizations.length; i<j; i+=chunk) {
+                            temparray = personalizations.slice(i,i+chunk);
                             // do whatever
                             request.body.personalizations = temparray;
                             requestAry.push(sg.emptyRequest(request));
                         }
                         async.eachSeries(requestAry, function(_request, callback){
+                            self.log.debug('Sending:', JSON.stringify(_request));
                             sg.API(_request, function(err, response){
                                 if(err) {
                                     self.log.error('Error sending email:', err);
+                                    if(err.response && err.response.body) {
+                                        self.log.error(err.response.body.errors);
+                                    }
+
                                     callback(err, response);
                                 } else {
                                     callback(null, response);
