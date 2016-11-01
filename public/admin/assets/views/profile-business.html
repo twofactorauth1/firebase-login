@@ -333,20 +333,20 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 min-height45" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
-                                    <div class="col-xs-1">
+                                    <div class="col-sm-1 col-xs-2">
                                         <label for="val.day">{{val.day}}:</label>
                                     </div>
-                                    <div class="col-xs-3" id="business_hours_start_{{$index}}" ng-if="!val.closed && !val.wholeday">
+                                    <div class="col-sm-3 col-xs-5" id="business_hours_start_{{$index}}" ng-if="!val.closed && !val.wholeday">
                                         <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                         </select>
                                         <span class="error help-block" />
                                     </div>
-                                    <div class="col-xs-3" ng-if="!val.closed && !val.wholeday">
+                                    <div class="col-sm-3 col-xs-5" ng-if="!val.closed && !val.wholeday">
                                         <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                         </select>
 
                                     </div>
-                                    <div class="col-xs-3" ng-if="!val.closed && !val.wholeday">
+                                    <div class="col-sm-3 col-xs-6" ng-if="!val.closed && !val.wholeday">
                                         <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
                                             <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=true" ng-model="val.wholeday">
                                             <label for="wholeday-{{$index}}">
@@ -355,7 +355,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-xs-3" ng-if="!val.closed && val.wholeday && !account.business.splitHours">
+                                    <div class="col-sm-3 col-xs-6" ng-if="!val.closed && val.wholeday && !account.business.splitHours">
                                         <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
                                             <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=false" ng-model="val.wholeday">
                                             <label for="wholeday-{{$index}}">
@@ -364,7 +364,7 @@
                                         </div>
 
                                     </div>
-                                    <div class="col-xs-2">
+                                    <div class="col-sm-2 col-xs-4">
                                         <div class="checkbox clip-check check-primary checkbox-inline">
                                             <input type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false" ng-model="val.closed">
                                             <label for="closed-{{$index}}">
