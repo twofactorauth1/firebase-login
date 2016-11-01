@@ -11,6 +11,10 @@ if (serverProps)
         script(id="indigenous-precache-sitedata-posts", type="application/json").
             #{serverProps.posts}
 
+        script(type="text/javascript").                
+                window.indigenous = window.indigenous || {};
+                window.indigenous.includeSocial = !{includeSocial};
+
     //- if (serverProps.pages)
 
     //-     script(id="indigenous-precache-sitedata-pages", type="application/json").
