@@ -225,7 +225,7 @@ var mainApp = angular
 
             $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
 
-            $rootScope.hideSocialShare = !window.indigenous.includeSocial;
+            $rootScope.hideSocialShare = window.indigenous.hideSocialShare;
 
             analyticsService.pageStart(function () {
                 var editorIndex = window.location.search.indexOf("editor=true");

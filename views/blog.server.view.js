@@ -804,8 +804,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 
                 data.includeSocial = true;
+                data.hideSocialShare = false;
                 if(data.account.showhide.blogSocialSharing === false){
-                    data.includeSocial = false;
+                    data.hideSocialShare = true;
                 }
                 if (!data.account.website.settings) {
                     self.log.warn('Website Settings is null for account ' + accountId);
