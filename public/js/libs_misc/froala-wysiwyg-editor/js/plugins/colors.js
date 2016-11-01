@@ -312,6 +312,14 @@
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
         var val_hex =  editor.helpers.RGBToHex(val);
+
+        if(!val_hex){
+          if(editor.helpers.RGBToHex("#" + val)){
+            val_hex = editor.helpers.RGBToHex("#" + val);
+            val = "#" + val;
+          }
+        }
+
         if(editor.opts.isButton)
             editor.opts.button.css('background-color', val);        
         else
@@ -364,8 +372,13 @@
       // Set text color.
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
-
         var val_hex =  editor.helpers.RGBToHex(val);
+        if(!val_hex){
+          if(editor.helpers.RGBToHex("#" + val)){
+            val_hex = editor.helpers.RGBToHex("#" + val);
+            val = "#" + val;
+          }
+        }
 
         if(editor.opts.isButton)
             $(editor.selection.element()).css('color', val);
