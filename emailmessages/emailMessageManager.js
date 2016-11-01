@@ -337,9 +337,10 @@ var emailMessageManager = {
                 if(maxSendTime.isBefore(moment.unix(send_at))) {
                     //schedule the email
                     self.log.debug('Scheduling email');
-                    if(personalizations.length > 1000) {
+                    var maxPersonalizations = 1000;
+                    if(personalizations.length > maxPersonalizations) {
                         var code = 'var emailJson, uniqueArgs, send_at;';
-                        var i,j,temparray,chunk = 1000;
+                        var i,j,temparray,chunk = maxPersonalizations;
                         for (i=0,j=personalizations.length; i<j; i+=chunk) {
                             temparray = personalizations.slice(i,i+chunk);
                             // do whatever
@@ -2039,29 +2040,94 @@ var emailMessageManager = {
         self.log.debug('uniqueArgs:', uniqueArgs);
         self.log.debug('send_at:', send_at);
         var params = serialize.unserialize(json);
-        var request = sg.emptyRequest();
+        var request = null;
+        if(params.content) {
+            // we have a sendgrid v3 message
+            request = sg.emptyRequest();
+            request.body.from = params.from;
+            request.body.subject = params.subject;
+            //need to fix content array
+            request.body.content = self._fixSerializedArray(params.content);
+            //need to fix categories array
+            request.body.categories = self._fixSerializedArray(params.categories);
+            //need to set personalizations array recursive
+            request.body.personalizations = self._fixSerializedArray(params.personalizations);
+            _.each(request.body.personalizations, function(p){
+                if(p.to) {
+                    p.to = self._fixSerializedArray(p.to);
+                }
+                if(p.content) {
+                    p.content = self._fixSerializedArray(p.content);
+                }
+                if(p.custom_args) {
+                    var pCustomArgs = {};
+                    _.each(_.keys(p.custom_args), function(key){
+                        pCustomArgs[key] = ''+ p.custom_args[key];
+                    });
+                    p.custom_args = pCustomArgs;
+                }
+            });
+            self.log.debug('request.body:', JSON.stringify(request.body));
+        } else {
+            //we have a sendgrid v2 message
+            request = sg.emptyRequest();
+            /*
+             * params.from
+             * params.fromname
+             * params.subject
+             * params.html
+             * params.category
+             * params.toname
+             */
+            request.body = {from:{}};
+
+            request.body.from.email = params.from;
+            request.body.from.name = params.fromname;
+            request.body.subject = params.subject;
+            request.body.content = [];
+            request.body.content[0] = {value: params.html, type:'text/html'};
+            request.body.categories = [];
+            request.body.categories.push(params.category);
+
+            var arr =[];
+            for( var i in params.to ) {
+                if (params.to.hasOwnProperty(i)){
+                    if(typeof i != 'number') {
+                        arr.push(params.to[i]);
+                    } else {
+                        arr[i] = params.to[i];
+                    }
+                }
+            }
+
+            self.log.debug('arr:', arr);
+            self.log.debug('params.to:', params.to);
+            request.body.personalizations = [];
+            _.each(arr, function(toAddress){
+                var p = {};
+                p.to = [];
+                p.to[0] = {email:toAddress};
+                request.body.personalizations.push(p);
+            });
+            //Make all properties strings... because sendgrid.
+            var custom_args = serialize.unserialize(uniqueArgs);
+            var stringifiedValues = {};
+            _.each(_.keys(custom_args), function(key){
+                stringifiedValues[key] = ''+custom_args[key];
+            });
+
+            request.body.personalizations[0].custom_args = stringifiedValues;
+        }
+
         request.method = 'POST';
         request.path = '/v3/mail/send';
 
         //need to fix the to addresses... should be an array
-        //TODO: I think this will be wrong now.  :(
-        var arr =[];
-        for( var i in params.to ) {
-            if (params.to.hasOwnProperty(i)){
-                if(typeof i != 'number') {
-                    arr.push(params.to[i]);
-                } else {
-                    arr[i] = params.to[i];
-                }
-            }
-        }
-        request.body.personalizations[0].to = [];
-        _.each(arr, function(toAddress){
-            request.body.personalizations[0].to.push({email:toAddress});
-        });
-        request.body.custom_args = serialize.unserialize(uniqueArgs);
+
+
         request.body.send_at = send_at;
-        sg.API(request, function (error, response) {
+        self.log.debug('Sending:', JSON.stringify(request.body));
+        sg.API(request, function (err, response) {
             self.log.debug(response.statusCode);
             self.log.debug(response.body);
             self.log.debug(response.headers);
@@ -2075,6 +2141,15 @@ var emailMessageManager = {
         });
 
 
+    },
+
+    _fixSerializedArray: function(serializedAry) {
+        var arr = [];
+        _.each(_.keys(serializedAry), function(key){
+            var obj = serializedAry[key];
+            arr.push(obj);
+        });
+        return arr;
     },
 
     contentTransformations: function(email) {
