@@ -1197,6 +1197,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('end:', end);
         self.log.debug('previousStart:', previousStart);
         self.log.debug('previousEnd:', previousEnd);
+        var accountIdParam = req.query.accountId;
+        if(accountId === appConfig.mainAccountID && accountIdParam) {
+            self.log.debug('Viewing analytics as account ' + accountIdParam);
+            accountId = parseInt(accountIdParam);
+        }
 
         async.parallel({
             visitorReports: function(callback){
