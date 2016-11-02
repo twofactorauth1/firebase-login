@@ -13,6 +13,7 @@
         var adminAnalyticsAPIUrl = '/api/1.0/analytics/admin/reports';
         saService.runReports = runReports;
         saService.runAdminReports = runAdminReports;
+        saService.runCustomerReports = runCustomerReports;
         saService.loading = {value:0};
 
 
@@ -51,6 +52,21 @@
             return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
+        function runCustomerReports(startDate, endDate, accountId, fn) {
+            function success(data) {
+                saService.reports = data;
+                fn(data);
+            }
+
+            function error(error) {
+                console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
+            }
+            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?accountId='+ accountId +'?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
+        }
+
+        
         function runAdminReports(startDate, endDate, fn) {
             function success(data) {
                 saService.reports = data;

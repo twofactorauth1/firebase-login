@@ -589,6 +589,7 @@ app.constant('JS_REQUIRES', {
     'xeditableCtrl': 'assets/js/controllers/xeditableCtrl.js',
     'chatCtrl': 'assets/js/controllers/chatCtrl.js',
     'editTopicCtrl': 'assets/js/controllers/editTopicCtrl.js',
+    'singleCustomerAnalyticsCtrl': 'assets/js/controllers/singleCustomerAnalyticsCtrl.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',

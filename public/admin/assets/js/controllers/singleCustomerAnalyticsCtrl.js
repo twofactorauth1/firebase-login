@@ -2,7 +2,7 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, SiteAnalyticsService) {
+    app.controller('singleCustomerAnalyticsCtrl', ["$scope", "$modal", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "$stateParams", "$state", "CustomerService", function ($scope, $modal, ChartAnalyticsService, $timeout, SiteAnalyticsService, $stateParams, $state, customerService) {
 
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
@@ -73,14 +73,11 @@
                 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         };
-
-        UserService.getAccount(function (account) {
-            $scope.analyticsAccount = account;
-            $scope.runAnalyticsReports();
-        });
+        
+        
 
         $scope.runAnalyticsReports = function () {
-            ChartAnalyticsService.runMongoReports($scope.date, $scope.analyticsAccount, function (data) {
+            ChartAnalyticsService.runCustomerReports($scope.date, $stateParams.customerId, function (data) {
                 //console.log('ABOUT TO COMPARE!!!\n\n\n\n\n');
                 //console.log('Legacy Data:', $scope.legacyData);
                 console.log('New Data:', data);
@@ -118,21 +115,9 @@
             });
         };
 
-        $scope.runAnalyticsReports1 = function () {
-            ChartAnalyticsService.runPagedReports($scope.date, $scope.analyticsAccount, function (data) {
-                $scope.formattedTopPages = _.reject(data.formattedTopPages, function (analytics) {
-                    return !angular.isDefined(analytics.page)
-                });
-                $scope.pagedformattedTopPages = _.reject(data.pagedformattedTopPages, function (analytics) {
-                    return !angular.isDefined(analytics.page)
-                });
-            });
 
-            ChartAnalyticsService.runReports($scope.date, $scope.analyticsAccount, function (data) {
-                $scope.setReportData(data);
-            });
-        };
-
+        $scope.runAnalyticsReports();
+        
         /**
          *
          * @param result2 - userReport current month
@@ -476,6 +461,7 @@
                 console.log('userAgentData', userAgentData);
                 $scope.userAgentData = userAgentData;
                 var uadLength = userAgentData.length -1;
+
                 if(userAgentData.length)
                 {
                     $scope.topBrowser = userAgentData[uadLength][0];
@@ -719,7 +705,7 @@
 
         $scope.displayDatePicker = function(){
             $timeout(function() {
-                angular.element('.deshboard-date-picker').click();
+                angular.element('.dashboard-date-picker').click();
             }, 0);
         }
 

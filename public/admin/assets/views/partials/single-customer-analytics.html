@@ -1,0 +1,316 @@
+<div ng-controller="singleCustomerAnalyticsCtrl" class="site-analytics single-customer-site-analytics">
+	<div class="container-fluid container-fullw bg-white ng-scope">
+	    <div class="row">
+	        <div class="col-xs-12 col-sm-3 col-sm-offset-9">
+	            <div class="input-group">
+	                <label class="sr-only">Date Range</label>
+	                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+	                <input date-range-picker class="form-control dashboard-date-picker date-picker" type="text" ng-model="selectedDate" options="pickerOptions" />
+	                <span class="input-group-addon" ng-click="displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="row">
+	    <div class="col-sm-12">
+	        <div class="panel panel-white margin-top-15" id="overview" ng-class="{'load1 csspinner': !analyticsOverviewConfig.options}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">Visitor <span class="text-bold">Overview</span></h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div collapse="overview" ng-init="overview=false" class="panel-wrapper">
+	                <div class="panel-body">
+	                    <div class="height-370">
+	                        <highchart config="analyticsOverviewConfig" id="analytics-overview-chart"></highchart>
+	                    </div>
+	                </div>
+	                <div class="panel-footer border-light">
+	                    <div class="row">
+	                        <div class="col-xs-4 text-center border-right border-dark">
+	                            <div class="rate">
+	                                <span class="value">{{(visitors | number) || '--'}}</span>
+	                                <i class="fa" ng-class="{'fa-caret-up text-green': visitorsPercent > 0, 'fa-caret-down text-red': visitorsPercent < 0}"></i><strong class="text-muted">{{visitorsPercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                            Visitors
+	                        </div>
+	                        <div class="col-xs-4 text-center border-right border-dark">
+	                            <div class="rate">
+	                                <span class="value">{{(sessions | number) || '--'}}</span>
+	                                <i class="fa" ng-class="{'fa-caret-up text-green': sessionsPercent > 0, 'fa-caret-down text-red': sessionsPercent < 0}"></i><strong class="text-muted">{{sessionsPercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                            Visits
+	                        </div>
+	                        <div class="col-xs-4 text-center">
+	                            <div class="rate">
+	                                <span class="value">{{(pageviews | number) || '--'}}</span>
+	                                <i class="fa" ng-class="{'fa-caret-up text-green': pageviewsPercent > 0, 'fa-caret-down text-red': pageviewsPercent < 0}"></i><strong class="text-muted">{{pageviewsPercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                            Page Views
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="clearfix"></div>
+	<div class="row">
+	    <div class="col-sm-6">
+	        <div class="panel panel-white no-radius" id="locations" ng-class="{'load1 csspinner': !locationData}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">Visitor <span class="text-bold">Locations</span></h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div collapse="locations" ng-init="locations=false" class="panel-wrapper">
+	                <div class="panel-body height-380">
+	                    <div id="visitor_locations" ng-if="locationData"></div>
+	                    <div class="clearfix"></div>
+	                </div>
+	                <div class="panel-footer border-light">
+	                    <div class="row">
+	                        <div class="col-xs-6 text-center border-right border-dark">
+	                            <div class="rate">
+	                                <span class="value">{{locationData.length || '--'}}</span>
+	                            </div>
+	                            States
+	                        </div>
+	                        <div class="col-xs-6 text-center">
+	                            <div class="rate">
+	                                <span class="value analytic-state-name">{{mostPopularState['ip_geo_info.province'] || '--'}}</span>
+	                            </div>
+	                            Most Popular
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-sm-6">
+	        <div class="panel panel-white no-radius" id="interactions" ng-class="{'load1 csspinner': !timeonSiteConfig.options}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">Content <span class="text-bold">Interactions</span></h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div class="panel-wrapper" collapse="interactions" ng-init="interactions=false">
+	                <div class="panel-body">
+	                    <div class="height-350">
+	                        <highchart config="timeonSiteConfig" id="timeonSiteConfig"></highchart>
+	                    </div>
+	                </div>
+	                <div class="panel-footer border-light">
+	                    <div class="row">
+	                        <div class="col-xs-6 text-center border-right border-dark">
+	                            <div class="rate">
+	                                <span class="value">{{visitDuration || '--'}}</span>
+	                                <i class="fa" ng-class="{'fa-caret-up text-green': visitDurationPercent > 0, 'fa-caret-down text-red': visitDurationPercent < 0}"></i><strong class="text-muted">{{visitDurationPercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                            Average Time On Site
+	                        </div>
+	                        <div class="col-xs-6 text-center">
+	                            <div class="rate">
+	                                <span class="value">{{(bounces | number) || '--'}}</span>
+	                                <i class="fa" ng-class="{'fa-caret-up text-green': bouncesPercent > 0, 'fa-caret-down text-red': bouncesPercent < 0}"></i><strong class="text-muted">{{bouncesPercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                            Bounces
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 col-sm-4 device-info" >
+	        <div id="device" class="panel panel-white" ng-class="{'load1 csspinner': !device_data_loaded}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">Device</h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div collapse="device" ng-init="device=false" class="panel-wrapper">
+	                <div class="panel-body  height-350">
+	                    <div class="clearfix mb30"></div>
+	                    <div class="col-xs-12">
+	                        <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;" ng-class="{'animated tada': newDesktop}"></i>
+	                                </h1>
+	                        <h3 class="center">{{desktop | number}}</h3>
+	                        <h5 class="center">Desktop</h5>
+	                    </div>
+	                    <div class="clearfix mb45"></div>
+	                    <div class="col-xs-12">
+	                        <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i>
+	                                </h1>
+	                        <h3 class="center">{{mobile | number}}</h3>
+	                        <h5 class="center">Mobile</h5>
+	                    </div>
+	                    <div class="clearfix mb45"></div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 col-sm-4" id="new-vs-returning">
+	        <div id="newVReturning" class="panel panel-white " ng-class="{'load1 csspinner': !newVsReturning}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">New vs. Returning</h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div collapse="newVReturning" ng-init="newVReturning=false" class="panel-wrapper">
+	                <div class="panel-body height-350 no-padding">
+	                    <div class="new-vs-returning-wrap" ng-if="!newVsReturningConfig.loading">
+	                        <highchart config="newVsReturningConfig" id="new-vs-returning-chart"></highchart>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 col-sm-4" id="traffic-sources">
+	        <div id="trafficSources" class="panel panel-white " ng-class="{'load1 csspinner': !trafficSourceData}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">Traffic Sources</h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div collapse="trafficSources" ng-init="trafficSources=false" class="panel-wrapper">
+	                <div class="panel-body height-350 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+	                    <div class="table-responsive">
+	                        <table class="table table-hover margin-bottom-0">
+	                            <thead>
+	                                <tr>
+	                                    <th>Referrer</th>
+	                                    <th>Count</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                <tr ng-repeat="trafficSource in trafficSourceData | orderBy:'-result'">
+	                                    <td><span ng-text-truncate="trafficSource['referrer.domain']" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                                    <td>{{trafficSource.result | number}}</td>
+	                                </tr>
+	                            </tbody>
+	                        </table>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
+	    <div class="panel-heading border-light">
+	        <h4 class="panel-title text-primary">Page <span class="text-bold">Analytics</span></h4>
+	        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	    </div>
+	    <div class="panel-wrapper" collapse="pageanalytics" ng-init="pageanalytics=false">
+	        <div class="panel-body panel-scroll">
+	            <div class="table-responsive">
+	                <table class="table table-hover margin-bottom-0">
+	                    <thead>
+	                        <tr>
+	                            <th>Page</th>
+	                            <th class="center">Page Views</th>
+	                            <th class="center">Unique Page Views</th>
+	                            <th class="center">Avg. Time on Page</th>
+	                        </tr>
+	                    </thead>
+	                    <tbody>
+	                        <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'|limitTo:25">
+	                            <td>
+	                                {{topPage.page}}
+	                                <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>
+	                            </td>
+	                            <td class="center">{{topPage.pageviews | number}}</td>
+	                            <td class="center">{{topPage.uniquePageviews | number}}</td>
+	                            <td class="center">{{topPage.avgTime | secTotime}}</td>
+	                            <!-- <td>{{topPage.entrances}}</td>
+	                                            <td>{{topPage.bounceRate | formatPercentage}}</td>
+	                                            <td>{{topPage.exitRate | formatPercentage}}</td> -->
+	                        </tr>
+	                    </tbody>
+	                </table>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	<div class="row">
+	    <div id="useragents" class="col-xs-12 col-sm-6">
+	        <div id="ua" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">User Agents</h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div class="panel-wrapper" collapse="ua" ng-init="ua=false" >
+	                <div class="panel-body no-padding">
+	                    <div class="new-vs-returning-wrap">
+	                        <highchart config="userAgentConfig" id="useragent-chart"></highchart>
+	                    </div>
+	                </div>
+	                <div class="panel-footer border-light">
+	                    <div class="row">
+	                        <div class="col-xs-12 text-center">
+	                            <div class="rate">
+	                                <span class="value">{{topBrowser || '--'}}</span>
+	                                <strong class="text-muted">{{browserPercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 col-sm-6" id="user-agent-table">
+	        <div id="userAgentsTable" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">User Agents</h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div collapse="userAgentsTable" ng-init="userAgents=false" class="panel-wrapper">
+	                <div class="panel-body panel-scroll height-375" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+	                    <div class="table-responsive">
+	                        <table class="table table-hover margin-bottom-0">
+	                            <thead>
+	                            <tr>
+	                                <th>User Agent</th>
+	                                <th>Percentage(%)</th>
+	                            </tr>
+	                            </thead>
+	                            <tbody>
+	                            <tr ng-repeat="ua in userAgentTableData">
+	                                <td><span ng-text-truncate="ua[0]" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                                <td>{{Math.round((ua[1] / browserTotal) * 100) + '%'  || '--' }}</td>
+	                            </tr>
+	                            </tbody>
+	                        </table>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="col-xs-12 col-sm-12" >
+	        <div id="rev" class="panel panel-white" ng-class="{'load1 csspinner': !revenueConfig.options}">
+	            <div class="panel-heading border-light">
+	                <h4 class="panel-title text-primary">Revenue <span class="text-bold">Overview</span></h4>
+	                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+	            </div>
+	            <div class="panel-wrapper" collapse="rev" ng-init="rev=false">
+	                <div class="panel-body">
+	                    <div class="rev-wrap">
+	                        <highchart config="revenueConfig" id="revenue-chart"></highchart>
+	                    </div>
+	                </div>
+	                <div class="panel-footer border-light">
+	                    <div class="row">
+	                        <div class="col-xs-6 text-center border-right border-dark">
+	                            <div class="rate">
+	                                <span class="value">{{(orderCount | number) || '--'}}</span>
+	                                <i class="fa" ng-class="{'fa-caret-up text-green': ordersPercent > 0, 'fa-caret-down text-red': ordersPercent < 0}"></i><strong class="text-muted">{{ordersPercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                            Orders
+	                        </div>
+	                        <div class="col-xs-6 text-center">
+	                            <div class="rate">
+	                                <span class="value">{{(revenue | currency:"$":0) || '--'}}</span>
+	                                <i class="fa" ng-class="{'fa-caret-up text-green': revenuePercent > 0, 'fa-caret-down text-red': revenuePercent < 0}"></i><strong class="text-muted">{{revenuePercent || '--'}}</strong><span class="percentage">%</span>
+	                            </div>
+	                            Revenue
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>	

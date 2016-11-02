@@ -376,6 +376,14 @@
             });
         };
 
+
+        this.runCustomerReports = function(date, accountId, fn) {
+            SiteAnalyticsService.runCustomerReports(date.startDate, date.endDate, accountId, function(data){
+                //console.log('I got this:', data);
+                fn(data);
+            });
+        };
+
         this.runAdminMongoReports = function(date, account, fn) {
             SiteAnalyticsService.runAdminReports(date.startDate, date.endDate, function(data){
                 fn(data);
