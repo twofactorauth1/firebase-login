@@ -32,6 +32,7 @@
         $scope.$watch('selectedDate', function () {
             $scope.date.startDate = moment($scope.selectedDate.startDate).format();
             $scope.date.endDate = moment($scope.selectedDate.endDate).format();
+
             //update user preferences
             if (dateSwitch) {
                 $scope.analyticsOverviewConfig = {};
@@ -49,7 +50,7 @@
                 $scope.locationData = null;
                 $scope.pagedformattedTopPages = null;
 
-                $scope.runAnalyticsReports($scope.analyticsAccount);
+                $scope.runAnalyticsReports();
             }
             dateSwitch = true;
         });
@@ -73,14 +74,10 @@
                 'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
             }
         };
-        
-        
 
         $scope.runAnalyticsReports = function () {
             $scope.loadCharts = true;
             ChartAnalyticsService.runCustomerReports($scope.date, $stateParams.customerId, function (data) {
-                //console.log('ABOUT TO COMPARE!!!\n\n\n\n\n');
-                //console.log('Legacy Data:', $scope.legacyData);
                 console.log('New Data:', data);
                 var formattedTopPages = [];
                 var pagedformattedTopPages;
@@ -117,8 +114,8 @@
         };
 
 
-        
-        
+
+
         /**
          *
          * @param result2 - userReport current month
@@ -394,7 +391,7 @@
                 var newVsReturning = [
                     newCustomers,
                     returningCustomers
-                ];  
+                ];
             }
             else{
                 var newVsReturning = [
@@ -402,7 +399,7 @@
                     ['Returning', 0]
                 ];
             }
-            
+
 
             $scope.newVsReturning = newVsReturning;
 
@@ -738,7 +735,7 @@
                 if(!$scope.loadCharts)
                     $scope.runAnalyticsReports();
             }, 0);
-            
+
         });
 
     }]);
