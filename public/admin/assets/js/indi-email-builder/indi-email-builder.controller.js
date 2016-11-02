@@ -604,28 +604,23 @@
                 "status": "DRAFT",
                 "visibility": 1,
                 "startDate": "",
-                "steps": [{
-                    "type": "email",
-                    "trigger": null,
-                    "index": 1,
-                    "settings": {
-                        "emailId": vm.state.email._id,
-                        "offset": "",
-                        "fromEmail": vm.state.email.fromEmail,
-                        "fromName": vm.state.email.fromName,
-                        "replyTo": vm.state.email.replyTo,
-                        "bcc": vm.state.email.bcc,
-                        "subject": vm.state.email.subject,
-                        "vars": [],
-                        "sendAt": {}
-                    }
-                }],
+                "emailSettings":{
+                    "emailId": "",
+                    "fromEmail": "",
+                    "fromName": '',
+                    "replyTo": '',
+                    "bcc": '',
+                    "subject": '',
+                    "vars": [],
+                    "sendAt": {}
+                },
                 "searchTags": {
                     "operation": "set",
                     "tags": []
                 },
-                "contactTags": [],
-            }
+                "contactTags": []
+            };
+            
 
             EmailCampaignService.createCampaign(campaign).then(function(res) {
                 vm.uiState.closeModal();
