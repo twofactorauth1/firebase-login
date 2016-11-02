@@ -63,10 +63,10 @@
             }
             var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?accountId='+ accountId +'?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
+            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?accountId='+ accountId +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
-        
+
         function runAdminReports(startDate, endDate, fn) {
             function success(data) {
                 saService.reports = data;
