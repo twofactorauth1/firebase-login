@@ -1216,6 +1216,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$on('$refreshAccountSettings', function(event, account) {
         if(account && account._id){
             vm.state.account = account;
+            if(account.showhide.blogSocialSharing === false){
+                vm.uiState.hideSocialShare = true;
+            }
         }
     });
 
