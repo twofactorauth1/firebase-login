@@ -327,6 +327,12 @@
         };
 
 
+        $scope.resizeAnalytics = function(){
+            $timeout(function() {
+                $scope.$broadcast('$renderSingleCustomerAnalytics');
+            }, 0);
+        };
+
         (function init() {
 
             UserService.getUsers(function (users) {

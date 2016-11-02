@@ -77,6 +77,7 @@
         
 
         $scope.runAnalyticsReports = function () {
+            $scope.loadCharts = true;
             ChartAnalyticsService.runCustomerReports($scope.date, $stateParams.customerId, function (data) {
                 //console.log('ABOUT TO COMPARE!!!\n\n\n\n\n');
                 //console.log('Legacy Data:', $scope.legacyData);
@@ -116,7 +117,7 @@
         };
 
 
-        $scope.runAnalyticsReports();
+        
         
         /**
          *
@@ -238,6 +239,9 @@
             ChartAnalyticsService.timeOnSite($scope.avgSessionData, $scope.bouncesData, function (data) {
                 $scope.timeonSiteConfig = data;
                 $scope.timeonSiteConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
 
@@ -330,6 +334,9 @@
                     $scope.analyticsOverviewConfig = data;
                 //});
                 $scope.analyticsOverviewConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
             var sessionsPreviousData = 0;
@@ -402,6 +409,9 @@
             ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
                 $scope.newVsReturningConfig = data;
                 $scope.newVsReturningConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
 
@@ -472,6 +482,9 @@
                 ChartAnalyticsService.userAgentChart(userAgentData, function(config){
                     $scope.userAgentConfig = config;
                     $scope.userAgentConfig.loading = false;
+                    $timeout(function() {
+                        $(window).resize();
+                    }, 0);
                 });
 
                 $scope.userAgentTableData = userAgentData.reverse();
@@ -522,6 +535,9 @@
             ChartAnalyticsService.revenueOverview($scope.revenueData, function (data) {
                 $scope.revenueConfig = data;
                 $scope.revenueConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
             //=======================================
@@ -612,6 +628,9 @@
                     $scope.analyticsOverviewConfig = data;
                 });
                 $scope.analyticsOverviewConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
             var sessionsPreviousData = 0;
@@ -670,6 +689,9 @@
             ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
                 $scope.newVsReturningConfig = data;
                 $scope.newVsReturningConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
             // ======================================
@@ -708,6 +730,16 @@
                 angular.element('.dashboard-date-picker').click();
             }, 0);
         }
+
+
+        $scope.$on('$renderSingleCustomerAnalytics', function(event, args) {
+            $timeout(function() {
+                $(window).resize();
+                if(!$scope.loadCharts)
+                    $scope.runAnalyticsReports();
+            }, 0);
+            
+        });
 
     }]);
 }(angular));
