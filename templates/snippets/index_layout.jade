@@ -59,7 +59,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
         //- script.
         //-     var test = !{JSON.stringify(account.website)};
 
-    body(data-styles, class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), ng-cloak)
+    body(data-styles, class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default', account && account.showhide && account.showhide.blogSocialSharing === false ? 'ssb-blog-hide-social-share' : ''), ng-cloak)
         block body_content
             div(id='fb-root')
             div(id='toolbar')

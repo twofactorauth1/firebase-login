@@ -412,6 +412,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     var unbindAccountWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.account }, function(account) {
         vm.state.account = account;
+        vm.uiState.hideSocialShare = false;
+            if(account.showhide.blogSocialSharing === false){
+                vm.uiState.hideSocialShare = true;
+            }
         unbindAccountWatcher();
     }, true);
 
