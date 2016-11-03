@@ -28,7 +28,7 @@
                                                     <span>Filter</span>
                                                 </button>
                                             </div>
-                                            <div class="col-xs-3 col-md-3 padding-right-0">
+                                            <div class="col-xs-3 col-md-3 padding-right-0 hidden">
                                                 <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
                                                     <ui-select-match placeholder="Actions">
                                                         <small ng-bind-html="$select.selected.label"></small>
@@ -125,7 +125,7 @@
                                                 <button type="button" style="min-width:60px;" class="btn btn-o btn-info ti-export margin-left-5 ng-click-active" ng-click="exportContactsFn()">
                                                 </button>
                                         </div>
-                                        <div class="form-group col-xs-8">
+                                        <div class="form-group col-xs-8 hidden">
                                             <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedContactsFn()).length'>
                                                 <ui-select-match placeholder="Actions">
                                                     <small ng-bind-html="$select.selected.label"></small>
