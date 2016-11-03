@@ -110,7 +110,7 @@
 
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
-            if(vm.state.campaign.emailSettings) {
+            if(vm.state.campaign.emailSettings && vm.state.campaign.status !== 'COMPLETED') {
                 if (vm.state.campaign.type === 'autoresponder') {
                     vm.state.campaign.emailSettings.trigger = 'SIGNUP';
                 } else {

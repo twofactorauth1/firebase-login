@@ -177,7 +177,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: "<indi-email-campaign></indi-email-campaign>",
         title: 'Email Campaign',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'propsFilter')
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'propsFilter', 'deep-diff')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "/admin/assets/views/campaigns.html",
