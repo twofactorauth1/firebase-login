@@ -134,11 +134,9 @@
                                                     <small ng-bind-html="action.label | highlight: $select.search"></small>
                                                 </ui-select-choices>
                                             </ui-select>
-                                        </div>  
-                                    </div>
-
-                                    <div class="col-xs-12 padding-0 padding-top-10">
-                                        <div class="form-group col-xs-12">
+                                        </div>
+                                        
+                                        <div class="form-group col-xs-8">
                                             <div class="btn-group tableView">
                                                 <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
                                                 <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
