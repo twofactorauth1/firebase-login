@@ -596,7 +596,7 @@
             vm.uiState.dataLoaded = false;
             EmailCampaignService.getCampaignContacts(vm.state.campaignId)
                 .then(function (res) {
-                    vm.state.originalRecipients = angular.copy(res.data);
+                    
                     vm.state.recipients = res.data;
                     var individuals = [];
                     _.each(res.data, function (contact) {
@@ -606,6 +606,7 @@
                     });
                     vm.uiState.selectedContacts.individuals = individuals;
                     vm.uiState.dataLoaded = true;
+
                 });
         }
 
@@ -628,6 +629,7 @@
                         vm.toggleSelectionFn(tag.matchingTag);
                 }
             });
+            vm.state.originalRecipients = angular.copy(vm.state.recipients);
             vm.uiState.dataLoaded = true;
         }
 
