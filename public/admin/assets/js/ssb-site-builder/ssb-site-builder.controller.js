@@ -43,6 +43,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.setDefaultSpacing = setDefaultSpacing;
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
+    vm.toggleSidebarPanel = toggleSidebarPanel;
 
 
     vm.uiState = {
@@ -158,7 +159,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         setDefaultSpacing: vm.setDefaultSpacing,
 
-        isNavHero: vm.isNavHero
+        isNavHero: vm.isNavHero,
+
+        toggleSidebarPanel: vm.toggleSidebarPanel
 
     };
 
@@ -173,10 +176,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 SimpleSiteBuilderService.getPages();
                 if(!vm.state.pendingWebsiteChanges && !vm.state.pendingPageChanges)
                     vm.uiState.loaded = false;
+                $timeout(function() {
+                    vm.state.saveAndLoading = false;
+                }, 0);
                 $location.path('/website/site-builder/pages/' + pageId);
             } else {
                 vm.uiState.navigation.index = 1;
                 vm.uiState.navigation.indexClass = 'ssb-sidebar-position-1';
+                $timeout(function() {
+                    vm.state.saveAndLoading = false;
+                }, 0);
             }
         },
         goToPagesListPage: function() {
@@ -1055,8 +1064,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function saveAndLoadPage(page) {
+        vm.uiState.openSidebarPanel = '';
+        vm.state.saveAndLoading = true;
         if (vm.state.pendingPageChanges || vm.state.pendingWebsiteChanges) {
-            vm.state.saveLoading = true;
+            vm.state.saveLoading = true;            
             vm.state.pendingWebsiteChanges = false;
             vm.state.pendingPageChanges = false;
             saveWebsite().then(function(){
@@ -1069,16 +1080,25 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                             SimpleSiteBuilderService.saveOtherPageLinks();
                             vm.uiState.navigation.loadPage(page._id);
                             SimpleSiteBuilderService.getPages();
+                            $timeout(function() {
+                                vm.state.saveAndLoading = false;
+                            }, 0);                            
                         })
                     }).catch(function(err) {
                         toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         vm.state.saveLoading = false;
+                        $timeout(function() {
+                            vm.state.saveAndLoading = false;
+                        }, 0);
                     })
                 )
             })
         } else {
             vm.uiState.navigation.loadPage(page._id);
             SimpleSiteBuilderService.getPages();
+            $timeout(function() {
+                vm.state.saveAndLoading = false;
+            }, 0);
         }
     };
 
@@ -1221,6 +1241,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             }
         }
     });
+
+
+    function toggleSidebarPanel(type){
+        if(!vm.state.saveAndLoading)
+            vm.uiState.openSidebarPanel = type;
+    }
 
     function init(element) {
 

@@ -5,24 +5,24 @@
         ng-class="{ 'tabs-left': vm.uiState.sidebarOrientation === 'vertical' }">
         <ul class="nav nav-tabs">
 
-            <li ng-click="vm.uiState.openSidebarPanel = 'add'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'add' }">
+            <li ng-click="vm.uiState.toggleSidebarPanel('add')" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'add' }">
                 <div><div class="ti-plus display-ib"></div>Add</div>
             </li>
 
-            <li ng-click="vm.uiState.openSidebarPanel = 'pages'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'pages' }">
+            <li ng-click="vm.uiState.toggleSidebarPanel('pages')" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'pages' }">
                 <div><div class="ti-files display-ib"></div>Pages</div>
             </li>
 
-            <li ng-click="vm.uiState.openSidebarPanel = 'content'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'content' }">
+            <li ng-click="vm.uiState.toggleSidebarPanel('content')" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'content' }">
                 <div><div class="ti-pencil-alt display-ib"></div>Content</div>
             </li>
 
-            <li ng-click="vm.uiState.openSidebarPanel = 'design'" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
+            <li ng-click="vm.uiState.toggleSidebarPanel('design')" class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'design' }">
                 <div><div class="ti-brush display-ib"></div>Design</div>
             </li>
 
             <li
-                ng-click="vm.uiState.openSidebarPanel = 'blog';  vm.uiState.activeSectionIndex = undefined; vm.uiState.activeComponentIndex = undefined; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Blog', id: 'blog' })"
+                ng-click="vm.uiState.toggleSidebarPanel('blog');  vm.uiState.activeSectionIndex = undefined; vm.uiState.activeComponentIndex = undefined; vm.uiState.navigation.blogPanel.loadPanel({ name: 'Blog', id: 'blog' })"
                 ng-if="vm.state.account.showhide.blog && vm.state.account.showhide.ssbBlog"
                 class="nav-tab"
                 ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'blog' }">
