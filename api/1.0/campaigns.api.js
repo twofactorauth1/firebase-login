@@ -523,7 +523,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> duplicateCampaign');
 
         var campaignId = req.params.id;
-        var campaignName = req.body['name'] + ' (copy)';
+        var campaignName = req.body['name'] + ' (copy) ' + moment().toDate().getTime();
 
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
