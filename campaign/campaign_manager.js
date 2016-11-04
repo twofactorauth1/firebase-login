@@ -397,6 +397,7 @@ module.exports = {
                     by: userId,
                     date: new Date()
                 };
+                campaignObj.set('modified', modified);
                 self.updateCampaign_v2(accountId, userId, campaignObj, campaign, fn);
             }
         });
