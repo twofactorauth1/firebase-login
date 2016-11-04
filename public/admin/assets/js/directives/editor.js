@@ -151,6 +151,11 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 if(blogPostEditor){
                     froalaConfig.enter = $.FroalaEditor.ENTER_P;
                     froalaConfig.placeholderText = attrs.placeholder;
+                    if(SimpleSiteBuilderService.permissions && SimpleSiteBuilderService.permissions.html === true){
+                        if (froalaConfig.toolbarButtons.indexOf('html') === -1) {
+                            froalaConfig.toolbarButtons.push('html');
+                        }
+                    }
                 }
 
 
