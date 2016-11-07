@@ -605,12 +605,12 @@
                 "visibility": 1,
                 "startDate": "",
                 "emailSettings":{
-                    "emailId": "",
-                    "fromEmail": "",
-                    "fromName": '',
-                    "replyTo": '',
-                    "bcc": '',
-                    "subject": '',
+                    "emailId": vm.state.email._id,
+                    "fromEmail": vm.state.email.fromEmail,
+                    "fromName": vm.state.email.fromName,
+                    "replyTo": vm.state.email.replyTo,
+                    "bcc": vm.state.email.bcc,
+                    "subject": vm.state.email.subject,
                     "vars": [],
                     "sendAt": {}
                 },
