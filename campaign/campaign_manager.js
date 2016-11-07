@@ -732,6 +732,9 @@ module.exports = {
                 return fn('Campaign contacts must be numeric');
             }
             campaign.set('status', $$.m.Campaign.status.RUNNING);
+            if(campaign.get('type') === 'autoresponder') {
+                campaign.set('status', $$.m.Campaign.status.COMPLETED);
+            }
             var participants = campaign.get('contacts').length;
             campaign.get('statistics').participants = participants;
             campaignDao.saveOrUpdate(campaign, function (err, updatedCampaign) {
@@ -740,45 +743,54 @@ module.exports = {
                 /*
                  * let's send some emails!!!
                  */
-                contactDao.getContactsByIDs(accountId, contactsArray, function(err, contactAry){
-                    var emailSettings = campaign.get('emailSettings');
-                    var fromName = emailSettings.fromName;
-                    var fromAddress = emailSettings.fromEmail;
-                    var subject = emailSettings.subject;
-                    var vars = emailSettings.vars;
-                    var emailId = emailSettings.emailId;
-                    accountDao.getAccountByID(accountId, function(err, account){
-                        if(err || !account) {
-                            self.log.error('Error getting account:', err);
-                            return fn(err);
-                        } else {
-                            emailDao.getEmailById(emailId, function(err, email){
-                                if(err || !email) {
-                                    self.log.error('Error getting email to render: ' + err);
-                                    return fn(err, null);
-                                }
-                                app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
-                                    if (err) {
-                                        self.log.error('error rendering html: ' + err);
-                                        self.log.warn('email will not be sent.');
-                                    } else {
-                                        emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
-                                                    html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
-                                            if(err) {
-                                                self.log.error('Error sending campaign:', err);
-                                            } else {
-                                                self.log.debug('Sent batched campaign:', value);
-                                            }
-                                            //TODO: patch completed status
-                                        });
+                if(updatedCampaign.get('type') !== 'autoresponder') {
+                    contactDao.getContactsByIDs(accountId, contactsArray, function(err, contactAry){
+                        var emailSettings = campaign.get('emailSettings');
+                        var fromName = emailSettings.fromName;
+                        var fromAddress = emailSettings.fromEmail;
+                        var subject = emailSettings.subject;
+                        var vars = emailSettings.vars;
+                        var emailId = emailSettings.emailId;
+                        accountDao.getAccountByID(accountId, function(err, account){
+                            if(err || !account) {
+                                self.log.error('Error getting account:', err);
+                                return fn(err);
+                            } else {
+                                emailDao.getEmailById(emailId, function(err, email){
+                                    if(err || !email) {
+                                        self.log.error('Error getting email to render: ' + err);
+                                        return fn(err, null);
                                     }
+                                    app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                                        if (err) {
+                                            self.log.error('error rendering html: ' + err);
+                                            self.log.warn('email will not be sent.');
+                                        } else {
+                                            emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
+                                                    html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
+                                                if(err) {
+                                                    self.log.error('Error sending campaign:', err);
+                                                } else {
+                                                    self.log.debug('Sent batched campaign:', value);
+                                                }
+                                                //TODO: patch completed status
+                                                campaignDao.patch({_id:campaignId}, {status:$$.m.Campaign.status.COMPLETED}, $$.m.CampaignV2, function(err, value){
+                                                    self.log.debug('Patched campaign:', value);
+                                                    if(err) {
+                                                        self.log.error('Error patching campaign:',err);
+                                                    }
+                                                });
+                                            });
+                                        }
+                                    });
                                 });
-                            });
-                        }
+                            }
+                        });
+
+
                     });
 
-
-                });
+                }
 
             });
         });
@@ -1504,7 +1516,89 @@ module.exports = {
      */
     handleCampaignSignupEvent: function(accountId, campaignId, contactId, fn) {
         var self = this;
-        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'SIGNUP', fn);
+        self.log.debug(accountId, null, '>> handleCampaignSignupEvent');
+        async.waterfall([
+            function(cb) {
+                campaignDao.getById(campaignId, $$.m.CampaignV2, function(err, campaign){
+                    cb(err, campaign);
+                });
+            },
+            function(campaign, cb) {
+                if(campaign) {
+                    accountDao.getAccountByID(accountId, function(err, account){
+                        cb(err, campaign, account);
+                    });
+                } else {
+                    cb('Could not find campaign');
+                }
+            },
+            function(campaign, account, cb) {
+                if(account) {
+                    var emailSettings = campaign.get('emailSettings');
+                    var emailId = emailSettings.emailId;
+                    emailDao.getEmailById(emailId, function(err, email){
+                        cb(err, campaign, account, email);
+                    });
+                } else {
+                    cb('Could not find account');
+                }
+            },
+            function(campaign, account, email, cb) {
+                if(!email) {
+                    cb('Error getting email to render');
+                } else {
+                    contactDao.getContactById(accountId, contactId, function(err, contact){
+                        if(err) {
+                           cb(err);
+                        } else if(!contact) {
+                            cb('Could not find contact');
+                        } else {
+                            cb(null, campaign, account, email, [contact]);
+                        }
+                    });
+                }
+
+            },
+            function(campaign, account, email, contactAry, cb) {
+                if(!contactAry) {
+                    cb('Error getting contacts');
+                } else {
+                    var emailSettings = campaign.get('emailSettings');
+                    var fromName = emailSettings.fromName;
+                    var fromAddress = emailSettings.fromEmail;
+                    var subject = emailSettings.subject;
+                    var vars = emailSettings.vars;
+                    var emailId = emailSettings.emailId;
+                    app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                        if (err) {
+                            self.log.error('error rendering html: ' + err);
+                            self.log.warn('email will not be sent.');
+                        } else {
+                            emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
+                                html, account, campaignId, vars, emailSettings, emailId, null, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error sending campaign:', err);
+                                    } else {
+                                        self.log.debug('Sent batched campaign:', value);
+                                    }
+                                    cb(err, value);
+                                });
+                        }
+                    });
+
+                }
+            }
+        ], function(err, value){
+            if(err) {
+                self.log.error('Error handling signup event:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, null, '<< handleCampaignSignupEvent');
+                fn(null, value);
+            }
+        });
+
+        //return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'SIGNUP', fn);
     },
 
     /**
