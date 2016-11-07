@@ -773,7 +773,6 @@ module.exports = {
                                                 } else {
                                                     self.log.debug('Sent batched campaign:', value);
                                                 }
-                                                //TODO: patch completed status
                                                 campaignDao.patch({_id:campaignId}, {status:$$.m.Campaign.status.COMPLETED}, $$.m.CampaignV2, function(err, value){
                                                     self.log.debug('Patched campaign:', value);
                                                     if(err) {
