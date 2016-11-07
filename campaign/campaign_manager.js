@@ -1391,17 +1391,17 @@ module.exports = {
 
         async.waterfall([
             function(callback) {
-                campaignDao.findMany(campaignQuery, $$.m.CampaignFlow, function(err, value){
+                campaignDao.getById(campaignId, $$.m.CampaignV2, function(err, campaign){
                     if(err) {
-                        self.log.error('Error finding campaign flow: ' + err);
-                        return callback(err, null);
+                        self.log.error('Error finding campaign:', err);
+                        callback(err);
                     } else {
-                        return callback(null, value)
+                        callback(null, campaign);
                     }
-                })
+                });
             },
-            function(flows) {
-                var contactIds = flows.map(function(flow) { return flow.get('contactId') });
+            function(campaign) {
+                var contactIds = campaign.get('contacts');
                 var query = { _id: { $in: contactIds} };
                 self.log.debug('contactIds:', contactIds);
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
