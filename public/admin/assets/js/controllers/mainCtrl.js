@@ -188,7 +188,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
     });
 
     $scope.openTopBarMediaModal = function () {
-        if($state.current.name === 'app.website.ssbSiteBuilder.editor'){
+        if($state.current.name === 'app.website.ssbSiteBuilder.editor' || $state.current.name === "app.emailEditor"){
             clickandInsertImageButton();
             return;
         }
