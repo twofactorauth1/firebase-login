@@ -573,6 +573,12 @@
         function updateSendNowFn(value) {
             vm.uiState.whenToSend = value;
             vm.uiState.watchDeliveryDate = true;
+
+            if(vm.uiState.whenToSend !== 'now') {
+                if(vm.uiState.delivery.date.isBefore(moment())) {
+                    vm.uiState.delivery.date = moment();
+                }
+            }
             if (vm.uiState.whenToSend !== 'later') {
                 vm.uiState.delivery.date = moment();
             }

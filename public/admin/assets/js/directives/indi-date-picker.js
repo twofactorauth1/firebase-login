@@ -9,7 +9,7 @@ app.directive('indiDatepicker',function($compile,$timeout){
         },
         template:
             '<div class="input-group">'     +
-                    '<input type="text" readonly="{{readOnly}}" class="form-control" datepicker-popup="{{popup}}" ng-model="ngModel" is-open="datePicker.isOpen" min-date="minDate" close-text="Close" />' +
+                    '<input type="text" readonly="{{readOnly}}" class="form-control" datepicker-popup="{{popup}}" ng-model="ngModel" is-open="datePicker.isOpen" min-date="minDate" close-text="Close"/>' +
                     '<span class="input-group-btn">' +
                         '<button type="button" class="btn btn-default" ng-click="open($event)">' +
                             '<i class="glyphicon glyphicon-calendar"></i>' +
@@ -60,4 +60,4 @@ app.directive('indiDatepicker',function($compile,$timeout){
           };
         }
     };
-})
+});
