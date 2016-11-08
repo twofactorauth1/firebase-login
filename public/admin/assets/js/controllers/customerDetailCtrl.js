@@ -350,9 +350,8 @@
 
             UserService.getUsers(function (users) {
                 $scope.users = users;
+                $scope.getCustomer();
             });
-
-            $scope.getCustomer();
 
         })();
 
