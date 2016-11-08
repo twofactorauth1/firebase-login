@@ -63,7 +63,7 @@
                                                     <td>Gross Revenue</td>
                                                     <td>{{(customer.chargeDetails.totalCharges) | currency:"$" }}</td>
                                                 </tr>
-                                                
+
                                                 <tr>
                                                     <td>Subdomain:</td>
                                                     <td>
@@ -75,16 +75,16 @@
                                                 <tr>
                                                     <td>Custom Domain:</td>
                                                     <td>
-                                                        <div>
+                                                        <span>
                                                             {{customer.customDomain}}
-                                                        </div>
+                                                        </span>
                                                         <div class="pull-right">
-                                                            <a ng-click="getNameServers(customer.customDomain)"><i class="fa fa-binoculars"></i></a>
-                                                            <a ng-click="openSimpleModal('add-domain-modal')"><i class="fa fa-pencil"></i></a>
+                                                            <a ng-click="getNameServers(customer.customDomain)"><i class="fa fa-binoculars" tooltip="Show name server details"></i></a>
+                                                            <a ng-click="openSimpleModal('add-domain-modal')" tooltip="Edit domain name"><i class="fa fa-pencil"></i></a>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr ng-if="nameservers">
+                                                <tr ng-if="nameservers" ng-show="showNameServer">
                                                     <td colspan="2"><div ng-repeat="ns in nameservers"><span class="text-bold">{{ns}}</span><br></div></td>
                                                 </tr>
                                                 <tr>
@@ -131,7 +131,7 @@
                                                         {{primaryUser._id}}
                                                     </td>
                                                 </tr>
-                                                
+
                                             </tbody>
                                         </table>
 

@@ -180,7 +180,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             tabMode: 'indent',
             tabSize: 2
         },
-        tableEditButtons: ['tableHeader', 'tableRemove', 'tableRows', 'tableColumns', 'tableStyle', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableCellStyle'],
+        tableEditButtons: ['tableHeader', 'tableRemove', 'tableRows', 'tableColumns', 'tableStyle', 'tableCells', 'tableCellColors', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableCellStyle'],
         tableCellStyles: {
             'ssb-table-transparent-border': 'Clear Border',
             'ssb-table-black-border': 'Black Border',
@@ -198,7 +198,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             'ssb-editor-style-line-height-4': 'Line Height 4',
             'ssb-editor-style-line-height-5': 'Line Height 5',
         },
-        imageUploadURL: "/api/1.0/assets/editor/upload",
+        imageUploadURL: "/api/1.0/assets/editor/image/upload",
         linkMultipleStyles: false,
         paragraphMultipleStyles: false,
         placeholderText: 'Type here',

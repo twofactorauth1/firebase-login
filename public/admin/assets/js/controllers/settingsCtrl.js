@@ -52,6 +52,10 @@
 
 
     AccountService.getUpdatedAccount(function (account) {
+      // Case when blogSocialSharing is not defined...
+      if(!angular.isDefined(account.showhide.blogSocialSharing)){
+        account.showhide.blogSocialSharing = true;
+      }
       $scope.account = account;
           $scope.originalAccount = angular.copy(account);
           if (!account.commerceSettings) {
@@ -372,7 +376,6 @@
         }
 
     }
-
 
   }]);
 }(angular));

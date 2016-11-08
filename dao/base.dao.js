@@ -432,6 +432,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    update: function(query, update, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._updateMongo(query, update, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
     distinct: function(key, query, type, fn) {
         if(this.getStorage(type) === 'mongo') {
             this._distinctMongo(key, query, type, fn);

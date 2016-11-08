@@ -7,7 +7,6 @@ ssbBlogPostDetailComponentController.$inject = ['$scope', '$attrs', '$filter', '
 function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclude, $location, SimpleSiteBuilderBlogService) {
 
     console.info('ssb-blog-post-detail directive init...')
-
     var vm = this;
 
     vm.init = init;
@@ -19,12 +18,12 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
         window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
         var post = window.indigenous.precache.siteData.post;
+        
         if (post) {
             vm.post = post;
         } else if (posts) {
             vm.post = posts[0];
         }
-        // vm.post.post_content.replace('&lt;!-- more --&gt;', '');
     }
 
     function getFeaturedImageUrl(url){

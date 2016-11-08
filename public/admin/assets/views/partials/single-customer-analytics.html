@@ -1,7 +1,7 @@
 <div ng-controller="singleCustomerAnalyticsCtrl" class="single-customer-site-analytics">
 	<div class="container-fluid container-fullw bg-white ng-scope">
 	    <div class="row">
-	        <div class="col-xs-12 col-sm-3 col-sm-offset-9">
+	        <div ng-class="{'col-xs-12 col-sm-3 col-sm-offset-9': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4 col-sm-offset-8 padding-left-50 pull-right': !app.layout.isSidebarClosed}">
 	            <div class="input-group">
 	                <label class="sr-only">Date Range</label>
 	                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>

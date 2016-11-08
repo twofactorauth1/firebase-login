@@ -112,6 +112,14 @@ var dao = {
         this.findMany(query, fn);
     },
 
+    getContactsByIDs: function(accountId, contactIdAry, fn) {
+        var query = {
+            accountId: accountId,
+            _id: {$in: contactIdAry}
+        };
+        this.findMany(query, fn);
+    },
+
 
     saveOrMerge: function (contact, fn) {
         var self = this;

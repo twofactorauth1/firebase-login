@@ -1465,10 +1465,12 @@ module.exports = {
                                 if(err) {
                                     cb(err);
                                 } else {
-                                    productAry.push(product);
-                                    item.sku = product.get('sku');
-                                    item.name = product.get('name');
-                                    log.debug(accountId, userId, 'Product is', product);
+                                    if(product){
+                                        productAry.push(product);
+                                        item.sku = product.get('sku');
+                                        item.name = product.get('name');
+                                        log.debug(accountId, userId, 'Product is', product);
+                                    }                                    
                                     cb();
                                 }
                             });
@@ -1544,6 +1546,9 @@ module.exports = {
                          *
                          *
                          */
+
+                         
+
                         _.each(order.get('line_items'), function iterator(item, index){
                             var product = _.find(productAry, function(currentProduct){
                                 if(currentProduct.id() === item.product_id) {
@@ -1551,24 +1556,30 @@ module.exports = {
                                 }
                             });
                             log.debug(accountId, userId, 'found product ', product);
-                            var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
-                            if(product.get('on_sale') === true) {
-                                var startDate = product.get('sale_date_from', 'day');
-                                var endDate = product.get('sale_date_to', 'day');
-                                var rightNow = new Date();
-                                if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
-                                    lineItemSubtotal = item.quantity * product.get('sale_price');
-                                    item.sale_price = product.get('sale_price').toFixed(2);
-                                    //TODO: Should not need this line.  Receipt template currently needs it.
-                                    item.regular_price = product.get('regular_price').toFixed(2);
-                                    item.total = lineItemSubtotal.toFixed(2);
+
+                            
+
+                            if(product){
+                                var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
+                                if(product.get('on_sale') === true) {
+                                    var startDate = product.get('sale_date_from', 'day');
+                                    var endDate = product.get('sale_date_to', 'day');
+                                    var rightNow = new Date();
+                                    if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                                        lineItemSubtotal = item.quantity * product.get('sale_price');
+                                        item.sale_price = product.get('sale_price').toFixed(2);
+                                        //TODO: Should not need this line.  Receipt template currently needs it.
+                                        item.regular_price = product.get('regular_price').toFixed(2);
+                                        item.total = lineItemSubtotal.toFixed(2);
+                                    }
                                 }
+                                if(product.get('taxable') === true) {
+                                    taxAdded += (lineItemSubtotal * taxPercent);
+                                }
+                                subTotal += lineItemSubtotal;
+                                totalLineItemsQuantity += parseFloat(item.quantity);
                             }
-                            if(product.get('taxable') === true) {
-                                taxAdded += (lineItemSubtotal * taxPercent);
-                            }
-                            subTotal += lineItemSubtotal;
-                            totalLineItemsQuantity += parseFloat(item.quantity);
+                            
                         });
                         log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
 

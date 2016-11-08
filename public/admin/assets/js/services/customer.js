@@ -134,7 +134,10 @@
         this.addCustomerNotes = function(id, notes, fn){
             var apiUrl = [baseUrl, 'customer', id, 'notes'].join('/');
             var body = {notes:notes};
+            var cache = this.getCache();
             $http.post(apiUrl, body).success(function(data){
+                if(cache)
+                    cache.put(id, data);
                 fn(data);
             }).error(function(err){
                 fn(err);

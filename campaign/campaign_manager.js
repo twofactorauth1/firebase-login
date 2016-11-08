@@ -7,6 +7,7 @@
 
 require('./dao/campaign.dao.js');
 require('./dao/campaign_message.dao.js');
+require('./model/campaignV2');
 
 var accountDao = require('../dao/account.dao');
 var campaignDao = require('./dao/campaign.dao');
@@ -75,12 +76,31 @@ module.exports = {
                 self.log.error('Error getting campaign:', err);
                 fn(err);
             } else {
-                self.log.debug('<< getCampaign');
-                if(campaign && campaign.get('status') === $$.m.Campaign.status.RUNNING) {
-                    self._updateStatusForCampaignObj(campaign, fn);
+                if(campaign.get('_v') === '0.2') {
+                    campaignDao.getById(campaignId, $$.m.CampaignV2, function(err, campaign){
+                        self.log.debug('<< getCampaign');
+                        if(campaign && campaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                            self._updateStatusForCampaignObj(campaign, fn);
+                        } else {
+                            return fn(null, campaign);
+                        }
+                    });
+
                 } else {
-                    return fn(null, campaign);
+                    var accountId = campaign.get('accountId');
+                    var userId = 1;
+                    var campaignName = campaign.get('name');
+                    self._convertV1Campaign(accountId, userId, campaignId, campaignName, campaign, function(err, campaignV2){
+                        self.log.debug('<< getCampaign');
+                        if(campaignV2 && campaignV2.get('status') === $$.m.Campaign.status.RUNNING) {
+                            self._updateStatusForCampaignObj(campaignV2, fn);
+                        } else {
+                            return fn(null, campaignV2);
+                        }
+                    });
+
                 }
+
             }
         });
     },
@@ -115,7 +135,42 @@ module.exports = {
 
 
     findCampaigns: function (query, fn) {
-        $$.dao.CampaignDao.findMany(query, fn);
+        var self = this;
+        campaignDao.findMany(query, function(err, campaigns){
+            if(err) {
+                self.log.error('Error finding campaigns:', err);
+                fn(err);
+            } else {
+                var campaignAry = [];
+                async.eachSeries(campaigns, function(campaign, cb){
+                    if(campaign.get('_v')=== '0.1') {
+                        var accountId = campaign.get('accountId');
+                        var userId = 1;
+                        var campaignName = campaign.get('name');
+                        var campaignId = campaign.id();
+                        self._convertV1Campaign(accountId, userId, campaignId, campaignName, campaign, function(err, campaignV2){
+                            if(err) {
+                                cb(err);
+                            } else {
+                                campaignAry.push(campaignV2);
+                                cb();
+                            }
+                        });
+                    } else {
+                        campaignAry.push(campaign);
+                        cb();
+                    }
+
+                }, function(err){
+                    if(err) {
+                        self.log.error('Error converting campaigns:', err);
+                        return fn(err);
+                    } else {
+                        return fn(null, campaignAry);
+                    }
+                });
+            }
+        });
     },
 
     findCampaignMessages: function (query, fn) {
@@ -131,6 +186,11 @@ module.exports = {
         campaignDao.findMany(query, $$.m.CampaignFlow, fn);
     },
 
+    /**
+     * @deprecated
+     * @param campaignObj
+     * @param fn
+     */
     createCampaign: function(campaignObj, fn) {
         var self = this;
         var accountId = campaignObj.get('accountId');
@@ -197,6 +257,54 @@ module.exports = {
 
     },
 
+    createCampaign_v2: function(campaignObj, fn) {
+        var self = this;
+        var accountId = campaignObj.get('accountId');
+        var userId = campaignObj.get('modified').by;
+        self.log.debug(accountId, userId, '>> createCampaign');
+        /*
+         * make some assertions to ensure UI is playing well with v2 campaigns
+         * campaignObj.get('contacts') => [0,1,2,3]
+         * campaignObj.get('status') => $$.m.Campaign.status.DRAFT
+         */
+        if(campaignObj.get('status') !== $$.m.Campaign.status.DRAFT) {
+            self.log.error('Expected draft status but campaign had status of:' + campaignObj.get('status'));
+            return fn('Campaign must be created in DRAFT status.');
+        }
+
+        /*
+         * Convert "steps"  to emailSettings if they exist.
+         */
+        if(campaignObj.get('steps') && campaignObj.get('steps').length > 0) {
+            var steps = campaignObj.get('steps');
+            var emailSettings = {
+                emailId:steps[0].emailId,
+                fromName:steps[0].fromName,
+                fromEmail:steps[0].fromEmail,
+                bcc:steps[0].bcc,
+                cc:steps[0].cc,
+                replyTo:steps[0].replyTo,
+                subject:steps[0].subject,
+                vars:steps[0].vars,
+                sendAt:steps[0].sendAt
+            };
+            delete campaignObj.attributes.steps;
+            campaignObj.set('emailSettings', emailSettings);
+        }
+
+        campaignDao.saveOrUpdate(campaignObj, function(err, savedCampaign){
+            if(err) {
+                self.log.error(accountId, userId, 'Error updating saving campaign:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< createCampaign');
+                return fn(null, savedCampaign);
+            }
+        });
+
+
+    },
+
     updateCampaignStatistics: function(accountId, campaignId, statistics, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> updateCampaignStatistics');
@@ -226,127 +334,256 @@ module.exports = {
         });
     },
 
-    updateCampaign: function(campaignObj, fn) {
+    atomicUpdateCampaignStatistics: function(accountId, campaignId, statistics, userId, fn) {
         var self = this;
-        var accountId = campaignObj.get('accountId');
-        self.log.debug(accountId, null, '>> updateCampaign');
+        self.log.debug(accountId, userId, '>> atomicUpdateCampaignStatistics');
+        statistics.sent = statistics.sent || 0;
+        statistics.clicked = statistics.clicked || 0;
+        statistics.opened = statistics.opened || 0;
+        statistics.bounced = statistics.bounced || 0;
+        self.log.debug(accountId, userId, 'updating with:', statistics);
+        var modified = {
+            date: new Date(),
+            by: userId
+        };
+        var query = {_id:campaignId, accountId:accountId};
+        var modification = {$inc: {
+            'statistics.emailsSent': statistics.sent,
+            'statistics.emailsClicked':statistics.clicked,
+            'statistics.emailsOpened': statistics.opened,
+            'statistics.emailsBounced':statistics.bounced}
+        };
+        campaignDao.update(query, modification, $$.m.CampaignV2, function(err, value){
+            if(err) {
+                self.log.error('Error udpating campaign stats:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< atomicUpdateCampaignStatistics');
+                fn(null, value);
+            }
+        });
+    },
+
+    updateCampaign: function(accountId, userId, campaignId, campaignJSON, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCampaign', campaignJSON);
         /*
          * Get the campaign.  If the status is RUNNING, return an error
          * If the new status is RUNNING, kick off the steps
          */
-        // need this
-        var campaignId = campaignObj.id();
-        var accountId = campaignObj.get('accountId');
-        var query = {
-            _id: campaignId,
-            accountId: accountId
-        };
 
-        campaignDao.findOne(query, $$.m.Campaign, function(err, campaign){
+        campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
             if(err || !campaign) {
                 self.log.error(accountId, null, 'Error finding campaign:', err);
                 return fn(err);
-            } else if(campaign.get('status') === $$.m.Campaign.status.RUNNING){
-                self.log.warn(accountId, null, 'Attempted to update a running campaign');
-                return fn('Attempted to update a running campaign');
-            } else {
-                var contactIdAry = [];
-                if(campaignObj.get('contacts')) {
-                    /*
-                     * If there is a 'contacts' field on the input object, we need to create new flows.
-                     */
-                    contactIdAry = campaignObj.get('contacts');
-                    delete campaignObj.attributes.contacts;
+            } else if(campaign.get('_v') === '0.1') {
+                var campaignObj = new $$.m.Campaign(campaignJSON);
+                campaignObj.set('_id', campaignId);
+                var modified = {
+                    by: userId,
+                    date: new Date()
+                };
+                var created = campaignObj.get('created');
 
+                if (created && _.isString(campaignObj.get('created').date)) {
+                    created.date = moment(campaignObj.date).toDate();
                 }
-                campaignDao.saveOrUpdate(campaignObj, function(err, updatedCampaign){
-                    if(err) {
-                        self.log.error(accountId, null, 'Error updating campaign: ' + err);
-                        return fn(err, null);
-                    } else {
-                        if(contactIdAry.length > 0) {
-                            self.bulkReplaceContactsInCampaign(contactIdAry, campaignId, accountId, function (err, campaign) {
-                                if (err) {
-                                    self.log.error(accountId, null, 'Error adding contacts to campaign:', err);
-                                    return fn(err);
-                                } else {
-                                    //we can return here.  We have deleted existing flows and created new (correct) ones.
-                                    self.log.debug(accountId, null, '<< updateCampaign');
-                                    fn(null, updatedCampaign);
-                                    if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
-                                        //kick off the flows
-                                        self._startCampaignFlows(updatedCampaign);
-                                    }
-                                    return;
-                                }
-                            });
-                        } else {
-                            self.log.debug(accountId, null, '<< updateCampaign');
-                            fn(null, updatedCampaign);
-                            /*
-                             * check if we need to update flows.
-                             *
-                             */
-                            var updateNeeded = false;
-                            var initialSteps = campaignObj.get('steps');
-                            var updatedSteps = updatedCampaign.get('steps');
-                            if(initialSteps.length !== updatedSteps.length) {
-                                updateNeeded = true;
-                            }
-                            _.each(updatedSteps, function(step, i){
-                                if(!initialSteps[i] || _.isEqual(step, initialSteps[i]) !== true ) {
-                                    updateNeeded = true;
-                                }
-                            });
+                campaignObj.set('modified', modified);
+                self.updateCampaign_v1(campaignObj, campaign, fn);
+            } else {
+                var campaignObj = new $$.m.CampaignV2(campaignJSON);
+                campaignObj.set('_id', campaignId);
+                var modified = {
+                    by: userId,
+                    date: new Date()
+                };
+                campaignObj.set('modified', modified);
+                self.updateCampaign_v2(accountId, userId, campaignObj, campaign, fn);
+            }
+        });
+    },
 
-                            if(updateNeeded === true) {
-                                campaignDao.findMany({campaignId:campaignId, accountId: accountId}, $$.m.CampaignFlow, function(err, flows){
-                                    if(err) {
-                                        self.log.error(accountId, null, 'Error updating flows.  Campaign steps will NOT start.', err);
-                                        return;
-                                    } else {
-                                        async.eachSeries(flows, function(flow, cb){
-                                            flow.set('steps', updatedSteps);
-                                            campaignDao.saveOrUpdate(flow, function(err, value){
-                                                cb(err);
-                                            });
-                                        }, function done(err){
-                                            if(err) {
-                                                self.log.error(accountId, null, 'Error updating flow steps.  Campaign steps will NOT start.', err);
-                                            } else {
-                                                if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
-                                                    //kick off the flows
-                                                    self._startCampaignFlows(updatedCampaign);
-                                                }
-                                                return;
-                                            }
-                                        });
-                                    }
-                                });
+    updateCampaign_v2: function(accountId, userId, newCampaign, existingCampaign, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCampaign_v2', newCampaign);
+        if(!existingCampaign) {
+            self.log.error(accountId, userId, 'Error finding campaign:', err);
+            return fn(err);
+        } else if(existingCampaign.get('status') === $$.m.Campaign.status.RUNNING){
+            self.log.warn(accountId, userId, 'Attempted to update a running campaign');
+            return fn('Attempted to update a running campaign');
+        } else {
+            /*
+             * Don't need to do anything with flows.
+             * Don't need to do anything with steps.
+             * Just save it and be done.
+             */
+            var contactsArray = newCampaign.get('contacts');
+
+            if(contactsArray && !_.every(contactsArray, function(id){return !isNaN(parseFloat(id)) && isFinite(id);})) {
+                self.log.error('Expected all contact ids to be numeric:', contactsArray);
+                return fn('Campaign contacts must be numeric');
+            }
+            /*
+             * Convert "steps"  to emailSettings if they exist.
+             */
+            if(newCampaign.get('steps') && newCampaign.get('steps').length > 0) {
+                var steps = newCampaign.get('steps');
+                var emailSettings = {
+                    emailId:steps[0].emailId,
+                    fromName:steps[0].fromName,
+                    fromEmail:steps[0].fromEmail,
+                    bcc:steps[0].bcc,
+                    cc:steps[0].cc,
+                    replyTo:steps[0].replyTo,
+                    subject:steps[0].subject,
+                    vars:steps[0].vars,
+                    sendAt:steps[0].sendAt
+                };
+                delete newCampaign.attributes.steps;
+            }
+            campaignDao.saveOrUpdate(newCampaign, function(err, savedCampaign){
+                if(err) {
+                    self.log.error('Error updating campaign:', err);
+                    return fn(err);
+                } else {
+                    self.log.debug(accountId, userId, '<< updateCampaign_v2');
+                    return fn(null, savedCampaign);
+                }
+
+            });
+        }
+
+    },
+
+    updateCampaign_v1: function(campaignObj, campaign, fn) {
+        var self = this;
+        var accountId = campaignObj.get('accountId');
+        self.log.debug(accountId, null, '>> updateCampaign');
+        var campaignId = campaignObj.id();
+
+        if(!campaign) {
+            self.log.error(accountId, null, 'Error finding campaign:', err);
+            return fn(err);
+        } else if(campaign.get('status') === $$.m.Campaign.status.RUNNING){
+            self.log.warn(accountId, null, 'Attempted to update a running campaign');
+            return fn('Attempted to update a running campaign');
+        } else {
+            var contactIdAry = [];
+            if(campaignObj.get('contacts')) {
+                /*
+                 * If there is a 'contacts' field on the input object, we need to create new flows.
+                 */
+                contactIdAry = campaignObj.get('contacts');
+                delete campaignObj.attributes.contacts;
+
+            }
+            campaignDao.saveOrUpdate(campaignObj, function(err, updatedCampaign){
+                if(err) {
+                    self.log.error(accountId, null, 'Error updating campaign: ' + err);
+                    return fn(err, null);
+                } else {
+                    if(contactIdAry.length > 0) {
+                        self.bulkReplaceContactsInCampaign(contactIdAry, campaignId, accountId, function (err, campaign) {
+                            if (err) {
+                                self.log.error(accountId, null, 'Error adding contacts to campaign:', err);
+                                return fn(err);
                             } else {
+                                //we can return here.  We have deleted existing flows and created new (correct) ones.
+                                self.log.debug(accountId, null, '<< updateCampaign');
+                                fn(null, updatedCampaign);
                                 if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
                                     //kick off the flows
                                     self._startCampaignFlows(updatedCampaign);
                                 }
                                 return;
                             }
+                        });
+                    } else {
+                        self.log.debug(accountId, null, '<< updateCampaign');
+                        fn(null, updatedCampaign);
+                        /*
+                         * check if we need to update flows.
+                         *
+                         */
+                        var updateNeeded = false;
+                        var initialSteps = campaignObj.get('steps');
+                        var updatedSteps = updatedCampaign.get('steps');
+                        if(initialSteps.length !== updatedSteps.length) {
+                            updateNeeded = true;
+                        }
+                        _.each(updatedSteps, function(step, i){
+                            if(!initialSteps[i] || _.isEqual(step, initialSteps[i]) !== true ) {
+                                updateNeeded = true;
+                            }
+                        });
+
+                        if(updateNeeded === true) {
+                            campaignDao.findMany({campaignId:campaignId, accountId: accountId}, $$.m.CampaignFlow, function(err, flows){
+                                if(err) {
+                                    self.log.error(accountId, null, 'Error updating flows.  Campaign steps will NOT start.', err);
+                                    return;
+                                } else {
+                                    async.eachSeries(flows, function(flow, cb){
+                                        flow.set('steps', updatedSteps);
+                                        campaignDao.saveOrUpdate(flow, function(err, value){
+                                            cb(err);
+                                        });
+                                    }, function done(err){
+                                        if(err) {
+                                            self.log.error(accountId, null, 'Error updating flow steps.  Campaign steps will NOT start.', err);
+                                        } else {
+                                            if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                                                //kick off the flows
+                                                self._startCampaignFlows(updatedCampaign);
+                                            }
+                                            return;
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                                //kick off the flows
+                                self._startCampaignFlows(updatedCampaign);
+                            }
+                            return;
                         }
                     }
-                });
-            }
-        });
-
-
+                }
+            });
+        }
     },
 
     duplicateCampaign: function(accountId, campaignId, campaignName, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> duplicateCampaign');
-        campaignDao.findOne({accountId:accountId, _id:campaignId}, $$.m.Campaign, function(err, campaign){
+        campaignDao.findOne({accountId:accountId, _id:campaignId}, $$.m.CampaignV2, function(err, campaign){
             if(err) {
                 self.log.error('Error finding campaign:', err);
                 return fn(err);
             } else {
+                if(campaign.get('_v') === '0.1') {
+
+                    self.log.debug('Converting V1 campaign');
+                    campaign.set('_id', null);
+                    var createdObj = {
+                        'date':new Date(),
+                        'by':userId
+                    };
+                    campaign.set('created', createdObj);
+                    campaign.set('modified', createdObj);
+                    campaign.set('status', $$.m.Campaign.status.DRAFT);
+                    campaign.set('name', campaignName);
+                    campaign.set('statistics', {
+                        emailsBounced: 0,
+                        emailsClicked: 0,
+                        emailsOpened: 0,
+                        emailsSent: 0,
+                        participants: 0
+                    });
+                    return self._convertV1Campaign(accountId, userId, campaignId, campaignName, campaign, fn);
+                }
                 campaign.set('_id', null);
                 var createdObj = {
                     'date':new Date(),
@@ -357,6 +594,7 @@ module.exports = {
                 campaign.set('status', $$.m.Campaign.status.DRAFT);
                 campaign.set('name', campaignName);
                 campaign.set('statistics', {
+                    emailsBounced: 0,
                     emailsClicked: 0,
                     emailsOpened: 0,
                     emailsSent: 0,
@@ -367,31 +605,193 @@ module.exports = {
                         self.log.error(accountId, userId, 'Error saving campaign:', err);
                         return fn(err);
                     } else {
-                        self.getContactsForCampaign(accountId, campaignId, function (err, contacts) {
-                            if (err) {
-                                self.log.error(accountId, userId, 'Error getting campaign contacts:', err);
-                                return fn(err);
-                            } else {
-                                var contactIdAry = [];
+                        /*
+                         * If we are duplicating a v1 campaign, continue.
+                         * Otherwise, return
+                         */
+                        self.log.debug(accountId, userId, '<< duplicateCampaign');
+                        return fn(null, savedCampaign);
 
-                                contacts.forEach(function(contact, index) {
-                                    contactIdAry.push(contact.get('_id'));
-                                });
+                            /*
+                            self.getContactsForCampaign(accountId, campaignId, function (err, contacts) {
+                                if (err) {
+                                    self.log.error(accountId, userId, 'Error getting campaign contacts:', err);
+                                    return fn(err);
+                                } else {
+                                    var contactIdAry = [];
 
-                                self.bulkAddContactToCampaign(contactIdAry, savedCampaign.get('_id'), accountId, function(err) {
-                                    if (err) {
-                                        self.log.error(accountId, userId, 'Error updating campaign contacts:', err);
-                                        return fn(err);
-                                    } else {
-                                        self.log.debug(accountId, userId, '<< duplicateCampaign');
-                                        return fn(null, savedCampaign);
-                                    }
-                                });
-                            }
-                        });
+                                    contacts.forEach(function(contact, index) {
+                                        contactIdAry.push(contact.get('_id'));
+                                    });
+
+                                    self.bulkAddContactToCampaign(contactIdAry, savedCampaign.get('_id'), accountId, function(err) {
+                                        if (err) {
+                                            self.log.error(accountId, userId, 'Error updating campaign contacts:', err);
+                                            return fn(err);
+                                        } else {
+                                            self.log.debug(accountId, userId, '<< duplicateCampaign');
+                                            return fn(null, savedCampaign);
+                                        }
+                                    });
+                                }
+                            });
+                            */
+
+
                     }
                 });
             }
+        });
+    },
+
+    _convertV1Campaign: function(accountId, userId, campaignId, campaignName, campaign, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> _convertV1Campaign');
+        self.getContactsForCampaign(accountId, campaignId, function (err, contacts) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error getting campaign contacts:', err);
+                return fn(err);
+            } else {
+                var contactIdAry = [];
+
+                contacts.forEach(function (contact, index) {
+                    contactIdAry.push(contact.get('_id'));
+                });
+                campaign.set('contacts', contactIdAry);
+                campaign.set('emailSettings', campaign.get('steps')[0].settings);
+                campaign.set('_v', '0.2');
+                delete campaign.attributes.steps;
+                campaignDao.saveOrUpdate(campaign, function(err, savedCampaign) {
+                    if (err) {
+                        self.log.error(accountId, userId, 'Error saving campaign:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< _convertV1Campaign');
+                        return fn(null, savedCampaign);
+                    }
+                });
+            }
+        });
+    },
+
+    activateCampaign: function(accountId, userId, campaignId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> activateCampaign');
+        var query = {
+            _id: campaignId,
+            accountId: accountId
+        };
+        campaignDao.findOne(query, $$.m.Campaign, function(err, campaign){
+            if(err || !campaign) {
+                self.log.error(accountId, userId, 'Error finding campaign:', err);
+                return fn(err);
+            } else if(campaign.get('status') === $$.m.Campaign.status.RUNNING){
+                self.log.warn(accountId, userId, 'Attempted to activate a running campaign');
+                return fn('Attempted to activate a running campaign');
+            } else {
+                if(campaign.get('_v') === '0.1') {
+                    campaign.set('status', $$.m.Campaign.status.RUNNING);
+                    campaignDao.saveOrUpdate(campaign, function(err, updatedCampaign){
+                        self.log.debug(accountId, userId, '<< activateCampaign');
+                        fn(err, updatedCampaign);
+
+                        self._startCampaignFlows(updatedCampaign);
+                    });
+                } else {
+                    self.log.debug(accountId, userId, 'activating v2 campaign');
+                    self._activateV2Campaign(accountId, userId, campaignId, fn);
+                }
+
+            }
+        });
+    },
+
+    _activateV2Campaign: function(accountId, userId, campaignId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> activateCampaign');
+        var query = {
+            _id: campaignId,
+            accountId: accountId
+        };
+
+        campaignDao.findOne(query, $$.m.CampaignV2, function(err, campaign) {
+            if (err || !campaign) {
+                //we totally just checked for this but whatever
+                self.log.error(accountId, userId, 'Error finding campaign:', err);
+                return fn(err);
+            }
+            var contactsArray = campaign.get('contacts');
+            var campaignType = campaign.get("type");
+            // We need not to check contacts length in autoresponder campaign
+            if(campaignType !== 'autoresponder' && (!contactsArray || !Array.isArray(contactsArray) || contactsArray.length <1)) {
+                self.log.error('Expected at least one contact id in contacts array');
+                return fn('Campaign must have at least one contact id in contacts array');
+            }
+            if(contactsArray && !_.every(contactsArray, function(id){return !isNaN(parseFloat(id)) && isFinite(id);})) {
+                self.log.error('Expected all contact ids to be numeric:', contactsArray);
+                return fn('Campaign contacts must be numeric');
+            }
+            campaign.set('status', $$.m.Campaign.status.RUNNING);
+            if(campaign.get('type') === 'autoresponder') {
+                campaign.set('status', $$.m.Campaign.status.COMPLETED);
+            }
+            var participants = campaign.get('contacts').length;
+            campaign.get('statistics').participants = participants;
+            campaignDao.saveOrUpdate(campaign, function (err, updatedCampaign) {
+                self.log.debug(accountId, userId, '<< activateCampaign');
+                fn(err, updatedCampaign);
+                /*
+                 * let's send some emails!!!
+                 */
+                if(updatedCampaign.get('type') !== 'autoresponder') {
+                    contactDao.getContactsByIDs(accountId, contactsArray, function(err, contactAry){
+                        var emailSettings = campaign.get('emailSettings');
+                        var fromName = emailSettings.fromName;
+                        var fromAddress = emailSettings.fromEmail;
+                        var subject = emailSettings.subject;
+                        var vars = emailSettings.vars;
+                        var emailId = emailSettings.emailId;
+                        accountDao.getAccountByID(accountId, function(err, account){
+                            if(err || !account) {
+                                self.log.error('Error getting account:', err);
+                                return fn(err);
+                            } else {
+                                emailDao.getEmailById(emailId, function(err, email){
+                                    if(err || !email) {
+                                        self.log.error('Error getting email to render: ' + err);
+                                        return fn(err, null);
+                                    }
+                                    app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                                        if (err) {
+                                            self.log.error('error rendering html: ' + err);
+                                            self.log.warn('email will not be sent.');
+                                        } else {
+                                            emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
+                                                    html, account, campaignId, vars, emailSettings, emailId, userId, function(err, value){
+                                                if(err) {
+                                                    self.log.error('Error sending campaign:', err);
+                                                } else {
+                                                    self.log.debug('Sent batched campaign:', value);
+                                                }
+                                                campaignDao.patch({_id:campaignId}, {status:$$.m.Campaign.status.COMPLETED}, $$.m.CampaignV2, function(err, value){
+                                                    self.log.debug('Patched campaign:', value);
+                                                    if(err) {
+                                                        self.log.error('Error patching campaign:',err);
+                                                    }
+                                                });
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                        });
+
+
+                    });
+
+                }
+
+            });
         });
     },
 
@@ -831,6 +1231,7 @@ module.exports = {
         });
     },
 
+    //TODO: this logic may need to change.
     _updateStatusForCampaignObj: function(campaign, fn) {
         var self = this;
         self.log.debug('>> _updateStatusForCampaignObj');
@@ -1001,17 +1402,17 @@ module.exports = {
 
         async.waterfall([
             function(callback) {
-                campaignDao.findMany(campaignQuery, $$.m.CampaignFlow, function(err, value){
+                campaignDao.getById(campaignId, $$.m.CampaignV2, function(err, campaign){
                     if(err) {
-                        self.log.error('Error finding campaign flow: ' + err);
-                        return callback(err, null);
+                        self.log.error('Error finding campaign:', err);
+                        callback(err);
                     } else {
-                        return callback(null, value)
+                        callback(null, campaign);
                     }
-                })
+                });
             },
-            function(flows) {
-                var contactIds = flows.map(function(flow) { return flow.get('contactId') });
+            function(campaign) {
+                var contactIds = campaign.get('contacts');
                 var query = { _id: { $in: contactIds} };
                 self.log.debug('contactIds:', contactIds);
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
@@ -1114,7 +1515,89 @@ module.exports = {
      */
     handleCampaignSignupEvent: function(accountId, campaignId, contactId, fn) {
         var self = this;
-        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'SIGNUP', fn);
+        self.log.debug(accountId, null, '>> handleCampaignSignupEvent');
+        async.waterfall([
+            function(cb) {
+                campaignDao.getById(campaignId, $$.m.CampaignV2, function(err, campaign){
+                    cb(err, campaign);
+                });
+            },
+            function(campaign, cb) {
+                if(campaign) {
+                    accountDao.getAccountByID(accountId, function(err, account){
+                        cb(err, campaign, account);
+                    });
+                } else {
+                    cb('Could not find campaign');
+                }
+            },
+            function(campaign, account, cb) {
+                if(account) {
+                    var emailSettings = campaign.get('emailSettings');
+                    var emailId = emailSettings.emailId;
+                    emailDao.getEmailById(emailId, function(err, email){
+                        cb(err, campaign, account, email);
+                    });
+                } else {
+                    cb('Could not find account');
+                }
+            },
+            function(campaign, account, email, cb) {
+                if(!email) {
+                    cb('Error getting email to render');
+                } else {
+                    contactDao.getContactById(accountId, contactId, function(err, contact){
+                        if(err) {
+                           cb(err);
+                        } else if(!contact) {
+                            cb('Could not find contact');
+                        } else {
+                            cb(null, campaign, account, email, [contact]);
+                        }
+                    });
+                }
+
+            },
+            function(campaign, account, email, contactAry, cb) {
+                if(!contactAry) {
+                    cb('Error getting contacts');
+                } else {
+                    var emailSettings = campaign.get('emailSettings');
+                    var fromName = emailSettings.fromName;
+                    var fromAddress = emailSettings.fromEmail;
+                    var subject = emailSettings.subject;
+                    var vars = emailSettings.vars;
+                    var emailId = emailSettings.emailId;
+                    app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                        if (err) {
+                            self.log.error('error rendering html: ' + err);
+                            self.log.warn('email will not be sent.');
+                        } else {
+                            emailMessageManager.sendBatchedCampaignEmail(fromAddress, fromName, contactAry, subject,
+                                html, account, campaignId, vars, emailSettings, emailId, null, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error sending campaign:', err);
+                                    } else {
+                                        self.log.debug('Sent batched campaign:', value);
+                                    }
+                                    cb(err, value);
+                                });
+                        }
+                    });
+
+                }
+            }
+        ], function(err, value){
+            if(err) {
+                self.log.error('Error handling signup event:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, null, '<< handleCampaignSignupEvent');
+                fn(null, value);
+            }
+        });
+
+        //return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'SIGNUP', fn);
     },
 
     /**
@@ -2175,14 +2658,11 @@ module.exports = {
                 fn(err);
             } else {
                 self.log.debug('Stats before: ', campaign.get('statistics'));
-                self.updateCampaignParticipants(campaign.get('accountId'), campaignId, function(err, updatedCampaign){
-                    stats.participants = updatedCampaign.get('statistics').participants;
-                    campaign.set('statistics', stats);
-                    self.log.debug('Stats after: ', campaign.get('statistics'));
-                    self.log.debug('<< reconcileCampaignStatistics');
-                    campaignDao.saveOrUpdate(campaign, fn);
-                });
-
+                stats.participants = emailMessages.length;
+                campaign.set('statistics', stats);
+                self.log.debug('Stats after: ', campaign.get('statistics'));
+                self.log.debug('<< reconcileCampaignStatistics');
+                campaignDao.saveOrUpdate(campaign, fn);
             }
         });
     }

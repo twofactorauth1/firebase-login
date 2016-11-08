@@ -421,6 +421,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     var unbindAccountWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.account }, function(account) {
         vm.state.account = account;
+        vm.uiState.hideSocialShare = false;
+            if(account && account.showhide && account.showhide.blogSocialSharing === false){
+                vm.uiState.hideSocialShare = true;
+            }
         unbindAccountWatcher();
     }, true);
 
@@ -1232,6 +1236,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$on('$refreshAccountSettings', function(event, account) {
         if(account && account._id){
             vm.state.account = account;
+            if(account && account.showhide && account.showhide.blogSocialSharing === false){
+                vm.uiState.hideSocialShare = true;
+            }
         }
     });
 

@@ -84,6 +84,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 window.indigenous = window.indigenous || {};
                 window.indigenous.ssbBlog = true;
 
+
             if jsonld
                 script(type="application/ld+json").
                     !{jsonld};
@@ -93,8 +94,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
     body(
             data-styles,
             class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak',
-            class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'),
-            ng-class="{ 'ssb-social-enabled': isSocialEnabled }",
+            class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), class=( account && account.showhide && account.showhide.blogSocialSharing === false ? 'ssb-blog-hide-social-share' : ''), 
+            ng-class="{ 'ssb-social-enabled': isSocialEnabled}",
             ng-cloak
         )
 

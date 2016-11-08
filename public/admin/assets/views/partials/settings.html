@@ -246,6 +246,15 @@
                         <div class="clearfix"></div>
                     </form>
                     <div class="clearfix"></div>
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Social Sharing (lessbuttons)</label>
+                            <span tooltip-placement="bottom" tooltip="Enable the blog sharing for your website"><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.showhide.blogSocialSharing" class="pull-right"></switch>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
                 </tab>
                 <tab heading="Scripts" ng-if='account.showhide.userScripts'>
                       <form class="col-sm-6 form-horizontal">

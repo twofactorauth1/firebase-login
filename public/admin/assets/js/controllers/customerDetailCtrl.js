@@ -4,6 +4,9 @@
 (function (angular) {
     app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, UserService) {
 
+
+
+        $scope.isDomainChanged = false;
         /*
          * @getCustomer
          * -
@@ -31,9 +34,16 @@
                 }
 
                 $scope.matchUsers(customer);
+
+                $scope.originalCustomer = angular.copy($scope.customer);
+
             });
 
         };
+
+        $scope.checkNameServerChanged = function(){
+            $scope.isDomainChanged = $scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer.customDomain, $scope.customer.customDomain);           
+        }
 
         $scope.getMapData = function () {
             var _firstAddress;
@@ -207,6 +217,7 @@
         };
 
         $scope.getNameServers = function(domain) {
+            $scope.showNameServer = true;
             if(!domain) {
                 toaster.pop('info', 'No custom domain to lookup.');
             } else {
@@ -231,6 +242,8 @@
                     console.log('Response:', data);
                     $scope.nameservers = data.nameServers;
                 }
+                $scope.originalCustomer = angular.copy($scope.customer);
+                $scope.checkNameServerChanged();
                 $scope.closeModal();
             });
         };
@@ -337,9 +350,8 @@
 
             UserService.getUsers(function (users) {
                 $scope.users = users;
+                $scope.getCustomer();
             });
-
-            $scope.getCustomer();
 
         })();
 

@@ -286,7 +286,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
             SweetAlert.swal({
                 title: "Are you sure?",
-                text: "Do you want to hide this section from page?",
+                text: "Do you want to hide this section from the page?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",

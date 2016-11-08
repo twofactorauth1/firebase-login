@@ -11,14 +11,14 @@
         <form action="#" name="form" role="form" id="form">
             <div class="form-group">
                 <label class="">Domain</label>
-                <input id="input-username" class="form-control" ng-model="$parent.customer.customDomain" placeholder="example.com" type="text">
+                <input id="input-username" class="form-control" ng-model="$parent.customer.customDomain" placeholder="example.com" ng-change="checkNameServerChanged()" type="text">
             </div>
         </form>
         <p class="text-danger">This will NOT affect any e-mail settings for the customer.</p>
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled="!$parent.customer.customDomain" ng-click="addCustomDomain()">Add Custom Domain</button>
+        <button class="btn btn-primary" ng-disabled="!$parent.customer.customDomain || !isDomainChanged" ng-click="addCustomDomain()">Add Custom Domain</button>
     </div>
 
 </script>

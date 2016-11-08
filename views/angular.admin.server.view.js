@@ -75,6 +75,8 @@ _.extend(view.prototype, BaseView.prototype, {
 
             var statusArray = [$$.m.BlogPost.status.PRIVATE,$$.m.BlogPost.status.DRAFT,$$.m.BlogPost.status.FUTURE,$$.m.BlogPost.status.PUBLISHED];
             logger.debug('listing blog posts');
+
+            
             cmsManager.listBlogPosts(data.account._id, 50, statusArray, function (err, value) {
                 logger.debug('done listing blog posts');
                 if (err) {

@@ -802,8 +802,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 }
 
+                
                 data.includeSocial = true;
-
+                
                 if (!data.account.website.settings) {
                     self.log.warn('Website Settings is null for account ' + accountId);
                     data.account.website.settings = {};
