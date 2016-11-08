@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('tag/:tag'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsByTag.bind(this));
         app.get(this.url('source/:source'), this.isAuthAndSubscribedApi.bind(this), this.getAssetsBySource.bind(this));
         app.post(this.url('editor/upload'), this.isAuthAndSubscribedApi.bind(this), this.uploadImage.bind(this));
+        app.post(this.url('editor/image/upload'), this.isAuthAndSubscribedApi.bind(this), this.uploadEditorImage.bind(this));
 
     },
 
@@ -120,6 +121,68 @@ _.extend(api.prototype, baseApi.prototype, {
                             mimeType: file.type,
                             size: file.size,
                             filename: file.name,
+                            url: '',
+                            source: source,
+                            tags: tagAry,
+                            created: {
+                                date: new Date(),
+                                by: userId
+                            }
+
+                        });
+
+                    }
+                    console.dir(asset);
+                    assetManager.createAsset(file.path, asset, function(err, value, file){
+                        self.log.debug('<< createAsset');
+                        file._id = value.get("_id");
+                        file.date = value.get("created").date;
+                        //self.sendResultOrError(res, err, value, "Error creating Asset");
+                        self.sendEditorUploadResult(res, err, file);
+                        self.createUserActivity(req, 'CREATE_ASSET', null, null, function(){});
+                    });
+
+                });
+            }
+        });
+    },
+
+    uploadEditorImage: function(req, res) {
+        var self = this;
+        self.log.debug('>> createAsset');
+        var form = new formidable.IncomingForm();
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermission(req, self.sc.privs.MODIFY_ASSET, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var userId = self.userId(req);
+
+                form.parse(req, function(err, fields, files) {
+                    if(err) {
+                        self.wrapError(res, 500, 'fail', 'The upload failed', err);
+                        self = null;
+                    } else {
+
+                        var file = files['file'];
+                        //var file = files["files[]"];
+                        var source = fields['source'] || 'S3';
+                        var tagAry = (fields['tag'] && fields['tag'].split(','))  || [];
+                        
+                        var t = file.name;
+                        var extIndex = t.lastIndexOf(".");
+                        var ext = t.substring(t.lastIndexOf("."), t.length);
+                        var fName = t.substr(0, t.lastIndexOf("."));
+
+                        fName = fName + "-" + moment().toDate().getTime();
+
+                        fName += ext;
+                        var asset = new $$.m.Asset({
+                            accountId: accountId,
+                            mimeType: file.type,
+                            size: file.size,
+                            filename: fName,
                             url: '',
                             source: source,
                             tags: tagAry,

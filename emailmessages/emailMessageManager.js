@@ -239,11 +239,11 @@ var emailMessageManager = {
                             personalizations.push(p);
                             i++;
                         });
-                        cb(null, batchId, personalizations, contacts);
+                        cb(null, batchId, personalizations, contacts, html);
                     }
                 });
             },
-            function(batchId, personalizations, contacts, cb) {
+            function(batchId, personalizations, contacts, html, cb) {
 
                 var request = sg.emptyRequest();
                 request.body = {
@@ -258,7 +258,7 @@ var emailMessageManager = {
                     content: [
                         {
                             type:'text/html',
-                            value:htmlContent
+                            value:html
                         }
                     ],
                     "subject": subject,
