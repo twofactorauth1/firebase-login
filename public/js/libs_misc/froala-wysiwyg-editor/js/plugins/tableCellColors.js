@@ -35,17 +35,11 @@
   'use strict';
 
   a.extend(a.FE.POPUP_TEMPLATES, {
-    'cellColor.picker': '[_BUTTONS_][_TEXT_COLORS_][_BACKGROUND_COLORS_]'
+    'cellColor.picker': '[_BUTTONS_][_COLORS_]'
   })
 
   // Extend defaults.
-  a.extend(a.FE.DEFAULTS, {
-    colorsText: [
-      '#61BD6D', '#1ABC9C', '#54ACD2', '#2C82C9', '#9365B8', '#475577', '#CCCCCC',
-      '#41A85F', '#00A885', '#3D8EB9', '#2969B0', '#553982', '#28324E', '#000000',
-      '#F7DA64', '#FBA026', '#EB6B56', '#E25041', '#A38F84', '#EFEFEF', '#FFFFFF',
-      '#FAC51C', '#F37934', '#D14841', '#B8312F', '#7C706B', '#D1D5D8', 'REMOVE'
-    ],
+  a.extend(a.FE.DEFAULTS, {    
     colorsBackground: [
       '#61BD6D', '#1ABC9C', '#54ACD2', '#2C82C9', '#9365B8', '#475577', '#CCCCCC',
       '#41A85F', '#00A885', '#3D8EB9', '#2969B0', '#553982', '#28324E', '#000000',
@@ -84,7 +78,7 @@
 
 
       var $popup = editor.popups.get('cellColor.picker');
-      if (!$popup) $popup = _initColorsPopup();
+      if (!$popup) $popup = _initCellColorsPopup();
 
       if (!$popup.hasClass('fr-active')) {
         // Colors popup
@@ -109,7 +103,7 @@
         }
 
         
-        _setInitialColors();
+        _setInitialCellColors();
       }
     }
 
@@ -124,7 +118,7 @@
     /**
      * Init the colors popup.
      */
-    function _initColorsPopup () {
+    function _initCellColorsPopup () {
       var colors_buttons = '<div class="fr-buttons fr-colors-buttons">';
 
       if (editor.opts.toolbarInline) {
@@ -134,13 +128,13 @@
         }
       }
 
-      colors_buttons += _colorsTabsHTML() + '</div>';
+      colors_buttons += '</div>';
 
       var template = {
-        buttons: colors_buttons,
-        text_colors: _colorPickerHTML('background'),
-        background_colors: _colorPickerHTML('background')
+        buttons: colors_buttons,        
+        colors: _cellColorPickerHTML('background')
       };
+
 
       // Create popup.
       var $popup = editor.popups.create('cellColor.picker', template);
@@ -151,14 +145,14 @@
     /*
      * HTML for the color picker text and background tabs.
      */
-    function _colorsTabsHTML () {
+    function _cellColorsTabsHTML () {
       var tabs_html = '<div class="fr-colors-tabs">';
 
       // Text tab.
-      tabs_html += '<span class="fr-colors-tab ' + (editor.opts.cellColorsDefaultTab == 'background' ? '' : 'fr-selected-tab ') + 'fr-command" data-param1="text" data-cmd="colorchangeCellSet" title="' + editor.language.translate('Text') + '">' + editor.language.translate('Text') + '</span>';
+      tabs_html += '<span class="fr-colors-tab ' + (editor.opts.cellColorsDefaultTab == 'background' ? '' : 'fr-selected-tab ') + 'fr-command" data-param1="text" data-cmd="colorChangeCellSet" title="' + editor.language.translate('Text') + '">' + editor.language.translate('Text') + '</span>';
 
       // Background tab.
-      tabs_html += '<span class="fr-colors-tab ' + (editor.opts.cellColorsDefaultTab == 'background' ? 'fr-selected-tab ' : '') + 'fr-command" data-param1="background" data-cmd="colorchangeCellSet" title="' + editor.language.translate('Background') + '">' + editor.language.translate('Background') + '</span>';
+      tabs_html += '<span class="fr-colors-tab ' + (editor.opts.cellColorsDefaultTab == 'background' ? 'fr-selected-tab ' : '') + 'fr-command" data-param1="background" data-cmd="colorChangeCellSet" title="' + editor.language.translate('Background') + '">' + editor.language.translate('Background') + '</span>';
 
       return tabs_html + '</div>';
     }
@@ -166,9 +160,9 @@
     /*
      * HTML for the color picker colors.
      */
-    function _colorPickerHTML (tab) {
+    function _cellColorPickerHTML (tab) {
       // Get colors according to tab name.
-      var colors = (tab == 'text' ? editor.opts.colorsText : editor.opts.colorsBackground);
+      var colors = editor.opts.colorsBackground;
 
       var dataCmdClear = "clearCellBackgroundColor";
 
@@ -189,16 +183,16 @@
         }
 
         if (colors[i] != 'REMOVE') {
-          colors_html += '<span class="fr-command fr-select-color" style="background: ' + colors[i] + ';" data-cmd="' + tab + 'Color" data-param1="' + colors[i] + '"></span>';
+          colors_html += '<span class="fr-command fr-select-color" style="background: ' + colors[i] + ';" data-cmd="cellBackgroundColor" data-param1="' + colors[i] + '"></span>';
         }
 
         else  {
           if(editor.opts.isIE){
-            colors_html += '<span class="fr-command fr-select-color" data-cmd="' + tab + 'Color" data-param1="REMOVE" title="' + editor.language.translate('Clear Formatting') + '"><i class="fa fa-eraser"></i></span>';
+            colors_html += '<span class="fr-command fr-select-color" data-cmd="cellBackgroundColor" data-param1="REMOVE" title="' + editor.language.translate('Clear Formatting') + '"><i class="fa fa-eraser"></i></span>';
           }
           else
           {
-            colors_html += '<span style="visibility: hidden;" class="fr-command fr-select-color" data-cmd="' + tab + 'Color" data-param1="REMOVE" title="' + editor.language.translate('Clear Formatting') + '"><i class="fa fa-eraser"></i></span>';
+            colors_html += '<span style="visibility: hidden;" class="fr-command fr-select-color" data-cmd="cellBackgroundColor" data-param1="REMOVE" title="' + editor.language.translate('Clear Formatting') + '"><i class="fa fa-eraser"></i></span>';
           }
         }
       }
@@ -217,70 +211,27 @@
      */
     function _refreshColor (tab) {
       var $popup = editor.popups.get('cellColor.picker');
+      var $cell = editor.$el.find('.fr-selected-cell:first');
       var $element = $(editor.selection.element());
-
-        var isButton = $element.hasClass("ssb-theme-btn");
-        if(isButton){
-            editor.opts.button = $element;
-        }
-        else{
-            isButton = $element.parent().hasClass('ssb-theme-btn');
-            if(isButton){
-                editor.opts.button = $element.parent();
-            }
-        }
-
-        editor.opts.isButton = isButton;
 
 
       // The color css property.
       var color_type;
-      if (tab == 'background') {
-        color_type = 'background-color';
-      }
-      else {
-        color_type = 'color';
-      }
+     
+      color_type = 'background-color';
 
-      var color = $element.css(color_type);
-      if(editor.opts.isButton){
-        color = editor.opts.button.css(color_type);
-      }
+      
 
-      // Remove current color selection.
-
-      $popup.find('.fr-' + tab + '-color .fr-select-color').removeClass('fr-selected-color');
-
+      $popup.find('.fr-selected-color').removeClass('fr-selected-color');
+      var color = editor.$el.find('.fr-selected-cell').css('background-color');
       // Find the selected color.
-      while ($element.get(0) != editor.$el.get(0)) {
-        // Transparent or black.
-        setTimeout(function() {
-            initializeCellSpectrum(color_type, color);
-        }, 0)
-        if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
-          $element = $element.parent();
-        }
-
-        // Select the correct color.
-        else {
-          $popup.find('.fr-' + tab + '-color .fr-select-color[data-param1="' + editor.helpers.RGBToHex($element.css(color_type)) + '"]').addClass('fr-selected-color');
-          break;
-        }
-      }
+      setTimeout(function() {
+        initializeCellSpectrum(color_type, color);
+      }, 0)
     }
 
-    function _setInitialColors () {
-      var $element = $(editor.selection.element());
-        // Check initial colors means txt color and bg color
-        if(editor.opts.isButton){
-            editor.opts.defaultCellColors.background.color = editor.opts.button.css('background-color');
-            editor.opts.defaultCellColors.text.color = editor.opts.button.css('color');
-        }
-        else{
-            editor.opts.defaultCellColors.background.color = $element.css('background-color');
-            editor.opts.defaultCellColors.text.color = $element.css('color');
-        }
-
+    function _setInitialCellColors () {
+        editor.opts.defaultCellColors.background.color = editor.$el.find('.fr-selected-cell').css('background-color');
     }
 
     /*
@@ -319,13 +270,7 @@
           }
         }
 
-        if(editor.opts.isButton)
-            editor.opts.button.css('background-color', val);        
-        else
-            editor.format.applyStyle('background-color', val);
-        
-        if(editor.opts.isButton)
-          editor.events.trigger("bgColorChange", [val]);
+        editor.$el.find('.fr-selected-cell').css('background-color', val);
 
         $(".fr-command.fr-select-color[data-cmd='cellBackgroundColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='cellBackgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
@@ -336,21 +281,9 @@
       else {
         $popup.find('input.sp-input').val("");
 
-        if(editor.opts.isButton)
-            editor.opts.button.css('background-color', "");
-        else if (editor.opts.isIE) 
-          $(editor.selection.element()).css('background-color', "");
-        else
-            editor.format.removeStyle('background-color');
+        editor.$el.find('.fr-selected-cell').css('background-color', '');
 
         $(".fr-command.fr-select-color[data-cmd='cellBackgroundColor']").removeClass("fr-selected-color");
-        if(editor.opts.isButton)
-          editor.events.trigger("bgColorChange", []);
-
-        setTimeout(function(){
-            //editor.events.trigger("contentChanged");
-            //editor.selection.save();
-        })
       }
 
       if(init){
@@ -363,105 +296,19 @@
      // _hideCellColorsPopup();
     }
 
-    /*
-     * Change text color.
-     */
-    function text (val, init) {
-      var $popup = editor.popups.get('cellColor.picker');
-      // Set text color.
-      if (val != 'REMOVE') {
-        $popup.find('input.sp-input').val(val);
-        var val_hex =  editor.helpers.RGBToHex(val);
-        if(!val_hex){
-          if(editor.helpers.RGBToHex("#" + val)){
-            val_hex = editor.helpers.RGBToHex("#" + val);
-            val = "#" + val;
-          }
-        }
-
-        if(editor.opts.isButton)
-            $(editor.selection.element()).css('color', val);
-        else
-            editor.format.applyStyle('color', val);
-
-        if(editor.opts.isButton)
-          editor.events.trigger("txtColorChange", [val]);
-
-        setTimeout(function(){
-            //editor.selection.save();
-        })
-        $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-        $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
-
-      }
-
-      // Remove text color.
-      else {
-        if(editor.opts.isButton)
-            editor.opts.button.css('color', "");
-        else if (editor.opts.isIE) 
-          $(editor.selection.element()).css('color', "");
-        else
-            editor.format.removeStyle('color');
-
-        $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-
-        if(editor.opts.isButton)
-          editor.events.trigger("bgColorChange", []);
-
-        $popup.find('input.sp-input').val("");
-        setTimeout(function(){
-            //editor.events.trigger("contentChanged");
-            //editor.selection.save();
-        })
-      }
-      if(init){
-            //editor.opts.defaultCellColors.text.init = false;
-            initializeCellSpectrum("color", val);
-        }
-    }
-
+    
     /*
      * Remove color.
      */
     function removeCellColor (tab, val) {
       var $popup = editor.popups.get('cellColor.picker');
       $popup.find('input.sp-input').val("");
-      // Remove text color.
-      if(tab === 'text') {
-
-        $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
-
-        if(editor.opts.isButton)
-            editor.opts.button.css('color', "");
-        else
-            editor.format.removeStyle('color');
-
-        if(editor.opts.isButton)
-          editor.events.trigger("txtColorChange", []);
+      
+      
         setTimeout(function(){
-            //editor.events.trigger("contentChanged");
-            //editor.selection.save();
+            editor.$el.find('.fr-selected-cell').css('background-color', '');
             closeCellColorPicker();
         })
-        
-      }
-      else{
-        $(".fr-command.fr-select-color[data-cmd='cellBackgroundColor']").removeClass("fr-selected-color");
-
-        if(editor.opts.isButton)
-            editor.opts.button.css('background-color', "");
-        else
-            editor.format.removeStyle('background-color');
-        if(editor.opts.isButton)
-          editor.events.trigger("bgColorChange", []);
-        setTimeout(function(){
-            //editor.events.trigger("contentChanged");
-            //editor.selection.save();
-            closeCellColorPicker();
-        })
-        
-      }
     }
 
     /*
@@ -469,8 +316,7 @@
      */
     function closeCellColorPicker(cancel) {
         if(cancel){
-            background(editor.opts.defaultCellColors.background.color || 'REMOVE');
-            text(editor.opts.defaultCellColors.text.color || 'REMOVE');
+            background(editor.opts.defaultCellColors.background.color || 'REMOVE');            
         }
       _hideCellColorsPopup();
     }
@@ -480,12 +326,7 @@
         var container = val === 'text' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color");
         var textInput = container.find(".sp-input");
         var color = textInput.val();
-        ////editor.selection.restore();
-        if(val === 'text'){
-           text(color || 'REMOVE');
-        }
-        else
-            background(color || 'REMOVE');
+        background(color || 'REMOVE');
         _hideCellColorsPopup();
 
     }
@@ -511,6 +352,9 @@
      */
     function initializeCellSpectrum(val, current_color) {
         var popup = editor.popups.get('cellColor.picker');
+        if (!editor.popups.isVisible('cellColor.picker')) {
+          editor.tableCellColors.showCellColorsPopup();
+        }
         popup.find('input:focus').blur();
         var container = val === 'color' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color"),
         dragHelper = container.find(".sp-dragger"),
@@ -614,10 +458,7 @@
                 var realHex = realColor.toHexString(),
                     realRgb = realColor.toRgbString();
                     if(!update){
-                        if(val === 'color')
-                            text(realRgb);
-                        else
-                            background(realRgb);
+                        background(realRgb);
                     }
 
                 // Update the replaced elements background color (with actual selected color)
@@ -753,11 +594,7 @@
                 //e.preventDefault();
                 //e.stopPropagation();
                 var realRgb = $(element).val();
-                //editor.selection.restore();
-                if(val === 'color')
-                    text(realRgb, true);
-                else
-                    background(realRgb, true);
+                background(realRgb, true);
                 _hideCellColorsPopup();
             }
         });
@@ -792,8 +629,7 @@
         }
 
         function move(e) {
-            editor.events.disableBlur();
-            //editor.selection.restore();
+            editor.events.disableBlur();            
             if (dragging) {
                 // Mouseup happened outside of window
                 if (editor.opts.isIE && doc.documentMode < 9 && !e.button) {
@@ -867,8 +703,7 @@
       showCellColorsPopup: _showCellColorsPopup,
       hideCellColorsPopup: _hideCellColorsPopup,
       changeCellSet: _changeCellSet,
-      background: background,
-      text: text,
+      background: background,      
       back: back,
       removeCellColor: removeCellColor,
       chooseCellColorPicker: chooseCellColorPicker,
@@ -881,7 +716,7 @@
   // Toolbar colors button.
   a.FE.DefineIcon('tableCellColors', { NAME: 'tint' });
   a.FE.RegisterCommand('tableCellColors', {
-    title: 'Colors',
+    title: 'Cell Background',
     undo: false,
     focus: true,
     refreshOnCallback: false,
@@ -891,38 +726,20 @@
       if (!this.popups.isVisible('cellColor.picker')) {
         this.tableCellColors.showCellColorsPopup();
       }
-      else {
-        if (this.$el.find('.fr-marker')) {
-          this.events.disableBlur();
-          this.selection.restore();
-        }
-        this.popups.hide('cellColor.picker');
-      }
+      
     },
     plugin: 'tableCellColors'
-  });
-
-  // Select text color command.
-  a.FE.RegisterCommand('textColor', {
-    undo: true,
-    callback: function (cmd, val) {
-        //this.events.disableBlur();
-        this.selection.restore();
-        this.tableCellColors.text(val, true);
-    }
   });
 
   // Select background color command.
   a.FE.RegisterCommand('cellBackgroundColor', {
     undo: true,
-    callback: function (cmd, val) {
-        //this.events.disableBlur();
-        this.selection.restore();
+    callback: function (cmd, val) {        
         this.tableCellColors.background(val, true);
     }
   });
 
-  a.FE.RegisterCommand('colorchangeCellSet', {
+  a.FE.RegisterCommand('colorChangeCellSet', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {
@@ -931,33 +748,14 @@
     }
   });
 
-  // Clear text color selection
-  a.FE.RegisterCommand('clearTextColor', {
-    undo: false,
-    focus: false,
-    callback: function (cmd, val) {
-      var $tab = this.popups.get('cellColor.picker').find('.fr-command[data-cmd="' + cmd + '"][data-param1="' + val + '"]');
-      this.tableCellColors.removeCellColor('text', val);
-    }
-  });
+  
 
   // Clear bg color selection
   a.FE.RegisterCommand('clearCellBackgroundColor', {
     undo: false,
     focus: false,
-    callback: function (cmd, val) {
-      var $tab = this.popups.get('cellColor.picker').find('.fr-command[data-cmd="' + cmd + '"][data-param1="' + val + '"]');
+    callback: function (cmd, val) {      
       this.tableCellColors.removeCellColor('background', val);
-    }
-  });
-
-
-  // Choose text color picker
-  a.FE.RegisterCommand('chooseTextColor', {
-    undo: false,
-    focus: false,
-    callback: function (cmd, val) {
-      this.tableCellColors.chooseCellColorPicker("text");
     }
   });
 
@@ -979,17 +777,6 @@
     }
   });
 
-
-
-  //on initialize text Spectrum
-  a.FE.RegisterCommand('textColorSpectrum', {
-    undo: !0,
-    focus: false,
-    callback: function (cmd) {
-      this.tableCellColors.initializeCellSpectrum("text", true);
-    }
-  });
-
 //on initialize bg Spectrum
   a.FE.RegisterCommand('bgColorSpectrum', {
     undo: !0,
@@ -998,27 +785,6 @@
       this.tableCellColors.initializeCellSpectrum("background", true);
     }
   });
-
-  //toggle text Spectrum
-  a.FE.RegisterCommand('toggleTextSpectrum', {
-    undo: false,
-    focus: false,
-    callback: function (cmd) {
-      this.tableCellColors.toggleCellSpectrum("text");
-    }
-  });
-
-  //toggle bg Spectrum
-  a.FE.RegisterCommand('toggleBgSpectrum', {
-    undo: false,
-    focus: false,
-    callback: function (cmd) {
-      this.tableCellColors.toggleCellSpectrum("background");
-    }
-  });
-
-
-
 
   // Colors back.
   a.FE.DefineIcon('colorsBack', { NAME: 'arrow-left' });
