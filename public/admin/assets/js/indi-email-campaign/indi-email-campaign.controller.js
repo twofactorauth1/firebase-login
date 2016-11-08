@@ -304,6 +304,16 @@
 
         function sendTestFn(address) {
             vm.uiState.dataLoaded = false;
+            console.log('sendTestFn:', vm.state.email);
+            /*
+             *Copy over settings from campaign in case the vm.state.email is stale
+             */
+            vm.state.email.fromEmail = vm.state.campaign.emailSettings.fromEmail;
+            vm.state.email.fromName = vm.state.campaign.emailSettings.fromName;
+            vm.state.email.replyTo = vm.state.campaign.emailSettings.replyTo;
+            vm.state.email.bcc = vm.state.campaign.emailSettings.bcc;
+            vm.state.email.subject = vm.state.campaign.emailSettings.subject;
+
             EmailCampaignService.sendTestEmail(address, vm.state.email)
                 .then(function (res) {
                     vm.uiState.dataLoaded = true;
@@ -691,6 +701,7 @@
                 vm.state.campaign.emailSettings.subject = email.subject;
                 vm.state.campaign.emailSettings.vars = email.vars;
                 vm.state.email = angular.copy(email);
+                console.log('695 set email to:', vm.state.email);
             } else {
                 var indexInEmailList = _.findIndex(vm.state.emails, {
                     _id: email._id
@@ -819,6 +830,7 @@
                             EmailBuilderService.getEmail(campaign.emailSettings.emailId)
                                 .then(function (res) {
                                     vm.state.email = res.data;
+                                    console.log('823 set email to:', vm.state.email);
                                     vm.state.campaign = angular.extend(vm.state.campaign, campaign);
 
                                     if (vm.state.campaign.status === 'DRAFT') {
