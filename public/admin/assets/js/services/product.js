@@ -17,7 +17,7 @@
         this.getProductsWithSort = function(sort, fn) {
             var apiUrl = baseUrl + ['products'].join('/');
             $http({
-                url: apiUrl,
+                url: apiUrl + '?hash_id=' + Math.random(),
                 params: {
                     sortFields: _.keys(sort),
                     sortDirections: _.values(sort)
@@ -53,7 +53,7 @@
         this.getSingleProduct = function(productId, fn) {
             var deferred = $q.defer();
             var apiUrl = baseUrl + ['products', productId].join('/');
-            $http.get(apiUrl)
+            $http.get(apiUrl + '?hash_id=' + Math.random())
             .success(function(data, status, headers, config) {
                 deferred.resolve(fn(data));
             }).error(function (err) {

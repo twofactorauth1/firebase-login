@@ -1,4 +1,4 @@
-/*global app, moment, angular, window, CKEDITOR*/
+/*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
 app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '$filter', 'toaster', function ($modal, $http, $timeout, $q, $compile, $filter, toaster) {

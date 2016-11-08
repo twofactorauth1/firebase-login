@@ -775,6 +775,20 @@ var mongodao = {
         );
     },
 
+    _updateMongo: function(query, update, type, fn) {
+        var self = this;
+
+        var collection = this.getTable(type);
+        self.mongo(collection).update(query, update, null, function(err, result){
+            if(err) {
+                self.log.error('Error in _update:', err);
+                fn(err);
+            } else {
+                fn(null, result);
+            }
+        });
+    },
+
     _batchUpdateMongo: function(list, type, fn) {
         var self = this;
         /*

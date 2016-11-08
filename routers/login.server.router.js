@@ -185,7 +185,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
                     self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
                     if (redirectUrl != null) {
-                        authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
+                        authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, authenticatedUrl) {
                             self.log.debug('onLogin authenticatedUrl: ' + redirectUrl);
                             self.log.debug('<< onLogin');
 

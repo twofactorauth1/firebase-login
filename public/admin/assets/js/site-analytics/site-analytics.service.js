@@ -13,6 +13,7 @@
         var adminAnalyticsAPIUrl = '/api/1.0/analytics/admin/reports';
         saService.runReports = runReports;
         saService.runAdminReports = runAdminReports;
+        saService.runCustomerReports = runCustomerReports;
         saService.loading = {value:0};
 
 
@@ -46,9 +47,25 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-
-            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDate + '&end=' + endDate).success(success).error(error));
+            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
+
+        function runCustomerReports(startDate, endDate, accountId, fn) {
+            function success(data) {
+                saService.reports = data;
+                fn(data);
+            }
+
+            function error(error) {
+                console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
+            }
+            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?accountId='+ accountId +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
+        }
+
 
         function runAdminReports(startDate, endDate, fn) {
             function success(data) {
@@ -59,11 +76,202 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-
-            return saRequest($http.get(adminAnalyticsAPIUrl + '/all?start=' + startDate + '&end=' + endDate).success(success).error(error));
+            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            return saRequest($http.get(adminAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
+        this.userAgentChart = function (userAgents, fn) {
+            var userAgentChartConfig = {
+                options: {
+                    chart: {
+                        height: 300
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'User Agents',
+                        data: userAgents
+                    }
+                ],
+                yAxis: {
+                    title: {
+                        text: 'Visitors'
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            };
 
+            fn(userAgentChartConfig);
+        };
+
+        this.osChart = function (osData, fn) {
+            var osChartConfig = {
+                options: {
+                    chart: {
+                        height: 300
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'OS',
+                        data: osData
+                    }
+                ],
+                yAxis: {
+                    title: {
+                        text: 'Visitors'
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            };
+
+            fn(osChartConfig);
+        };
+
+        this.revenueOverview = function (ordersData, fn) {
+            var revenueConfig = {
+                options: {
+                    chart: {
+                        spacing: [25, 25, 25, 25]
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: null
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            marker: {
+                                enabled: true,
+                                radius: 3
+                            }
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        format: "{value:%b %d}"
+                    },
+                    categories: ordersData.xData
+                },
+                yAxis: [{
+                    labels: {
+                        format: '{value}'
+
+                    },
+                    title: {
+                        text: 'Number Orders'
+                    },
+                    opposite: true
+                },
+                    {
+                        title: {
+                            text: 'Revenue'
+                        },
+                        labels: {
+                            format: '${value} USD'
+                        }
+                    }],
+                series: [
+                    {
+                        name: 'Orders',
+                        type: 'bar',
+                        yAxis: 0,
+                        data: ordersData.orderData,
+                        tooltip: {
+                            valueSuffix: ' orders'
+                        }
+
+                    },
+                    {
+                        name: 'Revenue',
+                        type: 'spline',
+                        yAxis: 1,
+                        data: ordersData.amountData,
+                        tooltip: {
+                            valueSuffix: ' usd',
+                            valuePrefix: '$'
+                        }
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+                /*
+                 func: function (chart) {
+
+                 }
+                 */
+            };
+
+            fn(revenueConfig);
+        };
 
         (function init() {
 

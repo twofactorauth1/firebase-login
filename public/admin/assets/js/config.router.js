@@ -67,13 +67,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             init: ['$stateParams', 'SimpleSiteBuilderService', function($stateParams, SimpleSiteBuilderService) {
                 return SimpleSiteBuilderService.getPage($stateParams.pageId);
             }]
-        }, loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'cleanType', 'filterPages', 'deep-diff', 'sortListPages'))
+        }, loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'cleanType', 'filterPages', 'deep-diff', 'sortListPages'))
     }).state('app.website.analytics', {
         url: '/site-analytics',
         templateUrl: "/admin/assets/views/site-analytics.html",
         title: 'Site Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'chartAnalyticsService')
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "/admin/assets/views/pages.html",
@@ -86,36 +86,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Templates',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('templatesCtrl', 'userService')
-    }).state('app.website.posts', {
-        url: '/posts',
-        templateUrl: "/admin/assets/views/posts.html",
-        title: 'Posts',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('postsCtrl', 'userService', 'htmlToPlaintext')
-    }).state('app.website.singlepage', {
-        url: '/pages/:id',
-        templateUrl: "/admin/assets/views/editor.html",
-        title: 'Page Single',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
-    }).state('app.website.singlepost', {
-        url: '/posts/:id',
-        templateUrl: "/admin/assets/views/editor.html",
-        title: 'Post Single',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces','ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
-    }).state('app.website.singletemplate', {
-        url: '/templates/:id',
-        templateUrl: "/admin/assets/views/editor.html",
-        title: 'Template Single',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum',  'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
-    }).state('app.editor', {
-        url: '/editor',
-        templateUrl: "/admin/assets/views/editor.html",
-        title: 'Editor',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.contacts', {
         url: '/contacts',
         templateUrl: "/admin/assets/views/contacts.html",
@@ -133,7 +103,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/customer-analytics.html",
         title: 'Customer Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'secTotime', 'dateRangePicker')
+        resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker')
     }).state('app.singleContact', {
         url: '/contacts/:contactId',
         templateUrl: "/admin/assets/views/contact-detail.html",
@@ -145,7 +115,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/customer-detail.html",
         title: 'Single Customer',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customerDetailCtrl','ngMap', 'customerService', 'toasterService')
+        resolve: loadSequence('customerDetailCtrl', 'singleCustomerAnalyticsCtrl', 'ngMap', 'customerService', 'toasterService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -161,7 +131,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/product-detail.html",
         title: 'Products',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'ngCurrency', 'bootstrap-icon-picker', 'campaignService', 'editorCtrl', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'propsFilter', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'ngCurrency', 'bootstrap-icon-picker', 'campaignService', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'propsFilter', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "/admin/assets/views/orders.html",
@@ -214,18 +184,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Campaigns',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('campaignsCtrl', 'campaignService', 'propsFilter')
-    }).state('app.marketing.createcampaign', {
-        url: '/campaigns/create-campaign',
-        templateUrl: "/admin/assets/views/create-campaign.html",
-        title: 'Create Campaign',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('createCampaignCtrl', 'campaignService', 'editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'string_score', 'angular-bootstrap-datetimepicker', 'propsFilter')
-    }).state('app.campaignDetail', {
-        url: '/marketing/campaigns/:campaignId',
-        templateUrl: "/admin/assets/views/create-campaign.html",
-        title: 'Campaign Detail',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('createCampaignCtrl', 'campaignService', 'editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'string_score', 'angular-bootstrap-datetimepicker', 'propsFilter')
     }).state('app.account', {
         url: '/account',
         template: '<div ui-view class="fade-in-up"></div>',

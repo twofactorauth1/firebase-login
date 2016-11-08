@@ -45,16 +45,16 @@
                             </li>
                         </ul>
                         <div ng-if="isEditing" class="add-addtional-team"  ng-click="openModal('social-links-modal', null, $parent.$index)">
-                            <a class="clickable-link social-links" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip-html-unsafe="Add social network."><i class="fa fa-plus"></i></a>
+                            <a class="clickable-link social-links" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip="Add social network."><i class="fa fa-plus"></i></a>
                         </div>
                     </div>
                 </div>
                 <div ng-if="isEditing" class="delete-team-member center" ng-click="deleteTeamMember($index)">
-                    <a class="ng-scope btn-delete-team-member" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Delete this team member.">
+                    <a class="ng-scope btn-delete-team-member" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this team member.">
                         <i class='fa fa-trash'></i>
                     </a>
                 </div>
-                <div ng-if="isEditing" ng-click="addTeamMember($index)" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip-html-unsafe="Add team member.">
+                <div ng-if="isEditing" ng-click="addTeamMember($index)" class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add team member.">
                     <a>
                         <i class="fa fa-plus"></i>
                     </a>

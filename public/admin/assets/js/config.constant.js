@@ -528,7 +528,7 @@ app.constant('JS_REQUIRES', {
     // 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
     "bootstrap-confirmation": ['../js/libs/bootstrap-confirmation/bootstrap-confirmation.js'],
     'uuid': '../js/libs_misc/uuid.js',
-    // 'ckeditor': '../js/libs_misc/ckeditor/ckeditor.js',
+    
     'papaParse': '../js/libs/papaparse/papaparse.min.js',
     'string_score': '../js/libs/string_score/string_score.min.js',
 
@@ -536,12 +536,11 @@ app.constant('JS_REQUIRES', {
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
     'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
-    'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
+    
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
-    'customerAnalyticsCtrl': 'assets/js/controllers/customerAnalyticsCtrl.js',
-    'editorCtrl': 'assets/js/controllers/editorCtrl.js',
+    'customerAnalyticsCtrl': 'assets/js/controllers/customerAnalyticsCtrl.js',    
     'billingCtrl': 'assets/js/controllers/billingCtrl.js',
-    'postsCtrl': 'assets/js/controllers/postsCtrl.js',
+    
     'socialFeedCtrl': 'assets/js/controllers/socialFeedCtrl.js',
     'contactsCtrl': 'assets/js/controllers/contactsCtrl.js',
     'contactDetailCtrl': 'assets/js/controllers/contactDetailCtrl.js',
@@ -551,7 +550,7 @@ app.constant('JS_REQUIRES', {
     'productsDetailCtrl': 'assets/js/controllers/productsDetailCtrl.js',
     'iconsCtrl': 'assets/js/controllers/iconsCtrl.js',
     'vAccordionCtrl': 'assets/js/controllers/vAccordionCtrl.js',
-    'ckeditorCtrl': 'assets/js/controllers/ckeditorCtrl.js',
+    
     'laddaCtrl': 'assets/js/controllers/laddaCtrl.js',
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
@@ -563,7 +562,7 @@ app.constant('JS_REQUIRES', {
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'campaignsCtrl': 'assets/js/controllers/campaignsCtrl.js',
-    'createCampaignCtrl': 'assets/js/controllers/createCampaignCtrl.js',
+    
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
@@ -590,6 +589,7 @@ app.constant('JS_REQUIRES', {
     'xeditableCtrl': 'assets/js/controllers/xeditableCtrl.js',
     'chatCtrl': 'assets/js/controllers/chatCtrl.js',
     'editTopicCtrl': 'assets/js/controllers/editTopicCtrl.js',
+    'singleCustomerAnalyticsCtrl': 'assets/js/controllers/singleCustomerAnalyticsCtrl.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',
@@ -687,7 +687,11 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/highcharts-release/adapters/standalone-framework.js', '../js/libs/highcharts-release/highcharts.js', '../js/libs/highcharts-ng/dist/highcharts-ng.min.js']
   },{
     name: 'highmaps',
-    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js', '../js/libs_misc/highmaps/us-all.js']
+    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js']
+  }
+  ,{
+    name: 'highmaps-lib',
+    files: ['../js/libs_misc/highmaps/us-all.js']
   },{
     name: 'truncate',
     files: ['../js/libs/angular-truncate/src/truncate.js']
@@ -797,6 +801,7 @@ app.constant('JS_REQUIRES', {
     files: [
       "../js/libs/froala-wysiwyg-editor/js/plugins/align.min.js",
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/colors.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/tableCellColors.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/emoticons.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",

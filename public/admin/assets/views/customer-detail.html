@@ -13,7 +13,7 @@
             Back to Customers
         </button>
     </div>
-    <div class="container-fluid container-fullw">
+    <div class="container-fluid container-fullw margin-top-20">
         <div class="row">
             <div class="col-md-12">
                 <div>
@@ -63,7 +63,7 @@
                                                     <td>Gross Revenue</td>
                                                     <td>{{(customer.chargeDetails.totalCharges) | currency:"$" }}</td>
                                                 </tr>
-                                                
+
                                                 <tr>
                                                     <td>Subdomain:</td>
                                                     <td>
@@ -75,16 +75,16 @@
                                                 <tr>
                                                     <td>Custom Domain:</td>
                                                     <td>
-                                                        <div>
+                                                        <span>
                                                             {{customer.customDomain}}
-                                                        </div>
+                                                        </span>
                                                         <div class="pull-right">
-                                                            <a ng-click="getNameServers(customer.customDomain)"><i class="fa fa-binoculars"></i></a>
-                                                            <a ng-click="openSimpleModal('add-domain-modal')"><i class="fa fa-pencil"></i></a>
+                                                            <a ng-click="getNameServers(customer.customDomain)"><i class="fa fa-binoculars" tooltip="Show name server details"></i></a>
+                                                            <a ng-click="openSimpleModal('add-domain-modal')" tooltip="Edit domain name"><i class="fa fa-pencil"></i></a>
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr ng-if="nameservers">
+                                                <tr ng-if="nameservers" ng-show="showNameServer">
                                                     <td colspan="2"><div ng-repeat="ns in nameservers"><span class="text-bold">{{ns}}</span><br></div></td>
                                                 </tr>
                                                 <tr>
@@ -131,7 +131,7 @@
                                                         {{primaryUser._id}}
                                                     </td>
                                                 </tr>
-                                                
+
                                             </tbody>
                                         </table>
 
@@ -139,7 +139,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <div class="panel-body panel-white">
+                                    <div class="panel-body panel-white space20 ">
                                         <div class="panel-heading border-light">
                                             <h4 class="panel-title">Account <span class="text-bold">Users</span></h4>
                                             <table class="table table-primary margin-bottom-0">
@@ -187,7 +187,7 @@
 
                                         </div>
                                     </div>
-                                    <div class="panel-body panel-white">
+                                    <div class="panel-body panel-white space20 ">
                                         <div class="panel-heading border-light">
                                             <h4 class="panel-title">Account <span class="text-bold">Invoices</span></h4>
                                             <table class="table table-primary margin-bottom-0">
@@ -217,7 +217,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="panel panel-white" id="notes">
+                                    <div class="panel panel-white space20 " id="notes">
                                         <div class="panel-heading border-light">
                                             <h4 class="panel-title">Customer <span class="text-bold">Notes</span></h4>
                                             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
@@ -225,7 +225,7 @@
                                         <div class="panel-wrapper" collapse="notes" ng-init="notes=false">
                                             <div class="panel-body no-padding">
                                                 <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                                                    <li ng-repeat="note in contact.notes">
+                                                    <li ng-repeat="note in customerNotes">
                                                         <div class="col-xs-2">
                                                             <img src="{{note.user_profile_photo ? note.user_profile_photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
                                                         </div>
@@ -267,8 +267,9 @@
                                 </div>
                             </div>
                         </tab>
-
-
+                        <tab heading="Analytics" select="resizeAnalytics()">
+                            <div data-ng-include=" 'assets/views/partials/single-customer-analytics.html' "></div>
+                        </tab>
                     </tabset>
                 </div>
             </div>
@@ -279,3 +280,4 @@
 <div data-ng-include=" 'assets/views/partials/new-user-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/add-domain-modal.html' "></div>
+

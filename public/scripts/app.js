@@ -223,7 +223,7 @@ var mainApp = angular
 
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
 
-            $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;
+            $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;            
 
             analyticsService.pageStart(function () {
                 var editorIndex = window.location.search.indexOf("editor=true");

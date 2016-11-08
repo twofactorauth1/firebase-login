@@ -619,7 +619,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 var uniqueEmail = req.body.uniqueEmail;
                 console.log('req.body ', req.body);
 
-
+                if (!contact_type || !contact_type.length) {
+                    
+                    tagSet.push('ld');
+                } else {
+                    tagSet = tagSet.concat(contact_type);
+                }
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
                         self.log.error('Error checking for existing contact: ' + err);
@@ -638,22 +643,38 @@ _.extend(api.prototype, baseApi.prototype, {
 
                         var toAddress = value.get('business').emails[0].email;
                         var toName = '';
-                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
+                        /*
+                         * Asynchronously send to each email in business.emails
+                         */
+                        var ccAry = [];
+                        var emails = value.get('business').emails;
+                        if(emails.length > 1) {
+                            for(var i=1; i<emails.length; i++) {
+                                ccAry.push(emails[i].email);
+                            }
+                        }
+                        emailMessageManager.sendNewCustomerEmail(toAddress, toName, accountId, vars, ccAry, function(err, value){
                             self.log.debug('email sent');
                         });
 
-                    }
-                    else if(emailPreferences.new_contacts === true && req.body.activity){
+                    } else if(emailPreferences.new_contacts === true && req.body.activity){
                         var accountEmail = null;
 
                         if(value && value.get("business") && value.get("business").emails && value.get("business").emails[0] && value.get("business").emails[0].email) {
                             self.log.debug('user email: ', value.get("business").emails[0].email);
                             accountEmail = value.get("business").emails[0].email;
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                            var ccAry = [];
+                            var emails = value.get('business').emails;
+                            if(emails.length > 1) {
+                                for(var i=1; i<emails.length; i++) {
+                                    ccAry.push(emails[i].email);
+                                }
+                            }
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet);
                         } else{
                             userDao.getUserAccount(value.id(), function(err, user){
                                 accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet);
                             })
                         }
 
@@ -669,11 +690,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     contact.set('accountId', value.id());
                     self.log.debug('contact_type ', contact_type);
                     if (!contact_type || !contact_type.length) {
-                        contact.set('type', 'ld');
-                        tagSet.push('ld');
+                        contact.set('type', 'ld');                       
                     } else {
-                        contact.set('type', 'ld');
-                        tagSet = tagSet.concat(contact_type);
+                        contact.set('type', 'ld');                        
                     }
                     contact.set('tags', _.uniq(tagSet));
                     if(contact.get('fingerprint')) {
@@ -1219,13 +1238,27 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
         var text = [];
          for(var attributename in fields){
             text.push("<b>"+attributename+"</b>: "+fields[attributename]);
+        }
+
+        if(tagSet && tagSet.length){
+            var tags = _.map(tagSet, function (x) {
+            var tag = _.findWhere($$.constants.contact.contact_types.dp, {data: x});
+              if (tag) {
+                return tag.label;
+              } else {
+                return x;
+              }
+            });
+            if(tags && tags.length){                
+                text.push("<b>tags</b>: "+tags.join(", "));
+            }
         }
         self.log.debug(fields);
         self.log.debug('accountEmail ', accountEmail);
@@ -1244,7 +1277,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var vars = [];
 
 
-                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
+                emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

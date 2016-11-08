@@ -80,6 +80,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/reports/newVsReturning'), this.isAuthAndSubscribedApi.bind(this), this.adminNewVsReturningReport.bind(this));
         app.get(this.url('admin/reports/pageAnalytics'), this.isAuthAndSubscribedApi.bind(this), this.adminPageAnalyticsReport.bind(this));
         app.get(this.url('admin/reports/userAgents'), this.isAuthApi.bind(this), this.getAdminUserAgentsReport.bind(this));
+        app.get(this.url('admin/reports/revenue'), this.isAuthAndSubscribedApi.bind(this), this.getAdminRevenue.bind(this));
+        app.get(this.url('admin/reports/os'), this.isAuthAndSubscribedApi.bind(this), this.getAdminOSReport.bind(this));
+        app.get(this.url('admin/reports/emails'), this.isAuthAndSubscribedApi.bind(this), this.getAdminEmailsReport.bind(this));
         app.get(this.url('admin/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allAdminReports.bind(this));
     },
 
@@ -280,7 +283,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                             accountId: contact.get('accountId'),
                                             contactId: contact.id(),
                                             activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                            start: event.timestamp
+                                            start: new Date()
                                         });
                                         contactActivityManager.createActivity(activity, function(err, value){});
                                     }
@@ -299,7 +302,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                     accountId: contact.get('accountId'),
                                     contactId: contact.id(),
                                     activityType: $$.m.ContactActivity.types.EMAIL_UNSUB,
-                                    start: event.timestamp
+                                    start: new Date()
                                 });
                                 contactActivityManager.createActivity(activity, function(err, value){});
                             }
@@ -356,32 +359,11 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.error('Could not update campaign with key [' + key + ']:', err);
                             cb();
                         } else {
-                            var stats = campaign.get('statistics');
-                            if(updates.sent) {
-                                stats.emailsSent += updates.sent;
-                            }
-                            if(updates.opened) {
-                                stats.emailsOpened += updates.opened;
-                            }
-                            if(updates.clicked) {
-                                stats.emailsClicked += updates.clicked;
-                            }
-                            if(updates.bounced) {
-                                stats.emailsBounced += updates.bounced;
-                            }
 
-                            var modified = {
-                                date: new Date(),
-                                by: 'ADMIN'
-                            };
-                            campaign.set('modified', modified);
-                            //TODO: updateCampaignStatistics
-                            //campaignManager.updateCampaign(campaign, cb);
                             var accountId = campaign.get('accountId');
                             var campaignId = campaign.id();
-                            var statistics = stats;
                             var userId = 0;
-                            campaignManager.updateCampaignStatistics(accountId, campaignId, statistics, userId, cb);
+                            campaignManager.atomicUpdateCampaignStatistics(accountId, campaignId, updates, userId, cb);
                         }
                     });
                 }, function(err){
@@ -788,6 +770,7 @@ _.extend(api.prototype, baseApi.prototype, {
         pingEvent.set('session_id', req.params.id);
         pingEvent.set('server_time', new Date().getTime());
         pingEvent.set('server_time_dt', new Date());
+        pingEvent.set('accountId', self.currentAccountId(req));
         analyticsManager.storePingEvent(pingEvent, function(err){
             if(err) {
                 self.log.error('Error saving ping event: ' + err);
@@ -810,14 +793,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.getVisitorReports(accountId, userId, start, end, false, function(err, value){
@@ -839,14 +822,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -869,14 +852,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -899,14 +882,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -939,14 +922,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -979,14 +962,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1019,14 +1002,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1058,14 +1041,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, function(err, value){
@@ -1087,14 +1070,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.newVsReturningReport(accountId, userId, start, end, false, function(err, value){
@@ -1116,14 +1099,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, function(err, value){
@@ -1145,14 +1128,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         analyticsManager.getUserAgentReport(accountId, userId, start, end, false, function(err, value){
@@ -1174,14 +1157,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1193,6 +1176,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('end:', end);
         self.log.debug('previousStart:', previousStart);
         self.log.debug('previousEnd:', previousEnd);
+        var accountIdParam = req.query.accountId;
+        if(accountId === appConfig.mainAccountID && accountIdParam) {
+            self.log.debug('Viewing analytics as account ' + accountIdParam);
+            accountId = parseInt(accountIdParam);
+        }
 
         async.parallel({
             visitorReports: function(callback){
@@ -1224,6 +1212,12 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             pageAnalyticsReport: function(callback) {
                 analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, callback);
+            },
+            userAgents: function(callback) {
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, callback);
+            },
+            revenueReport: function(callback) {
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, callback);
             }
         }, function(err, results){
             self.log.debug(accountId, userId, '<< allReports');
@@ -1244,14 +1238,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1279,14 +1273,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1314,14 +1308,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1348,14 +1342,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
@@ -1383,14 +1377,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1423,14 +1417,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1463,14 +1457,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1503,14 +1497,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1541,13 +1535,13 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1574,13 +1568,13 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1607,13 +1601,13 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
@@ -1640,19 +1634,128 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
 
         if(accountId === appConfig.mainAccountID) {
             analyticsManager.getUserAgentReport(accountId, userId, start, end, true, function(err, results){
                 self.log.debug(accountId, userId, '<< adminPageAnalyticsReport');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
+    getAdminOSReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getAdminOSReport (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getOSReport(accountId, userId, start, end, true, function(err, results){
+                self.log.debug(accountId, userId, '<< getAdminOSReport');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
+    getAdminRevenue: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getAdminRevenue (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
+        var previousEnd = start;
+
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+                self.log.debug(accountId, userId, '<< getAdminRevenue');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
+    getAdminEmailsReport: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getAdminEmailsReport (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
+        var previousEnd = start;
+
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+                self.log.debug(accountId, userId, '<< getAdminEmailsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
             });
         } else {
@@ -1674,14 +1777,14 @@ _.extend(api.prototype, baseApi.prototype, {
             end = moment().toDate();
         } else {
             //2016-07-03T00:00:00 05:30
-            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
         }
 
 
         if(!start) {
             start = moment().add(-30, 'days').toDate();
         } else {
-            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss ZZ').toDate();
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
         var dateDiff = moment(start).diff(end, 'days');
@@ -1731,6 +1834,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 },
                 userAgents: function(callback) {
                     analyticsManager.getUserAgentReport(accountId, userId, start, end, true, callback);
+                },
+                revenueReport: function(callback) {
+                    analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                },
+                osReport: function(callback) {
+                    analyticsManager.getOSReport(accountId, userId, start, end, true, callback);
+                },
+                emailsReport: function(callback) {
+                    analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
                 }
             }, function(err, results){
                 self.log.debug(accountId, userId, '<< allAdminReports');

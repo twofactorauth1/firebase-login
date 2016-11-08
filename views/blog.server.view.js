@@ -99,7 +99,7 @@ _.extend(view.prototype, BaseView.prototype, {
             function addSSBSection(webpageData, allPages, page, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
-                    ssbSectionTemplate.data = html;
+                    ssbSectionTemplate.data = '<div class="blog-list-section">'+html+'</div>';
                     data.templateIncludes.push(ssbSectionTemplate);
                     cb(null, webpageData, allPages, page);
                 });
@@ -345,7 +345,7 @@ _.extend(view.prototype, BaseView.prototype, {
             function addSSBSection(webpageData, allPages, page, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
-                    ssbSectionTemplate.data = html;
+                    ssbSectionTemplate.data = "";
                     data.templateIncludes.push(ssbSectionTemplate);
                     cb(null, webpageData, allPages, page);
                 });
@@ -802,8 +802,9 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 }
 
+                
                 data.includeSocial = true;
-
+                
                 if (!data.account.website.settings) {
                     self.log.warn('Website Settings is null for account ' + accountId);
                     data.account.website.settings = {};

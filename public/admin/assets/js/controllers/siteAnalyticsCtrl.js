@@ -26,6 +26,8 @@
             endDate: moment().format()
         };
 
+        $scope.Math = Math;
+
         var dateSwitch = false;
         $scope.$watch('selectedDate', function () {
             $scope.date.startDate = moment($scope.selectedDate.startDate).format();
@@ -251,6 +253,9 @@
             ChartAnalyticsService.timeOnSite($scope.avgSessionData, $scope.bouncesData, function (data) {
                 $scope.timeonSiteConfig = data;
                 $scope.timeonSiteConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
 
@@ -264,6 +269,11 @@
 
 
         $scope.setNewReportData = function(results) {
+            if(moment($scope.date.endDate).diff(moment($scope.date.startDate), 'days') <=7) {
+                ChartAnalyticsService.setGraunularity('hours');
+            } else {
+                ChartAnalyticsService.setGraunularity('days');
+            }
             var desktop = 0;
             var mobile = 0;
             _.each(results.visitorDeviceReport.result, function(device){
@@ -338,6 +348,9 @@
                     $scope.analyticsOverviewConfig = data;
                 //});
                 $scope.analyticsOverviewConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
             var sessionsPreviousData = 0;
@@ -384,23 +397,35 @@
 
             var newCustomers = ['New'];
             var returningCustomers = ['Returning'];
-            _.each(results.newVsReturningReport, function(result){
-                if(result._id === 'new') {
-                    newCustomers.push(result.count);
-                } else if(result._id === 'returning') {
-                    returningCustomers.push(result.count);
-                }
-            });
-            var newVsReturning = [
-                newCustomers,
-                returningCustomers
-            ];
+            if(results.newVsReturningReport && results.newVsReturningReport.length){
+                _.each(results.newVsReturningReport, function(result){
+                    if(result._id === 'new') {
+                        newCustomers.push(result.count);
+                    } else if(result._id === 'returning') {
+                        returningCustomers.push(result.count);
+                    }
+                });
+                var newVsReturning = [
+                    newCustomers,
+                    returningCustomers
+                ];  
+            }
+            else{
+                var newVsReturning = [
+                    ['New', 0],
+                    ['Returning', 0]
+                ];
+            }
+            
 
             $scope.newVsReturning = newVsReturning;
 
             ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
                 $scope.newVsReturningConfig = data;
                 $scope.newVsReturningConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
 
@@ -436,14 +461,104 @@
                 });
             }
 
+            // ======================================
+            // User Agent Pie Chart
+            // ======================================
+            var userAgentData = [];
+            var browserMap = {};
+            if(results.userAgents) {
+                var browserTotal = 0;
+                _.each(results.userAgents, function(obj){
+                    var browser = obj._id.browserName;
+                    var count = obj.count;
+                    if(browserMap[browser]) {
+                        browserMap[browser] += count;
+                    } else {
+                        browserMap[browser] = count;
+                    }
+                    browserTotal+= count;
+                });
+                $scope.browserTotal = browserTotal;
+                console.log('browserMap:', browserMap);
+                userAgentData = userAgentData.concat(_.pairs(browserMap));
+                userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
+                console.log('userAgentData', userAgentData);
+                $scope.userAgentData = userAgentData;
+                var uadLength = userAgentData.length -1;
+                if(userAgentData.length)
+                {
+                    $scope.topBrowser = userAgentData[uadLength][0];
+                    var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
+                    $scope.browserPercent = browserPercent;
+                }
 
+                ChartAnalyticsService.userAgentChart(userAgentData, function(config){
+                    $scope.userAgentConfig = config;
+                    $scope.userAgentConfig.loading = false;
+                    $timeout(function() {
+                        $(window).resize();
+                    }, 0);
+                });
+
+                $scope.userAgentTableData = userAgentData.reverse();
+                console.log('userAgentTableData:', $scope.userAgentTableData);
+            }
+
+            // ======================================
+            // Revenue
+            // ======================================
+            var revenueChartData = {
+                xData: [],
+                amountData: [],
+                orderData: []
+            };
+            var currentTotalRevenue = 0;
+            var currentTotalCount = 0;
+            _.each(results.revenueReport.currentMonth, function(rev){
+                revenueChartData.xData.push(new Date(rev.timeframe.start).getTime());
+                var amt = rev.total || 0;
+                var cnt = rev.count || 0;
+                revenueChartData.amountData.push(amt);
+                revenueChartData.orderData.push(cnt);
+                currentTotalRevenue+= amt;
+                currentTotalCount+= cnt;
+            });
+
+            $scope.revenueData = revenueChartData;
+            $scope.revenue = parseFloat(currentTotalRevenue).toFixed(2);
+            $scope.orderCount = currentTotalCount;
+
+            var revenuePreviousData = 0;
+            var ordersPreviousData = 0;
+            _.each(results.revenueReport.prevMonth, function (rev) {
+                var value = rev.total || 0;
+                revenuePreviousData += value;
+                var cnt = rev.count || 0;
+                ordersPreviousData += cnt;
+            });
+
+            $scope.revenuePreviousData = revenuePreviousData;
+
+            var revenuePercent = ChartAnalyticsService.calculatePercentChange(revenuePreviousData, currentTotalRevenue);
+            $scope.revenuePercent = revenuePercent;
+
+            var ordersPercent = ChartAnalyticsService.calculatePercentChange(ordersPreviousData, currentTotalCount);
+            $scope.ordersPercent = ordersPercent;
+
+            ChartAnalyticsService.revenueOverview($scope.revenueData, function (data) {
+                $scope.revenueConfig = data;
+                $scope.revenueConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
+            });
+
+            //=======================================
+            // Cleanup
+            //=======================================
             $scope.locationData = locationData;
-
-
             $scope.displayVisitors = $scope.visitors > 0;
-
             $scope.renderAnalyticsCharts();
-
         };
 
         $scope.setReportData = function (results) {
@@ -526,6 +641,9 @@
                     $scope.analyticsOverviewConfig = data;
                 });
                 $scope.analyticsOverviewConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
 
             var sessionsPreviousData = 0;
@@ -584,8 +702,10 @@
             ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
                 $scope.newVsReturningConfig = data;
                 $scope.newVsReturningConfig.loading = false;
+                $timeout(function() {
+                    $(window).resize();
+                }, 0);
             });
-
 
             // ======================================
             // Content

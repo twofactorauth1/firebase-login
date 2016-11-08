@@ -14,7 +14,7 @@
 </div>
 <div class="row padding-10" ng-if="component.components[0]" ng-init="defaultSpacing = !component.spacing.default">
     <div class="form-group">
-        <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip-html-unsafe="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
+        <label>Default vertical spacing<span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Use the default vertical space of 50px between components. Turn off to reset vertical space to 0px.">
                   <i class="fa fa-info-circle" />
              </span></label>
         <switch ng-model="defaultSpacing" ng-change="vm.uiState.setDefaultSpacing(component, defaultSpacing)" class="pull-right"></switch>

@@ -117,6 +117,9 @@
       address: function (value) {
         return value.bestAddress
       },
+      unsubscribed: function (value) {
+        return value.unsubscribed
+      },
       social: function (value) {
         if (value.hasLinkedInId) {
           return 1;
@@ -221,7 +224,8 @@
       "tags": true,
       "email": true,
       "address": true,
-      "social": true,
+      "social": false,
+      "unsubscribed" : true,
       "phone": true,
       "created": true,
       "modified": true
@@ -551,10 +555,14 @@
     // };
 
     $scope.bulkActionSelectFn = function () {
+        var selectedContacts = $scope.selectedContactsFn();
+        var deleteMessage = "Do you want to delete the "+ selectedContacts.length + " contact?";
+        if(selectedContacts.length > 1)
+          deleteMessage = "Do you want to delete the "+ selectedContacts.length + " contacts?";
         if ($scope.bulkActionChoice.action.data == 'delete') {
             SweetAlert.swal({
                 title: "Are you sure?",
-                text: "Do you want to delete the filtered contacts?",
+                text: deleteMessage,
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -565,7 +573,7 @@
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    var selectedContacts = $scope.selectedContactsFn();
+
                     var contactPromises = [];
 
                     selectedContacts.forEach(function(sc, sci) {
@@ -590,12 +598,12 @@
               });
         }
 
-        if ($scope.bulkActionChoice.action.data == 'tags') {
+        if ($scope.bulkActionChoice.action && $scope.bulkActionChoice.action.data == 'tags') {
             $scope.bulkActionChoice = {};
             $scope.openSimpleModal('tags-bulk-action-modal');
         }
 
-        if ($scope.bulkActionChoice.action.data == 'export') {
+        if ($scope.bulkActionChoice.action && $scope.bulkActionChoice.action.data == 'export') {
           ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
           $scope.bulkActionChoice = null;
           $scope.bulkActionChoice = {};

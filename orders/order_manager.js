@@ -606,7 +606,14 @@ module.exports = {
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
                         var emailPageHandle = isDonation ? 'new-donation' : 'new-order';
+                        //TODO: add cc emails here
+                        var ccAry = [];
 
+                        if(business.emails.length > 1) {
+                            for(var i=1; i<business.emails.length; i++) {
+                                ccAry.push(business.emails[i].email);
+                            }
+                        }
                         cmsManager.getEmailPage(accountId, emailPageHandle, function(err, email){
                             if(err || !email) {
                                 log.warn('No ' + (isDonation ? 'NEW_DONATION' : 'NEW_ORDER') + ' email receipt sent: ' + err);
@@ -629,7 +636,7 @@ module.exports = {
                                                 log.debug(accountId, userId, 'juiced - one ' + _html);
                                                 html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             }
-                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
                                         });
@@ -653,7 +660,7 @@ module.exports = {
                                             html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         }
 
-                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
+                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function(){
                                             callback(null, account, updatedOrder);
                                         });
                                     });
@@ -677,7 +684,7 @@ module.exports = {
                                                     html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                 }
 
-                                                emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function(){
                                                     log.debug(accountId, userId, 'Admin Notification Sent');
                                                 });
                                             });
@@ -1458,10 +1465,12 @@ module.exports = {
                                 if(err) {
                                     cb(err);
                                 } else {
-                                    productAry.push(product);
-                                    item.sku = product.get('sku');
-                                    item.name = product.get('name');
-                                    log.debug(accountId, userId, 'Product is', product);
+                                    if(product){
+                                        productAry.push(product);
+                                        item.sku = product.get('sku');
+                                        item.name = product.get('name');
+                                        log.debug(accountId, userId, 'Product is', product);
+                                    }                                    
                                     cb();
                                 }
                             });
@@ -1537,6 +1546,9 @@ module.exports = {
                          *
                          *
                          */
+
+                         
+
                         _.each(order.get('line_items'), function iterator(item, index){
                             var product = _.find(productAry, function(currentProduct){
                                 if(currentProduct.id() === item.product_id) {
@@ -1544,24 +1556,30 @@ module.exports = {
                                 }
                             });
                             log.debug(accountId, userId, 'found product ', product);
-                            var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
-                            if(product.get('on_sale') === true) {
-                                var startDate = product.get('sale_date_from', 'day');
-                                var endDate = product.get('sale_date_to', 'day');
-                                var rightNow = new Date();
-                                if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
-                                    lineItemSubtotal = item.quantity * product.get('sale_price');
-                                    item.sale_price = product.get('sale_price').toFixed(2);
-                                    //TODO: Should not need this line.  Receipt template currently needs it.
-                                    item.regular_price = product.get('regular_price').toFixed(2);
-                                    item.total = lineItemSubtotal.toFixed(2);
+
+                            
+
+                            if(product){
+                                var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
+                                if(product.get('on_sale') === true) {
+                                    var startDate = product.get('sale_date_from', 'day');
+                                    var endDate = product.get('sale_date_to', 'day');
+                                    var rightNow = new Date();
+                                    if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                                        lineItemSubtotal = item.quantity * product.get('sale_price');
+                                        item.sale_price = product.get('sale_price').toFixed(2);
+                                        //TODO: Should not need this line.  Receipt template currently needs it.
+                                        item.regular_price = product.get('regular_price').toFixed(2);
+                                        item.total = lineItemSubtotal.toFixed(2);
+                                    }
                                 }
+                                if(product.get('taxable') === true) {
+                                    taxAdded += (lineItemSubtotal * taxPercent);
+                                }
+                                subTotal += lineItemSubtotal;
+                                totalLineItemsQuantity += parseFloat(item.quantity);
                             }
-                            if(product.get('taxable') === true) {
-                                taxAdded += (lineItemSubtotal * taxPercent);
-                            }
-                            subTotal += lineItemSubtotal;
-                            totalLineItemsQuantity += parseFloat(item.quantity);
+                            
                         });
                         log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
 
@@ -1638,6 +1656,50 @@ module.exports = {
                     }
                 });
 
+            }
+        });
+    },
+
+    listOrdersByAccountWithoutCustomers: function(accountId, fn){
+        var userId = null;
+        log.debug(accountId, userId, '>> listOrdersByAccountWithoutCustomers');
+        var query = {
+            account_id: accountId
+        };
+
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            if(err) {
+                log.error(accountId, userId, 'Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                log.debug(accountId, userId, '<< listOrdersByAccountWithoutCustomers');
+                return fn(null, orders);
+            }
+        });
+    },
+
+    listOrderTypes: function(accountId, fn) {
+        var userId = null;
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> listOrderTypes');
+
+        var orderQuery = {account_id:accountId};
+        var donationQuery = {account_id:accountId, 'line_items.type':'DONATION'};
+        async.parallel({
+            orders: function(cb){
+                dao.exists(orderQuery, $$.m.Order, cb);
+            },
+            donations: function(cb){
+                dao.exists(donationQuery, $$.m.Order, cb);
+            }
+        }, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error listing types:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< listOrderTypes');
+                return fn(null, value);
             }
         });
     },

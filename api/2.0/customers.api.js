@@ -28,6 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listCustomers.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomer.bind(this));
+        app.post(this.url('customer/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addCustomerNotes.bind(this));
 
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
 
@@ -79,9 +80,24 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
         }
+    },
+
+    addCustomerNotes: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var customerId = parseInt(req.params.id);
+        var notes = req.body.notes;
+        if(accountId === appConfig.mainAccountID) {
+            manager.addCustomerNotes(accountId, userId, customerId, notes,  function(err, customer){
+                self.log.debug(accountId, userId, '<< addCustomerNotes');
+                self.sendResultOrError(resp, err, customer, 'Error adding notes');
+            });
+        } else {
+            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+        }
     }
-
-
+    
 
 });
 

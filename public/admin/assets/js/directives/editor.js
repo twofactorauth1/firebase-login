@@ -1,5 +1,5 @@
-// 'use strict'; <--- DO NOT USE! CKEDITOR FAILS (https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/65)
-/*global app, moment, angular, window, CKEDITOR*/
+
+/*global app, moment, angular, window*/
 /*jslint unparam:true*/
 app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window) {
   return {
@@ -151,6 +151,11 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 if(blogPostEditor){
                     froalaConfig.enter = $.FroalaEditor.ENTER_P;
                     froalaConfig.placeholderText = attrs.placeholder;
+                    if(SimpleSiteBuilderService.permissions && SimpleSiteBuilderService.permissions.html === true){
+                        if (froalaConfig.toolbarButtons.indexOf('html') === -1) {
+                            froalaConfig.toolbarButtons.push('html');
+                        }
+                    }
                 }
 
 
@@ -316,30 +321,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
               }, 2000);
             });
-      } else {
-        CKEDITOR.inline(elem, {
-          on: {
-            instanceReady: function(ev) {
-              var editor = ev.editor;
-              editor.setReadOnly(false);
-              editor.setData(ngModel.$viewValue);
-              editor.on('change', function(e) {
-                scope.update(e);
-              });
-              editor.on('key', function(e) {
-                scope.update(e);
-              });
-              editor.on('customUpdate', function(e) {
-                scope.setContent(e);
-              });
-            }
-          },
-          sharedSpaces: {
-            top: 'editor-toolbar'
-          }
-        });
       }
-
     }
   }
 });

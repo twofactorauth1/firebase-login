@@ -69,7 +69,7 @@
                                     class="btn btn-default"
                                     tooltip-placement="top"
                                     tooltip-append-to-body="true"
-                                    tooltip-html-unsafe="Status - {{post.post_status}}">
+                                    tooltip="Status - {{post.post_status}}">
 
                                     <i ng-if="post.post_status === 'PUBLISHED'" class="fa fa-globe"></i>
                                     <i ng-if="post.post_status === 'DRAFT'" class="fa fa-folder-open-o"></i>
@@ -81,7 +81,7 @@
                                     class="btn btn-default"
                                     tooltip-placement="top"
                                     tooltip-append-to-body="true"
-                                    tooltip-html-unsafe="Toggle Featured"
+                                    tooltip="Toggle Featured"
                                     ng-click="vm.toggleFeatured(post)">
 
                                     <i ng-if="post.featured" class="fa fa-star"></i>
@@ -94,13 +94,13 @@
                             </div>
                         </div>
                         <div class="ssb-blog-post-action-buttons">
-                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="Create duplicate post" ng-click="vm.duplicatePost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip="Create duplicate post" ng-click="vm.duplicatePost(post)">
                                 <i class="fa fa-copy"></i><span class="sr-only">Duplicate</span>
                             </button>
-                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="View post" ng-click="vm.viewPost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip="View post" ng-click="vm.viewPost(post)">
                                 <i class="fa fa-television"></i><span class="sr-only">Preview</span>
                             </button>
-                            <button class="btn btn-default" tooltip-placement="top" tooltip-html-unsafe="Delete post" ng-click="vm.deletePost(post)">
+                            <button class="btn btn-default" tooltip-placement="top" tooltip="Delete post" ng-click="vm.deletePost(post)">
                                 <i class="fa fa-trash"></i><span class="sr-only">Delete</span>
                             </button>
                             <button class="btn btn-primary" ng-click="vm.editPost(post)">
@@ -162,7 +162,7 @@
                     ng-repeat="page in vm.state.pages track by $index"
                     ng-class="{ 'active-page': page._id === vm.state.page._id }"
                     class="ssb-page-section-settings-item">
-                    <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
+                    <div ng-click="vm.uiState.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip="Page Settings"></div>
                     <div class="panel-group">
                         <div class="ssb-sidebar-sortable-item panel panel-default">
                             <div class="panel-heading">
@@ -191,7 +191,7 @@
                     elem
                     ssb-blog-editor="true"
                     ng-model="vm.state.post.post_content"
-                    placeholder="Tell your story...">
+                    placeholder="Tell your story..." stop-event="touchend">
                 </p>
 
             </div>
@@ -228,7 +228,7 @@
                                 ng-click="vm.toggleFeatured(vm.state.post)"
                                 tooltip-placement="top"
                                 tooltip-append-to-body="true"
-                                tooltip-html-unsafe="Toggle Featured">
+                                tooltip="Toggle Featured">
 
                                 <i ng-if="vm.state.post.featured" class="fa fa-star"></i>
                                 <i ng-if="!vm.state.post.featured" class="fa fa-star-o"></i>
@@ -287,7 +287,7 @@
 
                         <div class="row block ssb-blog-editor-featured-image">
                             <h4 class="text-u ssb-admin-panel-header">Featured Image</h4>
-                            <i ng-if="vm.state.post.featured_image" class="fa fa-close" ng-click="vm.removeFeaturedImage(vm.state.post);"></i>
+                            <i ng-if="vm.state.post.featured_image" class="fa fa-close fa-2x" ng-click="vm.removeFeaturedImage(vm.state.post);"></i>
                             <div class="center" ng-click="vm.setFeaturedImage(vm.state.post);">
                                 <div ng-if="vm.state.post.featured_image">
                                     <img ng-src="{{vm.state.post.featured_image}}" />

@@ -575,11 +575,12 @@
     // max-height: 600px;
 
     @media (max-width: 767px) {
-        top: auto;
+        top: 130px;
         bottom: 0;
         width: 90%;
         left: 5%;
         right: 5%;
+        display: table;
     }
 
     &.draggable > .ssb-sidebar-sub-heading {
@@ -712,6 +713,10 @@
         overflow: hidden;
         display: inline-block;
         vertical-align: middle;
+    }
+
+    @media screen and (max-width: 767px) {
+        max-height: calc(~"100vh - 320px");
     }
 
 }

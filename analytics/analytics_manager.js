@@ -15,6 +15,8 @@ var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var async = require('async');
 var accountDao = require('../dao/account.dao');
+var orderDao = require('../orders/dao/order.dao');
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 
 module.exports = {
 
@@ -129,24 +131,6 @@ module.exports = {
             }
         });
     },
-    /*
-    linkUsers: function(oldId, newId, fn) {
-        var self = this;
-        _log.debug('>> linkUsers');
-        analytics.alias({
-            previousId: oldId,
-            userId: newId
-        }, function(err, value){
-            if(err) {
-                _log.error('Error calling segment to link users: ' + err);
-            } else {
-                _log.debug('Linked users: ' + value);
-            }
-            _log.debug('<< linkUsers');
-            fn(null, value);
-        });
-    },
-    */
 
     storeSessionEvent: function(sessionEvent, fn) {
         var self = this;
@@ -238,7 +222,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorReports');
-
+        var granularity = self._determineGranularity(startDate, endDate);
 
         var stageAry = [];
         var match = {
@@ -264,6 +248,9 @@ module.exports = {
                 }
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {$group:{_id:"$_id.yearMonthDay", visits:{$sum:1} }};
@@ -285,11 +272,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        }
                         cb(null, resultAry);
                     }
                 });
@@ -310,11 +305,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD HH:mm'), moment(endDate).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(startDate).format('YYYY-MM-DD'), moment(endDate).format('YYYY-MM-DD'));
+                        }
                         cb(null, newVisitorResults, resultAry);
                     }
                 });
@@ -419,11 +422,11 @@ module.exports = {
         });
     },
 
-
     getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getUserReport');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -450,6 +453,9 @@ module.exports = {
                 }
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {
@@ -475,11 +481,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
                         cb(null, resultAry);
                     }
                 });
@@ -500,11 +515,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, currentMonth, resultAry);
                     }
                 });
@@ -528,6 +552,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getPageViewsReport');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -550,6 +575,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            group.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group);
 
         async.waterfall([
@@ -567,11 +595,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
+
                         cb(null, resultAry);
                     }
                 });
@@ -592,11 +629,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, currentMonth, resultAry);
                     }
                 });
@@ -619,6 +665,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getSessionsReport');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -645,6 +692,9 @@ module.exports = {
                 }
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {
@@ -670,11 +720,21 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
+
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
+
                         cb(null, resultAry);
                     }
                 });
@@ -695,11 +755,20 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousEnd).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
+
                         cb(null, currentMonth, resultAry);
                     }
                 });
@@ -722,7 +791,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> sessionLengthReport');
-
+        var granularity = self._determineGranularity(start, end);
         var stageAry = [];
         var match = {
             $match:{
@@ -732,7 +801,7 @@ module.exports = {
                     $lte:end
                 },
                 fingerprint:{$ne:0},
-                session_length: {$gte:5000}
+                session_length: {$gte:5000, $lte:360000}
             }
         };
         if(isAggregate === true) {
@@ -747,6 +816,9 @@ module.exports = {
                 count:{$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         async.waterfall([
@@ -765,11 +837,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
                         cb(null, resultAry);
                     }
                 });
@@ -793,11 +873,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0,count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                        }
                         //self.log.debug('results:', value);
                         cb(null, nonBounceAvg, resultAry);
                     }
@@ -823,11 +911,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0,count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, nonBounceAvg, bounceAvg, resultAry);
                     }
                 });
@@ -850,11 +946,19 @@ module.exports = {
                                     start: entry._id
                                 }
                             };
-                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            if(granularity === 'hours') {
+                                result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                            } else {
+                                result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                            }
                             resultAry.push(result);
                         });
                         resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                        resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        if(granularity === 'hours') {
+                            resultAry = self._zeroMissingHours(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                        } else {
+                            resultAry = self._zeroMissingDays(resultAry, {value:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                        }
                         cb(null, nonBounceAvg, bounceAvg, prevNonBounceAvg, resultAry);
                     }
                 });
@@ -1054,7 +1158,8 @@ module.exports = {
                     server_time_dt:{
                         $gte:start,
                         $lte:end
-                    }
+                    },
+                    timeOnPage:{$gte:0, $lte:3600000}
                 }
             };
             stageAry.push(match);
@@ -1089,7 +1194,8 @@ module.exports = {
                     server_time_dt:{
                         $gte:start,
                         $lte:end
-                    }
+                    },
+                    timeOnPage:{$gte:0, $lte:3600000}
                 }
             };
             stageAry.push(match);
@@ -1188,6 +1294,38 @@ module.exports = {
         return zeroedResultAry;
     },
 
+    _zeroMissingHours: function(resultAry, blankResult, firstDate, lastDate) {
+        var currentDate = firstDate;
+        var zeroedResultAry = [];
+        _.each(resultAry, function(result){
+            while(moment(currentDate).isBefore(result.timeframe.start)) {
+
+                zeroedResultAry.push({
+                    timeframe:{
+                        start : currentDate,
+                        end : moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm')
+                    }
+                });
+                zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+                currentDate = moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+            }
+            zeroedResultAry.push(result);
+            currentDate = moment(result.timeframe.start).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        });
+        while(moment(currentDate).isBefore(moment(lastDate)) || moment(currentDate).isSame(moment(lastDate), 'hour')) {
+            zeroedResultAry.push({
+                timeframe:{
+                    start : currentDate,
+                    end : moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm')
+                }
+            });
+            zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+            currentDate = moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        }
+
+        return zeroedResultAry;
+    },
+
     getUserAgentReport: function(accountId, userId, start, end, isAggregate, fn) {
         var self = this;
         self.log = _log;
@@ -1232,6 +1370,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getDailyActiveUsers');
+        var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
@@ -1253,6 +1392,9 @@ module.exports = {
                 count: {$sum:1}
             }
         };
+        if(granularity === 'hours') {
+            group1.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
         stageAry.push(group1);
 
         var group2 = {
@@ -1276,15 +1418,429 @@ module.exports = {
                             start: entry._id
                         }
                     };
-                    result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                    if(granularity === 'hours') {
+                        result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                    } else {
+                        result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                    }
                     resultAry.push(result);
                 });
                 resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                if(granularity === 'hours') {
+                    resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                } else {
+                    resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                }
                 self.log.debug(accountId, userId, '<< getDailyActiveUsers');
                 return fn(null, resultAry);
             }
 
         });
+    },
+
+    getRevenueByMonth: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getRevenueByMonth');
+        var granularity = self._determineGranularity(start, end);
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                account_id:accountId,
+                status:{$nin:['failed', 'pending_payment']},
+                created_at:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.account_id;
+        }
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{ $dateToString: { format: "%Y-%m-%d", date: "$created_at" }},
+                count: {$sum:1},
+                totals: {$push:'$total'}
+            }
+        };
+        if(granularity === 'hours') {
+            group1.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+        }
+        stageAry.push(group1);
+
+        async.waterfall([
+            function(cb){
+                orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, value){
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var total = 0;
+                        _.each(entry.totals, function(_total){
+                            if(!isNaN(parseFloat(_total)) && isFinite(_total)) {
+                                total+= parseFloat(_total);
+                            }
+                        });
+                        var result = {
+                            total: total,
+                            count: entry.count,
+                            timeframe: {
+                                start: entry._id
+                            }
+                        };
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        }
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
+                    cb(err, resultAry);
+                });
+            },
+            function(currentMonth, cb) {
+                stageAry[0].$match.created_at.$gte = previousStart;
+                stageAry[0].$match.created_at.$lte = previousEnd;
+                orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, value){
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var total = 0;
+                        _.each(entry.totals, function(_total){
+                            if(!isNaN(parseFloat(_total)) && isFinite(_total)) {
+                                total+= parseFloat(_total);
+                            }
+                        });
+                        var result = {
+                            total: total,
+                            count: entry.count,
+                            timeframe: {
+                                start: entry._id
+                            }
+                        };
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id).add(1, 'days').format('YYYY-MM-DD');
+                        }
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0, count:0}, moment(previousStart).format('YYYY-MM-DD HH:mm'), moment(previousEnd).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0, count:0}, moment(previousStart).format('YYYY-MM-DD'), moment(previousEnd).format('YYYY-MM-DD'));
+                    }
+                    var results = {
+                        currentMonth:currentMonth,
+                        prevMonth:resultAry
+                    };
+                    cb(err, results);
+                });
+            }
+        ], function(err, results){
+            if(err) {
+                self.log.error(accountId, userId, 'Error in getRevenueByMonth:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getRevenueByMonth');
+                fn(err, results);
+            }
+
+        });
+    },
+
+    getOSReport: function(accountId, userId, start, end, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getOSReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id:{
+                    osName:'$user_agent.os.name',
+                    osVersion:'$user_agent.os.version'
+                },
+                count: {$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            var sortedResults = _.sortBy(value, function(result){return result.count;});
+            self.log.debug(accountId, userId, '<< getOSReport');
+            fn(err, sortedResults);
+        });
+    },
+
+    getCampaignEmailsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getCampaignEmailsReport');
+        var granularity = self._determineGranularity(start, end);
+
+        var campaignsByDayStageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                batchId:{$ne:null},
+                sendDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        campaignsByDayStageAry.push(match);
+
+        var group = {
+            $group:{
+                _id:{
+                    campaignId:'$batchId',
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$sendDate" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        if(granularity === 'hours') {
+            group.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
+        campaignsByDayStageAry.push(group);
+        var group2 = {
+            $group:{
+                _id:{
+                    yearMonthDay:'$_id.yearMonthDay'
+                },
+                count:{$sum:1}
+            }
+        };
+        campaignsByDayStageAry.push(group2);
+
+        var emailsByDayStageAry = [];
+        var emailsMatch = {
+            $match:{
+                accountId:accountId,
+                sendDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete emailsMatch.$match.accountId;
+        }
+        emailsByDayStageAry.push(emailsMatch);
+        var emailsGroup = {
+            $group:{
+                _id:{
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$sendDate" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        if(granularity === 'hours') {
+            emailsGroup.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
+        emailsByDayStageAry.push(emailsGroup);
+
+        var opensByDayStageAry = [];
+        var opensMatch = {
+            $match:{
+                accountId:accountId,
+                openedDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete opensMatch.$match.accountId;
+        }
+        opensByDayStageAry.push(opensMatch);
+        var opensGroup = {
+            $group:{
+                _id:{
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$openedDate" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        if(granularity === 'hours') {
+            opensGroup.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
+        opensByDayStageAry.push(opensGroup);
+
+        var clicksByDayStageAry = [];
+        var clicksMatch = {
+            $match:{
+                accountId:accountId,
+                clickedDate:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete clicksMatch.$match.accountId;
+        }
+        clicksByDayStageAry.push(clicksMatch);
+        var clicksGroup = {
+            $group:{
+                _id:{
+                    yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$clickedDate" }}
+                },
+                count:{$sum:1}
+            }
+        };
+        if(granularity === 'hours') {
+            clicksGroup.$group._id.yearMonthDay.$dateToString.format = '%Y-%m-%d %H:00';
+        }
+        clicksByDayStageAry.push(clicksGroup);
+
+        async.parallel({
+            campaigns: function campaigns(cb){
+                dao.aggregateWithCustomStages(campaignsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
+                    cb(err, resultAry);
+                });
+            },
+            emails: function emails(cb) {
+                dao.aggregateWithCustomStages(emailsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
+                    cb(err, resultAry);
+                });
+            },
+            opens: function opens(cb){
+                dao.aggregateWithCustomStages(opensByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
+                    cb(err, resultAry);
+                });
+            },
+            clicks: function clicks(cb){
+                dao.aggregateWithCustomStages(clicksByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                    var resultAry = [];
+                    _.each(value, function (entry) {
+                        var result = {
+                            total: entry.count,
+                            timeframe: {
+                                start: entry._id.yearMonthDay
+                            }
+                        };
+                        if(granularity === 'hours') {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                        } else {
+                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                        }
+                        resultAry.push(result);
+                    });
+                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                    if(granularity === 'hours') {
+                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
+                    cb(err, resultAry);
+                });
+            }
+        }, function(err, results){
+            self.log.debug(accountId, userId, '<< getCampaignEmailsReport');
+            return fn(err, results);
+        });
+
+    },
+
+    /*
+     * If duration is 7 days or less, granularity will be 'hours'.  Else 'days'
+     */
+    _determineGranularity: function(startDate, endDate) {
+        if(moment(endDate).diff(moment(startDate), 'days') <=7) {
+            return 'hours';
+        } else {
+            return 'days';
+        }
     }
 };

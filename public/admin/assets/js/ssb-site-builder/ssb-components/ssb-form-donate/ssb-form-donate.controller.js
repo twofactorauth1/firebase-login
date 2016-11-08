@@ -924,8 +924,10 @@
         };
 
         function closeModalFn() {
-            vm.close();
-            vm.modalInstance.close();
+            vm.close();            
+            $timeout(function() {
+                vm.modalInstance.close();
+            }, 0);
         };
 
         function getCampaings(){

@@ -52,6 +52,10 @@
 
 
     AccountService.getUpdatedAccount(function (account) {
+      // Case when blogSocialSharing is not defined...
+      if(!angular.isDefined(account.showhide.blogSocialSharing)){
+        account.showhide.blogSocialSharing = true;
+      }
       $scope.account = account;
           $scope.originalAccount = angular.copy(account);
           if (!account.commerceSettings) {
@@ -171,6 +175,9 @@
                     SimpleSiteBuilderService.saveWebsite($scope.website).then(function(response){
                         $scope.saveLoading = false;
                         toaster.pop('success', " Website Settings saved.");
+                        if(!angular.equals($scope.account, $scope.originalAccount)){
+                            $rootScope.$broadcast('$refreshAccountSettings', $scope.account);
+                        }                        
                         if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
                             var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
                             $window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
@@ -369,7 +376,6 @@
         }
 
     }
-
 
   }]);
 }(angular));

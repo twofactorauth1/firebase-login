@@ -60,6 +60,9 @@ _.extend(baseView.prototype, {
             data.serverProps[$$.constants.server_props.USER_ID] = this.req.user.id();
             data.serverProps[$$.constants.server_props.IS_LOGGED_IN] = true;
             data.user = this.req.user.toJSON('public');
+            if(data.user.profilePhotos && data.user.profilePhotos[0] && data.user.profilePhotos[0].url) {
+                data.user.profilePhotos[0] = data.user.profilePhotos[0].url;
+            }
             //data.user = this.req.user.toJSON();
             data.isLoggedIn = true;
             data.photo = this.req.user.getDefaultPhoto();

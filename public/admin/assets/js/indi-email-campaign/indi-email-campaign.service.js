@@ -18,6 +18,7 @@
         campaignService.getCampaign = getCampaign;
         campaignService.createCampaign = createCampaign;
         campaignService.updateCampaign = updateCampaign;
+        campaignService.activateCampaign = activateCampaign;
         campaignService.sendTestEmail = sendTestEmail;
         campaignService.getCampaignContacts = getCampaignContacts;
         campaignService.cancelCampaignForContact = cancelCampaignForContact;
@@ -60,6 +61,17 @@
             }
 
             return campaignRequest($http.post([baseCampaignAPIv1, campaign._id].join('/'), campaign).success(success).error(error));
+        }
+
+        function activateCampaign(campaign) {
+
+            function success(data) {}
+
+            function error(error) {
+                console.error('EmailCampaignService updateCampaign error: ', JSON.stringify(error));
+            }
+
+            return campaignRequest($http.post([baseCampaignAPIv1, campaign._id, 'activate'].join('/'), campaign).success(success).error(error));
         }
 
         function deleteCampaign(campaign) {

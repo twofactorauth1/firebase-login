@@ -28,6 +28,8 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                     element.on('mouseleave', handleSectionOrComponentMouseLeave);
 
+                   // $(element).on('touchstart', handleTouchStart);
+
                     $(element).on('click', handleClick);
 
                     $(element).on('mouseover', '[data-edit]', handleComponentPartialAreaMouseOver);
@@ -37,6 +39,12 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     $(element).on('click', '[data-edit]', handleComponentPartialAreaClick);
 
                 })();
+
+                function handleTouchStart(e){
+                    
+                    handleClick(e);
+                }
+                
 
                 function handleMouseOver(e) {
 
@@ -200,6 +208,10 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                 }
 
+                function isTouchDevice(){
+                    return 'ontouchstart' in window;
+                }
+
                 function handleClick(e) {
 
                     //ignore if clicked on a control
@@ -212,6 +224,8 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                         return;
                     }
+                    if(isTouchDevice)
+                        handleMouseOver(e);
 
                     e.preventDefault();
 
@@ -371,6 +385,9 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                         return false;
 
                     }
+
+                    if(isTouchDevice)
+                        handleComponentPartialAreaMouseOver(e);
 
                     var hasComponentChildMouseOver = el.find('[data-edit]').length > 0;
 

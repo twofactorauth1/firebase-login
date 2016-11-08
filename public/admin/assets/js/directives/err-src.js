@@ -6,7 +6,8 @@ app.directive('errSrc', function () {
   return {
     scope: {
       errSrc: '@',
-      errContact: '='
+      errContact: '=',
+      isContact: '@'
     },
     link: function (scope, element, attrs) {
 
@@ -32,8 +33,9 @@ app.directive('errSrc', function () {
         } else {
           element.hide();
           var contentTr = angular.element('<div class="animated bounce two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
-          contentTr.insertAfter(element);
-          element.attr('src', scope.errSrc);
+          if(scope.isContact)
+            element.attr('src', scope.errSrc);
+          contentTr.insertAfter(element);          
         }
       });
 

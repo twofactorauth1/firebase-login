@@ -27,6 +27,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listOrders.bind(this));
+        app.get(this.url('nocustomers'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersWithoutCustomers.bind(this));
+        app.get(this.url('types'), this.isAuthAndSubscribedApi.bind(this), this.listOrderTypes.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrder.bind(this));
         app.get(this.url('customer/:customerid'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersByCustomer.bind(this));
         app.post(this.url(''), this.setup.bind(this), this.createOrder.bind(this));
@@ -196,6 +198,44 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    listOrdersWithoutCustomers: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listOrdersWithoutCustomers');
+
+
+        self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.listOrdersByAccountWithoutCustomers(accountId, function(err, orders){
+                    self.log.debug(accountId, userId, '<< listOrdersWithoutCustomers');
+                    self.sendResultOrError(resp, err, orders, 'Error listing orders');
+                });
+            }
+        });
+    },
+
+    listOrderTypes: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listOrderTypes');
+
+
+        self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.listOrderTypes(accountId, function(err, value){
+                    self.log.debug(accountId, userId, '<< listOrderTypes');
+                    self.sendResultOrError(resp, err, value, 'Error listing order types');
+                });
+            }
+        });
     },
 
     listOrdersByCustomer: function(req, res) {

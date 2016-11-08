@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", "$location", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie, $location) {
+    app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", "$location", "$timeout", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie, $location, $timeout) {
         $scope.tableView = 'list';
         $scope.itemPerPage = 100;
         $scope.showPages = 15;
@@ -16,7 +16,7 @@
         $scope.productTypeOptions = ProductConstant.product_types.dp;
 
         $scope.checkPaymentAccountExistsFn = function (cb) {
-            AccountService.getAccount(function (account) {
+            AccountService.getUpdatedAccount(function (account) {
                 var stripe = _.find(account.credentials, function (cred) {
                     return cred.type === 'stripe';
                 });
@@ -37,11 +37,26 @@
                     $scope.products = products;
                     $scope.showProducts = true;
                     $scope.noPaymentAccount = false;
+                    filterContactPhotos(products);
                 });
             } else {
                 $scope.noPaymentAccount = true;
             }
         });
+
+        function filterContactPhotos(products) {
+          _.each(products, function (product) {
+            if (product) {
+              product.hasImage = "false";
+              if (product.is_image && product.icon && !product.icon.indexOf("fa-") == 0) {
+                  product.hasImage = "true";
+              }
+            }
+          });
+        };
+
+
+        
 
         $scope.openProductModal = function (size) {
             $scope.modalInstance = $modal.open({
@@ -70,8 +85,10 @@
         $scope.addProduct = function () {
             $scope.saveLoading = true;
             ProductService.postProduct($scope.newProduct, function (product) {
+                product.hasImage = "false";
                 $scope.displayedProducts.unshift(product);
                 $scope.products.unshift(product);
+
                 $scope.modalInstance.close();
                 $scope.newProduct = {};
                 $scope.minRequirements = true;
@@ -219,6 +236,7 @@
             }
             ProductService.getProductsWithSort($scope.sortFields, function (products) {
                 $scope.products = products;
+                filterContactPhotos(products);
             });
         };
     }]);

@@ -90,6 +90,7 @@
         ssbService.deletedNavLinks = [];
         ssbService.setDeletedPageFromLinkList = setDeletedPageFromLinkList;
         ssbService.saveOtherPageLinks = saveOtherPageLinks;
+        ssbService.getAccount = getAccount;
 
         /**
          * This represents the category sorting for the add content panel
@@ -1577,7 +1578,7 @@
             var duplicateSection = angular.copy(section);
 
             duplicateSection._id = ssbService.getTempUUID();
-
+            duplicateSection.anchor = duplicateSection._id;
             if (duplicateSection.components.length) {
                 duplicateSection.components.forEach(function(component) {
                     component._id = ssbService.getTempUUID();
@@ -1926,6 +1927,15 @@
 
         function checkIfDiffrentLenthSection(section){
             return section && section.title === 'Donate Button';
+        }
+
+        function getAccount(){
+            AccountService.getAccount(function(data) {
+                ssbService.account = null;
+                $timeout(function() {
+                    ssbService.account = data;
+                },0);
+            })
         }
 
 

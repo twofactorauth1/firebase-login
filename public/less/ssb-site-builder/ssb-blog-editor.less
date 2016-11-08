@@ -117,6 +117,9 @@ ssb-blog-editor {
     .ssb-sidebar-section-panel-scrollable {
         min-height: calc(~"100vh - 250px");
         max-height: none;
+        @media screen and (max-width: 767px) {
+            max-height: calc(~"100vh - 250px");
+        }
     }
 }
 
@@ -140,7 +143,7 @@ ssb-blog-editor {
         }
 
         @media screen and (max-width: 767px) {
-            pointer-events: none;
+            
             background: transparent;
             z-index: 1;
 
@@ -371,12 +374,17 @@ ssb-blog-editor {
                 padding: 2em 0;
                 color: @var-ssb-edit-control-input-color;
             }
+
+            @media screen and (max-width: 767px) {
+                position: relative;
+            }
         }
 
         [datepicker-popup-wrap] .btn{
             width: auto;
         }
 
+        
     }
 
     .ssb-blog-editor-post-title {

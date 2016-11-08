@@ -10,7 +10,7 @@
             <div class="form-group">
                 <label for="component-title">
                     Custom Nav
-                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
                 </label>
                 <switch ng-model="component.customnav" class="pull-right" ng-change="saveComponent()"></switch>
             </div>
@@ -107,21 +107,21 @@
 
                               <div class="radio">
                                 <label>
-                                  <input type="radio" id="inlineRadioOptions1-{{$index}}" ng-model="link.linkTo.type" ng-click="linkType[$index] = 'page'" value="page" ng-checked="{{link.linkTo.type == 'page'}}">
+                                  <input type="radio" name="inlineRadioOptions1-{{$index}}" id="inlineRadioOptions1-{{$index}}" ng-model="link.linkTo.type" ng-change="linkType[$index] = 'page'" value="page" ng-checked="{{link.linkTo.type == 'page'}}">
                                   Page
                                 </label>
                               </div>
 
                               <div class="radio">
                                 <label>
-                                  <input type="radio" id="inlineRadioOptions2-{{$index}}" ng-click="linkType[$index] = 'section'" ng-model="link.linkTo.type" value="section" ng-checked="{{link.linkTo.type == 'section'}}">
+                                  <input type="radio" name="inlineRadioOptions1-{{$index}}" id="inlineRadioOptions2-{{$index}}" ng-change="linkType[$index] = 'section'" ng-model="link.linkTo.type" value="section" ng-checked="{{link.linkTo.type == 'section'}}">
                                   Component
                                 </label>
                               </div>
 
                               <div class="radio">
                                 <label>
-                                  <input type="radio" id="inlineRadioOptions3-{{$index}}" ng-click="linkType[$index] = 'external'" ng-model="link.linkTo.type" value="external" ng-checked="{{link.linkTo.type == 'external'}}">
+                                  <input type="radio" name="inlineRadioOptions1-{{$index}}" id="inlineRadioOptions3-{{$index}}" ng-change="linkType[$index] = 'external'" ng-model="link.linkTo.type" value="external" ng-checked="{{link.linkTo.type == 'external'}}">
                                   External
                                 </label>
                               </div>
@@ -187,21 +187,21 @@
 
                           <div class="radio">
                             <label>
-                              <input type="radio" id="inlineRadioOptions1-{{$index}}" ng-model="link.linkTo.type" ng-click="linkType[$index] = 'page'" value="page" ng-checked="{{link.linkTo.type == 'page'}}">
+                              <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions1-{{$index}}" ng-model="link.linkTo.type" ng-change="linkType[$index] = 'page'" value="page" ng-checked="{{link.linkTo.type == 'page'}}">
                               Page
                             </label>
                           </div>
 
                           <div class="radio">
                             <label>
-                              <input type="radio" id="inlineRadioOptions2-{{$index}}" ng-click="linkType[$index] = 'section'" ng-model="link.linkTo.type" value="section" ng-checked="{{link.linkTo.type == 'section'}}">
+                              <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions2-{{$index}}" ng-change="linkType[$index] = 'section'" ng-model="link.linkTo.type" value="section" ng-checked="{{link.linkTo.type == 'section'}}">
                               Section
                             </label>
                           </div>
 
                           <div class="radio">
                             <label>
-                              <input type="radio" id="inlineRadioOptions3-{{$index}}" ng-click="linkType[$index] = 'external'" ng-model="link.linkTo.type" value="external" ng-checked="{{link.linkTo.type == 'external'}}">
+                              <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadioOptions3-{{$index}}" ng-change="linkType[$index] = 'external'" ng-model="link.linkTo.type" value="external" ng-checked="{{link.linkTo.type == 'external'}}">
                               External
                             </label>
                           </div>

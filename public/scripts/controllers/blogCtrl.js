@@ -430,74 +430,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             });
         };
 
-        /*
-         * @activateCKEditor
-         * -
-         */
-
-       $scope.activateCKEditor = function() {            
-                $scope.isEditing = true;
-                for (name in CKEDITOR.instances) {                     
-                    {
-                       var b = CKEDITOR.instances[name];
-                       b.updateElement();
-                       var d = b.getData(1);
-                       if(d)
-                            b.setData(d);
-                       b.fire("contentDom");
-                    }                        
-                }
-                CKEDITOR.disableAutoInline = true;
-                var elements = angular.element('.editable');
-                elements.each(function(index) {
-                    if (!angular.element(this).parent().hasClass('edit-wrap')) {
-                        var dataClass = angular.element(this).data('class').replace('.item.', ' ');
-                        angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
-                    }
-                    if(!$(this).hasClass('cke_editable_inline'))
-                        CKEDITOR.inline(this, {
-                            on: {
-                                instanceReady: function(ev) {
-                                    var editor = ev.editor;
-                                    editor.setReadOnly(false);
-                                    if(index === 0)
-                                    {
-                                        $scope.activeEditor = editor;
-                                    }  
-                                    editor.on('change', function() {
-                                        $scope.isPageDirty = true;
-                                    });
-                                    editor.on('focus', function() {
-                                        $scope.activeEditor = editor;
-                                    });
-                                    editor.on('blur', function() {
-                                        $scope.activeEditor = null;
-                                    });
-                                    editor.focus();
-                                }
-                            },
-                            sharedSpaces: {
-                                top: 'editor-toolbar'
-                            }
-                    });
-                }); 
-                setTimeout(function () {
-                    $scope.$apply(function () {          
-                         $scope.parentScope.resizeIframe();
-                    });
-                }, 500)
-        };
-
-        /*
-         * @deactivateCKEditor
-         * -
-         */
-
-        $scope.deactivateCKEditor = function() {
-            for (name in CKEDITOR.instances) {
-                CKEDITOR.instances[name].destroy()
-            }
-        };
+        
 
         /*
          * @toTitleCase
@@ -526,33 +459,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 return $scope.isPageDirty;
         };
 
-        /*
-         * @addCKEditorImageInput
-         * -
-         */
-
-         //TODO: could not find where this function is being used
-        $scope.addCKEditorImage = function(url, inlineInput, edit) {
-            if(inlineInput)
-            {
-                if (edit)
-                    inlineInput.val(url);
-                else
-                    inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
-            }
-        };
-
-        /*
-         * @addCKEditorImage
-         * -
-         */
-
-        $scope.addCKEditorImage = function(url, inlineInput, edit) {
-            if(edit)
-                inlineInput.val(url);
-            else    
-                inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
-        };
+        
 
         /*
          * @clickImageButton
@@ -638,16 +545,6 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         }
 
         if($scope.parentScope)
-            angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
-                if (!$scope.activated && $scope.parentScope) {
-                  $scope.activated = true;
-                  setTimeout(function() {
-                    console.log("Activate Ckeditor")
-                    $scope.activateCKEditor();
-                  }, 1000)
-                }
-            });
-
          angular.element(document).ready(function() {
           $scope.$watch('blog.postTags', function(newValue, oldValue) {
                 if (newValue !== undefined && newValue.length) {

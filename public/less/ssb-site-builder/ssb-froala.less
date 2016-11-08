@@ -1,7 +1,11 @@
 @ssb-froala-topbar-min-width: 1280px;
 @ssb-froala-topbar-min-width-large: 1680px;
 
-
+indi-email-builder #ssb-froala-scrollable-container{
+  .fr-toolbar.fr-inline{
+    white-space: inherit;
+  }
+}
 indi-email-builder #ssb-froala-scrollable-container,
 ssb-topbar #ssb-froala-scrollable-container {
     @media (min-width: 768px) {
@@ -118,7 +122,7 @@ ssb-topbar #ssb-froala-scrollable-container {
     pointer-events: auto!important;
 
     @media (min-width: @ssb-froala-topbar-min-width) {
-        display: inline-block!important;
+        display: inline-block;
         z-index: 5;
 
         button {
@@ -947,7 +951,7 @@ body[ng-controller] .fr-line-breaker a.fr-floating-btn {
 }
 body[ng-controller] table td.fr-selected-cell,
 body[ng-controller] table th.fr-selected-cell {
-  border: 1px double #ddd;
+  
 }
 body[ng-controller] .fr-table-resizer div {
   border-right: 1px solid #ffffff;

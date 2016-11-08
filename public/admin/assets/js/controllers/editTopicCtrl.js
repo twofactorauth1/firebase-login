@@ -1,5 +1,5 @@
 'use strict';
-/*global app, moment, angular, window, CKEDITOR*/
+/*global app, moment, angular, window/
 /*jslint unparam:true*/
 (function (angular) {
   app.controller('EditTopicCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window) {
@@ -698,7 +698,7 @@
 
     
 
-    // CKEDITOR.disableAutoInline = true;
+    
 
     /*
      * @deleteComponent

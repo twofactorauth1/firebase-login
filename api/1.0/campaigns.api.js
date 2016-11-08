@@ -30,12 +30,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createCampaign.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateCampaign.bind(this));
         app.post(this.url(':id/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.duplicateCampaign.bind(this));
+        app.post(this.url(':id/activate'), this.isAuthAndSubscribedApi.bind(this), this.activateCampaign.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
         app.get(this.url(':id/statistics'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignStatistics.bind(this));
-        app.get(this.url(':id/statistics/reconcile'), this.isAuthAndSubscribedApi.bind(this), this.reconcileCampaignStatistics.bind(this));
+        app.get(this.url(':id/statistics/reconcile'), this.isAuthAndSubscribedApi.bind(this), this.reconcileCampaignStatistics.bind(this));//TODO
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
-        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));
-        app.delete(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelCampaign.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));//TODO
+        app.delete(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelCampaign.bind(this));//TODO
         app.get(this.url(':id/campaigns/:title'), this.isAuthAndSubscribedApi.bind(this), this.checkIfCampaignExists.bind(this));
         app.get(this.url('campaigns/exists/:title'), this.isAuthAndSubscribedApi.bind(this), this.checkIfCampaignExists.bind(this));
 
@@ -44,6 +45,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/running/contact/:contactid/steps/:stepNumber'), this.setup.bind(this), this.triggerCampaignStep.bind(this));
 
         app.get(this.url(':id/contacts'), this.isAuthAndSubscribedApi.bind(this), this.getContactsForCampaign.bind(this));
+
 
 
         /*
@@ -59,6 +61,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+
+
     createCampaign: function (req, resp) {
 
         var self = this;
@@ -71,13 +75,13 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                var campaignObj = new $$.m.Campaign(req.body);
+                var campaignObj = new $$.m.CampaignV2(req.body);
                 campaignObj.set('accountId', accountId);
 
                 var createdObj = {date: new Date(), by: req.user.id()};
                 campaignObj.set('created', createdObj);
                 campaignObj.set('modified', createdObj);
-                campaignManager.createCampaign(campaignObj, function(err, value){
+                campaignManager.createCampaign_v2(campaignObj, function(err, value){
                     if(err) {
                         self.log.error('Error creating campaign:', err);
                     }
@@ -102,6 +106,7 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
+                /*
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('_id', campaignId);
                 var modified = {
@@ -114,7 +119,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     created.date = moment(campaignObj.date).toDate();
                 }
                 campaignObj.set('modified', modified);
-                campaignManager.updateCampaign(campaignObj, function(err, value){
+                */
+                var campaignJSON = req.body;
+                campaignManager.updateCampaign(accountId, userId, campaignId, campaignJSON, function(err, value){
                     self.log.debug(accountId, userId, '<< updateCampaign');
                     self.sendResultOrError(resp, err, value, "Error updating campaign");
                     self.createUserActivity(req, 'UPDATE_CAMPAIGN', null, null, function(){});
@@ -516,7 +523,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> duplicateCampaign');
 
         var campaignId = req.params.id;
-        var campaignName = req.body['name'] + ' (copy)';
+        var campaignName = req.body['name'] + ' (copy) ' + moment().toDate().getTime();
 
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -525,6 +532,25 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.duplicateCampaign(accountId, campaignId, campaignName, userId, function(err, campaign){
                     self.log.debug(accountId, userId, '<< duplicateCampaign');
                     self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
+                });
+            }
+        });
+    },
+
+    activateCampaign: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        self.log.debug(accountId, userId, '>> activateCampaign [' + campaignId + ']');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.activateCampaign(accountId, userId, campaignId, function(err, campaign){
+                    self.log.debug(accountId, userId, '<< activateCampaign');
+                    self.sendResultOrError(resp, err, campaign, 'Error activating campaign');
                 });
             }
         });

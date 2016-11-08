@@ -164,6 +164,38 @@ module.exports = {
 
         });
 
+    },
+
+    addCustomerNotes: function(accountId, userId, customerId, note, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> addCustomerNotes');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(account) {
+                var date = moment();
+                var notes = account.get("notes") || [];
+                var _noteToPush = {
+                    note: note,
+                    user_id: userId,
+                    date: date.toISOString()
+                };
+                notes.push(_noteToPush);
+                account.set("notes", notes);
+                self.log.debug(notes);
+                
+                accountDao.saveOrUpdate(account, function(err, savedCustomer){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving customer notes:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< addCustomerNotes');
+                        return fn(null, savedCustomer);
+                    }
+                });
+            } else {
+                return fn('account not found', null);
+            }
+
+        });
     }
 
 

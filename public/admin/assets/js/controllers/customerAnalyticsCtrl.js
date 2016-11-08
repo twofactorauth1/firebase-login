@@ -25,6 +25,7 @@
             startDate: moment().subtract(29, 'days').format(),
             endDate: moment().format()
         };
+        $scope.Math = Math;
 
         var dateSwitch = false;
         $scope.$watch('selectedDate', function () {
@@ -254,6 +255,15 @@
 
 
         $scope.setNewReportData = function(results) {
+            /*
+             * set the granularity of labels in ChartService
+             */
+
+            if(moment($scope.date.endDate).diff(moment($scope.date.startDate), 'days') <=7) {
+                ChartAnalyticsService.setGraunularity('hours');
+            } else {
+                ChartAnalyticsService.setGraunularity('days');
+            }
             var desktop = 0;
             var mobile = 0;
             _.each(results.visitorDeviceReport.result, function(device){
@@ -331,6 +341,7 @@
             });
             $scope.sessions = _totalSessions;
             $scope.sessionsData = _sessionsData;
+
 
 
             ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, function (data) {
@@ -444,6 +455,7 @@
             var userAgentData = [];
             var browserMap = {};
             if(results.userAgents) {
+                var browserTotal = 0;
                 _.each(results.userAgents, function(obj){
                     var browser = obj._id.browserName;
                     var count = obj.count;
@@ -452,19 +464,165 @@
                     } else {
                         browserMap[browser] = count;
                     }
+                    browserTotal+= count;                    
                 });
+                $scope.browserTotal = browserTotal;
                 console.log('browserMap:', browserMap);
                 userAgentData = userAgentData.concat(_.pairs(browserMap));
                 userAgentData = _.sortBy(userAgentData, function(pair){return pair[1]});
                 console.log('userAgentData', userAgentData);
                 $scope.userAgentData = userAgentData;
+                var uadLength = userAgentData.length -1;
+                $scope.topBrowser = userAgentData[uadLength][0];
+                var browserPercent = Math.round((userAgentData[uadLength][1] / browserTotal) * 100);
+                $scope.browserPercent = browserPercent;
 
                 ChartAnalyticsService.userAgentChart(userAgentData, function(config){
                     $scope.userAgentConfig = config;
                     $scope.userAgentConfig.loading = false;
                 });
+
+                $scope.userAgentTableData = userAgentData.reverse();
+                console.log('userAgentTableData:', $scope.userAgentTableData);
             }
 
+            // ======================================
+            // OS Pie Chart
+            // ======================================
+            var osData = [];
+            var osMap = {};
+            if(results.osReport) {
+                var osTotal = 0;
+                _.each(results.osReport, function(obj){
+                    var os = obj._id.osName;
+                    if(os === 'undefined' || os === undefined) {
+                        os = 'Unknown';
+                    }
+                    var count = obj.count;
+                    if(osMap[os]) {
+                        osMap[os] += count;
+                    } else {
+                        osMap[os] = count;
+                    }
+                    osTotal += count;
+                });
+                osData = osData.concat(_.pairs(osMap));
+                osData = _.sortBy(osData, function(pair){return pair[1];});
+                $scope.osData = osData;
+                var osLength = osData.length - 1;
+                $scope.topOS = osData[osLength][0];
+                var osPercent = Math.floor((osData[osLength][1] / osTotal) * 100);
+                $scope.osPercent = osPercent;
+
+                ChartAnalyticsService.osChart(osData, function(config){
+                    $scope.osConfig = config;
+                    $scope.osConfig.loading = false;
+                });
+            }
+            // ======================================
+            // Revenue
+            // ======================================
+            var revenueChartData = {
+                xData: [],
+                amountData: [],
+                orderData: []
+            };
+            var currentTotalRevenue = 0;
+            var currentTotalCount = 0;
+            _.each(results.revenueReport.currentMonth, function(rev){
+                revenueChartData.xData.push(new Date(rev.timeframe.start).getTime());
+                var amt = rev.total || 0;
+                var cnt = rev.count || 0;
+                revenueChartData.amountData.push(amt);
+                revenueChartData.orderData.push(cnt);
+                currentTotalRevenue+= amt;
+                currentTotalCount+= cnt;
+            });
+
+            $scope.revenueData = revenueChartData;
+            $scope.revenue = parseFloat(currentTotalRevenue).toFixed(2);
+            $scope.orderCount = currentTotalCount;
+
+            var revenuePreviousData = 0;
+            var ordersPreviousData = 0;
+            _.each(results.revenueReport.prevMonth, function (rev) {
+                var value = rev.total || 0;
+                revenuePreviousData += value;
+                var cnt = rev.count || 0;
+                ordersPreviousData += cnt;
+            });
+
+            $scope.revenuePreviousData = revenuePreviousData;
+
+            var revenuePercent = ChartAnalyticsService.calculatePercentChange(revenuePreviousData, currentTotalRevenue);
+            $scope.revenuePercent = revenuePercent;
+
+            var ordersPercent = ChartAnalyticsService.calculatePercentChange(ordersPreviousData, currentTotalCount);
+            $scope.ordersPercent = ordersPercent;
+
+            ChartAnalyticsService.revenueOverview($scope.revenueData, function (data) {
+                $scope.revenueConfig = data;
+                $scope.revenueConfig.loading = false;
+            });
+
+            // ======================================
+            // Emails
+            // ======================================
+
+            var emailsData = [];
+            var totalEmails = 0;
+            _.each(results.emailsReport.emails, function(email){
+                var subArr = [];
+                var value = email.total || 0;
+                subArr.push(new Date(email.timeframe.start).getTime());
+                subArr.push(value);
+                totalEmails += value;
+                emailsData.push(subArr);
+            });
+
+            var campaignsData = [];
+            _.each(results.emailsReport.campaigns, function(campaign){
+                var subArr = [];
+                var value = campaign.total || 0;
+                subArr.push(new Date(campaign.timeframe.start).getTime());
+                subArr.push(value);
+
+                campaignsData.push(subArr);
+            });
+
+            var opensData = [];
+            var totalOpens = 0;
+            _.each(results.emailsReport.opens, function(open){
+                var subArr = [];
+                var value = open.total || 0;
+                subArr.push(new Date(open.timeframe.start).getTime());
+                subArr.push(value);
+                totalOpens += value;
+                opensData.push(subArr);
+            });
+
+            var clicksData = [];
+            var totalClicks = 0;
+            _.each(results.emailsReport.clicks, function(click){
+                var subArr = [];
+                var value = click.total || 0;
+                subArr.push(new Date(click.timeframe.start).getTime());
+                subArr.push(value);
+                totalClicks += value;
+                clicksData.push(subArr);
+            });
+
+            ChartAnalyticsService.emailsOverview(emailsData, campaignsData, opensData, clicksData, function(data){
+                $scope.emailsOverviewConfig = data;
+                $scope.emailsOverviewConfig.loading = false;
+                $scope.totalEmails = totalEmails;
+                $scope.totalOpens = totalOpens;
+                $scope.totalClicks = totalClicks;
+            });
+
+            //=======================================
+            // Cleanup
+            //=======================================
 
             $scope.locationData = locationData;
 

@@ -23,7 +23,7 @@ var view = function(req,resp,options) {
 _.extend(view.prototype, BaseView.prototype, {
 
     show: function(root) {
-        logger.trace('>> show');
+        logger.debug('>> show [' + _req.originalUrl + ']');
         var data = {
             router:"account/admin",
             root:root || "admin",
@@ -66,25 +66,27 @@ _.extend(view.prototype, BaseView.prototype, {
             data.user.user_preferences.welcome_alert = data.user.user_preferences.welcome_alert || {};
             data.environment = urlUtils.getEnvironmentFromRequest(_req);
             if(!data.user.intercomHash) {
-                logger.trace('calculating hash');
+                logger.debug('calculating hash');
                 data.user.intercomHash = CryptoJS.HmacSHA256(data.user.email, intercomConfig.INTERCOM_SECRET_KEY).toString(CryptoJS.enc.Hex);
                 logger.trace('hash:', data.user.intercomHash);
                 //TODO: save this to the user for next time.
             }
-            logger.trace('<< show');
+
 
             var statusArray = [$$.m.BlogPost.status.PRIVATE,$$.m.BlogPost.status.DRAFT,$$.m.BlogPost.status.FUTURE,$$.m.BlogPost.status.PUBLISHED];
+            logger.debug('listing blog posts');
 
+            
             cmsManager.listBlogPosts(data.account._id, 50, statusArray, function (err, value) {
-
+                logger.debug('done listing blog posts');
                 if (err) {
                     console.error('<< angular.admin.server.view: listBlogPosts error ', err);
                 } else {
                     data.serverProps.posts = JSON.stringify(_.map(value, function(val){ return val.toJSON(); }));
                 }
-
+                logger.debug('listing pages');
                 cmsManager.getPagesByWebsiteId(data.account.website.websiteId, data.account._id, function(err, value) {
-
+                    logger.debug('done listing pages');
                     if (err) {
                         console.error('<< angular.admin.server.view: getPagesByWebsiteId error ', err);
                     } else {
@@ -92,13 +94,15 @@ _.extend(view.prototype, BaseView.prototype, {
                     }
 
                     //console.dir(data);
+                    logger.debug('Starting render');
                     self.resp.render('admin', data);
+                    logger.debug('<< show [' + _req.originalUrl + ']');
                     //logger.debug('_cleanUp');
                     self.cleanUp();
                     //logger.debug('cleanUp_');
                     data = self = null;
 
-                })
+                });
 
             });
 

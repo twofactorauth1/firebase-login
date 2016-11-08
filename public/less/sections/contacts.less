@@ -17,7 +17,19 @@
         margin-bottom: 0;
     }
     .column-width {
-        width: 10%;
+        width: 8.3%;
+        
+    }
+    
+    @media (max-width: 767px) {
+        .column-width {
+            width: 19%;
+            display: table-cell;
+            .ui-select-container.ui-select-bootstrap.dropdown, input{
+                min-width: 70px;
+            }
+        }
+        
     }
     @media (min-width: 992px) {
         .tag-width {

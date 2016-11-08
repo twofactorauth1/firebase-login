@@ -4,13 +4,13 @@
             Show section on all pages?
             <span
                 tooltip-placement="top"
-                tooltip-html-unsafe="Make this a global section."
+                tooltip="Make this a global section."
                 tooltip-append-to-body="true">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
         <div ng-if="vm.uiState.isDuplicateGlobalHeader" tooltip-placement="top"
-                tooltip-html-unsafe="There is already a header section set to ​'Show on all pages'. You can only have one global header at a time."
+                tooltip="There is already a header section set to ​'Show on all pages'. You can only have one global header at a time."
                 tooltip-append-to-body="true" style="display:inline;" class="pull-right">
            <div class="disabled">
                 <switch ng-model="component.global" ng-change="vm.uiState.toggleSection(component, true)"></switch>
@@ -23,7 +23,7 @@
             Show section on this page?
             <span
                 tooltip-placement="top"
-                tooltip-html-unsafe="Show/hide section on this page."
+                tooltip="Show/hide section on this page."
                 tooltip-append-to-body="true">
                 <i class="fa fa-info-circle" />
             </span>
@@ -35,11 +35,18 @@
             Keep section in viewable area?
             <span
                 tooltip-placement="bottom"
-                tooltip-html-unsafe="On browsers and platforms that support it, toggling this setting 'on' makes this section stay visible at the top of the page even if the page is scrolled. This setting is only active in preview or published pages."
+                tooltip="On browsers and platforms that support it, toggling this setting 'on' makes this section stay visible at the top of the page even if the page is scrolled. This setting is only active in preview or published pages."
                 tooltip-append-to-body="true">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
         <switch ng-model="component.layoutModifiers.fixed" class="pull-right"></switch>
+    </div>
+    <div class="form-group">
+        <label for="component-title">
+            Anchor
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="The anchor of the section."><i class="fa fa-info-circle" /></span>
+        </label>
+        <input class="form-control" type="text" ng-model="component.anchor">
     </div>   
 </div>

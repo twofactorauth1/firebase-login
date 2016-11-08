@@ -66,6 +66,9 @@
             if (oldval === 0 && newval === 0) {
                 return 0;
             }
+            if (oldval === 0) {
+                return "(n/a)";
+            }
             //percent change is new-old/old
             var result = ((newval - oldval) / oldval) * 100;
             return Math.round(result * 100) / 100;
@@ -351,6 +354,13 @@
         var timeframePreviousEnd = moment().subtract(30, 'days').format(); //TODO: 30d ago
         var interval = "daily";
 
+        this.setGraunularity = function(granularity) {
+            this.granularity = 'days';
+            if(granularity==='hours') {
+                this.granularity = 'hours';
+            }
+        };
+
         //reports
 
         this.queryReports = function (date, _hostname, _hostnameAry) {
@@ -361,6 +371,14 @@
 
         this.runMongoReports = function(date, account, fn) {
             SiteAnalyticsService.runReports(date.startDate, date.endDate, function(data){
+                //console.log('I got this:', data);
+                fn(data);
+            });
+        };
+
+
+        this.runCustomerReports = function(date, accountId, fn) {
+            SiteAnalyticsService.runCustomerReports(date.startDate, date.endDate, accountId, function(data){
                 //console.log('I got this:', data);
                 fn(data);
             });
@@ -573,7 +591,90 @@
             if(dailyActiveUsersData) {
                 analyticsOverviewConfig.series.push({name: 'Daily Active Users', data:dailyActiveUsersData});
             }
+            if(this.granularity === 'hours') {
+                analyticsOverviewConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                analyticsOverviewConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
             fn(analyticsOverviewConfig);
+        };
+
+        this.emailsOverview = function (emailsData, campaignsData, opensData, clicksData, fn) {
+            var emailsOverviewConfig = {
+                options: {
+                    chart: {
+                        spacing: [25, 25, 25, 25]
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: null
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            marker: {
+                                enabled: true,
+                                radius: 3
+                            }
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        format: "{value:%b %d}"
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    // max: Math.max.apply(Math, lineData) + 100,
+                    title: {
+                        text: ''
+                    }
+                },
+                series: [
+                    {
+                        name: 'Emails',
+                        data: emailsData
+                    },
+                    {
+                        name: 'Opens',
+                        data: opensData
+                    },
+                    {
+                        name: 'Clicks',
+                        data: clicksData
+                    },
+                    {
+                        name: 'Campaigns',
+                        data: campaignsData
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+                /*
+                 func: function (chart) {
+
+                 }
+                 */
+            };
+            if(this.granularity === 'hours') {
+                emailsOverviewConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                emailsOverviewConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
+            fn(emailsOverviewConfig);
         };
 
         this.timeOnSite = function (timeOnSiteData, bouncesData, fn) {
@@ -636,6 +737,10 @@
                     enabled: false
                 }
             };
+            if(this.granularity === 'hours') {
+                timeonSiteConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                timeonSiteConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
             fn(timeonSiteConfig);
         };
 
@@ -852,16 +957,161 @@
             fn(userAgentChartConfig);
         };
 
-/*
+        this.osChart = function (osData, fn) {
+            var osChartConfig = {
+                options: {
+                    chart: {
+                        height: 300
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                            style: {
+                                color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                            }
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'OS',
+                        data: osData
+                    }
+                ],
+                yAxis: {
+                    title: {
+                        text: 'Visitors'
+                    }
+                },
+                credits: {
+                    enabled: false
+                }
+            };
+
+            fn(osChartConfig);
+        };
+
+        this.revenueOverview = function (ordersData, fn) {
+            var revenueConfig = {
+                options: {
+                    chart: {
+                        spacing: [25, 25, 25, 25]
+                    },
+                    colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
+                    title: {
+                        text: null
+                    },
+                    subtitle: {
+                        text: ''
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.x:%b %d}</b><br>',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
+                    },
+                    legend: {
+                        enabled: true
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    plotOptions: {
+                        series: {
+                            marker: {
+                                enabled: true,
+                                radius: 3
+                            }
+                        }
+                    }
+                },
+                xAxis: {
+                    type: 'datetime',
+                    labels: {
+                        format: "{value:%b %d}"
+                    },
+                    categories: ordersData.xData
+                },
+                yAxis: [{
+                        labels: {
+                            format: '{value}'
+
+                        },
+                        title: {
+                            text: 'Number Orders'
+                        },
+                        opposite: true
+                    },
+                    {
+                        title: {
+                            text: 'Revenue'
+                        },
+                        labels: {
+                            format: '${value} USD'
+                        }
+                    }],
+                series: [
+                    {
+                        name: 'Orders',
+                        type: 'bar',
+                        yAxis: 0,
+                        data: ordersData.orderData,
+                        tooltip: {
+                            valueSuffix: ' orders'
+                        }
+
+                    },
+                    {
+                        name: 'Revenue',
+                        type: 'spline',
+                        yAxis: 1,
+                        data: ordersData.amountData,
+                        tooltip: {
+                            valueSuffix: ' USD',
+                            valuePrefix: '$'
+                        }
+                    }
+                ],
+                credits: {
+                    enabled: false
+                }
+                /*
+                 func: function (chart) {
+
+                 }
+                 */
+            };
+            if(this.granularity === 'hours') {
+                revenueConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
+                revenueConfig.options.tooltip.headerFormat = '<b>{point.x:%b %d %H:%M}</b><br>';
+            }
+            fn(revenueConfig);
+        };
+
+
         (function init() {
 
             Highcharts.setOptions({
-                global: {
-                    useUTC: false
+                lang: {
+                    thousandsSep: ','
                 }
             });
 
         })();
-*/
+
     }]);
 }(angular));

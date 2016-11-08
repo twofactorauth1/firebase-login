@@ -1,5 +1,5 @@
 'use strict';
-/*global app, moment, angular, window, CKEDITOR*/
+/*global app, moment, angular, window*/
 /*jslint unparam:true*/
 angular.module('mainApp').directive("elem", function ($timeout) {
   return {

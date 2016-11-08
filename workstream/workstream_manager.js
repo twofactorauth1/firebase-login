@@ -62,7 +62,8 @@ module.exports = {
                 } else {
                     cb(null, workstreams);
                 }
-            },
+            }
+            /*
             function getCompletedBlocks(workstreams, cb){
                 self._getCompletedBlocks(accountId, function(err, completedBlocks){
                     if(err) {
@@ -112,6 +113,7 @@ module.exports = {
 
 
             }
+            */
         ], function done(err, workstreams){
             if(err) {
                 self.log.error('Error listing workstreams:', err);
@@ -461,7 +463,8 @@ module.exports = {
         var startOfYear= moment().startOf('year').toDate();
         var query = {
             account_id:accountId,
-            created_at: {$gte: startOfYear}
+            created_at: {$gte: startOfYear},
+            status: {$ne: 'failed'}
         };
         var groupCriteria = {
             _id:{month: {$month:'$created_at'}}
@@ -487,8 +490,20 @@ module.exports = {
 
             _.each(results, function(result){
                 total+= result.count;
-                totalAmount += parseFloat(result.amount);
-                totalTax += parseFloat(result.tax);
+
+                if(isNaN(parseFloat(result.amount))) {
+                    self.log.warn('Order amount for account[' + accountId +']  with id ['+result._id + '] is ', result.amount);
+                } else {
+                    totalAmount += parseFloat(result.amount);
+                }
+                if(isNaN(parseFloat(result.tax))) {
+                    self.log.warn('Order tax for account[' + accountId +']  with id ['+result._id + '] is ', result.tax);
+                } else {
+                    totalTax += parseFloat(result.tax);
+                }
+
+
+
 
                 delete result._id;
                 delete result.count;

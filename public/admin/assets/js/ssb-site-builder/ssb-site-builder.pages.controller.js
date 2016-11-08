@@ -1,5 +1,5 @@
 'use strict';
-/*global app, moment, angular, window, CKEDITOR*/
+/*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
   app.controller('SSBPagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "pageConstant", "$timeout", "SimpleSiteBuilderService", function ($scope, $location, toaster, $filter, $modal, WebsiteService, pageConstant, $timeout, SimpleSiteBuilderService) {

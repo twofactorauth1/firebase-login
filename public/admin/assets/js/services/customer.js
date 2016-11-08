@@ -54,7 +54,7 @@
             var data = this.getCache().get(id);
             var cache = this.getCache();
             if(data) {
-                fn(data);
+                fn(null, data);
             } else {
                 $http({
                     url: apiUrl,
@@ -126,6 +126,19 @@
             var apiUrl = [awsUrl, 'route53', domain, 'account', accountId].join('/');
             $http.put(apiUrl).success(function(data){
                 fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        }
+
+        this.addCustomerNotes = function(id, notes, fn){
+            var apiUrl = [baseUrl, 'customer', id, 'notes'].join('/');
+            var body = {notes:notes};
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache)
+                    cache.put(id, data);
+                fn(data);
             }).error(function(err){
                 fn(err);
             });
