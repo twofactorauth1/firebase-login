@@ -615,6 +615,7 @@ app.constant('JS_REQUIRES', {
     'emailBuilderService': 'assets/js/indi-email-builder/indi-email-builder.service.js',
     'indiLoginModalService': 'assets/js/indi-login-modal/indi-login-modal.service.js',
     'siteAnalyticsService': 'assets/js/site-analytics/site-analytics.service.js',
+    'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

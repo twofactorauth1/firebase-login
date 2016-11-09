@@ -73,7 +73,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/site-analytics.html",
         title: 'Site Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService')
+        resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'chartAnalyticsService', 'ipCookie', 'analyticsWidgetStateService')
     }).state('app.website.pages', {
         url: '/pages',
         templateUrl: "/admin/assets/views/pages.html",
@@ -103,7 +103,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/customer-analytics.html",
         title: 'Customer Analytics',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker')
+        resolve: loadSequence('customerAnalyticsCtrl', 'customerService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService')
     }).state('app.singleContact', {
         url: '/contacts/:contactId',
         templateUrl: "/admin/assets/views/contact-detail.html",
@@ -115,7 +115,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/customer-detail.html",
         title: 'Single Customer',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customerDetailCtrl', 'singleCustomerAnalyticsCtrl', 'ngMap', 'customerService', 'toasterService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker')
+        resolve: loadSequence('customerDetailCtrl', 'singleCustomerAnalyticsCtrl', 'ngMap', 'customerService', 'toasterService', 'userService', 'chartAnalyticsService','highcharts', 'highmaps', 'highmaps-lib', 'secTotime', 'dateRangePicker', 'ipCookie', 'analyticsWidgetStateService')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',

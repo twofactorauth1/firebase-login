@@ -1,0 +1,45 @@
+<div ng-class="component.type+'-v'+component.version">
+    <div class="col-md-12"><br>
+        <div class="title center">
+            <div elem ng-model="component.title"></div>
+        </div>
+        <div class="mb0" style="background: none" >
+            <div ng-if="showSlider" id="myCarousel-{{component._id}}" active="1" class="carousel slide">
+                <ol class="carousel-indicators hidden" ng-hide="slider[0][0].detail">
+                    <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in slider"></li>
+                </ol>
+                <div class="carousel-inner" ng-class="{'hide-scroll': !isEditing}">
+                    <div class="item {{$first?'active':''}}" data-ng-repeat="collection in slider">
+                        <div class="row">
+                            <div class="col-xs-3 hideText col-xs-width"  data-ng-repeat="image in collection track by $index">
+                                <div class="image-wrap {{isEditing ? 'editing' : ''}}">
+                                    <div class="imgHeight single-image">
+                                    <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 20px;background: none;">
+                                        <img ng-src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" ng-click="addImageFromMedia(component._id, $index, true, $parent.$index)" style="max-height: 100px; margin:{{image.margin}}; " />
+                                    </a>
+                                    </div>
+                                    <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromThumbnail($index, $parent.$parent.$index)">
+                                        <button class="btn-delete-single-image"><i class='fa fa-trash' tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this slide."></i></button>
+                                    </div>
+                                    <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another slide." ng-click="addImageFromMedia(component._id, $index, false, $parent.$parent.$index)">
+                                        <a href="">
+                                            <i class="fa fa-plus"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class-name="thumbnail-image-text" elem ng-model="image.details"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="!slider.length">
+                        <a href="" ng-if="isEditing" ng-click="addImageFromMedia(component._id, 0, false)" class="btn ssb-theme-btn btn-default">
+                                            <i class="fa fa-plus" ></i>
+                                    </a>
+                    </div>
+                </div>
+                <div ng-show="displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left no-edit" href="#myCarousel-{{component._id}}" style="background: none;" data-slide="prev"></div>
+                <div ng-show="displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right no-edit" href="#myCarousel-{{component._id}}" data-slide="next"></div>
+            </div>
+        </div>
+    </div>
+</div>

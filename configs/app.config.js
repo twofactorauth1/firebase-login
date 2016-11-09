@@ -172,6 +172,24 @@ module.exports = {
         return _serverUrl;
     },
 
+    getServerRequestUrl: function (subdomain, domain, protocol) {
+        if (subdomain == null && domain == null) {
+            return wwwUrl;
+        }
+        
+        var _serverUrl = protocol + "://";
+        if (!String.isNullOrEmpty(domain)) {
+            _serverUrl += domain;
+        } else {
+            _serverUrl += subdomain + "." + process.env.ROOT_HOST;
+        }
+
+        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
+            _serverUrl += ":" + process.env.PORT;
+        }
+        return _serverUrl;
+    },
+
     getServerDomain: function(subdomain, customDomain) {
         if(!subdomain && !customDomain) {
             return wwwUrl;

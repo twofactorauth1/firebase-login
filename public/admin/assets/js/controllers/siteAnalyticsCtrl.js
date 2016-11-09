@@ -2,8 +2,8 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, SiteAnalyticsService) {
-
+    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "AnalyticsWidgetStateService", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, SiteAnalyticsService, AnalyticsWidgetStateService) {
+        
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
         $scope.trafficSourcesConfig = {};
@@ -742,7 +742,82 @@
             $timeout(function() {
                 angular.element('.deshboard-date-picker').click();
             }, 0);
-        }
+        };
 
+        $scope.$watch('overview', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("overview", value);
+            }
+        });
+
+        $scope.$watch('locations', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("locations", value);
+            }
+        });
+
+        $scope.$watch('interactions', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("interactions", value);
+            }
+        });
+
+        $scope.$watch('device', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("device", value);
+            }
+        });
+
+        $scope.$watch('newVReturning', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("newVReturning", value);
+            }
+        });
+
+        $scope.$watch('trafficSources', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("trafficSources", value);
+            }
+        });
+
+        $scope.$watch('pageanalytics', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("pageanalytics", value);
+            }
+        });
+
+        $scope.$watch('ua', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("ua", value);
+            }
+        });
+
+        $scope.$watch('userAgents', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("userAgents", value);
+            }
+        });
+
+        $scope.$watch('rev', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){
+                AnalyticsWidgetStateService.setAnalyticsWidgetStates("rev", value);
+            }
+        });
+
+        $scope.setAnalyticsWidgetStates = function(){
+            AnalyticsWidgetStateService.getAnalyticsWidgetStates();
+            $timeout(function() {
+                $scope.overview = AnalyticsWidgetStateService.analyticsWidgetStateConfig.overview;
+                $scope.locations = AnalyticsWidgetStateService.analyticsWidgetStateConfig.locations;
+                $scope.interactions = AnalyticsWidgetStateService.analyticsWidgetStateConfig.interactions;
+                $scope.device = AnalyticsWidgetStateService.analyticsWidgetStateConfig.device;
+                $scope.newVReturning = AnalyticsWidgetStateService.analyticsWidgetStateConfig.newVReturning;
+                $scope.trafficSources = AnalyticsWidgetStateService.analyticsWidgetStateConfig.trafficSources;
+                $scope.pageanalytics = AnalyticsWidgetStateService.analyticsWidgetStateConfig.pageanalytics;
+                $scope.ua = AnalyticsWidgetStateService.analyticsWidgetStateConfig.ua;
+                $scope.userAgents = AnalyticsWidgetStateService.analyticsWidgetStateConfig.userAgents;
+                $scope.rev = AnalyticsWidgetStateService.analyticsWidgetStateConfig.rev;
+            }, 0);
+        }
     }]);
 }(angular));
