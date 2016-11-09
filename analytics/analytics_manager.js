@@ -375,6 +375,50 @@ module.exports = {
         });
     },
 
+    getVisitorLocationsByCountryReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getVisitorLocationsReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:startDate,
+                    $lte:endDate
+                },
+                fingerprint:{$ne:null}
+
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id: '$maxmind.country',
+                result: {$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            _.each(value, function(result){
+                if(result._id !== null) {
+                    result['ip_geo_info.country'] = result._id;
+                } else {
+                    result['ip_geo_info.country'] = 'Unknown';
+                }
+
+            });
+            self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
+            fn(err, value);
+        });
+    },
+
     getVisitorDeviceReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
 
         var self = this;

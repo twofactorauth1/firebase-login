@@ -46,6 +46,7 @@
                 };
 
                 $scope.locationData = null;
+                $scope.countryLocationData = null;
                 $scope.pagedformattedTopPages = null;
 
                 $scope.runAnalyticsReports($scope.analyticsAccount);
@@ -421,6 +422,7 @@
             // ======================================
 
             var locationData = [];
+            var countryLocationData = [];
             if (results.visitorLocationsReport) {
                 var _formattedLocations = [];
                 _.each(results.visitorLocationsReport, function (loc) {
@@ -445,8 +447,31 @@
                         }
                     }
                 });
-
-
+            }
+            if(results.visitorLocationsByCountryReport) {
+                var _formattedCountryLocations = [];
+                _.each(results.visitorLocationsByCountryReport, function(loc){
+                    if(loc['ip_geo_info.country']) {
+                        _formattedCountryLocations.push(loc);
+                    }
+                });
+                $scope.mostPopularCountry = _.max(_formattedCountryLocations, function(o){
+                    return o.result;
+                });
+                _.each(results.visitorLocationsByCountryReport, function(location){
+                    var _geo_info = ChartAnalyticsService.countryToAbbr(location['ip_geo_info.country']);
+                    if(_geo_info) {
+                        var subObj = {};
+                        subObj.code = _geo_info;
+                        subObj.value = location.result;
+                        var locationExists = _.find(countryLocationData, function (loc) {
+                            return loc.code === location.code;
+                        });
+                        if (!locationExists && subObj.value) {
+                            countryLocationData.push(subObj);
+                        }
+                    }
+                });
             }
 
             // ======================================
@@ -625,7 +650,7 @@
             //=======================================
 
             $scope.locationData = locationData;
-
+            $scope.countryLocationData = countryLocationData;
 
             $scope.displayVisitors = $scope.visitors > 0;
 
@@ -790,7 +815,8 @@
             if ($("#visitor_locations").length) {
                 $timeout(function () {
                     var location_data = angular.copy($scope.locationData);
-                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all']);
+                    var countryLocationData = angular.copy($scope.countryLocationData);
+                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
                 }, 200);
                 if (!$scope.displayVisitors) {
                     console.log('no visitors');

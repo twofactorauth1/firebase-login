@@ -94,6 +94,22 @@
             return Math.round(result * 100) / 100;
         };
 
+        this.countryToAbbr = function(strInput) {
+            var arrCountries = [
+                {
+                    "name":"United States",
+                    "abbreviation": "United States of America"
+                }
+            ];
+            _.each(arrCountries, function(translatable){
+                if(translatable.name.toLowerCase() === strInput.toLowerCase()) {
+                    strInput = translatable.abbreviation;
+                }
+            });
+            return strInput;
+
+        };
+
         this.stateToAbbr = function (strInput) {
             var strOutput;
             if (strInput) {
@@ -843,8 +859,41 @@
             fn(newVsReturningConfig);
         };
 
-        this.visitorLocations = function (locationData, highchartsData) {
-            console.log('>> visitorLocations');
+        this.visitorLocations = function (locationData, highchartsData, countryData, countryMap) {
+            console.log('>> visitorLocations', highchartsData);
+            console.log('countryData:', countryData);
+            console.log('countryMap:', countryMap);
+
+            var worldSeries = {
+                data: countryData,
+                mapData: Highcharts.maps['custom/world'],
+                joinBy: ['name', 'code'],
+                animation: true,
+                name: '# of Visitors',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                tooltip: {
+                    pointFormat: '{point.code}: {point.value}'
+                }
+            };
+            var usSeries = {
+                animation: {
+                    duration: 1000
+                },
+                data: locationData,
+                mapData: highchartsData,
+                joinBy: ['postal-code', 'code'],
+                dataLabels: {
+                    enabled: false
+                },
+                name: '# of Visitors',
+                tooltip: {
+                    pointFormat: '{point.code}: {point.value}'
+                }
+            };
             if ($("#visitor_locations").length) {
                 console.log('"#visitor_locations');
                 var chart1 = new Highcharts.Map({
@@ -884,22 +933,28 @@
                     },
 
                     series: [
-                        {
-                            animation: {
-                                duration: 1000
+                        usSeries
+                    ],
+                    xAxis:{
+                        events:{
+                            setExtremes:function(event) {
+                                console.log('setExtremes:', event);
+                                console.log('this:', this);
+                                if(this.chart.series[0].mapTitle === 'United States of America') {
+                                    if(event.min === event.dataMin && event.max === event.dataMax) {
+                                        this.chart.series[0].update(worldSeries);
+                                    }
+                                } else {
+                                    if(event.min) {
+                                        this.chart.series[0].update(usSeries);
+                                    }
+                                }
                             },
-                            data: locationData,
-                            mapData: highchartsData,
-                            joinBy: ['postal-code', 'code'],
-                            dataLabels: {
-                                enabled: false
-                            },
-                            name: '# of Visitors',
-                            tooltip: {
-                                pointFormat: '{point.code}: {point.value}'
+                            afterSetExtremes: function(event) {
+
                             }
                         }
-                    ],
+                    },
                     credits: {
                         enabled: false
                     }
