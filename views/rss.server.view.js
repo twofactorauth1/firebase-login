@@ -54,8 +54,8 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function buildTheFeed(account, blogPage, posts, cb) {
                 var image_url = null;
-                console.log('originalURL:', self.req.secure);
-                var url = appConfig.getServerRequestUrl(account.get("subdomain"), account.get("customDomain"), window.location.protocol) + self.req.originalUrl;
+                //console.log('originalURL:', self.req.originalUrl);
+                var url = appConfig.getServerRequestUrl(account.get("subdomain"), account.get("customDomain"), self.req.protocol) + self.req.originalUrl;
                 //console.log('Url', url);
                 var blogUrl = url.replace('/feed/rss', '');
                 if(account.get('business')) {
