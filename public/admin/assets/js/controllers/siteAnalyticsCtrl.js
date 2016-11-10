@@ -253,9 +253,7 @@
             ChartAnalyticsService.timeOnSite($scope.avgSessionData, $scope.bouncesData, function (data) {
                 $scope.timeonSiteConfig = data;
                 $scope.timeonSiteConfig.loading = false;
-                $timeout(function() {
-                    $(window).resize();
-                }, 0);
+                
             });
 
 
@@ -348,9 +346,7 @@
                     $scope.analyticsOverviewConfig = data;
                 //});
                 $scope.analyticsOverviewConfig.loading = false;
-                $timeout(function() {
-                    $(window).resize();
-                }, 0);
+                
             });
 
             var sessionsPreviousData = 0;
@@ -423,9 +419,7 @@
             ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
                 $scope.newVsReturningConfig = data;
                 $scope.newVsReturningConfig.loading = false;
-                $timeout(function() {
-                    $(window).resize();
-                }, 0);
+                
             });
 
 
@@ -548,9 +542,7 @@
             ChartAnalyticsService.revenueOverview($scope.revenueData, function (data) {
                 $scope.revenueConfig = data;
                 $scope.revenueConfig.loading = false;
-                $timeout(function() {
-                    $(window).resize();
-                }, 0);
+                
             });
 
             //=======================================
@@ -641,9 +633,7 @@
                     $scope.analyticsOverviewConfig = data;
                 });
                 $scope.analyticsOverviewConfig.loading = false;
-                $timeout(function() {
-                    $(window).resize();
-                }, 0);
+                
             });
 
             var sessionsPreviousData = 0;
@@ -702,9 +692,7 @@
             ChartAnalyticsService.newVsReturning($scope.newVsReturning, function (data) {
                 $scope.newVsReturningConfig = data;
                 $scope.newVsReturningConfig.loading = false;
-                $timeout(function() {
-                    $(window).resize();
-                }, 0);
+                
             });
 
             // ======================================
