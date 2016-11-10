@@ -692,7 +692,7 @@ app.constant('JS_REQUIRES', {
   }
   ,{
     name: 'highmaps-lib',
-    files: ['../js/libs_misc/highmaps/us-all.js']
+    files: ['../js/libs_misc/highmaps/us-all.js', '../js/libs_misc/highmaps/world.js']
   },{
     name: 'truncate',
     files: ['../js/libs/angular-truncate/src/truncate.js']
