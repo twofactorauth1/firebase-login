@@ -172,11 +172,12 @@ module.exports = {
         return _serverUrl;
     },
 
-    getServerRequestUrl: function (subdomain, domain, secure) {
+    getServerRequestUrl: function (subdomain, domain, protocol) {
         if (subdomain == null && domain == null) {
             return wwwUrl;
-        }        
-        var _serverUrl = secure ? "https://" : "http://";
+        }
+        
+        var _serverUrl = protocol + "://";
         if (!String.isNullOrEmpty(domain)) {
             _serverUrl += domain;
         } else {
