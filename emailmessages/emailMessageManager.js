@@ -141,7 +141,7 @@ var emailMessageManager = {
             } else {
                 var request = sg.emptyRequest();
                 request.method = 'POST';
-                request.path = '/v3/mail/batch';
+                request.path = '/v3/user/scheduled_sends';
                 request.body = {
                     batch_id: batchId,
                     status: 'cancel'
@@ -152,7 +152,8 @@ var emailMessageManager = {
                         self.log.error('Sendgrid says:', response.body);
                         fn(null, null);
                     } else {
-                        //self.log.debug('Sendgrid says:', response.body);
+                        self.log.debug('Sendgrid says:', response);
+                        self.log.debug('Response.body:', response.body);
                         self.log.debug(accountId, userId, '<< cancelSendgridBatch');
                         return fn(null, response);
                     }
