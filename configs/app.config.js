@@ -177,7 +177,7 @@ module.exports = {
             return wwwUrl;
         }
         
-        var _serverUrl = protocol + "://";
+        var _serverUrl = protocol + "//";
         if (!String.isNullOrEmpty(domain)) {
             _serverUrl += domain;
         } else {
