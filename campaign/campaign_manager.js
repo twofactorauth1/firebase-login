@@ -1293,7 +1293,7 @@ module.exports = {
                         };
                         campaign.set('modified', modified);
                         if(campaign.get('sendgridBatchId')) {
-                            emailMessageManager.cancelSendgridBatch(accountId, userId, campaign.get('sendgridBatchId'), function(err, value){
+                            emailMessageManager.cancelSendgridBatch(accountId, userId, campaign.get('sendgridBatchId'), campaignId, function(err, value){
                                 if(err) {
                                     self.log.error('Error cancelling Sendgrid Batch:', err);
                                     return fn(err);

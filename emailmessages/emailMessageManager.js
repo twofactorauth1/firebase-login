@@ -131,27 +131,35 @@ var emailMessageManager = {
 
     },
 
-    cancelSendgridBatch: function(accountId, userId, batchId, fn) {
+    cancelSendgridBatch: function(accountId, userId, batchId, campaignId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> cancelSendgridBatch');
-        var request = sg.emptyRequest();
-        request.method = 'POST';
-        request.path = '/v3/mail/batch';
-        request.body = {
-            batch_id: batchId,
-            status: 'cancel'
-        };
-        sg.API(request, function (err, response) {
+        scheduledJobsManager.cancelCampaignJob(campaignId, function(err, value){
             if(err) {
-                self.log.warn('Error cancelling batchId:', err);
-                self.log.error('Sendgrid says:', response.body);
-                fn(null, null);
+                self.log.error('Error cancelling job:', err);
+                return fn(err);
             } else {
-                //self.log.debug('Sendgrid says:', response.body);
-                self.log.debug(accountId, userId, '<< cancelSendgridBatch');
-                return fn(null, response);
+                var request = sg.emptyRequest();
+                request.method = 'POST';
+                request.path = '/v3/mail/batch';
+                request.body = {
+                    batch_id: batchId,
+                    status: 'cancel'
+                };
+                sg.API(request, function (err, response) {
+                    if(err) {
+                        self.log.warn('Error cancelling batchId:', err);
+                        self.log.error('Sendgrid says:', response.body);
+                        fn(null, null);
+                    } else {
+                        //self.log.debug('Sendgrid says:', response.body);
+                        self.log.debug(accountId, userId, '<< cancelSendgridBatch');
+                        return fn(null, response);
+                    }
+                });
             }
         });
+
 
     },
 
@@ -379,6 +387,7 @@ var emailMessageManager = {
                         }
                         var scheduledJob = new $$.m.ScheduledJob({
                             accountId: accountId,
+                            campaignId: campaignId,
                             scheduledAt: moment.unix(send_at).toDate(),
                             runAt: null,
                             job:code
@@ -399,6 +408,7 @@ var emailMessageManager = {
 
                         var scheduledJob = new $$.m.ScheduledJob({
                             accountId: accountId,
+                            campaignId: campaignId,
                             scheduledAt: moment.unix(send_at).toDate(),
                             runAt: null,
                             job:code
@@ -613,6 +623,7 @@ var emailMessageManager = {
 
                                     var scheduledJob = new $$.m.ScheduledJob({
                                         accountId: accountId,
+                                        campaignId: campaignId,
                                         scheduledAt: moment.unix(send_at).toDate(),
                                         runAt: null,
                                         job:code
