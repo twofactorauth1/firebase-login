@@ -280,7 +280,7 @@
                                     <tab heading="by Contact" disable='vm.uiState.disableEditing'>
                                         <label class="text-muted">Select individuals from your contact list</label>
                                         <div class="well well-sm">
-                                            <ui-select class="contact-list" multiple ng-model="vm.uiState.selectedContacts.individuals" on-select="vm.contactSelectedFn($select)" on-remove="vm.contactRemovedFn($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
+                                            <ui-select class="contact-list" multiple ng-model="vm.uiState.selectedContacts.individuals" on-select="vm.contactSelectedFn($select)" on-remove="vm.contactRemovedFn($select, $item)" theme="bootstrap" ng-disabled="vm.uiState.disableEditing" close-on-select="false" style="min-width:100%" search-enabled="true">
                                                 <ui-select-match placeholder="Select Contacts..."><span tooltip-placement="top" tooltip="{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})" class="panel-title text-white" ng-text-truncate="($item.first || '') + ' ' + ($item.last || '') + ' (' + $item.details[0].emails[0].email + ')'" ng-tt-chars-threshold="30" ng-tt-no-toggling></span></ui-select-match>
                                                 <ui-select-choices repeat="contact._id as contact in vm.state.contacts | filter:$select.search">
                                                     <span class="pull-left">
@@ -304,7 +304,8 @@
                                                 add-on-paste="true"
                                                 placeholder="Add an email"
                                                 add-on-comma="true"
-                                                on-tag-adding="vm.checkContactExistsFn($tag)">
+                                                on-tag-adding="vm.checkContactExistsFn($tag)"
+                                                ng-disabled="vm.uiState.disableEditing">
                                             </tags-input>
                                         </div>
                                     </tab>
