@@ -1266,7 +1266,7 @@ module.exports = {
      * @param accountId
      * @param fn
      */
-    cancelRunningCampaign: function(campaignId, accountId, fn) {
+    cancelRunningCampaign: function(campaignId, accountId, userId, fn) {
         var self = this;
         self.log.debug('>> cancelRunningCampaign');
         var query = {
@@ -1289,13 +1289,30 @@ module.exports = {
                         campaign.set('status', $$.m.Campaign.status.CANCELLED);
                         var modified = {
                             date: new Date(),
-                            by: 'Admin'
+                            by: userId
                         };
                         campaign.set('modified', modified);
-
-                        self.log.debug('<< mark campaign cancelled');
-
-                        return campaignDao.saveOrUpdate(campaign, fn);
+                        if(campaign.get('sendgridBatchId')) {
+                            emailMessageManager.cancelSendgridBatch(accountId, userId, campaign.get('sendgridBatchId'), function(err, value){
+                                if(err) {
+                                    self.log.error('Error cancelling Sendgrid Batch:', err);
+                                    return fn(err);
+                                } else {
+                                    campaignDao.saveOrUpdate(campaign, function(err, savedCampaign){
+                                        if(err) {
+                                            self.log.error('Error cancelling campaign:', err);
+                                            return fn(err);
+                                        } else {
+                                            self.log.debug('<< cancelRunningCampaign');
+                                            return fn(null, savedCampaign);
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            self.log.debug('<< cancelRunningCampaign');
+                            return campaignDao.saveOrUpdate(campaign, fn);
+                        }
                     }
                 });
 

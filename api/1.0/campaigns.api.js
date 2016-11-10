@@ -216,12 +216,12 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> cancelRunningCampaign');
         var campaignId = req.params.id;
         var accountId = parseInt(self.accountId(req));
-
+        var userId = self.userId(req);
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                campaignManager.cancelRunningCampaign(campaignId, accountId, function(err, value){
+                campaignManager.cancelRunningCampaign(campaignId, accountId, userId, function(err, value){
                     self.log.debug('<< cancelRunningCampaign');
                     self.sendResultOrError(resp, err, value, "Error cancelling campaign");
                     self.createUserActivity(req, 'CANCEL_CAMPAIGN', null, null, function(){});

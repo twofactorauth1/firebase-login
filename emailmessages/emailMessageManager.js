@@ -11,6 +11,7 @@ var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
 var contactDao = require('../dao/contact.dao');
 var accountDao = require('../dao/account.dao');
+var campaignDao = require('../campaign/dao/campaign.dao');
 var userDao = require('../dao/user.dao');
 var async = require('async');
 var juice = require('juice');
@@ -130,11 +131,36 @@ var emailMessageManager = {
 
     },
 
+    cancelSendgridBatch: function(accountId, userId, batchId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> cancelSendgridBatch');
+        var request = sg.emptyRequest();
+        request.method = 'POST';
+        request.path = '/v3/mail/batch';
+        request.body = {
+            batch_id: batchId,
+            status: 'cancel'
+        };
+        sg.API(request, function (err, response) {
+            if(err) {
+                self.log.warn('Error cancelling batchId:', err);
+                self.log.error('Sendgrid says:', response.body);
+                fn(null, null);
+            } else {
+                //self.log.debug('Sendgrid says:', response.body);
+                self.log.debug(accountId, userId, '<< cancelSendgridBatch');
+                return fn(null, response);
+            }
+        });
+
+    },
+
     sendBatchedCampaignEmail: function(fromAddress, fromName, contactAry, subject, htmlContent, account, campaignId,
                                        vars, emailSettings, emailId, userId, fn) {
         var self = this;
         var accountId = account.id();
         self.log.debug(accountId, null, '>> sendBatchedCampaignEmail');
+        var sendgridBatchID = null;
         async.waterfall([
             function(cb) {
                 var request = sg.emptyRequest();
@@ -147,6 +173,7 @@ var emailMessageManager = {
                         cb(null, null);
                     } else {
                         self.log.debug('BatchID: ', response.body.batch_id);
+                        sendgridBatchID = response.body.batch_id;
                         cb(null, response.body.batch_id);
                     }
                 });
@@ -432,6 +459,18 @@ var emailMessageManager = {
                         });
                     }
 
+                }
+            },
+            function(response, cb) {
+                if(sendgridBatchID) {
+                    campaignDao.patch({_id:campaignId}, {sendgridBatchId:sendgridBatchID}, $$.m.CampaignV2, function(err, value){
+                       if(err) {
+                           self.log.error(accountId, userId, 'Error storing batchId:', err);
+                       }
+                       cb(null, response);
+                    });
+                } else {
+                    cb(null, response);
                 }
             }
         ], function(err, response){
