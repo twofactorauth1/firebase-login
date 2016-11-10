@@ -938,20 +938,30 @@
                     xAxis:{
                         events:{
                             setExtremes:function(event) {
-                                console.log('setExtremes:', event);
-                                console.log('this:', this);
+                                //console.log('setExtremes:', event);
+                                //console.log('this:', this);
                                 if(this.chart.series[0].mapTitle === 'United States of America') {
-                                    if(event.min === event.dataMin && event.max === event.dataMax) {
+                                    if(event.min === event.dataMin && event.max === event.dataMax && event.trigger !== 'zoom') {
+                                        console.log('Switching to World');
                                         this.chart.series[0].update(worldSeries);
+                                        this.switchedSeries = true;
                                     }
                                 } else {
                                     if(event.min) {
+                                        //console.log('Switching to US');
                                         this.chart.series[0].update(usSeries);
+                                        this.switchedSeries = true;
+                                        //var chart = $('#visitor_locations').highcharts();
+                                        //chart.zoom();
                                     }
                                 }
                             },
                             afterSetExtremes: function(event) {
-
+                                if(this.switchedSeries === true) {
+                                    this.switchedSeries = false;
+                                    var chart = $('#visitor_locations').highcharts();
+                                    chart.zoom();
+                                }
                             }
                         }
                     },
