@@ -81,13 +81,13 @@
                         <div class="row">
                             <div class="col-xs-6 text-center border-right border-dark">
                                 <div class="rate">
-                                    <span class="value">{{locationData.length || '--'}}</span>
+                                    <span class="value">{{locationsLength || '--'}}</span>
                                 </div>
-                                States
+                                {{locationLabel}}
                             </div>
                             <div class="col-xs-6 text-center">
                                 <div class="rate">
-                                    <span class="value analytic-state-name">{{mostPopularState['ip_geo_info.province'] || '--'}}</span>
+                                    <span class="value analytic-state-name">{{mostPopularLabel || '--'}}</span>
                                 </div>
                                 Most Popular
                             </div>

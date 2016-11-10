@@ -433,6 +433,7 @@
                 $scope.mostPopularState = _.max(_formattedLocations, function (o) {
                     return o.result;
                 });
+
                 _.each(results.visitorLocationsReport, function (location) {
                     var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
                     if (_geo_info) {
@@ -651,11 +652,28 @@
 
             $scope.locationData = locationData;
             $scope.countryLocationData = countryLocationData;
+            $scope.locationLabel = 'States';
+            $scope.locationsLength = locationData.length;
+            $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
 
             $scope.displayVisitors = $scope.visitors > 0;
 
             $scope.renderAnalyticsCharts();
 
+        };
+
+        $scope.switchLocationLabels = function(locationScope) {
+            $scope.$apply(function(){
+                if(locationScope === 'US') {
+                    $scope.locationLabel = 'States';
+                    $scope.locationsLength = $scope.locationData.length;
+                    $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+                } else {
+                    $scope.locationLabel = 'Countries';
+                    $scope.locationsLength = $scope.countryLocationData.length;
+                    $scope.mostPopularLabel = $scope.mostPopularCountry['ip_geo_info.country'];
+                }
+            });
         };
 
         $scope.setReportData = function (results) {
@@ -816,7 +834,7 @@
                 $timeout(function () {
                     var location_data = angular.copy($scope.locationData);
                     var countryLocationData = angular.copy($scope.countryLocationData);
-                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
+                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world'], $scope.switchLocationLabels);
                 }, 200);
                 if (!$scope.displayVisitors) {
                     console.log('no visitors');
@@ -835,7 +853,7 @@
             $timeout(function() {
                 angular.element('.deshboard-date-picker').click();
             }, 0);
-        }
+        };
 
         $scope.$watch('overview', function (value, oldValue) {
             if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue)){

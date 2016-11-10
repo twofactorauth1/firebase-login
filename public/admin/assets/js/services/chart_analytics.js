@@ -859,7 +859,7 @@
             fn(newVsReturningConfig);
         };
 
-        this.visitorLocations = function (locationData, highchartsData, countryData, countryMap) {
+        this.visitorLocations = function (locationData, highchartsData, countryData, countryMap, labelSwitchFN) {
             console.log('>> visitorLocations', highchartsData);
             console.log('countryData:', countryData);
             console.log('countryMap:', countryMap);
@@ -942,14 +942,15 @@
                                 //console.log('this:', this);
                                 if(this.chart.series[0].mapTitle === 'United States of America') {
                                     if(event.min === event.dataMin && event.max === event.dataMax && event.trigger !== 'zoom') {
-                                        console.log('Switching to World');
                                         this.chart.series[0].update(worldSeries);
+                                        labelSwitchFN('world');
                                         this.switchedSeries = true;
                                     }
                                 } else {
                                     if(event.min) {
                                         //console.log('Switching to US');
                                         this.chart.series[0].update(usSeries);
+                                        labelSwitchFN('US');
                                         this.switchedSeries = true;
                                         //var chart = $('#visitor_locations').highcharts();
                                         //chart.zoom();
