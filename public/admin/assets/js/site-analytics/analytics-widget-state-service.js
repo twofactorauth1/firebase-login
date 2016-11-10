@@ -19,7 +19,7 @@
             "trafficSources": false,
             "pageanalytics": false,
             "ua": false,
-            "userAgents": false,
+            "userAgentsTable": false,
             "rev": false,
             "os": false,
             "campaigns": false
