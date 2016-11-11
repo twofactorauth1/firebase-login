@@ -55,6 +55,10 @@ _.extend(view.prototype, BaseView.prototype, {
             function buildTheFeed(account, blogPage, posts, cb) {
                 var image_url = null;
                 //console.log('originalURL:', self.req.originalUrl);
+                var protocol = self.req.protocol;
+                var secure = self.req.secure;
+                var xScheme = self.req.get('X-Scheme');
+                self.log.debug('protocol:' + protocol + ', secure:' + secure + ', xScheme:' + xScheme);
                 var url = appConfig.getServerRequestUrl(account.get("subdomain"), account.get("customDomain"), self.req.protocol) + self.req.originalUrl;
                 //console.log('Url', url);
                 var blogUrl = url.replace('/feed/rss', '');
