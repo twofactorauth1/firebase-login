@@ -5,6 +5,7 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+      scope.interval = "6000";
       var w = angular.element($window);
       var check_if_mobile = mobilecheck();
       var winWidth = w.width();
