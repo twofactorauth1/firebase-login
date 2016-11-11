@@ -12,9 +12,9 @@
         undo: true,
         refreshAfterCallback: true,
         callback: function () {
-            var buttonHTML = '<div style="display: inline;">' +
-                                '<a class="btn btn-primary ssb-theme-btn"><span>Button Text</span></a>' +
-                             '</div>';
+            var buttonHTML = '<a class="btn btn-primary ssb-theme-btn">' +
+                                'Button Text' +
+                             '</a>';
 
             this.selection.restore();
             this.html.insert(buttonHTML);
@@ -56,16 +56,10 @@
     }), a.FroalaEditor.RegisterCommand('deleteButton', {
         title: 'Delete',
         callback: function () {
-            if(this.link && this.link.get("a"))
+            if(this.link && this.link.get("a"));
                 this.link.get("a").remove();
-
-            if($(this.selection.element()).hasClass("ssb-theme-btn"))
-            {   
-                this.selection.element().remove();
-            }
             this.link.remove();
 
         }
     });
 });
-                            
