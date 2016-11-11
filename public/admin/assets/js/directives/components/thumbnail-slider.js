@@ -12,6 +12,7 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', '$rootScope', 
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
+      scope.interval = "false";
       scope.imagesPerPage = 4;
       scope.slider = [];
       var w = angular.element($window);
