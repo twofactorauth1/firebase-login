@@ -461,7 +461,7 @@
                 });
                 _.each(results.visitorLocationsByCountryReport, function(location){
                     var _geo_info = ChartAnalyticsService.countryToAbbr(location['ip_geo_info.country']);
-                    if(_geo_info) {
+                    if(_geo_info && _geo_info!='Unknown') {
                         var subObj = {};
                         subObj.code = _geo_info;
                         subObj.value = location.result;
@@ -490,7 +490,7 @@
                     } else {
                         browserMap[browser] = count;
                     }
-                    browserTotal+= count;                    
+                    browserTotal+= count;
                 });
                 $scope.browserTotal = browserTotal;
                 console.log('browserMap:', browserMap);
@@ -963,11 +963,11 @@
                 $scope.userAgentsTable = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.userAgentsTable;
                 $scope.rev = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.rev;
                 $scope.os = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.os;
-                $scope.campaigns = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.campaigns;    
+                $scope.campaigns = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.campaigns;
                 $scope.dataLoaded = true;
                 reflowCharts();
             }, 0);
-            
+
         }
 
     }]);
