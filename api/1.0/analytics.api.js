@@ -1190,6 +1190,9 @@ _.extend(api.prototype, baseApi.prototype, {
             visitorLocationsReport: function(callback) {
                 analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, callback);
             },
+            visitorLocationsByCountryReport: function(callback) {
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, callback);
+            },
             visitorDeviceReport: function(callback) {
                 analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, callback);
             },
