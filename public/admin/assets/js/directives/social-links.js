@@ -32,10 +32,8 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
       scope.closeModal = function () {
         $timeout(function () {
           console.log('scope.modalInstance ', scope.modalInstance);
-          console.log('modal element', angular.element('.modal'));
           scope.modalInstance.close();
-          scope.modalInstance.dismiss('cancel');
-          //angular.element('.modal-backdrop').remove();
+          //scope.modalInstance.dismiss('cancel');
         });
       };
 
@@ -263,13 +261,15 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
           }
           break;
         case "delete":
-          selectedName = _.findWhere(scope.component.teamMembers[parent_index].networks, {
-            name: old_value.name
-          });
-          if (selectedName) {
-            var index = scope.component.teamMembers[parent_index].networks.indexOf(selectedName)
-            scope.component.teamMembers[parent_index].networks.splice(index, 1);
-          }
+          $timeout(function () {
+            selectedName = _.findWhere(scope.component.teamMembers[parent_index].networks, {
+              name: old_value.name
+            });
+            if (selectedName) {
+              var index = scope.component.teamMembers[parent_index].networks.indexOf(selectedName);
+              scope.component.teamMembers[parent_index].networks.splice(index, 1);
+            }
+          }, 500);
           break;
       }
     };
