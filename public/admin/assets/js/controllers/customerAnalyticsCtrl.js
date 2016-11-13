@@ -655,7 +655,6 @@
             $scope.locationLabel = 'States';
             $scope.locationsLength = locationData.length;
             $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
-
             $scope.displayVisitors = $scope.visitors > 0;
 
             $scope.renderAnalyticsCharts();
