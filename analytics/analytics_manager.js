@@ -349,8 +349,8 @@ module.exports = {
                     $gte:startDate,
                     $lte:endDate
                 },
-                fingerprint:{$ne:null}
-
+                fingerprint:{$ne:null},
+                "maxmind.country":"United States"
             }
         };
         if(isAggregate === true) {
@@ -378,7 +378,7 @@ module.exports = {
     getVisitorLocationsByCountryReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
         var self = this;
         self.log = _log;
-        self.log.debug(accountId, userId, '>> getVisitorLocationsReport');
+        self.log.debug(accountId, userId, '>> getVisitorLocationsByCountryReport');
 
         var stageAry = [];
         var match = {
@@ -388,8 +388,7 @@ module.exports = {
                     $gte:startDate,
                     $lte:endDate
                 },
-                fingerprint:{$ne:null}
-
+                fingerprint:{$ne:0}
             }
         };
         if(isAggregate === true) {
@@ -414,7 +413,7 @@ module.exports = {
                 }
 
             });
-            self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
+            self.log.debug(accountId, userId, '<< getVisitorLocationsByCountryReport');
             fn(err, value);
         });
     },
