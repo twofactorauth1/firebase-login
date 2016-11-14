@@ -15,7 +15,8 @@
                                 <div class="image-wrap {{isEditing ? 'editing' : ''}}">
                                     <div class="imgHeight single-image">
                                     <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 20px;background: none;">
-                                        <img ng-src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" ng-click="addImageFromMedia(component._id, $index, true, $parent.$index)" style="max-height: 100px; margin:{{image.margin}}; " />
+                                        <img ng-if="!image.img" ng-src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" ng-click="addImageFromMedia(component._id, $index, true, $parent.$index)" style="max-height: 100px; margin:{{image.margin}}; " />
+                                        <div ng-if="image.img" elem ng-model="image.img"></div>
                                     </a>
                                     </div>
                                     <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromThumbnail($index, $parent.$parent.$index)">
@@ -27,8 +28,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <h4 ng-show="slider[0][0].detail" style="color: {{component.imagetextcolor}};text-align: center" >{{image.text}}</h4>
-                                <p ng-show="image.detail">{{image.detail}}</p>
+                                <div class-name="thumbnail-image-text" elem ng-model="image.details"></div>
                             </div>
                         </div>
                     </div>

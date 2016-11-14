@@ -30,7 +30,7 @@
                     <h4 class="panel-title text-primary">Visitor <span class="text-bold">Overview</span></h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div collapse="overview" ng-init="overview=false" class="panel-wrapper">
+                <div collapse="overview" ng-init="setAnalyticsWidgetStates()" class="panel-wrapper">
                     <div class="panel-body">
                         <div class="height-370">
                             <highchart config="analyticsOverviewConfig" id="analytics-overview-chart"></highchart>
@@ -73,7 +73,7 @@
                     <h4 class="panel-title text-primary">Visitor <span class="text-bold">Locations</span></h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div collapse="locations" ng-init="locations=false" class="panel-wrapper">
+                <div collapse="locations" class="panel-wrapper">
                     <div class="panel-body height-380">
                         <div id="visitor_locations" ng-if="locationData"></div>
                         <div class="clearfix"></div>
@@ -82,13 +82,13 @@
                         <div class="row">
                             <div class="col-xs-6 text-center border-right border-dark">
                                 <div class="rate">
-                                    <span class="value">{{locationData.length || '--'}}</span>
+                                    <span class="value">{{locationsLength || '--'}}</span>
                                 </div>
-                                States
+                                {{locationLabel}}
                             </div>
                             <div class="col-xs-6 text-center">
                                 <div class="rate">
-                                    <span class="value analytic-state-name">{{mostPopularState['ip_geo_info.province'] || '--'}}</span>
+                                    <span class="value analytic-state-name">{{mostPopularLabel || '--'}}</span>
                                 </div>
                                 Most Popular
                             </div>
@@ -103,7 +103,7 @@
                     <h4 class="panel-title text-primary">Content <span class="text-bold">Interactions</span></h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div class="panel-wrapper" collapse="interactions" ng-init="interactions=false">
+                <div class="panel-wrapper" collapse="interactions">
                     <div class="panel-body">
                         <div class="height-350">
                             <highchart config="timeonSiteConfig" id="timeonSiteConfig"></highchart>
@@ -136,7 +136,7 @@
                     <h4 class="panel-title text-primary">Device</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div collapse="device" ng-init="device=false" class="panel-wrapper">
+                <div collapse="device" class="panel-wrapper">
                     <div class="panel-body  height-350">
                         <div class="clearfix mb30"></div>
                         <div class="col-xs-12">
@@ -163,7 +163,7 @@
                     <h4 class="panel-title text-primary">New vs. Returning</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div collapse="newVReturning" ng-init="newVReturning=false" class="panel-wrapper">
+                <div collapse="newVReturning" class="panel-wrapper">
                     <div class="panel-body height-350 no-padding">
                         <div class="new-vs-returning-wrap" ng-if="!newVsReturningConfig.loading">
                             <highchart config="newVsReturningConfig" id="new-vs-returning-chart"></highchart>
@@ -178,7 +178,7 @@
                     <h4 class="panel-title text-primary">Traffic Sources</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div collapse="trafficSources" ng-init="trafficSources=false" class="panel-wrapper">
+                <div collapse="trafficSources" class="panel-wrapper">
                     <div class="panel-body height-350 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                         <div class="table-responsive">
                             <table class="table table-hover margin-bottom-0">
@@ -206,7 +206,7 @@
             <h4 class="panel-title text-primary">Page <span class="text-bold">Analytics</span></h4>
             <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
         </div>
-        <div class="panel-wrapper" collapse="pageanalytics" ng-init="pageanalytics=false">
+        <div class="panel-wrapper" collapse="pageanalytics">
             <div class="panel-body panel-scroll">
                 <div class="table-responsive">
                     <table class="table table-hover margin-bottom-0">
@@ -244,7 +244,7 @@
                     <h4 class="panel-title text-primary">User Agents</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div class="panel-wrapper" collapse="ua" ng-init="ua=false" >
+                <div class="panel-wrapper" collapse="ua">
                     <div class="panel-body no-padding">
                         <div class="new-vs-returning-wrap">
                             <highchart config="userAgentConfig" id="useragent-chart"></highchart>
@@ -264,12 +264,12 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-6" id="user-agent-table">
-            <div id="userAgentsTable" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentData}">
+            <div id="userAgentsTable" class="panel panel-white " ng-class="{'load1 csspinner': !userAgentTableData}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">User Agents</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div collapse="userAgentsTable" ng-init="userAgents=false" class="panel-wrapper">
+                <div collapse="userAgentsTable" class="panel-wrapper">
                     <div class="panel-body panel-scroll height-375" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                         <div class="table-responsive">
                             <table class="table table-hover margin-bottom-0">
@@ -297,7 +297,7 @@
                     <h4 class="panel-title text-primary">Revenue <span class="text-bold">Overview</span></h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
-                <div class="panel-wrapper" collapse="rev" ng-init="rev=false">
+                <div class="panel-wrapper" collapse="rev">
                     <div class="panel-body">
                         <div class="rev-wrap">
                             <highchart config="revenueConfig" id="revenue-chart"></highchart>

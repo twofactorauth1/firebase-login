@@ -127,6 +127,21 @@ var scheduledJobManager = {
 
     },
 
+    cancelCampaignJob: function(campaignId, fn) {
+        var self = this;
+        self.log.debug('>> cancelCampaignJob');
+        var query = {campaignId:campaignId};
+        dao.removeByQuery(query, $$.m.ScheduledJob, function(err, value){
+            if(err) {
+                self.log.error('Error cancelling job:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< cancelCampaignJob');
+                return fn(null, value);
+            }
+        });
+    },
+
     _findAllIncompleteJobs: function(callback) {
         var self = this;
         self.log.debug('>> _findAllIncompleteJobs');

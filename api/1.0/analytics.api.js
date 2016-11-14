@@ -71,6 +71,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/reports/dau'), this.isAuthAndSubscribedApi.bind(this), this.getDailyActiveUsers.bind(this));
         app.get(this.url('admin/reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runAdminVisitorsReport.bind(this));
         app.get(this.url('admin/reports/visitorLocations'), this.isAuthAndSubscribedApi.bind(this), this.adminVisitorLocationsReport.bind(this));
+        app.get(this.url('admin/reports/visitorLocationsByCountry'), this.isAuthAndSubscribedApi.bind(this), this.adminVisitorLocationsReportByCountry.bind(this));
         app.get(this.url('admin/reports/visitorDevices'), this.isAuthAndSubscribedApi.bind(this), this.adminVisitorDeviceReport.bind(this));
         app.get(this.url('admin/reports/users'), this.isAuthAndSubscribedApi.bind(this), this.adminUserReport.bind(this));
         app.get(this.url('admin/reports/pageviews'), this.isAuthAndSubscribedApi.bind(this), this.adminPageviewsReport.bind(this));
@@ -1189,6 +1190,9 @@ _.extend(api.prototype, baseApi.prototype, {
             visitorLocationsReport: function(callback) {
                 analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, callback);
             },
+            visitorLocationsByCountryReport: function(callback) {
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, callback);
+            },
             visitorDeviceReport: function(callback) {
                 analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, callback);
             },
@@ -1320,6 +1324,40 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         if(accountId === appConfig.mainAccountID) {
             analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, function(err, results){
+                self.log.debug(accountId, userId, '<< adminVisitorLocationsReport');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
+    adminVisitorLocationsReportByCountry: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> adminVisitorLocationsReport (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, function(err, results){
                 self.log.debug(accountId, userId, '<< adminVisitorLocationsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
             });
@@ -1804,6 +1842,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 },
                 visitorLocationsReport: function(callback) {
                     analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, callback);
+                },
+                visitorLocationsByCountryReport: function(callback) {
+                    analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, callback);
                 },
                 visitorDeviceReport: function(callback) {
                     analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, callback);

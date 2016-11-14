@@ -1130,8 +1130,8 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
-            var keysToOmitComponent = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder'];
+            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
+            var keysToOmitComponent = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
             var newComponents = angular.copy(newSection.components);
 
             var newComponentsOrder =  getComponentSortOrder(newComponents, newSection); // ['componentType1', 'componentType2', ...]
@@ -1530,25 +1530,19 @@
             } else if (type === 'thumbnail-slider') {
 
                 if (update) {
-
                     component.thumbnailCollection[index].url = asset.url;
-
+                    component.thumbnailCollection[index].img = "<img src='"+ asset.url +"'/>";
                 } else {
-
                     component.thumbnailCollection.splice(index + 1, 0, {
-                        url: asset.url
+                        url: asset.url,
+                        img: "<img src='"+ asset.url +"'/>"
                     });
-
                 }
 
             } else if (type === 'meet-team') {
-
                 component.teamMembers[index].profilepic = asset.url;
-
             } else {
-
                 console.log('unknown component or image location');
-
             }
 
         }

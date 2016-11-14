@@ -12,9 +12,11 @@
         undo: true,
         refreshAfterCallback: true,
         callback: function () {
-            var buttonHTML = '<a class="btn btn-primary ssb-theme-btn">' +
-                                'Button Text' +
-                             '</a>';
+            var buttonHTML = '<span>&nbsp;</span>' +
+                                '<a class="btn btn-primary ssb-theme-btn">' +
+                                    'Button Text' +
+                                '</a>' +
+                             '<span>&nbsp;</span>';
 
             this.selection.restore();
             this.html.insert(buttonHTML);
@@ -25,7 +27,7 @@
         }
     });
 
-      
+
 
       $.FE.DefineIcon('linkRemoveBtn', { NAME: 'unlink' });
       $.FE.RegisterCommand('linkRemoveBtn', {
@@ -40,11 +42,11 @@
                 var rmLinkButton = this.popups.get("link.edit").find("button[data-cmd='linkRemoveBtn']");
                 if($(this.link.get()).hasClass("ssb-theme-btn"))
                 {
-                    rmLink.hide(); 
+                    rmLink.hide();
                     rmLinkButton.show();
                 }
                 else{
-                    rmLink.show(); 
+                    rmLink.show();
                     rmLinkButton.hide();
                 }
             })
