@@ -116,7 +116,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
             }, 4000);
         }
 
-        vm.elementId = 'text-element_' + vm.parentSectionId + "-" + vm.parentComponentId + "-" + vm.elementModelName + "-" + getTempUUID();
+        vm.elementId = 'text-element_' + vm.parentSectionId + "-" + vm.parentComponentId + "-" + vm.elementModelName;
 
         if (vm.isNestedModelProp) {
 
