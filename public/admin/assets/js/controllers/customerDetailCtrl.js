@@ -346,6 +346,41 @@
             }, 0);
         };
 
+
+        $scope._moment = function (invoice, _date, options) {
+            $scope.planInterval = "";
+            if (invoice.lines.data.length) {
+                $scope.planInterval = _.last(invoice.lines.data).plan.interval;
+            }   
+            if (_date.toString().length === 10) {
+                _date = _date * 1000;
+            }
+            var formattedDate = moment(_date);
+
+            if (options) {
+                if (options.subtractNum && options.subtractType) {
+                    formattedDate = formattedDate.subtract(options.subtractNum, options.subtractType);
+                }
+                if (options.addNum && options.addType) {
+                    if ($scope.planInterval == 'week') {
+                        formattedDate = formattedDate.add(7, options.addType);
+                    }
+                    else if ($scope.planInterval == 'month') {
+                        formattedDate = formattedDate.add(1, 'months');
+                    }
+                    else if ($scope.planInterval == 'year') {
+                        formattedDate = formattedDate.add(1, 'years');
+                    }
+                    else {
+                        formattedDate = formattedDate.add(options.addNum, options.addType);
+                    }
+                    console.log("Formatted date: ")
+                    console.log(formattedDate);
+                }
+            }
+            return formattedDate.format("M/D/YY");
+        };
+
         (function init() {
 
             UserService.getUsers(function (users) {

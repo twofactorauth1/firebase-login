@@ -79,10 +79,6 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', '$rootScope', 
         scope.bindThumbnailSlider(winWidth, check_if_mobile);
       };
 
-        angular.element($window).bind('resize', function () {
-            scope.bindThumbnailSlider(w.width());
-        });
-
       /*
        * @addImageFromMedia
        * -

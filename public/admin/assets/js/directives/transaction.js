@@ -46,9 +46,8 @@ app.directive('indigewebTransactionLabel', ['OrderService', "DashboardService", 
                 }
             };
 
-            console.warn('calling getOrders');
+            
             OrderService.getOrderAndDonationStatus(function(orders) {
-                console.warn('Called getOrders');
                 updateLogicFn(orders);
             });
 

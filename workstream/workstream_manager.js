@@ -464,7 +464,7 @@ module.exports = {
         var query = {
             account_id:accountId,
             created_at: {$gte: startOfYear},
-            status: {$ne: 'failed'}
+            status:{$nin:['failed', 'pending_payment']}
         };
         var groupCriteria = {
             _id:{month: {$month:'$created_at'}}

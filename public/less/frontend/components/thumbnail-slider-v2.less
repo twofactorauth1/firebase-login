@@ -53,6 +53,7 @@
         position: absolute;
         top: 0;
         right:0;
+        z-index: 999;
       }
     }
 
@@ -83,8 +84,7 @@
   }
 
   .carousel-control.right {
-    background: none;
-    top: 42%;
+    background: none;    
   }
 
   .carousel-inner {
@@ -101,16 +101,13 @@
     top: 62px;
     width: 2%;
   }
-  .carousel-control.left{
-    top: 42%;
-  }
+  
   .hide-scroll{
     overflow: hidden !important;
   }
 
  @media (max-width: 768px) {
   .carousel-control.left{
-    top: 42%;
     margin-left: -18px;
   }
 }
