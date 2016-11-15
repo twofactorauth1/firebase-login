@@ -207,7 +207,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr ng-repeat="invoice in customer.invoices">
-                                                    <td>{{invoice.period_start | date:'M/d/yy'}} / {{invoice.period_end | date:'M/d/yy'}}</td>
+                                                    <td>{{_moment(invoice, invoice.lines.data[0].period.start)}} - {{_moment(invoice, invoice.lines.data[0].period.start, {addNum: 30, addType: 'days'})}}</td>
                                                     <td>{{invoice.total / 100 | currency:'$'}}</td>
                                                     <td>{{invoice.attempt_count}}</td>
                                                     <td>{{invoice.paid}}</td>
