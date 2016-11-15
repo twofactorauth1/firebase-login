@@ -617,6 +617,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var activity = req.body.activity;
                 var contact_type = req.body.contact_type;
                 var uniqueEmail = req.body.uniqueEmail;
+                var accountSubdomain = value.get("subdomain");
                 console.log('req.body ', req.body);
 
                 if (!contact_type || !contact_type.length) {
@@ -670,11 +671,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                     ccAry.push(emails[i].email);
                                 }
                             }
-                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet);
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), ccAry, tagSet, accountSubdomain);
                         } else{
                             userDao.getUserAccount(value.id(), function(err, user){
                                 accountEmail = user.get("email");
-                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet);
+                                self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id(), null, tagSet, accountSubdomain);
                             })
                         }
 
@@ -1238,7 +1239,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet) {
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId, ccAry, tagSet, accountSubdomain) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
@@ -1275,7 +1276,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromName =  notificationConfig.WELCOME_FROM_NAME;
                 var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
                 var vars = [];
-
+                if(accountSubdomain){
+                    emailSubject = emailSubject + " ("+ accountSubdomain +")";
+                }
 
                 emailMessageManager.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', ccAry, function(err, result){
                     self.log.debug('result: ', result);
