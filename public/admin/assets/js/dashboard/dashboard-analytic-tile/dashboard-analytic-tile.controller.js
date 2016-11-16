@@ -25,6 +25,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     function analyticMap() {
 
         var ret = {};
+        var analyticsObject = DashboardService.state.analytics;
 
         switch(vm.analytic.name) {
             case 'visitors':
@@ -34,15 +35,15 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.data = [
                     {
                         analyticDataLabel: 'MTD New Visitors',
-                        analyticDataValue: DashboardService.state.analytics.visitors.total
+                        analyticDataValue: analyticsObject.visitors.total
                     },
                     {
                         analyticDataLabel: 'MTD Uniques',
-                        analyticDataValue: DashboardService.state.analytics.allvisitors.total
+                        analyticDataValue: analyticsObject.allvisitors.total
                     },
                     {
                         analyticDataLabel: 'MTD Page Views',
-                        analyticDataValue: DashboardService.state.analytics.pageViews.total
+                        analyticDataValue: analyticsObject.pageViews.total
                     }
                 ];
 
@@ -55,11 +56,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.data = [
                     {
                         analyticDataLabel: 'MTD Contacts',
-                        analyticDataValue: DashboardService.state.analytics.contacts.total
+                        analyticDataValue: analyticsObject.contacts.total
                     },
                     {
                         analyticDataLabel: 'MTD Leads',
-                        analyticDataValue: DashboardService.state.analytics.contacts.leadTotal
+                        analyticDataValue: analyticsObject.contacts.leadTotal
                     }
                 ]
 
@@ -71,15 +72,15 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.data = [
                     {
                         analyticDataLabel: 'MTD Sent',
-                        analyticDataValue: DashboardService.state.analytics.campaigns.totalSent
+                        analyticDataValue: analyticsObject.campaigns.totalSent
                     },
                     {
                         analyticDataLabel: 'MTD Opened',
-                        analyticDataValue: DashboardService.state.analytics.campaigns.totalOpened
+                        analyticDataValue: analyticsObject.campaigns.totalOpened
                     },
                     {
                         analyticDataLabel: 'MTD Clicked',
-                        analyticDataValue: DashboardService.state.analytics.campaigns.totalClicked
+                        analyticDataValue: analyticsObject.campaigns.totalClicked
                     }
                 ]
 
@@ -110,15 +111,15 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.data = [
                     {
                         analyticDataLabel: 'YTD Order Rev.',
-                        analyticDataValue: '$' + (parseFloat(DashboardService.state.analytics.revenue.YTDTotalAmount) - parseFloat(DashboardService.state.analytics.revenue.YTDTotalTax)).toFixed(2)
+                        analyticDataValue: '$' + (parseFloat(analyticsObject.revenue.YTDTotalAmount) - parseFloat(analyticsObject.revenue.YTDTotalTax)).toFixed(2)
                     },
                     {
                         analyticDataLabel: 'YTD Tax Collected',
-                        analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalTax
+                        analyticDataValue: analyticsObject.revenue.YTDTotalTax
                     },
                     {
                         analyticDataLabel: 'YTD New Orders',
-                        analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalOrders
+                        analyticDataValue: analyticsObject.revenue.YTDTotalOrders
                     }
                 ]
 
