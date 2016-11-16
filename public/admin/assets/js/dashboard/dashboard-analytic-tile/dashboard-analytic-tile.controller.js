@@ -135,14 +135,14 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             vm.uiDetails = vm.analyticMap();
         }
     })
-    
+
     function init(element) {
 
         vm.element = element;
 
         $timeout(function() {
             vm.uiDetails = vm.analyticMap();
-        }, 0);
+        }, 500);
 
     }
 
