@@ -15,7 +15,7 @@ function ssbWaitPageContentLoad($timeout) {
             angular.element(document).ready(function() {
                 $timeout(function(){
                     element.removeClass("ssb-page-wait-data-include");
-                },500)
+                },1000)
             });
         }
 
