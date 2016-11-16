@@ -121,10 +121,16 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         if (vm.isNestedModelProp) {
 
             if (vm.parentNgRepeat.length) {
+                if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
+                    var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
+                    var index = vm.parentNgRepeat.scope().$index;
 
-                vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
-
-            }
+                    vm.elementModelIndex = parentIndex > 0 ? (parentIndex * 4 + index) : index;
+                     
+                }else{
+                    vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
+                }
+            } 
 
             if (vm.elementModelIndex !== undefined && vm.elementModelIndex !== null) {
 
@@ -172,7 +178,15 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
                 if (vm.parentNgRepeat.length) {
 
-                    vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
+                    if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
+                        var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
+                        var index = vm.parentNgRepeat.scope().$index;
+
+                        vm.elementModelIndex = parentIndex > 0 ? (parentIndex * 4 + index) : index;
+                     
+                    }else{
+                        vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
+                    }
 
                 }
 
@@ -203,7 +217,15 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
             pvm.component.elementStyles[vm.elementModelName] = pvm.component.elementStyles[vm.elementModelName] || {};
 
             if (vm.parentNgRepeat.length) {
-                vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
+                if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
+                    var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
+                    var index = vm.parentNgRepeat.scope().$index;
+
+                    vm.elementModelIndex = parentIndex > 0 ? (parentIndex * 4 + index) : index;
+                     
+                }else{
+                    vm.elementModelIndex = vm.parentNgRepeat.scope().$index;
+                }
             }
 
             if (vm.elementModelIndex !== undefined && vm.elementModelIndex !== null) {

@@ -144,7 +144,7 @@ var emailMessageManager = {
                 request.path = '/v3/user/scheduled_sends';
                 request.body = {
                     batch_id: batchId,
-                    status: 'cancel'
+                    status: 'pause'
                 };
                 sg.API(request, function (err, response) {
                     if(err) {
