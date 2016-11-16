@@ -12,8 +12,8 @@ var config = require('./app.config');
  */
 var localString = "mongodb://localhost/test_indigenous";
 var testString = "mongodb://indiweb-test2016:testing456@lighthouse.1.mongolayer.com:10303,lighthouse.0.mongolayer.com:10303/test_indigenous?replicaSet=set-54f7c735c346b1d3bf0005b0";
-var prodString = "mongodb://indiapp2:Ind1genous2016!@lighthouse.1.mongolayer.com:10188,lighthouse.0.mongolayer.com:10188/prod_indigenous?replicaSet=set-53f6b4cc19627093350038e8";
-
+//var prodString = "mongodb://indiapp2:Ind1genous2016!@lighthouse.1.mongolayer.com:10188,lighthouse.0.mongolayer.com:10188/prod_indigenous?replicaSet=set-53f6b4cc19627093350038e8";
+var prodString = "mongodb://indiapp2:Ind1genous2016!@lighthouse.6.mongolayer.com:10007,lighthouse.7.mongolayer.com:10007/prod_indigenous?replicaSet=set-582c8c97304fb61ff6000632";
 //LOCAL
 //var connectionString = localString;
 
