@@ -48,7 +48,7 @@
     ],
     colorsStep: 7,
     cellColorsDefaultTab: 'background',
-    colorsButtons: ['colorsBack', '|', '-'],
+    cellColorsButtons: ['colorsBackCell', '|', '-'],
     defaultCellColors:{
         background: {
             init: false,
@@ -123,8 +123,8 @@
 
       if (editor.opts.toolbarInline) {
         // Colors buttons.
-        if (editor.opts.colorsButtons.length > 0) {
-          colors_buttons += editor.button.buildList(editor.opts.colorsButtons)
+        if (editor.opts.cellColorsButtons.length > 0) {
+          colors_buttons += editor.button.buildList(editor.opts.cellColorsButtons)
         }
       }
 
@@ -576,7 +576,7 @@
     /*
      * Go back to the inline editor.
      */
-    function back () {
+    function colorsBackCell () {
       var link = editor.link.get();
       if(link){
         editor.link.back();
@@ -704,7 +704,7 @@
       hideCellColorsPopup: _hideCellColorsPopup,
       changeCellSet: _changeCellSet,
       background: background,      
-      back: back,
+      colorsBackCell: colorsBackCell,
       removeCellColor: removeCellColor,
       chooseCellColorPicker: chooseCellColorPicker,
       closeCellColorPicker: closeCellColorPicker,
@@ -787,15 +787,15 @@
   });
 
   // Colors back.
-  a.FE.DefineIcon('colorsBack', { NAME: 'arrow-left' });
-  a.FE.RegisterCommand('colorsBack', {
+  a.FE.DefineIcon('colorsBackCell', { NAME: 'arrow-left' });
+  a.FE.RegisterCommand('colorsBackCell', {
     title: 'Back',
     undo: false,
     focus: false,
     back: true,
     refreshAfterCallback: false,
     callback: function () {
-      this.tableCellColors.back();
+      this.tableCellColors.colorsBackCell();
     }
   });
 
