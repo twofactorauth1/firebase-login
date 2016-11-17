@@ -46,7 +46,14 @@
                     </ul>
                 </div>
 
-                <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder(0,null,myform.$invalid)">Save</button>
+                <button ng-disabled="saveLoading" type="button" class="btn btn-o btn-primary visible-xs-inline-block" ng-click="saveOrder(0,null,myform.$invalid)">Save</button>
+
+                <button ng-disabled="saveLoading" type="button" class="btn btn-wide btn-o btn-primary hidden-xs" ng-click="saveOrder(0,null,myform.$invalid)">Save</button>
+
+
+                <button type="button" class="btn btn-primary btn-o btn btn-primary btn-o margin-right-5" ng-click="backToOrders()">
+                Back to Orders
+                </button>
                 <!-- <div class="btn-group" dropdown is-open="email.isopen">
                 <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                     Send Email <span class="caret"></span>

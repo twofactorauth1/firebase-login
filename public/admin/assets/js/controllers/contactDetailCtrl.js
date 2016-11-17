@@ -81,6 +81,9 @@
             }
 
         };
+        $scope.backToContacts = function () {
+            $location.url('/contacts');
+        };
         /*
          * @addNote
          * add a note to an order

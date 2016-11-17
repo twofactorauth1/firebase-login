@@ -107,6 +107,7 @@
         vm.createContactDataFn = createContactDataFn;
         vm.contactTagsFn = contactTagsFn;
         vm.formValidations = formValidations;
+        vm.backToCampaigns = backToCampaigns;
 
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
@@ -799,6 +800,10 @@
 
         function getTagLabel(label){
             return label === 'No Tag' ? '(no tag)' : label
+        }
+
+        function backToCampaigns(){
+            $location.url('/marketing/campaigns');
         }
 
         function init(element) {

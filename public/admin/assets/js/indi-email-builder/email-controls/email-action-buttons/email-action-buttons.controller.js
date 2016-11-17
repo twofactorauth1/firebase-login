@@ -2,9 +2,9 @@
 
 app.controller('EmailBuilderActionButtonsController', ssbEmailBuilderActionButtonsController);
 
-ssbEmailBuilderActionButtonsController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$timeout', 'toaster'];
+ssbEmailBuilderActionButtonsController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$timeout', 'toaster', '$location'];
 /* @ngInject */
-function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleSiteBuilderService, $timeout, toaster) {
+function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleSiteBuilderService, $timeout, toaster, $location) {
 
     console.info('email-build sidebar directive init...')
 
@@ -17,6 +17,7 @@ function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleS
     vm.cancel = cancel;
     vm.revert = revert;
     vm.settingsValid = settingsValid;
+    vm.backToEmails = backToEmails;
 
     function save() {
         if (vm.settingsValid()) {
@@ -44,6 +45,10 @@ function ssbEmailBuilderActionButtonsController($scope, $attrs, $filter, SimpleS
 
     function settingsValid() {
         return vm.settingsValidAction();
+    }
+
+    function backToEmails(){
+        $location.url('/emails');
     }
 
     function init(element) {
