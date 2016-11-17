@@ -1775,7 +1775,6 @@ var emailMessageManager = {
                 regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
                 var userData = map.data || '';
                 htmlContent = htmlContent.replace(regex, userData);
-
             }
         });
         var siteUrl = null;
