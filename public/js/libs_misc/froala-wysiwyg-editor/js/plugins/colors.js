@@ -255,9 +255,12 @@
       // Find the selected color.
       while ($element.get(0) != editor.$el.get(0)) {
         // Transparent or black.
-        setTimeout(function() {
+        if(editor.opts.isButton){
+          color = editor.opts.button.css(color_type);
+          setTimeout(function() {
             initializeSpectrum(color_type, color);
         }, 0)
+        }
         if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
           $element = $element.parent();
         }
@@ -268,6 +271,12 @@
           break;
         }
       }
+      if(!editor.opts.isButton){
+        color = $element.css(color_type)
+        setTimeout(function() {
+            initializeSpectrum(color_type, color);
+        }, 0)
+      }
     }
 
     function _setInitialColors () {
@@ -277,9 +286,18 @@
             editor.opts.defaultColors.background.color = editor.opts.button.css('background-color');
             editor.opts.defaultColors.text.color = editor.opts.button.css('color');
         }
-        else{
-            editor.opts.defaultColors.background.color = $element.css('background-color');
-            editor.opts.defaultColors.text.color = $element.css('color');
+        else{ 
+      while ($element.get(0) != editor.$el.get(0)) {
+        if ($element.css('background-color') == 'transparent' || $element.css('background-color') == 'rgba(0, 0, 0, 0)') {
+          $element = $element.parent();
+        }
+        // Select the correct color.
+        else {
+          break;
+        }
+      }
+      editor.opts.defaultColors.text.color = $element.css('color');
+      editor.opts.defaultColors.background.color = $element.css('background-color');
         }
 
     }
