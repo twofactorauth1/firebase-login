@@ -89,6 +89,7 @@ module.exports = {
             console.log('testing /signup');
             driver.get('https://indigenous.io/signup');
             driver.wait(until.elementLocated(By.id('email')), 20000);
+            driver.wait(until.elementLocated(By.className('signup-btn-v2')), 20000);
 
             driver.isElementPresent(By.id('email')).then(function(el){test.ok(el, 'Email signup field missing.');});
 
