@@ -541,7 +541,8 @@
                 options: {
                     chart: {
                         spacing: [25, 25, 25, 25],
-                        zoomType: 'x'
+                        zoomType: 'x',
+                        pinchType: 'x'
                     },
                     colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
                     title: {
