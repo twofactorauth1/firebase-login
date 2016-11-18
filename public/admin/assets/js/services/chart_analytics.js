@@ -620,7 +620,7 @@
             var emailsOverviewConfig = {
                 options: {
                     chart: {
-                        spacing: [25, 25, 25, 25]
+                        spacing: [25, 25, 25, 25],
                         zoomType: 'x',
                         pinchType: 'x'
                     },
