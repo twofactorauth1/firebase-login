@@ -1112,6 +1112,7 @@
                     labels: {
                         format: "{value:%b %d}"
                     },
+                    minTickInterval: 4 * 60 * 60 * 1000,
                     categories: ordersData.xData
                 },
                 yAxis: [{
