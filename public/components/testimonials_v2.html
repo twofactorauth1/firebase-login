@@ -1,13 +1,20 @@
 <style>
-/*.carousel-caption .text,
-.carousel-caption .name,
-.carousel-caption .site {
-    color: {
-        {
-            component.txtcolor || 'black'
-        }
-    };
-}*/
+.testimonials-v2 .carousel-caption
+{
+    color : {{component.txtcolor}};
+}
+
+.slider-active-dot-color .slick-dots li.slick-active button:before{
+    color: {{component.slider.sliderActiveDotColor}} !important;
+}
+
+.slider-dot-color .slick-dots li button:before{
+    color: {{component.slider.sliderDotColor}} !important;
+}
+
+.slider-dot-color-opacity .slick-dots li button:before{
+    opacity: {{component.slider.sliderDotColorOpacity}} !important;
+}
 
 .carousel-indicators li.active {
     background: {
@@ -17,17 +24,15 @@
     }
     ;
 }
-.testimonials-v2 .carousel-caption
-{
-    color : {{component.txtcolor}};
-}
+
+
 </style>
 <div data-edit ng-class="component.type+'-v'+component.version">
     <div class="title col-xs-12">
         <div elem ng-model="component.title"></div>
     </div>
     <div class="clearfix"></div>
-    <div class="testimonial-wrap {{isEditing ? 'editing' : ''}}" style="position: relative;">
+    <div class="testimonial-wrap {{isEditing ? 'editing' : ''}}" style="position: relative;" ng-class="{'slider-dot-color': component.slider.sliderDotColor, 'slider-active-dot-color': component.slider.sliderActiveDotColor, 'slider-dot-color-opacity': component.slider.sliderDotColorOpacity}">
         <div ng-if="dataLoaded" class="carousel-caption" ind-slider='{ slidesToShow:1, touchMove:{{touchMove}}, draggable:{{draggable}}, dots:true, arrows:false,  speed:{{component.slider.speed}}, slidesToScroll:1, autoplay:{{autoplay}}, autoplaySpeed:{{component.slider.autoPlayInterval}}, fade: true, accessibility:{{accessibility}} }'>
             <div ng-repeat="testimonial in component.testimonials" class="col-sm-12 testimonials single-testimonial" ng-class="{'testimonial-blank-slide': !testimonial.img}">
                 <div ng-if="component.slider.showOverlay" class="bg slider-overlay-bg" ng-style="{'background': component.slider.overlay.color, opacity: component.slider.overlay.opacity === 0 ? component.slider.overlay.opacity : component.slider.overlay.opacity/100 || 0}">                    
