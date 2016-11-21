@@ -123,12 +123,15 @@
         //font-size set in ssb-themes.less default
     }
 
-    .ssb-page-section-layout-nav-hero .ssb-hero-sub-header [ssb-text-component] {
-        .ssb-media-query-xsmall-only({
-            [style] {
-                font-size: 8vw!important;
-            }
-        });
+    .ssb-page-section-layout-nav-hero.hide-hero-bg-image [ssb-image-component] {
+        background-image: none !important;
+        .ssb-image-component-container{
+            display:none;
+        }
+
+        .nav-header-div{
+            background-image: none !important;
+        }
     }
 
     .ssb-page-section-layout-nav-hero .flex-container-absolute-column {

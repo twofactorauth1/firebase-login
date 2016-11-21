@@ -3,8 +3,8 @@ app.directive('indSlider',function($timeout){
    restrict: 'A',
    link: function(scope,element,attrs) {
      $timeout(function() {
-        $(element).slick(scope.$eval(attrs.indSlider));
-     }, 0);
+         $(element).slick(scope.$eval(attrs.indSlider));
+     });
    }
  }
 });

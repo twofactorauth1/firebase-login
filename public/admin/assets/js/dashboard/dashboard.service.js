@@ -16,7 +16,6 @@
             }
         };
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
-        var baseReportsAPIUrl = '/api/2.0/dashboard/reports';
         var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
 
@@ -237,7 +236,7 @@
 
         }
 
-        
+
 
 		(function init() {
 

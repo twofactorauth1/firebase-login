@@ -1775,7 +1775,6 @@ var emailMessageManager = {
                 regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
                 var userData = map.data || '';
                 htmlContent = htmlContent.replace(regex, userData);
-
             }
         });
         var siteUrl = null;
@@ -2209,32 +2208,34 @@ var emailMessageManager = {
         var keys = ['logo','title','text','text1','text2','text3'];
         var regex = new RegExp('src="//s3.amazonaws', "g");
         var emailContent = email.content || email;
-
-        emailContent.components.forEach(function(component) {
-            if(component.visibility){
-                for (var i = 0; i < keys.length; i++) {
-                    if (component[keys[i]]) {
-                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
-                        // self.log.debug('sanitizeHtmlForSending before:', component[keys[i]]);
-                        component[keys[i]] = self.sanitizeHtmlForSending(component[keys[i]]);
-                        // self.log.debug('sanitizeHtmlForSending after:', component[keys[i]]);
+        if(emailContent.components) {
+            emailContent.components.forEach(function(component) {
+                if(component.visibility){
+                    for (var i = 0; i < keys.length; i++) {
+                        if (component[keys[i]]) {
+                            component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                            // self.log.debug('sanitizeHtmlForSending before:', component[keys[i]]);
+                            component[keys[i]] = self.sanitizeHtmlForSending(component[keys[i]]);
+                            // self.log.debug('sanitizeHtmlForSending after:', component[keys[i]]);
+                        }
                     }
+                    if (!component.bg.color) {
+                        component.bg.color = '#ffffff';
+                    }
+                    if (!component.emailBg) {
+                        component.emailBg = '#ffffff';
+                    }
+                    if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                    }
+                    if (!component.txtcolor) {
+                        component.txtcolor = '#000000';
+                    }
+                    components.push(component);
                 }
-                if (!component.bg.color) {
-                    component.bg.color = '#ffffff';
-                }
-                if (!component.emailBg) {
-                    component.emailBg = '#ffffff';
-                }
-                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                }
-                if (!component.txtcolor) {
-                    component.txtcolor = '#000000';
-                }
-                components.push(component);
-            }
-        });
+            });
+        }
+
 
         self.log.debug('components >>> ', components);
 

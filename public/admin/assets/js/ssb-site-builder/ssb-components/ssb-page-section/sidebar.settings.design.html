@@ -71,15 +71,15 @@
     </div>
 
     <div ng-if="vm.isHero || vm.uiState.isNavHero(vm.component)">
-        <div class="form-group" ng-init="switch=true" disabled ng-hide="isEmail">
+        <div class="form-group" ng-init="switch=true" ng-hide="isEmail">
             <label for="bg_hide" class="margin-bottom-0">
                 Show image
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide background image of component.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <div class="disabled" style="display:inline;">
-                <switch  ng-model="switch" class="pull-right"></switch>
+            <div style="display:inline;">
+                <switch  ng-model="component.bg.img.show" class="pull-right"></switch>
             </div>
 
         </div>
@@ -89,14 +89,14 @@
             </div>
         </div>
 
-        <div class="form-group ssb-background-image-picker" ng-if="component.components[0].src">
+        <div class="form-group ssb-background-image-picker" ng-if="component.components[0].src" ng-show="component.bg.img.show">
             <label for="bg_hide" class="margin-bottom-0">
                 Select image
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Select an image to use as a background.">
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <i class="fa fa-close hidden" ng-click="vm.removeImage(component.components[0])"></i>
+            <i class="fa fa-close" ng-click="vm.removeImage(component.components[0])"></i>
             <img ng-src="{{component.components[0].src}}" ng-model="component.components[0].src" ng-click="vm.addImage(vm.uiState.activeSectionIndex, 0)" class="img-thumbnail">
         </div>
     </div>

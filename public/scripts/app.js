@@ -62,7 +62,7 @@ var mainApp = angular
                 controller: 'CacheCtrl as cacheCtrl'
                 */
                 template: function(urlattr) {
-                    var s = '<div class="main-include ssb-page-wait-data-include" ssb-wait-page-content-load data-ng-include="';
+                    var s = '<div class="main-include" data-ng-include="';
                     s += " '/template/index";
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
@@ -83,7 +83,7 @@ var mainApp = angular
                     if(window.indigenous.ssbBlog === true) {
                         _pageName = 'blog-list';
                     }
-                    var s = '<div class="main-include ssb-page-wait-data-include" ssb-wait-page-content-load data-ng-include="';
+                    var s = '<div class="main-include" data-ng-include="';
                     s += " '/template/" + _pageName;
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
@@ -101,7 +101,7 @@ var mainApp = angular
                         _pageName = 'blog-list';
                     }
 
-                    var s = '<div class="main-include ssb-page-wait-data-include" ssb-wait-page-content-load data-ng-include="';
+                    var s = '<div class="main-include" data-ng-include="';
                     s += " '/template/" + _pageName;
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
@@ -119,7 +119,7 @@ var mainApp = angular
                         _pageName = 'blog-list';
                     }
 
-                    var s = '<div class="main-include ssb-page-wait-data-include" ssb-wait-page-content-load data-ng-include="';
+                    var s = '<div class="main-include" data-ng-include="';
                     s += " '/template/" + _pageName;
                         if(urlattr.cachebuster) {
                             s+='?cachebuster=' + urlattr.cachebuster;
@@ -151,7 +151,7 @@ var mainApp = angular
             .when('/:name', {
                 template: function(urlattr) {
 
-                    var s = '<div class="main-include ssb-page-wait-data-include" ssb-wait-page-content-load data-ng-include="';
+                    var s = '<div class="main-include" data-ng-include="';
                     s += " '/template/" + urlattr.name.toLowerCase();
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
