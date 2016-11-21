@@ -44,7 +44,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
     vm.toggleSidebarPanel = toggleSidebarPanel;
-
+    vm.resizeWindow = resizeWindow
 
     vm.uiState = {
         loading: 0,
@@ -161,7 +161,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isNavHero: vm.isNavHero,
 
-        toggleSidebarPanel: vm.toggleSidebarPanel
+        toggleSidebarPanel: vm.toggleSidebarPanel,
+
+        resizeWindow: vm.resizeWindow
 
     };
 
@@ -318,7 +320,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      */
     var unbindWebsiteServiceWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.pendingWebsiteChanges = false;
+        if(website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderDotColor))
+            website.themeOverrides.styles.primarySliderDotColor = '#FFF';
+        if(website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderActiveDotColor))
+            website.themeOverrides.styles.primarySliderActiveDotColor = '#000';
+        if(website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderDotColorOpacity))
+            website.themeOverrides.styles.primarySliderDotColorOpacity = 0.4;
         vm.state.website = website;
+        
         vm.state.originalWebsite = null;
         $timeout(function() {
             vm.state.originalWebsite = angular.copy(website);
@@ -1246,6 +1255,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function toggleSidebarPanel(type){
         if(!vm.state.saveAndLoading)
             vm.uiState.openSidebarPanel = type;
+    }
+
+
+    function resizeWindow(){
+        $timeout(function() {
+            $(window).trigger('resize');
+        }, 500);
     }
 
     function init(element) {
