@@ -108,7 +108,12 @@
         //font-size set in ssb-themes.less default
     }
 
-    
+    .ssb-page-section-layout-hero.hide-hero-bg-image [ssb-image-component] {
+        background-image: none !important;
+        .ssb-image-component-container{
+            display:none;
+        }
+    }
 
     .ssb-page-section-layout-hero .flex-container-absolute-column {
         margin: 25px 15px;
