@@ -320,11 +320,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      */
     var unbindWebsiteServiceWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.pendingWebsiteChanges = false;
-        if(website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderDotColor))
+        if(website && website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderDotColor))
             website.themeOverrides.styles.primarySliderDotColor = '#FFF';
-        if(website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderActiveDotColor))
+        if(website && website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderActiveDotColor))
             website.themeOverrides.styles.primarySliderActiveDotColor = '#000';
-        if(website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderDotColorOpacity))
+        if(website && website.themeOverrides && website.themeOverrides.styles && !angular.isDefined(website.themeOverrides.styles.primarySliderDotColorOpacity))
             website.themeOverrides.styles.primarySliderDotColorOpacity = 0.4;
         vm.state.website = website;
         
