@@ -759,6 +759,9 @@ var mongodao = {
             { $inc: { seq: 1 } },
             { new: true, upsert: true },
             function (err, value) {
+                if(value.value && !value.hasOwnProperty('seq')) {
+                    value = value.value;
+                }
                 self._unlockCollection(collection);
                 if (!err && value != null && value.hasOwnProperty('seq')) {
                     if (fn != null) {
