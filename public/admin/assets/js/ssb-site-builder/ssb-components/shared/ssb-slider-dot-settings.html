@@ -1,0 +1,43 @@
+<div class="form-group ssb-spectrum-color-picker-small">            
+    <div class="ssb-spectrum-color-picker-background-container">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.components[0].slider.sliderDotColor"></spectrum-colorpicker>
+        <i class="fa fa-eyedropper" />
+    </div>
+    <label>
+        Slider Dot Color
+        <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Slider dot color.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+</div>
+
+<div class="form-group ssb-spectrum-color-picker-small">            
+    <div class="ssb-spectrum-color-picker-background-container">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.components[0].slider.sliderActiveDotColor"></spectrum-colorpicker>
+        <i class="fa fa-eyedropper" />
+    </div>
+    <label>
+        Slider Active Slide Dot Color
+        <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Slider Active Slide Dot Color.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+</div>
+
+<div class="form-group" ng-init="vm.uiState.resizeWindow()">
+            
+             
+            <div>
+                <label>
+                    Slider Dot Color Opacity
+                    <span tooltip-placement="top" tooltip="Slider default dot color opacity."><i class="fa fa-info-circle" /></span>
+                </label>
+            </div>    
+            <div>
+                <rzslider
+                    class="slider-opacity"
+                    name="bg-opacity"
+                    rz-slider-model="component.components[0].slider.sliderDotColorOpacity" rz-slider-options="{floor: 0, ceil: 1, step: 0.1, precision: 2}">
+                </rzslider>
+            </div>               
+</div>
