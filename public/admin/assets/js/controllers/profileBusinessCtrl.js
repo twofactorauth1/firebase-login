@@ -229,9 +229,31 @@
       }
     };
 
+
+    function resetTaxBussinessLocation(){
+        if ($scope.account && $scope.account.commerceSettings && $scope.account.commerceSettings.taxes && $scope.account.commerceSettings.taxbased === 'business_location') {
+            var hasZip = true;
+
+            if (!$scope.account.business) {
+                hasZip = false;    
+            } else if ($scope.account.business && !$scope.account.business.addresses) {
+                hasZip = false;
+            } else if ($scope.account.business && $scope.account.business.addresses && !$scope.account.business.addresses.length) {
+                hasZip = false;
+            } else if ($scope.account.business && $scope.account.business.addresses && $scope.account.business.addresses.length && $scope.account.business.addresses[0].zip === '') {
+                hasZip = false;
+            }
+
+            if (!hasZip) {
+                $scope.account.commerceSettings.taxbased = null;
+            }
+        }
+    }
+
     $scope.profileSaveFn = function () {
       $scope.pageSaving = true;
       console.log('profileSaveFn >>>');
+      resetTaxBussinessLocation();
       angular.copy($scope.account, $scope.actualAccount);
       $scope.validateBeforeSave();
       if (!$scope.isValid) {

@@ -279,7 +279,7 @@
         <div ng-show="settingsView == 'commerce'">
             <tabset class="tabbable tabs-left margin-bottom-0">
                 <tab heading="Taxes">
-                    <form class="col-sm-6 form-horizontal">
+                    <form class="col-sm-7 form-horizontal">
                         <div class="form-group">
                             <label>Enable Taxes</label>
                             <span tooltip-placement="bottom" tooltip="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
@@ -294,8 +294,8 @@
                                 </select>
                             </div>
                             <div ng-if="account.commerceSettings.taxbased !== 'business_location'" class="form-group">
-                                <label>Sales are Taxable Only in (States):</label>
-                                <span tooltip-placement="right" tooltip="Unless specified otherwise, all locations are assumed to be taxable."><i class="fa fa-info-circle" /></span>
+                                <label>Sales are Taxable Only in (States) [States should be entered in format like (NY, WA, CA, AL, etc.)]:</label>
+                                <span tooltip-placement="right" style="display:inline-block"  tooltip="Unless specified otherwise, all locations are assumed to be taxable. Please add states in format like (NY, WA, CA, AL, etc.)"><i class="fa fa-info-circle" /></span>
                                 <tags-input min-length="2" placeholder="State(s)" ng-model="account.commerceSettings.taxnexus"></tags-input>
                             </div>
                         </div>

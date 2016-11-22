@@ -16,7 +16,7 @@
     <div ng-if="!vm.blog.posts.length" class="ssb-in-context-info margin-top-20 padding-30">
         <span class="fa fa-info-circle"> No published posts were found.</span>
     </div>
-    <div class="ssb-blog-featured-slider">
+    <div class="ssb-blog-featured-slider" ng-class="{'slider-dot-color': vm.component.slider.sliderDotColor, 'slider-active-dot-color': vm.component.slider.sliderActiveDotColor, 'slider-dot-color-opacity': vm.component.slider.sliderDotColorOpacity}">
         <div
             class="ssb-media-stacked"
             ind-slider='{ adaptiveHeight: true, slidesToShow:1, dots:true, arrows:false, autoplay:false, touchMove:true, draggable:true }'>
@@ -36,4 +36,19 @@
             ng-repeat="post in vm.blog.posts | orderBy:vm.sortBlogPosts:true track by $index">
         </article>
     </section>
+    <style>
+        [ssb-blog-post-list-component]#component_{{vm.component._id}} .slider-active-dot-color .slick-dots li.slick-active button:before{
+            color: {{vm.component.slider.sliderActiveDotColor}} !important;
+        }
+
+        [ssb-blog-post-list-component]#component_{{vm.component._id}} .slider-dot-color .slick-dots li:not(.slick-active) button:before{
+            color: {{vm.component.slider.sliderDotColor}} !important;
+        }
+
+        [ssb-blog-post-list-component]#component_{{vm.component._id}} .slider-dot-color-opacity .slick-dots li button:before{
+            opacity: {{vm.component.slider.sliderDotColorOpacity}} !important;
+        }
+    </style>
 </div>
+
+
