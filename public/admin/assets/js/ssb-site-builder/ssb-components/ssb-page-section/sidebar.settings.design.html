@@ -65,7 +65,7 @@
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
-            <i class="fa fa-close" ng-click="vm.removeBackgroundImage(component)"></i>
+            <i class="fa fa-close hidden" ng-click="vm.removeBackgroundImage(component)"></i>
             <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)" class="img-thumbnail">
         </div>
     </div>
