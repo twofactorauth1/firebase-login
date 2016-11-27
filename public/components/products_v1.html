@@ -46,7 +46,7 @@
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
-                            <button ng-disabled='product.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="product.type != 'external' && itemClicked(product) != true && !product.hasVariations">
+                            <button ng-disabled='product.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="(product.type | uppercase) != 'EXTERNAL' && itemClicked(product) != true && !product.hasVariations">
                                 <div data-class="btn-text" ng-hide='product.type == "SUBSCRIPTION" && !stripeInfo'>
                                     <span class="fa fa-shopping-cart"></span> Add to Cart
                                 </div>
@@ -54,12 +54,12 @@
                                     <span class="fa fa-shopping-cart"></span> Stripe account needed
                                 </div>
                             </button>
-                            <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="product.type != 'external' && itemClicked(product) == true && !product.hasVariations">
+                            <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="(product.type | uppercase) != 'EXTERNAL' && itemClicked(product) == true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-check"></span> Added to Cart!
                                 </div>
                             </button>
-                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external'" target="{{product.externalLinkOpenIn}}">
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="(product.type | uppercase) == 'EXTERNAL'" target="{{product.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText || 'External Link'}}
                                 </div>
