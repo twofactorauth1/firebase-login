@@ -28,6 +28,17 @@
         </select>
     </div>
 </div>
+<div class="row padding-10"  ng-if="vm.component.type == 'products'">
+    <div class="form-group">
+       <label for="bg_hide" class="margin-bottom-0">
+        Hide title and subtitle
+        <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="show/hide title and subtitle text components.">
+            <i class="fa fa-info-circle" />
+        </span>
+    </label>
+    <switch ng-model="component.hideTextComponents" class="pull-right"></switch>
+    </div>
+</div>
 <!-- <hr></hr>
     <div class="form-group">
         <label for="component-title">Version</label>
