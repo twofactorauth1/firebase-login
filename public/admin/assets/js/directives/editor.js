@@ -81,10 +81,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             }, 0);
         };
 
-        scope.updateFroalaContent = _.debounce(function(editor) {
+        scope.updateFroalaContent = _.debounce(function(editor, codeViewHtml) {
             $timeout(function() {
 
-                var html = editor.html.get().replace(/\u2028|\u2029/g, '');
+                var html = codeViewHtml || editor.html.get().replace(/\u2028|\u2029/g, '');
                                
                 ngModel.$setViewValue(html);
                 scope.compileEditorElements(editor);
@@ -250,6 +250,17 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                         if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove' || cmd === 'imageSetAlt'){
                             scope.updateFroalaContent(editor);
+                        }
+
+                        if (cmd == 'html') {
+                            if (editor.codeView.isActive()) {
+                                var mirror = editor.$box.find(".CodeMirror")[0].CodeMirror;
+                                mirror.on('change', function() {
+                                    $timeout(function() {
+                                        scope.updateFroalaContent(editor, editor.codeView.get());
+                                    }, 0)
+                                });
+                            }
                         }
 
                     }).on('froalaEditor.focus', function (e, editor) {
