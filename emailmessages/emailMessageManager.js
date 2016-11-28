@@ -235,6 +235,7 @@ var emailMessageManager = {
 
             },
             function(batchId, contacts, userAry, userAccountAry, cb) {
+                var sendgridSubsAndHtml = {};
                 juice.juiceResources(htmlContent, {}, function(err, html){
                     if(err) {
                         self.log.error('Error juicing the htmlContent:', err);
@@ -259,13 +260,8 @@ var emailMessageManager = {
                             if(userAccountAry && userAccountAry[i]) {
                                 userAccount = userAccountAry[i];
                             }
-                            var mergedHtml = self._findReplaceMergeTagsWithObjects(account, contact, user, userAccount, html, vars);
-                            p.content = [
-                                {
-                                    type:'text/html',
-                                    value:mergedHtml
-                                }
-                            ];
+                            sendgridSubsAndHtml = self._convertMergeTagsToSendgridPersonalizations(account, contact, user, userAccount, html, vars);
+                            p.substitutions = sendgridSubsAndHtml.substitutions;
                             if(emailSettings.cc) {
                                 p.cc =[{email:emailSettings.cc}];
                             }
@@ -275,7 +271,7 @@ var emailMessageManager = {
                             personalizations.push(p);
                             i++;
                         });
-                        cb(null, batchId, personalizations, contacts, html);
+                        cb(null, batchId, personalizations, contacts, sendgridSubsAndHtml.html);
                     }
                 });
             },
@@ -1669,6 +1665,126 @@ var emailMessageManager = {
                 }
             }
         });
+    },
+
+    _convertMergeTagsToSendgridPersonalizations: function(account, contact, user, userAccount, htmlContent, vars) {
+        var self = this;
+
+        var _account = account;
+        var accountId = account.id();
+        var _contact = contact;
+        var contactId = contact.id();
+        var _userAccount = userAccount;
+        var _user = user;
+        var environment = appConfig.environment;
+        var port = appConfig.port;
+
+        //list of possible merge vars and the matching data
+        var _address = _account.get('business').addresses && _address ? _address : null;
+        var hostname = '.indigenous.io';
+
+        if(environment === appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
+            hostname = '.indigenous.local' + ":" + port;
+        }
+        else if(environment !== appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
+            hostname = '.test.indigenous.io';
+        }
+        var mergeTagMap = [{
+            mergeTag: '[URL]',
+            data: _account ? _account.get('subdomain') + hostname : ''
+        }, {
+            mergeTag: '[SUBDOMAIN]',
+            data: _account ? _account.get('subdomain') : ''
+        }, {
+            mergeTag: '[CUSTOMDOMAIN]',
+            data: _account ? _account.get('customDomain'): ''
+        }, {
+            mergeTag: '[BUSINESSNAME]',
+            data: _account ? _account.get('business').name: ''
+        }, {
+            mergeTag: '[BUSINESSLOGO]',
+            data: _account ? _account.get('business').logo: ''
+        }, {
+            mergeTag: '[BUSINESSDESCRIPTION]',
+            data: _account ? _account.get('business').description: ''
+        }, {
+            mergeTag: '[BUSINESSPHONE]',
+            data: _account.get('business').phones && _account.get('business').phones[0] ? _account.get('business').phones[0].number : ''
+        }, {
+            mergeTag: '[BUSINESSEMAIL]',
+            data: _account.get('business').emails && _account.get('business').emails[0] ? _account.get('business').emails[0].email : ''
+        }, {
+            mergeTag: '[BUSINESSFULLADDRESS]',
+            data: _address ? _address.address + ' ' + _address.address2 + ' ' + _address.city + ' ' + _address.state + ' ' + _address.zip : ''
+        }, {
+            mergeTag: '[BUSINESSADDRESS]',
+            data: _address ? _address.address : ''
+        }, {
+            mergeTag: '[BUSINESSCITY]',
+            data: _address ? _address.city : ''
+        }, {
+            mergeTag: '[BUSINESSSTATE]',
+            data: _address ? _address.state : ''
+        }, {
+            mergeTag: '[BUSINESSZIP]',
+            data: _address ? _address.zip : ''
+        }, {
+            mergeTag: '[TRIALDAYS]',
+            data: _account ? _account.get('trialDaysRemaining'): ''
+        }, {
+            mergeTag: '[FULLNAME]',
+            data: _contact ? _contact.get('first') + ' ' + _contact.get('last'): ''
+        }, {
+            mergeTag: '[FIRST]',
+            data: _contact ? _contact.get('first') : ''
+        }, {
+            mergeTag: '[LAST]',
+            data: _contact ? _contact.get('last') : ''
+        }, {
+            mergeTag: '[EMAIL]',
+            data: _contact && _contact.getEmails() && _contact.getEmails()[0] ? _contact.getEmails()[0].email : ''
+        }];
+
+        if ((_user && _userAccount && accountId === 6) || (accountId === 6 && contactId === null)) {
+            var _data = !contactId && !_userAccount ? _account.get('subdomain') : _userAccount.get('subdomain');
+            var adminMergeTagMap = [{
+                mergeTag: '[USERACCOUNTURL]',
+                data: _data + hostname
+            }];
+            mergeTagMap = _.union(mergeTagMap, adminMergeTagMap);
+        }
+
+        var regex;
+        //TODO: fix this block
+        var substitutions = {};
+        _.each(mergeTagMap, function (map) {
+            if (htmlContent.indexOf(map.mergeTag) > -1) {
+                //replace merge vars with relevant data
+                regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
+                var userData = map.data || '';
+                self.log.debug('using the following regex:', regex);
+                htmlContent = htmlContent.replace(regex, '%' + map.mergeTag + '%');
+                self.log.debug('after the replace:', htmlContent);
+                substitutions['%' + map.mergeTag + '%'] =userData;
+            }
+        });
+        var siteUrl = null;
+        var userName = null;
+        if(_account) {
+            siteUrl = _account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+        }
+        if(_user) {
+            userName = _user.get('username');
+        }
+        //TODO: fix this block
+        _.each(vars, function(_var){
+            if(htmlContent.indexOf(_var.name) > -1) {
+                var regexp = new RegExp('\\*\\|' + _var.name + '\\|\\*', 'g');
+                htmlContent = htmlContent.replace(regexp, '%' + _var.name + '%');
+                substitutions['%' + _var.name + '%'] = _var.content;
+            }
+        });
+        return {substitutions:substitutions, html:htmlContent};
     },
 
     /**

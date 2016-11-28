@@ -1933,6 +1933,16 @@
         }
 
 
+        $rootScope.$on('$ssbAccountUpdated', function(event, account) {
+            AccountService.getAccount(function(data) {
+                ssbService.account = null;
+                $timeout(function() {
+                    ssbService.account = data;
+                },0);
+            });
+        });
+
+
 
         (function init() {
 

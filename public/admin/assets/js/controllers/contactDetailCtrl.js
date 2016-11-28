@@ -603,7 +603,7 @@
 
         $scope.contactDeleteFn = function () {
             ContactService.deleteContact($scope.contactId, function (contact) {
-                toaster.pop('warning', 'Contact Deleted.');
+                toaster.pop('success', 'Contact Deleted.');
             });
         };
 

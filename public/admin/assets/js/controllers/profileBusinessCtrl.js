@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations) {
+  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", "$rootScope", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations, $rootScope) {
 
     $scope.isValid = true;
     $scope.hours = hoursConstant;
@@ -275,6 +275,7 @@
         $scope.setDefaults();
         angular.copy($scope.account, $scope.actualAccount);
         $scope.pageSaving = false;
+        $rootScope.$broadcast('$ssbAccountUpdated');
       });
     };
 
