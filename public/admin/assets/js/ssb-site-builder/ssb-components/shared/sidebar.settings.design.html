@@ -196,6 +196,41 @@
 </div>
 
 
+<div class="row padding-10" ng-if="component.type == 'products'">
+    <h4 class="ssb-sidebar-sub-heading-separator">Widget font Style</h4>
+    <div class="form-group">
+        <label>
+            Font(Heading)
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for heading"><i class="fa fa-info-circle" /></span>
+        </label>
+        <select ng-model="component.formSettings.headingFontFamily" class="form-control margin-bottom-0">
+            <option value="">--Select--</option>
+            <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.headingFontFamily}}">{{key}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>
+            Font(Description Text)
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for description"><i class="fa fa-info-circle" /></span>
+        </label>
+        <select ng-model="component.formSettings.descriptionFontFamily" class="form-control margin-bottom-0">
+            <option value="">--Select--</option>
+            <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.descriptionFontFamily}}">{{key}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>
+            Font(Button)
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for buttons"><i class="fa fa-info-circle" /></span>
+        </label>
+        <select ng-model="component.formSettings.buttonFontFamily" class="form-control margin-bottom-0">
+            <option value="">--Select--</option>
+            <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.buttonFontFamily}}">{{key}}</option>
+        </select>
+    </div>
+</div>
+
+
 
 <div ng-if="component.type == 'simple-form' || component.type == 'ssb-form-builder'">
     <h4 class="ssb-sidebar-sub-heading-separator">Input Field Style</h4>
