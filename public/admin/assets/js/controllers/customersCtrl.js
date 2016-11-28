@@ -57,36 +57,16 @@
             modified: function (value) {
                 return value.modified.date;
             },
-            name: function (value) {
-                return [value.first, value.middle, value.last].join(' ').trim();
-            },
-            tags: function (value) {
-                return $scope.contactTagsFn(value);
-            },
-            phone: function (value) {
-                if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
-                    return value.details[0].phones[0].number.trim();
+            
+            trialDays: function(value){
+                var _days = 'N/A';
+                if(value.billing && value.billing.plan == 'NO_PLAN_ARGUMENT'){
+                    _days = value.trialDaysRemaining
                 }
-                return "";
-            },
-            address: function (value) {
-                return value.bestAddress
-            },
-            social: function (value) {
-                if (value.hasLinkedInId) {
-                    return 1;
+                if(value.billing && value.billing.plan != 'NO_PLAN_ARGUMENT'){
+                    _days = 'N/A';
                 }
-                if (value.hasGoogleId) {
-                    return 2;
-                }
-                if (value.hasFacebookId) {
-                    return 3;
-                }
-                if (value.hasTwitterId) {
-                    return 4;
-                }
-
-                return 5;
+                return _days;
             }
         };
 
