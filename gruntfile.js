@@ -200,10 +200,10 @@ module.exports = function(grunt) {
                 dest: 'public/admin/assets/js/admin-vendor-indigenous.js'
             },
             css: {
-                src: [    
-                    'public/js/libs/bootstrap/dist/css/bootstrap.min.css',                    
-                    'public/js/libs/bootstrap-social/bootstrap-social.css',
+                src: [
                     'public/js/libs/font-awesome/css/font-awesome.min.css',
+                    'public/js/libs/bootstrap/dist/css/bootstrap.min.css',
+                    'public/js/libs/bootstrap-social/bootstrap-social.css',
                     'public/js/libs/jqcloud2/dist/jqcloud.min.css',
                     'public/js/libs/angular-wizard/dist/angular-wizard.min.css',
                     'public/js/libs/animate.css/animate.min.css',
