@@ -84,6 +84,9 @@
 
         $scope.addProduct = function () {
             $scope.saveLoading = true;
+            if($scope.newProduct.type === 'EXTERNAL'){
+                $scope.newProduct.externalLinkOpenIn = '_blank';
+            }
             ProductService.postProduct($scope.newProduct, function (product) {
                 product.hasImage = "false";
                 $scope.displayedProducts.unshift(product);

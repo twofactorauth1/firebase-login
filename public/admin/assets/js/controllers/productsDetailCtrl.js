@@ -448,6 +448,12 @@
 
     $scope.productTypes = ProductConstant.product_types;
 
+
+    $scope.externalLinkOptions = ProductConstant.external_link_options.dp;
+
+
+    $scope.externalLinkViewOptions = ProductConstant.external_link_view_options.dp;
+
     /*
      * @convert:iconpicker
      * - icon picker for product image replacement
@@ -1136,6 +1142,9 @@
     $scope.backToProducts = function () {
         $location.url('/commerce/products');
     };
+
+
+    
 
     $scope.init = (function(){
       $scope.getProduct().then(function(data) {
