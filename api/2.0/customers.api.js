@@ -27,6 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listCustomers.bind(this));
+        app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.listAllCustomers.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomer.bind(this));
         app.post(this.url('customer/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addCustomerNotes.bind(this));
 
@@ -59,6 +60,28 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit , function(err, customers){
                 self.log.debug(accountId, userId, '<< listCustomers');
+                self.sendResultOrError(resp, err, customers, 'Error listing customers');
+            });
+        }
+
+    },
+
+
+    listAllCustomers: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listAllCustomers');
+        
+
+        if(accountId === appConfig.mainAccountID) {
+            manager.getMainCustomers(accountId, userId, null, null, null, null, function(err, customers){
+                self.log.debug(accountId, userId, '<< listAllCustomers');
+                self.sendResultOrError(resp, err, customers, 'Error listing customers');
+            });
+        } else {
+            manager.getCustomers(accountId, userId, null, null, null, null , function(err, customers){
+                self.log.debug(accountId, userId, '<< listAllCustomers');
                 self.sendResultOrError(resp, err, customers, 'Error listing customers');
             });
         }

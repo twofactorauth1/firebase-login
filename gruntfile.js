@@ -201,7 +201,7 @@ module.exports = function(grunt) {
             },
             css: {
                 src: [
-                    'public/js/libs/font-awesome/css/font-awesome.min.css',
+                    
                     'public/js/libs/bootstrap/dist/css/bootstrap.min.css',
                     'public/js/libs/bootstrap-social/bootstrap-social.css',
                     'public/js/libs/jqcloud2/dist/jqcloud.min.css',
@@ -211,7 +211,8 @@ module.exports = function(grunt) {
                     'public/js/libs/slick-carousel/slick/slick-theme.css',
                     'public/js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css',
                     'public/js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
-                    'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css'
+                    'public/js/libs/blueimp-gallery/css/blueimp-gallery.min.css',
+                    'public/js/libs/font-awesome/css/font-awesome.min.css'
                 ],
                 dest:'public/css/vendor.css',
                 nonull:true

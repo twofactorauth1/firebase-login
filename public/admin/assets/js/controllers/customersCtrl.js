@@ -30,7 +30,7 @@
 
 
         $scope.getCustomers = function () {
-            CustomerService.getCustomers('created.date', 'desc', 0, 500, function(customers){
+            CustomerService.loadAllCustomers(function(customers){
                 $scope.customers = customers.results;
                 $scope.showCustomers = true;
                 console.log('customers:', customers);
