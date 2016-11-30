@@ -555,6 +555,62 @@
 
             });
 
+
+            // ======================================
+            // Emails
+            // ======================================
+
+            var emailsData = [];
+            var totalEmails = 0;
+            _.each(results.emailsReport.emails, function(email){
+                var subArr = [];
+                var value = email.total || 0;
+                subArr.push(new Date(email.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(value);
+                totalEmails += value;
+                emailsData.push(subArr);
+            });
+
+            var campaignsData = [];
+            _.each(results.emailsReport.campaigns, function(campaign){
+                var subArr = [];
+                var value = campaign.total || 0;
+                subArr.push(new Date(campaign.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(value);
+
+                campaignsData.push(subArr);
+            });
+
+            var opensData = [];
+            var totalOpens = 0;
+            _.each(results.emailsReport.opens, function(open){
+                var subArr = [];
+                var value = open.total || 0;
+                subArr.push(new Date(open.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(value);
+                totalOpens += value;
+                opensData.push(subArr);
+            });
+
+            var clicksData = [];
+            var totalClicks = 0;
+            _.each(results.emailsReport.clicks, function(click){
+                var subArr = [];
+                var value = click.total || 0;
+                subArr.push(new Date(click.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(value);
+                totalClicks += value;
+                clicksData.push(subArr);
+            });
+
+            ChartAnalyticsService.emailsOverview(emailsData, campaignsData, opensData, clicksData, function(data){
+                $scope.emailsOverviewConfig = data;
+                $scope.emailsOverviewConfig.loading = false;
+                $scope.totalEmails = totalEmails;
+                $scope.totalOpens = totalOpens;
+                $scope.totalClicks = totalClicks;
+            });
+
             //=======================================
             // Cleanup
             //=======================================
@@ -853,6 +909,13 @@
             }
         });
 
+        $scope.$watch('campaigns', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
+                AnalyticsWidgetStateService.setCustomerAnalyticsWidgetStates("campaigns", value);
+                reflowCharts();
+            }
+        });
+
         $scope.setAnalyticsWidgetStates = function(){
             AnalyticsWidgetStateService.getCustomerAnalyticsWidgetStates();
             $timeout(function() {
@@ -866,6 +929,7 @@
                 $scope.ua = AnalyticsWidgetStateService.customerAnalyticsWidgetStateConfig.ua;
                 $scope.userAgentsTable = AnalyticsWidgetStateService.customerAnalyticsWidgetStateConfig.userAgentsTable;
                 $scope.rev = AnalyticsWidgetStateService.customerAnalyticsWidgetStateConfig.rev;
+                $scope.campaigns = AnalyticsWidgetStateService.customerAnalyticsWidgetStateConfig.campaigns;
                 $scope.dataLoaded = true;
                 reflowCharts();
             }, 0);
