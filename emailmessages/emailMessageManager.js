@@ -1322,11 +1322,11 @@ var emailMessageManager = {
             self.log.debug(response.statusCode);
             self.log.debug(response.body);
             self.log.debug(response.headers);
-            if (err) {
+            if (error) {
                 self.log.error('Error sending email:', err);
-                return fn(err);
+                return fn(error);
             } else {
-                self.log.debug(accountId, null, '<< notifyAdmin');
+                self.log.debug(null, null, '<< notifyAdmin');
                 return fn(null, response);
             }
         });
