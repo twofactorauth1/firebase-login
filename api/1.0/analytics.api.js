@@ -85,8 +85,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/reports/os'), this.isAuthAndSubscribedApi.bind(this), this.getAdminOSReport.bind(this));
         app.get(this.url('admin/reports/emails'), this.isAuthAndSubscribedApi.bind(this), this.getAdminEmailsReport.bind(this));
         app.get(this.url('admin/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allAdminReports.bind(this));
-    },
-
+        app.get(this.url('customer/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allCustomerReports.bind(this));
+    },    
 
 
     /**
@@ -1225,6 +1225,93 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         }, function(err, results){
             self.log.debug(accountId, userId, '<< allReports');
+            self.sendResultOrError(resp, err, results, 'Error getting report');
+        });
+    },
+
+    allCustomerReports: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> allCustomerReports (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+        var dateDiff = moment(start).diff(end, 'days');
+
+        var previousStart = moment(start).add(dateDiff, 'days').toDate();
+        var previousEnd = start;
+        self.log.debug('dateDiff:', dateDiff);
+        self.log.debug('start:', start);
+        self.log.debug('end:', end);
+        self.log.debug('previousStart:', previousStart);
+        self.log.debug('previousEnd:', previousEnd);
+        var accountIdParam = req.query.accountId;
+        if(accountId === appConfig.mainAccountID && accountIdParam) {
+            self.log.debug('Viewing analytics as account ' + accountIdParam);
+            accountId = parseInt(accountIdParam);
+        }
+
+        async.parallel({
+            visitorReports: function(callback){
+                analyticsManager.getVisitorReports(accountId, userId, start, end, false, callback);
+            },
+            visitorLocationsReport: function(callback) {
+                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, callback);
+            },
+            visitorLocationsByCountryReport: function(callback) {
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, callback);
+            },
+            visitorDeviceReport: function(callback) {
+                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, callback);
+            },
+            userReport: function(callback) {
+                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+            },
+            pageViewsReport: function(callback) {
+                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+            },
+            sessionsReport: function(callback) {
+                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+            },
+            sessionLengthReport: function(callback) {
+                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+            },
+            trafficSourcesReport: function(callback) {
+                analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, callback);
+            },
+            newVsReturningReport: function(callback) {
+                analyticsManager.newVsReturningReport(accountId, userId, start, end, false, callback);
+            },
+            pageAnalyticsReport: function(callback) {
+                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, callback);
+            },
+            userAgents: function(callback) {
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, callback);
+            },
+            revenueReport: function(callback) {
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+            },
+            emailsReport: function(callback) {
+                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+            }
+        }, function(err, results){
+            self.log.debug(accountId, userId, '<< allCustomerReports');
             self.sendResultOrError(resp, err, results, 'Error getting report');
         });
     },

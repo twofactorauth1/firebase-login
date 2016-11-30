@@ -334,6 +334,26 @@ app.constant('productConstant', {
         data: "auto_inactive"
       }
     ]
+  },
+  external_link_options:{
+    dp: [{
+        label: "New Window",
+        data: "_blank"
+      }, {
+        label: "Same Window",
+        data: "_top"
+      }
+    ]
+  },
+  external_link_view_options:{
+    dp: [{
+        label: "Yes",
+        data: "true"
+      }, {
+        label: "No",
+        data: "false"
+      }
+    ]
   }
 });
 

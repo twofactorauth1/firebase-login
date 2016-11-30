@@ -138,7 +138,7 @@
                 var subArr = [];
                 var value = visitor.value || 0;
                 currentTotalVisitors += value;
-                subArr.push(new Date(visitor.timeframe.start).getTime());
+                subArr.push(new Date(visitor.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 visitorsData.push(subArr);
             });
@@ -216,7 +216,7 @@
             _.each(result8, function (session) {
                 var subArr = [];
                 var value = session.count || session.value || 0;
-                subArr.push(new Date(session.timeframe.start).getTime());
+                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 avgSessionData.push(subArr);
             });
@@ -233,7 +233,7 @@
                 var subArr = [];
                 var value = bounce.count || bounce.value || 0;
                 _totalBounces += value;
-                subArr.push(new Date(bounce.timeframe.start).getTime());
+                subArr.push(new Date(bounce.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 _bouncesData.push(subArr);
             });
@@ -296,7 +296,7 @@
                 var subArr = [];
                 var value = pageView.value || 0;
                 currentTotalPageviews += value;
-                subArr.push(new Date(pageView.timeframe.start).getTime());
+                subArr.push(new Date(pageView.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 pageviewsData.push(subArr);
             });
@@ -308,7 +308,7 @@
             _.each(results.dau, function(dau){
                 var subArr = [];
                 var value = dau.total || 0;
-                subArr.push(new Date(dau.timeframe.start).getTime());
+                subArr.push(new Date(dau.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 dauData.push(subArr);
             });
@@ -336,7 +336,7 @@
                 var subArr = [];
                 var value = session.total || session.value || 0;
                 _totalSessions += value;
-                subArr.push(new Date(session.timeframe.start).getTime());
+                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 _sessionsData.push(subArr);
             });
@@ -556,7 +556,7 @@
             var currentTotalRevenue = 0;
             var currentTotalCount = 0;
             _.each(results.revenueReport.currentMonth, function(rev){
-                revenueChartData.xData.push(new Date(rev.timeframe.start).getTime());
+                revenueChartData.xData.push(new Date(rev.timeframe.start.replace(" ", "T")).getTime());
                 var amt = rev.total || 0;
                 var cnt = rev.count || 0;
                 revenueChartData.amountData.push(amt);
@@ -600,7 +600,7 @@
             _.each(results.emailsReport.emails, function(email){
                 var subArr = [];
                 var value = email.total || 0;
-                subArr.push(new Date(email.timeframe.start).getTime());
+                subArr.push(new Date(email.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 totalEmails += value;
                 emailsData.push(subArr);
@@ -610,7 +610,7 @@
             _.each(results.emailsReport.campaigns, function(campaign){
                 var subArr = [];
                 var value = campaign.total || 0;
-                subArr.push(new Date(campaign.timeframe.start).getTime());
+                subArr.push(new Date(campaign.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
 
                 campaignsData.push(subArr);
@@ -621,7 +621,7 @@
             _.each(results.emailsReport.opens, function(open){
                 var subArr = [];
                 var value = open.total || 0;
-                subArr.push(new Date(open.timeframe.start).getTime());
+                subArr.push(new Date(open.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 totalOpens += value;
                 opensData.push(subArr);
@@ -632,7 +632,7 @@
             _.each(results.emailsReport.clicks, function(click){
                 var subArr = [];
                 var value = click.total || 0;
-                subArr.push(new Date(click.timeframe.start).getTime());
+                subArr.push(new Date(click.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 totalClicks += value;
                 clicksData.push(subArr);
@@ -713,7 +713,7 @@
                 var subArr = [];
                 var value = pageView.value || 0;
                 currentTotalPageviews += value;
-                subArr.push(new Date(pageView.timeframe.start).getTime());
+                subArr.push(new Date(pageView.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 pageviewsData.push(subArr);
             });
@@ -742,7 +742,7 @@
                 var subArr = [];
                 var value = session.value || 0;
                 _totalSessions += value;
-                subArr.push(new Date(session.timeframe.start).getTime());
+                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());
                 subArr.push(value);
                 _sessionsData.push(subArr);
             });

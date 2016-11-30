@@ -1323,7 +1323,7 @@ var emailMessageManager = {
             self.log.debug(response.body);
             self.log.debug(response.headers);
             if (error) {
-                self.log.error('Error sending email:', err);
+                self.log.error('Error sending email:', error);
                 return fn(error);
             } else {
                 self.log.debug(null, null, '<< notifyAdmin');

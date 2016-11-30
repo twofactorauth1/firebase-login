@@ -26,8 +26,11 @@
          * -
          */
 
+
+
+
         $scope.getCustomers = function () {
-            CustomerService.getCustomers(null, null, 0, 500, function(customers){
+            CustomerService.loadAllCustomers(function(customers){
                 $scope.customers = customers.results;
                 $scope.showCustomers = true;
                 console.log('customers:', customers);
