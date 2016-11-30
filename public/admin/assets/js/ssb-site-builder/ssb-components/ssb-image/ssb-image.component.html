@@ -1,5 +1,5 @@
 <div>
-	<div ng-if="vm.component.version != 2">
+	<div ng-if="vm.component.version != 2" class="ssb-image-component-container">
 		<img class="img-responsive" ng-src="{{vm.component.src}}" alt="{{(vm.component.src) ? vm.component.alttext : ''}}"/>
 	</div>
 	<div class="nav-header-div" ng-if="vm.component.version == 2" ng-class="{parallax:vm.component.parallax}"

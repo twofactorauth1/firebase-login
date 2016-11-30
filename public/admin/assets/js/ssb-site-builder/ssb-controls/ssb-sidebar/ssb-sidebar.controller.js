@@ -955,9 +955,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     function validateDuplicatePage(pageHandle) {
 
+        pageHandle = $filter('slugify')(pageHandle); // in case $watch hasn't cleaned-up the handle.
         var _page = vm.state.pages.filter(function(page){return page.handle.toLowerCase() === pageHandle.toLowerCase()})[0]
 
-        if (_page && _page._id !== vm.state.page._id) {
+        if (pageHandle === "") {
+            return "Page handle is invalid.";
+        } else if (_page && _page._id !== vm.state.page._id) {
             return "Page handles must be unique.";
         } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
             return "Page handle cannot be a system route.";

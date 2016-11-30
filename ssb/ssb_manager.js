@@ -2893,8 +2893,8 @@ module.exports = {
     listPlatformSectionSummaries: function(accountId, fn) {
         var self = this;
         self.log.debug(accountId, null, '>> listPlatformSectionSummaries');
-
-        var query = {accountId:PLATFORM_ID};
+        var startTime = moment();
+        var query = {accountId:PLATFORM_ID, enabled:true};
         //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
         var fields = {
             _id:1,
@@ -2913,7 +2913,8 @@ module.exports = {
                 self.log.error(accountId, null, 'Error listing sections:', err);
                 return fn(err);
             } else {
-                self.log.debug(accountId, null, '<< listPlatformSectionSummaries');
+                var checkTime = moment();
+                self.log.debug(accountId, null, '<< listPlatformSectionSummaries (' + checkTime.diff(startTime) + ')');
                 return fn(null, list);
             }
         });

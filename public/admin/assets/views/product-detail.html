@@ -6,8 +6,9 @@
             <div class="col-sm-8">
                 <h1 class="mainTitle">{{product.name}}</h1>
                 <span class="mainDescription">{{product.description | truncate : 650 : '...' : true}}</span>
-            </div>
+            </div>            
         </div>
+        
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: YOUR CONTENT HERE -->
@@ -16,16 +17,27 @@
             <div class="col-sm-12">
                 <div class="panel panel-transparent row margin-bottom-0">
                     <div class="panel-body">
-                        <div class="col-sm-8 col-sm-offset-4">
+                        <div class="col-xs-12">
                             <!-- <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-receipt ng-click-active pull-right">
                                 <span>Duplicate</span>
                             </button> -->
-                            <button type="button" ng-click="cloneProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="cloneLoading">
+                            <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-right-5" ng-click="backToProducts()">
+                            Back to Products
+                            </button>
+                            <button type="button" ng-click="cloneProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5 hidden-xs" ng-disabled="cloneLoading">
                               <span><i ng-class="{'fa fa-spin fa-spinner':cloneLoading}"></i> Clone</span>
                             </button>
-                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="saveLoading || (product.on_sale && productDetail.$invalid && !productDetail.$pristine ) || checkFulfillmentEmail()">
+                            <button type="button" ng-click="cloneProductFn()" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5 visible-xs-inline-block" ng-disabled="cloneLoading">
+                              <span><i ng-class="{'fa fa-spin fa-spinner':cloneLoading}"></i> Clone</span>
+                            </button>
+                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5 hidden-xs" ng-disabled="saveLoading || (product.on_sale && productDetail.$invalid && !productDetail.$pristine ) || checkFulfillmentEmail()">
                                 <span><i ng-class="{'fa fa-spin fa-spinner':saveLoading}"></i> Save</span>
                             </button>
+                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5 visible-xs-inline-block" ng-disabled="saveLoading || (product.on_sale && productDetail.$invalid && !productDetail.$pristine ) || checkFulfillmentEmail()">
+                                <span><i ng-class="{'fa fa-spin fa-spinner':saveLoading}"></i> Save</span>
+                            </button>
+
+                            
                             <!-- <a ladda="ldloading.expand_right" class="btn btn-wide btn-primary" data-style="expand-right" ng-click="clickBtn('expand-right')">
                                 expand-right
                             </a> -->

@@ -36,7 +36,7 @@
             }
 
         }
-        
+
 
         [navigation-component]{
             flex: inherit !important;
@@ -47,7 +47,7 @@
     }
 
     .ssb-page-section-layout-nav-hero [ssb-text-component] {
-        width: 100%;        
+        width: 100%;
         text-align: center;
     }
 
@@ -119,16 +119,28 @@
         filter: blur(5px);
     }
 
+
+    .ssb-page-section-layout-blur-image [ssb-image-component] .nav-header-div {
+        -webkit-filter: blur(5px);
+        -moz-filter: blur(5px);
+        -o-filter: blur(5px);
+        -ms-filter: blur(5px);
+        filter: blur(5px);
+    }
+
     .ssb-page-section-layout-nav-hero .ssb-hero-main-header [ssb-text-component] {
         //font-size set in ssb-themes.less default
     }
 
-    .ssb-page-section-layout-nav-hero .ssb-hero-sub-header [ssb-text-component] {
-        .ssb-media-query-xsmall-only({
-            [style] {
-                font-size: 8vw!important;
-            }
-        });
+    .ssb-page-section-layout-nav-hero.hide-hero-bg-image [ssb-image-component] {
+        background-image: none !important;
+        .ssb-image-component-container{
+            display:none;
+        }
+
+        .nav-header-div{
+            background-image: none !important;
+        }
     }
 
     .ssb-page-section-layout-nav-hero .flex-container-absolute-column {
@@ -155,7 +167,7 @@
 
     }
 
-    
+
 
     /*
      * layout-hero-v2
@@ -241,17 +253,17 @@
             max-width: 100%!important;
 
             li button:before{
-                opacity: 0.6;
+                opacity: 0.4;
                 color: #FFF;
-                border: 4px solid #000;
-                border-radius: 50%;
+                // border: 4px solid #666;
+                // border-radius: 50%;
                 font-size: 8px;
                 line-height: 10px;
-                width: 15px;
-                height: 15px;
+                width: 16px;
+                height: 16px;
             }
             li.slick-active button:before{
-                color: #00FFFF;
+                color: #000;
             }
 
 

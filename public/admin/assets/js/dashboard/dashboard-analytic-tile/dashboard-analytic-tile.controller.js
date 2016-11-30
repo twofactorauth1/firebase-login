@@ -23,125 +23,136 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     };
 
     function analyticMap() {
-
         var ret = {};
+        var analyticsObject = DashboardService.state.analytics;
 
-        switch(vm.analytic.name) {
-            case 'visitors':
+        if (analyticsObject) {
+            switch(vm.analytic.name) {
+                case 'visitors':
 
-                ret.widgetTitle = 'Website';
-                ret.buttonTitle = 'View Analytics';
-                ret.data = [
-                    {
-                        analyticDataLabel: 'MTD New Visitors',
-                        analyticDataValue: DashboardService.state.analytics.visitors.total
-                    },
-                    {
-                        analyticDataLabel: 'MTD Uniques',
-                        analyticDataValue: DashboardService.state.analytics.allvisitors.total
-                    },
-                    {
-                        analyticDataLabel: 'MTD Page Views',
-                        analyticDataValue: DashboardService.state.analytics.pageViews.total
-                    }
-                ];
+                    ret.widgetTitle = 'Website';
+                    ret.buttonTitle = 'View Analytics';
+                    ret.data = [
+                        {
+                            analyticDataLabel: 'MTD New Visitors',
+                            analyticDataValue: analyticsObject.visitors.total
+                        },
+                        {
+                            analyticDataLabel: 'MTD Uniques',
+                            analyticDataValue: analyticsObject.allvisitors.total
+                        },
+                        {
+                            analyticDataLabel: 'MTD Page Views',
+                            analyticDataValue: analyticsObject.pageViews.total
+                        }
+                    ];
 
-                break;
+                    break;
 
-            case 'contacts':
+                case 'contacts':
 
-                ret.widgetTitle = 'Contacts';
-                ret.buttonTitle = 'View Contacts';
-                ret.data = [
-                    {
-                        analyticDataLabel: 'MTD Contacts',
-                        analyticDataValue: DashboardService.state.analytics.contacts.total
-                    },
-                    {
-                        analyticDataLabel: 'MTD Leads',
-                        analyticDataValue: DashboardService.state.analytics.contacts.leadTotal
-                    }
-                ]
+                    ret.widgetTitle = 'Contacts';
+                    ret.buttonTitle = 'View Contacts';
+                    ret.data = [
+                        {
+                            analyticDataLabel: 'MTD Contacts',
+                            analyticDataValue: analyticsObject.contacts.total
+                        },
+                        {
+                            analyticDataLabel: 'MTD Leads',
+                            analyticDataValue: analyticsObject.contacts.leadTotal
+                        }
+                    ]
 
-                break;
-            case 'CampaignMetrics':
+                    break;
+                case 'CampaignMetrics':
 
-                ret.widgetTitle = 'Campaigns';
-                ret.buttonTitle = 'View Campaigns';
-                ret.data = [
-                    {
-                        analyticDataLabel: 'MTD Sent',
-                        analyticDataValue: DashboardService.state.analytics.campaigns.totalSent
-                    },
-                    {
-                        analyticDataLabel: 'MTD Opened',
-                        analyticDataValue: DashboardService.state.analytics.campaigns.totalOpened
-                    },
-                    {
-                        analyticDataLabel: 'MTD Clicked',
-                        analyticDataValue: DashboardService.state.analytics.campaigns.totalClicked
-                    }
-                ]
+                    ret.widgetTitle = 'Campaigns';
+                    ret.buttonTitle = 'View Campaigns';
+                    ret.data = [
+                        {
+                            analyticDataLabel: 'MTD Sent',
+                            analyticDataValue: analyticsObject.campaigns.totalSent
+                        },
+                        {
+                            analyticDataLabel: 'MTD Opened',
+                            analyticDataValue: analyticsObject.campaigns.totalOpened
+                        },
+                        {
+                            analyticDataLabel: 'MTD Clicked',
+                            analyticDataValue: analyticsObject.campaigns.totalClicked
+                        }
+                    ]
 
-                break;
-            case 'SocialMedia':
+                    break;
+                case 'SocialMedia':
 
-                ret.widgetTitle = 'Social Media';
-                ret.buttonTitle = 'View Social Networks';
-                ret.data = [
-                    {
-                        analyticDataLabel: 'Facebook',
-                        analyticDataValue: function() { return vm.analyticData['SocialMedia'].facebook }
-                    },
-                    {
-                        analyticDataLabel: 'Twitter',
-                        analyticDataValue: function() { return vm.analyticData['SocialMedia'].twitter }
-                    }
-                ]
+                    ret.widgetTitle = 'Social Media';
+                    ret.buttonTitle = 'View Social Networks';
+                    ret.data = [
+                        {
+                            analyticDataLabel: 'Facebook',
+                            analyticDataValue: function () {
+                                return vm.analyticData['SocialMedia'].facebook
+                            }
+                        },
+                        {
+                            analyticDataLabel: 'Twitter',
+                            analyticDataValue: function () {
+                                return vm.analyticData['SocialMedia'].twitter
+                            }
+                        }
+                    ]
 
-                break;
-            case 'Orders':
+                    break;
+                case 'Orders':
 
-                break;
-            case 'Revenue':
+                    break;
+                case 'Revenue':
 
-                ret.widgetTitle = 'E-Commerce';
-                ret.buttonTitle = 'View Revenue';
-                ret.data = [
-                    {
-                        analyticDataLabel: 'YTD Order Rev.',
-                        analyticDataValue: '$' + (parseFloat(DashboardService.state.analytics.revenue.YTDTotalAmount) - parseFloat(DashboardService.state.analytics.revenue.YTDTotalTax)).toFixed(2)
-                    },
-                    {
-                        analyticDataLabel: 'YTD Tax Collected',
-                        analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalTax
-                    },
-                    {
-                        analyticDataLabel: 'YTD New Orders',
-                        analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalOrders
-                    }
-                ]
+                    ret.widgetTitle = 'E-Commerce';
+                    ret.buttonTitle = 'View Revenue';
+                    ret.data = [
+                        {
+                            analyticDataLabel: 'YTD Order Rev.',
+                            analyticDataValue: '$' + (parseFloat(analyticsObject.revenue.YTDTotalAmount) - parseFloat(analyticsObject.revenue.YTDTotalTax)).toFixed(2)
+                        },
+                        {
+                            analyticDataLabel: 'YTD Tax Collected',
+                            analyticDataValue: analyticsObject.revenue.YTDTotalTax
+                        },
+                        {
+                            analyticDataLabel: 'YTD New Orders',
+                            analyticDataValue: analyticsObject.revenue.YTDTotalOrders
+                        }
+                    ]
 
-                break;
-            default:
+                    break;
+                default:
                 //code
+            }
+
+        } else {
+            $timeout(function(){
+                vm.analyticMap();;
+            }, 100);
         }
 
+        vm.uiDetails = ret;
         return ret;
     }
 
     $scope.$watch(function() { return DashboardService.state.analytics }, function(state, oldState) {
         if(state && state !== oldState){
-            vm.uiDetails = vm.analyticMap();
+            vm.analyticMap();
         }
     })
-    
-    function init(element) {
 
+    function init(element) {
         vm.element = element;
 
         $timeout(function() {
-            vm.uiDetails = vm.analyticMap();
+            vm.analyticMap();
         }, 0);
 
     }

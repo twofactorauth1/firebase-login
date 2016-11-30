@@ -872,6 +872,11 @@
                 }
             };
 
+
+            $scope.backToOrders = function () {
+                $location.url('/commerce/orders');
+            };
+
             $scope.isDonationOrderFn = function () {
                 if (!$scope.order) {
                     return isDonation;

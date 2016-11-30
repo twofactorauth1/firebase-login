@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", 'editableOptions', "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "AccountService", "WebsiteService",  "toaster", "SweetAlert", "productConstant", function ($scope, $modal, $timeout, editableOptions, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, AccountService, WebsiteService, toaster, SweetAlert, ProductConstant) {
+  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", 'editableOptions', "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "AccountService", "WebsiteService",  "toaster", "SweetAlert", "productConstant", "$location", function ($scope, $modal, $timeout, editableOptions, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, AccountService, WebsiteService, toaster, SweetAlert, ProductConstant, $location) {
 
 
     /*
@@ -447,6 +447,12 @@
     });
 
     $scope.productTypes = ProductConstant.product_types;
+
+
+    $scope.externalLinkOptions = ProductConstant.external_link_options.dp;
+
+
+    $scope.externalLinkViewOptions = ProductConstant.external_link_view_options.dp;
 
     /*
      * @convert:iconpicker
@@ -1132,6 +1138,13 @@
       return returnValue;
       
     }
+
+    $scope.backToProducts = function () {
+        $location.url('/commerce/products');
+    };
+
+
+    
 
     $scope.init = (function(){
       $scope.getProduct().then(function(data) {

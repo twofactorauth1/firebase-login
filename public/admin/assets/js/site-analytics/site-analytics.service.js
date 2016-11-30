@@ -11,6 +11,7 @@
         var saService = {};
         var baseAnalyticsAPIUrl = '/api/1.0/analytics/reports';
         var adminAnalyticsAPIUrl = '/api/1.0/analytics/admin/reports';
+        var customerAnalyticsAPIUrl = '/api/1.0/analytics/customer/reports';
         saService.runReports = runReports;
         saService.runAdminReports = runAdminReports;
         saService.runCustomerReports = runCustomerReports;
@@ -63,7 +64,7 @@
             }
             var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            return saRequest($http.get(baseAnalyticsAPIUrl + '/all?accountId='+ accountId +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
+            return saRequest($http.get(customerAnalyticsAPIUrl + '/all?accountId='+ accountId +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
 

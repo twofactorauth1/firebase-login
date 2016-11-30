@@ -540,7 +540,9 @@
             var analyticsOverviewConfig = {
                 options: {
                     chart: {
-                        spacing: [25, 25, 25, 25]
+                        spacing: [25, 25, 25, 25],
+                        zoomType: 'x',
+                        pinchType: 'x'
                     },
                     colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
                     title: {
@@ -618,7 +620,9 @@
             var emailsOverviewConfig = {
                 options: {
                     chart: {
-                        spacing: [25, 25, 25, 25]
+                        spacing: [25, 25, 25, 25],
+                        zoomType: 'x',
+                        pinchType: 'x'
                     },
                     colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
                     title: {
@@ -698,7 +702,9 @@
                 options: {
                     chart: {
                         spacing: [25, 25, 25, 25],
-                        height: 360
+                        height: 360,
+                        zoomType: 'x',
+                        pinchType: 'x'
                     },
                     colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
                     title: {
@@ -1077,7 +1083,9 @@
             var revenueConfig = {
                 options: {
                     chart: {
-                        spacing: [25, 25, 25, 25]
+                        spacing: [25, 25, 25, 25],
+                        zoomType: 'x',
+                        pinchType: 'x'
                     },
                     colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
                     title: {
@@ -1110,6 +1118,7 @@
                     labels: {
                         format: "{value:%b %d}"
                     },
+                    minTickInterval: 4,
                     categories: ordersData.xData
                 },
                 yAxis: [{

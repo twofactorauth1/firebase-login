@@ -110,6 +110,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 classString += " no-component-vertical-space";
             }
 
+            if(section.title && (section.title.toLowerCase() === "nav + hero" || section.title.toLowerCase() === "hero")){
+                if(section.bg && section.bg.img && section.bg.img.show === false){
+                    classString += " hide-hero-bg-image";
+                }
+            }
+
         }
         // console.debug('section classString')
         // console.debug(classString)

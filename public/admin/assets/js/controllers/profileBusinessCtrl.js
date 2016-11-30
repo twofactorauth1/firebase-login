@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations) {
+  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", "$rootScope", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations, $rootScope) {
 
     $scope.isValid = true;
     $scope.hours = hoursConstant;
@@ -229,9 +229,31 @@
       }
     };
 
+
+    function resetTaxBussinessLocation(){
+        if ($scope.account && $scope.account.commerceSettings && $scope.account.commerceSettings.taxes && $scope.account.commerceSettings.taxbased === 'business_location') {
+            var hasZip = true;
+
+            if (!$scope.account.business) {
+                hasZip = false;    
+            } else if ($scope.account.business && !$scope.account.business.addresses) {
+                hasZip = false;
+            } else if ($scope.account.business && $scope.account.business.addresses && !$scope.account.business.addresses.length) {
+                hasZip = false;
+            } else if ($scope.account.business && $scope.account.business.addresses && $scope.account.business.addresses.length && $scope.account.business.addresses[0].zip === '') {
+                hasZip = false;
+            }
+
+            if (!hasZip) {
+                $scope.account.commerceSettings.taxbased = null;
+            }
+        }
+    }
+
     $scope.profileSaveFn = function () {
       $scope.pageSaving = true;
       console.log('profileSaveFn >>>');
+      resetTaxBussinessLocation();
       angular.copy($scope.account, $scope.actualAccount);
       $scope.validateBeforeSave();
       if (!$scope.isValid) {
@@ -253,6 +275,7 @@
         $scope.setDefaults();
         angular.copy($scope.account, $scope.actualAccount);
         $scope.pageSaving = false;
+        $rootScope.$broadcast('$ssbAccountUpdated');
       });
     };
 

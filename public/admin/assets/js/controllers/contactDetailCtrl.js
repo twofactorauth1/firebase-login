@@ -81,6 +81,9 @@
             }
 
         };
+        $scope.backToContacts = function () {
+            $location.url('/contacts');
+        };
         /*
          * @addNote
          * add a note to an order
@@ -600,7 +603,7 @@
 
         $scope.contactDeleteFn = function () {
             ContactService.deleteContact($scope.contactId, function (contact) {
-                toaster.pop('warning', 'Contact Deleted.');
+                toaster.pop('success', 'Contact Deleted.');
             });
         };
 

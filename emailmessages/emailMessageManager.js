@@ -144,7 +144,7 @@ var emailMessageManager = {
                 request.path = '/v3/user/scheduled_sends';
                 request.body = {
                     batch_id: batchId,
-                    status: 'cancel'
+                    status: 'pause'
                 };
                 sg.API(request, function (err, response) {
                     if(err) {
@@ -235,6 +235,7 @@ var emailMessageManager = {
 
             },
             function(batchId, contacts, userAry, userAccountAry, cb) {
+                var sendgridSubsAndHtml = {};
                 juice.juiceResources(htmlContent, {}, function(err, html){
                     if(err) {
                         self.log.error('Error juicing the htmlContent:', err);
@@ -259,13 +260,8 @@ var emailMessageManager = {
                             if(userAccountAry && userAccountAry[i]) {
                                 userAccount = userAccountAry[i];
                             }
-                            var mergedHtml = self._findReplaceMergeTagsWithObjects(account, contact, user, userAccount, html, vars);
-                            p.content = [
-                                {
-                                    type:'text/html',
-                                    value:mergedHtml
-                                }
-                            ];
+                            sendgridSubsAndHtml = self._convertMergeTagsToSendgridPersonalizations(account, contact, user, userAccount, html, vars);
+                            p.substitutions = sendgridSubsAndHtml.substitutions;
                             if(emailSettings.cc) {
                                 p.cc =[{email:emailSettings.cc}];
                             }
@@ -275,7 +271,7 @@ var emailMessageManager = {
                             personalizations.push(p);
                             i++;
                         });
-                        cb(null, batchId, personalizations, contacts, html);
+                        cb(null, batchId, personalizations, contacts, sendgridSubsAndHtml.html);
                     }
                 });
             },
@@ -1326,11 +1322,11 @@ var emailMessageManager = {
             self.log.debug(response.statusCode);
             self.log.debug(response.body);
             self.log.debug(response.headers);
-            if (err) {
-                self.log.error('Error sending email:', err);
-                return fn(err);
+            if (error) {
+                self.log.error('Error sending email:', error);
+                return fn(error);
             } else {
-                self.log.debug(accountId, null, '<< notifyAdmin');
+                self.log.debug(null, null, '<< notifyAdmin');
                 return fn(null, response);
             }
         });
@@ -1671,6 +1667,126 @@ var emailMessageManager = {
         });
     },
 
+    _convertMergeTagsToSendgridPersonalizations: function(account, contact, user, userAccount, htmlContent, vars) {
+        var self = this;
+
+        var _account = account;
+        var accountId = account.id();
+        var _contact = contact;
+        var contactId = contact.id();
+        var _userAccount = userAccount;
+        var _user = user;
+        var environment = appConfig.environment;
+        var port = appConfig.port;
+
+        //list of possible merge vars and the matching data
+        var _address = _account.get('business').addresses && _address ? _address : null;
+        var hostname = '.indigenous.io';
+
+        if(environment === appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
+            hostname = '.indigenous.local' + ":" + port;
+        }
+        else if(environment !== appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
+            hostname = '.test.indigenous.io';
+        }
+        var mergeTagMap = [{
+            mergeTag: '[URL]',
+            data: _account ? _account.get('subdomain') + hostname : ''
+        }, {
+            mergeTag: '[SUBDOMAIN]',
+            data: _account ? _account.get('subdomain') : ''
+        }, {
+            mergeTag: '[CUSTOMDOMAIN]',
+            data: _account ? _account.get('customDomain'): ''
+        }, {
+            mergeTag: '[BUSINESSNAME]',
+            data: _account ? _account.get('business').name: ''
+        }, {
+            mergeTag: '[BUSINESSLOGO]',
+            data: _account ? _account.get('business').logo: ''
+        }, {
+            mergeTag: '[BUSINESSDESCRIPTION]',
+            data: _account ? _account.get('business').description: ''
+        }, {
+            mergeTag: '[BUSINESSPHONE]',
+            data: _account.get('business').phones && _account.get('business').phones[0] ? _account.get('business').phones[0].number : ''
+        }, {
+            mergeTag: '[BUSINESSEMAIL]',
+            data: _account.get('business').emails && _account.get('business').emails[0] ? _account.get('business').emails[0].email : ''
+        }, {
+            mergeTag: '[BUSINESSFULLADDRESS]',
+            data: _address ? _address.address + ' ' + _address.address2 + ' ' + _address.city + ' ' + _address.state + ' ' + _address.zip : ''
+        }, {
+            mergeTag: '[BUSINESSADDRESS]',
+            data: _address ? _address.address : ''
+        }, {
+            mergeTag: '[BUSINESSCITY]',
+            data: _address ? _address.city : ''
+        }, {
+            mergeTag: '[BUSINESSSTATE]',
+            data: _address ? _address.state : ''
+        }, {
+            mergeTag: '[BUSINESSZIP]',
+            data: _address ? _address.zip : ''
+        }, {
+            mergeTag: '[TRIALDAYS]',
+            data: _account ? _account.get('trialDaysRemaining'): ''
+        }, {
+            mergeTag: '[FULLNAME]',
+            data: _contact ? _contact.get('first') + ' ' + _contact.get('last'): ''
+        }, {
+            mergeTag: '[FIRST]',
+            data: _contact ? _contact.get('first') : ''
+        }, {
+            mergeTag: '[LAST]',
+            data: _contact ? _contact.get('last') : ''
+        }, {
+            mergeTag: '[EMAIL]',
+            data: _contact && _contact.getEmails() && _contact.getEmails()[0] ? _contact.getEmails()[0].email : ''
+        }];
+
+        if ((_user && _userAccount && accountId === 6) || (accountId === 6 && contactId === null)) {
+            var _data = !contactId && !_userAccount ? _account.get('subdomain') : _userAccount.get('subdomain');
+            var adminMergeTagMap = [{
+                mergeTag: '[USERACCOUNTURL]',
+                data: _data + hostname
+            }];
+            mergeTagMap = _.union(mergeTagMap, adminMergeTagMap);
+        }
+
+        var regex;
+        //TODO: fix this block
+        var substitutions = {};
+        _.each(mergeTagMap, function (map) {
+            if (htmlContent.indexOf(map.mergeTag) > -1) {
+                //replace merge vars with relevant data
+                regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
+                var userData = map.data || '';
+                self.log.debug('using the following regex:', regex);
+                htmlContent = htmlContent.replace(regex, '%' + map.mergeTag + '%');
+                self.log.debug('after the replace:', htmlContent);
+                substitutions['%' + map.mergeTag + '%'] =userData;
+            }
+        });
+        var siteUrl = null;
+        var userName = null;
+        if(_account) {
+            siteUrl = _account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+        }
+        if(_user) {
+            userName = _user.get('username');
+        }
+        //TODO: fix this block
+        _.each(vars, function(_var){
+            if(htmlContent.indexOf(_var.name) > -1) {
+                var regexp = new RegExp('\\*\\|' + _var.name + '\\|\\*', 'g');
+                htmlContent = htmlContent.replace(regexp, '%' + _var.name + '%');
+                substitutions['%' + _var.name + '%'] = _var.content;
+            }
+        });
+        return {substitutions:substitutions, html:htmlContent};
+    },
+
     /**
      * This method is SYNCHRONOUS
      * @param account
@@ -1775,7 +1891,6 @@ var emailMessageManager = {
                 regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
                 var userData = map.data || '';
                 htmlContent = htmlContent.replace(regex, userData);
-
             }
         });
         var siteUrl = null;
@@ -2209,32 +2324,34 @@ var emailMessageManager = {
         var keys = ['logo','title','text','text1','text2','text3'];
         var regex = new RegExp('src="//s3.amazonaws', "g");
         var emailContent = email.content || email;
-
-        emailContent.components.forEach(function(component) {
-            if(component.visibility){
-                for (var i = 0; i < keys.length; i++) {
-                    if (component[keys[i]]) {
-                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
-                        // self.log.debug('sanitizeHtmlForSending before:', component[keys[i]]);
-                        component[keys[i]] = self.sanitizeHtmlForSending(component[keys[i]]);
-                        // self.log.debug('sanitizeHtmlForSending after:', component[keys[i]]);
+        if(emailContent.components) {
+            emailContent.components.forEach(function(component) {
+                if(component.visibility){
+                    for (var i = 0; i < keys.length; i++) {
+                        if (component[keys[i]]) {
+                            component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                            // self.log.debug('sanitizeHtmlForSending before:', component[keys[i]]);
+                            component[keys[i]] = self.sanitizeHtmlForSending(component[keys[i]]);
+                            // self.log.debug('sanitizeHtmlForSending after:', component[keys[i]]);
+                        }
                     }
+                    if (!component.bg.color) {
+                        component.bg.color = '#ffffff';
+                    }
+                    if (!component.emailBg) {
+                        component.emailBg = '#ffffff';
+                    }
+                    if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                    }
+                    if (!component.txtcolor) {
+                        component.txtcolor = '#000000';
+                    }
+                    components.push(component);
                 }
-                if (!component.bg.color) {
-                    component.bg.color = '#ffffff';
-                }
-                if (!component.emailBg) {
-                    component.emailBg = '#ffffff';
-                }
-                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                }
-                if (!component.txtcolor) {
-                    component.txtcolor = '#000000';
-                }
-                components.push(component);
-            }
-        });
+            });
+        }
+
 
         self.log.debug('components >>> ', components);
 

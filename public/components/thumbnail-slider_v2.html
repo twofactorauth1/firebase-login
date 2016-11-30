@@ -11,29 +11,29 @@
                 <div class="carousel-inner" ng-class="{'hide-scroll': !isEditing}">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in slider">
                         <div class="row">
-                            <div class="col-xs-3 hideText col-xs-width"  data-ng-repeat="image in collection track by $index">
+                            <div class="col-xs-3 hideText col-xs-width thumbnail-image-slider-collection"  data-ng-repeat="image in collection track by $index">
                                 <div class="image-wrap {{isEditing ? 'editing' : ''}}">
                                     <div class="imgHeight single-image">
-                                    <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 20px;background: none;">
-                                        <img ng-if="!image.img" ng-src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" ng-click="addImageFromMedia(component._id, $index, true, $parent.$index)" style="max-height: 100px; margin:{{image.margin}}; " />
-                                        <div ng-if="image.img" elem ng-model="image.img"></div>
-                                    </a>
+                                        <div class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 20px;background: none;">
+                                            <img ng-if="image.img === undefined" ng-src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" ng-click="addImageFromMedia(component._id, $index, true, $parent.$index)" style="max-height: 100px; margin:{{image.margin}}; " />
+                                            <div ng-if="image.img !== undefined" elem ng-model="image.img"></div>
+                                        </div>
                                     </div>
                                     <div ng-if="isEditing" class="delete-single-image center" ng-click="deleteImageFromThumbnail($index, $parent.$parent.$index)">
                                         <button class="btn-delete-single-image"><i class='fa fa-trash' tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this slide."></i></button>
                                     </div>
                                     <div ng-if="isEditing" class="add-addtional center" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another slide." ng-click="addImageFromMedia(component._id, $index, false, $parent.$parent.$index)">
-                                        <a href="">
+                                        <a>
                                             <i class="fa fa-plus"></i>
                                         </a>
                                     </div>
                                 </div>
-                                <div class-name="thumbnail-image-text" elem ng-model="image.details"></div>
+                                <div class-name="thumbnail-image-text ssb-thumbnail-image-text" elem ng-model="image.details"></div>
                             </div>
                         </div>
                     </div>
                     <div ng-if="!slider.length">
-                        <a href="" ng-if="isEditing" ng-click="addImageFromMedia(component._id, 0, false)" class="btn ssb-theme-btn btn-default">
+                        <a ng-if="isEditing" ng-click="addImageFromMedia(component._id, 0, false)" class="btn ssb-theme-btn btn-default">
                                             <i class="fa fa-plus" ></i>
                                     </a>
                     </div>

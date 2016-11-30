@@ -183,7 +183,7 @@
 
                 <ul class="list-unstyled ssb-settings-list">
                     <li>
-                        <label ng-class="{'disabled': vm.uiState.isBlogPage}">
+                        <label>
                             <h5>Title:</h5>
                             <span editable-text="vm.state.page.title" onbeforesave="" e-required e-placeholder="Enter title">{{vm.state.page.title || 'Enter title'}}</span>
                         </label>
@@ -397,7 +397,31 @@
 
                         <div class="form-group ssb-spectrum-color-picker-small">
                             <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnTextColor"></spectrum-colorpicker>
-                            <label for="colorpicker">Text Color (Buttons) <span tooltip-placement="top" tooltip="Override the default button text color color for your website."><i class="fa fa-info-circle" /></span></label>
+                            <label for="colorpicker">Text Color (Buttons) <span tooltip-placement="top" tooltip="Override the default button text color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+                        
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primarySliderDotColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Slider Dot Color <span tooltip-placement="top" tooltip="Override the slider default dot color for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+                        <div class="form-group ssb-spectrum-color-picker-small">
+                            <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'rgb'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primarySliderActiveDotColor"></spectrum-colorpicker>
+                            <label for="colorpicker">Slider Dot Color(Active Slide) <span tooltip-placement="top" tooltip="Override the slider default dot color of active slide for your website."><i class="fa fa-info-circle" /></span></label>
+                        </div>
+                        <div class="form-group" ng-init="vm.uiState.resizeWindow()">
+                            <div>
+                                <label>
+                                    Slider Dot Color Opacity
+                                    <span tooltip-placement="top" tooltip="Override the slider default dot color opacity for your website."><i class="fa fa-info-circle" /></span>
+                                </label>
+                            </div>
+                            <div>
+                                <rzslider
+                                    class="slider-opacity"
+                                    name="bg-opacity"
+                                    rz-slider-model="vm.state.website.themeOverrides.styles.primarySliderDotColorOpacity" rz-slider-options="{floor: 0, ceil: 1, step: 0.1, precision: 2}">
+                                </rzslider>
+                            </div>                    
                         </div>
                     </div>
 
