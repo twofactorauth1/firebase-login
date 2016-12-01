@@ -32,6 +32,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
             console.log('url:', scope.paypalURL);
             scope.taxPercent = 0;
+            scope.checkoutOrder = {
+                coupon : ""
+            };
 
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
 
@@ -1171,31 +1174,34 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.checkCoupon = function() {
+                scope.couponChecked = true;
+                scope.checkingCoupon = true;
                 console.log('>> checkCoupon');
-                var coupon = scope.newAccount.coupon;
+                var coupon = scope.checkoutOrder.coupon;
                 //console.dir(coupon);
                 //console.log(scope.newAccount.coupon);
                 if (coupon) {
-                    PaymentService.validateCoupon(coupon, function(data) {
+                    PaymentService.validateIndigenousCoupon(coupon, function(data) {
+                        console.log('data ', data);
+                        scope.currentCoupon = data;
+                        scope.checkingCoupon = false;
+                        console.log('validate coupon');
                         if (data.id && data.id === coupon) {
                             console.log('valid');
-                            $('.modal #coupon-name .error').html('');
-                            $('.modal #coupon-name').removeClass('has-error').addClass('has-success');
-                            $('.modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                            angular.element("#coupon-name .error").html("");
                             scope.couponIsValid = true;
                         } else {
                             console.log('invalid');
-                            $('.modal #coupon-name .error').html('Invalid Coupon');
-                            $('.modal #coupon-name').addClass('has-error');
-                            $('.modal #coupon-name .glyphicon').addClass('glyphicon-remove');
+                            angular.element("#coupon-name .error").html("Invalid Coupon");
                             scope.couponIsValid = false;
                         }
                     });
                 } else {
-                    $('.modal #coupon-name .error').html('');
-                    $('.modal #coupon-name').removeClass('has-error').addClass('has-success');
-                    $('.modal #coupon-name .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
                     scope.couponIsValid = true;
+                    scope.checkingCoupon = false;
+                    angular.element("#coupon-name .error").html("");
+                    angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
+                    angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
