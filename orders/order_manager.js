@@ -308,7 +308,7 @@ module.exports = {
                         discount += parseFloat(order.get('total_discount'));
                         log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
                     }
-
+                    //TODO: add coupon discount to discount
                     totalAmount = (subTotal - discount) + taxAdded;
 
 
