@@ -5,7 +5,6 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 var STRIPE_CONFIG = require('./configs/stripe.config.js');
-var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var GOOGLE_CONFIG = require('./configs/google.config');
 var FACEBOOK_CONFIG = require('./configs/facebook.config');
 var PAYPAL_CONFIG = require('./configs/paypal.config');
@@ -330,7 +329,6 @@ module.exports = function(grunt) {
                     ENV: {
                         name: 'development',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
-                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_WRITE_KEY,
                         googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
                         googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
                         googleClientId: GOOGLE_CONFIG.CLIENT_ID,
@@ -350,7 +348,6 @@ module.exports = function(grunt) {
                     ENV: {
                         name: 'production',
                         stripeKey: STRIPE_CONFIG.STRIPE_PUBLISHABLE_KEY,
-                        segmentKey: SEGMENTIO_CONFIG.SEGMENT_PROD_WRITE_KEY,
                         googleAnalyticsId: GOOGLE_CONFIG.ANALYTICS_ID,
                         googleAnalyticsScope: GOOGLE_CONFIG.ANALYTICS_SCOPE,
                         googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,

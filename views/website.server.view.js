@@ -8,7 +8,6 @@
 var BaseView = require('./base.server.view');
 
 var cmsDao = require('../cms/dao/cms.dao.js');
-var segmentioConfig = require('../configs/segmentio.config.js');
 var fs = require('fs');
 var async = require('async');
 var ssbManager = require('../ssb/ssb_manager');
@@ -80,7 +79,7 @@ _.extend(view.prototype, BaseView.prototype, {
             value.website = value.website || {};
             data.title = value.website.title;
             data.author = 'Indigenous';
-            data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+            data.segmentIOWriteKey = '';
             data.website = value.website || {};
             data.seo = {
                 description: '',
@@ -206,7 +205,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
 
                 data.author = 'Indigenous';//TODO: wut?
-                data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+                data.segmentIOWriteKey = '';
                 data.website = value.website || {};
                 if(pageHolder[handle] && pageHolder[handle].seo) {
                     data.seo = {
@@ -424,7 +423,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 }
 
                 data.author = 'Indigenous';//TODO: wut?
-                data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+                data.segmentIOWriteKey = '';
                 data.website = value.website || {};
                 if(pageHolder[handle] && pageHolder[handle].seo) {
                     data.seo = {
