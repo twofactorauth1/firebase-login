@@ -1878,7 +1878,7 @@ var dao = {
                     seo: seo,
                     footer: footer,
                     title: title,
-                    segmentIOWriteKey: ''
+                    segmentIOWriteKey: '',
                     handle: pageName,
                     linkLists: {},
                     blogposts: null,
