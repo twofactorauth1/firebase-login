@@ -95,7 +95,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             data-styles,
             class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak',
             class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), class=( account && account.showhide && account.showhide.blogSocialSharing === false ? 'ssb-blog-hide-social-share' : ''), 
-            ng-class="{ 'ssb-social-enabled': isSocialEnabled}",
+            ng-class="{ 'ssb-social-enabled': isSocialEnabled, 'ssb-social-share-hidden': !isSocialEnabled}",
             ng-cloak
         )
 
