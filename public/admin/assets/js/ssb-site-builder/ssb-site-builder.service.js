@@ -1130,8 +1130,8 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
-            var keysToOmitComponent = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
+            var keysToOmitSection = ['$$hashKey', 'anchor', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
+            var keysToOmitComponent = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'visibility', 'bg', 'border', 'layoutModifiers', 'componentSortOrder', 'thumbnailCollection'];
             var newComponents = angular.copy(newSection.components);
 
             var newComponentsOrder =  getComponentSortOrder(newComponents, newSection); // ['componentType1', 'componentType2', ...]
