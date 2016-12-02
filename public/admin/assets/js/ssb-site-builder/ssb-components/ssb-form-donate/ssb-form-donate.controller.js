@@ -887,11 +887,13 @@
             }
 
             if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
-                return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate));
+                return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate) || (
+                    moment().isSame(vm.component.productSettings.timePeriod.endDate, "day") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "month") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "year")));                
             } else if (vm.component.productSettings.timePeriod.startDate) {
                 return moment().isAfter(vm.component.productSettings.timePeriod.startDate);
             } else if (vm.component.productSettings.timePeriod.endDate) {
-                return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
+                return moment().isBefore(vm.component.productSettings.timePeriod.endDate) || (
+                    (moment().isSame(vm.component.productSettings.timePeriod.endDate, "day") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "month") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "year")));
             } else {
                 return true;
             }
