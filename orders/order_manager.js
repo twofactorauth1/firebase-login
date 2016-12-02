@@ -980,10 +980,18 @@ module.exports = {
                         log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
                     }
                     
-                    orderDiscount = discount
+                    if(coupon.amount_off){
+                        discount = discount + coupon.amount_off                        
+                    }
+                    else if(coupon.percent_off){
+                        var coupon_discount = subTotal * coupon.percent_off / 100;
+                        discount = discount + coupon_discount
+                    }
+                                        
+                    orderDiscount = discount;
 
-                    if(orderDiscount > subtotal){
-                        orderDiscount = subtotal;
+                    if(orderDiscount > subTotal){
+                        orderDiscount = subTotal;
                         totalAmount = taxAdded;
                     }
                     else{
@@ -996,6 +1004,7 @@ module.exports = {
                     order.set('total', totalAmount.toFixed(2));
                     log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                     order.set('total_line_items_quantity', totalLineItemsQuantity);
+                    order.set('total_discount_included_coupon', orderDiscount);
                     callback(null, account, order, productAry);
                 }
             },
