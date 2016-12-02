@@ -1077,6 +1077,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $(element).find('.jp-card-name').text('Full Name');
                 $(element).find('.jp-card-expiry').text('••/••');
                 $(element).find('.jp-card').removeClass('jp-card-identified');
+                angular.element("#order_coupon_code").text = "";
+                angular.element("#order_coupon_code").removeClass('has-error has-success');
             }
 
             /*

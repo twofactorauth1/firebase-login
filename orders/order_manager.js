@@ -988,7 +988,7 @@ module.exports = {
                         discount = discount + coupon_discount
                     }
                                         
-                    orderDiscount = discount;
+                    orderDiscount = discount || 0.00;
 
                     if(orderDiscount > subTotal){
                         orderDiscount = subTotal;
@@ -997,7 +997,7 @@ module.exports = {
                     else{
                         totalAmount = (subTotal - discount) + taxAdded;    
                     }
-
+                    orderDiscount = orderDiscount.toFixed(2);
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
                     order.set('total_tax', taxAdded.toFixed(2));

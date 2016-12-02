@@ -238,7 +238,7 @@
             </form>
             <!-- Coupon DETAILS -->
                   <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon && checkoutOrder.coupon, 'has-success': couponIsValid && !checkingCoupon && checkoutOrder.coupon}" style="padding-left:0; padding-right:0">
-                      <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="checkoutOrder.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
+                      <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="checkoutOrder.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  id="order_coupon_code"/>
                       <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon && checkoutOrder.coupon, 'glyphicon glyphicon-ok': couponIsValid && checkoutOrder.coupon && !checkingCoupon}"></span>
 
                       <span class="coupon-spinner" ng-class="{'fa fa-2x fa-spinner fa-spin':checkingCoupon}"></span>
