@@ -785,6 +785,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.makeCartPayment = function() {
+                var coupon = scope.checkoutOrder.coupon;
+                if(coupon && scope.couponIsValid === false){
+                    scope.checkoutModalState = 3;
+                    return;
+                }
                 angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
                 scope.failedOrderMessage = '';
                 scope.checkoutModalState = 4;
@@ -843,7 +848,36 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         cardInput.address_line2 = contact.details[0].addresses[0].address2;
                     }
                 }
+                
+                if (coupon) {
+                    PaymentService.validateIndigenousCoupon(coupon, function(data) {
+                        console.log('data ', data);
+                        scope.currentCoupon = data;
+                        scope.checkingCoupon = false;
+                        console.log('validate coupon');
+                        if (data.id && data.id === coupon) {
+                            console.log('valid');
+                            angular.element("#coupon-name .error").html("");
+                            scope.couponIsValid = true;
+                            validateAndCreateOrder(cardInput, data);
+                        } else {
+                            console.log('invalid');
+                            angular.element("#coupon-name .error").html("Invalid Coupon");
+                            scope.couponIsValid = false;
+                            scope.checkoutModalState = 3;
+                            return;
+                        }
+                    });
+                }
+                else{
+                   validateAndCreateOrder(cardInput); 
+                }
+                
+                //});
+            };
 
+
+            function validateAndCreateOrder(cardInput, couponObj){
                 PaymentService.getStripeCardToken(cardInput, function(token, error) {
 
                     // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function (data) {
@@ -995,6 +1029,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         };
                         order.line_items.push(_item);
                     });
+                    if(couponObj){
+                        order.coupon = couponObj;
+                    }
+                    
                     OrderService.createOrder(order, function(data) {
                         if (data && !data._id) {
                             var failedOrderMessage = 'Error in order processing';
@@ -1020,9 +1058,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         cookieProcessFn();
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
+                    
                 });
-                //});
-            };
+            }
 
             var clearCardDetails = function() {
                 $('.modal #product-card-details').trigger('reset');
