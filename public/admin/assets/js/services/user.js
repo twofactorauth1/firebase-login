@@ -23,6 +23,16 @@
       });
     };
 
+
+    this.getUsersByAccount = function(id, fn) {
+      var apiUrl = baseUrl + ['admin', 'user', 'account', id , 'admin', 'users'].join('/');
+      $http.get(apiUrl)
+      .success(function(data, status, headers, config) {
+        fn(data);
+      });
+    };
+
+
     this.putUser = function(user, fn) {
       var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
       $http.put(apiUrl, user)

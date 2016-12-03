@@ -1,0 +1,60 @@
+<div ng-controller="usersCtrl as vm" >
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">Account Users</h1>
+                <span ng-if="vm.state.users" class="mainDescription">There are currently {{vm.state.users.length}} users.</span>
+            </div>
+        </div>
+    </section>
+    <div>
+        <div class="container-fluid container-fullw bg-white padding-top-10 padding-bottom-10">
+            <div class="form-group margin-bottom-0 pull-right">
+                <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="vm.openSimpleModal('new-user-modal')">
+                    <span>Add New User</span>
+                </button>
+            </div>
+        </div>    
+    </div>
+    <div class="col-md-12 padding-top-20">
+        <div class="panel-body panel-white space20 ">
+            <div class="panel-heading">
+                <table class="table table-primary margin-bottom-0">
+                    <thead>
+                    <tr class="ng-scope">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Username</th>
+                        <th ng-if="vm.uiState.isAdminUser">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-if="(!vm.state.users || vm.state.users.length <= 0 )&& !vm.uiState.loading">
+                        <td colspan="4">
+                            <h4 class="text-center margin-top-30 margin-bottom-30">No Users</h4>
+                        </td>
+                    </tr>
+                    <tr ng-if="vm.uiState.loading">
+                        <td colspan="4">
+                            <h4 class="text-center margin-top-30 margin-bottom-30">Loading Users, Please wait....</h4>
+                        </td>
+                    </tr>
+                    <tr ng-repeat="user in vm.state.users">
+                        <td>
+                            {{user._id}}
+                        </td>
+                        <td>{{user.first}} {{user.last}}</td>
+                        <td>{{user.username}}</td>
+                        <td class="table-action" ng-if="vm.uiState.isAdminUser">
+                            <a ng-click="openEditUserModal(user._id)"><i class="fa fa-pencil"></i></a>
+                            <a ng-if="currentUser._id !== user._id" ng-click="vm.removeUserFromAccount(user._id)" class="delete-row"><i class="fa fa-trash-o"></i></a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>    
+<div data-ng-include=" 'assets/views/partials/new-user-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/edit-password-modal.html' "></div>

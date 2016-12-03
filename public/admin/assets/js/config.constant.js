@@ -24,6 +24,9 @@ app.constant('formValidations', {
    'contactTags': /^[a-z\d\-_\s]+$/i
   });
 
+
+
+
 /*
 
   {
@@ -520,6 +523,11 @@ app.constant('userConstant', {
   personal_profile: {
     PASSWORD_PLACEHOLDER: "profile_password",
   },
+
+  admin_user: {
+    userName: 'admin@indigenous.io'
+  }
+
 });
 
 
@@ -610,6 +618,7 @@ app.constant('JS_REQUIRES', {
     'chatCtrl': 'assets/js/controllers/chatCtrl.js',
     'editTopicCtrl': 'assets/js/controllers/editTopicCtrl.js',
     'singleCustomerAnalyticsCtrl': 'assets/js/controllers/singleCustomerAnalyticsCtrl.js',
+    'UsersCtrl': 'assets/js/users/users.controller.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',
