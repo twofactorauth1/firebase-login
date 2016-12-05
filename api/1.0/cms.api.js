@@ -79,6 +79,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));
 
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
+        app.get(this.url('email/stats'), this.isAuthAndSubscribedApi.bind(this), this.getAllEmailStats.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
         app.get(this.url('email/:id/stats'), this.isAuthAndSubscribedApi.bind(this), this.getEmailStats.bind(this));
         app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
@@ -812,6 +813,24 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug(accountId, userId, '<< getEmailStats');
                     self.sendResultOrError(resp, err, value, "Error getting Email Stats");
                 });
+            }
+        });
+    },
+
+    getAllEmailStats: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getAllEmailStats');
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed){
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                emailMessageManager.getEmailStatsByAccount(accountId, userId, function(err, value){
+                    self.log.debug(accountId, userId, '<< getAllEmailStats');
+                    self.sendResultOrError(resp, err, value, "Error getting Email Stats");
+                });
+
             }
         });
     },

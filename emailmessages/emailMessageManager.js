@@ -1599,6 +1599,68 @@ var emailMessageManager = {
         });
     },
 
+    getEmailStatsByAccount: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getEmailStatsByAccount');
+        /*
+         {
+         $match:{
+         accountId:12
+         }
+         },
+         {
+         $project:{
+         emailId:1,
+         openedDate:1,
+         clickedDate:1
+         }
+         },
+         {
+         $group:{
+         _id:'$emailId',
+         count:{$sum:1},
+         sends:{$sum:{$cond:[{$ne:['$openedDate', null]}, 1, 0]}},
+         clicks:{$sum:{$cond:[{$ne:['$clickedDate', null]}, 1, 0]}}
+         }
+         }
+         */
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId
+            }
+        };
+        stageAry.push(match);
+        var project = {
+            $project:{
+                emailId: 1,
+                openedDate: 1,
+                clickedDate: 1
+            }
+        };
+        stageAry.push(project);
+        var group1 = {
+            $group: {
+                _id:'$emailId',
+                sends: {$sum:1},
+                opens:{$sum:{$cond:[{$ne:['$openedDate', null]}, 1, 0]}},
+                clicks:{$sum:{$cond:[{$ne:['$clickedDate', null]}, 1, 0]}}
+            }
+        };
+
+        stageAry.push(group1);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.Emailmessage, function(err, value) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding email messages:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getEmailStatsByAccount');
+                fn(null, value);
+            }
+        });
+    },
+
     getEmailStats: function(accountId, userId, emailId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getEmailStats');
