@@ -16,13 +16,12 @@
             </div>
         </div>    
     </div>
-    <div class="col-md-12 padding-top-20">
-        <div class="panel-body panel-white space20 ">
-            <div class="panel-heading">
-                <table class="table table-primary margin-bottom-0">
+    <div class="padding-top-20">
+        <div class="panel-body panel-white space20 ">            
+            <table class="table table-primary margin-bottom-0">
                     <thead>
                     <tr class="ng-scope">
-                        <th>ID</th>
+                        <th class="hidden-xs">ID</th>
                         <th>Name</th>
                         <th>Username</th>
                         <th>Actions</th>
@@ -40,7 +39,7 @@
                         </td>
                     </tr>
                     <tr ng-repeat="user in vm.state.users">
-                        <td>
+                        <td class="hidden-xs">
                             {{user._id}}
                         </td>
                         <td>{{user.first}} {{user.last}}</td>
@@ -51,8 +50,7 @@
                         </td>
                     </tr>
                     </tbody>
-                </table>
-            </div>
+            </table>
         </div>
     </div>
 </div>    
