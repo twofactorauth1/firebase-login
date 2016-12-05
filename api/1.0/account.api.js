@@ -57,6 +57,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url(':id'), this.isAuthApi.bind(this), this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi.bind(this), this.getAllAccountsForUserId.bind(this));
+        app.post(this.url('user'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
+        app.delete(this.url('user/:userId'), this.isAuthApi.bind(this), this.removeUserFromAccount.bind(this));
+        app.post(this.url('user/:id/password'), this.isAuthApi.bind(this), this.setUserPassword.bind(this));
     },
 
     listUsersForAccount: function(req, resp) {
@@ -76,11 +79,79 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
 
 
+    createUserForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createUserForAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var username = req.body.username;
+        var password = req.body.password;
+        var email = req.body.username;
+        var roleAry = ['super','admin','member'];
+        if(req.body.roleAry) {
+            roleAry = req.body.roleAry.split(',');
+        }
+        var callingUser = parseInt(self.userId(req));
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                userManager.createUser(accountId, username, password, email, roleAry, callingUser, function(err, user){
+                    self.log.debug('<< createUserForAccount');
+                    return self.sendResultOrError(resp, err, user, 'Error creating user', null);
+                });
+            }
+        });
 
     },
 
+    removeUserFromAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> removeUserFromAccount');
+
+        var accountId = parseInt(self.accountId(req));
+        var userId = parseInt(req.params.userId);
+
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                userManager.deleteOrRemoveUserForAccount(accountId, userId, function(err, value){
+                    self.log.debug('<< removeUserFromAccount');
+                    return self.sendResultOrError(resp, err, value, 'Error removing user from account', null);
+                });
+            }
+        });
+    },
+
+
+    setUserPassword: function(req, resp) {
+        var self = this;
+        self.log.debug('>> setUserPassword');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var newPassword = req.body.password;
+                var userId = parseInt(req.params.id);
+                userManager.setUserPassword(userId, newPassword, self.userId(req), function(err, user){
+                    if(err) {
+                        self.log.error('Error setting password:', err);
+                        self.wrapError(resp, 500, 'Error modifying password', err, null);
+                    } else {
+                        self.log.debug('<< setUserPassword');
+                        self.sendResult(resp, user);
+                    }
+                });
+            }
+        });
+
+
+    },
 
     /**
      * No security here

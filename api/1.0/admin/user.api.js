@@ -27,7 +27,6 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('account/:id'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
         app.post(this.url('account/:id/evergreen'), this.isAuthApi.bind(this), this.convertAccountToInternal.bind(this));
         app.get(this.url('account/:id/users'), this.isAuthApi.bind(this), this.listUsersForAccount.bind(this));
-        app.get(this.url('account/:id/admin/users'), this.isAuthApi.bind(this), this.listAccountUsers.bind(this));
         
         app.post(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.addUserToAccount.bind(this));
         app.delete(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.removeUserFromAccount.bind(this));
@@ -134,18 +133,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, users, 'Error listing users', null);
                 });
             }
-        });
-    },
-
-    listAccountUsers: function(req, resp) {
-        var self = this;
-        self.log.debug('>> listUsersForAccount');
-
-        var accountId = parseInt(req.params.id);
-
-        userManager.getUserAccounts(accountId, function(err, users){
-            self.log.debug('<< listUsersForAccount');
-            return self.sendResultOrError(resp, err, users, 'Error listing users', null);
         });
     },
 

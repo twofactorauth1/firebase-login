@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "UserService", "AccountService", "userConstant", "CustomerService", function ($scope, toaster, $filter, $modal, $timeout, UserService, AccountService, userConstant, customerService) {
+    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService", "userConstant", function ($scope, toaster, $filter, $modal, $timeout, AccountService, userConstant) {
 
         var vm = this;
 
@@ -24,7 +24,7 @@
         });
 
         function loadAccountUsers(){
-            UserService.getUsersByAccount(vm.state.account._id, function(users){ 
+            AccountService.getUsersByAccount(vm.state.account._id, function(users){ 
                 // We should not list global admin user
                 users = _.reject(users, function(user){ return user.username == vm.state.adminUserName });               
                 vm.state.users = users;
@@ -48,7 +48,7 @@
 
         $scope.addNewUser = function() {
             console.log('Adding the following:', $scope.newuser);
-            customerService.addNewUser(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
+            AccountService.addNewUser(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
                 if(err) {
                     toaster.pop('warning', err.message);
                 } else {
@@ -72,7 +72,7 @@
         };
 
         $scope.setUserPassword = function(userId) {
-            customerService.setUserPassword(userId, $scope.edituser.password1, function(err, data){
+            AccountService.setUserPassword(userId, $scope.edituser.password1, function(err, data){
                 if(err) {
                     toaster.pop('warning', err.message);
                 } else {
@@ -82,8 +82,8 @@
             });
         };
 
-        function removeUserFromAccount(userId) {
-            customerService.removeUserFromAccount(vm.state.account._id, userId, function(err, data){
+        function removeUserFromAccount(userId) {            
+            AccountService.removeUserFromAccount(userId, function(err, data){
                 if(err) {
                     toaster.pop('warning', err.message);
                 } else {
