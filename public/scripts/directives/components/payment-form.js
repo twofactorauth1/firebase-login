@@ -233,7 +233,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                 } else {
                                     newUser.cardToken = token;
                                     newUser.plan = scope.newAccount.plan;
-                                    newUser.anonymousId = window.analytics.user().anonymousId();
+                                    newUser.anonymousId = window.analytics ? window.analytics.user().anonymousId() : null;
                                     newUser.permanent_cookie = ipCookie("permanent_cookie");
                                     newUser.fingerprint = new Fingerprint().get();
                                     newUser.setupFee = 0;
