@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService", "userConstant", function ($scope, toaster, $filter, $modal, $timeout, AccountService, userConstant) {
+    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService", "userConstant", "SweetAlert", function ($scope, toaster, $filter, $modal, $timeout, AccountService, userConstant, SweetAlert) {
 
         var vm = this;
 
@@ -83,13 +83,28 @@
         };
 
         function removeUserFromAccount(userId) {            
-            AccountService.removeUserFromAccount(userId, function(err, data){
-                if(err) {
-                    toaster.pop('warning', err.message);
-                } else {
-                    vm.state.users = _.filter(vm.state.users, function(user){
-                        if(user._id !== userId) {
-                            return true;
+            SweetAlert.swal({
+              title: "Are you sure?",
+              text: "You want to delete this user.",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes",
+              cancelButtonText: "No",
+              closeOnConfirm: true,
+              closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    AccountService.removeUserFromAccount(userId, function(err, data){
+                        if(err) {
+                            toaster.pop('warning', err.message);
+                        } else {
+                            vm.state.users = _.filter(vm.state.users, function(user){
+                                if(user._id !== userId) {
+                                    return true;
+                                }
+                            });
                         }
                     });
                 }
