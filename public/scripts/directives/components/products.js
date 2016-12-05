@@ -51,10 +51,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.numItems = CartDetailsService.items.length;
                 scope.cartDetails = CartDetailsService.items;
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
-                
+
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges();
-                
+
             }, true);
 
 
@@ -353,8 +353,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.checkBillingCity(city);
                 scope.checkBillingPhone(phone);
                 scope.shippingPostCodeChanged(zip);
-                
-                if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {                                        
+
+                if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
                 }
 
@@ -848,9 +848,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         cardInput.address_line2 = contact.details[0].addresses[0].address2;
                     }
                 }
-                
+
                 if (coupon) {
-                    PaymentService.validateIndigenousCoupon(coupon, function(data) {
+                    PaymentService.validateCoupon(coupon, function(data) {
                         console.log('data ', data);
                         scope.currentCoupon = data;
                         scope.checkingCoupon = false;
@@ -870,9 +870,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     });
                 }
                 else{
-                   validateAndCreateOrder(cardInput); 
+                   validateAndCreateOrder(cardInput);
                 }
-                
+
                 //});
             };
 
@@ -1032,7 +1032,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if(couponObj){
                         order.coupon = couponObj;
                     }
-                    
+
                     OrderService.createOrder(order, function(data) {
                         if (data && !data._id) {
                             var failedOrderMessage = 'Error in order processing';
@@ -1058,7 +1058,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         cookieProcessFn();
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
-                    
+
                 });
             }
 
@@ -1221,7 +1221,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 //console.dir(coupon);
                 //console.log(scope.newAccount.coupon);
                 if (coupon) {
-                    PaymentService.validateIndigenousCoupon(coupon, function(data) {
+                    PaymentService.validateCoupon(coupon, function(data) {
                         console.log('data ', data);
                         scope.currentCoupon = data;
                         scope.checkingCoupon = false;
@@ -1419,7 +1419,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
 
-            
+
         }
     };
 }]);
