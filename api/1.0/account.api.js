@@ -14,6 +14,7 @@ var appConfig = require('../../configs/app.config');
 var paymentManager = require('../../payments/payments_manager');
 var productManager = require('../../products/product_manager');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
+var userManager = require('../../dao/user.manager');
 var moment = require('moment');
 
 var api = function() {
@@ -43,6 +44,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('billing'), this.isAuthApi.bind(this), this.updateCurrentAccountBilling.bind(this));
         app.get(this.url('emailpreferences'), this.isAuthApi.bind(this), this.getCurrentAccountEmailPreferences.bind(this));
         app.post(this.url('emailpreferences'), this.isAuthApi.bind(this), this.updateCurrentAccountEmailPreferences.bind(this));
+        app.get(this.url('users'), this.isAuthAndSubscribedApi.bind(this), this.listUsersForAccount.bind(this));
 
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
@@ -51,9 +53,32 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url(':id/setting'), this.isAuthApi.bind(this), this.updateAccountSetting.bind(this));
         app.put(this.url(':id/website'), this.isAuthApi.bind(this), this.updateAccountWebsiteInfo.bind(this));
 
+
         app.delete(this.url(':id'), this.isAuthApi.bind(this), this.deleteAccount.bind(this));
 
         app.get(this.url(':userid/accounts', 'user'), this.isAuthApi.bind(this), this.getAllAccountsForUserId.bind(this));
+    },
+
+    listUsersForAccount: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listUsersForAccount');
+
+
+        self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                userManager.getUserAccounts(accountId, function(err, users){
+                    self.log.debug(accountId, userId, '<< listUsersForAccount');
+                    return self.sendResultOrError(resp, err, users, 'Error listing users', null);
+                });
+            }
+        });
+
+
+
     },
 
 
