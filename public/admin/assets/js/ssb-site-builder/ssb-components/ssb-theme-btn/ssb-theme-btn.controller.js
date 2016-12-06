@@ -336,6 +336,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         if (component.bg) {
             if (component.bg.color) {
                 styleString += 'background-color: ' + component.bg.color + ';';
+                styleString += 'border-color: transparent;';
             }
         }
 
@@ -345,6 +346,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             }
             if (component.hover.bg) {
                 hoverStyleString += 'background-color: ' + component.hover.bg.color + ';';
+                hoverStyleString += 'border-color: transparent;';
             }
         }
 
@@ -354,6 +356,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             }
             if (component.pressed.bg) {
                 activeStyleString += 'background-color: ' + component.pressed.bg.color + ';';
+                activeStyleString += 'border-color: transparent;';
             }
         }
 
