@@ -386,9 +386,22 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
 
                     }
 
-                    if(isTouchDevice)
-                        handleComponentPartialAreaMouseOver(e);
+                    if(isTouchDevice){
+                            handleComponentPartialAreaMouseOver(e);
+                            $timeout(function() {
+                                handleComponentPartialAreaClickFn(e);
+                            }, 500);
+                        }
+                    else
+                    {
+                        handleComponentPartialAreaClickFn(e);
+                    }
 
+                }
+
+                function handleComponentPartialAreaClickFn(e){
+                    var el = angular.element(e.currentTarget);
+                    var targetEl = angular.element(e.target);
                     var hasComponentChildMouseOver = el.find('[data-edit]').length > 0;
 
                     //let section handle clicks if the component has [data-edit] areas to surface menu
@@ -475,7 +488,6 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                     } else {
                         console.log('component has clickable child area, allow bubble up');
                     }
-
                 }
 
                 function compiledEditControl(el, clonedEditControl) {

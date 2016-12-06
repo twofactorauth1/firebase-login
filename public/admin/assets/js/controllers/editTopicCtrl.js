@@ -205,6 +205,10 @@
           return;
         }
         toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
+        $timeout(function() {
+          $scope.originalTopic = angular.copy($scope.topic);
+        }, 1000);
+        
         $scope.redirectAfterSave(redirect_url, reload);
       });
 
@@ -246,7 +250,10 @@
         });
 
         $scope.components = $scope.topic.components;
+
+        
         $timeout(function () {
+          $scope.originalTopic = angular.copy($scope.topic);
           $scope.editorLoaded = true;
         }, 500);
       });
@@ -636,8 +643,16 @@
     });
 
     
-
+    $scope.checkIfDirty = function(){
+      if($scope.topic && $scope.originalTopic && !angular.equals($scope.topic, $scope.originalTopic)){
+        return true;
+      }
+    }
     
+    $scope.resetDirty = function(){
+      $scope.originalTopic = null;
+      $scope.topic = null;
+    }
 
     var checkIfPageDirty = function(url, fn){
       if ($scope.originalPage && $scope.originalPage.components && $scope.components && $scope.originalPage.components.length !== $scope.components.length) {
@@ -815,39 +830,5 @@
           });
         });
     };
-
-    /*
-     * @locationChangeStart
-     * - Before user leaves editor, ask if they want to save changes
-     */
-
-    var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-      checkIfPageDirty(newUrl, function (redirectUrl) {
-          var condition = $scope.isDirty.dirty && !$scope.changesConfirmed && !$scope.cancelChanges;
-          if (condition && !$scope.isCampaign && !$scope.isProduct) {
-            event.preventDefault();
-            SweetAlert.swal({
-              title: "Are you sure?",
-              text: "You have unsaved data that will be lost",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "Yes, save changes!",
-              cancelButtonText: "No, do not save changes!",
-              closeOnConfirm: false,
-              closeOnCancel: true
-            }, function (isConfirm) {
-              if (isConfirm) {
-                $scope.redirect = true;
-                $scope.savePage(redirectUrl);
-                $scope.setDirty(false);
-              } else {
-                  $scope.redirectWithoutSave(newUrl, true);
-              }
-              offFn();
-            });
-          }
-      })
-    });
   }]);
 }(angular));

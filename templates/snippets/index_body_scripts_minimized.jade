@@ -49,5 +49,22 @@ script.
 
 | !{website.resources.userScripts.global.sanitized}
 
+// - Google Analytics
+script.
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-48234806-2', 'auto');
+    ga('send', 'pageview');
+script(async src='https://www.google-analytics.com/analytics.js')
+// - End Google Anlytics
+
+// - TrackJS
+script(type="text/javascript").
+    window._trackJs = {  // Just ensure the global variable is initialized before the tracker script loads.
+        token: '8ff8967db42447d4a9967c5fc68938ef'
+    };
+
+script(src="https://cdn.trackjs.com/releases/current/tracker.js")
+// - End TrackJS
+
 external-scripts(class="external-scripts")
 user-scripts(class="user-scripts")

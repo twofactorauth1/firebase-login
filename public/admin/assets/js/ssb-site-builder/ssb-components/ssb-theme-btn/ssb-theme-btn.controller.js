@@ -63,6 +63,16 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     var pvm = pScope.vm;
     $scope.pvm = pvm;
 
+    // check if email editor
+    vm.defaultBtnStyles = {};
+    if($scope.pvm && $scope.pvm.state && $scope.pvm.state.emails)
+    {
+        if($scope.pvm.state.website && $scope.pvm.state.website.themeOverrides && $scope.pvm.state.website.themeOverrides.styles && $scope.pvm.state.website.themeOverrides.styles){
+            vm.defaultBtnStyles.primaryBtnBackgroundColor = $scope.pvm.state.website.themeOverrides.styles.primaryBtnBackgroundColor;
+            vm.defaultBtnStyles.primaryBtnTextColor = $scope.pvm.state.website.themeOverrides.styles.primaryBtnTextColor;
+            vm.defaultBtnStyles.primaryBtnBorderColor = $scope.pvm.state.website.themeOverrides.styles.primaryBtnBackgroundColor;
+        }
+    }
     $rootScope.$on('$ssbElementsChanged', function(event, componentId, editorId) {
 
         if (parentEditorId && parentEditorId === editorId && parentComponent && componentId === parentComponent.attr('id')) {
@@ -328,6 +338,10 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         if (component.txtcolor) {
             styleString += 'color: ' + component.txtcolor + ';';
         }
+        
+        else if(vm.defaultBtnStyles.primaryBtnTextColor){
+            styleString += 'color: ' + vm.defaultBtnStyles.primaryBtnTextColor + ';';
+        }
 
         if (component.visibility === false) {
             styleString += 'display: none!important;';
@@ -336,7 +350,12 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         if (component.bg) {
             if (component.bg.color) {
                 styleString += 'background-color: ' + component.bg.color + ';';
+                styleString += 'border-color: transparent;';
             }
+            else if(vm.defaultBtnStyles.primaryBtnBackgroundColor){
+                styleString += 'background-color: ' + vm.defaultBtnStyles.primaryBtnBackgroundColor + ';';
+                styleString += 'border-color: transparent;';
+            }            
         }
 
         if (component.hover) {
@@ -345,6 +364,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             }
             if (component.hover.bg) {
                 hoverStyleString += 'background-color: ' + component.hover.bg.color + ';';
+                hoverStyleString += 'border-color: transparent;';
             }
         }
 
@@ -354,6 +374,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             }
             if (component.pressed.bg) {
                 activeStyleString += 'background-color: ' + component.pressed.bg.color + ';';
+                activeStyleString += 'border-color: transparent;';
             }
         }
 

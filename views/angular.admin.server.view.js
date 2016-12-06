@@ -8,7 +8,6 @@
 var BaseView = require('./base.server.view');
 var cmsManager = require('../cms/cms_manager');
 var logger = $$.g.getLogger('angular.admin.server.veiw');
-var segmentioConfig = require('../configs/segmentio.config.js');
 var _req = null;
 var urlUtils = require('../utils/urlutils');
 var intercomConfig = require('../configs/intercom.config');
@@ -51,7 +50,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 logger.error('Error: ' + err);
             }
 
-            data.segmentIOWriteKey=segmentioConfig.SEGMENT_WRITE_KEY;
+            data.segmentIOWriteKey='';
 
             data.showPreloader = false;
             data.includeJs = false;

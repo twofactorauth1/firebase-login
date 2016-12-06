@@ -86,6 +86,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('admin/reports/emails'), this.isAuthAndSubscribedApi.bind(this), this.getAdminEmailsReport.bind(this));
         app.get(this.url('admin/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allAdminReports.bind(this));
         app.get(this.url('customer/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allCustomerReports.bind(this));
+
+        app.get(this.url('live'), this.isAuthAndSubscribedApi.bind(this), this.getLiveVisitors.bind(this));
     },    
 
 
@@ -1980,6 +1982,19 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
             return self.send403(resp);
         }
+
+    },
+
+    getLiveVisitors: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getLiveVisitors');
+
+        analyticsManager.getLiveVisitors(accountId, userId, 0, false, function(err, value){
+            self.log.debug(accountId, userId, '<< getLiveVisitors');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
 
     }
 });

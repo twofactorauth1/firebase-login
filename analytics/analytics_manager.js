@@ -8,7 +8,6 @@ require('./dao/analytics.dao.js');
 var _log = $$.g.getLogger("analytics_manager");
 var SEGMENTIO = 'segment.io';
 var dao = require('./dao/analytics.dao.js');
-var segmentConfig = require('../configs/segmentio.config');
 //var Analytics = require('analytics-node');
 //var analytics = new Analytics(segmentConfig.SEGMENT_WRITE_KEY);
 var contactDao = require('../dao/contact.dao');
@@ -216,6 +215,113 @@ module.exports = {
     storePingEvent: function(pingEvent, fn) {
         //_log.debug('>> storePingEvent');
         dao.saveOrUpdate(pingEvent, fn);
+    },
+
+    getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getLiveVistiors');
+        /*
+         {
+         $match:{
+         server_time_dt: {$gte: new ISODate('2016-12-05 21:00:00.000Z')}
+         }
+         },
+         {
+         $sort:{session_id:1, server_time_dt:-1}
+         },
+         {
+         $group:{
+         _id:{
+         session_id:'$session_id',
+         secondsAgo:{$add:[{
+         "$subtract": [
+         { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
+         { "$mod": [
+         { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
+         1000 * 60
+         ]}
+         ]}, new Date(0)]}
+         },
+         count:{$sum:1},
+         lastPing: {$first:'$server_time_dt'}
+         }
+         },
+         {
+         $group:{
+         _id: '$_id.secondsAgo',
+         count:{$sum:'$count'}
+         }
+         },
+         {
+         $sort:{'_id':-1}
+         }
+         */
+
+
+
+
+        if(!lookBackInMinutes || lookBackInMinutes === 0) {
+            lookBackInMinutes = 30;
+        }
+        var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
+        //self.log.debug('targetDate:', targetDate.toDate());
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:targetDate.toDate()
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        stageAry.push(match);
+
+        //see: http://stackoverflow.com/questions/26814427/group-result-by-15-minutes-time-interval-in-mongodb
+        var group1 = {
+            $group:{
+                _id:{
+                    session_id:'$session_id',
+                    secondsAgo:{$add:[{
+                        "$subtract": [
+                            { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
+                            { "$mod": [
+                                { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
+                                1000 * 60]
+                            }
+                        ]},
+                        new Date(0)
+                    ]}
+                },
+                count:{$sum:1}
+            }
+        };
+        stageAry.push(group1);
+        var group2 = {
+            $group:{
+                _id: '$_id.secondsAgo',
+                count:{$sum:'$count'}
+            }
+        };
+        stageAry.push(group2);
+        var sort = {
+            $sort:{'_id':-1}
+        };
+        stageAry.push(sort);
+        //self.log.debug('stageAry:', stageAry);
+        dao.aggregateWithCustomStages(stageAry, $$.m.PingEvent, function(err, value) {
+            if(err) {
+                self.log.error('Error getting analytics:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getLiveVistiors');
+                fn(null, value);
+            }
+        });
+
     },
 
     getVisitorReports: function(accountId, userId, startDate, endDate, isAggregate, fn) {

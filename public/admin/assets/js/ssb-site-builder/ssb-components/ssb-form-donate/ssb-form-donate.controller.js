@@ -778,10 +778,10 @@
 
         function close() {
             vm.formBuilder = {};
-            vm.checkoutModalState = 1;
+            
             vm.getDonations(vm.product._id);
-
-            if (vm.component.redirect) {
+            if (vm.component.redirect && vm.checkoutModalState == 5) {
+                vm.checkoutModalState = 1;
                 if (vm.component.redirectType === 'page') {
                     window.location.href = vm.component.redirectUrl;
                 }
@@ -791,6 +791,7 @@
             } else {
                 $('#donation-card-details').find("input[type=text]").val("");
             }
+            vm.checkoutModalState = 1;
         }
 
         function deleteOrderFn(order) {
@@ -886,11 +887,13 @@
             }
 
             if (vm.component.productSettings.timePeriod.startDate && vm.component.productSettings.timePeriod.endDate) {
-                return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate));
+                return (moment().isAfter(vm.component.productSettings.timePeriod.startDate) && moment().isBefore(vm.component.productSettings.timePeriod.endDate) || (
+                    moment().isSame(vm.component.productSettings.timePeriod.endDate, "day") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "month") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "year")));                
             } else if (vm.component.productSettings.timePeriod.startDate) {
                 return moment().isAfter(vm.component.productSettings.timePeriod.startDate);
             } else if (vm.component.productSettings.timePeriod.endDate) {
-                return moment().isBefore(vm.component.productSettings.timePeriod.endDate);
+                return moment().isBefore(vm.component.productSettings.timePeriod.endDate) || (
+                    (moment().isSame(vm.component.productSettings.timePeriod.endDate, "day") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "month") && moment().isSame(vm.component.productSettings.timePeriod.endDate, "year")));
             } else {
                 return true;
             }

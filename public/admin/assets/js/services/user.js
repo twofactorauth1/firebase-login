@@ -23,6 +23,7 @@
       });
     };
 
+
     this.putUser = function(user, fn) {
       var apiUrl = baseUrl + ['user', $$.server.userId].join('/');
       $http.put(apiUrl, user)

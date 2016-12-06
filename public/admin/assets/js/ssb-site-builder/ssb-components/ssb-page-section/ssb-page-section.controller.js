@@ -6,7 +6,7 @@ ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude'
 /* @ngInject */
 function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window, $location) {
 
-    console.info('page-section directive init...')
+    console.info('page-section directive init...');
 
     var vm = this;
 
@@ -553,7 +553,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             if (vm.playerObject.destroy) {
                 vm.playerObject.destroy();
             }
-
             if (YT && YT.Player) {
                 vm.playerObject = new YT.Player('section_video_' + vm.section._id, {
                     height: '100%',

@@ -214,19 +214,19 @@
                 });
 
                 $scope.order.subtotal = _subtotal;
-                $scope.order.total_discount = _discount;
-                if (_discount) {
-                    $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotal)).toFixed(2);
+                $scope.order.total_discount = $scope.order.total_discount || _discount;
+                if ($scope.order.total_discount) {
+                    $scope.calculatedDiscountPercent = ((parseFloat($scope.order.total_discount) * 100) / parseFloat(_subtotal)).toFixed(2);
                 } else {
                     $scope.calculatedDiscountPercent = '';
                 }
                 if (_subtotalTaxable > 0) {
-                    $scope.order.total_tax = (_subtotalTaxable - _discount) * _taxrate;
+                    $scope.order.total_tax = (_subtotalTaxable - $scope.order.total_discount) * _taxrate;
                 } else {
                     $scope.order.total_tax = 0;
                 }
 
-                $scope.order.total = ((_subtotal + $scope.order.total_tax) - _discount);
+                $scope.order.total = ((_subtotal + $scope.order.total_tax) - $scope.order.total_discount);
             };
 
             /*

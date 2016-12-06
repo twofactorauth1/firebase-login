@@ -14,6 +14,8 @@ var serverKey = process.env.GOOGLE_SERVER_KEY || 'AIzaSyCAkloYlXlZx_---WXevaNHv0
 var analyticsId = process.env.GOOGLE_ANALYTICS_ID || 'ga:82461709';
 var analyticsScope = process.env.GOOGLE_ANALYTICS_SCOPE || 'ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews';
 var browserKey = process.env.GOOGLE_BROWSER_KEY || 'AIzaSyAG5JFmULSakLVV16ztr7tobAFGiQrtvpU';
+//UA-48234806-2 TEST?
+//UA-48234806-2 PROD?
 
 /* TEST Environment Credentials (*.test.indigenous.io)
  Client ID - 277102651227-q4rq36pdioba0vomtmssv07ojqie046b.apps.googleusercontent.com

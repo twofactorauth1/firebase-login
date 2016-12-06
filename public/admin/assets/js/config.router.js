@@ -252,6 +252,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Dashboard',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'jsVideoUrlParser', 'highcharts')
+    }).state('app.account.users', {
+        url: '/users',
+        templateUrl: "/admin/assets/js/users/users.html",
+        title: 'Users',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('UsersCtrl', 'customerService')
     })
 
     // Login routes

@@ -430,7 +430,9 @@ _.extend(apiBase.prototype, {
         if(req.session.stripeAccessToken) {
             return fn(null, req.session.stripeAccessToken);
         } else {
-            var accountId = parseInt(self.accountId(req));
+            //This will cause a problem if someone is logged into one account and browsing another
+            var accountId = parseInt(self.accountId(req)) || self.currentAccountId(req);
+            //console.log(accountId);
             if(accountId !== appConfig.mainAccountID) {
                 accountDao.getStripeTokensFromAccount(accountId, function(err, creds){
                     if(creds && creds.accessToken) {

@@ -236,6 +236,16 @@
               <div class="clearfix mb20"></div>
               <h4 ng-if="failedOrderMessage.length" class="center" style="color: #a94442;">{{failedOrderMessage}}</h4>
             </form>
+            <!-- Coupon DETAILS -->
+                  <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon && checkoutOrder.coupon, 'has-success': couponIsValid && !checkingCoupon && checkoutOrder.coupon}" style="padding-left:0; padding-right:0" id="card_coupon">
+                      <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="checkoutOrder.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  id="order_coupon_code"/>
+                      <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon && checkoutOrder.coupon, 'glyphicon glyphicon-ok': couponIsValid && checkoutOrder.coupon && !checkingCoupon}"></span>
+
+                      <span class="coupon-spinner" ng-class="{'fa fa-2x fa-spinner fa-spin':checkingCoupon}"></span>
+
+                      <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon && checkoutOrder.coupon">Invalid Coupon</span>
+                      <span class="success help-block" ng-if="checkoutOrder.coupon && couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
+                  </div>
           </div>
         </div>
         <div class="col-sm-4 col-xs-12 gray-bg order-summary">
@@ -305,7 +315,7 @@
       <button class="btn btn-danger pull-left" ng-click="deleteOrderFn(order)"><i class="fa fa-trash"></i> Cancel</button>
     </div>
     <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
-      <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
+      <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()" ng-disabled="checkingCoupon"><i class="fa fa-shopping-cart"></i> Checkout</button>
       <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, paypalInfo && !hasSubscriptionProduct ? 6 : 2)"><i class="fa fa-chevron-left"></i> Back
       </button>
     </div>

@@ -27,7 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('account/:id'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
         app.post(this.url('account/:id/evergreen'), this.isAuthApi.bind(this), this.convertAccountToInternal.bind(this));
         app.get(this.url('account/:id/users'), this.isAuthApi.bind(this), this.listUsersForAccount.bind(this));
-
+        
         app.post(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.addUserToAccount.bind(this));
         app.delete(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.removeUserFromAccount.bind(this));
     },
@@ -188,6 +188,8 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     _isAdmin: function(req, fn) {
         var self = this;
+        console.log(req)
+        
         if(self.userId(req) === 1 || self.userId(req)===4) {
             fn(null, true);
         } else if(_.contains(req.session.permissions, 'manager')){

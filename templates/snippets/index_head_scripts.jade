@@ -1,5 +1,6 @@
 script(type="text/javascript").
-
+    var loadSegment = false;
+    if(loadSegment) {
         window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
             return function () {
                 var a = Array.prototype.slice.call(arguments);
@@ -20,6 +21,8 @@ script(type="text/javascript").
         }, window.analytics.SNIPPET_VERSION = "2.0.9",
                 window.analytics.load('#{segmentIOWriteKey}');
         window.analytics.page('Index', {accountId:#{account._id}});
+    }
+
 
 
 script(src="//ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js")

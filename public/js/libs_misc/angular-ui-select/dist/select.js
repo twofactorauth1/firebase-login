@@ -1405,6 +1405,13 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
             }
             newItem = $select.tagging.fct($select.search);
 
+            if(!newItem){
+              newItem = {
+                'data': $select.search,
+                'label': $select.search
+              }
+            }
+
             //Check if the tagging is declined
             if(newItem){
               newItem.isTag = true;
