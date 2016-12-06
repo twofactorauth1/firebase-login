@@ -430,22 +430,26 @@ _.extend(apiBase.prototype, {
         if(req.session.stripeAccessToken) {
             return fn(null, req.session.stripeAccessToken);
         } else {
-            //This will cause a problem if someone is logged into one account and browsing another
-            var accountId = parseInt(self.accountId(req)) || self.currentAccountId(req);
-            //console.log(accountId);
-            if(accountId !== appConfig.mainAccountID) {
-                accountDao.getStripeTokensFromAccount(accountId, function(err, creds){
+            accountDao.getAccountByHost(req.get("host"), function(err, account) {
+                if(err) {
+                    self.log.error('Error getting account by host:', err);
+                    return fn(null, null);
+                } else {
+                    var credentials = account.get('credentials');
+                    var creds = null;
+                    _.each(credentials, function (cred) {
+                        if (cred.type === 'stripe') {
+                            creds = cred;
+                        }
+                    });
                     if(creds && creds.accessToken) {
                         req.session.stripeAccessToken = creds.accessToken;
                         return fn(null, req.session.stripeAccessToken);
                     } else {
                         return fn(null, null);
                     }
-                });
-            } else {
-                return fn(null, null);
-            }
-
+                }
+            });
         }
     },
 
