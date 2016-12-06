@@ -855,7 +855,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.currentCoupon = data;
                         scope.checkingCoupon = false;
                         console.log('validate coupon');
-                        if (data.id && data.id === coupon) {
+                        if (data && data.id && data.id === coupon) {
                             console.log('valid');
                             angular.element("#coupon-name .error").html("");
                             scope.couponIsValid = true;
@@ -1056,6 +1056,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                           products: []
                         };
                         cookieProcessFn();
+                        clearCardDetails();
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
 
@@ -1077,8 +1078,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $(element).find('.jp-card-name').text('Full Name');
                 $(element).find('.jp-card-expiry').text('••/••');
                 $(element).find('.jp-card').removeClass('jp-card-identified');
-                angular.element("#order_coupon_code").text = "";
-                angular.element("#order_coupon_code").removeClass('has-error has-success');
+                if(scope.checkoutOrder)
+                    scope.checkoutOrder.coupon = null;
+                //angular.element("#card_coupon").removeClass('has-error has-success');
             }
 
             /*
@@ -1226,7 +1228,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.currentCoupon = data;
                         scope.checkingCoupon = false;
                         console.log('validate coupon');
-                        if (data.id && data.id === coupon) {
+                        if (data && data.id && data.id === coupon) {
                             console.log('valid');
                             angular.element("#coupon-name .error").html("");
                             scope.couponIsValid = true;

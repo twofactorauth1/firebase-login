@@ -111,6 +111,10 @@ mainApp.service('paymentService', ['$http', 'ENV', '$timeout',
       $http.get(apiUrl)
         .success(function (data, status, headers, config) {
           fn(data);
+        })
+        .error(function (err) {
+            console.log('END:validateCoupon with ERROR ', err);
+            fn(null, err);
         });
     };
 
