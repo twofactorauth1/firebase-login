@@ -51,22 +51,36 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         var accountId = self.currentAccountId(req);
         self.log.debug(accountId, userId, '>> createOrder');
+        var coupon = req.body.coupon;
 
+        delete req.body.coupon;
         var order = new $$.m.Order(req.body);
         self.log.debug(accountId, userId, '>> Order Details '+ order);
+
         self.getStripeTokenFromUnAuthenticatedAccount(req, function(err, accessToken){
 
             order.set('account_id', accountId);
 
             //No security
-
-            orderManager.createOrder(order, accessToken, userId, function(err, order){
-                self.log.debug(accountId, userId, '<< createOrder', err);
-                self.sendResultOrError(res, err, order, 'Error creating order', 500);
-                if(userId && order) {
-                    self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
-                }
-            });
+            if(coupon){
+                orderManager.createOrderWithCoupon(order, accessToken, userId, coupon,  function(err, order){
+                    self.log.debug(accountId, userId, '<< createOrder', err);
+                    self.sendResultOrError(res, err, order, 'Error creating order', 500);
+                    if(userId && order) {
+                        self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
+                    }
+                }); 
+            }
+            else{
+               orderManager.createOrder(order, accessToken, userId,  function(err, order){
+                    self.log.debug(accountId, userId, '<< createOrder', err);
+                    self.sendResultOrError(res, err, order, 'Error creating order', 500);
+                    if(userId && order) {
+                        self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
+                    }
+                }); 
+            }
+            
         });
 
     },

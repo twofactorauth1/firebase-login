@@ -821,6 +821,693 @@ module.exports = {
 
     },
 
+    createOrderWithCoupon: function(order, accessToken, userId, coupon, fn) {
+        var self = this;
+        var accountId = parseInt(order.get('account_id'));
+        log.debug(accountId, userId, '>> createOrder');
+        var orderDiscount = 0;
+        /*
+         * Validation
+         *
+         * - Assumption: total = sum(line_items.total) - cart_discount - total_discount + total_tax + total_shipping
+         * - Assumption: customer_id = contact_id with a stripeId
+         * - Assumption: total_line_items_quantity = sum(line_items.quantity)
+         */
+
+        async.waterfall([
+            //get the account
+            function(callback) {
+                log.debug(accountId, userId, 'fetching account ' + order.get('account_id'));
+                accountDao.getAccountByID(accountId, function(err, account){
+                    callback(err, account);
+                });
+            },
+            //get the products
+            function(account, callback) {
+                log.debug(accountId, userId, 'fetching products');
+                var productAry = [];
+                async.each(order.get('line_items'), function iterator(item, cb){
+                    productManager.getProduct(item.product_id, function(err, product){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            if(product){
+                                productAry.push(product);
+                                item.sku = product.get('sku');
+                                item.name = product.get('name');
+                                log.debug(accountId, null, 'Product is', product);
+                            }
+
+                            cb();
+                        }
+                    });
+                }, function done(err){
+                    callback(err, account, productAry);
+                });
+            },
+            //determine tax rate
+            function(account, productAry, callback) {
+                log.debug(accountId, userId, 'commerceSettings');
+                var _taxRate = 0;
+                var commerceSettings = account.get('commerceSettings');
+
+                if(commerceSettings && commerceSettings.taxes === true) {
+                    //figure out the rate
+                    var zip = 0;
+                    if(commerceSettings.taxbased === 'customer_shipping') {
+                        zip = order.get('shipping_address').postcode;
+                    } else if(commerceSettings.taxbased === 'customer_billing') {
+                        zip = order.get('billing_address').postcode;
+                    } else if(commerceSettings.taxbased === 'business_location') {
+                        zip = account.get('business').addresses && account.get('business').addresses[0] ? account.get('business').addresses[0].zip : 0;
+                    } else {
+                        log.warn('Unable to determine tax rate based on ', commerceSettings);
+                    }
+                    if(zip !== 0) {
+                        productManager.getTax(zip, function(err, rate){
+                            log.debug(accountId, null, 'Tax Service Response: ', rate);
+                            if(rate && rate.results && rate.results.length > 0) {
+                                _taxRate = rate.results[0].taxSales.toFixed(4); // nexus location or business_location
+                                log.debug(accountId, userId, 'Initial Tax Rate: ', _taxRate);
+
+                                if(commerceSettings.taxbased !== 'business_location'
+                                    && commerceSettings.taxnexus && commerceSettings.taxnexus.length > 0) {
+
+                                    log.debug(accountId, userId, 'Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
+                                    if (_.pluck(commerceSettings.taxnexus, "text").indexOf(rate.results[0].geoState) < 0) {
+                                        _taxRate = 0; // Force rate to zero. Non-nexus location
+                                    }
+                                }
+                            } else {
+                                log.debug(accountId, userId, 'Tax Service (productManager.getTax) Response ERR: ', err);
+                                _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
+                            }
+                            log.debug(accountId, userId, 'Applicable Tax Rate (first): ', _taxRate);
+                            callback(err, account, productAry, _taxRate);
+                        });
+                    } else {
+                        log.debug(accountId, userId, 'Applicable Tax Rate (second): ', _taxRate);
+                        callback(null, account, productAry, _taxRate);
+                    }
+                } else {
+                    log.debug(accountId, userId, 'Applicable Tax Rate (third): ', _taxRate);
+                    callback(null, account, productAry, _taxRate);
+                }
+            },
+            //validate
+            function(account, productAry, taxPercent, callback){
+                log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
+                log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
+                //calculate total amount and number line items
+                var totalAmount = 0;
+                var subTotal = 0;
+                var totalLineItemsQuantity = 0;
+                var taxAdded = 0;
+                var discount = 0;
+
+                /*
+                 * loop through line items
+                 *   based on quantity and id, get lineItemSubtotal
+                 *   if item is taxable, get tax rate and add to lineItemTax
+                 *   sum
+                 *
+                 *
+                 */
+                var errorMsg = null;
+                _.each(order.get('line_items'), function iterator(item, index){
+                    var product = _.find(productAry, function(currentProduct){
+                        if(currentProduct.id() === item.product_id) {
+                            return true;
+                        }
+                    });
+                    if(product) {
+                        log.debug(accountId, userId, 'found product ', product);
+                        var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
+                        if(product.get('on_sale') === true) {
+                            var startDate = product.get('sale_date_from', 'day');
+                            var endDate = product.get('sale_date_to', 'day');
+                            var rightNow = new Date();
+                            if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                                lineItemSubtotal = item.quantity * product.get('sale_price');
+                                item.sale_price = product.get('sale_price').toFixed(2);
+                                //TODO: Should not need this line.  Receipt template currently needs it.
+                                item.regular_price = product.get('regular_price').toFixed(2);
+                                item.total = lineItemSubtotal.toFixed(2);
+                            }
+                        }
+                        if(product.get('taxable') === true) {
+                            taxAdded += (lineItemSubtotal * taxPercent);
+                        }
+                        subTotal += lineItemSubtotal;
+                        totalLineItemsQuantity += parseFloat(item.quantity);
+                    } else {
+                        log.error(accountId, userId, 'Could not find product with id: ' + item.product_id);
+                        errorMsg = 'No product found with id:' + item.product_id;
+                    }
+                });
+                if(errorMsg) {
+                    callback(errorMsg);
+                } else {
+                    log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+
+                    if(order.get('cart_discount')) {
+                        discount += parseFloat(order.get('cart_discount'));
+                        log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
+                    }
+
+                    if(order.get('total_discount')) {
+                        discount += parseFloat(order.get('total_discount'));
+                        log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
+                    }
+                    
+                    if(coupon.amount_off){
+                        discount = discount + coupon.amount_off                        
+                    }
+                    else if(coupon.percent_off){
+                        var coupon_discount = subTotal * coupon.percent_off / 100;
+                        discount = discount + coupon_discount
+                    }
+                                        
+                    orderDiscount = discount || 0.00;
+
+                    if(orderDiscount > subTotal){
+                        orderDiscount = subTotal;
+                        totalAmount = taxAdded;
+                    }
+                    else{
+                        totalAmount = (subTotal - discount) + taxAdded;    
+                    }
+                    orderDiscount = orderDiscount.toFixed(2);
+                    order.set('tax_rate', taxPercent);
+                    order.set('subtotal', subTotal.toFixed(2));
+                    order.set('total_tax', taxAdded.toFixed(2));
+                    order.set('total', totalAmount.toFixed(2));
+                    log.debug(accountId, userId, 'total is now: ' + order.get('total'));
+                    order.set('total_line_items_quantity', totalLineItemsQuantity);
+                    order.set('total_discount_included_coupon', orderDiscount);
+                    callback(null, account, order, productAry);
+                }
+            },
+            //save
+            function(account, validatedOrder, productAry, callback){
+                //look for customer instead of customer_id
+                if(validatedOrder.get('customer') && validatedOrder.get('customer_id')) {
+                    log.warn('request contains BOTH customer and customer_id.  Dropping customer.');
+                    validatedOrder.set('customer', null);
+                    callback(null, account, validatedOrder, productAry);
+                } else if(validatedOrder.get('customer') === null && validatedOrder.get('customer_id') === null) {
+                    //return an error.
+                    callback('Either a customer or customer_id is required.');
+                } else if(validatedOrder.get('customer')) {
+                    if (validatedOrder.get('isAnonymous')) {
+                      var tmpCust = {
+                        isAnonymous: true,
+                        details: [{
+                          emails: [{
+                            email: 'noreply@indigenous.io'
+                          }]
+                        }]
+                      };
+                      var contact = new $$.m.Contact(tmpCust);
+                    } else {
+                      var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    }
+                    contact.set('accountId', parseInt(validatedOrder.get('account_id')));
+                    contact.createdBy(userId, $$.constants.social.types.LOCAL);
+                    contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                        if(err) {
+                            log.error(accountId, null, 'Error creating contact for new order', err);
+                            callback(err);
+                        } else {
+                            validatedOrder.set('customer_id', savedContact.id());
+                            validatedOrder.set('customer', null);
+                            callback(null, account, validatedOrder, productAry);
+                        }
+                    });
+                } else {
+                    //we have the id.
+                    callback(null, account, validatedOrder, productAry);
+                }
+            },
+            //get contact
+            function(account, savedOrder, productAry, callback) {
+                log.debug(accountId, userId, 'getting contact');
+                contactDao.getById(savedOrder.get('customer_id'), $$.m.Contact, function(err, contact){
+                    if(err) {
+                        log.error(accountId, userId, 'Error getting contact: ' + err);
+                        callback(err);
+                    } else if(contact === null) {
+                        log.error(accountId, null, 'Could not find contact for id: ' + savedOrder.get('customer_id'));
+                        callback('contact not found');
+                    } else {
+
+                        //set order_id based on orders length for the account
+                        var query = {
+                            account_id: savedOrder.get('account_id')
+                        };
+                        dao.getMaxValue(query, 'order_id', $$.m.Order, function(err, value){
+                            if(err ) {
+                                log.warn('Could not find order_id:', err);
+                                callback(err);
+                            } else {
+                                var max = 1;
+                                if(value) {
+                                    max = parseInt(value) + 1;
+                                }
+
+                                savedOrder.set('order_id', max);
+                                dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
+                                    callback(err, account, updatedOrder, contact, productAry);
+                                });
+                            }
+                        });
+
+                    }
+                });
+            },
+            function(account, savedOrder, contact, productAry, callback) {
+                var customerId = contact.get('stripeId');
+                if(customerId) {
+                    callback(null, account, savedOrder, contact, productAry);
+                } else {
+                    var cardToken = savedOrder.get('payment_details').card_token;
+                    stripeDao.createStripeCustomer(null, contact, accountId, accountId, accessToken, function(err, customer){
+                        if(err) {
+                            log.error(accountId, userId, 'Error creating stripe customer:', err);
+                            callback(err);
+                        } else {
+                            contact.set('stripeId', customer.id);
+                            contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                                if(err) {
+                                    log.error(accountId, userId, 'Error saving stripe customerId:', err);
+                                    callback(err);
+                                } else {
+                                    callback(null, account, savedOrder, savedContact, productAry);
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            //charge
+            function(account, savedOrder, contact, productAry, callback){
+                log.debug(accountId, null, 'attempting to charge order');
+                var paymentDetails = savedOrder.get('payment_details');
+                if (savedOrder.get('total') > 0) {
+                    if(paymentDetails.method_id === 'cc') {
+                        var card = paymentDetails.card_token;
+                        //total is a double but amount needs to be in cents (integer)
+                        var amount = Math.round(savedOrder.get('total') * 100);
+                        log.debug(accountId, null, 'amount ', savedOrder.get('total'));
+                        var currency = savedOrder.get('currency');
+                        var customerId = contact.get('stripeId');
+                        log.debug(accountId, null, 'customerId:', customerId);
+                        var contactId = savedOrder.get('customer_id');
+                        var description = "Charge for order " + savedOrder.id();
+                        if(paymentDetails.charge_description) {
+                            description = paymentDetails.charge_description;
+                        }
+                        var metadata = {
+                            orderId: savedOrder.id(),
+                            accountId: savedOrder.get('account_id')
+                        };
+                        var capture = true;
+                        var statement_description = 'INDIGENOUS CHARGE';//TODO: make this configurable
+                        if(paymentDetails.statement_description) {
+                            statement_description = paymentDetails.statement_description;
+                        }
+                        var application_fee = 0;
+                        var userId = null;
+                        log.debug(accountId, userId, 'contact ', contact);
+                        var receipt_email = contact.getEmails().length ? contact.getEmails()[0].email : '';
+                        log.debug(accountId, userId, 'Setting receipt_email to ' + receipt_email);
+                        //TODO: if the product is a subscription, create a subscription rather than a charge
+                        if(_.find(productAry, function(product){return product.get('type') === 'SUBSCRIPTION'})) {
+                            log.debug(accountId, userId, 'creating a subscription');
+                            var subscriptionProduct = _.find(productAry, function(product){
+                                return product.get('type') === 'SUBSCRIPTION';});
+                            var productAttributes = subscriptionProduct.get('product_attributes');
+                            var stripePlanAttributes = productAttributes.stripePlans[0];
+                            var planId = stripePlanAttributes.id;
+                            var coupon = null;
+                            var trial_end = null;
+                            var quantity = 1;
+                            var application_fee_percent = null;
+                            //var accountId = savedOrder.get('account_id');
+                            //other items in the purchase can be add-ons
+                            var invoiceItems = _.reject(productAry, function(product){
+                                return product.get('type') === 'SUBSCRIPTION';
+                            });
+                            //TODO: handle invoiceItems
+                            /*
+                             async.eachSeries(invoiceItems, function(item, _callback){
+                             stripeDao.createInvoiceItem(customerId, amount, currency, invoiceId, subscriptionId, description, metadata, accessToken, _callback);
+                             }, function done(err){
+
+                             });
+                             */
+                            stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                                    application_fee_percent, metadata, accountId, contactId, null, accessToken, function(err, value){
+                                if(err) {
+                                    log.error(accountId, null, 'Error creating Stripe Subscription: ' + err);
+                                    //set the status of the order to failed
+                                    savedOrder.set('status', $$.m.Order.status.FAILED);
+                                    savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
+                                    var modified = {
+                                        date: new Date(),
+                                        by: userId
+                                    };
+                                    savedOrder.set('modified', modified);
+                                    dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
+                                        callback(err);
+                                    });
+                                } else {
+                                    callback(null, account, savedOrder, value, contact);
+                                }
+                            });
+
+                        } else {
+                            log.debug(accountId, userId, 'creating a charge');
+                            stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
+                                capture, statement_description, receipt_email, application_fee, userId, accessToken,
+                                function(err, charge){
+                                    if(err) {
+                                        log.error(accountId, null, 'Error creating Stripe Charge: ' + err);
+                                        //set the status of the order to failed
+                                        savedOrder.set('status', $$.m.Order.status.FAILED);
+                                        savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
+                                        var modified = {
+                                            date: new Date(),
+                                            by: userId
+                                        };
+                                        savedOrder.set('modified', modified);
+                                        dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
+                                            callback(err);
+                                        });
+                                    } else {
+                                        callback(null, account, savedOrder, charge, contact);
+                                    }
+                                }
+                            );
+                        }
+                    } else {
+                        log.warn('unsupported payment method: ' + paymentDetails.method_id);
+                        callback(null, account, savedOrder, null, contact);
+                    }
+                } else {
+                    callback(null, account, savedOrder, null, contact);
+                }
+            },
+            //update
+            function(account, savedOrder, charge, contact, callback){
+                log.debug(accountId, userId, 'updating saved order');
+                /*
+                 * need to set:
+                 * paid:true
+                 * status:pending
+                 * updated_at:new Date()
+                 * modified.date: new Date()
+                 * modified.by: userId
+                 */
+                savedOrder.set('updated_at', new Date());
+                // savedOrder.set('status', savedOrder.status.PENDING);
+                var paymentDetails = savedOrder.get('payment_details');
+                paymentDetails.paid = true;
+                paymentDetails.charge = charge;
+                savedOrder.set('payment_details', paymentDetails);
+                var modified = {
+                    date: new Date(),
+                    by: userId
+                };
+                savedOrder.set('modified', modified);
+
+                if (savedOrder.get('line_items').length && savedOrder.get('line_items')[0].type == 'DONATION') {
+                    savedOrder.set('status', 'completed');
+                } else {
+                    savedOrder.set('status', 'paid');
+                }
+
+                dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
+                    if(err) {
+                        log.error(accountId, userId, 'Error updating order: ' + err);
+                        callback(err);
+                    } else {
+                        callback(null, account, updatedOrder, contact);
+                    }
+                });
+
+            },
+            //send new order email
+            function(account, updatedOrder, contact, callback) {
+                log.debug(accountId, userId, 'Sending new order email');
+                var toAddress = "";
+                if(contact.getEmails()[0])
+                    toAddress = contact.getEmails()[0].email;
+                var toName = contact.get('first') + ' ' + contact.get('last');
+                //var accountId = updatedOrder.get('account_id');
+                var orderId = updatedOrder.id();
+                var vars = [];
+                var isDonation = updatedOrder.attributes.line_items[0].type == 'DONATION' ? true : false;
+
+                log.debug(accountId, userId, 'toAddress ', toAddress);
+                log.debug(accountId, userId, 'toName ', toName);
+                log.debug(accountId, userId, 'toAddress ', toAddress);
+                log.debug(accountId, userId, 'is donation ', isDonation)
+
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err) {
+                        callback(err);
+                    } else {
+                        var business = account.get('business');
+                        var emailPreferences = account.get('email_preferences');
+                        if(!business || !business.emails || !business.emails[0].email) {
+                            if (isDonation) {
+                              log.warn('No account email.  No NEW_DONATION email sent');
+                            } else {
+                              log.warn('No account email.  No NEW_ORDER email sent');
+                            }
+                            callback(null, account, updatedOrder);
+                        }
+
+                        var subject = isDonation ? ('Your '+business.name+' donation receipt from '+moment().format('MMM Do, YYYY')) : ('Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY'));
+                        var fromAddress = business.emails[0].email;
+                        var fromName = business.name;
+                        var emailPageHandle = isDonation ? 'new-donation' : 'new-order';
+                        //TODO: add cc emails here
+                        var ccAry = [];
+
+                        if(business.emails.length > 1) {
+                            for(var i=1; i<business.emails.length; i++) {
+                                ccAry.push(business.emails[i].email);
+                            }
+                        }
+                        cmsManager.getEmailPage(accountId, emailPageHandle, function(err, email){
+                            if(err || !email) {
+                                log.warn('No ' + (isDonation ? 'NEW_DONATION' : 'NEW_ORDER') + ' email receipt sent: ' + err);
+                                if(emailPreferences.new_orders === true) {
+                                    //Send additional details
+                                    subject = isDonation ? "New donation received!" : "New order created!";
+                                    var component = {};
+                                    component.order = updatedOrder.attributes;
+                                    component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                    component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                    app.render(adminNotificationEmailTemplate, component, function(err, html){
+                                        juice.juiceResources(html, {}, function(err, _html) {
+                                            if (err) {
+                                                log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
+                                                log.error(err);
+                                                fn(err, null);
+                                            } else {
+                                                log.debug(accountId, userId, 'juiced - one ' + _html);
+                                                html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            }
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
+                                                log.debug(accountId, userId, 'Admin Notification Sent');
+                                            });
+                                        });
+                                    });
+                                }
+                                callback(null, account, updatedOrder);
+                            } else {
+                                var component = email.get('components')[0];
+                                component.order = updatedOrder.attributes;
+                                log.debug(accountId, userId, 'Using this for data', component);
+                                var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
+
+                                app.render(baseEmailTemplate, component, function(err, html) {
+                                    juice.juiceResources(html, {}, function(err, _html) {
+                                        if (err) {
+                                            log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
+                                            log.error(err);
+                                            fn(err, null);
+                                        } else {
+                                            log.debug(accountId, userId, 'juiced - two' + _html);
+                                            html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                        }
+
+                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function(){
+                                            callback(null, account, updatedOrder);
+                                        });
+                                    });
+
+
+                                    if(emailPreferences.new_orders === true) {
+                                        //Send additional details
+                                        subject = isDonation ? "New donation received!" : "New order created!";
+                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                        var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                        app.render(adminNotificationEmailTemplate, component, function(err, html){
+                                            juice.juiceResources(html, {}, function(err, _html) {
+                                                if (err) {
+                                                    log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
+                                                    log.error(err);
+                                                    fn(err, null);
+                                                } else {
+                                                    log.debug(accountId, userId, 'juiced - three' + _html);
+                                                    html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                }
+
+                                                emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function(){
+                                                    log.debug(accountId, userId, 'Admin Notification Sent');
+                                                });
+                                            });
+                                        });
+                                    }
+                                });
+
+                            }
+                        });
+
+                    }
+                });
+
+
+            },
+            // check and get fulfillment email products
+            function(account, order, callback) {
+                log.debug(accountId, userId, 'Order is', order);
+                if(order.get('payment_details') && order.get('payment_details').charge && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
+                    var productAry = [];
+                    async.each(order.get('line_items'), function iterator(item, cb){
+                        productManager.getProduct(item.product_id, function(err, product){
+                            if(err) {
+                                cb(err);
+                            } else {
+                                if(product.get('fulfillment_email')){
+                                    productAry.push(product);
+                                }
+                                log.debug(accountId, userId, 'Product is', product);
+                                cb();
+                            }
+                        });
+                    }, function done(err){
+                        log.debug(accountId, userId, 'productAry', productAry);
+                        callback(err, account, order, productAry)
+                    });
+                }
+                else{
+                    callback(null, account, order, null)
+                }
+
+            },
+            // Send fulfillment email to ordering user
+            function(account, order, fulfillmentProductArr, callback) {
+                if(fulfillmentProductArr && fulfillmentProductArr.length){
+                    if(!order || !order.get('billing_address') || !order.get('billing_address').email) {
+                        log.warn('No order email address.  No Fulfillment email sent.');
+                        order.get("notes").push({
+                            note: 'No email address provided with order. No fulfillment email sent.',
+                            user_id: userId,
+                            date: new Date()
+                        });
+                        dao.saveOrUpdate(order, function(err, order){
+                            if(err) {
+                                log.error(accountId, userId, 'Error updating order: ' + err);
+                                callback(err);
+                            } else {
+                                callback(null,order);
+                            }
+                        });
+                    }
+                    else{
+                        var _ba = order.get('billing_address');
+                        var toName = (_ba.first_name || '') + ' ' + (_ba.last_name || '');
+                        var accountId = order.get('account_id');
+                        var toAddress = _ba.email;
+
+                        async.each(fulfillmentProductArr, function iterator(product, cb){
+                            var settings = product.get("emailSettings");
+                            var fromAddress = settings.fromEmail;
+                            var subject = settings.subject;
+                            var orderId = order.get("_id");
+                            var accountId = order.get('accountId');
+                            var vars = settings.vars || [];
+                            var fromName = settings.fromName;
+                            var emailId = settings.emailId;
+                            var bcc = settings.bcc;
+
+                            emailDao.getEmailById(emailId, function(err, email){
+                                if(err || !email) {
+                                    log.error(accountId, userId, 'Error getting email to render: ' + err);
+                                    return fn(err, null);
+                                }
+
+                                app.render('emails/base_email_v2', emailMessageManager.contentTransformations(email.toJSON()), function(err, html) {
+                                    if (err) {
+                                        log.error(accountId, userId, 'Error updating order: ' + err);
+                                        log.warn('email will not be sent.');
+                                        cb();
+                                    } else {
+                                        emailMessageManager.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, bcc, function(){
+                                            if(err) {
+                                                log.warn('Error sending email');
+                                                order.get("notes").push({
+                                                    note: 'Error sending fulfillment email.',
+                                                    user_id: userId,
+                                                    date: new Date()
+                                                });
+                                                dao.saveOrUpdate(order, function(err, order){
+                                                    if(err) {
+                                                        log.error(accountId, userId, 'Error updating order: ' + err);
+                                                        callback(err);
+                                                    } else {
+                                                        cb();
+                                                    }
+                                                });
+                                            } else {
+                                                cb();
+                                            }
+
+                                        });
+                                    }
+                                });
+                            });
+                        }, function done(err){
+                            callback(null, order);
+                        });
+                    }
+                }
+                else{
+                    callback(null, order);
+                }
+            }
+
+        ], function(err, result){
+            if(err) {
+                log.error(accountId, userId, 'Error creating order: ' + err);
+                return fn(err.message, null);
+            } else {
+                log.debug(accountId, userId, '<< createOrder');
+                return fn(null, result);
+            }
+        });
+
+    },
+
     createPaypalOrder: function(order, userId, cancelUrl, returnUrl, fn) {
 
         var self = this;
