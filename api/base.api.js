@@ -430,7 +430,8 @@ _.extend(apiBase.prototype, {
         if(req.session.stripeAccessToken) {
             return fn(null, req.session.stripeAccessToken);
         } else {
-            var accountId = parseInt(self.accountId(req));
+            var accountId = parseInt(self.accountId(req)) || self.currentAccountId(req);
+            console.log(accountId);
             if(accountId !== appConfig.mainAccountID) {
                 accountDao.getStripeTokensFromAccount(accountId, function(err, creds){
                     if(creds && creds.accessToken) {
