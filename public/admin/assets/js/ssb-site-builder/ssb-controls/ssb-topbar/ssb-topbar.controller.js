@@ -37,7 +37,7 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
         promise = saveWebsite().then(function(){
             return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                    
+                    vm.uiState.pageSaving = true;
                     SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                         vm.uiState.pageSaving = true;
                         console.log('page saved');
@@ -48,7 +48,7 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
                         SimpleSiteBuilderService.saveOtherPageLinks();
                         $timeout(function() {
                             vm.uiState.pageSaving = false;
-                        }, 1000);
+                        }, 1500);
                     })
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
