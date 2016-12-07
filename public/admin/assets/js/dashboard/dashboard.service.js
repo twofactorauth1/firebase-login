@@ -18,6 +18,7 @@
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
         var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
+        var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
 
         dashboardService.loading = { value:0 };
         dashboardService.updatedWorkstreams = false;
@@ -69,6 +70,7 @@
         dashboardService.setAwayFromDashboard = setAwayFromDashboard;
         dashboardService.getAnalytics = getAnalytics;
         dashboardService.getAccount = getAccount;
+        dashboardService.getLiveTraffic = getLiveTraffic;
 
 
 		function dashRequest(fn) {
@@ -188,6 +190,16 @@
 
         }
 
+        function getLiveTraffic() {
+            function success(data) {
+                dashboardService.state.liveTraffic = data;
+            }
+            function error(err) {
+                console.error('Dashboard Service getLiveTraffic error: ', JSON.stringify(err));
+            }
+            return dashRequest($http.get(baseLiveTrafficAPIUrl).success(success).error(error));
+        }
+
         function getAccount(account) {
 
             function success(data) {
@@ -243,6 +255,7 @@
             dashboardService.getAccount();
             dashboardService.getAnalytics();
             dashboardService.getWorkstreams();
+            dashboardService.getLiveTraffic();
             dashboardService.numberPolling++;
 		})();
 

@@ -88,6 +88,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customer/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allCustomerReports.bind(this));
 
         app.get(this.url('live'), this.isAuthAndSubscribedApi.bind(this), this.getLiveVisitors.bind(this));
+        app.get(this.url('admin/live'), this.isAuthAndSubscribedApi.bind(this), this.getAdminLiveVisitors.bind(this));
     },    
 
 
@@ -1991,10 +1992,27 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
         self.log.debug(accountId, userId, '>> getLiveVisitors');
 
-        analyticsManager.getLiveVisitors(accountId, userId, 0, false, function(err, value){
+        analyticsManager.getLiveVisitors(accountId, userId, 60, false, function(err, value){
             self.log.debug(accountId, userId, '<< getLiveVisitors');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
+
+    },
+
+    getAdminLiveVisitors: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getAdminLiveVisitors');
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getLiveVisitors(accountId, userId, 60, true, function(err, value){
+                self.log.debug(accountId, userId, '<< getAdminLiveVisitors');
+                self.sendResultOrError(resp, err, value, 'Error getting report');
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
 
     }
 });

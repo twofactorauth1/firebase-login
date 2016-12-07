@@ -265,6 +265,7 @@ module.exports = {
             lookBackInMinutes = 30;
         }
         var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
+        var rightnow = moment.utc().subtract('minutes', 1);
         //self.log.debug('targetDate:', targetDate.toDate());
         var stageAry = [];
         var match = {
@@ -317,8 +318,12 @@ module.exports = {
                 self.log.error('Error getting analytics:', err);
                 fn(err);
             } else {
+                var results = [];
+                if(value) {
+                    results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
+                }
                 self.log.debug(accountId, userId, '<< getLiveVistiors');
-                fn(null, value);
+                fn(null, results);
             }
         });
 
@@ -1470,6 +1475,32 @@ module.exports = {
             });
             zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
             currentDate = moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        }
+
+        return zeroedResultAry;
+    },
+
+    _zeroMissingMinutes: function(resultAry, blankResult, firstDate, lastDate) {
+        var currentDate = firstDate;
+        var zeroedResultAry = [];
+        _.each(resultAry, function(result){
+            while(moment(currentDate).isBefore(result._id)) {
+
+                zeroedResultAry.push({
+                    _id: currentDate
+                });
+                zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+                currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss.SSSZ');
+            }
+            zeroedResultAry.push(result);
+            currentDate = moment(result._id).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss.SSSZ');
+        });
+        while(moment(currentDate).isBefore(moment(lastDate)) || moment(currentDate).isSame(moment(lastDate), 'minute')) {
+            zeroedResultAry.push({
+                _id: currentDate
+            });
+            zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+            currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss.SSSZ');
         }
 
         return zeroedResultAry;
