@@ -181,7 +181,7 @@
 			</div>
 
             <div
-                class="ssb-layout__header_2-col_footer"                
+                class="ssb-layout__header_2-col_footer" ng-class="{'ssb-layout__header_2-col_footer-loading': vm.uiState.pageSaving}"               
                 ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-layout__header_2-col_footer')">
 
                 <div class="ssb-page-layout-row-header ssb-page-layout-row">

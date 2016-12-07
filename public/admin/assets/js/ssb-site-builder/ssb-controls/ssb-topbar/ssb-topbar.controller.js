@@ -37,6 +37,7 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
         promise = saveWebsite().then(function(){
             return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                    vm.uiState.pageSaving = true;
                     SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
                         console.log('page saved');
                         if (!vm.state.publishLoading) {
@@ -44,10 +45,14 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
                         }
                         vm.state.saveLoading = false;
                         SimpleSiteBuilderService.saveOtherPageLinks();
+                        $timeout(function() {
+                            vm.uiState.pageSaving = false;
+                        }, 0);
                     })
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                     vm.state.saveLoading = false;
+                    vm.uiState.pageSaving = false;
                 })
             )
         })
