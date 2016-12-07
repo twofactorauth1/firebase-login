@@ -198,9 +198,9 @@
                                                 <label tooltip-placement="top" tooltip="The dates of the sale">
                                                     Sale Dates <i class="fa fa-info-circle" />
                                                 </label>
-                                                <div class="input-group">
+                                                <div class="input-group" ng-if="product">
                                                     <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                                    <input date-range-picker class="form-control deshboard-date-picker date-picker" type="text" ng-model="selectedDate.range" options="pickerOptions" />
+                                                    <input date-range-picker class="form-control sales-date-date-picker date-picker" type="text" ng-model="selectedDate.range" options="pickerOptions" />
                                                     <span class="input-group-addon" ng-click="displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>
                                                 </div>
                                             </div>
@@ -214,7 +214,7 @@
                                                 <input type="text" class="form-control" ng-model="product.cost" currency-input>
                                             </div>
                                         </div> -->
-                                        <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
+                                        <div class="form-group" ng-hide='product.type == productTypes.DONATION || product.type == productTypes.EXTERNAL'>
                                             <label tooltip-placement="top" tooltip="To specify and send a fulfillment email when this item is ordered (scroll down)">
                                                 Fulfillment Email? <i class="fa fa-info-circle" />
                                             </label>
@@ -222,7 +222,7 @@
                                                 <switch ng-model="product.fulfillment_email" type="checkbox" switch-label="Fulfillment Email?"></switch>
                                             </div>
                                         </div>
-                                        <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
+                                        <div class="form-group" ng-hide='product.type == productTypes.DONATION || product.type == productTypes.EXTERNAL'>
                                             <label tooltip-placement="top" tooltip="To make this item taxable (See Taxes in Settings for more configuration)">
                                                 Taxable <i class="fa fa-info-circle" />
                                             </label>

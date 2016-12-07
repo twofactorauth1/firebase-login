@@ -508,14 +508,20 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     saveWebsite().then(function(){
                         return (
                             SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                                vm.uiState.pageSaving = true;
                                 SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                    
                                     console.log('page saved');
                                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                                     vm.state.saveLoading = false;
                                     SimpleSiteBuilderService.saveOtherPageLinks();
+                                    $timeout(function() {
+                                        vm.uiState.pageSaving = false;
+                                    }, 2000);
                                 })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;
+                                vm.uiState.pageSaving = false;
                                 toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                             })
                         )
