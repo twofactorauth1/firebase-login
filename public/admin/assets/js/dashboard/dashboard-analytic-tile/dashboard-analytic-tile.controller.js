@@ -111,7 +111,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 case 'Revenue':
 
                     ret.widgetTitle = 'E-Commerce';
-                    ret.buttonTitle = 'View Revenue';
+                    ret.buttonTitle = 'View Orders';
                     ret.data = [
                         {
                             analyticDataLabel: 'YTD Order Rev.',
