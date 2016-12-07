@@ -198,7 +198,7 @@
                                                 <label tooltip-placement="top" tooltip="The dates of the sale">
                                                     Sale Dates <i class="fa fa-info-circle" />
                                                 </label>
-                                                <div class="input-group">
+                                                <div class="input-group" ng-if="product">
                                                     <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                                                     <input date-range-picker class="form-control sales-date-date-picker date-picker" type="text" ng-model="selectedDate.range" options="pickerOptions" />
                                                     <span class="input-group-addon" ng-click="displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>

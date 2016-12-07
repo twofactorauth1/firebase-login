@@ -85,21 +85,6 @@
       $scope.user = user;
     });
 
-    $scope.pickerOptions = {
-      startDate: moment().subtract(29, 'days').toDate(),
-      endDate: new Date(),
-      format: 'YYYY-MM-DD',
-      opens: 'left',
-      ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-      }
-    };
-
     $scope.initDatePicker = function(){
       $timeout(function() {
         $scope.myform.$dirty = false;
@@ -1152,6 +1137,21 @@
       }).then(function(data) {
         return $scope.getAccount();
       })
+
+      $scope.pickerOptions = {
+        startDate: new Date($scope.selectedDate.range.startDate),
+        endDate: new Date($scope.selectedDate.range.startDate),
+        format: 'YYYY-MM-DD',
+        opens: 'left',
+        ranges: {
+          'Today': [moment(), moment()],
+          'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month': [moment().startOf('month'), moment().endOf('month')],
+          'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+      };
     })();
 
   }]);
