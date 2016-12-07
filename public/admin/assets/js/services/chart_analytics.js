@@ -959,7 +959,7 @@
                                         labelSwitchFN('US');
                                         this.switchedSeries = true;
                                         //var chart = $('#visitor_locations').highcharts();
-                                        //chart.zoom();
+                                        chart.zoom();
                                     }
                                 }
                             },

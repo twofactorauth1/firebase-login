@@ -37,17 +37,23 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
         promise = saveWebsite().then(function(){
             return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                    vm.uiState.pageSaving = true;
                     SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                        vm.uiState.pageSaving = true;
                         console.log('page saved');
                         if (!vm.state.publishLoading) {
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                         }
                         vm.state.saveLoading = false;
                         SimpleSiteBuilderService.saveOtherPageLinks();
+                        $timeout(function() {
+                            vm.uiState.pageSaving = false;
+                        }, 2000);
                     })
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                     vm.state.saveLoading = false;
+                    vm.uiState.pageSaving = false;
                 })
             )
         })
