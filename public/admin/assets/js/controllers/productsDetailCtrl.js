@@ -1140,7 +1140,7 @@
 
       $scope.pickerOptions = {
         startDate: new Date($scope.selectedDate.range.startDate),
-        endDate: new Date($scope.selectedDate.range.startDate),
+        endDate: new Date($scope.selectedDate.range.endDate),
         format: 'YYYY-MM-DD',
         opens: 'left',
         ranges: {
