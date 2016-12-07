@@ -1120,7 +1120,7 @@
 
     $scope.displayDatePicker = function(){
         $timeout(function() {
-            angular.element('.deshboard-date-picker').click();
+            angular.element('.sales-date-date-picker').click();
         }, 0);
     }
 
