@@ -517,7 +517,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                     SimpleSiteBuilderService.saveOtherPageLinks();
                                     $timeout(function() {
                                         vm.uiState.pageSaving = false;
-                                    }, 1500);
+                                    }, 2000);
                                 })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;

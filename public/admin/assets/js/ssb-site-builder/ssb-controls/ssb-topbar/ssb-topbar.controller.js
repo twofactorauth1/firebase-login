@@ -48,7 +48,7 @@ function ssbSiteBuilderTopbarController($scope, $rootScope, $timeout, $attrs, $f
                         SimpleSiteBuilderService.saveOtherPageLinks();
                         $timeout(function() {
                             vm.uiState.pageSaving = false;
-                        }, 1500);
+                        }, 2000);
                     })
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
