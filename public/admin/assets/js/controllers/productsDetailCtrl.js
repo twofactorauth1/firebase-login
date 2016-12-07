@@ -1129,6 +1129,14 @@
     };
 
 
+    $scope.$watch('selectedDate.range', function (newValue, oldValue) {
+      if (newValue) {
+          $scope.pickerOptions.startDate = new Date($scope.selectedDate.range.startDate);
+          $scope.pickerOptions.endDate = new Date($scope.selectedDate.range.endDate);
+        }
+    });
+
+
     
 
     $scope.init = (function(){
@@ -1138,6 +1146,7 @@
         return $scope.getAccount();
       })
 
+      
       $scope.pickerOptions = {
         startDate: new Date($scope.selectedDate.range.startDate),
         endDate: new Date($scope.selectedDate.range.endDate),
