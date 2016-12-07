@@ -90,7 +90,6 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     !{jsonld};
 
 
-
     body(
             data-styles,
             class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak',
@@ -104,8 +103,6 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             div(id='toolbar')
         block content
         block footer_scripts
-            script(type="text/javascript").
-                window.analytics.identify({accountId:#{account._id}});
         block body_scripts
             include index_body_scripts
             if includeSocial
