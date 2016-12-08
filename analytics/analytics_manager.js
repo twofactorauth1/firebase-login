@@ -1487,20 +1487,23 @@ module.exports = {
             while(moment(currentDate).isBefore(result._id)) {
 
                 zeroedResultAry.push({
-                    _id: currentDate
+                    _id: moment(currentDate).format('YYYY-MM-DD[T]HH:mm:00.000Z')
                 });
                 zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
-                currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss.SSSZ');
+                currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:00.000Z');
             }
-            zeroedResultAry.push(result);
-            currentDate = moment(result._id).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss.SSSZ');
+            zeroedResultAry.push({
+                _id: moment(result._id).format('YYYY-MM-DD[T]HH:mm:00.000Z'),
+                count: result.count
+            });
+            currentDate = moment(result._id).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:00.000Z');
         });
         while(moment(currentDate).isBefore(moment(lastDate)) || moment(currentDate).isSame(moment(lastDate), 'minute')) {
             zeroedResultAry.push({
-                _id: currentDate
+                _id: moment(currentDate).format('YYYY-MM-DD[T]HH:mm:00.000Z')
             });
             zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
-            currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:ss.SSSZ');
+            currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:00.000Z');
         }
 
         return zeroedResultAry;
