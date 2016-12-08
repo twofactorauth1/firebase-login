@@ -1194,9 +1194,11 @@
                         enabled: false
                     },
                     tooltip: {
-                        //headerFormat: '<b>{point.x}</b><br>',
-                        headerFormat: '',
-                        pointFormat: '<b class="text-center">{point.y}</b>'
+                        formatter: function() {
+                            return '' +
+                                moment(new Date()).subtract('minutes', (60-this.x)).format('hh:mma') +': ' +
+                                '<b>' + this.y + '</b>'
+                        }
                     }
                 },
                 xAxis:{
