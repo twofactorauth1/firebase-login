@@ -53,7 +53,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //visit
         app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
         app.post(this.url('session/:id/pageStart'), this.setup.bind(this), this.storePageInfo.bind(this));
-        app.post(this.url('session/:id/ping'), this.storePingInfo.bind(this));
+        app.post(this.url('session/:id/ping'), this.setup.bind(this), this.storePingInfo.bind(this));
 
         app.get(this.url('reports/visitors'), this.isAuthAndSubscribedApi.bind(this), this.runVisitorsReport.bind(this));
         app.get(this.url('reports/visitorLocations'), this.isAuthAndSubscribedApi.bind(this), this.visitorLocationsReport.bind(this));
