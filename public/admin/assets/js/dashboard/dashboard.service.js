@@ -61,7 +61,9 @@
             "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_15.jpg",
             "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_16.jpg",
             "//s3-us-west-2.amazonaws.com/indigenous-admin/dohy_background_17.jpg"
-        ],
+        ];
+
+        dashboardService.liveTraffic = [];
 
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
@@ -192,7 +194,7 @@
 
         function getLiveTraffic() {
             function success(data) {
-                dashboardService.state.liveTraffic = data;
+                dashboardService.liveTraffic = data;
             }
             function error(err) {
                 console.error('Dashboard Service getLiveTraffic error: ', JSON.stringify(err));

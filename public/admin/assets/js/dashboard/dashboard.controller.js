@@ -35,7 +35,6 @@
 
         }, true);
 
-
         function buildViewModel() {
 
             var incompleteWorkstreams = [];
@@ -141,8 +140,8 @@
             }
         });
 
-        $scope.$watch(function() { return vm.state.liveTraffic;}, function(liveTraffic){
-            if(liveTraffic) {
+        $scope.$watch(function() { return DashboardService.liveTraffic;}, function(liveTraffic){
+            if(liveTraffic && liveTraffic.length > 0) {
                 if(!$scope.liveTrafficConfig) {
                     //initialize chart
                     var trafficData = _.pluck(liveTraffic, 'count');
@@ -151,7 +150,6 @@
                     for(var i=0; i<liveTraffic.length; i++) {
                         categories.push("" + (liveTraffic.length - i));
                     }
-                    console.log(trafficData);
                     var liveTrafficConfig = ChartAnalyticsService.liveTraffic(trafficData, categories);
                     $scope.liveTraffic = liveTraffic;
                     $scope.liveTrafficConfig = liveTrafficConfig;
