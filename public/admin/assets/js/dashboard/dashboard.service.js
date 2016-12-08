@@ -19,6 +19,7 @@
         var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
+        var basePlatformLiveTrafficAPIUrl = '/api/1.0/analytics/admin/live';
 
         dashboardService.loading = { value:0 };
         dashboardService.updatedWorkstreams = false;
@@ -64,6 +65,7 @@
         ];
 
         dashboardService.liveTraffic = [];
+        dashboardService.platformLiveTraffic = [];
 
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
@@ -73,6 +75,7 @@
         dashboardService.getAnalytics = getAnalytics;
         dashboardService.getAccount = getAccount;
         dashboardService.getLiveTraffic = getLiveTraffic;
+        dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
 
 
 		function dashRequest(fn) {
@@ -200,6 +203,16 @@
                 console.error('Dashboard Service getLiveTraffic error: ', JSON.stringify(err));
             }
             return dashRequest($http.get(baseLiveTrafficAPIUrl).success(success).error(error));
+        }
+
+        function getPlatformLiveTraffic() {
+            function success(data) {
+                dashboardService.platformLiveTraffic = data;
+            }
+            function error(err) {
+                console.error('Dashboard Service getPlatformLiveTraffic error: ', JSON.stringify(err));
+            }
+            return dashRequest($http.get(basePlatformLiveTrafficAPIUrl).success(success).error(error));
         }
 
         function getAccount(account) {
