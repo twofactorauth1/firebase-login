@@ -105,8 +105,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> listProducts');
 
-        var skip = req.query['skip'];
-        var limit = req.query['limit'];
+        var skip = req.query['skip'] || 0;
+        var limit = req.query['limit'] || 0;
         var sortFields = req.query['sortFields'];
         var sortDirections = req.query['sortDirections'];
 

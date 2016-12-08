@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('DOHYCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "$timeout", "DashboardService", function ($scope, $location, toaster, $filter, $modal, $timeout, DashboardService) {
+    app.controller('DOHYCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "$timeout", "DashboardService", "ChartAnalyticsService", function ($scope, $location, toaster, $filter, $modal, $timeout, DashboardService, ChartAnalyticsService) {
 
         var vm = this;
 
@@ -34,7 +34,6 @@
             }, 0);
 
         }, true);
-
 
         function buildViewModel() {
 
@@ -138,6 +137,56 @@
                 var moduloIndex = dayOfYear % images.length;
                 var dashboardBGImage = images[moduloIndex];
                 sectionBGStyle(dashboardBGImage);
+            }
+        });
+
+        $scope.$watch(function() { return DashboardService.liveTraffic;}, function(liveTraffic){
+            if(liveTraffic && liveTraffic.length > 0) {
+                if(!$scope.liveTrafficConfig) {
+                    //initialize chart
+                    var trafficData = _.pluck(liveTraffic, 'count');
+
+                    var categories = [];
+                    for(var i=0; i<liveTraffic.length; i++) {
+                        categories.push("" + (liveTraffic.length - i));
+                    }
+                    var liveTrafficConfig = ChartAnalyticsService.liveTraffic(trafficData, categories);
+                    $scope.liveTraffic = liveTraffic;
+                    $scope.liveTrafficConfig = liveTrafficConfig;
+                    $scope.liveTrafficCategories = categories;
+                    $timeout(DashboardService.getLiveTraffic, 60000);
+                } else {
+                    //updateChart
+
+                    //figure out what's different
+                    var newPoints = [];
+                    _.each(liveTraffic, function(entry){
+                        var found = false;
+                        _.each($scope.liveTraffic, function(liveTrafficEntry){
+                            if(Math.abs(moment(entry._id).diff(liveTrafficEntry._id)) < 1000) {
+                                found = true;
+                            }
+                        });
+                        if(found === false) {
+                            newPoints.push(entry);
+                        }
+                    });
+
+                    //console.log('scope.liveTraffic:', $scope.liveTraffic);
+                    //console.log('liveTraffic:', liveTraffic);
+                    //console.log('difference:', newPoints);
+
+                    var chart = $('#live-traffic-chart').highcharts();
+                    _.each(newPoints, function(trafficData){
+                        //chart.series[0].addPoint(trafficData.count, true, true);
+                        chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
+                        //chart.xAxis[0].setCategories($scope.liveTrafficCategories);
+                    });
+
+                    $scope.liveTraffic = liveTraffic;
+                    $timeout(DashboardService.getLiveTraffic, 60000);
+                }
+
             }
         });
 

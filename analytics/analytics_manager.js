@@ -265,6 +265,7 @@ module.exports = {
             lookBackInMinutes = 30;
         }
         var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
+        var rightnow = moment.utc().subtract('minutes', 1);
         //self.log.debug('targetDate:', targetDate.toDate());
         var stageAry = [];
         var match = {
@@ -302,11 +303,20 @@ module.exports = {
         stageAry.push(group1);
         var group2 = {
             $group:{
-                _id: '$_id.secondsAgo',
-                count:{$sum:'$count'}
+                _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.sessionId'},
+                //_id: '$_id.secondsAgo',
+                //count:{$sum:'$count'}
+                count:{$sum:1}
             }
         };
         stageAry.push(group2);
+        var project = {
+            $project:{
+                _id: '$_id.secondsAgo',
+                count:'$count'
+            }
+        };
+        stageAry.push(project);
         var sort = {
             $sort:{'_id':-1}
         };
@@ -317,8 +327,12 @@ module.exports = {
                 self.log.error('Error getting analytics:', err);
                 fn(err);
             } else {
+                var results = [];
+                if(value) {
+                    results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
+                }
                 self.log.debug(accountId, userId, '<< getLiveVistiors');
-                fn(null, value);
+                fn(null, results);
             }
         });
 
@@ -1470,6 +1484,35 @@ module.exports = {
             });
             zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
             currentDate = moment(currentDate).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        }
+
+        return zeroedResultAry;
+    },
+
+    _zeroMissingMinutes: function(resultAry, blankResult, firstDate, lastDate) {
+        var currentDate = firstDate;
+        var zeroedResultAry = [];
+        _.each(resultAry, function(result){
+            while(moment(currentDate).isBefore(result._id)) {
+
+                zeroedResultAry.push({
+                    _id: moment(currentDate).format('YYYY-MM-DD[T]HH:mm:00.000Z')
+                });
+                zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+                currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:00.000Z');
+            }
+            zeroedResultAry.push({
+                _id: moment(result._id).format('YYYY-MM-DD[T]HH:mm:00.000Z'),
+                count: result.count
+            });
+            currentDate = moment(result._id).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:00.000Z');
+        });
+        while(moment(currentDate).isBefore(moment(lastDate)) || moment(currentDate).isSame(moment(lastDate), 'minute')) {
+            zeroedResultAry.push({
+                _id: moment(currentDate).format('YYYY-MM-DD[T]HH:mm:00.000Z')
+            });
+            zeroedResultAry.push(_.extend(zeroedResultAry.pop(), blankResult));
+            currentDate = moment(currentDate).add(1, 'minutes').format('YYYY-MM-DD[T]HH:mm:00.000Z');
         }
 
         return zeroedResultAry;

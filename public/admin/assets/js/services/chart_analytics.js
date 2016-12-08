@@ -1177,6 +1177,65 @@
             fn(revenueConfig);
         };
 
+        this.liveTraffic = function(data, categories) {
+            var config = {
+                options: {
+                    chart: {
+                        type: 'column',
+                        backgroundColor:'rgba(255, 255, 255, 0.1)'
+                    },
+                    title: {
+                        text: ''
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: false
+                    },
+                    tooltip: {
+                        formatter: function() {
+                            return '' +
+                                moment(new Date()).subtract('minutes', (60-this.x)).format('hh:mma') +': ' +
+                                '<b>' + this.y + '</b>'
+                        }
+                    }
+                },
+                xAxis:{
+                    labels: {
+                        enabled:false,
+                        step:5,
+                        //format:'{value:%H:%M}'
+                    },
+                    //type: 'dateTime'
+                    //categories:categories
+                },
+                yAxis: {
+                    min: 0,
+                    minTickInterval: 1,
+                    title: {
+                        text: 'Visitors'
+                    }
+                },
+                size:{
+                    height:240
+                },
+                plotOptions: {
+
+                },
+                credits: {
+                    enabled: false
+                },
+                series: [
+                    {
+                        name:'Visitors',
+                        data:data
+                    }
+                ]
+            };
+            return config;
+        };
+
 
         (function init() {
 
