@@ -303,11 +303,20 @@ module.exports = {
         stageAry.push(group1);
         var group2 = {
             $group:{
-                _id: '$_id.secondsAgo',
-                count:{$sum:'$count'}
+                _id: {secondsAgo:'$_id.secondsAgo', session_id:'$_id.sessionId'},
+                //_id: '$_id.secondsAgo',
+                //count:{$sum:'$count'}
+                count:{$sum:1}
             }
         };
         stageAry.push(group2);
+        var project = {
+            $project:{
+                _id: '$_id.secondsAgo',
+                count:'$count'
+            }
+        };
+        stageAry.push(project);
         var sort = {
             $sort:{'_id':-1}
         };
