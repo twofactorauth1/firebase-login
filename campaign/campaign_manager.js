@@ -72,7 +72,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> getCampaign');
         campaignDao.getById(campaignId, function(err, campaign){
-            if(err) {
+            if(err || !campaign) {
                 self.log.error('Error getting campaign:', err);
                 fn(err);
             } else {
