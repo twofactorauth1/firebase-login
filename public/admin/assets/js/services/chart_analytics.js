@@ -1215,6 +1215,9 @@
                 plotOptions: {
 
                 },
+                credits: {
+                    enabled: false
+                },
                 series: [
                     {
                         name:'Visitors',
