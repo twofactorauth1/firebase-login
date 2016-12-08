@@ -178,7 +178,8 @@
 
                     var chart = $('#live-traffic-chart').highcharts();
                     _.each(newPoints, function(trafficData){
-                        chart.series[0].addPoint(trafficData.count, true, true);
+                        //chart.series[0].addPoint(trafficData.count, true, true);
+                        chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
                         //chart.xAxis[0].setCategories($scope.liveTrafficCategories);
                     });
 
