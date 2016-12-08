@@ -1192,6 +1192,11 @@
                     },
                     exporting: {
                         enabled: false
+                    },
+                    tooltip: {
+                        //headerFormat: '<b>{point.x}</b><br>',
+                        headerFormat: '',
+                        pointFormat: '<b class="text-center">{point.y}</b>'
                     }
                 },
                 xAxis:{
