@@ -185,7 +185,7 @@
                     });
 
                     $scope.liveTraffic = liveTraffic;
-                    $timeout(DashboardService.getLiveTraffic, 10000);
+                    $timeout(DashboardService.getLiveTraffic, 60000);
                 }
 
             }
