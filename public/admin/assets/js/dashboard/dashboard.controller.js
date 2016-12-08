@@ -159,29 +159,9 @@
                     //updateChart
 
                     //figure out what's different
-                    var newPoints = [];
-                    _.each(liveTraffic, function(entry){
-                        var found = false;
-                        _.each($scope.liveTraffic, function(liveTrafficEntry){
-                            if(Math.abs(moment(entry._id).diff(liveTrafficEntry._id)) < 1000) {
-                                found = true;
-                            }
-                        });
-                        if(found === false) {
-                            newPoints.push(entry);
-                        }
-                    });
-
-                    //console.log('scope.liveTraffic:', $scope.liveTraffic);
-                    //console.log('liveTraffic:', liveTraffic);
-                    //console.log('difference:', newPoints);
-
+                    
                     var chart = $('#live-traffic-chart').highcharts();
-                    _.each(newPoints, function(trafficData){
-                        //chart.series[0].addPoint(trafficData.count, true, true);
-                        chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
-                        //chart.xAxis[0].setCategories($scope.liveTrafficCategories);
-                    });
+                    chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
 
                     $scope.liveTraffic = liveTraffic;
                     $timeout(DashboardService.getLiveTraffic, 15000);
