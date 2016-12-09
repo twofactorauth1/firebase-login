@@ -525,7 +525,8 @@ app.constant('userConstant', {
   },
 
   admin_user: {
-    userName: 'admin@indigenous.io'
+    userName: 'admin@indigenous.io',
+    emailDomain: '@indigenous.io'
   }
 
 });

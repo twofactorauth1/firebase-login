@@ -7,7 +7,8 @@
         var vm = this;
 
         vm.state = {       
-            adminUserName: userConstant.admin_user.userName
+            adminUserName: userConstant.admin_user.userName,
+            adminUserEmailFilter: userConstant.admin_user.emailDomain
         };
 
         vm.uiState = {
@@ -33,6 +34,15 @@
             });
         }
 
+
+        $scope.$watch('vm.state.users', function (users) {
+            if(users){
+                vm.state.filterUsers = _.filter(users, function(user){
+                    return user.username.indexOf(vm.state.adminUserEmailFilter) === -1
+                });
+            }
+        }, true)
+
         function openSimpleModal(modal){
             var _modal = {
                 templateUrl: modal,
@@ -52,7 +62,9 @@
                 if(err) {
                     toaster.pop('warning', err.message);
                 } else {
-                    vm.state.users.push(newuser);
+                    $timeout(function() {
+                        vm.state.users.push(newuser);
+                    }, 0);
                     $scope.closeModal();
                 }
             });
