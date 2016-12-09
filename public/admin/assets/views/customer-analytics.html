@@ -26,7 +26,8 @@
         <div class="col-sm-12">
             <div class="panel panel-white margin-top-15" id="liveTraffic" ng-class="{'load1 csspinner': !liveTrafficConfig.options}">
                 <div class="panel-heading border-light">
-                    <h3 class="text-primary analytic-title"><strong>Live</strong> Visitors (per minute)</h3>
+                    <h4 class="panel-title text-primary"><span class="text-bold">Live</span> Visitors (per minute)</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div class="panel-body" style="position: relative" ng-if="liveTrafficConfig">
                     <div class="height-215">
@@ -192,7 +193,7 @@
         <div class="col-xs-12 col-sm-4" id="traffic-sources">
             <div id="trafficSources" class="panel panel-white " ng-class="{'load1 csspinner': !trafficSourceData}">
                 <div class="panel-heading border-light">
-                    <h4 class="panel-title text-primary">Traffic Sources</h4>
+                    <h4 class="panel-title text-primary">Traffic <span class="text-bold">Sources</span></h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div collapse="trafficSources" class="panel-wrapper">
