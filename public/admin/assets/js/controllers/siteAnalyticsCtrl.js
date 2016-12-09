@@ -2,7 +2,7 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "AnalyticsWidgetStateService", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, SiteAnalyticsService, AnalyticsWidgetStateService) {
+    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "AnalyticsWidgetStateService", "$location", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, SiteAnalyticsService, AnalyticsWidgetStateService, $location) {
 
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
@@ -24,7 +24,7 @@
         $scope.date = {
             startDate: moment().subtract(29, 'days').format(),
             endDate: moment().format()
-        };
+        };        
 
         $scope.Math = Math;
 
@@ -55,11 +55,22 @@
             dateSwitch = true;
         });
 
-        $scope.selectedDate = {
-            startDate: moment().subtract(29, 'days').startOf('day'),
-            endDate: moment()
-        };
+        
 
+        if($location.search().date_filter === 'today'){
+            $scope.selectedDate = {
+                startDate: moment().startOf('day').format(),
+                endDate: moment().format()
+            };            
+        }
+        else{
+            $scope.selectedDate = {
+                startDate: moment().subtract(29, 'days').startOf('day'),
+                endDate: moment()
+            };
+        }
+
+        
         $scope.pickerOptions = {
             startDate: moment().subtract(29, 'days').toDate(),
             endDate: moment().toDate(),
