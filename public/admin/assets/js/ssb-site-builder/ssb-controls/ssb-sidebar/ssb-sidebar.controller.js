@@ -128,7 +128,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         name: "google-plus",
         icon: "google-plus",
         tooltip: "Google Plus",
-        url: "https://www.gmail.com"
+        url: "http://plus.google.com"
       }, {
         name: "instagram",
         icon: "instagram",

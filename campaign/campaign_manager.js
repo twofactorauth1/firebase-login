@@ -397,6 +397,11 @@ module.exports = {
                     by: userId,
                     date: new Date()
                 };
+                var created = campaignObj.get('created');
+
+                if (created && _.isString(campaignObj.get('created').date)) {
+                    created.date = moment(campaignObj.date).toDate();
+                }
                 campaignObj.set('modified', modified);
                 self.updateCampaign_v2(accountId, userId, campaignObj, campaign, fn);
             }

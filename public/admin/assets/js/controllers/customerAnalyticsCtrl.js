@@ -78,7 +78,29 @@
         UserService.getAccount(function (account) {
             $scope.analyticsAccount = account;
             $scope.runAnalyticsReports();
+            $scope.platformTraffic();
         });
+
+        $scope.platformTraffic = function() {
+            ChartAnalyticsService.getPlatformTraffic(function(data){
+                var trafficData = _.pluck(data, 'count');
+                var liveTrafficConfig = ChartAnalyticsService.liveTraffic(trafficData);
+                $scope.liveTraffic = data;
+                $scope.liveTrafficConfig = liveTrafficConfig;
+
+                $timeout($scope.updatePlatformTraffic, 60000);
+            });
+        };
+
+        $scope.updatePlatformTraffic = function() {
+            ChartAnalyticsService.getPlatformTraffic(function(data){
+                var chart = $('#live-traffic-chart').highcharts();
+                //chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
+
+                $scope.liveTraffic = data;
+                $timeout($scope.updatePlatformTraffic, 60000);
+            });
+        };
 
         $scope.runAnalyticsReports = function () {
             console.log('runAnalyticsReports');

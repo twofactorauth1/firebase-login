@@ -406,6 +406,10 @@
             });
         };
 
+        this.getPlatformTraffic = function(fn) {
+            SiteAnalyticsService.runPlatformTraffic(fn);
+        };
+
         this.runReports = function (date, account, fn) {
             var self = this;
             var hostname = this.getHostName(account);
