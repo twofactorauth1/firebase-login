@@ -95,7 +95,7 @@
         $scope.updatePlatformTraffic = function() {
             ChartAnalyticsService.getPlatformTraffic(function(data){
                 var chart = $('#live-traffic-chart').highcharts();
-                //chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
+                chart.series[0].setData(_.pluck(data, 'count'), true);
 
                 $scope.liveTraffic = data;
                 $timeout($scope.updatePlatformTraffic, 60000);

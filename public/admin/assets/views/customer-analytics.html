@@ -24,6 +24,24 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
+            <div class="panel panel-white margin-top-15" id="liveTraffic" ng-class="{'load1 csspinner': !liveTrafficConfig.options}">
+                <div class="panel-heading border-light">
+                    <h3 class="text-primary analytic-title"><strong>Live</strong> Visitors (per minute)</h3>
+                </div>
+                <div class="panel-body" style="position: relative" ng-if="liveTrafficConfig">
+                    <div class="height-215">
+                        <highchart config="liveTrafficConfig" id="live-traffic-chart"></highchart>
+                    </div>
+                </div>
+                <div class="panel-footer border-light">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-sm-12">
             <div class="panel panel-white margin-top-15" id="overview" ng-class="{'load1 csspinner': !analyticsOverviewConfig.options}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary"><span class="text-bold">Visitor</span> Overview</h4>
