@@ -2,9 +2,9 @@
 
 app.directive('ssbDataStyles', ssbDataStyles);
 
-ssbDataStyles.$inject = ['$timeout'];
+ssbDataStyles.$inject = ['$timeout', '$location'];
 /* @ngInject */
-function ssbDataStyles($timeout) {
+function ssbDataStyles($timeout, $location) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs, ctrl) {
@@ -22,6 +22,7 @@ function ssbDataStyles($timeout) {
                         unbindWatcher();
                         $timeout(function() {
                             var elements = angular.element('.ssb-theme-btn');
+                            var anchorElements = angular.element('a[href]');
                             elements.each(function() {
                                 var element = $(this);
 
@@ -90,6 +91,12 @@ function ssbDataStyles($timeout) {
                                 }
 
                             });
+                            anchorElements.each(function(){
+                                var element = $(this);
+                                if(element.attr("href") && element.attr("target") === undefined && element.attr("href").indexOf("/blog") > -1 && element.attr("href").indexOf($location.host()) > -1 ){
+                                    element.attr("target", "_self");
+                                }
+                            })
 
                         }, 1500);
                     }
