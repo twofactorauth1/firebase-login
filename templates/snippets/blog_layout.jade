@@ -21,8 +21,7 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 include index_head_styles
                 include index_head_scripts
 
-            if !post
-                title(data-ng-bind='pageTitle()')
+            title(data-ng-bind='pageTitle()')
 
             meta(charset="utf-8")
             meta(name="viewport", content="width=device-width, initial-scale=1.0")

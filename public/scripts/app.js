@@ -213,7 +213,15 @@ var mainApp = angular
 
 
         $rootScope.pageTitle = function () {
-            return $rootScope.title;
+            if($rootScope.isSocialEnabled)
+            {
+                if(window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.post){
+                    return window.indigenous.precache.siteData.post.post_title;
+                }
+            }
+            else{
+                return $rootScope.title;   
+            }
         };
 
 
