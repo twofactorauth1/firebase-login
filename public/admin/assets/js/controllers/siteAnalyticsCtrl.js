@@ -926,7 +926,7 @@
         })
 
         var timer=undefined;
-        var topbar = angular.element(".navbar-static-top");
+        
         function setDashboardMode(){
             $rootScope.app.layout.isAnalyticsDashboardMode = true;
             timer = $interval(function(){                
