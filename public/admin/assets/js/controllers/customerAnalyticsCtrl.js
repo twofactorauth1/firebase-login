@@ -1015,7 +1015,6 @@
         var timer=undefined;
         function setDashboardMode(){
             $rootScope.app.layout.isAnalyticsDashboardMode = true;
-            reflowCharts();
             timer = $interval(function(){                
                 console.log("Refreshing");
                 $scope.runAnalyticsReports();
@@ -1024,14 +1023,19 @@
         }
 
         function setDesktopMode(){    
-            $rootScope.app.layout.isAnalyticsDashboardMode = false;
-            reflowCharts();
+            $rootScope.app.layout.isAnalyticsDashboardMode = false;            
             if(angular.isDefined(timer))
             {
                 $interval.cancel(timer);
                 timer=undefined;
             }
         };
+
+        $scope.$watchGroup(['app.layout.isAnalyticsDashboardMode', 'app.layout.isSidebarClosed'],  function (val1, val2) {
+            if(angular.isDefined(val1) || angular.isDefined(val2)){
+                reflowCharts();
+            }
+        })
 
     }]);
 }(angular));
