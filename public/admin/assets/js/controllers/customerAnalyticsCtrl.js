@@ -1015,6 +1015,7 @@
         var timer=undefined;
         function setDashboardMode(){
             $rootScope.app.layout.isAnalyticsDashboardMode = true;
+            reflowCharts();
             timer = $interval(function(){                
                 console.log("Refreshing");
                 $scope.runAnalyticsReports();
@@ -1024,6 +1025,7 @@
 
         function setDesktopMode(){    
             $rootScope.app.layout.isAnalyticsDashboardMode = false;
+            reflowCharts();
             if(angular.isDefined(timer))
             {
                 $interval.cancel(timer);
