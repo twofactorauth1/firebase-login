@@ -2,8 +2,9 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "AnalyticsWidgetStateService", "$location", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, SiteAnalyticsService, AnalyticsWidgetStateService, $location) {
+    app.controller('siteAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "AnalyticsWidgetStateService", "$location", "$interval", "analyticsConstant", "$rootScope", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, SiteAnalyticsService, AnalyticsWidgetStateService, $location, $interval, analyticsConstant, $rootScope) {
 
+        $scope.analyticsRefreshAfterTime = analyticsConstant.refreshAfterTime;
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
         $scope.trafficSourcesConfig = {};
@@ -903,5 +904,46 @@
                 reflowCharts();
             }, 0);
         }
+
+
+        $scope.uiState = {
+            dashboardMode : false
+        }
+
+
+        $scope.$watch('uiState.dashboardMode', function (mode) {
+            if(angular.isDefined(mode)){
+                if(mode)
+                {
+                    console.log("dashboard Mode")
+                    setDashboardMode();
+                }
+                else{
+                    console.log("desktop Mode")
+                    setDesktopMode();
+                }
+            }
+        })
+
+        var timer=undefined;
+        var topbar = angular.element(".navbar-static-top");
+        function setDashboardMode(){
+            $rootScope.app.layout.isAnalyticsDashboardMode = true;
+            timer = $interval(function(){                
+                console.log("Refreshing");
+                $scope.runAnalyticsReports();
+            }, $scope.analyticsRefreshAfterTime);
+        }
+
+        function setDesktopMode(){    
+            $rootScope.app.layout.isAnalyticsDashboardMode = false;
+            if(angular.isDefined(timer))
+            {
+                $interval.cancel(timer);
+                timer=undefined;
+            }
+        };
+
+
     }]);
 }(angular));

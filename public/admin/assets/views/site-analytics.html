@@ -13,13 +13,17 @@
     <!-- start: YOUR CONTENT HERE -->
     <div class="container-fluid container-fullw bg-white ng-scope">
         <div class="row">
-            <div ng-class="{'col-xs-12 col-sm-3 col-sm-offset-9': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4 col-sm-offset-8 padding-left-50 pull-right': !app.layout.isSidebarClosed}">
+            <div class="pull-right" ng-class="{'col-xs-12 col-sm-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4': !app.layout.isSidebarClosed}">
                 <div class="input-group">
                     <label class="sr-only">Date Range</label>
                     <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                     <input date-range-picker class="form-control deshboard-date-picker date-picker" type="text" ng-model="selectedDate" options="pickerOptions" />
                     <span class="input-group-addon" ng-click="displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>
-                </div>
+                </div>                
+            </div>
+            <div class="space20 visible-xs"></div>
+            <div class="pull-left analytics-dashboard-btn" ng-class="{'col-xs-12 col-sm-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4': !app.layout.isSidebarClosed}">
+                <button type="button" ng-click="uiState.dashboardMode = !uiState.dashboardMode" class="btn btn-primary"><span ng-if="!app.layout.isAnalyticsDashboardMode">Dashboard Mode</span><span ng-if="app.layout.isAnalyticsDashboardMode">Desktop Mode</span></button>
             </div>
         </div>
     </div>

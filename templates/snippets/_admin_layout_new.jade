@@ -48,7 +48,7 @@ html(lang='en', data-ng-app='indigenousApp', class="light-admin-chrome")
 
 
   body(ng-controller='AppCtrl')
-    #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed, 'app-minimal-admin-chrome': app.layout.isMinimalAdminChrome, 'app-minimal-admin-chrome-light': app.layout.isMinimalAdminChromeLight }")
+    #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed, 'app-minimal-admin-chrome': app.layout.isMinimalAdminChrome, 'app-minimal-admin-chrome-light': app.layout.isMinimalAdminChromeLight, 'app-analytics-dashboard-mode':  app.layout.isAnalyticsDashboardMode}")
 
     block body_scripts
             include admin_body_scripts

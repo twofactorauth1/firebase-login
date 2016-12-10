@@ -277,6 +277,10 @@ app.constant('pageConstant', {
   }
 });
 
+app.constant('analyticsConstant', {
+  refreshAfterTime: 600000 // in milliseconds
+});
+
 // {
 //   name: 'Digital',
 //   value: 'digital'
