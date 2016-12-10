@@ -26,7 +26,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.currentProductPage = 1;
 
             // initializations
-            scope.showTax = true;
+            scope.showTax = false;
             scope.showNotTaxed = false; // Some items are not taxed when summing
             scope.hasSubscriptionProduct = false;
             scope.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
@@ -1057,6 +1057,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         };
                         cookieProcessFn();
                         clearCardDetails();
+                        CartDetailsService.showTax = false;
+                        scope.showTax = false;
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
 
@@ -1095,8 +1097,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             if (scope.checkoutModalState === 5) {
                                 scope.checkoutModalState = 1;
                                 scope.newContact = {};
-                                clearCardDetails();
-                                CartDetailsService.showTax = false;
+                                clearCardDetails();                                
                             }
                         });
                     }, 0);
