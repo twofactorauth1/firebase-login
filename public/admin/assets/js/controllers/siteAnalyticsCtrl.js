@@ -812,7 +812,7 @@
                 if(chart){
                     $timeout(function() {
                         chart.reflow();
-                    }, 0);
+                    }, 500);
                 }
             })
         };
