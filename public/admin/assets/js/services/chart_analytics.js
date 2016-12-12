@@ -1140,7 +1140,7 @@
                             text: 'Revenue'
                         },
                         labels: {
-                            format: '${value} USD'
+                            format: '${value:.2f} USD'
                         }
                     }],
                 series: [
@@ -1161,7 +1161,8 @@
                         data: ordersData.amountData,
                         tooltip: {
                             valueSuffix: ' USD',
-                            valuePrefix: '$'
+                            valuePrefix: '$',
+                            pointFormat: "${point.y:.2f} USD"
                         }
                     }
                 ],
