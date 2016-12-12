@@ -675,88 +675,88 @@ var emailMessageManager = {
                     }
                 );
                 htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
-
-                var request = sg.emptyRequest();
-                request.body = {
-                    "categories": [
-                        "order"
-                    ],
-                    "content": [
-                        {
-                            "type": "text/html",
-                            "value": htmlContent
-                        }
-                    ],
-                    "from": {
-                        "email": fromAddress
-                    },
-                    "headers": {},
-                    "personalizations": [
-                        {
-                            "headers": {
-                                "X-Accept-Language": "en"
-                            },
-                            "subject": subject,
-
-                            "to": [
-                                {
-                                    "email": toAddress
-                                }
-                            ]
-                        }
-                    ],
-                    "tracking_settings": {
-                        "click_tracking": {
-                            "enable": true,
-                            "enable_text": true
-                        }
-                    }
-                };
-                request.method = 'POST';
-                request.path = '/v3/mail/send';
-
-                if(fromName && fromName.length > 0) {
-                    request.body.from.name = fromName;
-                }
-                if(toName && toName.length > 0) {
-                    request.body.personalizations[0].to[0].name = toName;
-                }
-                if(ccAry && ccAry.length > 0) {
-                    request.body.personalizations[0].cc = [];
-                    _.each(ccAry, function(ccAddress){
-                        request.body.personalizations[0].cc.push({email:ccAddress});
-                    });
-                }
-
-                self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
-                    //we should not have an err here
-                    if(err) {
-                        self.log.error('Error storing email (this should not happen):', err);
-                        return fn(err);
-                    } else {
-
-                        request.body.custom_args = {
-                            emailmessageId: emailmessage.id(),
-                            accountId:''+accountId,
-                            orderId:orderId,
-                            date: moment().toISOString(),
-                            emailId: emailId
-                        };
-                        sg.API(request, function (error, response) {
-                            self.log.debug(response.statusCode);
-                            self.log.debug(response.body);
-                            self.log.debug(response.headers);
-                            if (err) {
-                                self.log.error('Error sending email:', err);
-                                return fn(err);
-                            } else {
-                                self.log.debug(accountId, null, '<< sendAccountWelcomeEmail');
-                                return fn(null, response);
+                juice.juiceResources(htmlContent, {}, function(err, html) {
+                    var request = sg.emptyRequest();
+                    request.body = {
+                        "categories": [
+                            "order"
+                        ],
+                        "content": [
+                            {
+                                "type": "text/html",
+                                "value": html
                             }
+                        ],
+                        "from": {
+                            "email": fromAddress
+                        },
+                        "headers": {},
+                        "personalizations": [
+                            {
+                                "headers": {
+                                    "X-Accept-Language": "en"
+                                },
+                                "subject": subject,
+
+                                "to": [
+                                    {
+                                        "email": toAddress
+                                    }
+                                ]
+                            }
+                        ],
+                        "tracking_settings": {
+                            "click_tracking": {
+                                "enable": true,
+                                "enable_text": true
+                            }
+                        }
+                    };
+                    request.method = 'POST';
+                    request.path = '/v3/mail/send';
+
+                    if(fromName && fromName.length > 0) {
+                        request.body.from.name = fromName;
+                    }
+                    if(toName && toName.length > 0) {
+                        request.body.personalizations[0].to[0].name = toName;
+                    }
+                    if(ccAry && ccAry.length > 0) {
+                        request.body.personalizations[0].cc = [];
+                        _.each(ccAry, function(ccAddress){
+                            request.body.personalizations[0].cc.push({email:ccAddress});
                         });
                     }
-                });
 
+                    self._safeStoreEmail(request.body, accountId, null, emailId, function(err, emailmessage){
+                        //we should not have an err here
+                        if(err) {
+                            self.log.error('Error storing email (this should not happen):', err);
+                            return fn(err);
+                        } else {
+
+                            request.body.custom_args = {
+                                emailmessageId: emailmessage.id(),
+                                accountId:''+accountId,
+                                orderId:orderId,
+                                date: moment().toISOString(),
+                                emailId: emailId
+                            };
+                            sg.API(request, function (error, response) {
+                                self.log.debug(response.statusCode);
+                                self.log.debug(response.body);
+                                self.log.debug(response.headers);
+                                if (err) {
+                                    self.log.error('Error sending email:', err);
+                                    return fn(err);
+                                } else {
+                                    self.log.debug(accountId, null, '<< sendAccountWelcomeEmail');
+                                    return fn(null, response);
+                                }
+                            });
+                        }
+                    });
+                })
             }
         });
 

@@ -627,19 +627,13 @@ module.exports = {
                                     var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
                                     app.render(adminNotificationEmailTemplate, component, function(err, html){
-                                        juice.juiceResources(html, {}, function(err, _html) {
-                                            if (err) {
-                                                log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
-                                                log.error(err);
-                                                fn(err, null);
-                                            } else {
-                                                log.debug(accountId, userId, 'juiced - one ' + _html);
-                                                html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                            }
+                                        //juice.juiceResources(html, {}, function(err, _html) {
+                                            
+                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
-                                        });
+                                        //});
                                     });
                                 }
                                 callback(null, account, updatedOrder);
@@ -650,20 +644,13 @@ module.exports = {
                                 var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
 
                                 app.render(baseEmailTemplate, component, function(err, html) {
-                                    juice.juiceResources(html, {}, function(err, _html) {
-                                        if (err) {
-                                            log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
-                                            log.error(err);
-                                            fn(err, null);
-                                        } else {
-                                            log.debug(accountId, userId, 'juiced - two' + _html);
-                                            html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                        }
-
+                                    //juice.juiceResources(html, {}, function(err, _html) {
+                                        
+                                        html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function(){
                                             callback(null, account, updatedOrder);
                                         });
-                                    });
+                                    //});
 
 
                                     if(emailPreferences.new_orders === true) {
@@ -674,20 +661,13 @@ module.exports = {
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
                                         app.render(adminNotificationEmailTemplate, component, function(err, html){
-                                            juice.juiceResources(html, {}, function(err, _html) {
-                                                if (err) {
-                                                    log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
-                                                    log.error(err);
-                                                    fn(err, null);
-                                                } else {
-                                                    log.debug(accountId, userId, 'juiced - three' + _html);
-                                                    html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                                }
-
+                                            //juice.juiceResources(html, {}, function(err, _html) {
+                                                
+                                                html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                 emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function(){
                                                     log.debug(accountId, userId, 'Admin Notification Sent');
                                                 });
-                                            });
+                                            //});
                                         });
                                     }
                                 });
@@ -1315,19 +1295,12 @@ module.exports = {
                                     var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
                                     app.render(adminNotificationEmailTemplate, component, function(err, html){
-                                        juice.juiceResources(html, {}, function(err, _html) {
-                                            if (err) {
-                                                log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
-                                                log.error(err);
-                                                fn(err, null);
-                                            } else {
-                                                log.debug(accountId, userId, 'juiced - one ' + _html);
-                                                html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                            }
+                                        //juice.juiceResources(html, {}, function(err, _html) {
+                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
-                                        });
+                                        //});
                                     });
                                 }
                                 callback(null, account, updatedOrder);
@@ -1338,20 +1311,13 @@ module.exports = {
                                 var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
 
                                 app.render(baseEmailTemplate, component, function(err, html) {
-                                    juice.juiceResources(html, {}, function(err, _html) {
-                                        if (err) {
-                                            log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
-                                            log.error(err);
-                                            fn(err, null);
-                                        } else {
-                                            log.debug(accountId, userId, 'juiced - two' + _html);
-                                            html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                        }
-
+                                    //juice.juiceResources(html, {}, function(err, _html) {
+                                        
+                                        html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                         emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function(){
                                             callback(null, account, updatedOrder);
                                         });
-                                    });
+                                   // });
 
 
                                     if(emailPreferences.new_orders === true) {
@@ -1362,20 +1328,12 @@ module.exports = {
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
                                         app.render(adminNotificationEmailTemplate, component, function(err, html){
-                                            juice.juiceResources(html, {}, function(err, _html) {
-                                                if (err) {
-                                                    log.error(accountId, userId, 'A juice error occurred. Failed to set styles inline.');
-                                                    log.error(err);
-                                                    fn(err, null);
-                                                } else {
-                                                    log.debug(accountId, userId, 'juiced - three' + _html);
-                                                    html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                                }
-
+                                            //juice.juiceResources(html, {}, function(err, _html) {
+                                                html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                 emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function(){
                                                     log.debug(accountId, userId, 'Admin Notification Sent');
                                                 });
-                                            });
+                                            //});
                                         });
                                     }
                                 });
