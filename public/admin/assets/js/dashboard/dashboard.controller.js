@@ -169,6 +169,22 @@
 
             }
         });
+        
+        function reflowCharts(){
+            window.Highcharts.charts.forEach(function(chart){
+                if(chart){
+                    $timeout(function() {
+                        chart.reflow();
+                    }, 500);
+                }
+            })
+        };
+
+        $scope.$watch('app.layout.isSidebarClosed',  function (val) {
+            if(angular.isDefined(val)){
+                reflowCharts();
+            }
+        });
 
         (function init() {
 

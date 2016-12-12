@@ -2,8 +2,9 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('customerAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "AnalyticsWidgetStateService", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, AnalyticsWidgetStateService) {
+    app.controller('customerAnalyticsCtrl', ["$scope", "$modal", "UserService", "ChartAnalyticsService", "$timeout", "AnalyticsWidgetStateService", "$interval", "analyticsConstant", "$rootScope", function ($scope, $modal, UserService, ChartAnalyticsService, $timeout, AnalyticsWidgetStateService, $interval, analyticsConstant, $rootScope) {
 
+        $scope.analyticsRefreshAfterTime = analyticsConstant.refreshAfterTime;
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
         $scope.trafficSourcesConfig = {};
@@ -881,7 +882,7 @@
                 if(chart){
                     $timeout(function() {
                         chart.reflow();
-                    }, 0);
+                    }, 500);
                 }
             })
         };
@@ -990,6 +991,51 @@
             }, 0);
 
         }
+
+
+        $scope.uiState = {
+            dashboardMode: false
+        }
+
+
+        $scope.$watch('uiState.dashboardMode', function (mode) {
+            if(angular.isDefined(mode)){
+                if(mode)
+                {
+                    console.log("dashboard Mode")
+                    setDashboardMode();
+                }
+                else{
+                    console.log("desktop Mode")
+                    setDesktopMode();
+                }
+            }
+        })
+
+        var timer=undefined;
+        function setDashboardMode(){
+            $rootScope.app.layout.isAnalyticsDashboardMode = true;
+            timer = $interval(function(){                
+                console.log("Refreshing");
+                $scope.runAnalyticsReports();
+                $scope.platformTraffic();
+            }, $scope.analyticsRefreshAfterTime);
+        }
+
+        function setDesktopMode(){    
+            $rootScope.app.layout.isAnalyticsDashboardMode = false;            
+            if(angular.isDefined(timer))
+            {
+                $interval.cancel(timer);
+                timer=undefined;
+            }
+        };
+
+        $scope.$watchGroup(['app.layout.isAnalyticsDashboardMode', 'app.layout.isSidebarClosed'],  function (val1, val2) {
+            if(angular.isDefined(val1) || angular.isDefined(val2)){
+                reflowCharts();
+            }
+        })
 
     }]);
 }(angular));

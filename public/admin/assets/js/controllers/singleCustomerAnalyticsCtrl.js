@@ -834,7 +834,7 @@
                 if(chart){
                     $timeout(function() {
                         chart.reflow();
-                    }, 0);
+                    }, 500);
                 }
             })
         };
@@ -934,6 +934,14 @@
                 reflowCharts();
             }, 0);
         }
+
+
+        $scope.$watchGroup(['app.layout.isAnalyticsDashboardMode', 'app.layout.isSidebarClosed'],  function (val1, val2) {
+            if(angular.isDefined(val1) || angular.isDefined(val2)){
+                reflowCharts();
+            }
+        })
+            
 
     }]);
 }(angular));

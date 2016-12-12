@@ -202,9 +202,9 @@
       </div>
       <div class="row payment" ng-show="checkoutModalState == 3">
         <div class="col-sm-8 col-xs-12 information">
-          <div class="clearfix margin-bottom-30"></div>
+          <div class="clearfix margin-bottom-20"></div>
           <div id="card-wrapper-{{component._id}}"></div>
-          <div class="clearfix margin-bottom-30"></div>
+          <div class="clearfix margin-bottom-20"></div>
           <div class="active col-xs-12 product-card-info">
             <form id="product-card-details-{{component._id}}" name="product-card-details" action="">
               <div class="row">
@@ -220,7 +220,7 @@
                   <span class="error help-block" />
                 </div>
               </div>
-              <div class="clearfix mb20"></div>
+              <div class="clearfix mb20 visible-xs"></div>
               <div class="row">
                 <div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">
                   <input placeholder="MM/YY" ng-blur="checkCardExpiry()" type="text" id="expiry" name="expiry" class="form-control">
@@ -233,7 +233,7 @@
                   <span class="error help-block" />
                 </div>
               </div>
-              <div class="clearfix mb20"></div>
+              <div class="clearfix mb20 visible-xs"></div>
               <h4 ng-if="failedOrderMessage.length" class="center" style="color: #a94442;">{{failedOrderMessage}}</h4>
             </form>
             <!-- Coupon DETAILS -->
