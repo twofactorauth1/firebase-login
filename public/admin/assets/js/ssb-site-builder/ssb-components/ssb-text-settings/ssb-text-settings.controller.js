@@ -16,6 +16,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
     vm.elementId = null;
     vm.parentTextElement = null;
     vm.parentTextElementModelAttribute = null;
+    vm.parentTextElementClassNameAttribute = null;
     vm.parentComponent = null;
     vm.parentComponentId = null;
     vm.elementModelName = null;
@@ -145,6 +146,10 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
             _id: vm.elementId,
             anchor: vm.elementId
         };
+
+        if(vm.parentTextElementClassNameAttribute && vm.parentTextElementClassNameAttribute === 'btn-form-text'){
+            data.disableTextSpacing = true;
+        }
 
         //extend with id values
         vm.elementData = angular.extend(vm.elementData, data);
@@ -367,6 +372,8 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         vm.parentTextElement = vm.element.parent();
 
         vm.parentTextElementModelAttribute = vm.parentTextElement.attr('ng-model');
+
+        vm.parentTextElementClassNameAttribute = vm.parentTextElement.attr('class-name');
 
         vm.elementModelName = vm.parentTextElementModelAttribute.replace('component.', '').replace('vm.', '').replace('.', '/');
 
