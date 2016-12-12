@@ -23,6 +23,10 @@ var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var serialize = require('node-serialize');
 var sanitizeHtml = require('sanitize-html');
 var sg = require('sendgrid')(sendgridConfig.API_KEY);
+var subjectPrefix = '';
+if(appConfig.nonProduction === true) {
+    subjectPrefix = '[TEST] ';
+}
 
 require('./model/unsubscription');
 
@@ -69,7 +73,7 @@ var emailMessageManager = {
                                     "headers": {
                                         "X-Accept-Language": "en"
                                     },
-                                    "subject": subject,
+                                    "subject": subjectPrefix + subject,
 
                                     "to": [
                                         {
@@ -293,7 +297,7 @@ var emailMessageManager = {
                             value:html
                         }
                     ],
-                    "subject": subject,
+                    "subject": subjectPrefix + subject,
                     "headers": {},
 
                     "tracking_settings": {
@@ -523,7 +527,7 @@ var emailMessageManager = {
                             "from": {
                                 "email": fromAddress
                             },
-                            "subject": subject,
+                            "subject": subjectPrefix + subject,
                             "headers": {},
                             "personalizations": [
                                 {
@@ -696,7 +700,7 @@ var emailMessageManager = {
                                 "headers": {
                                     "X-Accept-Language": "en"
                                 },
-                                "subject": subject,
+                                "subject": subjectPrefix + subject,
 
                                 "to": [
                                     {
@@ -807,7 +811,7 @@ var emailMessageManager = {
                                 "headers": {
                                     "X-Accept-Language": "en"
                                 },
-                                "subject": subject,
+                                "subject": subjectPrefix + subject,
 
                                 "to": [
                                     {
@@ -916,7 +920,7 @@ var emailMessageManager = {
                                     "headers": {
                                         "X-Accept-Language": "en"
                                     },
-                                    "subject": subject,
+                                    "subject": subjectPrefix + subject,
 
                                     "to": [
                                         {
@@ -1011,7 +1015,7 @@ var emailMessageManager = {
                                 "headers": {
                                     "X-Accept-Language": "en"
                                 },
-                                "subject": subject,
+                                "subject": subjectPrefix + subject,
 
                                 "to": [
                                     {
@@ -1105,7 +1109,7 @@ var emailMessageManager = {
                             "from": {
                                 "email": fromAddress
                             },
-                            "subject": subject,
+                            "subject": subjectPrefix + subject,
                             "headers": {},
                             "personalizations": [
                                 {
@@ -1186,7 +1190,7 @@ var emailMessageManager = {
                     "headers": {
                         "X-Accept-Language": "en"
                     },
-                    "subject": subject,
+                    "subject": subjectPrefix + subject,
 
                     "to": [
                         {
@@ -1292,7 +1296,7 @@ var emailMessageManager = {
                     "headers": {
                         "X-Accept-Language": "en"
                     },
-                    "subject": subject,
+                    "subject": subjectPrefix + subject,
 
                     "to": [
                         {
@@ -2273,7 +2277,7 @@ var emailMessageManager = {
             // we have a sendgrid v3 message
             request = sg.emptyRequest();
             request.body.from = params.from;
-            request.body.subject = params.subject;
+            request.body.subject = subjectPrefix + params.subject;
             //need to fix content array
             request.body.content = self._fixSerializedArray(params.content);
             //need to fix categories array
