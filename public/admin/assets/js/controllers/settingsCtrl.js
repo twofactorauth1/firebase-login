@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$rootScope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window', 'SweetAlert', 'pageConstant', function ($scope, $rootScope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window, SweetAlert, pageConstant) {
+  app.controller('SettingsCtrl', ["$scope", "$rootScope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', 'SimpleSiteBuilderService', '$window', 'SweetAlert', 'pageConstant', 'commerceConstant', '$filter', function ($scope, $rootScope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location, SimpleSiteBuilderService, $window, SweetAlert, pageConstant, commerceConstant, $filter) {
     $scope.keywords = [];
 
     console.log($location.absUrl().replace('main', 'hey'));
@@ -56,6 +56,9 @@
       if(!angular.isDefined(account.showhide.blogSocialSharing)){
         account.showhide.blogSocialSharing = true;
       }
+      if(!account.commerceSettings.redirectTimeout){
+        account.commerceSettings.redirectTimeout = commerceConstant.redirect_timeout_options.defaultTimeOut;
+      }
       $scope.account = account;
           $scope.originalAccount = angular.copy(account);
           if (!account.commerceSettings) {
@@ -65,6 +68,55 @@
               taxnexus: ''
           };
       }
+
+      $scope.$watch(function() { return SimpleSiteBuilderService.pages; }, function(pages){
+        if(angular.isDefined(pages)){
+          var allPages = angular.copy(pages);
+
+          // Suppress blog post and blog pages
+
+          allPages = allPages.filter(function(page) {
+            return page.handle !== 'blog-post' && page.handle !== 'single-post' && page.handle !== 'coming-soon'
+          })
+          // If account blog is disabled then blog link should be suppressed
+
+          var _blogListPage = _.findWhere(allPages, {
+              handle: 'blog-list'
+          });
+
+          if (!account.showhide.blog) {
+              allPages = allPages.filter(function(page) {
+                  return page.handle !== 'blog-list' && page.handle !== 'blog'
+              })
+          }
+          // If account blog and ssbBlog are enabled then show 'blog-list' not 'blog'
+          else if(account.showhide.blog && account.showhide.ssbBlog && _blogListPage){
+              allPages = allPages.filter(function(page) {
+                  return page.handle !== 'blog'
+              })
+
+              // Make sure 'blog-list' page points to 'blog'
+
+              _blogListPage.handle = 'blog';
+          }
+          // Make sure 'blog-list' page appear only if ssbBlog is true
+          else if(!account.showhide.ssbBlog){
+              allPages = allPages.filter(function(page) {
+                  return page.handle !== 'blog-list'
+              })
+          }
+
+          var _blankPage = {
+            title: 'Select a page',
+            handle: ""
+          }
+
+          $scope.allPages = allPages;
+
+          $scope.allPages.splice(0, 0, _blankPage);
+        }
+      })
+
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
@@ -272,6 +324,9 @@
       name: 'Business Location',
       value: 'business_location'
     }];
+
+
+    $scope.redirectTimeoutOptions = commerceConstant.redirect_timeout_options.dp;
 
     /*
      * @navigateTo
