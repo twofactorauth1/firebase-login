@@ -50,31 +50,34 @@
             }
             else{
                 var _startDate = moment().subtract(29, 'days');
+                var _endDate = moment();
                 // Today
                 if($scope.accountDayDiffrence < 1){
-                    _startDate = moment();
+                    _startDate = moment().startOf('day');
                 }
                 // Yesterday
                 else if($scope.accountDayDiffrence < 6){
-                    _startDate = moment().subtract(1, 'days');
+                    _startDate = moment().subtract(1, 'days').startOf('day');
+                    _endDate = moment().subtract(1, 'days').endOf('day');
                 }
                 // Last 7 Days
                 else if($scope.accountDayDiffrence < 29){
-                    _startDate = moment().subtract(6, 'days');
+                    _startDate = moment().subtract(6, 'days').startOf('day');
+                    _endDate = moment().subtract(1, 'days').endOf('day');
                 }
 
                 $scope.date = {
                     startDate: _startDate.format(),
-                    endDate: moment().format()
+                    endDate: _endDate.format()
                 };
                 $scope.selectedDate = {
                     startDate: _startDate.startOf('day'),
-                    endDate: moment()
+                    endDate: _endDate
                 }; 
 
                 $scope.pickerOptions = {
                     startDate: _startDate.toDate(),
-                    endDate: moment().toDate(),
+                    endDate: _endDate.toDate(),
                     format: 'YYYY-MM-DD',
                     opens: 'left',
                     ranges: {
