@@ -1384,7 +1384,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.modalInstance.close();
                 if (scope.checkoutModalState == 5) {
                   scope.checkoutModalState = 1;
-                  redirectAfterOrderOrClose(0);
+                  redirectAfterOrderOrClose(1);
                 }
             }
 
