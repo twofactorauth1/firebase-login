@@ -50,7 +50,7 @@ module.exports = {
 
     },
 
-    createOrderFromStripeInvoice: function(invoice, accountId, contactId, fn) {
+    createOrderFromStripeInvoice: function(invoice, accountId, contactId, newAccountId, fn) {
         var self = this;
         log.debug(accountId, null, '>> createOrderFromStripeInvoice');
         //set order_id based on orders length for the account
@@ -175,21 +175,24 @@ module.exports = {
                                         item.regular_price = item.total;
                                         item.quantity = 1;
                                     });
+                                    accountDao.getAccountByID(newAccountId, function(err, newAccount){
+                                        if(newAccount) {
+                                            //misuse some attributes on the order for email purposes
+                                            savedOrder.get('billing_address').first_name = newAccount.get('subdomain') + '.indigenous.io (' + newAccount.id() + ')';
+                                            savedOrder.get('billing_address').address_1 = newAccount.get('business').emails[0].email;
+                                        }
+                                        app.render(adminNotificationEmailTemplate, component, function(err, html){
+                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
+                                                log.debug(accountId, null, 'Admin Notification Sent');
+                                            });
+                                            log.debug(accountId, null, '<< createOrderFromStripeInvoice');
+                                            return fn(null, savedOrder);
 
-                                    //misuse some attributes on the order for email purposes
-                                    savedOrder.get('billing_address').first_name = account.get('subdomain') + '.indigenous.io (' + account.id() + ')';
-                                    savedOrder.get('billing_address').address_1 = account.get('business').emails[0].email;
-                                    app.render(adminNotificationEmailTemplate, component, function(err, html){
-
-
-                                        html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
-                                            log.debug(accountId, null, 'Admin Notification Sent');
                                         });
-                                        log.debug(accountId, null, '<< createOrderFromStripeInvoice');
-                                        return fn(null, savedOrder);
-
                                     });
+
+
                                 }
                             }
                         });

@@ -436,7 +436,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.error(accountId, userId, 'Error getting invoice for subscription: ' + err);
                         cb(err);
                     } else {
-                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contactId, function(err, order){
+                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contactId, accountId, function(err, order){
                             if(err) {
                                 self.log.error(accountId, userId, 'Error creating order for invoice: ' + err);
                                 cb(err);
