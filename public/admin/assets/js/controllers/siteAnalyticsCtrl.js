@@ -63,7 +63,7 @@
                 // Last 7 Days
                 else if($scope.accountDayDiffrence < 29){
                     _startDate = moment().subtract(6, 'days').startOf('day');
-                    _endDate = moment().subtract(1, 'days').endOf('day');
+                    _endDate = moment().endOf('day');
                 }
 
                 $scope.date = {
