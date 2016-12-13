@@ -2,7 +2,7 @@
 /*global app, moment, angular, Highcharts*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('singleCustomerAnalyticsCtrl', ["$scope", "$modal", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "$stateParams", "$state", "CustomerService", "AnalyticsWidgetStateService", function ($scope, $modal, ChartAnalyticsService, $timeout, SiteAnalyticsService, $stateParams, $state, customerService, AnalyticsWidgetStateService) {
+    app.controller('singleCustomerAnalyticsCtrl', ["$scope", "$modal", "ChartAnalyticsService", "$timeout", "SiteAnalyticsService", "$stateParams", "$state", "CustomerService", "AnalyticsWidgetStateService", function ($scope, $modal, ChartAnalyticsService, $timeout, SiteAnalyticsService, $stateParams, $state, CustomerService, AnalyticsWidgetStateService) {
 
         $scope.analyticsOverviewConfig = {};
         $scope.timeonSiteConfig = {};
@@ -21,60 +21,82 @@
         $scope.displayVisitors = true;
         $scope.visitors = null;
 
-        $scope.date = {
-            startDate: moment().subtract(29, 'days').format(),
-            endDate: moment().format()
-        };
+
+        function setFilterDates(){
+            
+            var _startDate = moment().subtract(29, 'days');
+            // Today
+            if($scope.accountDayDiffrence < 1){
+                _startDate = moment();
+            }
+            // Yesterday
+            else if($scope.accountDayDiffrence < 6){
+                _startDate = moment().subtract(1, 'days');
+            }
+            // Last 7 Days
+            else if($scope.accountDayDiffrence < 29){
+                _startDate = moment().subtract(6, 'days');
+            }
+
+            $scope.date = {
+                startDate: _startDate.format(),
+                endDate: moment().format()
+            };
+            $scope.selectedDate = {
+                startDate: _startDate.startOf('day'),
+                endDate: moment()
+            }; 
+
+            $scope.pickerOptions = {
+                startDate: _startDate.toDate(),
+                endDate: moment().toDate(),
+                format: 'YYYY-MM-DD',
+                opens: 'left',
+                ranges: {
+                    'Today': [moment().startOf('day'), moment()],
+                    'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+                    'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+                    'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            };         
+        }
+
+        
 
         $scope.Math = Math;
 
         var dateSwitch = false;
-        $scope.$watch('selectedDate', function () {
-            $scope.date.startDate = moment($scope.selectedDate.startDate).format();
-            $scope.date.endDate = moment($scope.selectedDate.endDate).format();
+        $scope.$watch('selectedDate', function (_date) {
+            if(angular.isDefined(_date)){
+                $scope.date.startDate = moment($scope.selectedDate.startDate).format();
+                $scope.date.endDate = moment($scope.selectedDate.endDate).format();
 
-            //update user preferences
-            if (dateSwitch) {
-                $scope.analyticsOverviewConfig = {};
-                $scope.timeonSiteConfig = {};
-                $scope.trafficSourcesConfig = {};
-                $scope.newVsReturningConfig = {};
-                $scope.customerOverviewConfig = {};
-                $scope.analyticsOverviewConfig.title = {
-                    text: ''
-                };
-                $scope.timeonSiteConfig.title = {
-                    text: ''
-                };
+                //update user preferences
+                if (dateSwitch) {
+                    $scope.analyticsOverviewConfig = {};
+                    $scope.timeonSiteConfig = {};
+                    $scope.trafficSourcesConfig = {};
+                    $scope.newVsReturningConfig = {};
+                    $scope.customerOverviewConfig = {};
+                    $scope.analyticsOverviewConfig.title = {
+                        text: ''
+                    };
+                    $scope.timeonSiteConfig.title = {
+                        text: ''
+                    };
 
-                $scope.locationData = null;
-                $scope.countryLocationData = null;
-                $scope.pagedformattedTopPages = null;
+                    $scope.locationData = null;
+                    $scope.countryLocationData = null;
+                    $scope.pagedformattedTopPages = null;
 
-                $scope.runAnalyticsReports();
-            }
-            dateSwitch = true;
+                    $scope.runAnalyticsReports();
+                }
+                dateSwitch = true;
+            }    
         });
 
-        $scope.selectedDate = {
-            startDate: moment().subtract(29, 'days').startOf('day'),
-            endDate: moment()
-        };
-
-        $scope.pickerOptions = {
-            startDate: moment().subtract(29, 'days').toDate(),
-            endDate: moment().toDate(),
-            format: 'YYYY-MM-DD',
-            opens: 'left',
-            ranges: {
-                'Today': [moment().startOf('day'), moment()],
-                'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
-                'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
-                'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            }
-        };
 
         $scope.runAnalyticsReports = function () {
             $scope.loadCharts = true;
@@ -113,8 +135,6 @@
                 $scope.setNewReportData(data);
             });
         };
-
-
 
 
         /**
@@ -823,7 +843,20 @@
             $timeout(function() {
                 $(window).resize();
                 if(!$scope.loadCharts)
-                    $scope.runAnalyticsReports();
+                    CustomerService.getSingleCustomer($stateParams.customerId, function(err, customer){
+                        if(customer.created && customer.created.date)
+                        {
+                            var _accountDate = moment(customer.created.date);
+                            var _currentDate = moment();
+                            $scope.accountDayDiffrence =  _currentDate.diff(_accountDate, 'days');
+                        }
+                        else{
+                            $scope.accountDayDiffrence =  30;
+                        }
+                        setFilterDates();
+                        $scope.runAnalyticsReports();
+                    })
+                    
             }, 0);
 
         });

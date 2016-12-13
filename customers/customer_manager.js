@@ -166,6 +166,21 @@ module.exports = {
 
     },
 
+
+    getSingleCustomer: function(accountId, userId, customerId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getSingleCustomer');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting customer:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getSingleCustomer');
+                return fn(null, account);
+            }
+        });
+    },
+
     addCustomerNotes: function(accountId, userId, customerId, note, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> addCustomerNotes');

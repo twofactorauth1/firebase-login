@@ -52,15 +52,15 @@
                 var _startDate = moment().subtract(29, 'days');
                 // Today
                 if($scope.accountDayDiffrence < 1){
-                    _startDate = moment()
+                    _startDate = moment();
                 }
                 // Yesterday
-                if($scope.accountDayDiffrence < 6){
-                    _startDate = moment().subtract(1, 'days')
+                else if($scope.accountDayDiffrence < 6){
+                    _startDate = moment().subtract(1, 'days');
                 }
                 // Last 7 Days
-                if($scope.accountDayDiffrence < 29){
-                    _startDate = moment().subtract(6, 'days')
+                else if($scope.accountDayDiffrence < 29){
+                    _startDate = moment().subtract(6, 'days');
                 }
 
                 $scope.date = {
