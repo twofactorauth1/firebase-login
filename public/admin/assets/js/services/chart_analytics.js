@@ -1185,6 +1185,7 @@
                         type: 'column',
                         backgroundColor:'rgba(255, 255, 255, 0.1)'
                     },
+                    colors: ['#7cb5ec'],
                     title: {
                         text: ''
                     },
