@@ -21,90 +21,119 @@
         $scope.customerOverviewConfig.loading = true;
         $scope.displayVisitors = true;
         $scope.visitors = null;
-        if($location.search().date_filter === 'today'){
-            $scope.date = {
-                startDate: moment().startOf('day').format(),
-                endDate: moment().format()
-            }; 
-            $scope.selectedDate = {
-                startDate: moment().startOf('day').format(),
-                endDate: moment().format()
-            }; 
+        
+        function setFilterDates(){
+            if($location.search().date_filter === 'today'){
+                $scope.date = {
+                    startDate: moment().startOf('day').format(),
+                    endDate: moment().format()
+                }; 
+                $scope.selectedDate = {
+                    startDate: moment().startOf('day').format(),
+                    endDate: moment().format()
+                }; 
 
-            $scope.pickerOptions = {
-                startDate: moment().startOf('day').toDate(),
-                endDate: moment().toDate(),
-                format: 'YYYY-MM-DD',
-                opens: 'left',
-                ranges: {
-                    'Today': [moment().startOf('day'), moment()],
-                    'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
-                    'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
-                    'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                $scope.pickerOptions = {
+                    startDate: moment().startOf('day').toDate(),
+                    endDate: moment().toDate(),
+                    format: 'YYYY-MM-DD',
+                    opens: 'left',
+                    ranges: {
+                        'Today': [moment().startOf('day'), moment()],
+                        'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+                        'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+                        'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }; 
+            }
+            else{
+                var _startDate = moment().subtract(29, 'days');
+                // Today
+                if($scope.accountDayDiffrence < 1){
+                    _startDate = moment()
                 }
-            }; 
-        }
-        else{
-            $scope.date = {
-                startDate: moment().subtract(29, 'days').format(),
-                endDate: moment().format()
-            };
-            $scope.selectedDate = {
-                startDate: moment().subtract(29, 'days').startOf('day'),
-                endDate: moment()
-            }; 
-
-            $scope.pickerOptions = {
-                startDate: moment().subtract(29, 'days').toDate(),
-                endDate: moment().toDate(),
-                format: 'YYYY-MM-DD',
-                opens: 'left',
-                ranges: {
-                    'Today': [moment().startOf('day'), moment()],
-                    'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
-                    'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
-                    'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                // Yesterday
+                if($scope.accountDayDiffrence < 6){
+                    _startDate = moment().subtract(1, 'days')
                 }
-            }; 
-        }
-              
+                // Last 7 Days
+                if($scope.accountDayDiffrence < 29){
+                    _startDate = moment().subtract(6, 'days')
+                }
 
+                $scope.date = {
+                    startDate: _startDate.format(),
+                    endDate: moment().format()
+                };
+                $scope.selectedDate = {
+                    startDate: _startDate.startOf('day'),
+                    endDate: moment()
+                }; 
+
+                $scope.pickerOptions = {
+                    startDate: _startDate.toDate(),
+                    endDate: moment().toDate(),
+                    format: 'YYYY-MM-DD',
+                    opens: 'left',
+                    ranges: {
+                        'Today': [moment().startOf('day'), moment()],
+                        'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+                        'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+                        'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    }
+                }; 
+            }
+        }
+        
         $scope.Math = Math;
 
         var dateSwitch = false;
-        $scope.$watch('selectedDate', function () {
-            $scope.date.startDate = moment($scope.selectedDate.startDate).format();
-            $scope.date.endDate = moment($scope.selectedDate.endDate).format();
-            //update user preferences
-            if (dateSwitch) {
-                $scope.analyticsOverviewConfig = {};
-                $scope.timeonSiteConfig = {};
-                $scope.trafficSourcesConfig = {};
-                $scope.newVsReturningConfig = {};
-                $scope.customerOverviewConfig = {};
-                $scope.analyticsOverviewConfig.title = {
-                    text: ''
-                };
-                $scope.timeonSiteConfig.title = {
-                    text: ''
-                };
+        $scope.$watch('selectedDate', function (_date) {
+            if(angular.isDefined(_date)){
+                $scope.date.startDate = moment($scope.selectedDate.startDate).format();
+                $scope.date.endDate = moment($scope.selectedDate.endDate).format();
+                //update user preferences
+                if (dateSwitch) {
+                    $scope.analyticsOverviewConfig = {};
+                    $scope.timeonSiteConfig = {};
+                    $scope.trafficSourcesConfig = {};
+                    $scope.newVsReturningConfig = {};
+                    $scope.customerOverviewConfig = {};
+                    $scope.analyticsOverviewConfig.title = {
+                        text: ''
+                    };
+                    $scope.timeonSiteConfig.title = {
+                        text: ''
+                    };
 
-                $scope.locationData = null;
-                $scope.countryLocationData = null;
-                $scope.pagedformattedTopPages = null;
+                    $scope.locationData = null;
+                    $scope.countryLocationData = null;
+                    $scope.pagedformattedTopPages = null;
 
-                $scope.runAnalyticsReports($scope.analyticsAccount);
+                    $scope.runAnalyticsReports($scope.analyticsAccount);
+                }
+                dateSwitch = true;
             }
-            dateSwitch = true;
+            
         });
 
         
         UserService.getAccount(function (account) {
             $scope.analyticsAccount = account;
+            if(account.created && account.created.date)
+            {
+                var _accountDate = moment(account.created.date);
+                var _currentDate = moment();
+                $scope.accountDayDiffrence =  _currentDate.diff(_accountDate, 'days');
+            }
+            else{
+                $scope.accountDayDiffrence =  30;
+            }
+            setFilterDates();
             $scope.runAnalyticsReports();
         });
 
