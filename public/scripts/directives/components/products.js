@@ -1384,7 +1384,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.modalInstance.close();
                 if (scope.checkoutModalState == 5) {
                   scope.checkoutModalState = 1;
-                  redirectAfterOrderOrClose();
+                  redirectAfterOrderOrClose(0);
                 }
             }
 
@@ -1405,13 +1405,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 return !isIcon;
             };
 
-            function redirectAfterOrderOrClose(){
+            function redirectAfterOrderOrClose(_time){
                 if(scope.settings && scope.settings.checkout && scope.settings.checkout.redirectUrl){
                     $timeout(function() {
                         if(scope.modalInstance)
                             scope.modalInstance.close();
                         window.location.href = scope.settings.checkout.redirectUrl;
-                    }, scope.settings.checkout.redirectTimeout || 5000);
+                    }, _time || scope.settings.checkout.redirectTimeout || 5000);
                 }
             };
 
