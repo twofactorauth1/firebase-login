@@ -56,8 +56,10 @@
       if(!angular.isDefined(account.showhide.blogSocialSharing)){
         account.showhide.blogSocialSharing = true;
       }
-      if(!account.commerceSettings.redirectTimeout){
-        account.commerceSettings.redirectTimeout = commerceConstant.redirect_timeout_options.defaultTimeOut;
+      if(account.commerceSettings && !account.commerceSettings.checkout){
+        account.commerceSettings.checkout = {
+          redirectTimeout: commerceConstant.redirect_timeout_options.defaultTimeOut
+        }
       }
       $scope.account = account;
           $scope.originalAccount = angular.copy(account);

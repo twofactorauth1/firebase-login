@@ -330,7 +330,7 @@
                         <div class="form-group settings-redirect-pages">
                             <label>Landing Page</label>
                             <div ng-if="allPages">
-                                <ui-select ng-model="account.commerceSettings.redirectUrl" theme="bootstrap">
+                                <ui-select ng-model="account.commerceSettings.checkout.redirectUrl" theme="bootstrap">
                                     <ui-select-match placeholder="Select a page">
                                         <small ng-bind-html="$select.selected.title"></small>
                                     </ui-select-match>
@@ -345,7 +345,7 @@
                         </div>
                         <div class="form-group">
                             <label>Redirect Timeout in seconds </label>
-                            <select ng-model="account.commerceSettings.redirectTimeout" class="form-control" ng-options="opt.data as opt.label for opt in redirectTimeoutOptions">
+                            <select ng-model="account.commerceSettings.checkout.redirectTimeout" class="form-control" ng-options="opt.data as opt.label for opt in redirectTimeoutOptions">
                                     <option value="">-- choose --</option>
                                 </select>
                         </div>
