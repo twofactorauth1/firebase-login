@@ -1018,7 +1018,6 @@
             timer = $interval(function(){                
                 console.log("Refreshing");
                 $scope.runAnalyticsReports();
-                $scope.platformTraffic();
             }, $scope.analyticsRefreshAfterTime);
         }
 
