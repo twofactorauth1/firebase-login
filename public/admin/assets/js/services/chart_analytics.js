@@ -961,17 +961,13 @@
                                         //console.log('Switching to US');
                                         this.chart.series[0].update(usSeries);
                                         labelSwitchFN('US');
-                                        this.switchedSeries = true;
-                                        //var chart = $('#visitor_locations').highcharts();
-                                        chart.zoom();
+                                        this.switchedSeries = true;                                        
                                     }
                                 }
                             },
                             afterSetExtremes: function(event) {
                                 if(this.switchedSeries === true) {
-                                    this.switchedSeries = false;
-                                    var chart = $('#visitor_locations').highcharts();
-                                    chart.zoom();
+                                    this.switchedSeries = false;                                    
                                 }
                             }
                         }
@@ -1189,6 +1185,7 @@
                         type: 'column',
                         backgroundColor:'rgba(255, 255, 255, 0.1)'
                     },
+                    colors: ['#7cb5ec'],
                     title: {
                         text: ''
                     },

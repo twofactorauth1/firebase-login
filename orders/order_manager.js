@@ -50,7 +50,7 @@ module.exports = {
 
     },
 
-    createOrderFromStripeInvoice: function(invoice, accountId, contactId, fn) {
+    createOrderFromStripeInvoice: function(invoice, accountId, contactId, newAccountId, fn) {
         var self = this;
         log.debug(accountId, null, '>> createOrderFromStripeInvoice');
         //set order_id based on orders length for the account
@@ -135,15 +135,73 @@ module.exports = {
                 order.set('line_items', line_items);
                 order.set('total_line_items_quantity', line_items.length);
 
+
                 dao.saveOrUpdate(order, function(err, savedOrder){
                     if(err) {
                         log.error(accountId, null, 'Error saving order: ' + err);
                         return fn(err, null);
                     } else {
-                        log.debug(accountId, null, '<< createOrderFromStripeInvoice');
-                        return fn(null, savedOrder);
+                        accountDao.getAccountByID(accountId, function(err, account){
+                            if(err || !account) {
+                                log.error(accountId, null, 'Error getting account:', err);
+                                return fn(err);
+                            } else {
+                                var emailPreferences = account.get('email_preferences');
+                                var business = account.get('business');
+
+                                var fromAddress = business.emails[0].email;
+                                var fromName = business.name;
+                                var ccAry = [];
+
+                                if(business.emails.length > 1) {
+                                    for(var i=1; i<business.emails.length; i++) {
+                                        ccAry.push(business.emails[i].email);
+                                    }
+                                }
+                                var orderId = savedOrder.id();
+                                var vars = [];
+                                if(emailPreferences.new_orders === true) {
+                                    //Send additional details
+                                    var subject = "New account created!";
+                                    var component = {};
+                                    component.order = savedOrder.attributes;
+                                    component.text = "The following order was created:";
+                                    component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + savedOrder.attributes._id;
+                                    var adminNotificationEmailTemplate = 'emails/base_email_order_admin_notification';
+
+
+                                    //set params needed for email
+                                    _.each(savedOrder.get('line_items'), function(item){
+                                        item.regular_price = item.total;
+                                        item.quantity = 1;
+                                    });
+                                    accountDao.getAccountByID(newAccountId, function(err, newAccount){
+                                        if(newAccount) {
+                                            //misuse some attributes on the order for email purposes
+                                            savedOrder.get('billing_address').first_name = newAccount.get('subdomain') + '.indigenous.io (' + newAccount.id() + ')';
+                                            savedOrder.get('billing_address').address_1 = newAccount.get('business').emails[0].email;
+                                        }
+                                        app.render(adminNotificationEmailTemplate, component, function(err, html){
+                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function(){
+                                                log.debug(accountId, null, 'Admin Notification Sent');
+                                            });
+                                            log.debug(accountId, null, '<< createOrderFromStripeInvoice');
+                                            return fn(null, savedOrder);
+
+                                        });
+                                    });
+
+
+                                }
+                            }
+                        });
+
+
                     }
                 });
+
+
 
             }
         });

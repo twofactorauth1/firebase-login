@@ -65,6 +65,10 @@
                                 <a class="text-dark" ng-click="viewSettings('commerce', 'PayPal')">PayPal</a>
                             </li>
 
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'Checkout')">Checkout</a>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -315,6 +319,35 @@
                         <div class="form-group" ng-if='account.commerceSettings.paypal'>
                             <label>PayPal account email address</label>
                             <input type="text" placeholder="Email" class="pull-right" ng-model="account.commerceSettings.paypalAddress">
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+
+                <tab heading="Checkout">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group settings-redirect-pages">
+                            <label>Landing Page</label>
+                            <div ng-if="allPages">
+                                <ui-select ng-model="account.commerceSettings.checkout.redirectUrl" theme="bootstrap">
+                                    <ui-select-match placeholder="Select a page">
+                                        <small ng-bind-html="$select.selected.title"></small>
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="page.handle as page in allPages | filter: $select.search track by $index">
+                                        <small ng-bind-html="page.title | highlight: $select.search"></small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                            <div ng-if="!allPages">
+                                <h4><span class="fa fa-spinner fa-spin"></span> Loading Pages...</h4>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Redirect Timeout in seconds </label>
+                            <select ng-model="account.commerceSettings.checkout.redirectTimeout" class="form-control" ng-options="opt.data as opt.label for opt in redirectTimeoutOptions">
+                                    <option value="">-- choose --</option>
+                                </select>
                         </div>
                         <div class="clearfix"></div>
                     </form>

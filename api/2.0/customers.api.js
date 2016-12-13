@@ -29,6 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listCustomers.bind(this));
         app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.listAllCustomers.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomer.bind(this));
+        app.get(this.url('single/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSingleCustomer.bind(this));
         app.post(this.url('customer/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addCustomerNotes.bind(this));
 
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
@@ -98,6 +99,23 @@ _.extend(api.prototype, baseApi.prototype, {
         if(accountId === appConfig.mainAccountID) {
             manager.getMainCustomer(accountId, userId, customerId, function(err, customer){
                 self.log.debug(accountId, userId, '<< getCustomer');
+                self.sendResultOrError(resp, err, customer, 'Error getting customer');
+            });
+        } else {
+            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+        }
+    },
+
+    getSingleCustomer: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getSingleCustomer');
+        var customerId = parseInt(req.params.id);
+
+        if(accountId === appConfig.mainAccountID) {
+            manager.getSingleCustomer(accountId, userId, customerId, function(err, customer){
+                self.log.debug(accountId, userId, '<< getSingleCustomer');
                 self.sendResultOrError(resp, err, customer, 'Error getting customer');
             });
         } else {

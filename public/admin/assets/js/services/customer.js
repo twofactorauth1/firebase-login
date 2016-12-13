@@ -86,6 +86,19 @@
             }
         };
 
+        this.getSingleCustomer = function(id, fn) {
+            var apiUrl = [baseUrl, 'single', id].join('/');
+            
+            $http({
+                url: apiUrl,
+                method: 'GET'
+            }).success(function (data) {                
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
         this.extendTrial = function(id, newLength, fn) {
             var apiUrl = [adminUrl, 'account', id, 'trial', newLength].join('/');
             $http({
