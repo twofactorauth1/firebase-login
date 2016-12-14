@@ -25,6 +25,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             //assign and hold the currentProductPage for pagination
             scope.currentProductPage = 1;
 
+            scope.showDiscount = false;
+
             // initializations
             scope.showTax = false;
             scope.showNotTaxed = false; // Some items are not taxed when summing
@@ -859,22 +861,41 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             console.log('valid');
                             angular.element("#coupon-name .error").html("");
                             scope.couponIsValid = true;
+                            scope.showDiscount = true;
+                            calculateDiscount(data);
                             validateAndCreateOrder(cardInput, data);
                         } else {
                             console.log('invalid');
                             angular.element("#coupon-name .error").html("Invalid Coupon");
                             scope.couponIsValid = false;
                             scope.checkoutModalState = 3;
+                            scope.showDiscount = false;
                             return;
                         }
                     });
                 }
                 else{
+                   scope.showDiscount = false;
                    validateAndCreateOrder(cardInput);
                 }
 
                 //});
             };
+
+
+            function calculateDiscount(coupon){
+                console.log("calculating discount");
+                scope.total_discount = 0;
+                if(coupon){
+                    if(coupon.amount_off){
+                        scope.total_discount = coupon.amount_off;
+                    }
+                    else if(coupon.percent_off){
+                        
+                        scope.total_discount = scope.subTotal * coupon.percent_off / 100
+                    }
+                }
+            }
 
 
             function validateAndCreateOrder(cardInput, couponObj){
@@ -1233,13 +1254,17 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             console.log('valid');
                             angular.element("#coupon-name .error").html("");
                             scope.couponIsValid = true;
+                            scope.showDiscount = true;
+                            calculateDiscount(data);
                         } else {
                             console.log('invalid');
                             angular.element("#coupon-name .error").html("Invalid Coupon");
                             scope.couponIsValid = false;
+                            scope.showDiscount = false;
                         }
                     });
                 } else {
+                    scope.showDiscount = false;
                     scope.couponIsValid = true;
                     scope.checkingCoupon = false;
                     angular.element("#coupon-name .error").html("");
