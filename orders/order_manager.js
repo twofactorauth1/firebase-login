@@ -969,6 +969,7 @@ module.exports = {
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
                 var taxAdded = 0;
+                var _subtotalTaxable = 0;
                 var discount = 0;
 
                 /*
@@ -979,23 +980,6 @@ module.exports = {
                  *
                  *
                  */
-                if(order.get('cart_discount')) {
-                    discount += parseFloat(order.get('cart_discount'));
-                    log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
-                }
-
-                if(order.get('total_discount')) {
-                    discount += parseFloat(order.get('total_discount'));
-                    log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
-                }
-
-                if(coupon.amount_off){
-                    discount = discount + (coupon.amount_off / 100);
-                } else if(coupon.percent_off){
-                    var coupon_discount = subTotal * coupon.percent_off / 100;
-                    discount = discount + coupon_discount
-                }
-
                 var errorMsg = null;
                 _.each(order.get('line_items'), function iterator(item, index){
                     var product = _.find(productAry, function(currentProduct){
@@ -1019,12 +1003,7 @@ module.exports = {
                             }
                         }
                         if(product.get('taxable') === true) {
-                            if(lineItemSubtotal - discount < 0){
-                                taxAdded = 0    
-                            }
-                            else{
-                                taxAdded += ((lineItemSubtotal - discount) * taxPercent);    
-                            }
+                            _subtotalTaxable += lineItemSubtotal;
                         }
                         subTotal += lineItemSubtotal;
                         totalLineItemsQuantity += parseFloat(item.quantity);
@@ -1036,6 +1015,31 @@ module.exports = {
                 if(errorMsg) {
                     callback(errorMsg);
                 } else {
+                    
+
+                    if(order.get('cart_discount')) {
+                        discount += parseFloat(order.get('cart_discount'));
+                        log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
+                    }
+
+                    if(order.get('total_discount')) {
+                        discount += parseFloat(order.get('total_discount'));
+                        log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
+                    }
+                    
+                    if(coupon.amount_off){
+                        discount = discount + (coupon.amount_off / 100);
+                    } else if(coupon.percent_off){
+                        var coupon_discount = subTotal * coupon.percent_off / 100;
+                        discount = discount + coupon_discount
+                    }
+
+                    if (_subtotalTaxable > 0) {
+                        taxAdded = (_subtotalTaxable - discount) * taxPercent;
+                    }
+
+                    if(taxAdded < 0)
+                        taxAdded = 0;
                     log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
                                         
                     orderDiscount = discount || 0.00;
