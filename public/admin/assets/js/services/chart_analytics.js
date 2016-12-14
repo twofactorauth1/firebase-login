@@ -665,6 +665,7 @@
                     }
                 },
                 yAxis: {
+                    allowDecimals: false,
                     min: 0,
                     // max: Math.max.apply(Math, lineData) + 100,
                     title: {
