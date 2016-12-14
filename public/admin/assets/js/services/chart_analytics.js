@@ -961,13 +961,13 @@
                                         //console.log('Switching to US');
                                         this.chart.series[0].update(usSeries);
                                         labelSwitchFN('US');
-                                        this.switchedSeries = true;                                        
+                                        this.switchedSeries = true;
                                     }
                                 }
                             },
                             afterSetExtremes: function(event) {
                                 if(this.switchedSeries === true) {
-                                    this.switchedSeries = false;                                    
+                                    this.switchedSeries = false;
                                 }
                             }
                         }
@@ -1213,6 +1213,7 @@
                     //categories:categories
                 },
                 yAxis: {
+                    allowDecimals: false,
                     min: 0,
                     minTickInterval: 1,
                     title: {
