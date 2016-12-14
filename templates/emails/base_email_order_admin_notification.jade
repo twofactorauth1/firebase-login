@@ -320,12 +320,12 @@ html
                                         td $ !{order.subtotal}
                                       tr
                                         td(colspan="3", class="text-right")
-                                          strong Tax
-                                        td $ !{order.total_tax}
+                                          strong Discount
+                                        td $ (!{order.total_discount})
                                       tr
                                         td(colspan="3", class="text-right")
-                                          strong Discount
-                                        td $ !{order.total_discount || 0.00}  
+                                          strong Tax
+                                        td $ !{order.total_tax}
                                       tr
                                         td(colspan="3", class="text-right")
                                           strong Total

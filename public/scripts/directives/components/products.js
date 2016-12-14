@@ -1384,6 +1384,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.modalInstance.close();
                 if (scope.checkoutModalState == 5) {
                   scope.checkoutModalState = 1;
+                  redirectAfterOrderOrClose(1);
                 }
             }
 
@@ -1402,7 +1403,24 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.isImage = function(src) {
                 var isIcon = src && src.indexOf("fa-") === 0;
                 return !isIcon;
-            }
+            };
+
+            function redirectAfterOrderOrClose(_time){
+                if(scope.settings && scope.settings.checkout && scope.settings.checkout.redirectUrl){
+                    $timeout(function() {
+                        if(scope.modalInstance)
+                            scope.modalInstance.close();
+                        window.location.href = scope.settings.checkout.redirectUrl;
+                    }, _time || scope.settings.checkout.redirectTimeout || 5000);
+                }
+            };
+
+
+            scope.$watch('checkoutModalState', function(state){
+                if(state === 5){
+                    redirectAfterOrderOrClose();
+                }
+            })
 
         },
         controller: function($scope) {

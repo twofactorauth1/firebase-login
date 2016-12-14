@@ -281,6 +281,33 @@ app.constant('analyticsConstant', {
   refreshAfterTime: 600000 // in milliseconds
 });
 
+
+app.constant('commerceConstant', {
+  redirect_timeout_options: {
+    defaultTimeOut: 5000,
+    dp: [{
+        label: 1,
+        data: 1000
+      }, {
+        label: 2,
+        data: 2000
+      }, {
+        label: 3,
+        data: 3000
+      }, {
+        label: 4,
+        data: 4000
+      }, {
+        label: 5,
+        data: 5000
+      }, {
+        label: 10,
+        data: 10000
+      }
+    ]
+  }
+});
+
 // {
 //   name: 'Digital',
 //   value: 'digital'
