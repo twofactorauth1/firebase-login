@@ -359,7 +359,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 async.eachSeries(_.keys(deferredUpdates), function(key, cb){
                     var updates = deferredUpdates[key];
                     campaignManager.getCampaign(key, function(err, campaign){
-                        if(err) {
+                        if(err || !campaign) {
                             self.log.error('Could not update campaign with key [' + key + ']:', err);
                             cb();
                         } else {

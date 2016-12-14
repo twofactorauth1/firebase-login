@@ -969,6 +969,7 @@ module.exports = {
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
                 var taxAdded = 0;
+                var _subtotalTaxable = 0;
                 var discount = 0;
 
                 /*
@@ -1002,7 +1003,7 @@ module.exports = {
                             }
                         }
                         if(product.get('taxable') === true) {
-                            taxAdded += (lineItemSubtotal * taxPercent);
+                            _subtotalTaxable += lineItemSubtotal;
                         }
                         subTotal += lineItemSubtotal;
                         totalLineItemsQuantity += parseFloat(item.quantity);
@@ -1014,7 +1015,7 @@ module.exports = {
                 if(errorMsg) {
                     callback(errorMsg);
                 } else {
-                    log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                    
 
                     if(order.get('cart_discount')) {
                         discount += parseFloat(order.get('cart_discount'));
@@ -1032,6 +1033,14 @@ module.exports = {
                         var coupon_discount = subTotal * coupon.percent_off / 100;
                         discount = discount + coupon_discount
                     }
+
+                    if (_subtotalTaxable > 0) {
+                        taxAdded = (_subtotalTaxable - discount) * taxPercent;
+                    }
+
+                    if(taxAdded < 0)
+                        taxAdded = 0;
+                    log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
                                         
                     orderDiscount = discount || 0.00;
 

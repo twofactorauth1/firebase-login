@@ -13,11 +13,13 @@
         var adminAnalyticsAPIUrl = '/api/1.0/analytics/admin/reports';
         var customerAnalyticsAPIUrl = '/api/1.0/analytics/customer/reports';
         var platformTrafficAPIUrl = '/api/1.0/analytics/admin/live';
+        var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
 
         saService.runReports = runReports;
         saService.runAdminReports = runAdminReports;
         saService.runCustomerReports = runCustomerReports;
         saService.runPlatformTraffic = runPlatformTraffic;
+        saService.runSiteAnlyticsTraffic = runSiteAnlyticsTraffic;
         saService.loading = {value:0};
 
 
@@ -94,6 +96,18 @@
                 console.error('SiteAnalyticsService runPlatformTraffic error:', JSON.stringify(err));
             }
             return saRequest($http.get(platformTrafficAPIUrl).success(success).error(error));
+        }
+
+
+        function runSiteAnlyticsTraffic(fn) {
+            function success(data) {
+                fn(data);
+            }
+
+            function error(err) {
+                console.error('SiteAnalyticsService runSiteAnlyticsTraffic error:', JSON.stringify(err));
+            }
+            return saRequest($http.get(baseLiveTrafficAPIUrl).success(success).error(error));
         }
 
         this.userAgentChart = function (userAgents, fn) {
