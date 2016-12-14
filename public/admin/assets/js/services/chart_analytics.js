@@ -410,6 +410,10 @@
             SiteAnalyticsService.runPlatformTraffic(fn);
         };
 
+        this.getSiteAnalyticsTraffic = function(fn) {
+            SiteAnalyticsService.runSiteAnlyticsTraffic(fn);
+        };
+
         this.runReports = function (date, account, fn) {
             var self = this;
             var hostname = this.getHostName(account);

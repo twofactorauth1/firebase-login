@@ -138,8 +138,30 @@
             }
             setFilterDates();
             $scope.runAnalyticsReports();
+            $scope.siteTraffic();
         });
 
+
+        $scope.siteTraffic = function() {
+            ChartAnalyticsService.getSiteAnalyticsTraffic(function(data){
+                var trafficData = _.pluck(data, 'count');
+                var liveTrafficConfig = ChartAnalyticsService.liveTraffic(trafficData);
+                $scope.liveTraffic = data;
+                $scope.liveTrafficConfig = liveTrafficConfig;
+
+                $timeout($scope.updatesiteTraffic, 60000);
+            });
+        };
+
+        $scope.updatesiteTraffic = function() {
+            ChartAnalyticsService.getSiteAnalyticsTraffic(function(data){
+                var chart = $('#live-traffic-chart').highcharts();
+                chart.series[0].setData(_.pluck(data, 'count'), true);
+
+                $scope.liveTraffic = data;
+                $timeout($scope.updatesiteTraffic, 60000);
+            });
+        };
         $scope.runAnalyticsReports = function () {
             ChartAnalyticsService.runMongoReports($scope.date, $scope.analyticsAccount, function (data) {
                 //console.log('ABOUT TO COMPARE!!!\n\n\n\n\n');
@@ -964,6 +986,7 @@
             timer = $interval(function(){                
                 console.log("Refreshing");
                 $scope.runAnalyticsReports();
+                $scope.siteTraffic();
             }, $scope.analyticsRefreshAfterTime);
         }
 
