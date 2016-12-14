@@ -25,13 +25,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             //assign and hold the currentProductPage for pagination
             scope.currentProductPage = 1;
 
-            scope.cart_discount = 0; 
-
-            scope.showDiscount = undefined;
-
-            scope.percent_off = false;
-
-            scope.coupon = undefined;
+            
 
             // initializations
             scope.showTax = false;
@@ -40,11 +34,16 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
             console.log('url:', scope.paypalURL);
             scope.taxPercent = 0;
+            initializeCouponDetails();    
             scope.checkoutOrder = {
                 coupon : ""
             };
 
+
+
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
+
+
 
             scope.$watch(function() {
                 return CartDetailsService;
@@ -648,6 +647,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.showPaypalLoading = true;
                 scope.failedOrderMessage = '';
 
+                initializeCouponDetails();
+
                 var contact = scope.newContact;
                 if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
                     scope.checkoutModalState = 2;
@@ -1120,10 +1121,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if(scope.checkoutOrder)
                     scope.checkoutOrder.coupon = null;
                 
-                scope.showDiscount = undefined;
-                scope.cart_discount = 0;
-                scope.percent_off = false;
-                scope.coupon = undefined;   
+                initializeCouponDetails();   
                 //angular.element("#card_coupon").removeClass('has-error has-success');
             }
 
@@ -1461,6 +1459,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }, _time || scope.settings.checkout.redirectTimeout || 5000);
                 }
             };
+
+
+            function initializeCouponDetails = function(){
+                scope.cart_discount = 0; 
+                scope.showDiscount = undefined;
+                scope.percent_off = false;
+                scope.coupon = undefined;
+            }
 
 
             scope.$watch('checkoutModalState', function(state){
