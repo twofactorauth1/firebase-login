@@ -55,7 +55,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         delete req.body.coupon;
         var order = new $$.m.Order(req.body);
-        self.log.debug(accountId, userId, '>> Order Details '+ order);
+        self.log.debug(accountId, userId, '>> Order Details ', order);
 
         self.getStripeTokenFromUnAuthenticatedAccount(req, function(err, accessToken){
 
@@ -63,6 +63,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
             //No security
             if(coupon){
+                self.log.debug(accountId, userId, 'using coupon:', coupon);
                 orderManager.createOrderWithCoupon(order, accessToken, userId, coupon,  function(err, order){
                     self.log.debug(accountId, userId, '<< createOrder', err);
                     self.sendResultOrError(res, err, order, 'Error creating order', 500);
@@ -70,8 +71,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
                     }
                 }); 
-            }
-            else{
+            } else {
                orderManager.createOrder(order, accessToken, userId,  function(err, order){
                     self.log.debug(accountId, userId, '<< createOrder', err);
                     self.sendResultOrError(res, err, order, 'Error creating order', 500);
