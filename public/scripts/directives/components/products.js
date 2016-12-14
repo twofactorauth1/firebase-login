@@ -25,7 +25,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             //assign and hold the currentProductPage for pagination
             scope.currentProductPage = 1;
 
-            scope.showDiscount = false;
+            scope.cart_discount = 0; 
+
+            scope.showDiscount = undefined;
+
+            scope.percent_off = false;
+
+            scope.coupon = undefined;
 
             // initializations
             scope.showTax = false;
@@ -53,9 +59,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.numItems = CartDetailsService.items.length;
                 scope.cartDetails = CartDetailsService.items;
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
-
+                scope.totalDiscount = CartDetailsService.totalDiscount;
                 if(scope.cartDetails && scope.cartDetails.length)
-                    CartDetailsService.calculateTotalCharges();
+                    CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
 
             }, true);
 
@@ -248,7 +254,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.getTax(postcode, function() {
                             scope.calculatingTax = false;
                             CartDetailsService.showTax = true;
-                            CartDetailsService.calculateTotalCharges();
+                            CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
                         });
                         console.log('shipping postcode changed ', postcode);
                     }
@@ -572,7 +578,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
 
-                CartDetailsService.removeItemFromCart(product);
+                CartDetailsService.removeItemFromCart(product, scope.cart_discount, scope.percent_off);
 
             };
 
@@ -852,6 +858,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
 
                 if (coupon) {
+                    scope.showDiscount = undefined;
                     PaymentService.validateCoupon(coupon, function(data) {
                         console.log('data ', data);
                         scope.currentCoupon = data;
@@ -861,20 +868,24 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             console.log('valid');
                             angular.element("#coupon-name .error").html("");
                             scope.couponIsValid = true;
+                            scope.coupon = data;
                             scope.showDiscount = true;
-                            calculateDiscount(data);
+                            
+                            //calculateDiscount(data);
                             validateAndCreateOrder(cardInput, data);
                         } else {
                             console.log('invalid');
                             angular.element("#coupon-name .error").html("Invalid Coupon");
                             scope.couponIsValid = false;
                             scope.checkoutModalState = 3;
+                            scope.coupon = undefined;
                             scope.showDiscount = false;
                             return;
                         }
                     });
                 }
                 else{
+                   scope.coupon = undefined; 
                    scope.showDiscount = false;
                    validateAndCreateOrder(cardInput);
                 }
@@ -883,18 +894,23 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
 
-            function calculateDiscount(coupon){
-                console.log("calculating discount");
-                scope.total_discount = 0;
-                if(coupon){
-                    if(coupon.amount_off){
-                        scope.total_discount = coupon.amount_off;
+            function calculateDiscount(){
+                console.log("calculating discount");                
+                if(scope.coupon){
+                    if(scope.coupon.amount_off){
+                        scope.cart_discount = scope.coupon.amount_off;
+                        scope.percent_off = false;
                     }
-                    else if(coupon.percent_off){
-                        
-                        scope.total_discount = scope.subTotal * coupon.percent_off / 100
+                    else if(scope.coupon.percent_off){                        
+                        scope.cart_discount = scope.coupon.percent_off;
+                        scope.percent_off = true;
                     }
                 }
+                else{
+                    scope.cart_discount = 0;
+                    scope.percent_off = false;
+                }
+                CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
             }
 
 
@@ -1103,6 +1119,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $(element).find('.jp-card').removeClass('jp-card-identified');
                 if(scope.checkoutOrder)
                     scope.checkoutOrder.coupon = null;
+                
+                scope.showDiscount = undefined;
+                scope.cart_discount = 0;
+                scope.percent_off = false;
+                scope.coupon = undefined;   
                 //angular.element("#card_coupon").removeClass('has-error has-success');
             }
 
@@ -1245,6 +1266,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 //console.dir(coupon);
                 //console.log(scope.newAccount.coupon);
                 if (coupon) {
+                    scope.showDiscount = undefined;
                     PaymentService.validateCoupon(coupon, function(data) {
                         console.log('data ', data);
                         scope.currentCoupon = data;
@@ -1254,16 +1276,18 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             console.log('valid');
                             angular.element("#coupon-name .error").html("");
                             scope.couponIsValid = true;
+                            scope.coupon = data;
                             scope.showDiscount = true;
-                            calculateDiscount(data);
                         } else {
                             console.log('invalid');
                             angular.element("#coupon-name .error").html("Invalid Coupon");
                             scope.couponIsValid = false;
                             scope.showDiscount = false;
+                            scope.coupon = undefined;
                         }
                     });
                 } else {
+                    scope.coupon = undefined;
                     scope.showDiscount = false;
                     scope.couponIsValid = true;
                     scope.checkingCoupon = false;
@@ -1297,7 +1321,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 cookieData.products.forEach(function(entry, index) {
                     scope.reloadCartDetails(entry.product, entry.variation, entry.quantity);
                 });
-                CartDetailsService.calculateTotalCharges();
+                CartDetailsService.calculateTotalCharges(scope.cart_discount);
 
                 if (cookieData.state) {
                     scope.checkoutModalState = cookieData.state;
@@ -1445,7 +1469,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if(state === 5){
                     redirectAfterOrderOrClose();
                 }
-            })
+            });
+
+
+            scope.$watch('showDiscount', function(_discount){
+                if(angular.isDefined(_discount)){
+                    calculateDiscount();
+                }
+            }, true)
 
         },
         controller: function($scope) {

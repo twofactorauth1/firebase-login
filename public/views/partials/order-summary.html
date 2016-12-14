@@ -11,9 +11,9 @@
 <div class="row">
     <div class="col-xs-6"></div>
     <div class="clearfix mb30"></div>
-    <div class="col-xs-12" ng-if="showDiscount">
+    <div class="col-xs-12" ng-if="totalDiscount">
         <p class="pull-right">
-            Discount: {{ total_discount | currency }}
+            Discount: {{ totalDiscount | currency }}
         </p>
     </div>
     <div class="col-xs-12 col-md-offset-4 col-md-8">

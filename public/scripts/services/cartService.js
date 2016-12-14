@@ -1,12 +1,12 @@
 (function () {
-	mainApp.factory('CartDetailsService', CartDetailsService);
-	function CartDetailsService(){
-		var cartService = {};
+    mainApp.factory('CartDetailsService', CartDetailsService);
+    function CartDetailsService(){
+        var cartService = {};
 
 
-		cartService.getCartItems = getCartItems;
-		
-		cartService.addItemToCart = addItemToCart;
+        cartService.getCartItems = getCartItems;
+        
+        cartService.addItemToCart = addItemToCart;
 
         cartService.calculateTotalCharges = calculateTotalCharges;
 
@@ -21,13 +21,13 @@
         cartService.taxPercent = 0;
         cartService.showNotTaxed = false;
         cartService.hasSubscriptionProduct = false;
-		
+        cartService.totalDiscount = 0;
 
-		function getCartItems() {
-			return cartService.items;
-		}		
+        function getCartItems() {
+            return cartService.items;
+        }       
 
-		function addItemToCart(item) {
+        function addItemToCart(item) {
             cartService.items.push(item);
 
             cartService.items.forEach(function (item, index) {
@@ -38,7 +38,7 @@
             calculateTotalCharges();
         }
 
-        function removeItemFromCart(product) {
+        function removeItemFromCart(product, _discount, percent_off) {
             var filteredItems = _.filter(cartService.items, function(item) {
                 return item._id !== product._id;
             });
@@ -49,12 +49,20 @@
                     cartService.hasSubscriptionProduct = true;
                 }
             });
-            calculateTotalCharges();
+            calculateTotalCharges(_discount);
         }
 
-        function calculateTotalCharges() {
+        function calculateTotalCharges(_discount, percent_off) {
+            if(!angular.isDefined(_discount)){
+                _discount = 0;
+            }
+            if(!angular.isDefined(percent_off)){
+                percent_off = false;
+            }
+
             var _subTotal = 0;
             var _totalTax = 0;
+            var _subtotalTaxable = 0;
             _.each(cartService.items, function(item){
                 var _price = item.regular_price;
                 if (checkOnSale(item)) {
@@ -62,16 +70,30 @@
                 }
                 _subTotal = parseFloat(_subTotal) + (parseFloat(_price) * item.quantity);
                 if (item.taxable && cartService.showTax) {
-                    _totalTax += (_price * parseFloat(cartService.taxPercent) / 100) * item.quantity;
+                    _subtotalTaxable += _price * item.quantity;
                 }
 
                 if (!item.taxable) {
                     cartService.showNotTaxed = true;
                 }
             });
+
+            if(_discount && !percent_off){
+                _discount = _discount / 100;
+            }
+            else if(_discount && percent_off){
+                _discount = _subTotal * _discount / 100;
+            }
+
+            if (_subtotalTaxable > 0) {
+                _totalTax = (_subtotalTaxable - _discount) * parseFloat(cartService.taxPercent) / 100;
+            }
+            if(_totalTax < 0)
+                _totalTax = 0;
             cartService.subTotal = _subTotal;
-            cartService.totalTax = _totalTax;
-            cartService.total = _subTotal + _totalTax;
+            cartService.totalTax = _totalTax ;
+            cartService.total = (_subTotal + _totalTax - _discount > 0 ? _subTotal + _totalTax - _discount : 0);
+            cartService.totalDiscount = _discount;
         }
 
 
@@ -90,10 +112,10 @@
                 return true;
             }
         }
-		
-		(function init() {
-			cartService.items = [];
-		})();
-	return cartService;		  
-	}
+        
+        (function init() {
+            cartService.items = [];
+        })();
+    return cartService;       
+    }
 })();
