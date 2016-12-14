@@ -494,7 +494,7 @@ module.exports = {
                         var customerId = contact.get('stripeId');
                         log.debug(accountId, null, 'customerId:', customerId);
                         var contactId = savedOrder.get('customer_id');
-                        var description = "Charge for order " + savedOrder.id();
+                        var description = "Charge for order " + savedOrder.get('order_id');
                         if(paymentDetails.charge_description) {
                             description = paymentDetails.charge_description;
                         }
@@ -859,7 +859,7 @@ module.exports = {
 
     },
 
-    createOrderWithCoupon: function(order, accessToken, userId, coupon, fn) {
+    createOrderWithCoupon: function(order, accessToken, userId, _coupon, fn) {
         var self = this;
         var accountId = parseInt(order.get('account_id'));
         log.debug(accountId, userId, '>> createOrder');
@@ -952,8 +952,16 @@ module.exports = {
                     callback(null, account, productAry, _taxRate);
                 }
             },
+            // get the coupon
+            function(account, productAry, taxPercent, callback) {
+                if(_coupon && _coupon.id) {
+                    stripeDao.getCoupon(_coupon.id, accessToken, function(err, coupon){
+                        callback(err, account, productAry, taxPercent, coupon);
+                    });
+                }
+            },
             //validate
-            function(account, productAry, taxPercent, callback){
+            function(account, productAry, taxPercent, coupon, callback){
                 log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
                 log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                 //calculate total amount and number line items
@@ -1019,9 +1027,8 @@ module.exports = {
                     }
                     
                     if(coupon.amount_off){
-                        discount = discount + coupon.amount_off                        
-                    }
-                    else if(coupon.percent_off){
+                        discount = discount + (coupon.amount_off / 100);
+                    } else if(coupon.percent_off){
                         var coupon_discount = subTotal * coupon.percent_off / 100;
                         discount = discount + coupon_discount
                     }
@@ -1044,11 +1051,11 @@ module.exports = {
                     log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                     order.set('total_line_items_quantity', totalLineItemsQuantity);
                     order.set('total_discount', orderDiscount);
-                    callback(null, account, order, productAry);
+                    callback(null, account, order, productAry, coupon);
                 }
             },
             //save
-            function(account, validatedOrder, productAry, callback){
+            function(account, validatedOrder, productAry, coupon, callback){
                 //look for customer instead of customer_id
                 if(validatedOrder.get('customer') && validatedOrder.get('customer_id')) {
                     log.warn('request contains BOTH customer and customer_id.  Dropping customer.');
@@ -1080,16 +1087,16 @@ module.exports = {
                         } else {
                             validatedOrder.set('customer_id', savedContact.id());
                             validatedOrder.set('customer', null);
-                            callback(null, account, validatedOrder, productAry);
+                            callback(null, account, validatedOrder, productAry, coupon);
                         }
                     });
                 } else {
                     //we have the id.
-                    callback(null, account, validatedOrder, productAry);
+                    callback(null, account, validatedOrder, productAry, coupon);
                 }
             },
             //get contact
-            function(account, savedOrder, productAry, callback) {
+            function(account, savedOrder, productAry, coupon, callback) {
                 log.debug(accountId, userId, 'getting contact');
                 contactDao.getById(savedOrder.get('customer_id'), $$.m.Contact, function(err, contact){
                     if(err) {
@@ -1116,7 +1123,7 @@ module.exports = {
 
                                 savedOrder.set('order_id', max);
                                 dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
-                                    callback(err, account, updatedOrder, contact, productAry);
+                                    callback(err, account, updatedOrder, contact, productAry, coupon);
                                 });
                             }
                         });
@@ -1124,7 +1131,7 @@ module.exports = {
                     }
                 });
             },
-            function(account, savedOrder, contact, productAry, callback) {
+            function(account, savedOrder, contact, productAry, coupon, callback) {
                 var customerId = contact.get('stripeId');
                 if(customerId) {
                     callback(null, account, savedOrder, contact, productAry);
@@ -1141,7 +1148,7 @@ module.exports = {
                                     log.error(accountId, userId, 'Error saving stripe customerId:', err);
                                     callback(err);
                                 } else {
-                                    callback(null, account, savedOrder, savedContact, productAry);
+                                    callback(null, account, savedOrder, savedContact, productAry, coupon);
                                 }
                             });
                         }
@@ -1149,7 +1156,7 @@ module.exports = {
                 }
             },
             //charge
-            function(account, savedOrder, contact, productAry, callback){
+            function(account, savedOrder, contact, productAry, coupon, callback){
                 log.debug(accountId, null, 'attempting to charge order');
                 var paymentDetails = savedOrder.get('payment_details');
                 if (savedOrder.get('total') > 0) {
@@ -1162,7 +1169,7 @@ module.exports = {
                         var customerId = contact.get('stripeId');
                         log.debug(accountId, null, 'customerId:', customerId);
                         var contactId = savedOrder.get('customer_id');
-                        var description = "Charge for order " + savedOrder.id();
+                        var description = "Charge for order " + savedOrder.get('order_id');
                         if(paymentDetails.charge_description) {
                             description = paymentDetails.charge_description;
                         }
@@ -1188,7 +1195,7 @@ module.exports = {
                             var productAttributes = subscriptionProduct.get('product_attributes');
                             var stripePlanAttributes = productAttributes.stripePlans[0];
                             var planId = stripePlanAttributes.id;
-                            var coupon = null;
+
                             var trial_end = null;
                             var quantity = 1;
                             var application_fee_percent = null;

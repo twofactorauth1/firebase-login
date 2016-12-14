@@ -754,7 +754,7 @@ var emailMessageManager = {
                                     self.log.error('Error sending email:', err);
                                     return fn(err);
                                 } else {
-                                    self.log.debug(accountId, null, '<< sendAccountWelcomeEmail');
+                                    self.log.debug(accountId, null, '<< sendOrderEmail');
                                     return fn(null, response);
                                 }
                             });
