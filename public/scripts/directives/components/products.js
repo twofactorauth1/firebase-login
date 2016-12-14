@@ -1457,8 +1457,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             function redirectAfterOrderOrClose(_time){
                 if(scope.settings && scope.settings.checkout && scope.settings.checkout.redirectUrl){
                     $timeout(function() {
-                        if(scope.modalInstance)
-                            scope.modalInstance.close();
                         window.location.href = scope.settings.checkout.redirectUrl;
                     }, _time || scope.settings.checkout.redirectTimeout || 5000);
                 }
