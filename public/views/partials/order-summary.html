@@ -11,6 +11,11 @@
 <div class="row">
     <div class="col-xs-6"></div>
     <div class="clearfix mb30"></div>
+    <div class="col-xs-12" ng-if="showDiscount">
+        <p class="pull-right">
+            Discount: {{ total_discount | currency }}
+        </p>
+    </div>
     <div class="col-xs-12 col-md-offset-4 col-md-8">
         <p class="line-wrap-text pull-right">Subtotal: {{ subTotal | currency }}</p>
         <p class="pull-right line-wrap-tax" style="min-width: 70px;">
