@@ -35,11 +35,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             console.log('url:', scope.paypalURL);
             scope.taxPercent = 0;
             initializeCouponDetails();    
-            scope.checkoutOrder = {
-                coupon : ""
-            };
-
-
+            
 
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
 
@@ -1118,8 +1114,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $(element).find('.jp-card-name').text('Full Name');
                 $(element).find('.jp-card-expiry').text('••/••');
                 $(element).find('.jp-card').removeClass('jp-card-identified');
-                if(scope.checkoutOrder)
-                    scope.checkoutOrder.coupon = null;
                 
                 initializeCouponDetails();   
                 //angular.element("#card_coupon").removeClass('has-error has-success');
@@ -1466,6 +1460,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.showDiscount = undefined;
                 scope.percent_off = false;
                 scope.coupon = undefined;
+                scope.checkoutOrder = {
+                    coupon : ""
+                };
             }
 
 
