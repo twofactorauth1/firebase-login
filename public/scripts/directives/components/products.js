@@ -1461,7 +1461,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
 
-            function initializeCouponDetails = function(){
+            function initializeCouponDetails(){
                 scope.cart_discount = 0; 
                 scope.showDiscount = undefined;
                 scope.percent_off = false;
