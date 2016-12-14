@@ -221,7 +221,7 @@
                     $scope.calculatedDiscountPercent = '';
                 }
                 if (_subtotalTaxable > 0) {
-                    $scope.order.total_tax = (_subtotalTaxable) * _taxrate;
+                    $scope.order.total_tax = (_subtotalTaxable - $scope.order.total_discount) * _taxrate;
                 } else {
                     $scope.order.total_tax = 0;
                 }
