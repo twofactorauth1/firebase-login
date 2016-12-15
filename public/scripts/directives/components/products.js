@@ -55,6 +55,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.cartDetails = CartDetailsService.items;
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
                 scope.totalDiscount = CartDetailsService.totalDiscount;
+                scope.totalShipping = CartDetailsService.totalShipping;
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
 
@@ -200,6 +201,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     console.log('Stripe?', scope.stripeInfo);
                     console.log('commerceSettings ', account.commerceSettings);
                     scope.settings = account.commerceSettings;
+                    CartDetailsService.commerceSettings = account.commerceSettings;
                     if (scope.settings) {
                         scope.paypalInfo = scope.settings.paypal;
                         if (scope.settings.taxes && scope.settings.taxbased === 'business_location') {
@@ -698,7 +700,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     'status': 'paid',
                     'cart_discount': 0,
                     'total_discount': 0,
-                    'total_shipping': 0,
+                    'total_shipping': scope.totalShipping,
                     'total_tax': formatNum(scope.totalTax),
                     'shipping_tax': 0,
                     'cart_tax': 0,
@@ -1001,7 +1003,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'status': 'paid',
                         'cart_discount': 0,
                         'total_discount': 0,
-                        'total_shipping': 0,
+                        'total_shipping': scope.totalShipping,
                         'total_tax': formatNum(CartDetailsService.totalTax),
                         'shipping_tax': 0,
                         'cart_tax': 0,
@@ -1496,8 +1498,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $scope.checkoutModalState = state;
                 angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
-
-
         }
     };
 }]);
