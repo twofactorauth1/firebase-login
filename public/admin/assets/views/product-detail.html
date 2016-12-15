@@ -211,7 +211,7 @@
                                             </label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" name="shipping_order_additive_charge" class="form-control" ng-model="product.shipping_charges.item_order_additive_charge" ng-currency min="0.00" max="9999999999" currency-symbol=""/>
+                                                <input type="text" name="item_override_charge" class="form-control" ng-model="product.shipping_charges.item_override_charge" ng-currency min="0.00" max="9999999999" currency-symbol=""/>
                                             </div>
                                         </div>
                                         <div class="form-group" ng-if="account.commerceSettings.shipping.enabled && account.commerceSettings.shipping.chargeType === 'order'">
@@ -220,7 +220,7 @@
                                             </label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text"  name="shipping_override_charge" class="form-control" ng-model="product.shipping_charges.item_override_charge" ng-currency min="0.00" max="9999999999" currency-symbol=""/>
+                                                <input type="text"  name="item_order_additive_charge" class="form-control" ng-model="product.shipping_charges.item_order_additive_charge" ng-currency min="0.00" max="9999999999" currency-symbol=""/>
                                             </div>
                                         </div>
                                         <!-- <div class="form-group">
