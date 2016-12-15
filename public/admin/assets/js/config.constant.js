@@ -798,7 +798,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']
   }, {
     name: 'ngCurrency',
-    files: ['../js/libs/ng-currency/dist/ng-currency.min.js']
+    files: ['../js/libs/ng-currency/dist/ng-currency.js']
   }, {
     name: 'ngSticky',
     files: ['../js/libs/ngSticky/dist/sticky.min.js']
