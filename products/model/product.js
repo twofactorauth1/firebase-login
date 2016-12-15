@@ -33,8 +33,8 @@ var product = $$.m.ModelBase.extend({
             length: "",
             downloads: [],
             shipping_charges:{
-                item_override_charge: 0,
-                item_order_additive_charge : 0
+                item_override_charge: null,
+                item_order_additive_charge : null
             },
             /* Example:
                 {
