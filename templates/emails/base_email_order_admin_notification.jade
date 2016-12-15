@@ -318,10 +318,11 @@ html
                                         td(colspan="3", class="text-right")
                                           strong Subtotal
                                         td $ !{order.subtotal}
-                                      tr
-                                        td(colspan="3", class="text-right")
-                                          strong Discount
-                                        td $ (!{order.total_discount})
+                                      if order.total_discount  
+                                        tr
+                                          td(colspan="3", class="text-right")
+                                            strong Discount
+                                          td $ (!{order.total_discount})
                                       tr
                                         td(colspan="3", class="text-right")
                                           strong Tax
