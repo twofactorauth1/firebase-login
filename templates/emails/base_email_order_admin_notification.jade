@@ -323,10 +323,11 @@ html
                                           td(colspan="3", class="text-right")
                                             strong Discount
                                           td $ (!{order.total_discount})
-                                      tr
-                                        td(colspan="3", class="text-right")
-                                          strong Tax
-                                        td $ !{order.total_tax}
+                                      if order.total_discount
+                                        tr
+                                          td(colspan="3", class="text-right")
+                                            strong Tax
+                                          td $ !{order.total_tax}
                                       tr
                                         td(colspan="3", class="text-right")
                                           strong Total
