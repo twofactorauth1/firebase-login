@@ -7,7 +7,7 @@
             $scope.dataLoaded = false;
             $scope.billing = {sameAsBilling: false};
             
-
+            $scope.showDiscount = false;
             //TODO
             // - $q all api calls
             // 1. getCustomers
@@ -186,6 +186,7 @@
 
             $scope.calculateTotals = function () {
                 console.log('calculateTotals >>>');
+                $scope.showDiscount = false;
                 var _subtotal = 0;
                 var _total = 0;
                 var _discount = 0;
@@ -206,6 +207,7 @@
                         line_item.total -= _dc;
                         _discount += _dc;
                         _total -= _dc;
+                        $scope.showDiscount = true;
                     }
                     _subtotal += parseFloat(item_price) * parseFloat(line_item.quantity);
                     _total += parseFloat(item_price) * parseFloat(line_item.quantity);
