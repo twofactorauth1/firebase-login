@@ -69,6 +69,10 @@
                                 <a class="text-dark" ng-click="viewSettings('commerce', 'Checkout')">Checkout</a>
                             </li>
 
+                            <li>
+                                <a class="text-dark" ng-click="viewSettings('commerce', 'Shipping Charges')">Shipping Charges</a>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -348,6 +352,40 @@
                             <select ng-model="account.commerceSettings.checkout.redirectTimeout" class="form-control" ng-options="opt.data as opt.label for opt in redirectTimeoutOptions">
                                     <option value="">-- choose --</option>
                                 </select>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+
+
+                <tab heading="Shipping Charges">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">                            
+                            <label>Enable Shipping Charges</label>
+                            <span tooltip-placement="bottom" tooltip="Enable Shipping Charges"><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.commerceSettings.shipping.enabled" class="pull-right"></switch>                        
+                        </div>
+                        <div class="form-group" ng-if="account.commerceSettings.shipping.enabled"> 
+                            <div class="block">
+                                <label>Calculate Shipping Charges based on:</label>
+                                <span tooltip-placement="right" tooltip="Calculate Shipping Charges"><i class="fa fa-info-circle" /></span>
+                            </div>
+                            
+                            <label class="radio-inline">
+                                <input type="radio" id="perItem" value="item" name="shippingCharges" ng-model="account.commerceSettings.shipping.chargeType"> Item
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" id="perOrder" value="order" name="shippingCharges" ng-model="account.commerceSettings.shipping.chargeType"> Order
+                            </label>
+                        </div>
+                        <div class="form-group" ng-if="account.commerceSettings.shipping.enabled">
+                            <label>Per(item/order) Charge</label>
+                            <span tooltip-placement="bottom" tooltip="Per(item/order) Charge"><i class="fa fa-info-circle" /></span>
+                            <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" name="shipping_charge" class="form-control" ng-model="account.commerceSettings.shipping.charge" ng-currency max="9999999999" min="0" currency-symbol=""/>
+                            </div>                       
                         </div>
                         <div class="clearfix"></div>
                     </form>

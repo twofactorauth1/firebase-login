@@ -38,7 +38,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "/admin/assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency'),
         abstract: true
     }).state('app.dashboard', {
         url: "/_dashboard",
@@ -131,7 +131,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/views/product-detail.html",
         title: 'Products',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'ngCurrency', 'bootstrap-icon-picker', 'campaignService', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'propsFilter', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'bootstrap-icon-picker', 'campaignService', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'propsFilter', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "/admin/assets/views/orders.html",
