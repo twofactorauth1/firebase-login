@@ -3991,6 +3991,16 @@ module.exports = {
                 });
             }
         });
+    },
+
+    getPagesCreatedModifiedPublished: function(accountId, userId, startDate, endDate, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getPagesCreatedModifiedPublished');
+        var publishedPagesQuery = {};
+        var pagesCreatedQuery = {};
+        var pagesModifiedQuery = {};
+
+        pageDao.findPublishedPages(publishedPagesQuery, function(err, value){});
     }
 
 };
