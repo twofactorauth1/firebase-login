@@ -1077,6 +1077,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             scope.failedOrderMessage = failedOrderMessage;
                             return;
                         }
+                        scope.order = data;
                         console.log('order, ', order);
                         scope.checkoutModalState = 5;
                         CartDetailsService.items = [];
@@ -1449,7 +1450,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             function redirectAfterOrderOrClose(_time){
                 if(scope.settings && scope.settings.checkout && scope.settings.checkout.redirectUrl){
                     $timeout(function() {
-                        window.location.href = scope.settings.checkout.redirectUrl;
+                        var redirectUrl = scope.settings.checkout.redirectUrl;
+                        if(scope.order){
+                            redirectUrl = redirectUrl + "?orderId="+ scope.order._id;
+                        }
+                        window.location.href = redirectUrl;
                     }, _time || scope.settings.checkout.redirectTimeout || 5000);
                 }
             };
