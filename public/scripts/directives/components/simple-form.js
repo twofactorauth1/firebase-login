@@ -110,7 +110,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
       };
 
       function formatString(stringval){
-        return stringval.replace(/[^\w\s]/gi, '');
+        return stringval.replace(/[^\w-\s]/gi, '');
       } 
 
       scope.formValidations = formValidations;
