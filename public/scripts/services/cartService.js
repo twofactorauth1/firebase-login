@@ -22,6 +22,8 @@
         cartService.showNotTaxed = false;
         cartService.hasSubscriptionProduct = false;
         cartService.totalDiscount = 0;
+        cartService.commerceSettings = {};
+
 
         function getCartItems() {
             return cartService.items;
@@ -63,6 +65,22 @@
             var _subTotal = 0;
             var _totalTax = 0;
             var _subtotalTaxable = 0;
+            var _overrides  = 0;
+            var _nonOverrides = 0;
+            var _totalShippingCharges = 0;
+            // Shipping Charges condtions and calculations
+            var shipping = {
+                chargeType: null,
+                charge: null
+            }
+
+            if(cartService.commerceSettings){
+                if(cartService.commerceSettings.shipping && cartService.commerceSettings.shipping.enabled){                    
+                    shipping.chargeType = cartService.commerceSettings.shipping.chargeType;
+                    shipping.charge = cartService.commerceSettings.shipping.charge || 0;                  
+                }
+            }
+
             _.each(cartService.items, function(item){
                 var _price = item.regular_price;
                 if (checkOnSale(item)) {
@@ -76,7 +94,28 @@
                 if (!item.taxable) {
                     cartService.showNotTaxed = true;
                 }
+
+                if(shipping.chargeType){    
+                    if(shipping.chargeType === 'item'){
+                        if(item.shipping && item.shipping_charges.item_override_charge){
+                            _overrides += item.quantity * item.shipping_charges.item_override_charge;
+                        }
+                        else{
+                            _nonOverrides = _nonOverrides += item.quantity * shipping.charge;
+                        }
+                    }                    
+                    else if(shipping.chargeType === 'order' && item.shipping_charges && item.shipping_charges.item_order_additive_charge){
+                        _overrides += item.quantity * item.shipping_charges.item_order_additive_charge;
+                    }
+                }
             });
+
+            if(shipping.chargeType === 'order'){
+                _totalShippingCharges = _overrides + shipping.charge;
+            }
+            else if(shipping.chargeType === 'item'){
+                _totalShippingCharges = _overrides + _nonOverrides;
+            }
 
             if(_discount && !percent_off){
                 _discount = _discount / 100;
@@ -94,6 +133,7 @@
             cartService.totalTax = _totalTax ;
             cartService.total = (_subTotal + _totalTax - _discount > 0 ? _subTotal + _totalTax - _discount : 0);
             cartService.totalDiscount = _discount;
+            cartService.totalShipping = _totalShippingCharges;
         }
 
 
