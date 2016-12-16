@@ -56,6 +56,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
                 scope.totalDiscount = CartDetailsService.totalDiscount;
                 scope.totalShipping = CartDetailsService.totalShipping;
+                scope.shippingTax = CartDetailsService.shippingTax;
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
 
@@ -702,7 +703,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     'total_discount': 0,
                     'total_shipping': scope.totalShipping,
                     'total_tax': formatNum(scope.totalTax),
-                    'shipping_tax': 0,
+                    'shipping_tax': scope.shippingTax || 0,
                     'cart_tax': 0,
                     'currency': 'usd',
                     'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
@@ -1005,7 +1006,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'total_discount': 0,
                         'total_shipping': scope.totalShipping,
                         'total_tax': formatNum(CartDetailsService.totalTax),
-                        'shipping_tax': 0,
+                        'shipping_tax': scope.shippingTax || 0,
                         'cart_tax': 0,
                         'currency': 'usd',
                         'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }

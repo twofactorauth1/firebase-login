@@ -1,6 +1,7 @@
 (function () {
     mainApp.factory('CartDetailsService', CartDetailsService);
-    function CartDetailsService(){
+    CartDetailsService.$inject = ['nonShippingChargeStates'];
+    function CartDetailsService(nonShippingChargeStates){
         var cartService = {};
 
 
@@ -21,6 +22,7 @@
         cartService.taxPercent = 0;
         cartService.showNotTaxed = false;
         cartService.hasSubscriptionProduct = false;
+        cartService.shippingTax = 0;
         cartService.totalDiscount = 0;
         cartService.commerceSettings = {};
 
@@ -134,6 +136,8 @@
             cartService.total = (_subTotal + _totalTax - _discount > 0 ? _subTotal + _totalTax - _discount : 0);
             cartService.totalDiscount = _discount;
             cartService.totalShipping = _totalShippingCharges;
+            // TO DO - Shipping tax calculations on basis of state
+            cartService.shippingTax = 0;
         }
 
 
