@@ -2,9 +2,9 @@
 
     app.controller('SiteBuilderFormBuilderComponentController', ssbFormBuilderComponentController);
 
-    ssbFormBuilderComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout'];
+    ssbFormBuilderComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$injector', 'formValidations', '$timeout', '$location'];
     /* @ngInject */
-    function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout) {
+    function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude, $injector, formValidations, $timeout, $location) {
 
         console.info('ssb-form-builder directive init...')
 
@@ -144,6 +144,10 @@
             }
         }
 
+        function formatString(stringval){
+            return stringval.replace(/[^\w\s]/gi, '');
+        } 
+
 
         vm.createUser = function (form) {
             // Admin check
@@ -200,6 +204,16 @@
                 extra.push({name: c.name, label: c.label, value: vm.formBuilder[c.name] || null});
             });
 
+            var params = $location.$$search;
+
+            if(angular.isObject(params) && Object.keys(params).length){
+                _.each(params, function(value, key){ 
+                    extra.push({
+                        name: formatString(key),                        
+                        value: formatString(value)
+                    });
+                });
+            };
 
             var formatted = {
                 fingerprint: fingerprint,

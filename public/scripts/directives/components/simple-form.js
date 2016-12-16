@@ -1,6 +1,6 @@
 'use strict';
 /*global app, window, Fingerprint, CryptoJS*/
-app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', 'formValidations', 'campaignService', function (ipCookie, $window, $timeout, userService, formValidations, campaignService) {
+app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', 'formValidations', 'campaignService', '$location', function (ipCookie, $window, $timeout, userService, formValidations, campaignService, $location) {
   return {
     scope: {
       component: '='
@@ -109,6 +109,10 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         return styleString;
       };
 
+      function formatString(stringval){
+        return stringval.replace(/[^\w\s]/gi, '');
+      } 
+
       scope.formValidations = formValidations;
       scope.user = {};
       scope.createUser = function (simpleForm) {
@@ -136,6 +140,19 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         if (_campaignObj && angular.isDefined(_campaignObj.searchTags) && _campaignObj.searchTags.tags.length) {
           _campaignTags = _.uniq(_.pluck(_campaignObj.searchTags.tags, 'data'));
         }
+
+        var extra = [];
+
+        var params = $location.$$search;
+
+        if(angular.isObject(params) && Object.keys(params).length){
+            _.each(params, function(value, key){ 
+                extra.push({
+                    name: formatString(key),                        
+                    value: formatString(value)
+                });
+            });
+        };
 
         var formatted = {
           fingerprint: fingerprint,
@@ -171,6 +188,10 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             extension: scope.user.extension,
             type: 'm'
           });
+        }
+
+        if(extra.length){
+          formatted.extra = extra;
         }
 
         //create contact
