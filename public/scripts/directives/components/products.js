@@ -57,6 +57,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.totalDiscount = CartDetailsService.totalDiscount;
                 scope.totalShipping = CartDetailsService.totalShipping;
                 scope.shippingTax = CartDetailsService.shippingTax;
+                scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
 
@@ -307,9 +308,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.checkBillingState = function(state) {
                 if (!state) {
                     scope.emptyState = true;
+                    CartDetailsService.isStateTaxable = false;
                 } else {
                     scope.emptyState = false;
-                }
+                    CartDetailsService.checkIfStateTaxable(state, scope.cart_discount, scope.percent_off);
+                }                
             };
 
             scope.checkBillingCity = function(city) {
@@ -327,6 +330,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.invalidPhone = !formValidations.phone.test(phone);
                 }
             };
+
 
             scope.validateAddressDetails = function(details, email, phone) {
                 scope.emptyFirstName = false;
@@ -523,7 +527,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (match) {
                         match.quantity = parseInt(match.quantity, 10) + 1;
                     } else {
-                        CartDetailsService.addItemToCart(productMatch);
+                        CartDetailsService.addItemToCart(productMatch, scope.cart_discount, scope.percent_off);
                     }
                 }
 
@@ -551,7 +555,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (match) {
                         match.quantity = parseInt(match.quantity, 10) + quantity;
                     } else {
-                        CartDetailsService.addItemToCart(productMatch);
+                        CartDetailsService.addItemToCart(productMatch, scope.cart_discount, scope.percent_off);
                     }
 
                 }
@@ -704,7 +708,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     'total_shipping': scope.totalShipping,
                     'total_tax': formatNum(scope.totalTax),
                     'shipping_tax': scope.shippingTax || 0,
-                    'cart_tax': 0,
+                    'cart_tax': scope.cartTax || 0,
                     'currency': 'usd',
                     'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
                     'total_line_items_quantity': CartDetailsService.items.length,
@@ -1007,7 +1011,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'total_shipping': scope.totalShipping,
                         'total_tax': formatNum(CartDetailsService.totalTax),
                         'shipping_tax': scope.shippingTax || 0,
-                        'cart_tax': 0,
+                        'cart_tax': scope.cartTax || 0,
                         'currency': 'usd',
                         'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
                         'total_line_items_quantity': CartDetailsService.items.length,

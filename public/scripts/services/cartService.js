@@ -15,23 +15,27 @@
 
         cartService.removeItemFromCart = removeItemFromCart;
 
+        cartService.checkIfStateTaxable = checkIfStateTaxable;
+
         cartService.total = 0;
-        cartService.totalTax = 0;
+        cartService.cartTax = 0;
         cartService.subTotal = 0;
         cartService.showTax = false;
         cartService.taxPercent = 0;
         cartService.showNotTaxed = false;
         cartService.hasSubscriptionProduct = false;
         cartService.shippingTax = 0;
+        cartService.totalTax = 0;
         cartService.totalDiscount = 0;
         cartService.commerceSettings = {};
+        cartService.isStateTaxable = false;
 
 
         function getCartItems() {
             return cartService.items;
         }       
 
-        function addItemToCart(item) {
+        function addItemToCart(item, _discount, percent_off) {
             cartService.items.push(item);
 
             cartService.items.forEach(function (item, index) {
@@ -39,7 +43,7 @@
                     cartService.hasSubscriptionProduct = true;
                 }
             });
-            calculateTotalCharges();
+            calculateTotalCharges(_discount, percent_off);
         }
 
         function removeItemFromCart(product, _discount, percent_off) {
@@ -53,7 +57,7 @@
                     cartService.hasSubscriptionProduct = true;
                 }
             });
-            calculateTotalCharges(_discount);
+            calculateTotalCharges(_discount, percent_off);
         }
 
         function calculateTotalCharges(_discount, percent_off) {
@@ -65,8 +69,10 @@
             }
 
             var _subTotal = 0;
+            var _cartTax = 0;
+            var _shippingTax = 0;
             var _totalTax = 0;
-            var _subtotalTaxable = 0;
+            var _subcartTaxable = 0;
             var _overrides  = 0;
             var _nonOverrides = 0;
             var _totalShippingCharges = 0;
@@ -90,7 +96,7 @@
                 }
                 _subTotal = parseFloat(_subTotal) + (parseFloat(_price) * item.quantity);
                 if (item.taxable && cartService.showTax) {
-                    _subtotalTaxable += _price * item.quantity;
+                    _subcartTaxable += _price * item.quantity;
                 }
 
                 if (!item.taxable) {
@@ -126,21 +132,24 @@
                 _discount = _subTotal * _discount / 100;
             }
 
-            if (_subtotalTaxable > 0) {
-                _totalTax = (_subtotalTaxable - _discount) * parseFloat(cartService.taxPercent) / 100;
+            if (_subcartTaxable > 0) {
+                _cartTax = (_subcartTaxable - _discount) * parseFloat(cartService.taxPercent) / 100;
             }
-            if(_totalTax < 0)
-                _totalTax = 0;
+            if(_cartTax < 0)
+                _cartTax = 0;
+            
+            if(cartService.isStateTaxable){
+                _shippingTax = _totalShippingCharges * parseFloat(cartService.taxPercent) / 100;
+            }
+            _totalTax = _cartTax + _shippingTax;
             cartService.subTotal = _subTotal;
-            cartService.totalTax = _totalTax ;
-            cartService.total = (_subTotal + _totalTax - _discount > 0 ? _subTotal + _totalTax - _discount : 0);
+            cartService.cartTax = _cartTax;
+            cartService.shippingTax = _shippingTax;
             cartService.totalDiscount = _discount;
             cartService.totalShipping = _totalShippingCharges;
-            // TO DO - Shipping tax calculations on basis of state
-            cartService.shippingTax = 0;
+            cartService.totalTax = _totalTax;
+            cartService.total = (_subTotal + _totalTax - _discount > 0 ? _subTotal + _totalTax - _discount : 0);            
         }
-
-
 
         function checkOnSale(_product) {
             if (_product.on_sale) {
@@ -155,6 +164,20 @@
                 }
                 return true;
             }
+        }
+
+        function checkIfStateTaxable(_state, _discount, percent_off){
+            if(_state){
+                var stateExists = _.filter(nonShippingChargeStates, function(stateObj){ return stateObj.abbr.toLowerCase() === _state.toLowerCase() ||  stateObj.name.toLowerCase() === _state.toLowerCase(); });
+                if(stateExists && stateExists.length){
+                    cartService.isStateTaxable = false;
+                }
+                else{
+                    cartService.isStateTaxable = true;
+                }
+                calculateTotalCharges(_state, _discount, percent_off);
+            }
+            
         }
         
         (function init() {
