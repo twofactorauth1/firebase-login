@@ -552,7 +552,7 @@
                         zoomType: 'x',
                         pinchType: 'x'
                     },
-                    colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
+                    colors: ['#41b0c7', '#fcb252', '#993300'],
                     title: {
                         text: null
                     },
@@ -616,6 +616,7 @@
             };
             if(dailyActiveUsersData) {
                 analyticsOverviewConfig.series.push({name: 'Daily Active Users', data:dailyActiveUsersData});
+                analyticsOverviewConfig.options.colors.push('#f8cc49');
             }
             if(this.granularity === 'hours') {
                 analyticsOverviewConfig.xAxis.labels.format = '{value:%b %d %H:%M}';
