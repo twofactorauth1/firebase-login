@@ -320,7 +320,7 @@ html
                                         tr
                                           td(colspan="3", class="text-right")
                                             strong Shipping Charges
-                                          td $ (!{order.total_shipping})
+                                          td $ !{order.total_shipping}
                                       if order.total_tax && order.total_tax > 0
                                         tr
                                           td(colspan="3", class="text-right")
