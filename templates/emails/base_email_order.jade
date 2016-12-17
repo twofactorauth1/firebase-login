@@ -316,6 +316,11 @@ html
                                           td(colspan="3", class="text-right")
                                             strong Discount
                                           td $ (!{order.total_discount})
+                                      if order.total_shipping && order.total_shipping > 0
+                                        tr
+                                          td(colspan="3", class="text-right")
+                                            strong Shipping Charges
+                                          td $ (!{order.total_shipping})
                                       if order.total_tax && order.total_tax > 0
                                         tr
                                           td(colspan="3", class="text-right")

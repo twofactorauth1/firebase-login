@@ -705,9 +705,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     'status': 'paid',
                     'cart_discount': 0,
                     'total_discount': 0,
-                    'total_shipping': scope.totalShipping,
+                    'total_shipping': formatNum(scope.totalShipping),
                     'total_tax': formatNum(scope.totalTax),
-                    'shipping_tax': scope.shippingTax || 0,
+                    'shipping_tax': formatNum(scope.shippingTax),
                     'cart_tax': scope.cartTax || 0,
                     'currency': 'usd',
                     'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
@@ -1008,9 +1008,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'status': 'paid',
                         'cart_discount': 0,
                         'total_discount': 0,
-                        'total_shipping': scope.totalShipping,
+                        'total_shipping': formatNum(scope.totalShipping),
                         'total_tax': formatNum(CartDetailsService.totalTax),
-                        'shipping_tax': scope.shippingTax || 0,
+                        'shipping_tax': formatNum(scope.shippingTax),
                         'cart_tax': scope.cartTax || 0,
                         'currency': 'usd',
                         'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
