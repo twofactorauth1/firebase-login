@@ -148,7 +148,7 @@
             cartService.totalDiscount = _discount;
             cartService.totalShipping = _totalShippingCharges;
             cartService.totalTax = _totalTax;
-            cartService.total = (_subTotal + _totalTax - _discount > 0 ? _subTotal + _totalTax - _discount : 0);            
+            cartService.total = (_subTotal + _totalTax + _totalShippingCharges - _discount > 0 ? _subTotal + _totalTax + _totalShippingCharges - _discount : 0);            
         }
 
         function checkOnSale(_product) {
