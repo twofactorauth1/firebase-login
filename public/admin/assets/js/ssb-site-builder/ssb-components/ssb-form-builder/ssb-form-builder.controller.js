@@ -206,12 +206,15 @@
 
             var params = $location.$$search;
 
+            var activityFields = angular.copy(vm.formBuilder);
+
             if(angular.isObject(params) && Object.keys(params).length){
                 _.each(params, function(value, key){ 
                     extra.push({
                         name: formatString(key),                        
                         value: formatString(value)
                     });
+                    activityFields[key] = value;
                 });
             };
 
@@ -240,7 +243,7 @@
                     activityType: 'CONTACT_FORM',
                     note: vm.formBuilder.Message || "Contact form data.",
                     sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
-                    contact: vm.formBuilder
+                    contact: activityFields
                 },
                 extra: extra
             };
