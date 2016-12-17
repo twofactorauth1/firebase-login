@@ -145,14 +145,22 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
         var params = $location.$$search;
 
+        
+        var activityFields = angular.copy(scope.user);
+
+
         if(angular.isObject(params) && Object.keys(params).length){
             _.each(params, function(value, key){ 
                 extra.push({
                     name: formatString(key),                        
                     value: formatString(value)
                 });
+                activityFields[key] = value;
             });
         };
+
+
+
 
         var formatted = {
           fingerprint: fingerprint,
@@ -176,7 +184,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             activityType: 'CONTACT_FORM',
             note: scope.user.message || "Contact form data.",
             sessionId: ipCookie("session_cookie") ? ipCookie("session_cookie").id : null,
-            contact: scope.user
+            contact: activityFields
           }
         };
         formatted.details[0].emails.push({
