@@ -80,7 +80,7 @@
             var shipping = {
                 chargeType: null,
                 charge: null
-            }
+            };
 
             if(cartService.commerceSettings){
                 if(cartService.commerceSettings.shipping && cartService.commerceSettings.shipping.enabled){                    
@@ -107,12 +107,10 @@
                     if(shipping.chargeType === 'item'){
                         if(item.shipping_charges && item.shipping_charges.item_override_charge){
                             _overrides += item.quantity * item.shipping_charges.item_override_charge;
-                        }
-                        else{
+                        } else {
                             _nonOverrides = _nonOverrides += item.quantity * shipping.charge;
                         }
-                    }                    
-                    else if(shipping.chargeType === 'order' && item.shipping_charges && item.shipping_charges.item_order_additive_charge){
+                    } else if(shipping.chargeType === 'order' && item.shipping_charges && item.shipping_charges.item_order_additive_charge){
                         _overrides += item.quantity * item.shipping_charges.item_order_additive_charge;
                     }
                 }
@@ -120,15 +118,13 @@
 
             if(shipping.chargeType === 'order'){
                 _totalShippingCharges = _overrides + shipping.charge;
-            }
-            else if(shipping.chargeType === 'item'){
+            } else if(shipping.chargeType === 'item'){
                 _totalShippingCharges = _overrides + _nonOverrides;
             }
 
             if(_discount && !percent_off){
                 _discount = _discount / 100;
-            }
-            else if(_discount && percent_off){
+            } else if(_discount && percent_off){
                 _discount = (_subTotal) * _discount / 100;
             }
 
@@ -172,8 +168,7 @@
                 var stateExists = _.filter(nonShippingChargeStates, function(stateObj){ return stateObj.abbr.toLowerCase() === _state.toLowerCase() ||  stateObj.name.toLowerCase() === _state.toLowerCase(); });
                 if(stateExists && stateExists.length){
                     cartService.isStateTaxable = false;
-                }
-                else{
+                } else{
                     cartService.isStateTaxable = true;
                 }
                 calculateTotalCharges(_discount, percent_off);

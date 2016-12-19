@@ -18,7 +18,7 @@ var accountDao = require('../dao/account.dao');
 var cmsManager = require('../cms/cms_manager');
 var productManager = require('../products/product_manager');
 var emailDao = require('../cms/dao/email.dao');
-var juice = require('juice');
+var orderConstants = require('./order_constants');
 require('moment');
 
 
@@ -256,8 +256,14 @@ module.exports = {
                 log.debug(accountId, userId, 'commerceSettings');
                 self._calculateTaxRate(accountId, userId, account, productAry, callback);
             },
+            //determine shipping charges
+            function(account, productAry, taxPercent, callback) {
+                self._calculateShippingCharges(accountId, userId, account, productAry, function(err, shippingCharge){
+                    callback(err, account, productAry, taxPercent, shippingCharge);
+                });
+            },
             //validate
-            function (account, productAry, taxPercent, callback) {
+            function (account, productAry, taxPercent, shippingCharge, callback) {
                 log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
                 log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                 //calculate total amount and number line items
@@ -321,7 +327,14 @@ module.exports = {
                         discount += parseFloat(order.get('total_discount'));
                         log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
                     }
-                    //TODO: add coupon discount to discount
+                    order.set('cart_tax', taxAdded.toFixed(2));
+                    //If we need to tax shipping, we'll do so here
+                    if(order.get('shipping_address').state && !_.contains(orderConstants.statesThatDontTaxShipping, order.get('shipping_address').state)) {
+                        var shippingTax = shippingCharge * taxPercent;
+                        taxAdded += shippingTax;
+                        order.set('shipping_tax', shippingTax.toFixed(2));
+                    }
+
                     totalAmount = (subTotal - discount) + taxAdded;
 
 
@@ -870,16 +883,22 @@ module.exports = {
                 log.debug(accountId, userId, 'commerceSettings');
                 self._calculateTaxRate(accountId, userId, account, productAry, callback);
             },
+            //determine shipping charges
+            function(account, productAry, taxPercent, callback) {
+                self._calculateShippingCharges(accountId, userId, account, productAry, function(err, shippingCharge){
+                    callback(err, account, productAry, taxPercent, shippingCharge);
+                });
+            },
             // get the coupon
-            function (account, productAry, taxPercent, callback) {
+            function (account, productAry, taxPercent, shippingCharge, callback) {
                 if (_coupon && _coupon.id) {
                     stripeDao.getCoupon(_coupon.id, accessToken, function (err, coupon) {
-                        callback(err, account, productAry, taxPercent, coupon);
+                        callback(err, account, productAry, taxPercent, shippingCharge, coupon);
                     });
                 }
             },
             //validate
-            function (account, productAry, taxPercent, coupon, callback) {
+            function (account, productAry, taxPercent, shippingCharge, coupon, callback) {
                 log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
                 log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                 //calculate total amount and number line items
@@ -952,12 +971,22 @@ module.exports = {
                         discount = discount + coupon_discount
                     }
 
+
                     if (_subtotalTaxable > 0) {
                         taxAdded = (_subtotalTaxable - discount) * taxPercent;
                     }
 
-                    if (taxAdded < 0)
+                    if (taxAdded < 0) {
                         taxAdded = 0;
+                    }
+                    order.set('cart_tax', taxAdded.toFixed(2));
+                    //If we need to tax shipping, we'll do so here
+                    if(order.get('shipping_address').state && !_.contains(orderConstants.statesThatDontTaxShipping, order.get('shipping_address').state)) {
+                        var shippingTax = shippingCharge * taxPercent;
+                        taxAdded += shippingTax;
+                        order.set('shipping_tax', shippingTax.toFixed(2));
+                    }
+
                     log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
 
                     orderDiscount = discount || 0.00;
@@ -965,8 +994,7 @@ module.exports = {
                     if (orderDiscount > subTotal) {
                         orderDiscount = subTotal;
                         totalAmount = taxAdded;
-                    }
-                    else {
+                    } else {
                         totalAmount = (subTotal - discount) + taxAdded;
                     }
                     orderDiscount = orderDiscount.toFixed(2);
@@ -1509,8 +1537,14 @@ module.exports = {
                 log.debug(accountId, userId, 'commerceSettings');
                 self._calculateTaxRate(accountId, userId, account, productAry, callback);
             },
+            //determine shipping charges
+            function(account, productAry, taxPercent, callback) {
+                self._calculateShippingCharges(accountId, userId, account, productAry, function(err, shippingCharge){
+                    callback(err, account, productAry, taxPercent, shippingCharge);
+                });
+            },
             //validate
-            function validateOrder(account, productAry, taxPercent, callback) {
+            function validateOrder(account, productAry, taxPercent, shippingCharge, callback) {
                 log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
                 log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                 //calculate total amount and number line items
@@ -1553,6 +1587,13 @@ module.exports = {
                     subTotal += lineItemSubtotal;
                     totalLineItemsQuantity += parseFloat(item.quantity);
                 });
+                order.set('cart_tax', taxAdded.toFixed(2));
+                //If we need to tax shipping, we'll do so here
+                if(order.get('shipping_address').state && !_.contains(orderConstants.statesThatDontTaxShipping, order.get('shipping_address').state)) {
+                    var shippingTax = shippingCharge * taxPercent;
+                    taxAdded += shippingTax;
+                    order.set('shipping_tax', shippingTax.toFixed(2));
+                }
                 log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
                 /*
                  * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
@@ -2565,6 +2606,63 @@ module.exports = {
                 });
             }
         });
+    },
+
+    _calculateShippingCharges: function(accountId, userId, account, productAry, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, 'calculating shipping charges');
+
+        var _subTotal = 0;
+        var _subcartTaxable = 0;
+        var _overrides  = 0;
+        var _nonOverrides = 0;
+        var _totalShippingCharges = 0;
+        var shipping = {
+            chargeType: null,
+            charge: null
+        };
+        var commerceSettings = account.get('commerceSettings');
+
+        if(commerceSettings){
+            if(commerceSettings.shipping && commerceSettings.shipping.enabled){
+                shipping.chargeType = commerceSettings.shipping.chargeType;
+                shipping.charge = commerceSettings.shipping.charge || 0;
+            }
+        }
+
+        _.each(productAry, function(item){
+            var _quantity = item.get('quantity');
+            if(shipping.chargeType){
+                if(shipping.chargeType === 'item'){
+                    if(item.get('shipping_charges') && item.get('shipping_charges').item_override_charge){
+                        _overrides += _quantity * item.get('shipping_charges').item_override_charge;
+                    } else {
+                        _nonOverrides = _nonOverrides += _quantity * shipping.charge;
+                    }
+                } else if(shipping.chargeType === 'order' && item.get('shipping_charges') && item.get('shipping_charges').item_order_additive_charge){
+                    _overrides += _quantity * item.get('shipping_charges').item_order_additive_charge;
+                }
+            }
+        });
+
+        if(shipping.chargeType === 'order'){
+            _totalShippingCharges = _overrides + shipping.charge;
+        } else if(shipping.chargeType === 'item'){
+            _totalShippingCharges = _overrides + _nonOverrides;
+        }
+        return fn(null, _totalShippingCharges);
+    },
+
+    _checkOnSale: function(product) {
+        var startDate = product.get('sale_date_from', 'day');
+        var endDate = product.get('sale_date_to', 'day');
+        var rightNow = new Date();
+        if (startDate && endDate && moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     _calculateTaxRate: function(accountId, userId, account, productAry, fn) {
