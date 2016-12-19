@@ -29,6 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listOrders.bind(this));
         app.get(this.url('nocustomers'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersWithoutCustomers.bind(this));
         app.get(this.url('types'), this.isAuthAndSubscribedApi.bind(this), this.listOrderTypes.bind(this));
+        app.post(this.url('estimatedTax'), this.setup.bind(this), this.calculateEstimatedTax.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrder.bind(this));
         app.get(this.url('customer/:customerid'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersByCustomer.bind(this));
         app.post(this.url(''), this.setup.bind(this), this.createOrder.bind(this));
@@ -271,6 +272,19 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    calculateEstimatedTax: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = null;
+        self.log.debug(accountId, userId, '>> calculateEstimatedTax');
+
+        var tempOrder = new $$.m.Order(req.body);
+        orderManager.calculateEstimatedTax(accountId, userId, tempOrder, function(err, order){
+            self.log.debug(accountId, userId, '<< calculateEstimatedTax');
+            self.sendResultOrError(resp, err, order, 'Error calculating tax');
+        });
     },
 
     completeOrder: function(req, res) {

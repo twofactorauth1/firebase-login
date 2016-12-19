@@ -75,7 +75,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     styleString += " height:" + calcHeight + "px;";
                     return styleString;
                 }
-            }
+            };
 
 
             /*
@@ -152,7 +152,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     returnValue = clicked ? true : false;
                 }
                 return returnValue;
-            }
+            };
 
             /*
              * @getTax
@@ -160,6 +160,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.getTax = function(postcode, fn) {
+                //TODO: Tie in call to orderService.getEstimatedTax(order, fn);
                 ProductService.getTax(postcode, function(taxdata) {
                     if (taxdata.results[0] && taxdata.results[0].taxSales) {
                         CartDetailsService.showTax = true;
@@ -1075,7 +1076,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if(couponObj){
                         order.coupon = couponObj;
                     }
-
+                    
                     OrderService.createOrder(order, function(data) {
                         if (data && !data._id) {
                             var failedOrderMessage = 'Error in order processing';
@@ -1127,7 +1128,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 
                 initializeCouponDetails();   
                 //angular.element("#card_coupon").removeClass('has-error has-success');
-            }
+            };
 
             /*
              * @
@@ -1146,7 +1147,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         });
                     }, 0);
                 });
-            }
+            };
 
             /*
              * @pageChanged
@@ -1437,7 +1438,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                   scope.checkoutModalState = 1;
                   redirectAfterOrderOrClose(1);
                 }
-            }
+            };
 
             scope.cartValidItemCountFn = function () {
                 var isValid = true;
