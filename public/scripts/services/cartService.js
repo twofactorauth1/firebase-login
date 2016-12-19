@@ -129,7 +129,7 @@
                 _discount = _discount / 100;
             }
             else if(_discount && percent_off){
-                _discount = (_subTotal + _totalShippingCharges) * _discount / 100;
+                _discount = (_subTotal) * _discount / 100;
             }
 
             if (_subcartTaxable > 0) {
@@ -141,6 +141,7 @@
             if(cartService.isStateTaxable){
                 _shippingTax = _totalShippingCharges * parseFloat(cartService.taxPercent) / 100;
             }
+
             _totalTax = _cartTax + _shippingTax;
             cartService.subTotal = _subTotal;
             cartService.cartTax = _cartTax;
