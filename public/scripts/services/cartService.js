@@ -129,7 +129,7 @@
                 _discount = _discount / 100;
             }
             else if(_discount && percent_off){
-                _discount = _subTotal * _discount / 100;
+                _discount = (_subTotal + _totalShippingCharges) * _discount / 100;
             }
 
             if (_subcartTaxable > 0) {
@@ -175,7 +175,7 @@
                 else{
                     cartService.isStateTaxable = true;
                 }
-                calculateTotalCharges(_state, _discount, percent_off);
+                calculateTotalCharges(_discount, percent_off);
             }
             
         }
