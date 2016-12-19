@@ -134,7 +134,7 @@
                 <div class="col-sm-6">
                   <div class="form-group" ng-class="{'has-error': invalidZipCode || emptyZipCode}">
                     <label class="control-label" for="zipCode">Zip Code</label>
-                    <input type="text" placeholder="Zip Code" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip" ng-blur="shippingPostCodeChanged(newContact.details[0].addresses[0].zip); cookieUpdateContactFn()">
+                    <input type="text" placeholder="Zip Code" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip" ng-blur="shippingPostCodeChanged(newContact.details[0].addresses[0].zip, newContact.details[0].addresses[0].state); cookieUpdateContactFn()">
                     <span class="help-block" ng-if="emptyZipCode"></i>Required.</span>
                     <span class="help-block" ng-if="invalidZipCode"></i>Zip Code is not valid.</span>
                   </div>

@@ -236,7 +236,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.invalidZipCode = false;
-            scope.shippingPostCodeChanged = function(postcode) {
+            scope.shippingPostCodeChanged = function(postcode, state) {
                 console.log('isValidUSZip(postcode) ', isValidUSZip(postcode));
                 scope.emptyZipCode = false;
                 scope.invalidZipCode = false;
@@ -245,6 +245,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.emptyZipCode = true;
                     return;
                 }
+                if(state)
+                    CartDetailsService.checkIfStateTaxable(state, scope.cart_discount, scope.percent_off);
                 if (isValidUSZip(postcode)) {
                     if (postcode && scope.settings.taxes && scope.settings.taxbased !== 'business_location') {
                         scope.calculatingTax = true;
@@ -362,7 +364,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.checkBillingState(state);
                 scope.checkBillingCity(city);
                 scope.checkBillingPhone(phone);
-                scope.shippingPostCodeChanged(zip);
+                scope.shippingPostCodeChanged(zip, state);
 
                 if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
