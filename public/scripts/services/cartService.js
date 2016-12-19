@@ -105,7 +105,7 @@
 
                 if(shipping.chargeType){    
                     if(shipping.chargeType === 'item'){
-                        if(item.shipping && item.shipping_charges.item_override_charge){
+                        if(item.shipping_charges && item.shipping_charges.item_override_charge){
                             _overrides += item.quantity * item.shipping_charges.item_override_charge;
                         }
                         else{
