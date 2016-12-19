@@ -74,14 +74,13 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                 fn();
             };
 
-            scope.reloadMap = function () {
-                $timeout(function() {
-                    //google.maps.event.trigger(scope.map, 'resize');
-                    if(scope.map)
+            scope.reloadMap = function () {                
+                scope.$watch('map', function(map){
+                    if(map){
+                        google.maps.event.trigger(scope.map, 'resize');
                         scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));    
-
-                }, 500);
-                
+                    }
+                })                
             }
 
             scope.updateContactUsAddress = function () {
