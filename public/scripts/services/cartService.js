@@ -167,7 +167,7 @@
         }
 
         function checkIfStateTaxable(_state, _discount, percent_off){
-            if(_state){
+            if(_state && cartService.commerceSettings && cartService.commerceSettings.shipping && cartService.commerceSettings.shipping.enabled){
                 var stateExists = _.filter(nonShippingChargeStates, function(stateObj){ return stateObj.abbr.toLowerCase() === _state.toLowerCase() ||  stateObj.name.toLowerCase() === _state.toLowerCase(); });
                 if(stateExists && stateExists.length){
                     cartService.isStateTaxable = false;
