@@ -76,7 +76,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
 
             scope.reloadMap = function () {
                 $timeout(function() {
-                    google.maps.event.trigger(scope.map, 'resize');
+                    //google.maps.event.trigger(scope.map, 'resize');
                     scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));    
                 }, 500);
                 
