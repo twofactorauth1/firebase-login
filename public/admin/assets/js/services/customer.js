@@ -168,7 +168,7 @@
             var cache = this.getCache();
             $http.post(apiUrl, body).success(function(data){
                 if(cache)
-                    cache.put(id, data);
+                    cache.get(id).notes = data.notes;
                 fn(data);
             }).error(function(err){
                 fn(err);
