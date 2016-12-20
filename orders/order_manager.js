@@ -254,7 +254,7 @@ module.exports = {
             //determine tax rate
             function (account, productAry, callback) {
                 log.debug(accountId, userId, 'commerceSettings');
-                self._calculateTaxRate(accountId, userId, account, productAry, callback);
+                self._calculateTaxRate(accountId, userId, account, productAry, order, callback);
             },
             //determine shipping charges
             function(account, productAry, taxPercent, callback) {
@@ -881,7 +881,7 @@ module.exports = {
             //determine tax rate
             function (account, productAry, callback) {
                 log.debug(accountId, userId, 'commerceSettings');
-                self._calculateTaxRate(accountId, userId, account, productAry, callback);
+                self._calculateTaxRate(accountId, userId, account, productAry, order, callback);
             },
             //determine shipping charges
             function(account, productAry, taxPercent, callback) {
@@ -1535,7 +1535,7 @@ module.exports = {
             //determine tax rate
             function getTaxRate(account, productAry, callback) {
                 log.debug(accountId, userId, 'commerceSettings');
-                self._calculateTaxRate(accountId, userId, account, productAry, callback);
+                self._calculateTaxRate(accountId, userId, account, productAry, order, callback);
             },
             //determine shipping charges
             function(account, productAry, taxPercent, callback) {
@@ -2127,7 +2127,7 @@ module.exports = {
                     //determine tax rate
                     function (account, productAry, callback) {
                         log.debug(accountId, userId, 'commerceSettings');
-                        self._calculateTaxRate(accountId, userId, account, productAry, callback);
+                        self._calculateTaxRate(accountId, userId, account, productAry, order, callback);
                     },
                     //validate
                     function (account, productAry, taxPercent, callback) {
@@ -2527,7 +2527,7 @@ module.exports = {
                         }
                     });
                 }, function done(err) {
-                    self._calculateTaxRate(accountId, userId, account, productAry, function(err, account, productAry, taxPercent) {
+                    self._calculateTaxRate(accountId, userId, account, productAry, order, function(err, account, productAry, taxPercent) {
                         taxPercent = taxPercent || 0;
                         log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
                         log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
@@ -2665,7 +2665,7 @@ module.exports = {
         }
     },
 
-    _calculateTaxRate: function(accountId, userId, account, productAry, fn) {
+    _calculateTaxRate: function(accountId, userId, account, productAry, order, fn) {
         var self = this;
         log.debug(accountId, userId, 'calculateTaxRate');
         var _taxRate = 0;
