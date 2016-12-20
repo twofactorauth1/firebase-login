@@ -144,7 +144,8 @@
                         $scope.selectedCustomer = _.find($scope.customers, function (customer) {
                             return customer._id === $scope.order.customer_id;
                         });
-                        $scope.calculateTotals();
+                        // We should not recalculate total rather use server variables
+                        //$scope.calculateTotals();
                         $scope.compareAddress();
                     } else {
                         $scope.order = {

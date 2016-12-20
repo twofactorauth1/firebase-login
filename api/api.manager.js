@@ -58,6 +58,7 @@ var cms2Api = require('./2.0/cms.api');
 var dashboard2Api = require('./2.0/dashboard.api');
 var componentdata2Api = require('./2.0/componentdata.api');
 var customers2Api = require('./2.0/customers.api');
+var insights2Api = require('./2.0/insights.api');
 
 module.exports = {
 

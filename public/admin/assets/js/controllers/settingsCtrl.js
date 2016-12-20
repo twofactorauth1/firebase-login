@@ -432,6 +432,17 @@
             });
         }
 
+    };
+
+    $scope.setDefaultShipping = function(shipping){
+      if(shipping){
+        if(!shipping.chargeType){
+          shipping.chargeType = "order";
+        }
+        if(!shipping.charge){
+          shipping.charge = "0.00";
+        }
+      }
     }
 
   }]);

@@ -25,7 +25,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             //assign and hold the currentProductPage for pagination
             scope.currentProductPage = 1;
 
-            
+
 
             // initializations
             scope.showTax = false;
@@ -34,8 +34,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
             console.log('url:', scope.paypalURL);
             scope.taxPercent = 0;
-            initializeCouponDetails();    
-            
+            initializeCouponDetails();
+
 
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
 
@@ -55,6 +55,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.cartDetails = CartDetailsService.items;
                 scope.hasSubscriptionProduct = CartDetailsService.hasSubscriptionProduct;
                 scope.totalDiscount = CartDetailsService.totalDiscount;
+                scope.totalShipping = CartDetailsService.totalShipping;
+                scope.shippingTax = CartDetailsService.shippingTax;
+                scope.cartTax = CartDetailsService.cartTax;
                 if(scope.cartDetails && scope.cartDetails.length)
                     CartDetailsService.calculateTotalCharges(scope.cart_discount, scope.percent_off);
 
@@ -72,7 +75,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     styleString += " height:" + calcHeight + "px;";
                     return styleString;
                 }
-            }
+            };
 
 
             /*
@@ -149,7 +152,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     returnValue = clicked ? true : false;
                 }
                 return returnValue;
-            }
+            };
 
             /*
              * @getTax
@@ -157,25 +160,141 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.getTax = function(postcode, fn) {
-                ProductService.getTax(postcode, function(taxdata) {
-                    if (taxdata.results[0] && taxdata.results[0].taxSales) {
+
+                var order = getOrderStructure();
+                OrderService.getEstimatedTax(order, function(data){
+                    if(data && data.tax_rate > 0){
                         CartDetailsService.showTax = true;
-                        if ((scope.settings.taxbased === 'business_location') || (!scope.settings.taxnexus) || (scope.settings.taxnexus && scope.settings.taxnexus.length == 0) || (scope.settings.taxnexus && _.pluck(scope.settings.taxnexus, 'text').indexOf(taxdata.results[0].geoState) > -1)) {
-                            console.debug('Nexus location - taxable: ', taxdata.results[0].geoState);
-                            CartDetailsService.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(2);
-                        } else {
-                            console.debug('Non Nexus location - not taxable: ', taxdata.results[0].geoState);
-                            CartDetailsService.taxPercent = 0.00; // Show 0% for non-nexus locations - force think/rethink by client
-                        }
+                        CartDetailsService.taxPercent = parseFloat(data.tax_rate * 100).toFixed(2);
                         if (fn) {
                             fn(CartDetailsService.taxPercent);
                         }
-                    } else {
-                        scope.invalidZipCode = true;
+                    }
+                    else {
                         CartDetailsService.showTax = false;
                     }
                 });
             };
+
+
+            function getOrderStructure(){
+                var phone_number = '';
+                var email = '';
+                if(scope.newContact.details){
+                    if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                        phone_number = scope.newContact.details[0].phones[0].number;
+                    }
+                    if (scope.newContact.details[0].emails && scope.newContact.details[0].emails[0] && scope.newContact.details[0].emails[0].email) {
+                        email = scope.newContact.details[0].emails[0].email;
+                    }
+
+                    var _formattedDetails = [{
+                        _id: Math.uuid(10),
+                        emails: [{
+                            _id: Math.uuid(10),
+                            email: email
+                        }],
+                        phones: [],
+                        addresses: [{
+                            _id: Math.uuid(10),
+                            address: scope.newContact.details[0].addresses[0].address,
+                            address2: scope.newContact.details[0].addresses[0].address2,
+                            state: scope.newContact.details[0].addresses[0].state,
+                            zip: scope.newContact.details[0].addresses[0].zip,
+                            country: 'US',
+                            defaultShipping: false,
+                            defaultBilling: false,
+                            city: scope.newContact.details[0].addresses[0].city,
+                            countryCode: '',
+                            displayName: ''
+                        }]
+                    }];
+                    if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                        _formattedDetails[0].phones.push({
+                            _id: Math.uuid(10),
+                            number: scope.newContact.details[0].phones[0].number
+                        });
+                    }
+                    console.log('scope.newContact ', scope.newContact);
+                    scope.newContact.details = _formattedDetails;
+                    console.log('scope.newContact ', scope.newContact);
+                }
+
+
+                var customer = scope.newContact;
+                console.log('customer, ', customer);
+                var order = {
+                    //'customer_id': customer._id,
+                    'customer': customer,
+                    'session_id': null,
+                    'status': 'paid',
+                    'cart_discount': 0,
+                    'total_discount': 0,
+                    'total_shipping': formatNum(scope.totalShipping),
+                    'total_tax': formatNum(scope.totalTax),
+                    'shipping_tax': formatNum(scope.shippingTax),
+                    'cart_tax': scope.cartTax || 0,
+                    'currency': 'usd',
+                    'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
+                    'total_line_items_quantity': CartDetailsService.items.length,
+                    'payment_details': {
+                        'method_title': 'Credit Card Payment', //Check Payment, Credit Card Payment
+                        'method_id': 'cc', //check, cc
+                        'card_token': null, //Stripe card token if applicable
+                        'charge_description': null, //description of charge if applicable
+                        'statement_description': null, //22char string for cc statement if applicable
+                        'paid': true
+                    },
+                    'shipping_methods': '', // 'Free Shipping',
+                    'shipping_address': {
+                        'first_name': customer.first,
+                        'last_name': customer.last,
+                        'phone': phone_number,
+                        'city': customer.details ? customer.details[0].addresses[0].city : '',
+                        'country': 'US',
+                        'address_1': customer.details ? customer.details[0].addresses[0].address: '',
+                        'company': '',
+                        'postcode': customer.details ? customer.details[0].addresses[0].zip : '',
+                        'email': customer.details ? customer.details[0].emails[0].email : '',
+                        'address_2': customer.details ? customer.details[0].addresses[0].address2 : '',
+                        'state': customer.details ? customer.details[0].addresses[0].state : ''
+                    },
+                    'billing_address': {
+                        'first_name': customer.first,
+                        'last_name': customer.last,
+                        'phone': phone_number,
+                        'city': customer.details ? customer.details[0].addresses[0].city : '',
+                        'country': 'US',
+                        'address_1': customer.details ? customer.details[0].addresses[0].address : '',
+                        'company': '',
+                        'postcode': customer.details ? customer.details[0].addresses[0].zip : '',
+                        'email': customer.details ? customer.details[0].emails[0].email : '',
+                        'address_2': customer.details ? customer.details[0].addresses[0].address2 : '',
+                        'state': customer.details ? customer.details[0].addresses[0].state : ''
+                    },
+                    'notes': []
+                };
+                _.each(CartDetailsService.items, function(item) {
+                    var totalAmount = item.regular_price * item.quantity;
+                    var _item = {
+                        'product_id': item._id,
+                        'quantity': item.quantity,
+                        'regular_price': formatNum(item.regular_price),
+                        'sale_price': item.on_sale ? formatNum(item.sale_price) : null,
+                        'on_sale': item.onSaleToday || false,
+                        'taxable': item.taxable || false,
+                        'variation_id': '',
+                        'tax_class': null,
+                        'sku': '',
+                        'total': formatNum(totalAmount),
+                        'name': item.name,
+                        'total_tax': '0.00',
+                        'type': item.type
+                    };
+                    order.line_items.push(_item);
+                });
+                return order;
+            }
 
             /*
              * @getUserPreferences
@@ -200,6 +319,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     console.log('Stripe?', scope.stripeInfo);
                     console.log('commerceSettings ', account.commerceSettings);
                     scope.settings = account.commerceSettings;
+                    CartDetailsService.commerceSettings = account.commerceSettings;
                     if (scope.settings) {
                         scope.paypalInfo = scope.settings.paypal;
                         if (scope.settings.taxes && scope.settings.taxbased === 'business_location') {
@@ -232,7 +352,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.invalidZipCode = false;
-            scope.shippingPostCodeChanged = function(postcode) {
+            scope.shippingPostCodeChanged = function(postcode, state) {
                 console.log('isValidUSZip(postcode) ', isValidUSZip(postcode));
                 scope.emptyZipCode = false;
                 scope.invalidZipCode = false;
@@ -241,6 +361,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.emptyZipCode = true;
                     return;
                 }
+                if(state)
+                    CartDetailsService.checkIfStateTaxable(state, scope.cart_discount, scope.percent_off);
                 if (isValidUSZip(postcode)) {
                     if (postcode && scope.settings.taxes && scope.settings.taxbased !== 'business_location') {
                         scope.calculatingTax = true;
@@ -304,8 +426,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.checkBillingState = function(state) {
                 if (!state) {
                     scope.emptyState = true;
+                    CartDetailsService.isStateTaxable = false;
                 } else {
                     scope.emptyState = false;
+                    CartDetailsService.checkIfStateTaxable(state, scope.cart_discount, scope.percent_off);
                 }
             };
 
@@ -324,6 +448,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.invalidPhone = !formValidations.phone.test(phone);
                 }
             };
+
 
             scope.validateAddressDetails = function(details, email, phone) {
                 scope.emptyFirstName = false;
@@ -355,7 +480,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.checkBillingState(state);
                 scope.checkBillingCity(city);
                 scope.checkBillingPhone(phone);
-                scope.shippingPostCodeChanged(zip);
+                scope.shippingPostCodeChanged(zip, state);
 
                 if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
@@ -520,7 +645,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (match) {
                         match.quantity = parseInt(match.quantity, 10) + 1;
                     } else {
-                        CartDetailsService.addItemToCart(productMatch);
+                        CartDetailsService.addItemToCart(productMatch, scope.cart_discount, scope.percent_off);
                     }
                 }
 
@@ -548,7 +673,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (match) {
                         match.quantity = parseInt(match.quantity, 10) + quantity;
                     } else {
-                        CartDetailsService.addItemToCart(productMatch);
+                        CartDetailsService.addItemToCart(productMatch, scope.cart_discount, scope.percent_off);
                     }
 
                 }
@@ -698,10 +823,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     'status': 'paid',
                     'cart_discount': 0,
                     'total_discount': 0,
-                    'total_shipping': 0,
+                    'total_shipping': formatNum(scope.totalShipping),
                     'total_tax': formatNum(scope.totalTax),
-                    'shipping_tax': 0,
-                    'cart_tax': 0,
+                    'shipping_tax': formatNum(scope.shippingTax),
+                    'cart_tax': scope.cartTax || 0,
                     'currency': 'usd',
                     'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
                     'total_line_items_quantity': CartDetailsService.items.length,
@@ -867,7 +992,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             scope.couponIsValid = true;
                             scope.coupon = data;
                             scope.showDiscount = true;
-                            
+
                             //calculateDiscount(data);
                             validateAndCreateOrder(cardInput, data);
                         } else {
@@ -882,7 +1007,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     });
                 }
                 else{
-                   scope.coupon = undefined; 
+                   scope.coupon = undefined;
                    scope.showDiscount = false;
                    validateAndCreateOrder(cardInput);
                 }
@@ -892,13 +1017,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
             function calculateDiscount(){
-                console.log("calculating discount");                
+                console.log("calculating discount");
                 if(scope.coupon){
                     if(scope.coupon.amount_off){
                         scope.cart_discount = scope.coupon.amount_off;
                         scope.percent_off = false;
                     }
-                    else if(scope.coupon.percent_off){                        
+                    else if(scope.coupon.percent_off){
                         scope.cart_discount = scope.coupon.percent_off;
                         scope.percent_off = true;
                     }
@@ -956,113 +1081,113 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                     scope.initializeModalEvents();
                     var phone_number = '';
-                    if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
-                        phone_number = scope.newContact.details[0].phones[0].number;
-                    }
-                    var _formattedDetails = [{
-                        _id: Math.uuid(10),
-                        emails: [{
-                            _id: Math.uuid(10),
-                            email: scope.newContact.details[0].emails[0].email
-                        }],
-                        phones: [],
-                        addresses: [{
-                            _id: Math.uuid(10),
-                            address: scope.newContact.details[0].addresses[0].address,
-                            address2: scope.newContact.details[0].addresses[0].address2,
-                            state: scope.newContact.details[0].addresses[0].state,
-                            zip: scope.newContact.details[0].addresses[0].zip,
-                            country: 'US',
-                            defaultShipping: false,
-                            defaultBilling: false,
-                            city: scope.newContact.details[0].addresses[0].city,
-                            countryCode: '',
-                            displayName: ''
-                        }]
-                    }];
-                    if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
-                        _formattedDetails[0].phones.push({
-                            _id: Math.uuid(10),
-                            number: scope.newContact.details[0].phones[0].number
-                        });
-                    }
-                    console.log('scope.newContact ', scope.newContact);
-                    scope.newContact.details = _formattedDetails;
-                    console.log('scope.newContact ', scope.newContact);
+                     if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                         phone_number = scope.newContact.details[0].phones[0].number;
+                     }
+                     var _formattedDetails = [{
+                         _id: Math.uuid(10),
+                         emails: [{
+                             _id: Math.uuid(10),
+                             email: scope.newContact.details[0].emails[0].email
+                         }],
+                         phones: [],
+                         addresses: [{
+                             _id: Math.uuid(10),
+                             address: scope.newContact.details[0].addresses[0].address,
+                             address2: scope.newContact.details[0].addresses[0].address2,
+                             state: scope.newContact.details[0].addresses[0].state,
+                             zip: scope.newContact.details[0].addresses[0].zip,
+                             country: 'US',
+                             defaultShipping: false,
+                             defaultBilling: false,
+                             city: scope.newContact.details[0].addresses[0].city,
+                             countryCode: '',
+                             displayName: ''
+                         }]
+                     }];
+                     if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                         _formattedDetails[0].phones.push({
+                             _id: Math.uuid(10),
+                             number: scope.newContact.details[0].phones[0].number
+                         });
+                     }
+                     console.log('scope.newContact ', scope.newContact);
+                     scope.newContact.details = _formattedDetails;
+                     console.log('scope.newContact ', scope.newContact);
 
-                    var customer = scope.newContact;
-                    console.log('customer, ', customer);
+                     var customer = scope.newContact;
+                     console.log('customer, ', customer);
 
-                    //UserService.postContact(scope.newContact, function (customer) {
-                    var order = {
-                        //'customer_id': customer._id,
-                        'customer': customer,
-                        'session_id': null,
-                        'status': 'paid',
-                        'cart_discount': 0,
-                        'total_discount': 0,
-                        'total_shipping': 0,
-                        'total_tax': formatNum(CartDetailsService.totalTax),
-                        'shipping_tax': 0,
-                        'cart_tax': 0,
-                        'currency': 'usd',
-                        'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
-                        'total_line_items_quantity': CartDetailsService.items.length,
-                        'payment_details': {
-                            'method_title': 'Credit Card Payment', //Check Payment, Credit Card Payment
-                            'method_id': 'cc', //check, cc
-                            'card_token': token, //Stripe card token if applicable
-                            'charge_description': null, //description of charge if applicable
-                            'statement_description': null, //22char string for cc statement if applicable
-                            'paid': true
-                        },
-                        'shipping_methods': '', // 'Free Shipping',
-                        'shipping_address': {
-                            'first_name': customer.first,
-                            'last_name': customer.last,
-                            'phone': phone_number,
-                            'city': customer.details[0].addresses[0].city,
-                            'country': 'US',
-                            'address_1': customer.details[0].addresses[0].address,
-                            'company': '',
-                            'postcode': customer.details[0].addresses[0].zip,
-                            'email': customer.details[0].emails[0].email,
-                            'address_2': customer.details[0].addresses[0].address2,
+                     //UserService.postContact(scope.newContact, function (customer) {
+                     var order = {
+                         //'customer_id': customer._id,
+                         'customer': customer,
+                         'session_id': null,
+                         'status': 'paid',
+                         'cart_discount': 0,
+                         'total_discount': 0,
+                         'total_shipping': formatNum(scope.totalShipping),
+                         'total_tax': formatNum(CartDetailsService.totalTax),
+                         'shipping_tax': formatNum(scope.shippingTax),
+                         'cart_tax': scope.cartTax || 0,
+                         'currency': 'usd',
+                         'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
+                         'total_line_items_quantity': CartDetailsService.items.length,
+                         'payment_details': {
+                             'method_title': 'Credit Card Payment', //Check Payment, Credit Card Payment
+                             'method_id': 'cc', //check, cc
+                             'card_token': token, //Stripe card token if applicable
+                             'charge_description': null, //description of charge if applicable
+                             'statement_description': null, //22char string for cc statement if applicable
+                             'paid': true
+                         },
+                         'shipping_methods': '', // 'Free Shipping',
+                         'shipping_address': {
+                             'first_name': customer.first,
+                             'last_name': customer.last,
+                             'phone': phone_number,
+                             'city': customer.details[0].addresses[0].city,
+                             'country': 'US',
+                             'address_1': customer.details[0].addresses[0].address,
+                             'company': '',
+                             'postcode': customer.details[0].addresses[0].zip,
+                             'email': customer.details[0].emails[0].email,
+                             'address_2': customer.details[0].addresses[0].address2,
                             'state': customer.details[0].addresses[0].state
-                        },
-                        'billing_address': {
-                            'first_name': customer.first,
-                            'last_name': customer.last,
-                            'phone': phone_number,
-                            'city': customer.details[0].addresses[0].city,
-                            'country': 'US',
-                            'address_1': customer.details[0].addresses[0].address,
-                            'company': '',
-                            'postcode': customer.details[0].addresses[0].zip,
-                            'email': customer.details[0].emails[0].email,
-                            'address_2': customer.details[0].addresses[0].address2,
-                            'state': customer.details[0].addresses[0].state
-                        },
-                        'notes': []
-                    };
-                    _.each(CartDetailsService.items, function(item) {
-                        var totalAmount = item.regular_price * item.quantity;
-                        var _item = {
-                            'product_id': item._id,
-                            'quantity': item.quantity,
-                            'regular_price': formatNum(item.regular_price),
-                            'sale_price': item.on_sale ? formatNum(item.sale_price) : null,
-                            'on_sale': item.onSaleToday || false,
-                            'taxable': item.taxable || false,
-                            'variation_id': '',
-                            'tax_class': null,
-                            'sku': '',
-                            'total': formatNum(totalAmount),
-                            'name': item.name,
-                            'total_tax': '0.00'
-                        };
-                        order.line_items.push(_item);
-                    });
+                         },
+                         'billing_address': {
+                             'first_name': customer.first,
+                             'last_name': customer.last,
+                             'phone': phone_number,
+                             'city': customer.details[0].addresses[0].city,
+                             'country': 'US',
+                             'address_1': customer.details[0].addresses[0].address,
+                             'company': '',
+                             'postcode': customer.details[0].addresses[0].zip,
+                             'email': customer.details[0].emails[0].email,
+                             'address_2': customer.details[0].addresses[0].address2,
+                             'state': customer.details[0].addresses[0].state
+                         },
+                         'notes': []
+                     };
+                     _.each(CartDetailsService.items, function(item) {
+                         var totalAmount = item.regular_price * item.quantity;
+                         var _item = {
+                             'product_id': item._id,
+                             'quantity': item.quantity,
+                             'regular_price': formatNum(item.regular_price),
+                             'sale_price': item.on_sale ? formatNum(item.sale_price) : null,
+                             'on_sale': item.onSaleToday || false,
+                             'taxable': item.taxable || false,
+                             'variation_id': '',
+                             'tax_class': null,
+                             'sku': '',
+                             'total': formatNum(totalAmount),
+                             'name': item.name,
+                             'total_tax': '0.00'
+                         };
+                         order.line_items.push(_item);
+                     });
                     if(couponObj){
                         order.coupon = couponObj;
                     }
@@ -1115,10 +1240,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $(element).find('.jp-card-name').text('Full Name');
                 $(element).find('.jp-card-expiry').text('••/••');
                 $(element).find('.jp-card').removeClass('jp-card-identified');
-                
-                initializeCouponDetails();   
+
+                initializeCouponDetails();
                 //angular.element("#card_coupon").removeClass('has-error has-success');
-            }
+            };
 
             /*
              * @
@@ -1132,12 +1257,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             if (scope.checkoutModalState === 5) {
                                 scope.checkoutModalState = 1;
                                 scope.newContact = {};
-                                clearCardDetails();                                
+                                clearCardDetails();
                             }
                         });
                     }, 0);
                 });
-            }
+            };
 
             /*
              * @pageChanged
@@ -1428,7 +1553,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                   scope.checkoutModalState = 1;
                   redirectAfterOrderOrClose(1);
                 }
-            }
+            };
 
             scope.cartValidItemCountFn = function () {
                 var isValid = true;
@@ -1461,7 +1586,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
             function initializeCouponDetails(){
-                scope.cart_discount = 0; 
+                scope.cart_discount = 0;
                 scope.showDiscount = undefined;
                 scope.percent_off = false;
                 scope.coupon = undefined;
@@ -1501,8 +1626,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $scope.checkoutModalState = state;
                 angular.element("#cart-checkout-modal .modal-body").scrollTop(0);
             };
-
-
         }
     };
 }]);

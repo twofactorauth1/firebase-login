@@ -52,6 +52,17 @@
         <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, vm.uiState.activeComponentIndex)" class="img-thumbnail">
     </div>
 
+    <div class="form-group" ng-if="component.type === 'footer'">
+        <label for="bg_hide" class="margin-bottom-0">
+            Reverse
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="reverse the footer means logo at left and text at right.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <switch ng-model="component.reverse" class="pull-right"></switch>
+    </div>
+
+
     <!-- <div class="form-group" ng-show="component.bg.img.show">
         <div>
             <label for="bg_position">

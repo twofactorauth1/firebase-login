@@ -15,6 +15,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.sectionBGClass = sectionBGClass;
     vm.sectionStyle = sectionStyle;
     vm.sectionBGStyle = sectionBGStyle;
+    vm.sectionBackgroundUrl = sectionBackgroundUrl;
     vm.componentClass = componentClass;
     vm.componentStyle = componentStyle;
     vm.sectionHasFooter = sectionHasFooter;
@@ -253,6 +254,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
         }
 
+        return styleString;
+    }
+
+    function sectionBackgroundUrl(section) {
+        var styleString = ' ';
+        if (section && section.bg && section.bg.img && section.bg.img.url) {
+            styleString = "background: url("+section.bg.img.url+") repeat-y";
+        }
         return styleString;
     }
 

@@ -487,7 +487,7 @@
                                     <div class="panel-body">
                                         <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{order.subtotal | currency}}</span></p>
                                         <p><span class="text-bold">Discount ({{calculatedDiscountPercent | number:0}}%):</span> <span class="pull-right">{{order.total_discount| currency}}</span></p>
-                                        <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping}}</span></p>
+                                        <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping | currency}}</span></p>
                                         <p ng-if="order.total_tax"><span class="text-bold">Tax ({{order.tax_rate * 100| number :2}}%):</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
                                         <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
                                         <p class="text-danger" ng-if="order.status == 'refunded'">
@@ -519,7 +519,7 @@
                                     </div>
                                     <div class="col-xs-10">
                                         <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
-                                        <span>{{note.note}}</span>
+                                        <span class="user-notes" ng-bind-html="note.note"></span>
                                     </div>
                                     <div class="clearfix"></div>
                                 </li>

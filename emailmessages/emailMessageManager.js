@@ -799,7 +799,7 @@ var emailMessageManager = {
                         "content": [
                             {
                                 "type": "text/html",
-                                "value": htmlContent
+                                "value": html
                             }
                         ],
                         "from": {

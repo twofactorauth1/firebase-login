@@ -621,7 +621,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 console.log('req.body ', req.body);
 
                 if (!contact_type || !contact_type.length) {
-                    
+
                     tagSet.push('ld');
                 } else {
                     tagSet = tagSet.concat(contact_type);
@@ -691,9 +691,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     contact.set('accountId', value.id());
                     self.log.debug('contact_type ', contact_type);
                     if (!contact_type || !contact_type.length) {
-                        contact.set('type', 'ld');                       
+                        contact.set('type', 'ld');
                     } else {
-                        contact.set('type', 'ld');                        
+                        contact.set('type', 'ld');
                     }
                     contact.set('tags', _.uniq(tagSet));
                     if(contact.get('fingerprint')) {
@@ -940,7 +940,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getReadActivityByContactId: function(req, resp) {
         var self = this;
-        self.log.debug('>> getActivityByContactId');
+        self.log.debug('>> getReadActivityByContactId');
 
         var contactId = req.params.id;
         var accountId = parseInt(self.accountId(req));
@@ -963,7 +963,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
                 contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, 'true', function(err, value){
-                    self.log.debug('<< getActivityByContactId');
+                    self.log.debug('<< getReadActivityByContactId');
                     self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
                     self = null;
                 });
@@ -973,7 +973,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     getUnreadActivityByContactId: function(req, resp) {
         var self = this;
-        self.log.debug('>> getActivityByContactId');
+        self.log.debug('>> getUnreadActivityByContactId');
 
         var contactId = req.params.id;
         var accountId = parseInt(self.accountId(req));
@@ -996,7 +996,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
                 contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, 'false', function(err, value){
-                    self.log.debug('<< getActivityByContactId');
+                    self.log.debug('<< getUnreadActivityByContactId');
                     self.sendResultOrError(resp, err, value, "Error getting activity by contactId.");
                     self = null;
                 });
@@ -1257,7 +1257,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return x;
               }
             });
-            if(tags && tags.length){                
+            if(tags && tags.length){
                 text.push("<b>tags</b>: "+tags.join(", "));
             }
         }

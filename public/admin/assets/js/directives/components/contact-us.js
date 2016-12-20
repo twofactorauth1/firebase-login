@@ -74,9 +74,13 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                 fn();
             };
 
-            scope.reloadMap = function () {
-                google.maps.event.trigger(scope.map, 'resize');
-                scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
+            scope.reloadMap = function () {                
+                scope.$watch('map', function(map){
+                    if(map){
+                        google.maps.event.trigger(scope.map, 'resize');
+                        scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));    
+                    }
+                })                
             }
 
             scope.updateContactUsAddress = function () {
@@ -107,9 +111,11 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                 }, 500);
             };
             scope.$on('mapInitialized', function (event, map) {
-                scope.map = map;
-                google.maps.event.trigger(scope.map, 'resize');
-                scope.map.setCenter(new google.maps.LatLng(51, 0));
+                $timeout(function() {
+                    scope.map = map;
+                    google.maps.event.trigger(scope.map, 'resize');
+                    scope.map.setCenter(new google.maps.LatLng(51, 0));
+                }, 500)
             });
 
             // if (!scope.control) {
