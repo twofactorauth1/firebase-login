@@ -258,7 +258,7 @@ module.exports = {
             },
             //determine shipping charges
             function(account, productAry, taxPercent, callback) {
-                self._calculateShippingCharges(accountId, userId, account, order.get('line_items'), function(err, shippingCharge){
+                self._calculateShippingCharges(accountId, userId, account, productAry, function(err, shippingCharge){
                     callback(err, account, productAry, taxPercent, shippingCharge);
                 });
             },
@@ -1539,7 +1539,7 @@ module.exports = {
             },
             //determine shipping charges
             function(account, productAry, taxPercent, callback) {
-                self._calculateShippingCharges(accountId, userId, account, order.get('line_items'), function(err, shippingCharge){
+                self._calculateShippingCharges(accountId, userId, account, productAry, function(err, shippingCharge){
                     callback(err, account, productAry, taxPercent, shippingCharge);
                 });
             },
@@ -2632,16 +2632,16 @@ module.exports = {
         }
 
         _.each(productAry, function(item){
-            var _quantity = item.quantity;
+            var _quantity = item.get('quantity');
             if(shipping.chargeType){
                 if(shipping.chargeType === 'item'){
-                    if(item.shipping_charges && item.shipping_charges.item_override_charge){
-                        _overrides += _quantity * item.shipping_charges.item_override_charge;
+                    if(item.get('shipping_charges') && item.get('shipping_charges').item_override_charge){
+                        _overrides += _quantity * item.get('shipping_charges').item_override_charge;
                     } else {
                         _nonOverrides = _nonOverrides += _quantity * shipping.charge;
                     }
-                } else if(shipping.chargeType === 'order' && item.shipping_charges && item.shipping_charges.item_order_additive_charge){
-                    _overrides += _quantity * item.shipping_charges.item_order_additive_charge;
+                } else if(shipping.chargeType === 'order' && item.get('shipping_charges') && item.get('shipping_charges').item_order_additive_charge){
+                    _overrides += _quantity * item.get('shipping_charges').item_order_additive_charge;
                 }
             }
         });
