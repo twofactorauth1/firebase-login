@@ -238,6 +238,7 @@ module.exports = {
                             cb(err);
                         } else {
                             if (product) {
+                                product.set("quantity", item.quantity);
                                 productAry.push(product);
                                 item.sku = product.get('sku');
                                 item.name = product.get('name');
@@ -865,6 +866,7 @@ module.exports = {
                             cb(err);
                         } else {
                             if (product) {
+                                product.set("quantity", item.quantity);
                                 productAry.push(product);
                                 item.sku = product.get('sku');
                                 item.name = product.get('name');
