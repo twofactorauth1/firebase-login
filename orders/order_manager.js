@@ -335,7 +335,7 @@ module.exports = {
                         order.set('shipping_tax', shippingTax.toFixed(2));
                     }
 
-                    totalAmount = (subTotal - discount) + taxAdded;
+                    totalAmount = (subTotal - discount) + shippingCharge + taxAdded;
 
 
                     order.set('tax_rate', taxPercent);
@@ -1599,7 +1599,7 @@ module.exports = {
                  * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
                  * side to avoid shenanigans.
                  */
-                totalAmount = subTotal + taxAdded;
+                totalAmount = subTotal + taxAdded + shippingCharge;
 
 
                 order.set('tax_rate', taxPercent);
