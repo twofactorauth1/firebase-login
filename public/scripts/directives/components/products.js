@@ -181,42 +181,46 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             function getOrderStructure(){
                 var phone_number = '';
                 var email = '';
-                if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
-                    phone_number = scope.newContact.details[0].phones[0].number;
-                }
-                if (scope.newContact.details[0].emails && scope.newContact.details[0].emails[0] && scope.newContact.details[0].emails[0].email) {
-                    email = scope.newContact.details[0].emails[0].email;
-                }
-                var _formattedDetails = [{
-                    _id: Math.uuid(10),
-                    emails: [{
+                if(scope.newContact.details){
+                    if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                        phone_number = scope.newContact.details[0].phones[0].number;
+                    }
+                    if (scope.newContact.details[0].emails && scope.newContact.details[0].emails[0] && scope.newContact.details[0].emails[0].email) {
+                        email = scope.newContact.details[0].emails[0].email;
+                    }
+
+                    var _formattedDetails = [{
                         _id: Math.uuid(10),
-                        email: email
-                    }],
-                    phones: [],
-                    addresses: [{
-                        _id: Math.uuid(10),
-                        address: scope.newContact.details[0].addresses[0].address,
-                        address2: scope.newContact.details[0].addresses[0].address2,
-                        state: scope.newContact.details[0].addresses[0].state,
-                        zip: scope.newContact.details[0].addresses[0].zip,
-                        country: 'US',
-                        defaultShipping: false,
-                        defaultBilling: false,
-                        city: scope.newContact.details[0].addresses[0].city,
-                        countryCode: '',
-                        displayName: ''
-                    }]
-                }];
-                if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
-                    _formattedDetails[0].phones.push({
-                        _id: Math.uuid(10),
-                        number: scope.newContact.details[0].phones[0].number
-                    });
+                        emails: [{
+                            _id: Math.uuid(10),
+                            email: email
+                        }],
+                        phones: [],
+                        addresses: [{
+                            _id: Math.uuid(10),
+                            address: scope.newContact.details[0].addresses[0].address,
+                            address2: scope.newContact.details[0].addresses[0].address2,
+                            state: scope.newContact.details[0].addresses[0].state,
+                            zip: scope.newContact.details[0].addresses[0].zip,
+                            country: 'US',
+                            defaultShipping: false,
+                            defaultBilling: false,
+                            city: scope.newContact.details[0].addresses[0].city,
+                            countryCode: '',
+                            displayName: ''
+                        }]
+                    }];
+                    if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                        _formattedDetails[0].phones.push({
+                            _id: Math.uuid(10),
+                            number: scope.newContact.details[0].phones[0].number
+                        });
+                    }
+                    console.log('scope.newContact ', scope.newContact);
+                    scope.newContact.details = _formattedDetails;
+                    console.log('scope.newContact ', scope.newContact);
                 }
-                console.log('scope.newContact ', scope.newContact);
-                scope.newContact.details = _formattedDetails;
-                console.log('scope.newContact ', scope.newContact);
+                
 
                 var customer = scope.newContact;
                 console.log('customer, ', customer);
@@ -247,27 +251,27 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         'first_name': customer.first,
                         'last_name': customer.last,
                         'phone': phone_number,
-                        'city': customer.details[0].addresses[0].city,
+                        'city': customer.details ? customer.details[0].addresses[0].city : '',
                         'country': 'US',
-                        'address_1': customer.details[0].addresses[0].address,
+                        'address_1': customer.details ? customer.details[0].addresses[0].address: '',
                         'company': '',
-                        'postcode': customer.details[0].addresses[0].zip,
-                        'email': customer.details[0].emails[0].email,
-                        'address_2': customer.details[0].addresses[0].address2,
-                        'state': customer.details[0].addresses[0].state
+                        'postcode': customer.details ? customer.details[0].addresses[0].zip : '',
+                        'email': customer.details ? customer.details[0].emails[0].email : '',
+                        'address_2': customer.details ? customer.details[0].addresses[0].address2 : '',
+                        'state': customer.details ? customer.details[0].addresses[0].state : ''
                     },
                     'billing_address': {
                         'first_name': customer.first,
                         'last_name': customer.last,
                         'phone': phone_number,
-                        'city': customer.details[0].addresses[0].city,
+                        'city': customer.details ? customer.details[0].addresses[0].city : '',
                         'country': 'US',
-                        'address_1': customer.details[0].addresses[0].address,
+                        'address_1': customer.details ? customer.details[0].addresses[0].address : '',
                         'company': '',
-                        'postcode': customer.details[0].addresses[0].zip,
-                        'email': customer.details[0].emails[0].email,
-                        'address_2': customer.details[0].addresses[0].address2,
-                        'state': customer.details[0].addresses[0].state
+                        'postcode': customer.details ? customer.details[0].addresses[0].zip : '',
+                        'email': customer.details ? customer.details[0].emails[0].email : '',
+                        'address_2': customer.details ? customer.details[0].addresses[0].address2 : '',
+                        'state': customer.details ? customer.details[0].addresses[0].state : ''
                     },
                     'notes': []
                 };
