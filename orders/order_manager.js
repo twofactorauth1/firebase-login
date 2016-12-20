@@ -2129,18 +2129,20 @@ module.exports = {
                     //determine tax rate
                     function (account, productAry, callback) {
                         log.debug(accountId, userId, 'commerceSettings');
+
                         self._calculateTaxRate(accountId, userId, account, productAry, order, callback);
                     },
                     //validate
                     function (account, productAry, taxPercent, callback) {
                         log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
                         log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
+                        // We need not reclaculation here because we can't apply changes to order calculations
                         //calculate total amount and number line items
-                        var totalAmount = 0;
-                        var subTotal = 0;
-                        var totalLineItemsQuantity = 0;
-                        var taxAdded = 0;
-                        var discount = 0;
+                        // var totalAmount = 0;
+                        // var subTotal = 0;
+                        // var totalLineItemsQuantity = 0;
+                        // var taxAdded = 0;
+                        // var discount = 0;
 
                         /*
                          * loop through line items
@@ -2152,58 +2154,60 @@ module.exports = {
                          */
 
 
-                        _.each(order.get('line_items'), function iterator(item, index) {
-                            var product = _.find(productAry, function (currentProduct) {
-                                if (currentProduct.id() === item.product_id) {
-                                    return true;
-                                }
-                            });
-                            log.debug(accountId, userId, 'found product ', product);
+                        // _.each(order.get('line_items'), function iterator(item, index) {
+                        //     var product = _.find(productAry, function (currentProduct) {
+                        //         if (currentProduct.id() === item.product_id) {
+                        //             return true;
+                        //         }
+                        //     });
+                        //     log.debug(accountId, userId, 'found product ', product);
 
 
-                            if (product) {
-                                var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
-                                if (product.get('on_sale') === true) {
-                                    var startDate = product.get('sale_date_from', 'day');
-                                    var endDate = product.get('sale_date_to', 'day');
-                                    var rightNow = new Date();
-                                    if (moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
-                                        lineItemSubtotal = item.quantity * product.get('sale_price');
-                                        item.sale_price = product.get('sale_price').toFixed(2);
-                                        //TODO: Should not need this line.  Receipt template currently needs it.
-                                        item.regular_price = product.get('regular_price').toFixed(2);
-                                        item.total = lineItemSubtotal.toFixed(2);
-                                    }
-                                }
-                                if (product.get('taxable') === true) {
-                                    taxAdded += (lineItemSubtotal * taxPercent);
-                                }
-                                subTotal += lineItemSubtotal;
-                                totalLineItemsQuantity += parseFloat(item.quantity);
-                            }
+                        //     if (product) {
+                        //         var lineItemSubtotal = item.quantity * (product.get('type') == 'DONATION' ? item.total : product.get('regular_price'));
+                        //         if (product.get('on_sale') === true) {
+                        //             var startDate = product.get('sale_date_from', 'day');
+                        //             var endDate = product.get('sale_date_to', 'day');
+                        //             var rightNow = new Date();
+                        //             if (moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                        //                 lineItemSubtotal = item.quantity * product.get('sale_price');
+                        //                 item.sale_price = product.get('sale_price').toFixed(2);
+                        //                 //TODO: Should not need this line.  Receipt template currently needs it.
+                        //                 item.regular_price = product.get('regular_price').toFixed(2);
+                        //                 item.total = lineItemSubtotal.toFixed(2);
+                        //             }
+                        //         }
+                        //         if (product.get('taxable') === true) {
+                        //             taxAdded += (lineItemSubtotal * taxPercent);
+                        //         }
+                        //         subTotal += lineItemSubtotal;
+                        //         totalLineItemsQuantity += parseFloat(item.quantity);
+                        //     }
 
-                        });
-                        log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                        // });
+                        // log.debug(accountId, userId, 'Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
 
-                        if (order.get('cart_discount')) {
-                            discount += parseFloat(order.get('cart_discount'));
-                            log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
-                        }
+                        // if (order.get('cart_discount')) {
+                        //     discount += parseFloat(order.get('cart_discount'));
+                        //     log.debug(accountId, userId, 'subtracting cart_discount of ' + order.get('cart_discount'));
+                        // }
 
-                        if (order.get('total_discount')) {
-                            discount += parseFloat(order.get('total_discount'));
-                            log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
-                        }
+                        // if (order.get('total_discount')) {
+                        //     discount += parseFloat(order.get('total_discount'));
+                        //     log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
+                        // }
 
-                        totalAmount = (subTotal - discount) + taxAdded;
+                        // totalAmount = (subTotal - discount) + taxAdded;
 
 
-                        order.set('tax_rate', taxPercent);
-                        order.set('subtotal', subTotal.toFixed(2));
-                        order.set('total_tax', taxAdded.toFixed(2));
-                        order.set('total', totalAmount.toFixed(2));
-                        log.debug(accountId, userId, 'total is now: ' + order.get('total'));
-                        order.set('total_line_items_quantity', totalLineItemsQuantity);
+                        // order.set('tax_rate', taxPercent);
+                        // order.set('subtotal', subTotal.toFixed(2));
+                        // order.set('total_tax', taxAdded.toFixed(2));
+                        // order.set('total', totalAmount.toFixed(2));
+                        // log.debug(accountId, userId, 'total is now: ' + order.get('total'));
+                        // order.set('total_line_items_quantity', totalLineItemsQuantity);
+
+                        log.debug(order, 'order');                        
                         callback(null, account, order);
 
                     },
