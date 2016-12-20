@@ -79,7 +79,7 @@ mainApp.service('orderService', function ($http) {
             method: "POST",
             data: angular.toJson(order)
         }).success(function (data, status, headers, config) {
-            fn(null, data);
+            fn(data);
         }).error(function (err) {
             console.log('END:get estimated tax with ERROR');
             fn(err);
