@@ -1077,7 +1077,114 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         return;
                     }
                     scope.initializeModalEvents();
-                    var order = getOrderStructure();
+                    var phone_number = '';
+                     if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                         phone_number = scope.newContact.details[0].phones[0].number;
+                     }
+                     var _formattedDetails = [{
+                         _id: Math.uuid(10),
+                         emails: [{
+                             _id: Math.uuid(10),
+                             email: scope.newContact.details[0].emails[0].email
+                         }],
+                         phones: [],
+                         addresses: [{
+                             _id: Math.uuid(10),
+                             address: scope.newContact.details[0].addresses[0].address,
+                             address2: scope.newContact.details[0].addresses[0].address2,
+                             state: scope.newContact.details[0].addresses[0].state,
+                             zip: scope.newContact.details[0].addresses[0].zip,
+                             country: 'US',
+                             defaultShipping: false,
+                             defaultBilling: false,
+                             city: scope.newContact.details[0].addresses[0].city,
+                             countryCode: '',
+                             displayName: ''
+                         }]
+                     }];
+                     if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                         _formattedDetails[0].phones.push({
+                             _id: Math.uuid(10),
+                             number: scope.newContact.details[0].phones[0].number
+                         });
+                     }
+                     console.log('scope.newContact ', scope.newContact);
+                     scope.newContact.details = _formattedDetails;
+                     console.log('scope.newContact ', scope.newContact);
+
+                     var customer = scope.newContact;
+                     console.log('customer, ', customer);
+
+                     //UserService.postContact(scope.newContact, function (customer) {
+                     var order = {
+                         //'customer_id': customer._id,
+                         'customer': customer,
+                         'session_id': null,
+                         'status': 'paid',
+                         'cart_discount': 0,
+                         'total_discount': 0,
+                         'total_shipping': formatNum(scope.totalShipping),
+                         'total_tax': formatNum(CartDetailsService.totalTax),
+                         'shipping_tax': formatNum(scope.shippingTax),
+                         'cart_tax': scope.cartTax || 0,
+                         'currency': 'usd',
+                         'line_items': [], // { 'product_id': 31, 'quantity': 1, 'variation_id': 7, 'subtotal': '20.00', 'tax_class': null, 'sku': '', 'total': '20.00', 'name': 'Product Name', 'total_tax': '0.00' }
+                         'total_line_items_quantity': CartDetailsService.items.length,
+                         'payment_details': {
+                             'method_title': 'Credit Card Payment', //Check Payment, Credit Card Payment
+                             'method_id': 'cc', //check, cc
+                             'card_token': token, //Stripe card token if applicable
+                             'charge_description': null, //description of charge if applicable
+                             'statement_description': null, //22char string for cc statement if applicable
+                             'paid': true
+                         },
+                         'shipping_methods': '', // 'Free Shipping',
+                         'shipping_address': {
+                             'first_name': customer.first,
+                             'last_name': customer.last,
+                             'phone': phone_number,
+                             'city': customer.details[0].addresses[0].city,
+                             'country': 'US',
+                             'address_1': customer.details[0].addresses[0].address,
+                             'company': '',
+                             'postcode': customer.details[0].addresses[0].zip,
+                             'email': customer.details[0].emails[0].email,
+                             'address_2': customer.details[0].addresses[0].address2,
+                            'state': customer.details[0].addresses[0].state
+                         },
+                         'billing_address': {
+                             'first_name': customer.first,
+                             'last_name': customer.last,
+                             'phone': phone_number,
+                             'city': customer.details[0].addresses[0].city,
+                             'country': 'US',
+                             'address_1': customer.details[0].addresses[0].address,
+                             'company': '',
+                             'postcode': customer.details[0].addresses[0].zip,
+                             'email': customer.details[0].emails[0].email,
+                             'address_2': customer.details[0].addresses[0].address2,
+                             'state': customer.details[0].addresses[0].state
+                         },
+                         'notes': []
+                     };
+                     _.each(CartDetailsService.items, function(item) {
+                         var totalAmount = item.regular_price * item.quantity;
+                         var _item = {
+                             'product_id': item._id,
+                             'quantity': item.quantity,
+                             'regular_price': formatNum(item.regular_price),
+                             'sale_price': item.on_sale ? formatNum(item.sale_price) : null,
+                             'on_sale': item.onSaleToday || false,
+                             'taxable': item.taxable || false,
+                             'variation_id': '',
+                             'tax_class': null,
+                             'sku': '',
+                             'total': formatNum(totalAmount),
+                             'name': item.name,
+                             'total_tax': '0.00'
+                         };
+                         order.line_items.push(_item);
+                     });
                     if(couponObj){
                         order.coupon = couponObj;
                     }
