@@ -995,9 +995,9 @@ module.exports = {
 
                     if (orderDiscount > subTotal) {
                         orderDiscount = subTotal;
-                        totalAmount = taxAdded;
+                        totalAmount = taxAdded + shippingCharge;
                     } else {
-                        totalAmount = (subTotal - discount) + taxAdded;
+                        totalAmount = (subTotal + shippingCharge - discount) + taxAdded;
                     }
                     orderDiscount = orderDiscount.toFixed(2);
 
