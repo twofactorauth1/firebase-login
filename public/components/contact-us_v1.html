@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <map zoom="{{component.map.zoom || 10}}" center="{{component.location.lat}}, {{component.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="true" scrollwheel="false">
+            <map zoom="{{component.map.zoom || 10}}" center="{{component.location.lat}}, {{component.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="true" scrollwheel="false" ng-if="mapLoaded">
 
             <marker  position="{{component.location.lat}}, {{component.location.lon}}"></marker>
            </map>

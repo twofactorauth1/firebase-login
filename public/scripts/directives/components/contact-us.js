@@ -7,12 +7,13 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.reloadMap = function()
-      {
-        if(scope.map){
-         google.maps.event.trigger(scope.map, 'resize');
-         scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
-       }
+      scope.reloadMap = function () {                
+          scope.$watch('map', function(map){
+              if(map){
+                  google.maps.event.trigger(scope.map, 'resize');
+                  scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));    
+              }
+          })                
       }
       function hexToRgb(hex, opacity) {
         var c;
@@ -51,7 +52,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
               scope.component.location.lon = results[0].geometry.location.lng();
               $timeout(function () {
                 scope.reloadMap();
-              }, 3000);
+              }, 500);
             }
             else{
               if (scope.contactAddress) {
@@ -74,8 +75,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
 
       scope.$on('mapInitialized', function(event, map) {
         scope.map = map;
-        google.maps.event.trigger(scope.map, 'resize');
-        scope.map.setCenter(new google.maps.LatLng(51, 0));
+        google.maps.event.trigger(scope.map, 'resize');        
       });
 
 
@@ -98,19 +98,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
         fn();
       };
 
-      accountService(function (err, account) {
-        if(!scope.component.custom.hours)
-        {
-          scope.setBusinessDetails(false, account, function () {});
-        }
-        if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
-          scope.setBusinessDetails(true, account, function () {
-            scope.updateContactUsAddress();
-          });
-        } else {
-           scope.updateContactUsAddress();
-        }
-      });
+      
 
         scope.calcMaxWidth = function(element){
             var el = angular.element("."+element);
@@ -121,6 +109,28 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
                 return (w - 100 - 50) + 'px';
             }
         }
+        
+        var unbindWatcher = scope.$watch(function() {
+            return typeof google === 'object' && typeof google.maps === 'object';
+        }, function(newValue, oldValue) {
+            if (newValue) {
+              scope.mapLoaded = true;
+              accountService(function (err, account) {
+                if(!scope.component.custom.hours)
+                {
+                  scope.setBusinessDetails(false, account, function () {});
+                }
+                if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+                  scope.setBusinessDetails(true, account, function () {
+                    scope.updateContactUsAddress();
+                  });
+                } else {
+                   scope.updateContactUsAddress();
+                }
+              });
+              unbindWatcher();
+            }
+        });
     }
   };
 }]);

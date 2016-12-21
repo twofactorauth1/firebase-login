@@ -110,12 +110,9 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                     }
                 }, 500);
             };
-            scope.$on('mapInitialized', function (event, map) {
-                $timeout(function() {
-                    scope.map = map;
-                    google.maps.event.trigger(scope.map, 'resize');
-                    scope.map.setCenter(new google.maps.LatLng(51, 0));
-                }, 500)
+            scope.$on('mapInitialized', function (event, map) {                
+                scope.map = map;
+                google.maps.event.trigger(scope.map, 'resize');                
             });
 
             // if (!scope.control) {
@@ -200,6 +197,16 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                     $timeout(function () {
                         google.maps.event.trigger(scope.map, 'resize');
                     }, 500);
+                }
+            });
+
+            var unbindWatcher = scope.$watch(function() {
+                return typeof google === 'object' && typeof google.maps === 'object';
+            }, function(newValue, oldValue) {
+                if (newValue) {
+                    scope.mapLoaded = true;
+                    unbindWatcher();
+                    
                 }
             });
 

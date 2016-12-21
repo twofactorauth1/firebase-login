@@ -69,6 +69,9 @@ module.exports = {
                 var total = invoice.total / 100;
                 var subtotal = invoice.subtotal / 100;
                 var discount = subtotal - total;
+                if(discount > 0){
+                    discount = discount.toFixed(2);
+                }
                 var order = new $$.m.Order({
                     "account_id": accountId,
                     "customer_id": contactId,
@@ -1523,6 +1526,7 @@ module.exports = {
                             log.debug(accountId, userId, 'Could not find product with ID: ' + item.product_id);
                             cb('No product found');
                         } else {
+                            product.set("quantity", item.quantity);
                             productAry.push(product);
                             item.sku = product.get('sku');
                             item.name = product.get('name');
