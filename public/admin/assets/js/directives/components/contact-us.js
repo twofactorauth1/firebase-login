@@ -200,6 +200,16 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                 }
             });
 
+            var unbindWatcher = scope.$watch(function() {
+                return typeof google === 'object' && typeof google.maps === 'object';
+            }, function(newValue, oldValue) {
+                if (newValue) {
+                    scope.mapLoaded = true;
+                    unbindWatcher();
+                    
+                }
+            });
+
         }
 
     };

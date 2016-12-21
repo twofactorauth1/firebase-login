@@ -121,6 +121,17 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
                 return (w - 100 - 50) + 'px';
             }
         }
+
+
+        var unbindWatcher = scope.$watch(function() {
+            return typeof google === 'object' && typeof google.maps === 'object';
+        }, function(newValue, oldValue) {
+            if (newValue) {
+                scope.mapLoaded = true;
+                unbindWatcher();
+                
+            }
+        });
     }
   };
 }]);
