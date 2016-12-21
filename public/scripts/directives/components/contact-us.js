@@ -52,7 +52,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
               scope.component.location.lon = results[0].geometry.location.lng();
               $timeout(function () {
                 scope.reloadMap();
-              }, 3000);
+              }, 1000);
             }
             else{
               if (scope.contactAddress) {
