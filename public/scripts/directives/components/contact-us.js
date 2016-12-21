@@ -98,19 +98,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
         fn();
       };
 
-      accountService(function (err, account) {
-        if(!scope.component.custom.hours)
-        {
-          scope.setBusinessDetails(false, account, function () {});
-        }
-        if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
-          scope.setBusinessDetails(true, account, function () {
-            scope.updateContactUsAddress();
-          });
-        } else {
-           scope.updateContactUsAddress();
-        }
-      });
+      
 
         scope.calcMaxWidth = function(element){
             var el = angular.element("."+element);
@@ -121,15 +109,26 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
                 return (w - 100 - 50) + 'px';
             }
         }
-
-
+        
         var unbindWatcher = scope.$watch(function() {
             return typeof google === 'object' && typeof google.maps === 'object';
         }, function(newValue, oldValue) {
             if (newValue) {
-                scope.mapLoaded = true;
-                unbindWatcher();
-                
+              scope.mapLoaded = true;
+              accountService(function (err, account) {
+                if(!scope.component.custom.hours)
+                {
+                  scope.setBusinessDetails(false, account, function () {});
+                }
+                if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+                  scope.setBusinessDetails(true, account, function () {
+                    scope.updateContactUsAddress();
+                  });
+                } else {
+                   scope.updateContactUsAddress();
+                }
+              });
+              unbindWatcher();
             }
         });
     }
