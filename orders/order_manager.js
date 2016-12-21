@@ -69,6 +69,9 @@ module.exports = {
                 var total = invoice.total / 100;
                 var subtotal = invoice.subtotal / 100;
                 var discount = subtotal - total;
+                if(discount > 0){
+                    discount = discount.toFixed(2);
+                }
                 var order = new $$.m.Order({
                     "account_id": accountId,
                     "customer_id": contactId,
