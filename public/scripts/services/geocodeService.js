@@ -35,23 +35,29 @@ mainApp.service('geocodeService', ['$http', function ($http) {
     };
 
     this.validateAddress = function (location, fn) {
-      var geocoder = new google.maps.Geocoder();
-      var myLatLng = new google.maps.LatLng(location.lat, location.lon);
-      var address = this.stringifyAddress(location);
-      if (!(location.city || location.state || location.zip)) {
-        fn(false, null);
-      } else {
-        geocoder.geocode({
-          latLng: myLatLng,
-          'address': address
-        }, function (results, status) {
-          if (status === google.maps.GeocoderStatus.OK) {
-            fn(true, results);
-          } else {
-            fn(false, null);
-          }
-        });
+      if(typeof google === 'object'){
+        var geocoder = new google.maps.Geocoder();
+        var myLatLng = new google.maps.LatLng(location.lat, location.lon);
+        var address = this.stringifyAddress(location);
+        if (!(location.city || location.state || location.zip)) {
+          fn(false, null);
+        } else {
+          geocoder.geocode({
+            latLng: myLatLng,
+            'address': address
+          }, function (results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+              fn(true, results);
+            } else {
+              fn(false, null);
+            }
+          });
+        }
       }
+      else{
+        fn(false, null);
+      }
+      
     };
 
     this.getLocations = function (lat, long, radius, fn) {
