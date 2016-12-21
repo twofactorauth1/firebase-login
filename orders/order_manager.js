@@ -1526,6 +1526,7 @@ module.exports = {
                             log.debug(accountId, userId, 'Could not find product with ID: ' + item.product_id);
                             cb('No product found');
                         } else {
+                            product.set("quantity", item.quantity);
                             productAry.push(product);
                             item.sku = product.get('sku');
                             item.name = product.get('name');
