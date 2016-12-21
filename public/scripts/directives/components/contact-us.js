@@ -7,12 +7,13 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.reloadMap = function()
-      {
-        if(scope.map){
-         google.maps.event.trigger(scope.map, 'resize');
-         scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
-       }
+      scope.reloadMap = function () {                
+          scope.$watch('map', function(map){
+              if(map){
+                  google.maps.event.trigger(scope.map, 'resize');
+                  scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));    
+              }
+          })                
       }
       function hexToRgb(hex, opacity) {
         var c;
@@ -51,7 +52,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
               scope.component.location.lon = results[0].geometry.location.lng();
               $timeout(function () {
                 scope.reloadMap();
-              }, 3000);
+              }, 500);
             }
             else{
               if (scope.contactAddress) {
@@ -74,8 +75,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
 
       scope.$on('mapInitialized', function(event, map) {
         scope.map = map;
-        google.maps.event.trigger(scope.map, 'resize');
-        scope.map.setCenter(new google.maps.LatLng(51, 0));
+        google.maps.event.trigger(scope.map, 'resize');        
       });
 
 
