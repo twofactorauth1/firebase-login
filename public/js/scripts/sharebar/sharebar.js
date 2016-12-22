@@ -27,41 +27,26 @@ if (typeof jQuery == 'undefined') {
   getScript('https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', function() {
     if (typeof jQuery=='undefined') {
       // No-op. No share bar.
-
     } else {
-
-      // Loaded here - run
       sb_init();
     }
   });
 
-// Already Loaded - run
+// jQuery already Loaded - run
 } else {
   sb_init();
 };
 
 
 function sb_init() {
-  var cssLink
-
-  // Script can be conditioned w/ attr data-target to specify where bar appears
-  var this_script = $('script[src*=sharebar]');
-  var target = this_script.attr('data-target');
-  if (typeof target === "undefined" ) {
-    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-fixed.css">';
-  } else {
-    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-relative.css">';
-  }
-  $('head').append(cssLink);
-
+  var cssLink, where;
   var encodedLocation = encodeURIComponent(window.location.href);
-
-  // OpenGraph
   var ogTitle = $('meta[property="og:title"]').attr('content')
-  // var ogImage = $('meta[property="og:image"]').attr('content')
-  // var ogDescription = $('meta[property="og:description"]').attr('content')
+  //var ogImage = $('meta[property="og:image"]').attr('content')
+  //var ogDescription = $('meta[property="og:description"]').attr('content')
+  var encodedTitle;
 
-  var encodedTitle; // OG if avail, title if not, default otherwise
+  // OG if avail, title if not, default otherwise
   if (typeof ogTitle !== "undefined") {
     encodedTitle = encodeURIComponent(ogTitle);
   } else if ($('title').is(':empty')) {
@@ -70,8 +55,7 @@ function sb_init() {
     encodedTitle = encodeURIComponent('This page has no title');
   }
 
-  // Extract title, image (? - use), content/description (? - use)
-  // Insert LIs - Facebook, Twitter, Pinterest, Mail, etc.
+  // Insert LIs - Facebook, Twitter, LinkedIn, Pinterest, G+, Mail.
   var facebookLink  = 'https://www.facebook.com/sharer/sharer.php';
       facebookLink += '?u=' + encodedLocation;
 
@@ -122,5 +106,18 @@ function sb_init() {
 
   toolbar += '</ul>';
 
-  $('body').append(toolbar);
+
+  // Script can be conditioned w/ attr data-target to specify where bar appears
+  var this_script = $('script[src*=sharebar]');
+  var target = this_script.attr('data-target');
+  if (typeof target === "undefined" ) {
+    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-fixed.css">';
+    where = $('body');
+  } else {
+    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-relative.css">';
+    where = $(target);
+  }
+
+  $('head').append(cssLink);
+  where.append(toolbar);
 }
