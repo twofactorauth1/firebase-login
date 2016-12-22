@@ -340,7 +340,7 @@ module.exports = {
                         order.set('shipping_tax', shippingTax.toFixed(2));
                     }
                     if(isDonation)
-                        totalAmount = subtotal + taxAdded;
+                        totalAmount = subTotal + taxAdded;
                     else
                         totalAmount = (subTotal - discount) + shippingCharge + taxAdded;
 
