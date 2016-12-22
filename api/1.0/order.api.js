@@ -243,7 +243,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 orderManager.listOrderTypes(accountId, function(err, value){
                     self.log.debug(accountId, userId, '<< listOrderTypes');
