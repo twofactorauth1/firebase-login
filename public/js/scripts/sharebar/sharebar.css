@@ -54,10 +54,10 @@
 /* Using IcoMoon Free, GPL */
 
 .social-sidebar {
-  width: 48px;
+  width: 88px;
   position: fixed;
   left: 0;
-  top: 30px; 
+  top: 120px;
   -webkit-padding-start: 40px;
   z-index: 500; }
 
@@ -104,11 +104,11 @@
 
 /********************************* MEDIA QUEROES *********************************/
 
-@media (max-width: 960px){
+@media (max-width: 600px){
 	.social-sidebar {
-		width: 32px;
-		-webkit-padding-start: 20px;
-		top: 20px;
+		width: 37px;
+		-webkit-padding-start: 5px;
+		top: 200px;
 	}
 
 	.social-sidebar li span {
