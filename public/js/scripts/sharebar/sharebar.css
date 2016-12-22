@@ -111,6 +111,7 @@
 		height: 32px;
 		line-height: 32px;
 		font-size: 18px;
+        opacity: 0.8;
 	}
 
 	.glyph .icon {
