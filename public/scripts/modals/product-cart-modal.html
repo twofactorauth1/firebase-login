@@ -124,14 +124,16 @@
                     <span class="help-block" ng-if="emptyCity"></i>Required</span>
                   </div>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-5">
                   <div class="form-group" ng-class="{'has-error': emptyState}">
                     <label class="control-label" for="state">State</label>
-                    <input type="text" ng-blur="checkBillingState(newContact.details[0].addresses[0].state); cookieUpdateContactFn()" placeholder="State" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
+                    <select ng-change="checkBillingState(newContact.details[0].addresses[0].state); cookieUpdateContactFn()" placeholder="State" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state" ng-options="state.abbr as state.name for state in shippingStates">                    
+                          <option value="">-- select --</option>
+                      </select>
                     <span class="help-block" ng-if="emptyState"></i>Required</span>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                   <div class="form-group" ng-class="{'has-error': invalidZipCode || emptyZipCode}">
                     <label class="control-label" for="zipCode">Zip Code</label>
                     <input type="text" placeholder="Zip Code" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip" ng-blur="shippingPostCodeChanged(newContact.details[0].addresses[0].zip, newContact.details[0].addresses[0].state); cookieUpdateContactFn()">
