@@ -183,7 +183,7 @@ var page = $$.m.ModelBase.extend({
     },
 
     transients: {
-        deepCopy: true,
+        deepCopy: false,
         frontend: [
             function (json, options) {
                 if(json.created) {

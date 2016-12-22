@@ -637,6 +637,11 @@ module.exports = function(grunt) {
         dbcopyutil.addAccountIdToPageEvents( done);
     });
 
+    grunt.registerTask('updatePageDates', 'Update Page Dates', function() {
+        var done = this.async();
+        dbcopyutil.fixPagesDates(done);
+    });
+
     grunt.registerTask('archiveDB', 'Archive DB', function(){
         var done = this.async();
         var dbArchiveUtil = require('./utils/dbarchiveutil');
