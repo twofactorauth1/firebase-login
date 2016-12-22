@@ -168,8 +168,8 @@ module.exports = {
                                     var subject = "New account created!";
                                     var component = {};
                                     component.order = savedOrder.attributes;
-                                    component.text = "The following order was created:";
-                                    email.set(ordertext, component.text)
+                                    //component.text = "The following order was created:";
+                                    //email.set(ordertext, component.text)
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + savedOrder.attributes._id;
                                     email.set(orderurl, component.orderurl)
                                     var adminNotificationEmailTemplate = 'emails/base_email_order_admin_notification';
@@ -698,8 +698,8 @@ module.exports = {
                                     if (emailPreferences.new_orders === true) {
                                         //Send additional details
                                         subject = isDonation ? "New donation received!" : "New order created!";
-                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
-                                        email.set("ordertext", component.text);
+                                        //component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        //email.set("ordertext", component.text);
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
                                         email.set("orderurl", component.orderurl);
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
@@ -1363,8 +1363,8 @@ module.exports = {
                                     if (emailPreferences.new_orders === true) {
                                         //Send additional details
                                         subject = isDonation ? "New donation received!" : "New order created!";
-                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
-                                        email.set("ordertext", component.text);
+                                        //component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        //email.set("ordertext", component.text);
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
                                         email.set("orderurl", component.orderurl);
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
