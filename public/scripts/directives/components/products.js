@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', '$modal', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, $routeParams, $location, ENV, $sce, localStorageService, $modal) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', '$modal', 'shippingStates', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, $routeParams, $location, ENV, $sce, localStorageService, $modal, shippingStates) {
     return {
         require: [],
         scope: {
@@ -11,6 +11,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.showPaypalLoading = false;
             scope.showPaypalErrorMsg = false;
             scope.order = null;
+            scope.shippingStates = shippingStates;
             //cookie data fetch
 
             var cookieKey = 'cart_cookie_' + scope.component._id;
