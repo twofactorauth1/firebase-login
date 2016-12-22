@@ -270,7 +270,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 } else {
                     self.log.debug('<< handleReauth');
                     resp.redirect(value);
-                    userActivityManager.createUserReauthActivity(req.session.accountId, self.userId(req), function(){});
+                    userActivityManager.createUserReauthActivity(req.session.accountId, self.userId(req), {}, function(){});
                 }
             });
 

@@ -2440,6 +2440,76 @@ var emailMessageManager = {
             }
         })
 
+    },
+
+    getMessagesSentOpenedClicked: function(accountId, userId, startDate, endDate, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getMessagesSentOpenedClicked');
+        var sentQuery = {
+            accountId:accountId,
+            sendDate:{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var openQuery = {
+            accountId:accountId,
+            openedDate:{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var clickQuery = {
+            accountId:accountId,
+            clickedDate:{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var results = {};
+        async.waterfall([
+            function(cb) {
+                dao.findCount(sentQuery, $$.m.Emailmessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding sentCount:', err);
+                        cb(err);
+                    } else {
+                        results.sentCount = value;
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                dao.findCount(openQuery, $$.m.Emailmessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding openCount:', err);
+                        cb(err);
+                    } else {
+                        results.openCount = value;
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                dao.findCount(clickQuery, $$.m.Emailmessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding clickCount:', err);
+                        cb(err);
+                    } else {
+                        results.clickCount = value;
+                        cb();
+                    }
+                });
+            }
+        ], function(err){
+            if(err) {
+                self.log.error('Error in getMessagesSentOpenedClicked:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getMessagesSentOpenedClicked');
+                fn(null, results);
+            }
+        });
     }
 
 };
