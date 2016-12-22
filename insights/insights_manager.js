@@ -120,6 +120,9 @@ module.exports = {
             },
             pagesReports: function(callback) {
                 ssbManager.getPagesCreatedModifiedPublished(accountId, userId, startDate, endDate, callback);
+            },
+            emailReports: function(callback) {
+                emailMessageManager.getMessagesSentOpenedClicked(accountId, userId, startDate, endDate, callback);
             }
         }, function(err, results){
             fn(err, results);
