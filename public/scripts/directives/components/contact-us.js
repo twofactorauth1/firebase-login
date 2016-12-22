@@ -39,7 +39,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
         scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
 
       scope.updateContactUsAddress = function () {
-        scope.contactAddress = geocodeService.stringifyAddress(scope.component.location, true);
+        
         if (scope.component.location.lat && scope.component.location.lon) {
           $timeout(function () {
               scope.reloadMap();
@@ -80,7 +80,7 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
 
 
       scope.setAddress = function(){
-          scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
+          scope.contactAddress = geocodeService.stringifyAddress(scope.component.location, true);
           return scope.contactAddress;
       }
 
