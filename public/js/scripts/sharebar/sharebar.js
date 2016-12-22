@@ -33,13 +33,13 @@ if (typeof jQuery == 'undefined') {
   });
 
 // Already Loaded - run
-} else { 
+} else {
   init();
 };
 
 
 function init() {
-  var cssLink = '<link rel="stylesheet" type="text/css" href="sharebar.css">';
+  var cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar.css">';
   $('head').append(cssLink);
 
   var encodedLocation = encodeURIComponent(window.location.href);
@@ -62,7 +62,7 @@ function init() {
   // Insert LIs - Facebook, Twitter, Pinterest, Mail, etc.
   var facebookLink  = 'https://www.facebook.com/sharer/sharer.php';
       facebookLink += '?u=' + encodedLocation;
- 
+
   var twitterLink  = 'http://twitter.com/intent/tweet?';
       twitterLink += 'original_referer=' + encodedLocation + '&amp;';
       twitterLink += 'ref_src=twsrc%5Etfw&amp;';
@@ -82,11 +82,11 @@ function init() {
 
   var googleLink  = 'https://plus.google.com/share?';
       googleLink += 'url=' + encodedLocation;
- 
+
   var mailLink  = 'mailto:your@emailhere.com?';
       mailLink += 'subject=' + encodedTitle +'&';
       mailLink += 'body=Link%3A%20' + encodedLocation;
- 
+
   var toolbar  = '<ul class="social-sidebar">';
 
   toolbar += '<li><a href="' + facebookLink + '" target="_blank">';
