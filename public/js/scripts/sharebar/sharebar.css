@@ -65,12 +65,8 @@
 .social-sidebar li a {
   width: 100%;
   float: left;
-  text-align: center; }
-
-.social-sidebar li {
-  list-style: none;
-  text-indent: 0;
-  margin-bottom: 2; }
+  text-align: center;
+  margin-bottom: 2px;}
 
 .social-sidebar li span {
   width: 100%;
