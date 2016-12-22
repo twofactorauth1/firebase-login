@@ -7,7 +7,7 @@
                             <div class="col-xs-12 no-offset-top temp address-hours-inner-box" data-edit tab-active="address" data-id="{{component._id}}" ng-style="{'background' : component.boxColor
                             }">
                             <div >
-                            <span class="blocked" ng-bind-html="contactAddress | unsafe"></span>
+                            <span class="blocked" ng-bind-html="setAddress() | unsafe"></span>
                             <a class="contact-tel" href="tel:{{component.contact.phone}}"><span class="blocked" ng-bind-html="component.contact.phone"></span></a>
                             <!-- <span ng-if="!component.hours.length">Enter Business hours here</span> -->
                             <div class="hours-panel" ng-if="component.showHours">

@@ -79,6 +79,11 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
       });
 
 
+      scope.setAddress = function(){
+          scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
+          return scope.contactAddress;
+      }
+
       if(!scope.component.custom){
         scope.component.custom = {
           hours: true, address: true

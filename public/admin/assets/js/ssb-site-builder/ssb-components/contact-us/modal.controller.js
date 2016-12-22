@@ -43,14 +43,14 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
                         vm.setLatLon(results[0].geometry.location.lat(), results[0].geometry.location.lng());
                         vm.errorMapData = false;
                         angular.copy(vm.component.location, vm.originalContactMap);
-                        vm.parentVm.uiState.componentControl.refreshMap();
+                        //vm.parentVm.uiState.componentControl.refreshMap();
                     });
                 }, 0);
             } else {
                 $timeout(function () {
                     $scope.$apply(function () {
                         vm.errorMapData = true;
-                        vm.parentVm.uiState.componentControl.refreshMap();
+                        //vm.parentVm.uiState.componentControl.refreshMap();
                         //angular.copy(vm.originalContactMap,vm.component.location);
                     });
                 }, 0);
@@ -63,10 +63,10 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
 
     function saveComponent(is_address) {
         if (is_address) {
-            vm.parentVm.uiState.componentControl.refreshMap();
+           // vm.parentVm.uiState.componentControl.refreshMap();
             vm.place.address = GeocodeService.stringifyAddress(vm.component.location);
         } else {
-            vm.parentVm.uiState.componentControl.refreshHours();
+           // vm.parentVm.uiState.componentControl.refreshHours();
         }
     };
 

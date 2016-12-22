@@ -22,7 +22,7 @@
                             </div>                            
                         </div>
                         <div class="contact-address">
-                            <span ng-bind-html="contactAddress | unsafe"></span>
+                            <span ng-bind-html="setAddress() | unsafe"></span>
                         </div>
                         <div class="contact-hours">
                             <div ng-if="component.showHours && !component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span><span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
