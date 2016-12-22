@@ -92,7 +92,7 @@ var mongodao = {
 
     _findCountMongo: function (query, type, fn) {
         var self = this;
-        self.log.error('result ', query);
+        //self.log.error('result ', query);
         if (fn == null) {
             fn = type;
             type = null;
@@ -102,7 +102,7 @@ var mongodao = {
 
         this.mongo(collection).find(query).count(function (err, result) {
             if (!err) {
-                self.log.error('result ', result);
+                //self.log.error('result ', result);
                 fn(null, result);
             } else {
                 self.log.error("An error occurred: #findOneMongo() with query: " + JSON.stringify(query), err);

@@ -115,14 +115,14 @@ module.exports = {
         var accountId = account.id();
         var userId = 0;
         async.parallel({
-            visitorReports: function(callback){
-                analyticsManager.getVisitorReports(accountId, userId, startDate.toDate(), endDate.toDate(), false, callback);
+            visitorCount: function(callback){
+                analyticsManager.getVisitorCount(accountId, userId, startDate, endDate, false, callback);
             },
             pagesReports: function(callback) {
-                ssbManager.getPagesCreatedModifiedPublished(accountId, userId, startDate.toDate(), endDate.toDate(), callback);
+                ssbManager.getPagesCreatedModifiedPublished(accountId, userId, startDate, endDate, callback);
             }
         }, function(err, results){
-
+            fn(err, results);
         });
     }
 

@@ -23,6 +23,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         app.get(this.url('sections/available'), this.isAuthAndSubscribedApi.bind(this), this.getAvailableSections.bind(this));
+        app.get(this.url('test'), this.isAuthAndSubscribedApi.bind(this), this.testInsightReport.bind(this));
     },
 
     getAvailableSections: function(req, resp) {
@@ -33,6 +34,23 @@ _.extend(api.prototype, baseApi.prototype, {
         manager.getAvailableSections(accountId, userId, function(err, data){
             self.log.debug(accountId, userId, '<< getAvailableSections');
             self.sendResultOrError(resp, err, data, 'Could not load available sections');
+        });
+    },
+
+    testInsightReport: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> testInsightReport');
+        var customerAccountId = accountId;
+        var sections = ['weeklyreport'];
+        var destinationAddress = 'kyle@indigenous.io';
+        var startDate = moment().subtract(7, 'days').toDate();
+        var endDate = moment().toDate();
+        manager.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate,
+                endDate, function(err, results){
+            self.log.debug(accountId, userId, '<< testInsightReport');
+            self.sendResultOrError(resp, err, results, 'Could not load available sections');
         });
     }
 
