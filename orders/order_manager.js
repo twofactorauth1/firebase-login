@@ -169,7 +169,9 @@ module.exports = {
                                     var component = {};
                                     component.order = savedOrder.attributes;
                                     component.text = "The following order was created:";
+                                    email.set(ordertext, component.text)
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + savedOrder.attributes._id;
+                                    email.set(orderurl, component.orderurl)
                                     var adminNotificationEmailTemplate = 'emails/base_email_order_admin_notification';
 
 
@@ -184,8 +186,8 @@ module.exports = {
                                             savedOrder.get('billing_address').first_name = newAccount.get('subdomain') + '.indigenous.io (' + newAccount.id() + ')';
                                             savedOrder.get('billing_address').address_1 = newAccount.get('business').emails[0].email;
                                         }
-                                        app.render(adminNotificationEmailTemplate, component, function (err, html) {
-                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                        app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
+                                            //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function () {
                                                 log.debug(accountId, null, 'Admin Notification Sent');
                                             });
@@ -663,7 +665,7 @@ module.exports = {
                                     component.order = updatedOrder.attributes;
                                     component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification_default' : 'emails/base_email_order_admin_notification_default';
 
                                     app.render(adminNotificationEmailTemplate, component, function (err, html) {
                                         //juice.juiceResources(html, {}, function(err, _html) {
@@ -697,13 +699,15 @@ module.exports = {
                                         //Send additional details
                                         subject = isDonation ? "New donation received!" : "New order created!";
                                         component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        email.set("ordertext", component.text);
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                        email.set("orderurl", component.orderurl);
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
-                                        app.render(adminNotificationEmailTemplate, component, function (err, html) {
+                                        app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                             //juice.juiceResources(html, {}, function(err, _html) {
 
-                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function () {
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
@@ -1327,7 +1331,7 @@ module.exports = {
                                     component.order = updatedOrder.attributes;
                                     component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification_default' : 'emails/base_email_order_admin_notification_default';
 
                                     app.render(adminNotificationEmailTemplate, component, function (err, html) {
                                         //juice.juiceResources(html, {}, function(err, _html) {
@@ -1360,10 +1364,12 @@ module.exports = {
                                         //Send additional details
                                         subject = isDonation ? "New donation received!" : "New order created!";
                                         component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        email.set("ordertext", component.text);
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                        email.set("orderurl", component.orderurl);
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
-                                        app.render(adminNotificationEmailTemplate, component, function (err, html) {
+                                        app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                             //juice.juiceResources(html, {}, function(err, _html) {
                                             html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function () {

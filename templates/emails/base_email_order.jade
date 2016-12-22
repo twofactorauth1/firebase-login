@@ -64,89 +64,75 @@ html
             color: #5b5b60;
         }
 
+        .center {
+        text-align: center!important;
+        margin: 0 auto;
+        }
+        .text-right {
+        text-align: right!important;
+        }
+        #backgroundTable {
+        height: 100% !important;
+        margin: 0;
+        padding: 0;
+        width: 100% !important;
+        }
+        #templateContainer,
+        .bodyContent {
+        background-color: #FFFFFF;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        }
+        .bodyContent {
+        margin-top: 15px;
+        }
+        .bodyContent div {
+        color: #505050;
+        font-family: Arial;
+        font-size: 14px;
+        line-height: 150%;
+        text-align: left;
+        }
+        .bodyContent div a:link,
+        .bodyContent div a:visited,
+        .bodyContent div a .yshortcuts
+        {
+        color: #336699;
+        font-weight: normal;
+        text-decoration: underline;
+        }
         .orderTableWrap {
-          width: 100%
+        width: 100%
         }
         .orderTable {
-          margin: 15px auto;
+        margin: 15px auto;
         }
         .orderTd {
-          text-align: center;
+        text-align: center;
         }
         .orderTable td,
         .orderTable th {
-          border: 1px solid #eee;
-          padding: 10px;
+        border: 1px solid #eee;
+        padding: 10px;
         }
         .spacer {
-          background: #FAFAFA
+        background: #FAFAFA
         }
-        h1,
-        .h1 {
-          color: #202020;
-          display: block;
-          font-family: Arial;
-          font-size: 34px;
-          font-weight: bold;
-          line-height: 100%;
-          margin-top: 0;
-          margin-right: 0;
-          margin-bottom: 10px;
-          margin-left: 0;
-          text-align: left;
+        p.text {
+        font-size:16px;
         }
-        h2,
-        .h2 {
-          color: #202020;
-          display: block;
-          font-family: Arial;
-          font-size: 30px;
-          font-weight: bold;
-          line-height: 100%;
-          margin-top: 0;
-          margin-right: 0;
-          margin-bottom: 10px;
-          margin-left: 0;
-          text-align: left;
-        }
-        h3,
-        .h3 {
-          color: #202020;
-          display: block;
-          font-family: Arial;
-          font-size: 26px;
-          font-weight: bold;
-          line-height: 100%;
-          margin-top: 0;
-          margin-right: 0;
-          margin-bottom: 10px;
-          margin-left: 0;
-          text-align: left;
-        }
-        h4,
-        .h4 {
-          color: #202020;
-          display: block;
-          font-family: Arial;
-          font-size: 18px;
-          font-weight: bold;
-          line-height: 100%;
-          margin-top: 0;
-          margin-right: 0;
-          margin-bottom: 10px;
-          margin-left: 0;
-          text-align: left;
-        }
-        .btn {
-          color: white!important;
-          background: #336699;
-          padding: 10px;
-          border-radius: 5px;
-          text-decoration: none!important;
-          margin: 15px auto;
-          max-width: 150px;
-          display: block;
-          text-align: center;
+        h4.orderUrl {
+        color: #202020;
+        display: block;
+        font-family: Arial;
+        font-size: 18px;
+        font-weight: bold;
+        line-height: 100%;
+        margin-top: 0;
+        margin-right: 0;
+        margin-bottom: 10px;
+        margin-left: 0;
+        text-align: left;
         }
 
       //- <!--[if gte mso 9]><!-->
@@ -427,49 +413,55 @@ html
                 |     </tr>
                 | </table>
 
-
-      table(border='0', cellpadding='20', cellspacing='0', width='100%')
-        tr
-          td.bodyContent(valign='top')
-            div(mc:edit='std_content00')
-              h4 Order # !{email.order.order_id}
-              div.orderTableWrap
-                table.orderTable(border='0', cellpadding='0', cellspacing='0', width='580')
-                  thead
+      center
+          table#backgroundTable(border='0', cellpadding='0', cellspacing='0', height='100%', width='100%')
+              tr
+                td(align='center', valign='top', style='padding:20px 0;')
+                  table#templateContainer(border='0', cellpadding='0', cellspacing='0', width='600', padding='15px')              
                     tr
-                      th Product Name
-                      th(class="orderTd") Price
-                      th(class="orderTd") Quantity
-                      th(class="orderTd") Total
-                  tbody
-                      each val, index in email.order.line_items
+                      td(align='center', valign='top')
+                        table(border='0', cellpadding='20', cellspacing='0', width='100%')
                         tr
-                          td= val.name
-                          td(class="orderTd")= '$' + val.regular_price
-                          td(class="orderTd")= val.quantity
-                          td(class="orderTd")= '$' + val.total
-                    tr
-                      td(colspan="4", class="spacer")
-                    tr
-                      td(colspan="3", class="text-right")
-                        strong Subtotal
-                      td $ !{email.order.subtotal}
-                    if email.order.total_discount && email.order.total_discount > 0
-                      tr
-                        td(colspan="3", class="text-right")
-                          strong Discount
-                        td $ (!{email.order.total_discount})
-                    if email.order.total_shipping && email.order.total_shipping > 0
-                      tr
-                        td(colspan="3", class="text-right")
-                          strong Shipping Charges
-                        td $ !{email.order.total_shipping}
-                    if email.order.total_tax && email.order.total_tax > 0
-                      tr
-                        td(colspan="3", class="text-right")
-                          strong Tax
-                        td $ !{email.order.total_tax}
-                    tr
-                      td(colspan="3", class="text-right")
-                        strong Total
-                      td $ !{email.order.total}
+                          td.bodyContent(valign='top')
+                            div(mc:edit='std_content00')
+                              h4.orderUrl Order # !{email.order.order_id}
+                              div.orderTableWrap
+                                table.orderTable(border='0', cellpadding='0', cellspacing='0', width='580')
+                                  thead
+                                    tr
+                                      th Product Name
+                                      th(class="orderTd") Price
+                                      th(class="orderTd") Quantity
+                                      th(class="orderTd") Total
+                                  tbody
+                                      each val, index in email.order.line_items
+                                        tr
+                                          td= val.name
+                                          td(class="orderTd")= '$' + val.regular_price
+                                          td(class="orderTd")= val.quantity
+                                          td(class="orderTd")= '$' + val.total
+                                    tr
+                                      td(colspan="4", class="spacer")
+                                    tr
+                                      td(colspan="3", class="text-right")
+                                        strong Subtotal
+                                      td $ !{email.order.subtotal}
+                                    if email.order.total_discount && email.order.total_discount > 0
+                                      tr
+                                        td(colspan="3", class="text-right")
+                                          strong Discount
+                                        td $ (!{email.order.total_discount})
+                                    if email.order.total_shipping && email.order.total_shipping > 0
+                                      tr
+                                        td(colspan="3", class="text-right")
+                                          strong Shipping Charges
+                                        td $ !{email.order.total_shipping}
+                                    if email.order.total_tax && email.order.total_tax > 0
+                                      tr
+                                        td(colspan="3", class="text-right")
+                                          strong Tax
+                                        td $ !{email.order.total_tax}
+                                    tr
+                                      td(colspan="3", class="text-right")
+                                        strong Total
+                                      td $ !{email.order.total}
