@@ -887,7 +887,7 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
-    },
+    }
 
 
 

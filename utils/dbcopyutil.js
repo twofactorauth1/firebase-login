@@ -1524,12 +1524,13 @@ var copyutil = {
     },
 
     fixPagesDates: function(fn) {
-        var query = {
-            'created.date': {$type:2}
-        };
+        //var query = {'published.date': {$type:2}};
+        var query = {'created.date': {$type:2}};
+        //var query = {'modified.date': {$type:2}};
         var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
         var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
 
+        //var pagesCollection = srcMongo.collection('published_pages');
         var pagesCollection = srcMongo.collection('pages');
         pagesCollection.find(query).toArray(function(err, pages){
             if(err) {
