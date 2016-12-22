@@ -1,4 +1,7 @@
-// Conditionally load jQuery
+// Add Copyright
+
+
+// Conditionally load jQuery, invoke sb_init
 //  src: https://css-tricks.com/snippets/jquery/load-jquery-only-if-not-present/
 
 if (typeof jQuery == 'undefined') {
@@ -28,18 +31,27 @@ if (typeof jQuery == 'undefined') {
     } else {
 
       // Loaded here - run
-      init();
+      sb_init();
     }
   });
 
 // Already Loaded - run
 } else {
-  init();
+  sb_init();
 };
 
 
-function init() {
-  var cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar.css">';
+function sb_init() {
+  var cssLink
+
+  // Script can be conditioned w/ attr data-target to specify where bar appears
+  var this_script = $('script[src*=sharebar]');
+  var target = this_script.attr('data-target');
+  if (typeof target === "undefined" ) {
+    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-fixed.css">';
+  } else {
+    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-relative.css">';
+  }
   $('head').append(cssLink);
 
   var encodedLocation = encodeURIComponent(window.location.href);
@@ -58,7 +70,7 @@ function init() {
     encodedTitle = encodeURIComponent('This page has no title');
   }
 
-  // Extract title, image (?), content (?)
+  // Extract title, image (? - use), content/description (? - use)
   // Insert LIs - Facebook, Twitter, Pinterest, Mail, etc.
   var facebookLink  = 'https://www.facebook.com/sharer/sharer.php';
       facebookLink += '?u=' + encodedLocation;
@@ -89,6 +101,7 @@ function init() {
 
   var toolbar  = '<ul class="social-sidebar">';
 
+  // loop ?
   toolbar += '<li><a href="' + facebookLink + '" target="_blank">';
   toolbar += '<span class="icon icon-facebook"></span></a></li>';
 
