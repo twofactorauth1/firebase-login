@@ -112,7 +112,11 @@
 		top: 200px;
 	}
 
-	.social-sidebar li span {
+    .social-sidebar li,
+        margin-bottom: 1px;
+    }
+
+    .social-sidebar li span {
 		height: 32px;
 		line-height: 32px;
 		font-size: 18px;
