@@ -1521,6 +1521,40 @@ var copyutil = {
 
             }
         });
+    },
+
+    fixPagesDates: function(fn) {
+        var query = {
+            'created.date': {$type:2}
+        };
+        var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+
+        var pagesCollection = srcMongo.collection('pages');
+        pagesCollection.find(query).toArray(function(err, pages){
+            if(err) {
+                console.log('Error:', err);
+                fn(err);
+            } else {
+                async.eachLimit(pages, 20,
+                    function(page, cb){
+                        page.created.date = new Date(page.created.date);
+                        pagesCollection.save(page, function(err, savedPage){
+                            cb(err);
+                        });
+                    },
+                    function(err) {
+                        if(err) {
+                            console.log('Error:', err);
+                            fn(err);
+                        } else {
+                            console.log('Done.');
+                            fn();
+                        }
+                    }
+                );
+            }
+        });
     }
 };
 
