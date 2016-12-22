@@ -14,6 +14,7 @@ var accountDao = require('../dao/account.dao');
 var async = require('async');
 var analyticsManager = require('../analytics/analytics_manager');
 var ssbManager = require('../ssb/ssb_manager');
+var userActivityManager = require('../useractivities/useractivity_manager');
 
 module.exports = {
 
@@ -123,6 +124,9 @@ module.exports = {
             },
             emailReports: function(callback) {
                 emailMessageManager.getMessagesSentOpenedClicked(accountId, userId, startDate, endDate, callback);
+            },
+            loginReports: function(callback) {
+                userActivityManager.countNonAdminLogins(accountId, userId, startDate, endDate, callback);
             }
         }, function(err, results){
             fn(err, results);
