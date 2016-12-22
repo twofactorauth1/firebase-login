@@ -64,14 +64,14 @@ module.exports = {
         });
     },
 
-    createUserReauthActivity: function(accountId, userId, fn) {
+    createUserReauthActivity: function(accountId, userId, requestorProps, fn) {
         var self = this;
         log.debug('>> createUserReauthActivity');
-        var activity = new $$.m.UserActivity({
-            accountId: accountId,
-            userId: userId,
-            activityType: $$.m.UserActivity.types.REAUTH
-        });
+        var data = requestorProps || {};
+        data.accountId = accountId;
+        data.userId = userId;
+        data.activityType = $$.m.UserActivity.types.REAUTH;
+        var activity = new $$.m.UserActivity(data);
 
         dao.saveOrUpdate(activity, function(err, value){
             if(err) {
