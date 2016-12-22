@@ -679,13 +679,14 @@ module.exports = {
                             } else {
                                 var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
+                                email.set('order', component.order);
                                 log.debug(accountId, userId, 'Using this for data', component);
                                 var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
 
-                                app.render(baseEmailTemplate, component, function (err, html) {
+                                app.render(baseEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                     //juice.juiceResources(html, {}, function(err, _html) {
 
-                                    html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                    //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                     emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function () {
                                         callback(null, account, updatedOrder);
                                     });
@@ -1340,14 +1341,15 @@ module.exports = {
                                 callback(null, account, updatedOrder);
                             } else {
                                 var component = email.get('components')[0];
+                                email.set("order", component.order)
                                 component.order = updatedOrder.attributes;
                                 log.debug(accountId, userId, 'Using this for data', component);
                                 var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
 
-                                app.render(baseEmailTemplate, component, function (err, html) {
+                                app.render(baseEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                     //juice.juiceResources(html, {}, function(err, _html) {
 
-                                    html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                    //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                     emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function () {
                                         callback(null, account, updatedOrder);
                                     });
