@@ -5,7 +5,6 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
     return {
         scope: {
             component: '=',
-            control: '=?',
             ssbEditor: '='
         },
         templateUrl: '/components/component-wrap.html',
@@ -83,11 +82,14 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                 })                
             }
 
+            scope.setAddress = function(){
+                scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
+                return scope.contactAddress;
+            }
+
             scope.updateContactUsAddress = function () {
                 setTimeout(function () {
-                    scope.$apply(function () {
-                        scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
-                    });
+                    
                     if (scope.component.location.lat && scope.component.location.lon) {
                         scope.reloadMap();
                     } else {
@@ -98,13 +100,14 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                                 scope.reloadMap();
                             }
                             else {
-                                GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
-                                    if (data.lat && data.lon) {
-                                        scope.component.location.lat = data.lat;
-                                        scope.component.location.lon = data.lon;
-                                        scope.reloadMap();
-                                    }
-                                })
+                                if(scope.contactAddress)
+                                    GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
+                                        if (data.lat && data.lon) {
+                                            scope.component.location.lat = data.lat;
+                                            scope.component.location.lon = data.lon;
+                                            scope.reloadMap();
+                                        }
+                                    })
                             }
                         });
                     }
@@ -115,27 +118,31 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                 google.maps.event.trigger(scope.map, 'resize');                
             });
 
-            // if (!scope.control) {
-            //     scope.control = {};
-            // }
+            
 
-            scope.control.refreshMap = function () {
-                if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
-                    scope.setBusinessDetails(true, function () {
-                        scope.updateContactUsAddress();
-                    });
-                } else {
-                    scope.updateContactUsAddress();
+
+            scope.$watch('component.custom.hours', function(hours){
+                if(angular.isDefined(hours) && scope.loadedAllData){
+                    if (!scope.component.custom.hours)
+                        scope.setBusinessDetails(false, function () {
+                            console.log("hours refreshed");
+                        });
                 }
-            };
+            })
 
-            scope.control.refreshHours = function () {
-                if (!scope.component.custom.hours)
-                    scope.setBusinessDetails(false, function () {
-                        console.log("hours refreshed");
-                    });
-            };
 
+
+            scope.$watch('component.custom.address', function(address){
+                if(angular.isDefined(address) && scope.loadedAllData){
+                    if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+                        scope.setBusinessDetails(true, function () {
+                            scope.updateContactUsAddress();
+                        });
+                    } else {
+                        scope.updateContactUsAddress();
+                    }
+                }
+            })
 
             scope.$parent.$watchGroup(['vm.uiState.loaded'], function (newValue, oldValue) {
                 if (newValue[0] || newValue[1] && scope.component.visibility) {
@@ -169,6 +176,8 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
                                 }, 500);
                             });
                         }
+
+                        scope.loadedAllData = true;
                     });
                 }
             });

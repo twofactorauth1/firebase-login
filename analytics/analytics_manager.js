@@ -338,6 +338,50 @@ module.exports = {
 
     },
 
+    getVisitorCount: function(accountId, userId, startDate, endDate, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getVisitorCount');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:startDate,
+                    $lte:endDate
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        stageAry.push(match);
+        var group1 = {
+            $group: {
+                _id:{
+                    permanent_tracker:'$permanent_tracker'
+                },
+                count: {$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting visitor count: ', err);
+                fn(err);
+            } else {
+                var count = 0;
+                if(value) {
+                    count = value.length;
+                }
+                self.log.debug(accountId, userId, '<< getVisitorCount');
+                fn(null, count);
+            }
+        });
+    },
+
     getVisitorReports: function(accountId, userId, startDate, endDate, isAggregate, fn) {
         var self = this;
         self.log = _log;

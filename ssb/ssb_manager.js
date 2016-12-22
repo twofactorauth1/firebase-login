@@ -3996,11 +3996,76 @@ module.exports = {
     getPagesCreatedModifiedPublished: function(accountId, userId, startDate, endDate, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getPagesCreatedModifiedPublished');
-        var publishedPagesQuery = {};
-        var pagesCreatedQuery = {};
-        var pagesModifiedQuery = {};
+        var publishedPagesQuery = {
+            accountId:accountId,
+            'published.date':{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var pagesCreatedQuery = {
+            accountId:accountId,
+            'created.date':{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var pagesModifiedQuery = {
+            accountId:accountId,
+            'modified.date':{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var results = {};
+        async.waterfall([
+            function(cb) {
+                pageDao.findCount(pagesCreatedQuery, $$.m.ssb.Page, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding pages created:', err);
+                        cb(err);
+                    } else {
+                        results.pagesCreated = value;
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                pageDao.findCount(pagesModifiedQuery, $$.m.ssb.Page, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding pages modified:', err);
+                        cb(err);
+                    } else {
+                        results.pagesModified = value;
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                pageDao.findPublishedPages(publishedPagesQuery, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding pages published:', err);
+                        cb(err);
+                    } else {
+                        if(value) {
+                            results.pagesPublished = value.length;
+                        } else {
+                            results.pagesPublished = 0;
+                        }
+                        cb();
+                    }
+                });
+            }
+        ], function(err){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting pages created/modified/published:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getPagesCreatedModifiedPublished');
+                fn(null, results);
+            }
+        });
 
-        pageDao.findPublishedPages(publishedPagesQuery, function(err, value){});
     }
 
 };

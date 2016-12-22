@@ -332,15 +332,17 @@ module.exports = {
                         log.debug(accountId, userId, 'subtracting total_discount of ' + order.get('total_discount'));
                     }
                     order.set('cart_tax', taxAdded.toFixed(2));
+                    var isDonation = order.get('line_items')[0].type == 'DONATION' ? true : false;
                     //If we need to tax shipping, we'll do so here
-                    if(order.get('shipping_address').state && !_.contains(orderConstants.statesThatDontTaxShipping, order.get('shipping_address').state)) {
+                    if(!isDonation && order.get('shipping_address').state && !_.contains(orderConstants.statesThatDontTaxShipping, order.get('shipping_address').state)) {
                         var shippingTax = shippingCharge * taxPercent;
                         taxAdded += shippingTax;
                         order.set('shipping_tax', shippingTax.toFixed(2));
                     }
-
-                    totalAmount = (subTotal - discount) + shippingCharge + taxAdded;
-
+                    if(isDonation)
+                        totalAmount = subTotal + taxAdded;
+                    else
+                        totalAmount = (subTotal - discount) + shippingCharge + taxAdded;
 
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
