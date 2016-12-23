@@ -171,8 +171,8 @@ module.exports = {
                                     //component.text = "The following order was created:";
                                     //email.set(ordertext, component.text)
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + savedOrder.attributes._id;
-                                    email.set(orderurl, component.orderurl)
-                                    var adminNotificationEmailTemplate = 'emails/base_email_order_admin_notification';
+                                    //email.set(orderurl, component.orderurl)
+                                    var adminNotificationEmailTemplate = 'emails/base_email_order_admin_notification_default';
 
 
                                     //set params needed for email
@@ -186,8 +186,8 @@ module.exports = {
                                             savedOrder.get('billing_address').first_name = newAccount.get('subdomain') + '.indigenous.io (' + newAccount.id() + ')';
                                             savedOrder.get('billing_address').address_1 = newAccount.get('business').emails[0].email;
                                         }
-                                        app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
-                                            //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                        app.render(adminNotificationEmailTemplate, component, function (err, html) {
+                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function () {
                                                 log.debug(accountId, null, 'Admin Notification Sent');
                                             });
