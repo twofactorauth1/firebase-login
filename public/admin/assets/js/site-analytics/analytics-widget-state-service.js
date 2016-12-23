@@ -48,7 +48,8 @@
             "pageanalytics": false,
             "ua": false,
             "userAgentsTable": false,
-            "rev": false
+            "rev": false,
+            "campaigns": false
         };
         
         analyticService.getSiteAnalyticsWidgetStates = getSiteAnalyticsWidgetStates;
