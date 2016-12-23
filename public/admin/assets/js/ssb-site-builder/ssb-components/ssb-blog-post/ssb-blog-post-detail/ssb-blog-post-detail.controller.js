@@ -12,6 +12,7 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
     vm.init = init;
     vm.initData = initData;
     vm.getFeaturedImageUrl = getFeaturedImageUrl;
+    vm.floatSocialShareLinks = floatSocialShareLinks;
 
     function initData() {
         window.indigenous.precache = window.indigenous.precache || {};
@@ -39,6 +40,10 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
             vm.initData();
         }
 
+    }
+
+    function floatSocialShareLinks(){
+        return $(window).width() > 600 && window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.post;
     }
 
 }
