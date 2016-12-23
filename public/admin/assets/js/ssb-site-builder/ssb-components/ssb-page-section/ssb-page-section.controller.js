@@ -453,7 +453,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
             }
 
-            if (component.txtcolor) {
+            if (component.txtcolor && vm.section && vm.section.txtcolor) {
                 styleString += 'color: ' + component.txtcolor + ';';
             }
 

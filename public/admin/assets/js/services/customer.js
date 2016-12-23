@@ -6,6 +6,7 @@
         var baseUrl = '/api/2.0/customers';
         var adminUrl = '/api/1.0/admin';
         var awsUrl = '/api/1.0/integrations/aws';
+        var insightUrl = '/api/2.0/insights';
 
         this.getCache = function () {
             var cache = $cacheFactory.get('CustomerService');
@@ -160,16 +161,27 @@
             }).error(function(err){
                 fn(err);
             });
-        }
+        };
 
         this.addCustomerNotes = function(id, notes, fn){
             var apiUrl = [baseUrl, 'customer', id, 'notes'].join('/');
             var body = {notes:notes};
             var cache = this.getCache();
             $http.post(apiUrl, body).success(function(data){
-                if(cache)
+                if(cache) {
                     cache.get(id).notes = data.notes;
+                }
                 fn(data);
+            }).error(function(err){
+                fn(err);
+            });
+        };
+
+        this.generateInsightReport = function(id, fn) {
+            var apiUrl = [insightUrl];
+            var body = {accountId:id};
+            $http.post(apiUrl, body).success(function(data){
+                fn(null, data);
             }).error(function(err){
                 fn(err);
             });

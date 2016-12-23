@@ -1,0 +1,127 @@
+.glyph .icon {
+  font-size: 32px;
+}
+@font-face {
+  font-family: 'IcoMoon-Free';
+  src: url('IcoMoon-Free.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'IcoMoon-Free' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  -o-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-linkedin:before {
+  content: "\eaca";
+}
+.icon-pinterest:before {
+  content: "\ead1";
+}
+.icon-google-plus:before {
+  content: "\ea8b";
+}
+.icon-twitter:before {
+  content: "\ea96";
+}
+.icon-facebook:before {
+  content: "\ea90";
+}
+.icon-email:before {
+  content: "\e945";
+}
+
+/* Using IcoMoon Free, GPL */
+
+.social-sidebar {
+  display: block;
+  height: 48px;
+  left: 0;
+  margin-bottom: 0px;
+  position: relative;
+  -webkit-padding-start: 0px;
+  width: 100%;
+  z-index: 500; }
+
+.social-sidebar li,
+.social-sidebar li a {
+  float: left;
+  margin-right: 1px;
+  text-align: center;
+  width: 48px;
+}
+
+.social-sidebar li {
+  line-height: 48px;
+  list-style: none;
+  text-indent: 0;
+}
+
+.social-sidebar li span {
+  color: #ffffff;
+  height: 48px;
+  float: left;
+  font-size: 20px;
+  font-size: 2rem;
+  line-height: 48px;
+  width: 48px;
+}
+
+.social-sidebar li span.icon-twitter {
+  background: #55ACEE; }
+
+.social-sidebar li span.icon-facebook {
+  background: #3B5998; }
+
+.social-sidebar li span.icon-email {
+  background: #5C7B98; }
+
+.social-sidebar li span.icon-linkedin {
+  background: #007BB6; }
+
+.social-sidebar li span.icon-pinterest {
+  background: #BE000F; }
+
+.social-sidebar li span.icon-google-plus {
+  background: #DD4B39; }
+
+.social-sidebar.fixed {
+  position: fixed; }
+
+/********************************* MEDIA QUEROES *********************************/
+
+@media (max-width: 600px){
+  .social-sidebar {
+    height: 32px;
+  }
+
+  .social-sidebar li span {
+    height: 32px;
+    line-height: 32px;
+    font-size: 18px;
+  }
+
+  .glyph .icon {
+    font-size: 24px;
+  }
+}

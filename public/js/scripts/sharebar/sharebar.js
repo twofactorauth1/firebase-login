@@ -1,4 +1,7 @@
-// Conditionally load jQuery
+// Add Copyright
+
+
+// Conditionally load jQuery, invoke sb_init
 //  src: https://css-tricks.com/snippets/jquery/load-jquery-only-if-not-present/
 
 if (typeof jQuery == 'undefined') {
@@ -24,32 +27,26 @@ if (typeof jQuery == 'undefined') {
   getScript('https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js', function() {
     if (typeof jQuery=='undefined') {
       // No-op. No share bar.
-
     } else {
-
-      // Loaded here - run
-      init();
+      sb_init();
     }
   });
 
-// Already Loaded - run
+// jQuery already Loaded - run
 } else {
-  init();
+  sb_init();
 };
 
 
-function init() {
-  var cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar.css">';
-  $('head').append(cssLink);
-
+function sb_init() {
+  var cssLink, where;
   var encodedLocation = encodeURIComponent(window.location.href);
-
-  // OpenGraph
   var ogTitle = $('meta[property="og:title"]').attr('content')
-  // var ogImage = $('meta[property="og:image"]').attr('content')
-  // var ogDescription = $('meta[property="og:description"]').attr('content')
+  //var ogImage = $('meta[property="og:image"]').attr('content')
+  //var ogDescription = $('meta[property="og:description"]').attr('content')
+  var encodedTitle;
 
-  var encodedTitle; // OG if avail, title if not, default otherwise
+  // OG if avail, title if not, default otherwise
   if (typeof ogTitle !== "undefined") {
     encodedTitle = encodeURIComponent(ogTitle);
   } else if ($('title').is(':empty')) {
@@ -58,8 +55,7 @@ function init() {
     encodedTitle = encodeURIComponent('This page has no title');
   }
 
-  // Extract title, image (?), content (?)
-  // Insert LIs - Facebook, Twitter, Pinterest, Mail, etc.
+  // Insert LIs - Facebook, Twitter, LinkedIn, Pinterest, G+, Mail.
   var facebookLink  = 'https://www.facebook.com/sharer/sharer.php';
       facebookLink += '?u=' + encodedLocation;
 
@@ -89,6 +85,7 @@ function init() {
 
   var toolbar  = '<ul class="social-sidebar">';
 
+  // loop ?
   toolbar += '<li><a href="' + facebookLink + '" target="_blank">';
   toolbar += '<span class="icon icon-facebook"></span></a></li>';
 
@@ -109,5 +106,18 @@ function init() {
 
   toolbar += '</ul>';
 
-  $('body').append(toolbar);
+
+  // Script can be conditioned w/ attr data-target to specify where bar appears
+  var this_script = $('script[src*=sharebar]');
+  var target = this_script.attr('data-target');
+  if (typeof target === "undefined" ) {
+    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-fixed.css">';
+    where = $('body');
+  } else {
+    cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-relative.css">';
+    where = $(target);
+  }
+
+  $('head').append(cssLink);
+  where.append(toolbar);
 }

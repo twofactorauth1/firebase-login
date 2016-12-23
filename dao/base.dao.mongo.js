@@ -664,7 +664,7 @@ var mongodao = {
         //db.thiscollection.find().sort({"thisfieldname":-1}).limit(1)
         var self = this;
         var collection = this.getTable(type);
-        console.dir(query);
+        //console.dir(query);
         var sort = {};
         sort[fieldName] = -1;
         this.mongo(collection).find(query).sort(sort).limit(1).toArray(function (err, values) {
@@ -673,8 +673,8 @@ var mongodao = {
                 fn(err, null);
             } else {
                 var result = values[0] || {};
-                self.log.info('result: ');
-                console.dir(result);
+                //self.log.info('result: ');
+                //console.dir(result);
                 fn(null, result[fieldName]);
             }
         });

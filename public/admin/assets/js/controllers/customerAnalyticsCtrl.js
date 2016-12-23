@@ -368,7 +368,7 @@
 
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, function (data) {
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, isVisibleLegend, setLegendVisibility, function (data) {
                 //$scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 //});
@@ -475,7 +475,7 @@
             if(results.visitorLocationsByCountryReport) {
                 var _formattedCountryLocations = [];
                 _.each(results.visitorLocationsByCountryReport, function(loc){
-                    if(loc['ip_geo_info.country']) {
+                    if(loc['ip_geo_info.country'] && loc['ip_geo_info.country'] != "Unknown") {
                         _formattedCountryLocations.push(loc);
                     }
                 });
@@ -674,29 +674,37 @@
             //=======================================
 
             $scope.locationData = locationData;
-            $scope.countryLocationData = countryLocationData;
+            
             $scope.locationLabel = 'States';
             $scope.locationsLength = locationData.length;
             $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+
+            // Country based
+            $scope.countryLocationData = countryLocationData;
+            $scope.locationLabelCountry = 'Countries';
+            $scope.locationsLengthCountry = $scope.countryLocationData.length;
+            $scope.mostPopularLabelCountry = $scope.mostPopularCountry['ip_geo_info.country'];
+
+            
             $scope.displayVisitors = $scope.visitors > 0;
 
             $scope.renderAnalyticsCharts();
 
         };
 
-        $scope.switchLocationLabels = function(locationScope) {
-            $scope.$apply(function(){
-                if(locationScope === 'US') {
-                    $scope.locationLabel = 'States';
-                    $scope.locationsLength = $scope.locationData.length;
-                    $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
-                } else {
-                    $scope.locationLabel = 'Countries';
-                    $scope.locationsLength = $scope.countryLocationData.length;
-                    $scope.mostPopularLabel = $scope.mostPopularCountry['ip_geo_info.country'];
-                }
-            });
-        };
+        // $scope.switchLocationLabels = function(locationScope) {
+        //     $scope.$apply(function(){
+        //         if(locationScope === 'US') {
+        //             $scope.locationLabel = 'States';
+        //             $scope.locationsLength = $scope.locationData.length;
+        //             $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+        //         } else {
+        //             $scope.locationLabel = 'Countries';
+        //             $scope.locationsLength = $scope.countryLocationData.length;
+        //             $scope.mostPopularLabel = $scope.mostPopularCountry['ip_geo_info.country'];
+        //         }
+        //     });
+        // };
 
         $scope.setReportData = function (results) {
             console.log('setReportData - results:', results);
@@ -773,7 +781,7 @@
             $scope.sessionsData = _sessionsData;
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, function (data) {
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
                 $scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 });
@@ -856,7 +864,8 @@
                 $timeout(function () {
                     var location_data = angular.copy($scope.locationData);
                     var countryLocationData = angular.copy($scope.countryLocationData);
-                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world'], $scope.switchLocationLabels);
+                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
+                    ChartAnalyticsService.visitorLocationsGlobal(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
                 }, 200);
                 if (!$scope.displayVisitors) {
                     console.log('no visitors');
@@ -897,6 +906,14 @@
         $scope.$watch('locations', function (value, oldValue) {
             if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
                 AnalyticsWidgetStateService.setPlateformAnalyticsWidgetStates("locations", value);
+                reflowCharts();
+            }
+        });
+
+
+        $scope.$watch('locationsGlobal', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
+                AnalyticsWidgetStateService.setPlateformAnalyticsWidgetStates("locationsGlobal", value);
                 reflowCharts();
             }
         });
@@ -976,6 +993,7 @@
             $timeout(function() {
                 $scope.overview = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.overview;
                 $scope.locations = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.locations;
+                $scope.locationsGlobal = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.locationsGlobal;
                 $scope.interactions = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.interactions;
                 $scope.device = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.device;
                 $scope.newVReturning = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.newVReturning;
@@ -1036,6 +1054,19 @@
                 reflowCharts();
             }
         })
+
+
+        function isVisibleLegend(name, widget){
+            var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
+            legend = legend.replace(/ /g, "_");
+            return AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig[legend];
+        }
+
+        function setLegendVisibility(widget, name, value){
+            var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
+            legend = legend.replace(/ /g, "_");
+            AnalyticsWidgetStateService.setPlateformAnalyticsWidgetStates(legend, value);
+        }
 
     }]);
 }(angular));

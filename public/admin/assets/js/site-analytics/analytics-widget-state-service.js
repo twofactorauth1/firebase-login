@@ -22,7 +22,12 @@
             "userAgentsTable": false,
             "rev": false,
             "os": false,
-            "campaigns": false
+            "campaigns": false,
+            "locationsGlobal": false,
+            "analytics_visitors_legend": true,
+            "analytics_visits_legend": true,
+            "analytics_pageviews_legend": true,
+            "analytics_daily_active_users_legend": true
         };
 
         analyticService.siteAnalyticsWidgetStateConfig = {
@@ -35,7 +40,12 @@
             "pageanalytics": false,
             "ua": false,
             "userAgentsTable": false,
-            "rev": false
+            "rev": false,
+            "locationsGlobal": false,
+            "analytics_visitors_legend": true,
+            "analytics_visits_legend": true,
+            "analytics_pageviews_legend": true,
+            "analytics_daily_active_users_legend": true
         };
 
         analyticService.customerAnalyticsWidgetStateConfig = {
@@ -48,7 +58,13 @@
             "pageanalytics": false,
             "ua": false,
             "userAgentsTable": false,
-            "rev": false
+            "rev": false,
+            "campaigns": false,
+            "locationsGlobal": false,
+            "analytics_visitors_legend": true,
+            "analytics_visits_legend": true,
+            "analytics_pageviews_legend": true,
+            "analytics_daily_active_users_legend": true
         };
         
         analyticService.getSiteAnalyticsWidgetStates = getSiteAnalyticsWidgetStates;

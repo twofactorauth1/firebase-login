@@ -23,6 +23,8 @@ var accountDao = require('../dao/account.dao');
 var pageCacheManager = require('../cms/pagecache_manager');
 var BlogView = require('../views/blog.server.view');
 var RSSView = require('../views/rss.server.view');
+var UAParser = require('ua-parser-js');
+var parser = new UAParser();
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -299,7 +301,30 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 } else {
                     self.log.debug('<< handleReauth');
                     resp.redirect(value);
-                    userActivityManager.createUserReauthActivity(req.session.accountId, self.userId(req), function(){});
+                    var ua = req.headers['user-agent'];
+                    var result = parser.setUA(ua).getResult();
+
+
+                    /*
+                     * Need to pull in the following data:
+                     * Date: December 12, 2014 10:28 AM
+                     * Browser: Safari
+                     * Operating System: OS X
+                     * IP Address: 00.00.00.00
+                     * Approximate Location: La Jolla, California, United States
+                     */
+                    var ip = self.ip(req);
+                    var date = moment().format('MMMM DD, YYYY hh:mm A');
+                    var browser = result.browser.name;
+                    var os = result.os.name;
+
+                    var requestorProps = {
+                        ip: ip,
+                        date: date,
+                        browser: browser,
+                        os: os
+                    };
+                    userActivityManager.createUserReauthActivity(req.session.accountId, self.userId(req), requestorProps, function(){});
                 }
             });
 
@@ -572,6 +597,26 @@ _.extend(router.prototype, BaseRouter.prototype, {
     serveNodeModules: function(req, resp) {
         var path = req.path.replace(/\/scripts\//, 'node_modules/');
         return resp.sendfile(path);
+    },
+
+    ip: function(req) {
+        try {
+            var ip = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress;
+
+            if(Array.isArray(ip)) {
+                return ip[0];
+            } else if(ip.indexOf(',') !== -1){
+                return ip.split(',')[0].trim();
+            } else{
+                return ip;
+            }
+        } catch(exception) {
+            return null;
+        }
+
     }
 
 });

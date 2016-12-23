@@ -43,7 +43,7 @@
 
         $scope.checkNameServerChanged = function(){
             $scope.isDomainChanged = $scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer.customDomain, $scope.customer.customDomain);           
-        }
+        };
 
         $scope.getMapData = function () {
             var _firstAddress;
@@ -166,6 +166,16 @@
                     $scope.customer.locked_sub = customer.locked_sub;
                     $scope.customer.billing.trialLength = customer.billing.trialLength;
                     $scope.closeModal();
+                }
+            });
+        };
+
+        $scope.generateInsightReport = function() {
+            customerService.generateInsightReport($scope.customer._id, function(err, data){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('info', 'Report Sent');
                 }
             });
         };
