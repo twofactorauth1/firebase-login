@@ -22,7 +22,8 @@
             "userAgentsTable": false,
             "rev": false,
             "os": false,
-            "campaigns": false
+            "campaigns": false,
+            "locationsGlobal": false
         };
 
         analyticService.siteAnalyticsWidgetStateConfig = {
@@ -35,7 +36,8 @@
             "pageanalytics": false,
             "ua": false,
             "userAgentsTable": false,
-            "rev": false
+            "rev": false,
+            "locationsGlobal": false
         };
 
         analyticService.customerAnalyticsWidgetStateConfig = {
@@ -49,7 +51,8 @@
             "ua": false,
             "userAgentsTable": false,
             "rev": false,
-            "campaigns": false
+            "campaigns": false,
+            "locationsGlobal": false
         };
         
         analyticService.getSiteAnalyticsWidgetStates = getSiteAnalyticsWidgetStates;
