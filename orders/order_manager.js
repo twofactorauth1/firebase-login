@@ -1344,9 +1344,9 @@ module.exports = {
                                 }
                                 callback(null, account, updatedOrder);
                             } else {
-                                var component = email.get('components')[0];
-                                email.set("order", component.order)
+                                var component = email.get('components')[0];                                
                                 component.order = updatedOrder.attributes;
+                                email.set("order", component.order);
                                 log.debug(accountId, userId, 'Using this for data', component);
                                 var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
 
@@ -1371,7 +1371,7 @@ module.exports = {
 
                                         app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                             //juice.juiceResources(html, {}, function(err, _html) {
-                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function () {
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
