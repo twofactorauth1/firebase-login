@@ -45,8 +45,7 @@ var component = $$.m.ModelBase.extend({
              * (optional)
              */
             subtitle:"",
-
-            txtcolor: "#444",
+           
 
             /**
              * An array of objects that contain image and caption data:
