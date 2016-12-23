@@ -543,8 +543,8 @@
 
             return pageDepthConfig;
         };
-
-        this.analyticsOverview = function (readyPageviewsData, sessionsData, readyVisitorsData, dailyActiveUsersData, fn) {
+        this.analyticsOverview = function (readyPageviewsData, sessionsData, readyVisitorsData, dailyActiveUsersData, isVisibleLegend, setLegendVisibility, fn) {
+            var _widgetName = "analytics";
             var analyticsOverviewConfig = {
                 options: {
                     chart: {
@@ -574,6 +574,11 @@
                             marker: {
                                 enabled: true,
                                 radius: 3
+                            },
+                            events: {
+                                legendItemClick: function(event) {
+                                    setLegendVisibility(_widgetName, this.name, !this.visible)                        
+                                }
                             }
                         }
                     }
@@ -594,15 +599,18 @@
                 series: [
                     {
                         name: 'Visitors',
-                        data: readyVisitorsData
+                        data: readyVisitorsData,
+                        visible: isVisibleLegend("Visitors", _widgetName) 
                     },
                     {
                         name: 'Visits',
-                        data: sessionsData
+                        data: sessionsData,
+                        visible: isVisibleLegend("Visits", _widgetName)
                     },
                     {
                         name: 'Pageviews',
-                        data: readyPageviewsData
+                        data: readyPageviewsData,
+                        visible: isVisibleLegend("Pageviews", _widgetName)
                     }
                 ],
                 credits: {
@@ -615,7 +623,7 @@
                  */
             };
             if(dailyActiveUsersData) {
-                analyticsOverviewConfig.series.push({name: 'Daily Active Users', data:dailyActiveUsersData});
+                analyticsOverviewConfig.series.push({name: 'Daily Active Users', data:dailyActiveUsersData, visible: isVisibleLegend("Daily Active Users", _widgetName)});
                 analyticsOverviewConfig.options.colors.push('#f8cc49');
             }
             if(this.granularity === 'hours') {
