@@ -530,15 +530,7 @@ var emailMessageManager = {
                             "subject": subjectPrefix + subject,
                             "headers": {},
                             "personalizations": [
-                                {
-
-
-                                    "to": [
-                                        {
-                                            "email": toAddress
-                                        }
-                                    ]
-                                }
+                                {"to": [{"email": toAddress}]}
                             ],
                             "tracking_settings": {
                                 "click_tracking": {
@@ -1338,6 +1330,109 @@ var emailMessageManager = {
 
     },
 
+    sendInsightEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
+                               contactId, vars, emailId, ccAry, repyToAddress, replyToName, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> sendInsightEmail');
+        async.waterfall([
+            function(cb) {
+                self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
+                    if (isUnsubscribed === true) {
+                        self.log.warn(accountId, userId, 'Skipping insight email for [' + toAddress + '] because contact has unsubscribed.' );
+                        cb('Destination address has unsubscribed');
+                    } else {
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, vars, function(mergedHtml) {
+                    cb(null, mergedHtml)
+                });
+            },
+            function(mergedHtml, cb) {
+                juice.juiceResources(mergedHtml, {}, function(err, html){
+                    cb(err, html);
+                });
+            },
+            function(html, cb) {
+                var request = sg.emptyRequest();
+                request.body = {
+                    "categories": [
+                        "insights"
+                    ],
+                    "content": [
+                        {
+                            "type": "text/html",
+                            "value": html
+                        }
+                    ],
+                    "from": {"email": fromAddress},
+                    "headers": {},
+                    "personalizations": [
+                        {
+                            "headers": {
+                                "X-Accept-Language": "en"
+                            },
+                            "subject": subjectPrefix + subject,
+                            "to": [ {"email": toAddress}]
+                        }
+                    ],
+                    "tracking_settings": {
+                        "click_tracking": {
+                            "enable": true,
+                            "enable_text": true
+                        }
+                    }
+                };
+                request.method = 'POST';
+                request.path = '/v3/mail/send';
+
+                if(fromName && fromName.length > 0) {
+                    request.body.from.name = fromName;
+                }
+                if(toName && toName.length > 0) {
+                    request.body.personalizations[0].to[0].name = toName;
+                }
+                if(repyToAddress) {
+                    request.body.reply_to = {
+                        email: repyToAddress
+                    };
+                    if(replyToName) {
+                        request.body.reply_to.name = replyToName;
+                    }
+                }
+                self._safeStoreEmail(request.body, accountId, userId, emailId, function(err, emailmessage){
+                    if(err) {
+                        self.log.error('Error storing email (this should not happen):', err);
+                        cb(err);
+                    } else {
+                        cb(null, request, emailmessage);
+                    }
+                });
+            }
+        ], function(err, request, emailmessage){
+            request.body.custom_args = {
+                emailmessageId: emailmessage.id(),
+                accountId:''+accountId,
+                date: moment().toISOString()
+            };
+
+            sg.API(request, function (error, response) {
+                self.log.debug(response.statusCode);
+                self.log.debug(response.body);
+                self.log.debug(response.headers);
+                if (err) {
+                    self.log.error('Error sending email:', err);
+                    return fn(err);
+                } else {
+                    self.log.debug('<< sendInsightEmail');
+                    return fn(null, response);
+                }
+            });
+        });
+    },
+
     getMessageInfo: function(messageId, fn) {
         //TODO: this
         fn();
@@ -2129,7 +2224,7 @@ var emailMessageManager = {
                 }];
 
                 if ((_user && _userAccount && accountId === 6) || (accountId === 6 && contactId === null)) {
-                    var _data = !contactId && !_userAccount ? _account.get('subdomain') : _userAccount.get('subdomain')
+                    var _data = !contactId && !_userAccount ? _account.get('subdomain') : _userAccount.get('subdomain');
                     var adminMergeTagMap = [{
                         mergeTag: '[USERACCOUNTURL]',
                         data: _data + hostname
