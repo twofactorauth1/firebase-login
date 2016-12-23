@@ -89,7 +89,7 @@
         <div class="col-sm-6">
             <div class="panel panel-white no-radius" id="locations" ng-class="{'load1 csspinner': !locationData}">
                 <div class="panel-heading border-light">
-                    <h4 class="panel-title text-primary">Visitor <span class="text-bold">Locations</span></h4>
+                    <h4 class="panel-title text-primary">Visitor <span class="text-bold">Locations (US)</span></h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div collapse="locations" class="panel-wrapper">
@@ -116,6 +116,39 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="panel panel-white no-radius" id="locations_global" ng-class="{'load1 csspinner': !countryLocationData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Visitor <span class="text-bold">Locations (Global)</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="locations_global" class="panel-wrapper">
+                    <div class="panel-body height-380">
+                        <div id="visitor_locations_global" ng-if="countryLocationData"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-footer border-light">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-5 text-center border-right border-dark">
+                                <div class="rate">
+                                    <span class="value">{{locationsLengthCountry || '--'}}</span>
+                                </div>
+                                {{locationLabelCountry}}
+                            </div>
+                            <div class="col-xs-6 col-sm-7 text-center">
+                                <div class="rate">
+                                    <span class="value analytic-state-name">{{mostPopularLabelCountry || '--'}}</span>
+                                </div>
+                                Most Popular
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
         <div class="col-sm-6">
             <div class="panel panel-white no-radius" id="interactions" ng-class="{'load1 csspinner': !timeonSiteConfig.options}">
                 <div class="panel-heading border-light">
@@ -149,7 +182,35 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4 device-info" >
+        <div class="col-xs-12 col-sm-6" id="traffic-sources">
+            <div id="trafficSources" class="panel panel-white " ng-class="{'load1 csspinner': !trafficSourceData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Traffic <span class="text-bold">Sources</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="trafficSources" class="panel-wrapper">
+                    <div class="panel-body height-470 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                        <div class="table-responsive">
+                            <table class="table table-hover margin-bottom-0">
+                                <thead>
+                                    <tr>
+                                        <th>Referrer</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="trafficSource in trafficSourceData | orderBy:'-result'">
+                                        <td><span ng-text-truncate="trafficSource['referrer.domain']" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                                        <td>{{trafficSource.result | number}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-6 device-info" >
             <div id="device" class="panel panel-white" ng-class="{'load1 csspinner': !device_data_loaded}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">Device</h4>
@@ -176,7 +237,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4" id="new-vs-returning">
+        <div class="col-xs-12 col-sm-6" id="new-vs-returning">
             <div id="newVReturning" class="panel panel-white " ng-class="{'load1 csspinner': !newVsReturning}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">New vs. Returning</h4>
@@ -191,71 +252,44 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4" id="traffic-sources">
-            <div id="trafficSources" class="panel panel-white " ng-class="{'load1 csspinner': !trafficSourceData}">
-                <div class="panel-heading border-light">
-                    <h4 class="panel-title text-primary">Traffic <span class="text-bold">Sources</span></h4>
-                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
-                </div>
-                <div collapse="trafficSources" class="panel-wrapper">
-                    <div class="panel-body height-350 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                        <div class="table-responsive">
-                            <table class="table table-hover margin-bottom-0">
-                                <thead>
-                                    <tr>
-                                        <th>Referrer</th>
-                                        <th>Count</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="trafficSource in trafficSourceData | orderBy:'-result'">
-                                        <td><span ng-text-truncate="trafficSource['referrer.domain']" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                                        <td>{{trafficSource.result | number}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+    </div>
+    <div class="clearfix"></div>
+        <div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
+            <div class="panel-heading border-light">
+                <h4 class="panel-title text-primary"><span class="text-bold">Customer Site</span> Analytics</h4>
+                <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+            </div>
+            <div class="panel-wrapper" collapse="pageanalytics">
+                <div class="panel-body panel-scroll">
+                    <div class="table-responsive">
+                        <table class="table table-hover margin-bottom-0">
+                            <thead>
+                                <tr>
+                                    <th>Account Name</th>
+                                    <th class="center">Page Views</th>
+                                    <th class="center">Unique Page Views</th>
+                                    <th class="center">Avg. Time on Page</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'|limitTo:25">
+                                    <td>
+                                        {{topPage.page}}
+                                        <a href="#/customers/{{topPage.accountId}}" >({{topPage.accountId}})</a>
+                                    </td>
+                                    <td class="center">{{topPage.pageviews | number}}</td>
+                                    <td class="center">{{topPage.uniquePageviews | number}}</td>
+                                    <td class="center">{{topPage.avgTime | secTotime}}</td>
+                                    <!-- <td>{{topPage.entrances}}</td>
+                                                    <td>{{topPage.bounceRate | formatPercentage}}</td>
+                                                    <td>{{topPage.exitRate | formatPercentage}}</td> -->
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
-        <div class="panel-heading border-light">
-            <h4 class="panel-title text-primary"><span class="text-bold">Customer Site</span> Analytics</h4>
-            <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
-        </div>
-        <div class="panel-wrapper" collapse="pageanalytics">
-            <div class="panel-body panel-scroll">
-                <div class="table-responsive">
-                    <table class="table table-hover margin-bottom-0">
-                        <thead>
-                            <tr>
-                                <th>Account Name</th>
-                                <th class="center">Page Views</th>
-                                <th class="center">Unique Page Views</th>
-                                <th class="center">Avg. Time on Page</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'|limitTo:25">
-                                <td>
-                                    {{topPage.page}}
-                                    <a href="#/customers/{{topPage.accountId}}" >({{topPage.accountId}})</a>
-                                </td>
-                                <td class="center">{{topPage.pageviews | number}}</td>
-                                <td class="center">{{topPage.uniquePageviews | number}}</td>
-                                <td class="center">{{topPage.avgTime | secTotime}}</td>
-                                <!-- <td>{{topPage.entrances}}</td>
-                                                <td>{{topPage.bounceRate | formatPercentage}}</td>
-                                                <td>{{topPage.exitRate | formatPercentage}}</td> -->
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="clearfix"></div>
     <div class="row">
         <div id="useragents" class="col-xs-12 col-sm-4">

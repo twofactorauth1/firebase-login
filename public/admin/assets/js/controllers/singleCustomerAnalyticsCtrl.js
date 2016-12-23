@@ -637,28 +637,35 @@
             // Cleanup
             //=======================================
             $scope.locationData = locationData;
-            $scope.countryLocationData = countryLocationData;
+            
             $scope.locationLabel = 'States';
             $scope.locationsLength = locationData.length;
             $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+
+            // Country based
+            $scope.countryLocationData = countryLocationData;
+            $scope.locationLabelCountry = 'Countries';
+            $scope.locationsLengthCountry = $scope.countryLocationData.length;
+            $scope.mostPopularLabelCountry = $scope.mostPopularCountry['ip_geo_info.country'];
+            
             $scope.displayVisitors = $scope.visitors > 0;
 
             $scope.renderAnalyticsCharts();
         };
 
-        $scope.switchLocationLabels = function(locationScope) {
-            $scope.$apply(function(){
-                if(locationScope === 'US') {
-                    $scope.locationLabel = 'States';
-                    $scope.locationsLength = $scope.locationData.length;
-                    $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
-                } else {
-                    $scope.locationLabel = 'Countries';
-                    $scope.locationsLength = $scope.countryLocationData.length;
-                    $scope.mostPopularLabel = $scope.mostPopularCountry['ip_geo_info.country'];
-                }
-            });
-        };
+        // $scope.switchLocationLabels = function(locationScope) {
+        //     $scope.$apply(function(){
+        //         if(locationScope === 'US') {
+        //             $scope.locationLabel = 'States';
+        //             $scope.locationsLength = $scope.locationData.length;
+        //             $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
+        //         } else {
+        //             $scope.locationLabel = 'Countries';
+        //             $scope.locationsLength = $scope.countryLocationData.length;
+        //             $scope.mostPopularLabel = $scope.mostPopularCountry['ip_geo_info.country'];
+        //         }
+        //     });
+        // };
 
         $scope.setReportData = function (results) {
             console.log('setReportData - results:', results);
@@ -819,7 +826,8 @@
                 $timeout(function () {
                     var location_data = angular.copy($scope.locationData);
                     var countryLocationData = angular.copy($scope.countryLocationData);
-                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world'], $scope.switchLocationLabels);
+                    ChartAnalyticsService.visitorLocations(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
+                    ChartAnalyticsService.visitorLocationsGlobal(location_data, Highcharts.maps['countries/us/us-all'], countryLocationData, Highcharts.maps['custom/world']);
                 }, 200);
                 if (!$scope.displayVisitors) {
                     console.log('no visitors');

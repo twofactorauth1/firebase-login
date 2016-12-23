@@ -875,7 +875,7 @@
             fn(newVsReturningConfig);
         };
 
-        this.visitorLocations = function (locationData, highchartsData, countryData, countryMap, labelSwitchFN) {
+        this.visitorLocationsGlobal = function (locationData, highchartsData, countryData, countryMap) {
             console.log('>> visitorLocations', highchartsData);
             console.log('countryData:', countryData);
             console.log('countryMap:', countryMap);
@@ -895,6 +895,65 @@
                     pointFormat: '{point.code}: {point.value}'
                 }
             };
+            
+            if ($("#visitor_locations_global").length) {
+                console.log('"#visitor_locations_global');
+                var chart1 = new Highcharts.Map({
+                    chart: {
+                        renderTo: 'visitor_locations_global',
+                        height: 360,
+                        zoomType : false 
+                    },
+
+                    title: {
+                        text: ''
+                    },
+
+                    exporting: {
+                        enabled: false
+                    },
+
+                    legend: {
+                        enabled: false
+                    },
+
+                    mapNavigation: {
+                        buttonOptions: {
+                            align: 'right',
+                            verticalAlign: 'bottom'
+                        },
+                        enableButtons: false,
+                        //enableDoubleClickZoomTo: true,
+                        enableDoubleClickZoom: false,
+                        enableTouchZoom: false
+                    },
+
+                    colorAxis: {
+                        min: 1,
+                        type: 'logarithmic',
+                        minColor: '#4cb0ca',
+                        maxColor: '#224f5b'
+                    },
+
+                    series: [
+                        worldSeries
+                    ],
+                    xAxis:{
+                        
+                    },
+                    credits: {
+                        enabled: false
+                    }
+                });
+            }
+        };
+
+        this.visitorLocations = function (locationData, highchartsData, countryData, countryMap) {
+            console.log('>> visitorLocations', highchartsData);
+            console.log('countryData:', countryData);
+            console.log('countryMap:', countryMap);
+
+            
             var usSeries = {
                 animation: {
                     duration: 1000
@@ -915,7 +974,8 @@
                 var chart1 = new Highcharts.Map({
                     chart: {
                         renderTo: 'visitor_locations',
-                        height: 360
+                        height: 360,
+                        zoomType : false 
                     },
 
                     title: {
@@ -935,9 +995,9 @@
                             align: 'right',
                             verticalAlign: 'bottom'
                         },
-                        enableButtons: true,
+                        enableButtons: false,
                         //enableDoubleClickZoomTo: true,
-                        enableDoubleClickZoom: true,
+                        enableDoubleClickZoom: false,
                         enableTouchZoom: false
                     },
 
@@ -952,31 +1012,7 @@
                         usSeries
                     ],
                     xAxis:{
-                        events:{
-                            setExtremes:function(event) {
-                                //console.log('setExtremes:', event);
-                                //console.log('this:', this);
-                                if(this.chart.series[0].mapTitle === 'United States of America') {
-                                    if(event.min === event.dataMin && event.max === event.dataMax && event.trigger !== 'zoom') {
-                                        this.chart.series[0].update(worldSeries);
-                                        labelSwitchFN('world');
-                                        this.switchedSeries = true;
-                                    }
-                                } else {
-                                    if(event.min) {
-                                        //console.log('Switching to US');
-                                        this.chart.series[0].update(usSeries);
-                                        labelSwitchFN('US');
-                                        this.switchedSeries = true;
-                                    }
-                                }
-                            },
-                            afterSetExtremes: function(event) {
-                                if(this.switchedSeries === true) {
-                                    this.switchedSeries = false;
-                                }
-                            }
-                        }
+                        
                     },
                     credits: {
                         enabled: false
