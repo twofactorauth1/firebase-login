@@ -156,7 +156,8 @@
         $scope.updatesiteTraffic = function() {
             ChartAnalyticsService.getSiteAnalyticsTraffic(function(data){
                 var chart = $('#live-traffic-chart').highcharts();
-                chart.series[0].setData(_.pluck(data, 'count'), true);
+                if(chart)
+                    chart.series[0].setData(_.pluck(data, 'count'), true);
 
                 $scope.liveTraffic = data;
                 $timeout($scope.updatesiteTraffic, 60000);
