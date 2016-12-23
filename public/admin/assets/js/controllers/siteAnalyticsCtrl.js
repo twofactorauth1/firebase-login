@@ -156,7 +156,8 @@
         $scope.updatesiteTraffic = function() {
             ChartAnalyticsService.getSiteAnalyticsTraffic(function(data){
                 var chart = $('#live-traffic-chart').highcharts();
-                chart.series[0].setData(_.pluck(data, 'count'), true);
+                if(chart)
+                    chart.series[0].setData(_.pluck(data, 'count'), true);
 
                 $scope.liveTraffic = data;
                 $timeout($scope.updatesiteTraffic, 60000);
@@ -424,7 +425,8 @@
             $scope.sessionsData = _sessionsData;
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, function (data) {
+
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
                 //$scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 //});
@@ -542,7 +544,7 @@
             if(results.visitorLocationsByCountryReport) {
                 var _formattedCountryLocations = [];
                 _.each(results.visitorLocationsByCountryReport, function(loc){
-                    if(loc['ip_geo_info.country']  && loc['ip_geo_info.country'] != "Unknown") {
+                    if(loc['ip_geo_info.country']) {
                         _formattedCountryLocations.push(loc);
                     }
                 });
@@ -765,12 +767,11 @@
             $scope.sessionsData = _sessionsData;
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, function (data) {
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
                 $scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 });
                 $scope.analyticsOverviewConfig.loading = false;
-
             });
 
             var sessionsPreviousData = 0;
@@ -894,13 +895,6 @@
             }
         });
 
-        $scope.$watch('locationsGlobal', function (value, oldValue) {
-            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
-                AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("locationsGlobal", value);
-                reflowCharts();
-            }
-        });
-
         $scope.$watch('interactions', function (value, oldValue) {
             if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
                 AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("interactions", value);
@@ -962,7 +956,6 @@
             $timeout(function() {
                 $scope.overview = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.overview;
                 $scope.locations = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.locations;
-                $scope.locationsGlobal = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.locationsGlobal;
                 $scope.interactions = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.interactions;
                 $scope.device = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.device;
                 $scope.newVReturning = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.newVReturning;
@@ -1016,6 +1009,17 @@
             }
         };
 
+        function isVisibleLegend(name, widget){
+            var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
+            legend = legend.replace(/ /g, "_");
+            return AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig[legend];
+        }
+
+        function setLegendVisibility(widget, name, value){
+            var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
+            legend = legend.replace(/ /g, "_");
+            AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates(legend, value);
+        }
 
         $scope.$watchGroup(['app.layout.isAnalyticsDashboardMode', 'app.layout.isSidebarClosed'],  function (val1, val2) {
             if(angular.isDefined(val1) || angular.isDefined(val2)){

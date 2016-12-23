@@ -368,7 +368,7 @@
 
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, function (data) {
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, $scope.dauData, isVisibleLegend, setLegendVisibility, function (data) {
                 //$scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 //});
@@ -781,7 +781,7 @@
             $scope.sessionsData = _sessionsData;
 
 
-            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, function (data) {
+            ChartAnalyticsService.analyticsOverview($scope.pageviewsData, $scope.sessionsData, $scope.visitorsData, null, isVisibleLegend, setLegendVisibility, function (data) {
                 $scope.$apply(function () {
                     $scope.analyticsOverviewConfig = data;
                 });
@@ -1054,6 +1054,19 @@
                 reflowCharts();
             }
         })
+
+
+        function isVisibleLegend(name, widget){
+            var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
+            legend = legend.replace(/ /g, "_");
+            return AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig[legend];
+        }
+
+        function setLegendVisibility(widget, name, value){
+            var legend = widget.toLowerCase() + "_" + name.toLowerCase() + "_legend";
+            legend = legend.replace(/ /g, "_");
+            AnalyticsWidgetStateService.setPlateformAnalyticsWidgetStates(legend, value);
+        }
 
     }]);
 }(angular));

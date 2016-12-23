@@ -161,7 +161,8 @@
                     //figure out what's different
                     
                     var chart = $('#live-traffic-chart').highcharts();
-                    chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
+                    if(chart)
+                        chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
 
                     $scope.liveTraffic = liveTraffic;
                     $timeout(DashboardService.getLiveTraffic, 15000);
