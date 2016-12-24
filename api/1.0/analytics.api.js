@@ -1990,10 +1990,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var userId = self.userId(req);
         var accountId = self.accountId(req);
-        self.log.debug(accountId, userId, '>> getLiveVisitors');
+        self.log.trace(accountId, userId, '>> getLiveVisitors');
 
         analyticsManager.getLiveVisitors(accountId, userId, 60, false, function(err, value){
-            self.log.debug(accountId, userId, '<< getLiveVisitors');
+            self.log.trace(accountId, userId, '<< getLiveVisitors');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
 
@@ -2003,10 +2003,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var userId = self.userId(req);
         var accountId = self.accountId(req);
-        self.log.debug(accountId, userId, '>> getAdminLiveVisitors');
+        self.log.trace(accountId, userId, '>> getAdminLiveVisitors');
         if(accountId === appConfig.mainAccountID) {
             analyticsManager.getLiveVisitors(accountId, userId, 60, true, function(err, value){
-                self.log.debug(accountId, userId, '<< getAdminLiveVisitors');
+                self.log.trace(accountId, userId, '<< getAdminLiveVisitors');
                 self.sendResultOrError(resp, err, value, 'Error getting report');
             });
         } else {
