@@ -68,7 +68,7 @@
                                                     <td>Subdomain:</td>
                                                     <td>
                                                         <div>
-                                                            {{customer.subdomain}}
+                                                            <a href="{{subdomainURL}} " target="_blank">{{customer.subdomain}}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -76,7 +76,7 @@
                                                     <td>Custom Domain:</td>
                                                     <td>
                                                         <span>
-                                                            {{customer.customDomain}}
+                                                            <a href="http://{{customer.customDomain}}" target="_blank">{{customer.customDomain}}</a>
                                                         </span>
                                                         <div class="pull-right">
                                                             <a ng-click="getNameServers(customer.customDomain)"><i class="fa fa-binoculars" tooltip="Show name server details"></i></a>

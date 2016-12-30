@@ -3,9 +3,6 @@
 /*jslint unparam:true*/
 (function (angular) {
     app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "CustomerService", 'ContactService', 'SweetAlert', '$state', '$window', '$timeout', 'UserService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, customerService, contactService, SweetAlert, $state, $window, $timeout, UserService) {
-
-
-
         $scope.isDomainChanged = false;
         /*
          * @getCustomer
@@ -34,15 +31,14 @@
                 }
 
                 $scope.matchUsers(customer);
-
                 $scope.originalCustomer = angular.copy($scope.customer);
-
+                $scope.subdomainURL = $scope.generateSubdomainURL($scope.data.subdomain);
             });
 
         };
 
         $scope.checkNameServerChanged = function(){
-            $scope.isDomainChanged = $scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer.customDomain, $scope.customer.customDomain);           
+            $scope.isDomainChanged = $scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer.customDomain, $scope.customer.customDomain);
         };
 
         $scope.getMapData = function () {
@@ -92,6 +88,11 @@
             } else {
                 fn();
             }
+        };
+
+        $scope.generateSubdomainURL = function (subdomain) {
+            var url = $location.protocol() + '://' + location.host.replace('main',subdomain);
+            return url;
         };
 
         $scope.displayAddressFormat = function (address) {
@@ -304,7 +305,7 @@
 
 
 
-        
+
 
         /*
          * @addNote
@@ -314,7 +315,7 @@
         $scope.newNote = {};
 
         $scope.addNote = function (_note) {
-            
+
             customerService.addCustomerNotes($scope.customer._id, _note, function (customer) {
                 if(customer && customer._id){
                     toaster.pop('success', 'Notes Added.');
@@ -361,7 +362,7 @@
             $scope.planInterval = "";
             if (invoice.lines.data.length) {
                 $scope.planInterval = _.last(invoice.lines.data).plan.interval;
-            }   
+            }
             if (_date.toString().length === 10) {
                 _date = _date * 1000;
             }
