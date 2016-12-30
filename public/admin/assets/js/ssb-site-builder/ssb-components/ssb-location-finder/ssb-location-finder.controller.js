@@ -55,7 +55,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     // Chris - my bad..
     if(vm.component.isHelm === false){
-        vm.mapCenterLocation = new google.maps.LatLng(38.873452, -77.003743); // ice cream jubilee
+        vm.mapCenterLocation = new google.maps.LatLng(41.8853195, -87.6285088); // rowdydow
     } else {
         vm.mapCenterLocation = new google.maps.LatLng(32.837377, -117.138966); // helms
     }
@@ -215,7 +215,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             });
 
         }
-        else{            
+        else{
             resetSearchButton();
         }
 
