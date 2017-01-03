@@ -12,6 +12,7 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
     vm.init = init;
     vm.initData = initData;
     vm.getFeaturedImageUrl = getFeaturedImageUrl;
+    vm.encodeUrlText = encodeUrlText;
 
     function initData() {
         window.indigenous.precache = window.indigenous.precache || {};
@@ -30,6 +31,10 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
         if(url){
             return url.replace(/^(http|https):/i, "");
         }
+    }
+
+    function encodeUrlText(url){
+        return encodeURI(url);
     }
 
     function init(element) {

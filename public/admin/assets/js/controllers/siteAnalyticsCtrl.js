@@ -872,12 +872,11 @@
         };
 
         function reflowCharts(){
-            window.Highcharts.charts.forEach(function(chart){
-                if(chart){
-                    $timeout(function() {
+            window.Highcharts.charts.forEach(function(chart){                
+                $timeout(function() {
+                    if(chart)
                         chart.reflow();
-                    }, 500);
-                }
+                }, 500);
             })
         };
 
@@ -891,6 +890,13 @@
         $scope.$watch('locations', function (value, oldValue) {
             if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
                 AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("locations", value);
+                reflowCharts();
+            }
+        });
+
+        $scope.$watch('locationsGlobal', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
+                AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("locationsGlobal", value);
                 reflowCharts();
             }
         });
@@ -956,6 +962,7 @@
             $timeout(function() {
                 $scope.overview = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.overview;
                 $scope.locations = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.locations;
+                $scope.locationsGlobal = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.locationsGlobal;
                 $scope.interactions = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.interactions;
                 $scope.device = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.device;
                 $scope.newVReturning = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.newVReturning;

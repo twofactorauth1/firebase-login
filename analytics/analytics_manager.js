@@ -220,7 +220,7 @@ module.exports = {
     getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, fn) {
         var self = this;
         self.log = _log;
-        self.log.debug(accountId, userId, '>> getLiveVistiors');
+        self.log.trace(accountId, userId, '>> getLiveVistiors');
         /*
          {
          $match:{
@@ -331,7 +331,7 @@ module.exports = {
                 if(value) {
                     results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
                 }
-                self.log.debug(accountId, userId, '<< getLiveVistiors');
+                self.log.trace(accountId, userId, '<< getLiveVistiors');
                 fn(null, results);
             }
         });
