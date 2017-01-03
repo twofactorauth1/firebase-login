@@ -636,8 +636,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
             $timeout(function() {
                 vm.setFixedPosition();
-            }, 500);
+            }, 1000);
         }
+
     }
 
 }
