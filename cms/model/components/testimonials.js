@@ -42,14 +42,14 @@ var component = $$.m.ModelBase.extend({
 
             testimonials : [
                 {
-                    "img" : "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+                    "img" : "<img src='//s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
                     "name" : "First Last",
                     "site" : "www.examplesite.com",
                     "text" : "This is the testimonial.",
                     "active" : true
                 },
                 {
-                    "img" : "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+                    "img" : "<img src='//s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
                     "name" : "First Last",
                     "site" : "www.examplesite.com",
                     "text" : "This is the testimonial.",
