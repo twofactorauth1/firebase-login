@@ -96,9 +96,5 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
                 
             }
         });
-
-        $scope.$on('getCurrentPage', function (event, args) {
-            args.currentpage = $scope.page;
-        });
     }
 ]);

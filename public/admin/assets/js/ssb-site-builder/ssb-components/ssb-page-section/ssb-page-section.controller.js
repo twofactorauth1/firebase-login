@@ -72,7 +72,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
                     classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
                     if(vm.elementLoaded){
-                        classString += ' ssb-fixed sticky';
+                        classString += ' ssb-fixed sticky fixedsection';
 
                         if (vm.index === 0) {
                             classString += ' ssb-fixed-first-element';
@@ -636,7 +636,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
             $timeout(function() {
                 vm.setFixedPosition();
-            }, 1000);
+            }, 0);
         }
 
     }
