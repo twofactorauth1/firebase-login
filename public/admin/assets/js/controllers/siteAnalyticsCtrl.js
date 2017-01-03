@@ -872,12 +872,11 @@
         };
 
         function reflowCharts(){
-            window.Highcharts.charts.forEach(function(chart){
-                if(chart){
-                    $timeout(function() {
+            window.Highcharts.charts.forEach(function(chart){                
+                $timeout(function() {
+                    if(chart)
                         chart.reflow();
-                    }, 500);
-                }
+                }, 500);
             })
         };
 
