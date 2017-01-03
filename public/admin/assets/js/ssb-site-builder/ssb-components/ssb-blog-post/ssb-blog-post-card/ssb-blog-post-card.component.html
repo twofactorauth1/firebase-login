@@ -46,7 +46,7 @@
                 <i class="fa fa-user margin-left-10"></i>
                 <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
                     <span itemprop="name">
-                        <a ng-class="{'ssb-theme-btn' : vm.post.post_author}" class="btn btn-link padding-top-0" href="/author/{{vm.post.post_author}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                        <a ng-class="{'ssb-theme-btn' : vm.post.post_author}" class="btn btn-link padding-top-0" href="/author/{{vm.encodeUrlText(vm.post.post_author)}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
                     </span>
                 </span>
             </div>
@@ -58,7 +58,7 @@
                     <h5 class="ssb-tag-heading">TAGS</h5>
                     <ul class="ssb-post_tags" >
                         <li ng-repeat="tag in vm.post.post_tags track by $index">
-                            <a href="/tag/{{tag.text ? tag.text: tag}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{tag.text ? tag.text: tag}}</a>
+                            <a href="/tag/{{tag.text ? vm.encodeUrlText(tag.text): vm.encodeUrlText(tag)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{tag.text ? tag.text: tag}}</a>
                         </li>
                     </ul> 
                 </div>
