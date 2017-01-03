@@ -163,9 +163,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.getTax = function(postcode, fn) {
 
                 var order = getOrderStructure();
+                scope.waitForTax = true;
                 OrderService.getEstimatedTax(order, function(data){
                     if(data && data.tax_rate > 0){
                         CartDetailsService.showTax = true;
+                        scope.waitForTax = false;
                         CartDetailsService.taxPercent = parseFloat(data.tax_rate * 100).toFixed(2);
                         if (fn) {
                             fn(CartDetailsService.taxPercent);
@@ -173,6 +175,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                     else {
                         CartDetailsService.showTax = false;
+                        scope.waitForTax = false;
                     }
                 });
             };
