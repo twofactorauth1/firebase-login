@@ -895,6 +895,13 @@
             }
         });
 
+        $scope.$watch('locationsGlobal', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
+                AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("locationsGlobal", value);
+                reflowCharts();
+            }
+        });
+
         $scope.$watch('interactions', function (value, oldValue) {
             if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
                 AnalyticsWidgetStateService.setSiteAnalyticsWidgetStates("interactions", value);
@@ -956,6 +963,7 @@
             $timeout(function() {
                 $scope.overview = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.overview;
                 $scope.locations = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.locations;
+                $scope.locationsGlobal = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.locationsGlobal;
                 $scope.interactions = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.interactions;
                 $scope.device = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.device;
                 $scope.newVReturning = AnalyticsWidgetStateService.siteAnalyticsWidgetStateConfig.newVReturning;
