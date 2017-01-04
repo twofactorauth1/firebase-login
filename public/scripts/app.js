@@ -264,7 +264,19 @@ var mainApp = angular
                 $rootScope.$apply();
             }
         });
-    });
+    })
+    .config(["$provide", function ($provide) {
+        $provide.decorator("$exceptionHandler", ["$delegate", "$window", function($delegate, $window) {
+                return function (exception, cause) {
+                    if ($window.trackJs) {
+                        $window.trackJs.track(exception);
+                    }
+                    // (Optional) Pass the error through to the delegate
+                    $delegate(exception, cause);
+                };
+            }]);
+    }]
+);
 mainApp.constant('formValidations', {
     //'email': /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/,
     'email': /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.([a-z]{2,})|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
