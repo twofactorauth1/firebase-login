@@ -119,5 +119,9 @@ function sb_init() {
   }
 
   $('head').append(cssLink);
-  where.append(toolbar);
+
+  //Only insert sidebar once
+  if($(target).find('.social-sidebar').length === 0) {
+    where.append(toolbar);
+  }
 }
