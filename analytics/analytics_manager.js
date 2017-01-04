@@ -338,7 +338,7 @@ module.exports = {
 
     },
 
-    getVisitorCount: function(accountId, userId, startDate, endDate, isAggregate, fn) {
+    getVisitorCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorCount');
@@ -372,14 +372,236 @@ module.exports = {
                 self.log.error(accountId, userId, 'Error getting visitor count: ', err);
                 fn(err);
             } else {
-                var count = 0;
+                var currentCount = 0;
                 if(value) {
-                    count = value.length;
+                    currentCount = value.length;
                 }
-                self.log.debug(accountId, userId, '<< getVisitorCount');
-                fn(null, count);
+                var results = {currentCount:currentCount};
+                stageAry[0].$match.server_time_dt = {
+                    $gte:previousStart,
+                    $lte:previousEnd
+                };
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting visitor count: ', err);
+                        fn(err);
+                    } else {
+                        var previousCount = 0;
+                        if(value) {
+                            previousCount = value.length;
+                        }
+                        results.previousCount = previousCount;
+                        self.log.debug(accountId, userId, '<< getVisitorCount');
+                        fn(null, results);
+                    }
+                });
+
             }
         });
+    },
+
+    getVisitCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getVisitCount');
+
+        var currentQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var previousQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:previousStart,
+                $lte:previousEnd
+            }
+        };
+        dao.findCount(currentQuery, $$.m.SessionEvent, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting visit count: ', err);
+                fn(err);
+            } else {
+                var results = {
+                    currentCount: count || 0
+                };
+                dao.findCount(previousQuery, $$.m.SessionEvent, function(err, count){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting visit count: ', err);
+                        fn(err);
+                    } else {
+                        var previousCount = 0;
+                        if(count) {
+                            previousCount = count;
+                        }
+                        results.previousCount = previousCount;
+                        self.log.debug(accountId, userId, '<< getVisitCount');
+                        fn(null, results);
+                    }
+                });
+            }
+        });
+
+    },
+
+    getPageViewCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getPageViewCount');
+
+        var currentQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:startDate,
+                $lte:endDate
+            }
+        };
+        var previousQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:previousStart,
+                $lte:previousEnd
+            }
+        };
+        dao.findCount(currentQuery, $$.m.PageEvent, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting page view count: ', err);
+                fn(err);
+            } else {
+                var results = {
+                    currentCount: count || 0
+                };
+                dao.findCount(previousQuery, $$.m.PageEvent, function(err, count){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting page view count: ', err);
+                        fn(err);
+                    } else {
+                        var previousCount = 0;
+                        if(count) {
+                            previousCount = count;
+                        }
+                        results.previousCount = previousCount;
+                        self.log.debug(accountId, userId, '<< getPageViewCount');
+                        fn(null, results);
+                    }
+                });
+            }
+        });
+    },
+
+    getSearchReferrals: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getSearchReferrals');
+
+        var currentQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:startDate,
+                $lte:endDate
+            },
+            'referrer.domain': {$in:['www.google.com']}
+        };
+        var previousQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:previousStart,
+                $lte:previousEnd
+            },
+            'referrer.domain': {$in:['www.google.com']}
+        };
+        dao.findCount(currentQuery, $$.m.SessionEvent, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting search referral count: ', err);
+                fn(err);
+            } else {
+                var results = {
+                    currentCount: count || 0
+                };
+                dao.findCount(previousQuery, $$.m.SessionEvent, function(err, count){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting search referral count: ', err);
+                        fn(err);
+                    } else {
+                        var previousCount = 0;
+                        if(count) {
+                            previousCount = count;
+                        }
+                        results.previousCount = previousCount;
+                        self.log.debug(accountId, userId, '<< getSearchReferrals');
+                        fn(null, results);
+                    }
+                });
+            }
+        });
+    },
+
+    getBounceRate: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getBounceRate');
+
+        var currentQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:startDate,
+                $lte:endDate
+            },
+            fingerprint:{$ne:0},
+            session_length: {$lte:360000}//exclude tabs left-open
+        };
+
+        var previousQuery = {
+            accountId:accountId,
+            server_time_dt:{
+                $gte:previousStart,
+                $lte:previousEnd
+            },
+            fingerprint:{$ne:0},
+            session_length: {$lte:360000}//exclude tabs left-open
+        };
+
+        dao.findMany(currentQuery, $$.m.SessionEvent, function(err, sessionAry){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding sessions:', err);
+                fn(err);
+            } else {
+                var currentBounceRate = self._calculateBounceRate(sessionAry);
+                dao.findMany(previousQuery, $$.m.SessionEvent, function(err, sessionAry){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding sessions:', err);
+                        fn(err);
+                    } else {
+                        var previousBounceRate = self._calculateBounceRate(sessionAry);
+                        var results = {
+                            currentBounceRate:currentBounceRate,
+                            previousBounceRate:previousBounceRate
+                        };
+                        self.log.debug(accountId, userId, '<< getBounceRate');
+                        return fn(null, results);
+                    }
+                });
+            }
+        });
+
+    },
+
+    _calculateBounceRate: function(sessionAry) {
+        var bounceCount = 0;
+        var totalCount = sessionAry.length;
+
+        _.each(sessionAry, function(sessionEvent){
+            if(sessionEvent.get('session_length') < 5000) {
+                bounceCount++;
+            }
+        });
+        if(totalCount > 0) {
+            return bounceCount / totalCount;
+        } else {
+            return 0;
+        }
     },
 
     getVisitorReports: function(accountId, userId, startDate, endDate, isAggregate, fn) {

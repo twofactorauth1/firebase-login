@@ -2620,6 +2620,115 @@ module.exports = {
         });
     },
 
+    getOrderCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> getOrderCount');
+
+        var statusAry = ['completed', 'processing', 'paid'];
+        var query = {
+            account_id:accountId,
+            created_at:{
+                $gte:startDate,
+                $lte:endDate
+            },
+            status:{$in:statusAry}
+        };
+        var previousQuery = {
+            account_id:accountId,
+            created_at:{
+                $gte:previousStart,
+                $lte:previousEnd
+            },
+            status:{$in:statusAry}
+        };
+        dao.findCount(query, $$.m.Order, function(err, count){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting order count: ', err);
+                fn(err);
+            } else {
+                var results = {
+                    currentCount: count || 0
+                };
+                dao.findCount(previousQuery, $$.m.Order, function(err, count){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting order count: ', err);
+                        fn(err);
+                    } else {
+                        var previousCount = 0;
+                        if(count) {
+                            previousCount = count;
+                        }
+                        results.previousCount = previousCount;
+                        self.log.debug(accountId, userId, '<< getOrderCount');
+                        fn(null, results);
+                    }
+                });
+            }
+
+        });
+    },
+
+    getRevenueAmount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> getRevenueAmount');
+
+        var statusAry = ['completed', 'processing', 'paid'];
+        var query = {
+            account_id:accountId,
+            created_at:{
+                $gte:startDate,
+                $lte:endDate
+            },
+            status:{$in:statusAry}
+        };
+        var previousQuery = {
+            account_id:accountId,
+            created_at:{
+                $gte:previousStart,
+                $lte:previousEnd
+            },
+            status:{$in:statusAry}
+        };
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting order revenue: ', err);
+                fn(err);
+            } else {
+                var currentRevenue = self._calculateNetSales(orders);
+                dao.findMany(previousQuery, $$.m.Order, function(err, orders){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting order revenue: ', err);
+                        fn(err);
+                    } else {
+                        var previousRevenue = self._calculateNetSales(orders);
+                        var results = {
+                            currentRevenue:currentRevenue,
+                            previousRevenue:previousRevenue
+                        };
+                        self.log.debug(accountId, userId, '<< getRevenueAmount');
+                        return fn(null, results);
+                    }
+                });
+            }
+        });
+    },
+
+    _calculateNetSales: function(orderAry) {
+        /*
+         * Assuming Net Sales = sum(subtotals) - sum(discounts)
+         */
+
+        var subTotalTotal = 0;
+        var discountTotal = 0;
+        _.each(orderAry, function(order){
+            subTotalTotal += Number(order.get('subtotal'));
+            discountTotal += Number(order.get('total_discount'));
+        });
+        return subTotalTotal - discountTotal;
+    },
+
     _calculateShippingCharges: function(accountId, userId, account, productAry, fn) {
         var self = this;
         self.log = log;

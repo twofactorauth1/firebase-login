@@ -48,7 +48,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var destinationAddress = 'kyle@indigenous.io';
         var startDate = moment().subtract(7, 'days').toDate();
         var endDate = moment().toDate();
-        manager.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate,
+        manager.generateInsightReport(accountId, userId, 6, sections, destinationAddress, startDate,
                 endDate, function(err, results){
             self.log.debug(accountId, userId, '<< testInsightReport');
             self.sendResultOrError(resp, err, results, 'Could not test insight report');
