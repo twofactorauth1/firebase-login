@@ -6,10 +6,11 @@
                     <div elem ng-model="vm.component.heading"></div>
                 </div>
                 <div class="row-fluid margin-top-10">
-                	<div class="feed-list-loading" ng-if="!vm.loading">
-                		<span class="center">Loading....</span>
+                	<div class="feed-list-loading" ng-if="vm.loading">
+                		<div class="feed-list-wait-message">Loading feeds. Please wait....</div>
+                		<span class="fa fa-3x fa-spinner fa-spin"></span>
                 	</div>
-		            <ul class="ssb-rss-feed-list" ng-if="vm.loading">		                
+		            <ul class="ssb-rss-feed-list" ng-if="!vm.loading">		                
 		                <li ng-repeat="feed in vm.feeds | filter:filterText">                  
 		                    <p class="rss-feed-title" ng-attr-style="{{vm.titleStyle()}}"><a class="btn-link ssb-theme-btn padding-top-0" href="{{feed.link}}" ng-bind-html="feed.title"></a></p>
 		                    <p class="rss-feed-description" ng-attr-style="{{vm.descriptionStyle()}}"><a class="btn-link ssb-theme-btn padding-top-0" href="{{feed.link}}" ng-bind-html="feed.contentSnippet"></a></p>
