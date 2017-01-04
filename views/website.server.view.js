@@ -213,10 +213,18 @@ _.extend(view.prototype, BaseView.prototype, {
                         keywords: ''
                     };
                 } else {
-                    data.seo = {
-                        description: value.website.seo.description,
-                        keywords: ''
-                    };
+                    if(value && value.website && value.website.seo) {
+                        data.seo = {
+                            description: value.website.seo.description,
+                            keywords: ''
+                        };
+                    } else {
+                        data.seo = {
+                            description: '',
+                            keywords: ''
+                        };
+                    }
+
                 }
 
 
