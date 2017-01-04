@@ -15,16 +15,14 @@
             <i class="fa fa-user margin-left-10"></i>
             <span itemprop="author" itemscope="" itemtype="http://schema.org/Person">
                 <span itemprop="name">
-                    <a class="btn btn-link ssb-theme-btn padding-top-0" href="/author/{{vm.encodeUrlText(vm.post.post_author)}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
+                    <a ng-if="vm.post.post_author" class="btn btn-link ssb-theme-btn padding-top-0" href="/author/{{vm.encodeUrlText(vm.post.post_author)}}" target="_self" itemprop="url" rel="author">{{vm.post.post_author}}</a>
                 </span>
             </span>
         </div>
 
-        <div id="lessbuttons_holder"></div>
-        <script
-            async
-            src="https://lessbuttons.com/script.js?position=inline&facebook=1&twitter=1&linkedin=1&pinterest=1&email=1">
-        </script>
+        
+        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && vm.floatSocialShareLinks()"></script>
+        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && !vm.floatSocialShareLinks()" data-target=".ssb-blog-byline"></script>
 
         <section
             itemprop="articleBody"
