@@ -44,8 +44,8 @@ function ssbBlogPostDetailComponentController($scope, $attrs, $filter, $transclu
             vm.showSocialShare = true;            
         }
         if ($injector.has("AccountService")){
-            AccountService = $injector.get("AccountService");    
-            AccountService.getAccount(function(account) {
+            var accountService = $injector.get("AccountService");    
+            accountService.getAccount(function(account) {
                 if(account && account.showhide && account.showhide.blogSocialSharing !== false){
                     vm.showSocialShare = true;
                 }
