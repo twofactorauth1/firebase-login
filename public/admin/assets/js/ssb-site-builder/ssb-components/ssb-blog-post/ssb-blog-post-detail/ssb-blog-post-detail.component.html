@@ -20,11 +20,9 @@
             </span>
         </div>
 
-        <div id="lessbuttons_holder"></div>
-        <script
-            async
-            src="https://lessbuttons.com/script.js?position=inline&facebook=1&twitter=1&linkedin=1&pinterest=1&email=1">
-        </script>
+        
+        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && vm.floatSocialShareLinks()"></script>
+        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && !vm.floatSocialShareLinks()" data-target=".ssb-blog-byline"></script>
 
         <section
             itemprop="articleBody"
