@@ -7,7 +7,7 @@
                 <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set source of rss feed"><i class="fa fa-info-circle" /></span>
             </label>
             <div>
-                <input class="form-control" type="text" ng-model="component.settings.source">
+                <input class="form-control" type="text" ng-model-options="{ debounce: 800 }" ng-model="component.settings.source">
             </div>           
             
         </div>

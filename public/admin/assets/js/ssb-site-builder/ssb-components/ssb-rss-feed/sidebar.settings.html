@@ -1,7 +1,12 @@
 <div class="row padding-10">
 	
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Settings', id: 'rss-feed-settings' + component._id, componentId: component._id });" class="ssb-sidebar-section-panel-btn btn btn-link">
-        <i class="fa fa-gear display-ib"></i> Rss Feed Configurations
+        <i class="fa fa-align-justify display-ib"></i> Configuration
+    </button>
+
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="fa fa-magic display-ib"></i> Style
     </button>
 
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Size &amp; Padding', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">

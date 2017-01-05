@@ -44,19 +44,31 @@ function ssbRssFeedComponentController($scope, $attrs, $filter, $transclude, Rss
 		return styleString;
 	}
 
+	$scope.$watch('vm.component.settings.source', function (val) {
+        if (val) {
+        	loadFeed();
+        }
+    })
+
 
 	function loadFeed(){
 		vm.loading = true;
 		RssFeedService.parseFeed(vm.component.settings.source).then(function(feeds){
-	        console.log(feeds);
-	        vm.feeds = feeds.data.responseData.feed.entries;
-	        vm.loading = false;
+	        if(feeds && feeds.data && feeds.data.responseStatus === 200){
+		        vm.feeds = feeds.data.responseData.feed.entries;
+		        vm.loading = false;
+	        }
+	        else{
+	        	vm.feeds = [];
+	        	vm.loading = false;
+	        }
+		        
 		})
 	}
 
 	function init(element) {
 		vm.element = element;
-		loadFeed();
+		//loadFeed();
 	}
 
 }
