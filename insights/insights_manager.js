@@ -18,6 +18,7 @@ var userActivityManager = require('../useractivities/useractivity_manager');
 var emailDao = require('../cms/dao/email.dao');
 var contactDao = require('../dao/contact.dao');
 var userDao = require('../dao/user.dao');
+var orderManager = require('../orders/order_manager');
 
 module.exports = {
 
@@ -140,7 +141,7 @@ module.exports = {
                     content:moment(endDate).format('MM/DD/YYYY')
                 });
                 var data = sectionDataMap.weeklyreport;
-                var visitors = '<b>' + data.visitorCount + '</b>';
+                var visitors = '<b>' + data.visitorCount.currentCount + '</b>';
                 var sendCount = '<b>' + data.emailReports.sentCount + '</b>';
                 var openCount = '<b>' + data.emailReports.openCount + '</b>';
                 var clickCount = '<b>' + data.emailReports.clickCount + '</b>';
@@ -224,9 +225,32 @@ module.exports = {
          */
         var accountId = account.id();
         var userId = 0;
+        var dateDiff = moment(startDate).diff(endDate, 'days');
+
+        var previousStart = moment(startDate).add(dateDiff, 'days').toDate();
+        var previousEnd = startDate;
+
         async.parallel({
             visitorCount: function(callback){
-                analyticsManager.getVisitorCount(accountId, userId, startDate, endDate, false, callback);
+                analyticsManager.getVisitorCount(accountId, userId, startDate, endDate, previousStart, previousEnd, false, callback);
+            },
+            visitsCount: function(callback){
+                analyticsManager.getVisitCount(accountId, userId, startDate, endDate, previousStart, previousEnd, false, callback);
+            },
+            pageViewsCount:function(callback) {
+                analyticsManager.getPageViewCount(accountId, userId, startDate, endDate, previousStart, previousEnd, false, callback);
+            },
+            bounceRate:function(callback) {
+                analyticsManager.getBounceRate(accountId, userId, startDate, endDate, previousStart, previousEnd, false, callback);
+            },
+            searchReferrals:function(callback) {
+                analyticsManager.getSearchReferrals(accountId, userId, startDate, endDate, previousStart, previousEnd, false, callback);
+            },
+            ordersCount:function(callback) {
+                orderManager.getOrderCount(accountId, userId, startDate, endDate, previousStart, previousEnd, false, callback);
+            },
+            revenueReport:function(callback) {
+                orderManager.getRevenueAmount(accountId, userId, startDate, endDate, previousStart, previousEnd, false, callback);
             },
             pagesReports: function(callback) {
                 ssbManager.getPagesCreatedModifiedPublished(accountId, userId, startDate, endDate, callback);

@@ -91,6 +91,7 @@
         ssbService.setDeletedPageFromLinkList = setDeletedPageFromLinkList;
         ssbService.saveOtherPageLinks = saveOtherPageLinks;
         ssbService.getAccount = getAccount;
+        ssbService.isImage = isImage;
 
         /**
          * This represents the category sorting for the add content panel

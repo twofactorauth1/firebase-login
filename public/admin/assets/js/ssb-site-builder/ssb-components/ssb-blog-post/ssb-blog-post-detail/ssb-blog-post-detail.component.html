@@ -21,8 +21,8 @@
         </div>
 
         
-        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && vm.floatSocialShareLinks()"></script>
-        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && !vm.floatSocialShareLinks()" data-target=".ssb-blog-byline"></script>
+        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && vm.floatSocialShareLinks()" data-class="ssb-blog-post-social-share"></script>
+        <script src="/js/scripts/sharebar/sharebar.js" ng-if="vm.showSocialShare && !vm.floatSocialShareLinks()" data-target=".ssb-blog-byline" data-class="ssb-blog-post-social-share"></script>
 
         <section
             itemprop="articleBody"

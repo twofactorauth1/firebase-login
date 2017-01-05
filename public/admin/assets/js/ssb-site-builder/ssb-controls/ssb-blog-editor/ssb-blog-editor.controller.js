@@ -280,8 +280,14 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         }
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg').result.then(function(){
             if(SimpleSiteBuilderService.asset){
-                vm.state.post.featured_image = SimpleSiteBuilderService.asset.url;
-                SimpleSiteBuilderService.asset = null;
+                SimpleSiteBuilderService.isImage(SimpleSiteBuilderService.asset.url).then(function(response){
+                    if(response === false){
+                        SimpleSiteBuilderService.asset = null;
+                        return;
+                    }
+                    vm.state.post.featured_image = SimpleSiteBuilderService.asset.url;
+                    SimpleSiteBuilderService.asset = null;
+                })
             }
         })
     }

@@ -80,8 +80,8 @@ ssb-blog-editor {
     }
 
     .blog-post-image-container{
-        background-size:cover;
-        background-position:50% 50%; 
+        background-size:contain;
+        background-repeat: no-repeat; 
         height:200px;
         width:200px;
     }
@@ -278,7 +278,7 @@ ssb-blog-editor {
         }
 
         @media screen and (min-width: 992px) { //when nav sidebar disappears
-            flex: 0 0 380px;
+            flex: 0 0 500px;
         }
 
         .ssb-blog-editor-controls-inner {
@@ -411,4 +411,14 @@ ssb-blog-editor {
         }
     }
 
-}    
+}  
+
+
+
+.app-sidebar-closed .ssb-blog-editor-controls {
+
+    @media screen and (min-width: 992px) {
+        flex: 0 0 380px !important;
+    }
+    
+}   
