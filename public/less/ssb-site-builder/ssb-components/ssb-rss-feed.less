@@ -1,0 +1,33 @@
+/********** Rss Feed **********/
+
+.rss-feed-component {
+    .feed-list-loading{
+        min-height: 100px;
+        padding-top: 25px;
+        text-align: center;
+        .feed-list-wait-message{
+            font-size: 20px;
+        }
+    }
+    ul.ssb-rss-feed-list{
+        list-style: none;
+        padding-left:20px;
+        padding-right:20px;
+        .rss-feed-title,.rss-feed-description{
+            a.btn-link{
+                color: inherit;
+            }
+        }
+        .ssb-theme-btn.btn-link {
+            &:focus {
+                background-color: transparent !important;
+            }
+
+            &:hover:before {
+                background-color: transparent!important;
+            }
+        }
+    }
+}
+
+
