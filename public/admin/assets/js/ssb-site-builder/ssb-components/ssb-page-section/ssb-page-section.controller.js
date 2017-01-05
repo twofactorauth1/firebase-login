@@ -457,7 +457,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 styleString += 'color: ' + component.txtcolor + ';';
             }
 
-            if (component.visibility === false) {
+            if (component.visibility === false && component.type != 'ssb-rss-feed') {
                 styleString += 'display: none!important;';
             }
 

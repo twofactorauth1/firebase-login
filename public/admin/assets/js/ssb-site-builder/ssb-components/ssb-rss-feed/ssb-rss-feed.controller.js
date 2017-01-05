@@ -16,6 +16,8 @@ function ssbRssFeedComponentController($scope, $attrs, $filter, $transclude, Rss
 	vm.titleStyle = titleStyle;
 	vm.descriptionStyle = descriptionStyle;
 
+	vm.isEditing = $scope.$parent && $scope.$parent.vm && $scope.$parent.vm.uiState;
+
 	function titleStyle(){
 		var styleString = ' ';
 		if(vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.fontSize){
