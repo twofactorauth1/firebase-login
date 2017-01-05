@@ -83,8 +83,14 @@ function sb_init() {
       mailLink += 'subject=' + encodedTitle +'&';
       mailLink += 'body=Link%3A%20' + encodedLocation;
 
-  var toolbar  = '<ul class="social-sidebar">';
+  var this_script = $('script[src*=sharebar]');    
 
+  var toolbar  = '<ul class="social-sidebar">';
+  var dataClass = this_script.attr('data-class');
+
+  if (typeof dataClass !== "undefined" ) {
+    toolbar  = '<ul class="social-sidebar '+ dataClass +'" >';
+  }
   // loop ?
   toolbar += '<li><a href="' + facebookLink + '" target="_blank">';
   toolbar += '<span class="icon icon-facebook"></span></a></li>';
@@ -108,7 +114,7 @@ function sb_init() {
 
 
   // Script can be conditioned w/ attr data-target to specify where bar appears
-  var this_script = $('script[src*=sharebar]');
+  
   var target = this_script.attr('data-target');
   if (typeof target === "undefined" ) {
     cssLink = '<link rel="stylesheet" type="text/css" href="/js/scripts/sharebar/sharebar-fixed.css">';
