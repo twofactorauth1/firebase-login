@@ -45,7 +45,7 @@ function ssbRssFeedComponentController($scope, $attrs, $filter, $transclude, Rss
 	}
 
 	$scope.$watch('vm.component.settings.source', function (val) {
-        if (val) {
+        if (angular.isDefined(val)) {
         	loadFeed();
         }
     })
