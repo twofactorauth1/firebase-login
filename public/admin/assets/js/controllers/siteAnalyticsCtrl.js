@@ -544,7 +544,7 @@
             if(results.visitorLocationsByCountryReport) {
                 var _formattedCountryLocations = [];
                 _.each(results.visitorLocationsByCountryReport, function(loc){
-                    if(loc['ip_geo_info.country']) {
+                    if(loc['ip_geo_info.country'] && loc['ip_geo_info.country'] != "Unknown") {
                         _formattedCountryLocations.push(loc);
                     }
                 });
