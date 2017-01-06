@@ -616,6 +616,12 @@ module.exports = {
                 if (contact.getEmails()[0])
                     toAddress = contact.getEmails()[0].email;
                 var toName = contact.get('first') + ' ' + contact.get('last');
+
+                var _sa = updatedOrder.get('shipping_address');
+                if(_sa){
+                    toName = (_sa.first_name || '') + ' ' + (_sa.last_name || '');
+                    toAddress = _sa.email;
+                }
                 //var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
                 var vars = [];
@@ -1279,6 +1285,12 @@ module.exports = {
                 if (contact.getEmails()[0])
                     toAddress = contact.getEmails()[0].email;
                 var toName = contact.get('first') + ' ' + contact.get('last');
+
+                var _sa = updatedOrder.get('shipping_address');
+                if(_sa){
+                    toName = (_sa.first_name || '') + ' ' + (_sa.last_name || '');
+                    toAddress = _sa.email;
+                }
                 //var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
                 var vars = [];
