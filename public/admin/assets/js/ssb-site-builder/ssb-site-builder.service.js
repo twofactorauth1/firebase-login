@@ -1578,6 +1578,15 @@
                 duplicateSection.components.forEach(function(component) {
                     component._id = ssbService.getTempUUID();
                     component.anchor = component._id;
+                    if(angular.isObject(component.elementStyles) && Object.keys(component.elementStyles).length){
+                        _.each(component.elementStyles, function(value, key){ 
+                            if(value){
+                                delete value._id;
+                                delete value.id;
+                                delete value.anchor;
+                            }
+                        });
+                    };
                 });
             }
 
