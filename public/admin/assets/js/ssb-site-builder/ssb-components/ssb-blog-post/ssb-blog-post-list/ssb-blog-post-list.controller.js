@@ -14,7 +14,7 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     vm.initData = initData;
     vm.hasFeaturedPosts = false;
     
-    var path = $location.$$path.replace('/page/', '');
+    var path = $location.$$url.replace('/page/', '');
 
     vm.blog = SimpleSiteBuilderBlogService.blog || {};
 
