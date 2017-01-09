@@ -73,6 +73,60 @@ module.exports = {
 
     },
 
+    replaceS3Asset: function(accountId, userId, temporaryPath, asset, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> replaceS3Asset');
+
+        var uploadPromise = $.Deferred();
+
+        if(temporaryPath) {
+            //TODO: also determine source.
+            var file = {};
+            file.name = asset.get('filename');
+            file.type = asset.get('mimeType');
+            file.size = asset.get('size');
+            file.path = temporaryPath;
+            var bucket = awsConfig.BUCKETS.ASSETS;
+            var subdir = 'account_' + asset.get('accountId');
+            asset.set('source', 'S3');
+            s3dao.uploadToS3(bucket, subdir, file, false, function(err, value){
+                if(err) {
+                    self.log.error('Error from S3: ' + err);
+                    uploadPromise.reject();
+                    fn(err, null);
+                } else {
+                    self.log.debug('S3 upload complete');
+                    self.log.debug('previous url:', asset.get('url'));
+
+                    if (value.url.substring(0, 5) == 'http:') {
+                        asset.set('url', value.url.substring(5, value.url.length));
+                    } else {
+                        asset.set('url', value.url);
+                    }
+                    self.log.debug('new url: ', asset.get('url'));
+                    uploadPromise.resolve(value);
+                }
+            });
+
+        } else {
+            uploadPromise.resolve();
+        }
+        //create record
+        $.when(uploadPromise).done(function(file){
+            asset.set('modified', {modified:new Date(), by:userId});
+            assetDao.saveOrUpdate(asset, function(err, value){
+                if(err) {
+                    self.log.error('Exception during asset creation: ' + err);
+                    fn(err, null);
+                } else {
+                    self.log.debug('<< createAsset');
+                    fn(null, value, file);
+                }
+            });
+        });
+    },
+
     getAsset: function(assetId, fn) {
         var self = this;
         self.log = log;
