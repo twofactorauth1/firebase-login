@@ -2145,15 +2145,15 @@ module.exports = {
                         });
                     },
                     //determine tax rate
-                    function (account, productAry, callback) {
-                        log.debug(accountId, userId, 'commerceSettings');
+                    // function (account, productAry, callback) {
+                    //     log.debug(accountId, userId, 'commerceSettings');
 
-                        self._calculateTaxRate(accountId, userId, account, productAry, order, callback);
-                    },
+                    //     self._calculateTaxRate(accountId, userId, account, productAry, order, callback);
+                    // },
                     //validate
-                    function (account, productAry, taxPercent, callback) {
+                    function (account, productAry, callback) {
                         log.debug(accountId, userId, 'validating order on account ' + order.get('account_id'));
-                        log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
+                        //log.debug(accountId, userId, 'using a tax rate of ', taxPercent);
                         // We need not reclaculation here because we can't apply changes to order calculations
                         //calculate total amount and number line items
                         // var totalAmount = 0;
