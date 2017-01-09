@@ -14,7 +14,11 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     vm.initData = initData;
     vm.hasFeaturedPosts = false;
     
-    var path = $location.$$path.replace('/page/', '');
+    var path = $location.$$url.replace('/page/', '');
+
+    if(path){
+        path = decodeURI(path);
+    }
 
     vm.blog = SimpleSiteBuilderBlogService.blog || {};
 
@@ -44,6 +48,24 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     function initData() {
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
         if (posts) {
+            if(vm.filteredPostView){
+                if(vm.blog.currentAuthor){
+                    posts =  posts.filter(function(post){
+                        // console.log(post)
+                        return post.post_author === vm.blog.currentAuthor
+                    })
+                }
+                if(vm.blog.currentTag){
+                    posts = posts.filter(function(post){
+                        if (post.post_tags) {
+                            return _.some(post.post_tags, function(tag) {
+                                return tag.toLowerCase() === vm.blog.currentTag.toLowerCase() 
+                            })
+                        }
+                    })
+                }
+            }
+            
             vm.blog.posts = posts;
             checkHasFeaturedPosts();
         }

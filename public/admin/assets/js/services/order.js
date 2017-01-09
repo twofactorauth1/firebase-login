@@ -86,13 +86,13 @@
                 method: "POST",
                 data: reasonData
             })
-                .success(function (data, status, headers, config) {
-                    fn(data, null);
-                })
-                .error(function (error) {
-                    console.error('OrderService: refundOrder error >>> ', error);
-                    fn(null, error);
-                });
+            .success(function (data, status, headers, config) {
+                fn(data, null);
+            })
+            .error(function (error) {
+                console.error('OrderService: refundOrder error >>> ', error);
+                fn(null, error);
+            });
         };
 
         this.completeOrder = function (orderId, note, fn) {

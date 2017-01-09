@@ -618,8 +618,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.checkoutModalState = 8;
                 }
                 else{
-                    if (CartDetailsService.hasSubscriptionProduct) {
-                        if(scope.addresses.shipping)
+                    if (CartDetailsService.hasSubscriptionProduct) {                        
                             scope.checkoutModalState = 3;
                     } else {
                         if (scope.stripeInfo && scope.paypalInfo) {

@@ -296,14 +296,18 @@ ssb-blog-editor {
 
                 @media screen and (min-width: 768px) {
                     position: fixed;
-                    width: calc(300px - 25px);
+                    margin-left: -15px;
+                    margin-right: 5px;
+                    overflow-y: auto;
+                    width: 315px;
+                    height: calc(~"100vh - 140px");
 
                     .ssb-blog-editor-controls-tags{
                         max-height: 150px;
                         overflow-y: auto;
                     }
+                    
                 }
-
 
             }
 
@@ -421,4 +425,10 @@ ssb-blog-editor {
         flex: 0 0 380px !important;
     }
     
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    .ssb-blog-editor-controls-inner-fixed {        
+        position: relative !important;
+    }
 }   
