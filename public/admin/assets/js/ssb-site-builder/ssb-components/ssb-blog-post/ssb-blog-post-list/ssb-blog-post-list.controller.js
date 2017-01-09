@@ -16,6 +16,10 @@ function ssbBlogPostListComponentController(SimpleSiteBuilderBlogService, $scope
     
     var path = $location.$$url.replace('/page/', '');
 
+    if(path){
+        path = decodeURI(path);
+    }
+
     vm.blog = SimpleSiteBuilderBlogService.blog || {};
 
     vm.sortBlogPosts = sortBlogPosts;
