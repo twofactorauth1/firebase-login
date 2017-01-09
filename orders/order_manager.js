@@ -168,9 +168,11 @@ module.exports = {
                                     var subject = "New account created!";
                                     var component = {};
                                     component.order = savedOrder.attributes;
-                                    component.text = "The following order was created:";
+                                    //component.text = "The following order was created:";
+                                    //email.set(ordertext, component.text)
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + savedOrder.attributes._id;
-                                    var adminNotificationEmailTemplate = 'emails/base_email_order_admin_notification';
+                                    //email.set(orderurl, component.orderurl)
+                                    var adminNotificationEmailTemplate = 'emails/base_email_order_admin_notification_default';
 
 
                                     //set params needed for email
@@ -669,7 +671,7 @@ module.exports = {
                                     component.order = updatedOrder.attributes;
                                     component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification_default' : 'emails/base_email_order_admin_notification_default';
 
                                     app.render(adminNotificationEmailTemplate, component, function (err, html) {
                                         //juice.juiceResources(html, {}, function(err, _html) {
@@ -685,13 +687,14 @@ module.exports = {
                             } else {
                                 var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
+                                email.set('order', component.order);
                                 log.debug(accountId, userId, 'Using this for data', component);
                                 var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
 
-                                app.render(baseEmailTemplate, component, function (err, html) {
+                                app.render(baseEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                     //juice.juiceResources(html, {}, function(err, _html) {
 
-                                    html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                    //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                     emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function () {
                                         callback(null, account, updatedOrder);
                                     });
@@ -701,14 +704,16 @@ module.exports = {
                                     if (emailPreferences.new_orders === true) {
                                         //Send additional details
                                         subject = isDonation ? "New donation received!" : "New order created!";
-                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        //component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        //email.set("ordertext", component.text);
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                        email.set("orderurl", component.orderurl);
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
-                                        app.render(adminNotificationEmailTemplate, component, function (err, html) {
+                                        app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                             //juice.juiceResources(html, {}, function(err, _html) {
 
-                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function () {
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
@@ -1338,7 +1343,7 @@ module.exports = {
                                     component.order = updatedOrder.attributes;
                                     component.text = isDonation ? "The following donation was created:" : "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
-                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+                                    var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification_default' : 'emails/base_email_order_admin_notification_default';
 
                                     app.render(adminNotificationEmailTemplate, component, function (err, html) {
                                         //juice.juiceResources(html, {}, function(err, _html) {
@@ -1351,15 +1356,16 @@ module.exports = {
                                 }
                                 callback(null, account, updatedOrder);
                             } else {
-                                var component = email.get('components')[0];
+                                var component = email.get('components')[0];                                
                                 component.order = updatedOrder.attributes;
+                                email.set("order", component.order);
                                 log.debug(accountId, userId, 'Using this for data', component);
                                 var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
 
-                                app.render(baseEmailTemplate, component, function (err, html) {
+                                app.render(baseEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                     //juice.juiceResources(html, {}, function(err, _html) {
 
-                                    html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                    //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                     emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function () {
                                         callback(null, account, updatedOrder);
                                     });
@@ -1369,13 +1375,15 @@ module.exports = {
                                     if (emailPreferences.new_orders === true) {
                                         //Send additional details
                                         subject = isDonation ? "New donation received!" : "New order created!";
-                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        //component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        //email.set("ordertext", component.text);
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                        email.set("orderurl", component.orderurl);
                                         var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
 
-                                        app.render(adminNotificationEmailTemplate, component, function (err, html) {
+                                        app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
                                             //juice.juiceResources(html, {}, function(err, _html) {
-                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                             emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function () {
                                                 log.debug(accountId, userId, 'Admin Notification Sent');
                                             });
