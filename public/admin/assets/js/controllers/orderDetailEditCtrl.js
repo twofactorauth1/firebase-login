@@ -539,6 +539,7 @@
                 var emails = customer.details[0].emails;
                 var phones = customer.details[0].phones;
                 var defaultBilling, defaultShipping;
+                var company = customer.details[0].company;
                 //find default address else get first
                 var i = 0;
                 for (i; i < addresses.length; i++) {
@@ -577,11 +578,6 @@
                 var email = '';
                 if (emails.length > 0) {
                     email = emails[0].email;
-                }
-
-                var company = '';
-                if (customer.company) {
-                    company = customer.company;
                 }
 
                 var billingAddress1 = '';
