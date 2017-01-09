@@ -213,6 +213,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         var startPageTimer = new Date().getTime();
         parsedEntranceUrl = $.url(window.location.href);
         var parsedUrl = parsedEntranceUrl;
+        var sessionId = ipCookie("session_cookie")["id"] || Math.uuid();
 
         pageProperties = {
             url: {
@@ -226,13 +227,13 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             pageActions: [],
             start_time: startPageTimer,
             end_time: 0,
-            session_id: ipCookie("session_cookie") && ipCookie("session_cookie")["id"],
+            session_id: sessionId,
             entrance: entrance
         };
 
         entrance = false;
 
-        var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'pageStart'].join('/');
+        var apiUrl = baseUrl + ['analytics', 'session', sessionId, 'pageStart'].join('/');
         $http.post(apiUrl, pageProperties)
             .success(function(data, status, headers, config) {
                 //track mouse movement
