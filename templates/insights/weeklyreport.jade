@@ -12,5 +12,7 @@ table
                 td= row.lastWeek
                 td= row.previousWeek
                 td= row.trend
-
-p Your most recent login was at #{loginTime}
+if loginTime
+    p Your most recent login was at #{loginTime}
+else
+    p There have been no logins to your account.
