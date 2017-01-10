@@ -67,6 +67,17 @@
                                     <li class="hidden">
                                         <a href="#" ng-click="m.editImage(asset)"><i class="fa fa-pencil"></i> Edit</a>
                                     </li>
+                                    <li>                                        
+                                        <label ng-click="replaceAssetFn(true, asset)" style="
+                                            z-index: 9999;
+                                            cursor: pointer;
+                                            text-align: center;
+                                            width: 100%;
+                                        ">
+                                            <i class="fa fa-exchange"></i> Replace
+                                            <input type="file" class="hidden" nv-file-select="" uploader="uploader" ng-click="resetUploader()">
+                                        </label>
+                                    </li>
                                     <li>
                                         <a clipboard text="'https:' + asset.url" on-copied="successCopy()"><i class="fa fa-link"></i> Copy Link</a>
                                     </li>
@@ -170,10 +181,10 @@
             </div>
             <div class="row" ng-if="!editingImage">
                 <div class="col-md-offset-7 col-md-5">
-                    <label for="upload_image" class="btn btn-primary ">
+                    <label for="upload_image" class="btn btn-primary " ng-click="replaceAssetFn(false, null)" ng-hide="mediaModal.replace && uploader.queue.length > 0">
                         <span ng-if="uploader.queue.length <= 0" ng-show="!isMobile">From Computer</span>
                         <span ng-if="uploader.queue.length <= 0" ng-show="isMobile">From Mobile</span>
-                        <span ng-if="uploader.queue.length > 0">Select Another File</span>
+                        <span ng-if="uploader.queue.length > 0" ng-show="!mediaModal.replace">Select Another File</span>
                         <input type="file" id="upload_image" class="hidden" nv-file-select="" uploader="uploader" ng-click="resetUploader()" multiple>
                     </label>
                     <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length" ng-if="uploader.queue.length > 1">

@@ -7,6 +7,10 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
   $scope.maximumUploadItems = 20;
+  $scope.mediaModal = {
+    replace:false,
+    asset: null
+  }
 
   /*
      * set editor theme
@@ -33,6 +37,13 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.successCopy = function () {
       ToasterService.show('success', 'Successfully copied text to your clipboard! Now just paste it wherever you would like.');
   };
+
+  $scope.replaceAssetFn = function(replace, asset){
+    $scope.mediaModal = {
+      replace:replace,
+      asset: asset
+    }
+  }
 
   /*
    * @closeModal
@@ -100,6 +111,16 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       }
     }]
   });
+
+  uploader.onBeforeUploadItem = onBeforeUploadItem;
+
+
+  function onBeforeUploadItem(item) {
+    item.formData.push({
+      replace: $scope.mediaModal.replace,
+      assetToBeReplaced :  $scope.mediaModal.asset || {}
+    });
+  }
 
   uploader.filters.push({
     name: 'customFilter',
