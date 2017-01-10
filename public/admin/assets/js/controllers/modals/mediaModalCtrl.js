@@ -116,10 +116,17 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
 
 
   function onBeforeUploadItem(item) {
-    item.formData.push({
-      replace: $scope.mediaModal.replace,
-      assetToBeReplaced :  $scope.mediaModal.asset || {}
-    });
+    if($scope.mediaModal.asset)  {
+        item.formData.push({
+            replace: $scope.mediaModal.replace,
+            assetToBeReplaced :  $scope.mediaModal.asset._id
+        });
+    } else {
+        item.formData.push({
+            replace: $scope.mediaModal.replace,
+            assetToBeReplaced : ''
+        });
+    }
   }
 
   uploader.filters.push({

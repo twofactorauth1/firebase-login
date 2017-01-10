@@ -10,6 +10,7 @@ var assetDao = require('./dao/asset.dao.js');
 var log = $$.g.getLogger("asset_manager");
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
+var async = require('async');
 
 module.exports = {
 
@@ -77,54 +78,57 @@ module.exports = {
         var self = this;
         self.log = log;
         self.log.debug(accountId, userId, '>> replaceS3Asset');
+        var file = {};
 
-        var uploadPromise = $.Deferred();
+        async.waterfall([
+            function(cb){
+                assetDao.getById(asset.id(), function(err, dbAsset){
+                    cb(err, dbAsset);
+                });
+            },
+            function(existingAsset, cb) {
 
-        if(temporaryPath) {
-            //TODO: also determine source.
-            var file = {};
-            file.name = asset.get('filename');
-            file.type = asset.get('mimeType');
-            file.size = asset.get('size');
-            file.path = temporaryPath;
-            var bucket = awsConfig.BUCKETS.ASSETS;
-            var subdir = 'account_' + asset.get('accountId');
-            asset.set('source', 'S3');
-            s3dao.uploadToS3(bucket, subdir, file, false, function(err, value){
-                if(err) {
-                    self.log.error('Error from S3: ' + err);
-                    uploadPromise.reject();
-                    fn(err, null);
-                } else {
-                    self.log.debug('S3 upload complete');
-                    self.log.debug('previous url:', asset.get('url'));
-
-                    if (value.url.substring(0, 5) == 'http:') {
-                        asset.set('url', value.url.substring(5, value.url.length));
+                //Keep the same filename in AWS
+                file.name = existingAsset.get('filename');
+                file.type = asset.get('mimeType');
+                file.size = asset.get('size');
+                file.path = temporaryPath;
+                var bucket = awsConfig.BUCKETS.ASSETS;
+                var subdir = 'account_' + asset.get('accountId');
+                asset.set('source', 'S3');
+                existingAsset.set('mimeType', file.type);
+                existingAsset.set('size', file.size);
+                existingAsset.set('modified', {modified:new Date(), by:userId});
+                s3dao.uploadToS3(bucket, subdir, file, false, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error from S3: ' + err);
+                        cb(err, null);
                     } else {
-                        asset.set('url', value.url);
-                    }
-                    self.log.debug('new url: ', asset.get('url'));
-                    uploadPromise.resolve(value);
-                }
-            });
+                        self.log.debug(accountId, userId, 'S3 upload complete');
 
-        } else {
-            uploadPromise.resolve();
-        }
-        //create record
-        $.when(uploadPromise).done(function(file){
-            asset.set('modified', {modified:new Date(), by:userId});
-            assetDao.saveOrUpdate(asset, function(err, value){
+                        if (value.url.substring(0, 5) == 'http:') {
+                            existingAsset.set('url', value.url.substring(5, value.url.length));
+                        } else {
+                            existingAsset.set('url', value.url);
+                        }
+                        self.log.debug(accountId, userId, 'new url: ', existingAsset.get('url'));
+                        cb(null, existingAsset);
+                    }
+                });
+            }
+        ], function(err, existingAsset){
+            assetDao.saveOrUpdate(existingAsset, function(err, value){
                 if(err) {
-                    self.log.error('Exception during asset creation: ' + err);
+                    self.log.error(accountId, userId, 'Exception during asset replacement: ' + err);
                     fn(err, null);
                 } else {
-                    self.log.debug('<< createAsset');
+                    self.log.debug(accountId, userId, '<< replaceS3Asset');
                     fn(null, value, file);
                 }
             });
         });
+
+
     },
 
     getAsset: function(assetId, fn) {

@@ -77,6 +77,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             }
 
                         });
+                        asset.set('_id', fields['assetToBeReplaced']);
                         var isReplacement = (fields['replace']=== 'true');
                         console.dir(asset);
                         if(isReplacement === true) {
