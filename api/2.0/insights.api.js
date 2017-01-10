@@ -8,6 +8,7 @@
 var baseApi = require('../base.api.js');
 var dao = require('../../insights/dao/insights.dao');
 var manager = require('../../insights/insights_manager');
+var appConfig = require('../../configs/app.config');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -64,6 +65,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var customerAccountId = req.body.accountId;
         var sections = ['weeklyreport'];
         var destinationAddress = 'account_managers@indigenous.io';
+        if(appConfig.nonProduction === true) {
+            destinationAddress = 'test_account_managers@indigenous.io';
+        }
         var startDate = moment().subtract(7, 'days').toDate();
         var endDate = moment().toDate();
         manager.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate,
