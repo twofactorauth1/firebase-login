@@ -170,8 +170,10 @@ module.exports = {
                         row.trend = trend + '%';
                     } else if((row.previousWeek === 0 || row.previousWeek === '$0.00') && (row.lastWeek === 0 || row.lastWeek === '$0.00')) {
                         //Set trend to 0 for sorting and 'NA' for display purposes
-                        trend = '0';
+                        trend = 0;
                         row.trend = 'NA';
+                    } else {
+                        row.trend = 'Infinity%';
                     }
 
                     row.absTrend = Math.abs(trend);
