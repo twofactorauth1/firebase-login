@@ -167,8 +167,13 @@ module.exports = {
                     if(row.previousWeek != 0 && row.previousWeek !== '$0.00') {
                         trend = (row.lastWeek - row.previousWeek) / row.previousWeek;
                         trend *=100;
+                        row.trend = trend + '%';
+                    } else if((row.previousWeek === 0 || row.previousWeek === '$0.00') && (row.lastWeek === 0 || row.lastWeek === '$0.00')) {
+                        //Set trend to 0 for sorting and 'NA' for display purposes
+                        trend = '0';
+                        row.trend = 'NA';
                     }
-                    row.trend = trend + '%';
+
                     row.absTrend = Math.abs(trend);
                     return row;
                 };
@@ -181,11 +186,19 @@ module.exports = {
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data));
                 //rows.push(buildRow('', 'Emails'));
                 //self.log.debug('rows:', rows);
+
                 app.render('insights/weeklyreport', {reports:rows, loginTime:data.loginReports.mostRecentLogin}, function(err, jadeHtml){
-                    cb(err, account, sectionDataMap, html, contact, jadeHtml);
+                    if(jadeHtml) {
+                        vars.push({
+                            name:'WEEKLYREPORTSECTION',
+                            content:jadeHtml
+                        });
+                    }
+                    cb(err, account, sectionDataMap, html, contact, vars);
                 });
 
             },
+            /*
             function(account, sectionDataMap, html, contact, jadeHtml, cb) {
                 //build the needed variables for substitution
                 var vars = [];
@@ -220,6 +233,7 @@ module.exports = {
                 });
                 cb(null, account, sectionDataMap, html, contact, vars);
             },
+            */
             function(account, sectionDataMap, html, contact, reportVars, cb) {
                 //send the email
                 var fromAddress = self.config.fromAddress;
