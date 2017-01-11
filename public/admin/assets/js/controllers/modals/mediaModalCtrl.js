@@ -147,10 +147,27 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     file_name = file_name.replace(/ /g, "_");
     response.files[0].filename = file_name;
     response.files[0].mimeType = fileItem.file.type;
-    $scope.originalAssets.push(response.files[0]);
-    $scope.assets.push(response.files[0]);
-    response.files[0].checked = true;
-    $scope.m.singleSelect(response.files[0]);
+
+    if($scope.mediaModal.replace){
+        if($scope.mediaModal.asset){             
+          response.files[0].filename = $scope.mediaModal.asset.filename;
+          var originalAsset =_.findWhere($scope.originalAssets, { _id: $scope.mediaModal.asset._id });
+          var asset =_.findWhere($scope.assets, { _id: $scope.mediaModal.asset._id });
+          _.extend(originalAsset, response.files[0]);
+          _.extend(asset, response.files[0]);       
+          originalAsset.checked = true;
+          asset.checked = true;
+          $scope.m.singleSelect(asset);   
+        }
+    }
+    else{
+      $scope.originalAssets.push(response.files[0]);
+      $scope.assets.push(response.files[0]);  
+      response.files[0].checked = true;
+      $scope.m.singleSelect(response.files[0]);
+    }
+
+    
   };
 
   uploader.onErrorItem = function (item, response, status, headers) {
