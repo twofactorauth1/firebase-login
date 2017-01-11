@@ -157,39 +157,49 @@ module.exports = {
                  * }
                  */
                 var rows = [];
-                var buildRow = function(field, name, lastWeek, previousWeek, obj) {
+                var buildRow = function(field, name, lastWeek, previousWeek, obj, prefix, suffix) {
                     var row = {
                         name: name
                     };
                     row.lastWeek = obj[field][lastWeek];
                     row.previousWeek = obj[field][previousWeek];
-                    var trend = Infinity;
+                    var trend = 0.0000001;//hack for sorting
                     if(row.previousWeek != 0 && row.previousWeek !== '$0.00') {
                         trend = (row.lastWeek - row.previousWeek) / row.previousWeek;
                         trend *=100;
-                        row.trend = trend + '%';
+                        row.trend = trend.toFixed(2) + '%';
                     } else if((row.previousWeek === 0 || row.previousWeek === '$0.00') && (row.lastWeek === 0 || row.lastWeek === '$0.00')) {
                         //Set trend to 0 for sorting and 'NA' for display purposes
                         trend = 0;
                         row.trend = 'NA';
                     } else {
-                        row.trend = 'Infinity%';
+                        row.trend = 'Rising';
                     }
 
                     row.absTrend = Math.abs(trend);
+                    row.lastWeek = prefix + row.lastWeek + suffix;
+                    row.previousWeek = prefix + row.previousWeek + suffix;
                     return row;
                 };
-                rows.push(buildRow('pageViewsCount', 'Page Views', 'currentCount', 'previousCount', data));
-                rows.push(buildRow('visitsCount', 'Visits', 'currentCount', 'previousCount', data));
-                rows.push(buildRow('visitorCount', 'Visitors', 'currentCount', 'previousCount', data));
-                rows.push(buildRow('bounceRate', 'Bounce Rate', 'currentBounceRate', 'previousBounceRate', data));
-                rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data));
-                rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data));
-                rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data));
+
+                rows.push(buildRow('visitsCount', 'Visits', 'currentCount', 'previousCount', data, '', ''));
+                rows.push(buildRow('visitorCount', 'Visitors', 'currentCount', 'previousCount', data, '', ''));
+                rows.push(buildRow('bounceRate', 'Bounce Rate', 'currentBounceRate', 'previousBounceRate', data, '', '%'));
+                rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data, '', ''));
+                rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data, '', ''));
+                rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
                 //rows.push(buildRow('', 'Emails'));
                 //self.log.debug('rows:', rows);
+                var sortedRows = _.sortBy(rows, function(row){return -row.absTrend});
+                /*
+                 * remove any rows that are "uninteresting"
+                 */
+                while(sortedRows.length > 4 && self._removeLeastInterestingRow(sortedRows) != 0) {
 
-                app.render('insights/weeklyreport', {reports:rows, loginTime:data.loginReports.mostRecentLogin}, function(err, jadeHtml){
+                }
+                sortedRows.unshift(buildRow('pageViewsCount', 'Page Views', 'currentCount', 'previousCount', data, '', ''));
+
+                app.render('insights/weeklyreport', {reports:sortedRows, loginTime:data.loginReports.mostRecentLogin}, function(err, jadeHtml){
                     if(jadeHtml) {
                         vars.push({
                             name:'WEEKLYREPORTSECTION',
@@ -338,6 +348,18 @@ module.exports = {
         }, function(err, results){
             fn(err, results);
         });
+    },
+
+    _removeLeastInterestingRow: function(sortedRows) {
+        //if any trends are 0, remove them
+        for(var i=sortedRows.length-1; i>=0; i--) {
+            if(sortedRows[i].trend === 'NA') {
+                sortedRows.splice(i, 1);
+                return 1;
+            }
+        }
+        //if any trends are infinity, remove the one with the least magnitude of values
+        return 0;
     }
 
 
