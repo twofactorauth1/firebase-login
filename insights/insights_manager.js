@@ -177,6 +177,7 @@ module.exports = {
                     }
 
                     row.absTrend = Math.abs(trend);
+                    row.lastWeekRaw = row.lastWeek;
                     row.lastWeek = prefix + row.lastWeek + suffix;
                     row.previousWeek = prefix + row.previousWeek + suffix;
                     return row;
@@ -195,7 +196,7 @@ module.exports = {
                  * remove any rows that are "uninteresting"
                  */
                 while(sortedRows.length > 4 && self._removeLeastInterestingRow(sortedRows) != 0) {
-
+                    //this space intentionally left blank;
                 }
                 sortedRows.unshift(buildRow('pageViewsCount', 'Page Views', 'currentCount', 'previousCount', data, '', ''));
 
@@ -359,6 +360,18 @@ module.exports = {
             }
         }
         //if any trends are infinity, remove the one with the least magnitude of values
+        var leastMagnitudeIndex = -1;
+        var leastMagnitudeValue = Infinity;
+        for(var i = sortedRows.length-1; i>=0; i--) {
+            if(sortedRows[i].trend === 'Rising' && sortedRows[i].lastWeekRaw < leastMagnitudeValue) {
+                leastMagnitudeIndex = i;
+                leastMagnitudeValue = sortedRows[i].lastWeekRaw;
+            }
+        }
+        if(leastMagnitudeIndex > 0) {
+            sortedRows.splice(leastMagnitudeIndex, 1);
+            return 1;
+        }
         return 0;
     }
 
