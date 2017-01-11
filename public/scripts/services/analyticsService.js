@@ -213,6 +213,14 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         var startPageTimer = new Date().getTime();
         parsedEntranceUrl = $.url(window.location.href);
         var parsedUrl = parsedEntranceUrl;
+        //Check if we have a session cookie:
+        var session_cookie = ipCookie("session_cookie");
+
+        //If it is undefined, set a new one.
+        if(!session_cookie || !session_cookie.id){
+            console.log('restarting session');
+            this.sessionStart();
+        }
         var sessionId = ipCookie("session_cookie")["id"] || Math.uuid();
 
         pageProperties = {
