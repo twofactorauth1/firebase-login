@@ -7,10 +7,11 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
   $scope.maximumUploadItems = 20;
+  $scope.cachebuster = 1;
   $scope.mediaModal = {
     replace:false,
     asset: null
-  }
+  };
 
   /*
      * set editor theme
@@ -31,7 +32,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
         }, 500);
       }
     });
-  })
+  });
   
 
   $scope.successCopy = function () {
@@ -42,8 +43,9 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     $scope.mediaModal = {
       replace:replace,
       asset: asset
-    }
-  }
+    };
+    $scope.cachebuster +=1;
+  };
 
   /*
    * @closeModal
