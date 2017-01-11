@@ -1,0 +1,18 @@
+table
+    thead
+        tr
+            td
+            td Last Week
+            td Previous Week
+            td Trend
+    tbody
+        each row in reports
+            tr
+                td= row.name
+                td= row.lastWeek
+                td= row.previousWeek
+                td= row.trend
+if loginTime
+    p Your most recent login was at #{loginTime}
+else
+    p There have been no logins to your account.

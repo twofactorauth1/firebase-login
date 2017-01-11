@@ -31,7 +31,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         var session_cookie = ipCookie("session_cookie");
 
         //If it is undefined, set a new one.
-        if(session_cookie == undefined){
+        if(!session_cookie || !session_cookie.id){
             entrance = true;
             ipCookie("session_cookie", {
                 id: Math.uuid()
@@ -116,7 +116,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             timezone: timezone.name(),
             new_visitor: new_visitor,
             entrance: parsedEntranceUrl.attr("path"),
-            fullEntrance: $location.absUrl(),
+            fullEntrance: $location.absUrl()
         };
 
         console.log('sessionProperties ', sessionProperties);
