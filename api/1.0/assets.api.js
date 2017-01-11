@@ -56,6 +56,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(err) {
                         self.wrapError(res, 500, 'fail', 'The upload failed', err);
                         self = null;
+                        return;
                     } else {
 
                         var file = files['file'];
@@ -76,17 +77,32 @@ _.extend(api.prototype, baseApi.prototype, {
                             }
 
                         });
+                        asset.set('_id', fields['assetToBeReplaced']);
+                        var isReplacement = (fields['replace']=== 'true');
+                        console.dir(asset);
+                        if(isReplacement === true) {
+                            assetManager.replaceS3Asset(accountId, userId, file.path, asset, function(err, value, file){
+                                self.log.debug('<< createAsset');
+                                file._id = value.get("_id");
+                                file.date = value.get("created").date;
+                                //self.sendResultOrError(res, err, value, "Error creating Asset");
+                                self.sendFileUploadResult(res, err, file);
+                                self.createUserActivity(req, 'CREATE_ASSET', null, null, function(){});
+                            });
+
+                        } else {
+                            assetManager.createAsset(file.path, asset, function(err, value, file){
+                                self.log.debug('<< createAsset');
+                                file._id = value.get("_id");
+                                file.date = value.get("created").date;
+                                //self.sendResultOrError(res, err, value, "Error creating Asset");
+                                self.sendFileUploadResult(res, err, file);
+                                self.createUserActivity(req, 'CREATE_ASSET', null, null, function(){});
+                            });
+                        }
 
                     }
-                    console.dir(asset);
-                    assetManager.createAsset(file.path, asset, function(err, value, file){
-                        self.log.debug('<< createAsset');
-                        file._id = value.get("_id");
-                        file.date = value.get("created").date;
-                        //self.sendResultOrError(res, err, value, "Error creating Asset");
-                        self.sendFileUploadResult(res, err, file);
-                        self.createUserActivity(req, 'CREATE_ASSET', null, null, function(){});
-                    });
+
 
                 });
             }

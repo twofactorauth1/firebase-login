@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+html
+  head
+    style(type="text/css").
+        
+        table, td {
+          mso-table-lspace: 0pt;
+          mso-table-rspace: 0pt;
+          border-collapse: collapse;
+        }
+
+        
+        .text-right {
+            text-align: right!important;
+        }
+        
+        .insightTable {
+            margin: 15px auto;
+            font-family: Arial;
+        }
+        
+        .insightTable td
+         {
+            border: 1px solid #eee;
+            padding: 10px;
+        }
+        .headRow {
+            
+            font-size: 16px;
+            color: gray;
+            text-transform: uppercase;
+            font-weight: bold;
+            
+        }
+        .spacer {
+            background: #FAFAFA
+        }
+        p.text {
+            font-size:16px;
+            font-family: Arial;
+        }
+        
+
+  body
+    table.insightTable
+        thead
+            tr.headRow
+                td
+                td Last Week
+                td Previous Week
+                td Trend
+        tbody
+            each row in reports
+                tr
+                    td= row.name
+                    td= row.lastWeek
+                    td= row.previousWeek
+                    td= row.trend
+    if loginTime
+        p.text Your most recent login was at #{loginTime}
+    else
+        p.text There have been no logins to your account.

@@ -19,6 +19,7 @@ var emailDao = require('../cms/dao/email.dao');
 var contactDao = require('../dao/contact.dao');
 var userDao = require('../dao/user.dao');
 var orderManager = require('../orders/order_manager');
+var appConfig = require('../configs/app.config');
 
 module.exports = {
 
@@ -140,6 +141,78 @@ module.exports = {
                     name:'INSIGHTENDDATE',
                     content:moment(endDate).format('MM/DD/YYYY')
                 });
+                var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                vars.push({
+                    name:'SITEURL',
+                    content:siteUrl
+                });
+                var data = sectionDataMap.weeklyreport;
+                /*
+                 * Need to build rows like:
+                 * {
+                 *      name: 'Visitors',
+                 *      lastWeek: '873',
+                 *      previousWeek: ' 95',
+                 *      trend: '100%'
+                 * }
+                 */
+                var rows = [];
+                var buildRow = function(field, name, lastWeek, previousWeek, obj) {
+                    var row = {
+                        name: name
+                    };
+                    row.lastWeek = obj[field][lastWeek];
+                    row.previousWeek = obj[field][previousWeek];
+                    var trend = Infinity;
+                    if(row.previousWeek != 0 && row.previousWeek !== '$0.00') {
+                        trend = (row.lastWeek - row.previousWeek) / row.previousWeek;
+                        trend *=100;
+                        row.trend = trend + '%';
+                    } else if((row.previousWeek === 0 || row.previousWeek === '$0.00') && (row.lastWeek === 0 || row.lastWeek === '$0.00')) {
+                        //Set trend to 0 for sorting and 'NA' for display purposes
+                        trend = 0;
+                        row.trend = 'NA';
+                    } else {
+                        row.trend = 'Infinity%';
+                    }
+
+                    row.absTrend = Math.abs(trend);
+                    return row;
+                };
+                rows.push(buildRow('pageViewsCount', 'Page Views', 'currentCount', 'previousCount', data));
+                rows.push(buildRow('visitsCount', 'Visits', 'currentCount', 'previousCount', data));
+                rows.push(buildRow('visitorCount', 'Visitors', 'currentCount', 'previousCount', data));
+                rows.push(buildRow('bounceRate', 'Bounce Rate', 'currentBounceRate', 'previousBounceRate', data));
+                rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data));
+                rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data));
+                rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data));
+                //rows.push(buildRow('', 'Emails'));
+                //self.log.debug('rows:', rows);
+
+                app.render('insights/weeklyreport', {reports:rows, loginTime:data.loginReports.mostRecentLogin}, function(err, jadeHtml){
+                    if(jadeHtml) {
+                        vars.push({
+                            name:'WEEKLYREPORTSECTION',
+                            content:jadeHtml
+                        });
+                    }
+                    cb(err, account, sectionDataMap, html, contact, vars);
+                });
+
+            },
+            /*
+            function(account, sectionDataMap, html, contact, jadeHtml, cb) {
+                //build the needed variables for substitution
+                var vars = [];
+                vars.push({
+                    name:'INSIGHTSTARTDATE',
+                    content:moment(startDate).format('MM/DD/YYYY')
+                });
+                vars.push({
+                    name:'INSIGHTENDDATE',
+                    content:moment(endDate).format('MM/DD/YYYY')
+                });
+
                 var data = sectionDataMap.weeklyreport;
                 var visitors = '<b>' + data.visitorCount.currentCount + '</b>';
                 var sendCount = '<b>' + data.emailReports.sentCount + '</b>';
@@ -158,10 +231,11 @@ module.exports = {
 
                 vars.push({
                     name:'WEEKLYREPORTSECTION',
-                    content:s
+                    content:jadeHtml
                 });
                 cb(null, account, sectionDataMap, html, contact, vars);
             },
+            */
             function(account, sectionDataMap, html, contact, reportVars, cb) {
                 //send the email
                 var fromAddress = self.config.fromAddress;

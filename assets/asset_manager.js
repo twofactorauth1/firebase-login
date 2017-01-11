@@ -10,6 +10,7 @@ var assetDao = require('./dao/asset.dao.js');
 var log = $$.g.getLogger("asset_manager");
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
+var async = require('async');
 
 module.exports = {
 
@@ -70,6 +71,65 @@ module.exports = {
                 }
             });
         });
+
+    },
+
+    replaceS3Asset: function(accountId, userId, temporaryPath, asset, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> replaceS3Asset');
+        var file = {};
+
+        async.waterfall([
+            function(cb){
+                assetDao.getById(asset.id(), function(err, dbAsset){
+                    cb(err, dbAsset);
+                });
+            },
+            function(existingAsset, cb) {
+
+                //Keep the same filename in AWS
+                file.name = existingAsset.get('filename');
+                file.type = asset.get('mimeType');
+                file.size = asset.get('size');
+                file.path = temporaryPath;
+                var bucket = awsConfig.BUCKETS.ASSETS;
+                var subdir = 'account_' + asset.get('accountId');
+                asset.set('source', 'S3');
+                existingAsset.set('mimeType', file.type);
+                existingAsset.set('size', file.size);
+                existingAsset.set('modified', {modified:new Date(), by:userId});
+                s3dao.uploadToS3(bucket, subdir, file, false, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error from S3: ' + err);
+                        cb(err, null);
+                    } else {
+                        self.log.debug(accountId, userId, 'S3 upload complete');
+
+                        if (value.url.substring(0, 5) == 'http:') {
+                            existingAsset.set('url', value.url.substring(5, value.url.length));
+                        } else {
+                            existingAsset.set('url', value.url);
+                        }
+                        self.log.debug(accountId, userId, 'new url: ', existingAsset.get('url'));
+                        cb(null, existingAsset);
+                    }
+                });
+            }
+        ], function(err, existingAsset){
+            assetDao.saveOrUpdate(existingAsset, function(err, value){
+                if(err) {
+                    self.log.error(accountId, userId, 'Exception during asset replacement: ' + err);
+                    fn(err, null);
+                } else {
+                    self.log.debug(accountId, userId, '<< replaceS3Asset');
+                    //self.log.debug('new file: ', file);
+                    file.url = existingAsset.get("url");
+                    fn(null, value, file);
+                }
+            });
+        });
+
 
     },
 
