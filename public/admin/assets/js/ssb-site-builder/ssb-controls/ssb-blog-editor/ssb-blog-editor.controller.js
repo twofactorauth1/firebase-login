@@ -45,6 +45,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
     vm.checkPendingChanges = checkPendingChanges;
     vm.refreshPost = refreshPost;
     vm.draftPost = draftPost;
+    vm.tagsAdded = tagsAdded;
 
     vm.uiState.cleanBlogPanel = cleanBlogPanel;
 
@@ -58,6 +59,19 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
         vm.state.post = angular.copy(vm.defaultPost);
     }
 
+
+    $scope.$watch("vm.state.post.post_author", function(value, oldValue){
+        if(value && value !== oldValue){
+            vm.state.post.post_author = value.replace(/#/g, "");
+        }
+    })
+
+    function tagsAdded(tag){
+        if(tag && tag.text)
+            tag.text = tag.text.replace(/#/g, "");
+    }
+
+    
     $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], _.debounce(function(id) {
         $timeout(function() {
            vm.ssbBlogLoaded = true; 
