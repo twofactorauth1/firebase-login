@@ -20,6 +20,7 @@ var contactDao = require('../dao/contact.dao');
 var userDao = require('../dao/user.dao');
 var orderManager = require('../orders/order_manager');
 var appConfig = require('../configs/app.config');
+var numeral = require('numeral');
 
 module.exports = {
 
@@ -166,8 +167,8 @@ module.exports = {
                     var trend = 0.0000001;//hack for sorting
                     if(row.previousWeek != 0 && row.previousWeek !== '$0.00') {
                         trend = (row.lastWeek - row.previousWeek) / row.previousWeek;
-                        trend *=100;
-                        row.trend = trend.toFixed(2) + '%';
+                        row.trend = numeral(trend).format('0,0%');
+                        trend *=100;//fix magnitude on trend for sorting later
                     } else if((row.previousWeek === 0 || row.previousWeek === '$0.00') && (row.lastWeek === 0 || row.lastWeek === '$0.00')) {
                         //Set trend to 0 for sorting and 'NA' for display purposes
                         trend = 0;
@@ -178,8 +179,11 @@ module.exports = {
 
                     row.absTrend = Math.abs(trend);
                     row.lastWeekRaw = row.lastWeek;
-                    row.lastWeek = prefix + row.lastWeek + suffix;
-                    row.previousWeek = prefix + row.previousWeek + suffix;
+                    //row.lastWeek = prefix + row.lastWeek.toLocaleString() + suffix;
+                    row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
+                    row.previousWeekRaw = row.previousWeek;
+                    row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
+                    //row.previousWeek = prefix + row.previousWeek.toLocaleString() + suffix;
                     return row;
                 };
 
