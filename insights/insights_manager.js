@@ -21,6 +21,7 @@ var userDao = require('../dao/user.dao');
 var orderManager = require('../orders/order_manager');
 var appConfig = require('../configs/app.config');
 var numeral = require('numeral');
+var broadcastMessageDao = require('./dao/broadcast_messages.dao');
 
 module.exports = {
 
@@ -43,6 +44,109 @@ module.exports = {
         var insightSections = constants.availableSections;
         self.log.debug(accountId, userId, '<< getAvailableSections');
         fn(null, insightSections);
+    },
+
+    listBroadcastMessages:function(accountId, userId, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> listBroadcastMessages');
+        var query = {accountId:accountId};
+        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+            if(err) {
+                self.log.error(accountId, userId, 'Error listing messages:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< listBroadcastMessages');
+                return fn(null, list);
+            }
+        });
+    },
+
+    getActiveBroadcastMessages:function(accountId, userId, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> getActiveBroadcastMessages');
+        var now = moment().toDate();
+        var query = {
+            startDate : {$lte:now},
+            endDate : {$tte:now}
+        };
+        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding active messages:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< getActiveBroadcastMessages');
+                return fn(null, list);
+            }
+        });
+    },
+
+    updateBroadcastMessage:function(accountId, userId, broadcastMessage, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateBroadcastMessage');
+        broadcastMessage.set('modified', {date:new Date(), by:userId});
+
+        broadcastMessageDao.saveOrUpdate(broadcastMessage, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error updating message:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< updateBroadcastMessage');
+                return fn(null, value);
+            }
+        });
+    },
+
+    createBroadcastMessage:function(accountId, userId, message, startDate, endDate, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> createBroadcastMessage');
+
+        if(!moment().isDate(startDate)) {
+            return fn('startDate parameter must be a date!');
+        }
+
+        if(!moment().isDate(endDate)) {
+            return fn('endDate parameter must be a date!');
+        }
+
+        var msg = new $$.m.BroadcastMessage({
+            accountId:accountId,
+            message:message,
+            startDate:startDate,
+            endDate:endDate,
+            created:{
+                date:new Date(),
+                by:userId
+            }
+        });
+        broadcastMessageDao.saveOrUpdate(msg, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error creating message:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< createBroadcastMessage');
+                return fn(null, value);
+            }
+        });
+
+    },
+
+    deleteBroadcastMessage:function(accountId, userId, messageId, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> deleteBroadcastMessage');
+
+        var query = {
+            _id:messageId,
+            accountId: accountId
+        };
+        broadcastMessageDao.removeByQuery(query, $$.m.BroadcastMessage, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error deleting message:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< deleteBroadcastMessage');
+                return fn(null, value);
+            }
+        });
     },
 
     generateInsightReport: function(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, fn) {
