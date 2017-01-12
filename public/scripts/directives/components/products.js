@@ -1093,12 +1093,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(orderCookieKey, data);
                     scope.paypalKey = data.payment_details.payKey;
                     CartDetailsService.items = [];
-
+                    scope.cartDetails = [];
 
                     CartDetailsService.subTotal = 0;
                     CartDetailsService.totalTax = 0;
                     CartDetailsService.total = 0;
                     localStorageService.remove(cookieKey);
+
                     // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                 });
             };
@@ -1400,6 +1401,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         console.log('order, ', order);
                         scope.checkoutModalState = 5;
                         CartDetailsService.items = [];
+                        scope.cartDetails = [];
 
 
                         CartDetailsService.subTotal = 0;
