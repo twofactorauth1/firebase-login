@@ -197,7 +197,8 @@ var mainApp = angular
 
         var runningInterval;
         var isPreview = $location.$$path.indexOf("/preview/") === 0;
-        if(!isPreview){
+        var editorIndex = window.location.search.indexOf("editor=true");
+        if (editorIndex == -1 && !isPreview) {
             analyticsService.sessionStart(function (data) {
             });  
         }
@@ -235,11 +236,9 @@ var mainApp = angular
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
 
             $rootScope.isSocialEnabled = $location.absUrl().search(/\/blog\/.+/) !== -1;            
-
-            analyticsService.pageStart(function () {
-                var editorIndex = window.location.search.indexOf("editor=true");
+            if (editorIndex == -1 && !isPreview) {
+                analyticsService.pageStart(function () {
                 
-                if (editorIndex == -1 && !isPreview) {
                     analyticsService.pagePing();
                     clearInterval(runningInterval);
 
@@ -253,8 +252,8 @@ var mainApp = angular
                             clearInterval(runningInterval);
                         }
                     }, 15000);
-                }
-            });
+                });
+            }    
         });
 
 
