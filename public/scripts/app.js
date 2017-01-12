@@ -235,7 +235,8 @@ var mainApp = angular
 
             analyticsService.pageStart(function () {
                 var editorIndex = window.location.search.indexOf("editor=true");
-                if (editorIndex == -1) {
+                var isPreview = $location.$$path.indexOf("/preview/") === 0;
+                if (editorIndex == -1 && !isPreview) {
                     analyticsService.pagePing();
                     clearInterval(runningInterval);
 
