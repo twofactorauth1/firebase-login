@@ -122,7 +122,6 @@
             $scope.compareAddress = function () {
                 if ($scope.order.shipping_address && $scope.order.billing_address && $scope.order.billing_address.hasOwnProperty("address_1") && angular.equals($scope.order.shipping_address, $scope.order.billing_address)) {
                     $scope.billing.sameAsBilling = true;
-                    
                 }
             };
 
@@ -148,7 +147,6 @@
                         // We should not recalculate total rather use server variables
                         //$scope.calculateTotals();
                         $scope.compareAddress();
-                        $scope.originalSameAsBilling = angular.copy($scope.billing.sameAsBilling);
                     } else {
                         $scope.order = {
                             created: {
@@ -174,16 +172,12 @@
                     isDirty = true;
                 if ($scope.originalOrder && !angular.equals($scope.originalOrder, $scope.order))
                     isDirty = true;
-                if(angular.isDefined($scope.billing.sameAsBilling) && angular.isDefined($scope.originalSameAsBilling) && !angular.equals($scope.originalSameAsBilling, $scope.billing.sameAsBilling)){
-                   isDirty = true; 
-                }
                 return isDirty;
             }
 
             $scope.resetDirty = function () {
                 $scope.originalOrder = null;
                 $scope.order = null;
-                $scope.originalSameAsBilling = null;
             }
 
             /*
