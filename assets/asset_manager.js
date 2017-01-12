@@ -88,8 +88,17 @@ module.exports = {
             },
             function(existingAsset, cb) {
 
-                //Keep the same filename in AWS
-                file.name = existingAsset.get('filename');
+                //Keep the same filename in AWS                
+                var fileName = existingAsset.get('filename');
+                // get filename using image url 
+                var _fileurl = existingAsset.get('url'); 
+                if(_fileurl){
+                    var fNameArr = _fileurl.split("/");
+                    if(fNameArr.length){
+                        fileName = fNameArr.pop();
+                    }
+                }
+                file.name = fileName;
                 file.type = asset.get('mimeType');
                 file.size = asset.get('size');
                 file.path = temporaryPath;
