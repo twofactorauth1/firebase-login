@@ -122,8 +122,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> getRssFeed');
         var feedUrl = req.body.feedUrl;
+        self.log.debug(accountId, userId, '>> getRssFeed', feedUrl);
+
         ssbManager.listFeeds(accountId, userId, feedUrl, function(err, list){
             self.log.debug(accountId, userId, '<< getRssFeed');
             return self.sendResultOrError(resp, err, list, "Error listing feeds");
