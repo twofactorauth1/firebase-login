@@ -67,7 +67,7 @@ module.exports = {
         var now = moment().toDate();
         var query = {
             startDate : {$lte:now},
-            endDate : {$tte:now}
+            endDate : {$gte:now}
         };
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
             if(err) {
