@@ -4070,17 +4070,16 @@ module.exports = {
     },
 
 
-    listFeeds: function(feedUrl, fn) {
+    listFeeds: function(accountId, userId, feedUrl, fn) {
         var self = this;
-        self.log.debug('>> listFeeds');
+        self.log.debug(accountId, userId, '>> listFeeds');
 
         feed(feedUrl, function(err, articles) {
             var feeds = [];
             if(err) {
-                self.log.error('Error fetching : ' + err);
+                self.log.error(accountId, userId, 'Error fetching : ' + err);
                 return fn(err, null);
             } else {
-                console.log()
                 _.each(articles, function(article) {
                     feeds.push({
                         "title": article.title,
@@ -4088,6 +4087,7 @@ module.exports = {
                         "link": article.link
                     })
                 });
+                self.log.debug(accountId, userId, '<< listFeeds');
                 return fn(err, feeds);
             }       
            

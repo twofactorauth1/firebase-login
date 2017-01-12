@@ -106,7 +106,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url('email/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicateEmail.bind(this));//create duplicate page
 
-        app.post(this.url('feed/rss'), this.isAuthAndSubscribedApi.bind(this), this.getRssFeed.bind(this));//create duplicate page
+        app.post(this.url('feed/rss'), this.setup.bind(this), this.getRssFeed.bind(this));
     },
 
     noop: function(req, resp) {
@@ -123,18 +123,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> getRssFeed');
-        var feedUrl = req.body.feedUrl;   
-
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
-            if(isAllowed !== true) {
-                return self.send403(resp);
-            } else {
-                ssbManager.listFeeds(feedUrl, function(err, list){ 
-                    return self.sendResultOrError(resp, err, list, "Error listing feeds");
-                });
-            }
+        var feedUrl = req.body.feedUrl;
+        ssbManager.listFeeds(accountId, userId, feedUrl, function(err, list){
+            self.log.debug(accountId, userId, '<< getRssFeed');
+            return self.sendResultOrError(resp, err, list, "Error listing feeds");
         });
-
     },
 
 
