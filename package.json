@@ -29,6 +29,7 @@
     "express3-handlebars": "~0.5.0",
     "fast-csv": "^0.5.1",
     "fb": "0.7.0",
+    "feed-read": "0.0.1",
     "formidable": "~1.0.14",
     "grunt-cli": "^0.1.13",
     "handlebars": "~2.0.0-alpha.2",
@@ -52,6 +53,7 @@
     "node-twitter-api": "^1.5.0",
     "node-uuid": "1.4.1",
     "nodemailer": "0.6.0",
+    "numeral": "^2.0.4",
     "oauth": "~0.9.11",
     "object-fit-images": "^2.3.0",
     "passport": "~0.2.0",
@@ -81,8 +83,7 @@
     "underscore": ">=1.6.0",
     "validate.js": "^0.5.0",
     "wiredep": "^1.8.6",
-    "xml2js": "^0.4.4",
-    "feed-read": "0.0.1"
+    "xml2js": "^0.4.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
