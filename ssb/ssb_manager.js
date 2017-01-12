@@ -23,6 +23,7 @@ var pageCacheManager = require('../cms/pagecache_manager');
 var blogPostDao = require('../cms/dao/blogpost.dao');
 var sanitizeHtml = require('sanitize-html');
 var observableDiff = require('deep-diff').observableDiff;
+var feed = require("feed-read");
 var PLATFORM_ID = 0;
 
 module.exports = {
@@ -4066,6 +4067,69 @@ module.exports = {
             }
         });
 
+    },
+
+
+    listFeeds: function(feedUrl, fn) {
+        var self = this;
+        self.log.debug('>> listFeeds');
+
+        feed(feedUrl, function(err, articles) {
+            var feeds = [];
+            if(err) {
+                self.log.error('Error fetching : ' + err);
+                return fn(err, null);
+            } else {
+                console.log()
+                _.each(articles, function(article) {
+                    feeds.push({
+                        "title": article.title,
+                        "description": self.getShortDescription(article.content),
+                        "link": article.link
+                    })
+                });
+                return fn(err, feeds);
+            }       
+           
+        });
+    },
+
+    getShortDescription: function (content) {
+        
+        var $$$ = cheerio.load('<div id="temp_wrap">' + content + '</div>');
+        // Replace table
+        //$$$('#temp_wrap').find('table').replaceWith("");
+
+        var description = $$$('#temp_wrap').text();
+        var maxLength = 200;
+
+        var indexOfMoreToken = description.lastIndexOf('<!-- more -->');
+
+        if (indexOfMoreToken !== -1) {
+            return description.substr(0, indexOfMoreToken);
+        }
+
+        description = description.substr(0, maxLength);
+
+        //get last space and last of various punctuation
+        var lastIndexOfSpace = description.lastIndexOf(" ");
+        var lastIndexOfPeriod = description.lastIndexOf(".");
+        var lastIndexOfExclamation= description.lastIndexOf("!");
+        var lastIndexOfQuestionMark = description.lastIndexOf("?");
+
+        
+        //get largest of indexes
+        var lastIndexCutOff = Math.max.apply(Math, [lastIndexOfSpace, lastIndexOfPeriod, lastIndexOfExclamation, lastIndexOfQuestionMark]);
+
+        //re-trim if we are in the middle of a word
+        description = description.substr(0, Math.min(description.length, lastIndexCutOff + 1))
+
+        //if we've cut off at a space, trim by 1 and add ellipses
+        if (lastIndexCutOff === lastIndexOfSpace) {
+            description = description.substring(0, description.length - 1) + '...';
+        }
+
+        return description;
     }
 
 };

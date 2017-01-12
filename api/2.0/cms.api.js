@@ -14,6 +14,7 @@ var ssbManager = require('../../ssb/ssb_manager');
 var pageDao = require('../../ssb/dao/page.dao');
 
 
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -104,6 +105,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
 
         app.post(this.url('email/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicateEmail.bind(this));//create duplicate page
+
+        app.post(this.url('feed/rss'), this.isAuthAndSubscribedApi.bind(this), this.getRssFeed.bind(this));//create duplicate page
     },
 
     noop: function(req, resp) {
@@ -113,6 +116,27 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('<< noop');
         self.sendResult(resp, {msg:'method not implemented'});
     },
+
+
+    getRssFeed: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getRssFeed');
+        var feedUrl = req.body.feedUrl;   
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listFeeds(feedUrl, function(err, list){ 
+                    return self.sendResultOrError(resp, err, list, "Error listing feeds");
+                });
+            }
+        });
+
+    },
+
 
     deletePage: function(req, resp) {
 

@@ -56,8 +56,8 @@ function ssbRssFeedComponentController($scope, $attrs, $filter, $transclude, Rss
 	function loadFeed(){
 		vm.loading = true;
 		RssFeedService.parseFeed(vm.component.settings.source).then(function(feeds){
-	        if(feeds && feeds.data && feeds.data.responseStatus === 200){
-		        vm.feeds = feeds.data.responseData.feed.entries;
+	        if(feeds && feeds.data){
+		        vm.feeds = feeds.data;
 		        vm.loading = false;
 	        }
 	        else{
@@ -65,7 +65,10 @@ function ssbRssFeedComponentController($scope, $attrs, $filter, $transclude, Rss
 	        	vm.loading = false;
 	        }
 		        
-		})
+		}).catch(function(err) {
+        	vm.feeds = [];
+        	vm.loading = false;
+        })
 	}
 
 	function init(element) {
