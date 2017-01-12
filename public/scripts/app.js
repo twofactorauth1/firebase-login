@@ -196,9 +196,12 @@ var mainApp = angular
     .run(function ($rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
         var runningInterval;
-
-        analyticsService.sessionStart(function (data) {
-        });
+        var isPreview = $location.$$path.indexOf("/preview/") === 0;
+        if(!isPreview){
+            analyticsService.sessionStart(function (data) {
+            });  
+        }
+        
 
         $rootScope.app = {
             isMobile: (function () { // true if the browser is a mobile device
@@ -235,7 +238,7 @@ var mainApp = angular
 
             analyticsService.pageStart(function () {
                 var editorIndex = window.location.search.indexOf("editor=true");
-                var isPreview = $location.$$path.indexOf("/preview/") === 0;
+                
                 if (editorIndex == -1 && !isPreview) {
                     analyticsService.pagePing();
                     clearInterval(runningInterval);
