@@ -26,6 +26,13 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('sections/available'), this.isAuthAndSubscribedApi.bind(this), this.getAvailableSections.bind(this));
         app.get(this.url('test'), this.isAuthAndSubscribedApi.bind(this), this.testInsightReport.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.sendInsightReport.bind(this));
+
+        //broadcast messages
+        app.get(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.listBroadcastMessages.bind(this));
+        app.get(this.url('messages/active'), this.isAuthAndSubscribedApi.bind(this), this.getActiveBroadcastMessages.bind(this));
+        app.post(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.createBroadcastMessage.bind(this));
+        app.post(this.url('messages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateBroadcastMessage.bind(this));
+        app.del(this.url('messages/:id'), this.isAuthAndSubscribedApi.bind(this), this.removeBroadcastMessage.bind(this));
     },
 
     getAvailableSections: function(req, resp) {
@@ -71,10 +78,77 @@ _.extend(api.prototype, baseApi.prototype, {
         var startDate = moment().subtract(7, 'days').toDate();
         var endDate = moment().toDate();
         manager.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate,
-            endDate, function(err, results){
-                self.log.debug(accountId, userId, '<< sendInsightReport');
-                self.sendResultOrError(resp, err, results, 'Could not send insight report');
-            });
+                endDate, function(err, results){
+            self.log.debug(accountId, userId, '<< sendInsightReport');
+            self.sendResultOrError(resp, err, results, 'Could not send insight report');
+        });
+    },
+
+    listBroadcastMessages: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> listBroadcastMessages');
+
+        manager.listBroadcastMessages(accountId, userId, function(err, value){
+            self.log.debug(accountId, userId, '<< listBroadcastMessages');
+            self.sendResultOrError(resp, err, value, 'Could not list messages');
+        });
+    },
+
+    getActiveBroadcastMessages: function(req, resp){
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getActiveBroadcastMessages');
+
+        manager.getActiveBroadcastMessages(accountId, userId, function(err, value){
+            self.log.debug(accountId, userId, '<< getActiveBroadcastMessages');
+            self.sendResultOrError(resp, err, value, 'Could not get active messages');
+        });
+    },
+
+    createBroadcastMessage: function(req, resp){
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> createBroadcastMessage');
+
+        var message = req.body.message;
+        var startDate = moment(req.body.startDate);
+        var endDate = moment(req.body.endDate);
+
+        manager.createBroadcastMessage(accountId, userId, message, startDate, endDate, function(err, value){
+            self.log.debug(accountId, userId, '<< createBroadcastMessage');
+            self.sendResultOrError(resp, err, value, 'Could not create message');
+        });
+    },
+
+    updateBroadcastMessage: function(req, resp){
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateBroadcastMessage');
+
+        var msg = new $$.m.BroadcastMessage(req.body);
+        msg.set('_id', req.params.id);
+        manager.updateBroadcastMessage(accountId, userId, msg, function(err, value){
+            self.log.debug(accountId, userId, '<< updateBroadcastMessage');
+            self.sendResultOrError(resp, err, value, 'Could not update message');
+        });
+    },
+
+    removeBroadcastMessage: function(req, resp){
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> removeBroadcastMessage');
+
+        var msgId = req.params.id;
+        manager.deleteBroadcastMessage(accountId, userId, msgId, function(err, value){
+            self.log.debug(accountId, userId, '<< removeBroadcastMessage');
+            self.sendResultOrError(resp, err, value, 'Could not delete message');
+        });
     }
 
 });
