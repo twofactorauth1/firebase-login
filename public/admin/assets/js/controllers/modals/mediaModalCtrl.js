@@ -7,7 +7,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
   $scope.maximumUploadItems = 20;
-  $scope.cachebuster = 1;
+  $scope.cachebuster = new Date().getTime();
   $scope.mediaModal = {
     replace:false,
     asset: null
@@ -43,8 +43,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     $scope.mediaModal = {
       replace:replace,
       asset: asset
-    };
-    $scope.cachebuster +=1;
+    };    
   };
 
   /*
@@ -151,7 +150,8 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     response.files[0].mimeType = fileItem.file.type;
 
     if($scope.mediaModal.replace){
-        if($scope.mediaModal.asset){             
+        if($scope.mediaModal.asset){    
+          $scope.cachebuster = new Date().getTime();         
           response.files[0].filename = $scope.mediaModal.asset.filename;
           var originalAsset =_.findWhere($scope.originalAssets, { _id: $scope.mediaModal.asset._id });
           var asset =_.findWhere($scope.assets, { _id: $scope.mediaModal.asset._id });

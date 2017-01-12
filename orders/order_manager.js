@@ -2724,8 +2724,8 @@ module.exports = {
                     } else {
                         var previousRevenue = self._calculateNetSales(orders);
                         var results = {
-                            currentRevenue:'$' + currentRevenue.toFixed(2),
-                            previousRevenue:'$' + previousRevenue.toFixed(2)
+                            currentRevenue:currentRevenue.toFixed(2),
+                            previousRevenue:previousRevenue.toFixed(2)
                         };
                         self.log.debug(accountId, userId, '<< getRevenueAmount');
                         return fn(null, results);

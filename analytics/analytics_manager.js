@@ -576,8 +576,8 @@ module.exports = {
                     } else {
                         var previousBounceRate = self._calculateBounceRate(sessionAry);
                         var results = {
-                            currentBounceRate:currentBounceRate.toFixed(2),
-                            previousBounceRate:previousBounceRate.toFixed(2)
+                            currentBounceRate:currentBounceRate.toFixed(2)*100,
+                            previousBounceRate:previousBounceRate.toFixed(2)*100
                         };
                         self.log.debug(accountId, userId, '<< getBounceRate');
                         return fn(null, results);
