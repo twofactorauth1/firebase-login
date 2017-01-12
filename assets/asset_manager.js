@@ -124,7 +124,7 @@ module.exports = {
                 } else {
                     self.log.debug(accountId, userId, '<< replaceS3Asset');
                     //self.log.debug('new file: ', file);
-                    //file.url = existingAsset.get("url");
+                    file.url = existingAsset.get("url");
                     fn(null, value, file);
                 }
             });
