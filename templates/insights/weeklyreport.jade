@@ -2,35 +2,35 @@
 html
   head
     style(type="text/css").
-        
+
         table, td {
           mso-table-lspace: 0pt;
           mso-table-rspace: 0pt;
           border-collapse: collapse;
         }
 
-        
+
         .text-right {
             text-align: right!important;
         }
-        
+
         .insightTable {
             margin: 15px auto;
             font-family: Arial;
         }
-        
+
         .insightTable td
          {
             border: 1px solid #eee;
             padding: 10px;
         }
         .headRow {
-            
-            font-size: 16px;
-            color: gray;
+
+            font-size: 15px;
+            color: #42aac2;
             text-transform: uppercase;
             font-weight: bold;
-            
+            background: #e3f9ff;
         }
         .spacer {
             background: #FAFAFA
@@ -41,7 +41,10 @@ html
             text-align: center;
             padding-top: 10px
         }
-        
+        .textCenter {
+            text-align: center!important;
+        }
+
 
   body
     table.insightTable
@@ -55,9 +58,9 @@ html
             each row in reports
                 tr
                     td= row.name
-                    td= row.lastWeek
-                    td= row.previousWeek
-                    td= row.trend
+                    td.textCenter= row.lastWeek
+                    td.textCenter= row.previousWeek
+                    td.textCenter= row.trend
     if loginTime
         p.text Your most recent login was at #{loginTime}
     else

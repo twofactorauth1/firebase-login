@@ -258,6 +258,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Users',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('UsersCtrl', 'customerService')
+    }).state('app.broadcastmessage', {
+        url: '/customer/messages',
+        templateUrl: "/admin/assets/js/messages/messages.html",
+        title: 'Messages',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('MessagesCtrl', 'broadcastMessagesService')
+    }).state('app.singlebroadcastmessage', {
+        url: '/customer/messages/:id',
+        templateUrl: "/admin/assets/js/messages/broadcast-message-editor/broadcast-message-editor.html",
+        title: 'Message Single',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'BroadcastMessageEditorCtrl', 'broadcastMessagesService')
     })
 
     // Login routes

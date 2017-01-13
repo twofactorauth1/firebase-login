@@ -41,6 +41,11 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                             'ng-bind-html="ngModel | unsafe">' +
                         '</div>' +
                     '</div>';
+        var messageTemplate =
+                    '<div ' +
+                        'class="editable {{className}}" ' +
+                        'ng-bind-html="ngModel | unsafe">' +
+                    '</div>';            
 
         var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";                    
 
@@ -48,12 +53,16 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             attrs.helpTopics = helpTopics;
         }
         
-        if (attrs.ssbBlogEditor) {
+        if (attrs.ssbBlogEditor || attrs.broadcastMessageEditor) {
             return blogTemplate
         }
 
         if (attrs.helpTopics) {
-            return topicTemplate
+            return topicTemplate;
+        }
+
+        if(attrs.broadcastMessageEditor){
+            return messageTemplate;
         }
 
         if (attrs.ssbEmailEditor) {
@@ -126,19 +135,22 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
         var elem = angular.element(element[0].querySelector('.editable'))[0];
         var componentId = $(elem).closest('[component]').attr('id');
 
-        if (attrs.ssbBlogEditor) {
+        if (attrs.ssbBlogEditor || attrs.broadcastMessageEditor) {
             elem = element[0];
         }
 
         
 
-        if (scope.$parent.ssbEditor || (angular.element(elem).scope() && angular.element(elem).scope().pvm) || (scope.$parent.vm && scope.$parent.vm.ssbEditor) || attrs.helpTopics) {
+        if (scope.$parent.ssbEditor || (angular.element(elem).scope() && angular.element(elem).scope().pvm) || (scope.$parent.vm && scope.$parent.vm.ssbEditor) || attrs.helpTopics || attrs.broadcastMessageEditor) {
             $(function() {
                 var blogPostEditor = attrs.ssbBlogEditor;
                 var helpTopicsEditor = attrs.helpTopics;
                 var froalaConfig = $.FroalaEditor.build(
                     (function() {
-                        if (attrs.ssbBlogEditor) {
+                        if (attrs.broadcastMessageEditor) {
+                            return 'broadcastMessageEditor';
+                        }
+                        else if (attrs.ssbBlogEditor) {
                             return 'ssbBlogEditor';
                         } else if (attrs.ssbEmailEditor) {
                             return 'ssbEmailEditor'
@@ -163,7 +175,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                 $timeout(function() {
 
                     $(elem).on('froalaEditor.initialized', function(e, editor) {
-                    if(blogPostEditor || helpTopicsEditor){
+                    if(blogPostEditor || helpTopicsEditor || attrs.broadcastMessageEditor){
                         destroyShared(editor);
                     }
                     //topbar positioning
