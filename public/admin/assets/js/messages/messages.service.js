@@ -11,7 +11,9 @@
 
         var messageService = {
         };
-        
+        messageService.message = {
+            message: ""
+        }
         var baseAccountAPIUrl = '/api/1.0/account/';
         var baseBroadcastMessagesAPIUrl = '/api/2.0/insights/messages';
 

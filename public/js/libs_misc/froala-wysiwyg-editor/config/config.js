@@ -241,6 +241,26 @@ $.FroalaEditor.build = _.memoize(function(type) {
 
     }
 
+    if (type === 'broadcastMessageEditor') {
+        var messageToolbarButtons = [
+            'bold',
+            'italic',
+            'underline',
+            'strikeThrough',
+            'fontFamily',
+            'fontSize',
+            'color'
+        ];
+        _.extend($.FroalaEditor.config, {
+            toolbarButtons: messageToolbarButtons,
+            toolbarButtonsMD: messageToolbarButtons,
+            toolbarButtonsSM: messageToolbarButtons,
+            toolbarButtonsXS: messageToolbarButtons,
+            placeholderText: 'Type your text here'
+        });
+
+    }
+
     console.debug('called $.FroalaEditor.build', type);
 
     return $.FroalaEditor.config;

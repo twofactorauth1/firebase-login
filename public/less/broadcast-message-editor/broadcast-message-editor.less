@@ -1,0 +1,176 @@
+.broadcast-message-editor-container{
+    .message-topbar{
+        position: fixed;
+        background: #1c2b36;
+        color: white;
+        text-align: center;
+        line-height: 18px;
+        z-index: 2;
+        height: 60px;
+        width: 100%;
+    }
+   .broadcast-message-editor-scrollable-container {
+        @media screen and (min-width: 768px) {
+            .flex-container;
+            justify-content: flex-start;
+            align-items: stretch;
+            flex-flow: row wrap;
+        }
+    }
+
+    .broadcast-message-editor-controls,
+    .broadcast-message-editor {
+        @media screen and (min-width: 768px) {
+            min-height: calc(~"100vh - 110px");
+        }
+    }
+
+    .broadcast-message-editor {
+        margin-bittom: 20px;
+        font-size: 16px;
+        // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        padding: 60px 15px 40px;
+        margin-top: 30px;
+        min-height: calc(~"100vh - 300px");
+        overflow: hidden;
+        background: white;
+
+        @media screen and (min-width: 768px) {
+            flex: 1 1 300px;
+            padding: 40px 25px;
+            min-height: none;
+        }
+
+        // @media screen and (min-width: 960px) {
+        //     flex: 1 1 400px;
+        // }
+
+        span.fr-fontAwesomeIcon{
+            span.fa{
+                width: auto;
+            }
+        }
+
+    }
+
+    .broadcast-message-editor-controls {
+
+        padding: 40px 15px;
+        background: @lightGrey;
+        margin-top: 20px;
+        @media screen and (min-width: 768px) {
+            flex: 1;
+            padding: 40px 25px;
+            flex: 0 0 300px;
+        }
+
+        @media screen and (min-width: 992px) { //when nav sidebar disappears
+            flex: 0 0 400px;
+        }
+
+        .broadcast-message-editor-controls-inner {
+
+            @media screen and (min-width: 768px) {
+                position: relative;
+                // width: 300px;
+            }
+
+            .broadcast-message-editor-controls-inner-fixed > .row {
+                margin: 10px 0 20px;
+            }
+
+            .broadcast-message-editor-controls-inner-fixed {
+
+                @media screen and (min-width: 768px) {
+                    position: fixed;
+                    margin-left: -15px;
+                    margin-right: 5px;
+                    overflow-y: auto;
+                    .broadcast-message-editor-controls-tags{
+                        max-height: 150px;
+                        overflow-y: auto;
+                    }
+                    
+                }
+
+            }
+
+        }
+
+        .broadcast-message-editor-controls-date input,
+        .broadcast-message-editor-controls-date .btn,
+        .broadcast-message-editor-controls-author input {
+            height: @var-ssb-edit-control-input-height;
+        }
+
+        .broadcast-message-editor-controls-date .btn {
+            width: @var-ssb-edit-control-input-height;
+            border: @var-ssb-edit-control-input-border;
+        }
+
+        .broadcast-message-editor-controls-tags .tag-item {
+            margin: 5px 0 5px 2px;
+        }
+
+        .broadcast-message-editor-controls-date input,
+        .broadcast-message-editor-controls-author input,
+        .broadcast-message-editor-controls-tags .tags {
+            border: @var-ssb-edit-control-input-border;
+            box-shadow: none!important;
+            border-radius: 5px!important;
+            background: @var-ssb-edit-control-input-background;
+        }
+
+        .broadcast-message-editor-controls-date input {
+            border-right: 0 none;
+            border-radius: 5px 0 0 5px!important;
+            color: @var-ssb-edit-control-input-color;
+        }
+
+
+        .broadcast-message-editor-controls-tags input {
+            color: @var-ssb-edit-control-input-color;
+        }
+
+        // h4 {
+        //     padding-top: 8px;
+        //     border-top: 1px solid @var-ssb-edit-control-input-color;
+        //     font-weight: 600;
+        //     font-size: 14px;
+        //     color: @var-ssb-edit-control-input-color;
+        // }
+
+        .broadcast-message-editor-featured-image {
+            cursor: pointer;
+
+            .center {
+                max-width: 400px;
+            }
+
+            .fa-close{
+                position: absolute;
+                right: 0;
+            }
+
+            .fa-image {
+                width: 100%;
+                font-size: 80px;
+            }
+
+            .ssb-no-image {
+                background: @var-ssb-edit-control-input-background;
+                padding: 2em 0;
+                color: @var-ssb-edit-control-input-color;
+            }
+
+            @media screen and (max-width: 767px) {
+                position: relative;
+            }
+        }
+
+        [datepicker-popup-wrap] .btn{
+            width: auto;
+        }
+
+    } 
+}

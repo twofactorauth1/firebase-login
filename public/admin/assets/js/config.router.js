@@ -269,7 +269,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/js/messages/broadcast-message-editor/broadcast-message-editor.html",
         title: 'Message Single',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('MessagesCtrl', 'broadcastMessagesService')
+        resolve: loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'spectrum', 'BroadcastMessageEditorCtrl', 'broadcastMessagesService')
     })
 
     // Login routes

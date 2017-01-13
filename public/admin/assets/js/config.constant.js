@@ -652,6 +652,7 @@ app.constant('JS_REQUIRES', {
     'singleCustomerAnalyticsCtrl': 'assets/js/controllers/singleCustomerAnalyticsCtrl.js',
     'UsersCtrl': 'assets/js/users/users.controller.js',
     'MessagesCtrl': 'assets/js/messages/messages.controller.js',
+    'BroadcastMessageEditorCtrl': 'assets/js/messages/broadcast-message-editor/broadcast-message-editor.controller.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',
