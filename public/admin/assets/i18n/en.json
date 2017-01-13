@@ -98,7 +98,7 @@
       },
       "customers": {
           "MAIN": "Platform",
-          "MANAGE": "Manage Customers",
+          "MANAGE": "Customers",
           "ANALYTICS": "Platform Analytics",
           "BROADCAST": "Broadcast Message"
       },
