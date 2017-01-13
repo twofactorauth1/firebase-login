@@ -1,0 +1,34 @@
+<div ng-controller="messagesCtrl as vm" >
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">Broadcast Messages</h1>
+                <span ng-if="vm.state.messages" class="mainDescription">There are currently {{vm.state.messages.length}} messages.</span>
+            </div>
+        </div>
+    </section>
+    <div>
+        <div class="container-fluid container-fullw bg-white padding-top-10 padding-bottom-10">
+            <div class="form-group margin-bottom-0 pull-right">
+                <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="vm.openSimpleModal('new-user-modal')">
+                    <span>Add New Message</span>
+                </button>
+            </div>
+        </div>    
+    </div>
+    <div class="padding-top-20">
+        <div class="panel-body panel-white space20 ">
+            <div ng-if="(!vm.state.messages || vm.state.messages.length <= 0 )&& !vm.uiState.loading">                
+                <h4 class="text-center margin-top-30 margin-bottom-30">No Messages</h4>                
+            </div>            
+            <div ng-if="vm.uiState.loading">                
+                <h4 class="text-center margin-top-30 margin-bottom-30">Loading Messages, Please wait....</h4>                
+            </div>
+            <ul class="ssb-message-list">                  
+                <li ng-repeat="message in vm.state.messages">
+                    <p class="message-title" ng-bind-html="message.message"></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

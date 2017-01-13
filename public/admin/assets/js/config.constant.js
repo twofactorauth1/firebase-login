@@ -651,6 +651,7 @@ app.constant('JS_REQUIRES', {
     'editTopicCtrl': 'assets/js/controllers/editTopicCtrl.js',
     'singleCustomerAnalyticsCtrl': 'assets/js/controllers/singleCustomerAnalyticsCtrl.js',
     'UsersCtrl': 'assets/js/users/users.controller.js',
+    'MessagesCtrl': 'assets/js/messages/messages.controller.js',
 
     //*** Services
     'accountService': 'assets/js/services/account.js',
@@ -677,6 +678,7 @@ app.constant('JS_REQUIRES', {
     'indiLoginModalService': 'assets/js/indi-login-modal/indi-login-modal.service.js',
     'siteAnalyticsService': 'assets/js/site-analytics/site-analytics.service.js',
     'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
+    'broadcastMessagesService': 'assets/js/messages/messages.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

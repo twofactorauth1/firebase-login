@@ -258,6 +258,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Users',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('UsersCtrl', 'customerService')
+    }).state('app.broadcastmessage', {
+        url: '/customer/messages',
+        templateUrl: "/admin/assets/js/messages/messages.html",
+        title: 'Users',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('MessagesCtrl', 'broadcastMessagesService')
     })
 
     // Login routes
