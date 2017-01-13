@@ -30,7 +30,7 @@ html
             color: gray;
             text-transform: uppercase;
             font-weight: bold;
-            
+            background: #e0ffff;
         }
         .spacer {
             background: #FAFAFA
@@ -40,6 +40,9 @@ html
             font-family: Arial;
             text-align: center;
             padding-top: 10px
+        }
+        .textCenter {
+            text-align: center!important;
         }
         
 
@@ -55,9 +58,9 @@ html
             each row in reports
                 tr
                     td= row.name
-                    td= row.lastWeek
-                    td= row.previousWeek
-                    td= row.trend
+                    td.textCenter= row.lastWeek
+                    td.textCenter= row.previousWeek
+                    td.textCenter= row.trend
     if loginTime
         p.text Your most recent login was at #{loginTime}
     else
