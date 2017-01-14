@@ -140,6 +140,16 @@
             }
         });
 
+
+        $scope.$watch(function() { return DashboardService.broadcastMessages; }, function(messages){
+            if(messages && messages.length){
+                vm.state.broadCastMessage = messages[0];
+            }
+            else{
+                vm.state.broadCastMessage = null;   
+            }
+        });
+
         $scope.$watch(function() { return DashboardService.liveTraffic;}, function(liveTraffic){
             if(liveTraffic && liveTraffic.length > 0) {
                 if(!$scope.liveTrafficConfig) {

@@ -66,8 +66,9 @@ module.exports = {
         self.log.debug(accountId, userId, '>> getActiveBroadcastMessages');
         var now = moment().toDate();
         var query = {
-            startDate : {$lte:now},
-            endDate : {$gte:now}
+            //startDate : {$lte:now},
+            //endDate : {$gte:now},
+            accountId: {$gte:0}
         };
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
             if(err) {
@@ -100,13 +101,13 @@ module.exports = {
         var self = this;
         self.log.debug(accountId, userId, '>> createBroadcastMessage');
 
-        if(!moment().isDate(startDate)) {
-            return fn('startDate parameter must be a date!');
-        }
+        // if(!moment().isDate(startDate)) {
+        //     return fn('startDate parameter must be a date!');
+        // }
 
-        if(!moment().isDate(endDate)) {
-            return fn('endDate parameter must be a date!');
-        }
+        // if(!moment().isDate(endDate)) {
+        //     return fn('endDate parameter must be a date!');
+        // }
 
         var msg = new $$.m.BroadcastMessage({
             accountId:accountId,

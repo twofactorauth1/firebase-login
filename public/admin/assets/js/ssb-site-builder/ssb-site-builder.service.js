@@ -398,7 +398,6 @@
                     data: angular.toJson(page)
                 }).success(success).error(error))
             )
-
         }
 
         /**

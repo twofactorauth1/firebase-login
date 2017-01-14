@@ -8,9 +8,9 @@
         </div>
     </section>
     <div>
-        <div class="container-fluid container-fullw bg-white padding-top-10 padding-bottom-10">
+        <div class="container-fluid container-fullw bg-white padding-top-10 padding-bottom-10" ng-if="(!vm.state.messages || vm.state.messages.length <= 0 )&& !vm.uiState.loading">
             <div class="form-group margin-bottom-0 pull-right">
-                <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="vm.createNewMessage()">
+                <button ng-disabled="vm.uiState.saveLoading" type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="vm.editMessage()">
                     <span>Add New Message</span>
                 </button>
             </div>
@@ -24,9 +24,34 @@
             <div ng-if="vm.uiState.loading">                
                 <h4 class="text-center margin-top-30 margin-bottom-30">Loading Messages, Please wait....</h4>                
             </div>
-            <ul class="ssb-message-list">                  
+            <ul class="list-unstyled">                  
                 <li ng-repeat="message in vm.state.messages">
-                    <p class="message-title" ng-bind-html="message.message"></p>
+                    <p class="message-title" ng-bind-html="message.message | unsafe"></p>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Post Status">
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            tooltip-placement="top"
+                            ng-disabled="vm.uiState.saveLoading"
+                            tooltip-append-to-body="true"
+                            tooltip="Edit Message" ng-click="vm.editMessage(message._id)">
+                            <i class="fa fa-pencil"></i>  
+                        </button>
+
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            tooltip-placement="top"
+                            ng-disabled="vm.uiState.saveLoading"
+                            tooltip-append-to-body="true"
+                            tooltip="Delete Message"
+                            ng-click="vm.deleteMessage(message)">
+
+                            <i class="fa fa-trash"></i>
+
+                        </button>
+
+                    </div>
                 </li>
             </ul>
         </div>

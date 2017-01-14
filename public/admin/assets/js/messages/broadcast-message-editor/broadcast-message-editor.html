@@ -1,10 +1,26 @@
 <div ng-controller="broadcastMessageEditorCtrl as vm">
-	
+	<div class="ssb-topbar message-topbar">
+		<div class="ssb-topbar-inner">		    
+
+		    <div id="ssb-froala-scrollable-container"></div>
+
+		    <div class="pull-right text-right">
+
+		        <div		            
+		            class="close-panel fa fa fa-arrow-left"
+		            ng-click="vm.backToMessages()"
+		            tooltip-placement="bottom"
+		            tooltip-append-to-body="true"
+		            tooltip="Close">
+		        </div>
+
+		    </div>
+
+		</div>
+	</div>
 	<div class="broadcast-message-editor-container">
-		<div class="message-topbar">
-	        <div id="ssb-froala-scrollable-container"></div>
-	    </div>
-		<div class="broadcast-message-editor-scrollable-container row">
+		
+		<div class="broadcast-message-editor-scrollable-container row" ng-if="vm.state.message">
 
 		    <div class="broadcast-message-editor" >
 		        <p
@@ -25,9 +41,9 @@
 		                <div class="btn-group btn-group-md row block clearfix" role="group" aria-label="Post Status">
 
 		                    <button
-		                        ng-disabled="!vm.isValidPost() || vm.uiState.saveLoading"
+		                        ng-disabled="vm.uiState.saveLoading || !vm.state.message.message"
 		                        class="btn btn-primary"
-		                        ng-click="vm.savePost(vm.state.post)"
+		                        ng-click="vm.saveMessage()"
 		                        tooltip-placement="top"
 		                        tooltip-append-to-body="true"
 		                        tooltip="Save">
@@ -43,11 +59,11 @@
 		                </div>
 
 		                <div class="row block broadcast-message-editor-controls-date">
-		                    <indi-datepicker ng-model="vm.state.post.startDate" popup="MM/dd/yyyy"></indi-datepicker>
+		                    <indi-datepicker ng-model="vm.state.message.startDate" popup="MM/dd/yyyy"></indi-datepicker>
 		                </div>
 
 		                <div class="row block broadcast-message-editor-controls-date">
-		                    <indi-datepicker ng-model="vm.state.post.endDate" popup="MM/dd/yyyy"></indi-datepicker>
+		                    <indi-datepicker ng-model="vm.state.message.endDate" popup="MM/dd/yyyy"></indi-datepicker>
 		                </div>
 
 		            </div>

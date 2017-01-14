@@ -24,8 +24,17 @@
     <!-- end: DASHBOARD TITLE -->
 
     <div class="workstream-container container-fluid container-fullw" style="padding-top:0px;">
+
+
         <!-- start: Analytics -->
         <section class="image-grid row">
+
+            <div ng-if="vm.state.broadCastMessage.message" class="indi-rounded panel panel-white margin-top-15" style="position:relative; margin-left: 15px; padding-left:15px; margin-right:15px; padding-right:15px;">
+                <div class="panel-heading border-light">
+                    <p class="message-title" ng-bind-html="vm.state.broadCastMessage.message | unsafe"></p>
+                </div>
+                
+            </div>
 
             <h1 class="mainTitle">
                 Key Business Insights

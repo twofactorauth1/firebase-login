@@ -13,18 +13,34 @@
             loading: true
         };
 
-        vm.createNewMessage = createNewMessage;
-
-        function createNewMessage(){
-            var message_url = '/customer/messages/new';
+        vm.editMessage = editMessage;
+        vm.deleteMessage = deleteMessage;
+        function editMessage(id){
+            if(!id)
+                id = "new";
+            var message_url = '/customer/messages/' + id;
             $location.url(message_url);
         }
+
+
+        function deleteMessage(message) {        
+            vm.uiState.saveLoading = true;
+            
+            return BroadcastMessagesService.deleteMessage(message).then(function(message) {
+                console.log('message deleted');                
+            }).catch(function(error) {
+                console.log(error)
+            }).finally(function() {
+                vm.uiState.saveLoading = false;
+            });
+        }
         
-        var unbindPagesWatcher = $scope.$watch(function() { return BroadcastMessagesService.messages }, function(messages) {
-          // To track duplicate pages
-          vm.state.originalMessages = angular.copy(messages);
-          vm.state.messages = angular.copy(messages);
-          vm.uiState.loading = false;
+        var unbindMessageWatcher = $scope.$watch(function() { return BroadcastMessagesService.messages }, function(messages) {          
+            if(angular.isDefined(messages)){
+                vm.state.messages = messages
+                vm.uiState.loading = false;
+            }
+          
         }, true);
 
         (function init() {

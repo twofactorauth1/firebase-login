@@ -7,17 +7,56 @@
         var vm = this;
 
         vm.state = {
-            message: {
-                message: ""
-            }
+            
         };
 
         vm.uiState = {
-            loading: true
+            loading: true,
+            saveLoading: false
         };
 
-        (function init() {
+        vm.saveMessage = saveMessage;
 
+        vm.backToMessages = backToMessages;
+
+        function saveMessage() {        
+            vm.uiState.saveLoading = true;
+            if(vm.state.message && !vm.state.message._id){
+                return BroadcastMessagesService.createMessage(vm.state.message).then(function(message) {
+                    console.log('message created');
+                    
+                }).catch(function(error) {
+                    console.log(error)
+                }).finally(function() {
+                    vm.uiState.saveLoading = false;
+                });
+            }
+            else if(vm.state.message && vm.state.message._id){
+                return BroadcastMessagesService.updateMessage(vm.state.message, vm.state.message._id).then(function(message) {
+                    console.log('message updated');
+                    
+                }).catch(function(error) {
+                    console.log(error)
+                }).finally(function() {
+                    vm.uiState.saveLoading = false;
+                });
+            }
+                
+        }
+
+        function backToMessages()
+        {
+            $location.url("/customer/messages");
+        }
+
+        var unbindMessageWatcher = $scope.$watch(function() { return BroadcastMessagesService.message }, function(message) {          
+          if(message){
+            vm.state.message = message;
+          }
+        }, true);
+
+        (function init() {
+            
         })();
 
     }]);
