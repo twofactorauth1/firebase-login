@@ -764,6 +764,7 @@
                                         SweetAlert.swal("Refunded", "Order has been refunded.", "success");
                                     }
                                     $scope.order.status = newStatus;
+                                    $scope.originalOrder.status = newStatus;
                                     $scope.currentStatus = newStatus;
                                 }
                             });
