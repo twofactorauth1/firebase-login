@@ -241,7 +241,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
                 var customer = scope.newContact;
-                
+
                 var shipping_address = {
                     'first_name': customer.first,
                     'last_name': customer.last,
@@ -451,7 +451,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - validatitions for checkout
              */
 
-            
+
             scope.checkBillingFirst = function(first) {
                 if (!first) {
                     scope.emptyFirstName = true;
@@ -492,17 +492,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 } else {
                     scope.emptyEmail = false;
                     scope.invalidEmail = !formValidations.email.test(email);
-                }
-            };
-
-
-            scope.checkShippingEmail = function(email) {
-                if (!email) {
-                    scope.emptyShippingEmail = true;
-                    scope.invalidShippingEmail = false;
-                } else {
-                    scope.emptyShippingEmail = false;
-                    scope.invalidShippingEmail = !formValidations.email.test(email);
                 }
             };
 
@@ -569,15 +558,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
 
-            scope.checkShippingPhone = function(phone) {
-                if (!phone) {
-                    scope.invalidShippingPhone = false;
-                } else {
-                    scope.invalidShippingPhone = !formValidations.phone.test(phone);
-                }
-            };
-
-
             scope.validateAddressDetails = function(details, email, phone) {
                 scope.emptyFirstName = false;
                 scope.emptyLastName = false;
@@ -618,7 +598,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.checkoutModalState = 8;
                 }
                 else{
-                    if (CartDetailsService.hasSubscriptionProduct) {                        
+                    if (CartDetailsService.hasSubscriptionProduct) {
                             scope.checkoutModalState = 3;
                     } else {
                         if (scope.stripeInfo && scope.paypalInfo) {
@@ -630,21 +610,18 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         }
                     }
                 }
-                
+
             };
 
 
             scope.validateShippingAddressDetails = function() {
                 scope.emptyShippingFirstName = false;
                 scope.emptyShippingLastName = false;
-                scope.emptyShippingEmail = false;
                 scope.emptyShippingAddress = false;
                 scope.emptyShippingState = false;
                 scope.emptyShippingCity = false;
                 scope.invalidShippingZipCode = false;
                 scope.emptyShippingZipCode = false;
-                scope.invalidShippingEmail = false;
-                scope.invalidShippingPhone = false;
                 var first, last, address, state, city, zip, email, phone;
                 if (scope.newShippingContactAddress) {
                     first = scope.newShippingContactAddress.first_name;
@@ -658,14 +635,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
                 scope.checkShippingFirst(first);
                 scope.checkShippingLast(last);
-                scope.checkShippingEmail(email);
                 scope.checkShippingAddress(address);
                 scope.checkShippingState(state);
                 scope.checkShippingCity(city);
-                scope.checkShippingPhone(phone);
                 scope.shippingPostCodeChanged(zip, state);
 
-                if (scope.emptyShippingFirstName || scope.emptyShippingLastName || scope.emptyShippingEmail || scope.emptyShippingAddress || scope.emptyShippingState || scope.emptyShippingCity || scope.invalidShippingZipCode || scope.emptyShippingZipCode || scope.invalidShippingEmail || scope.invalidShippingPhone) {
+                if (scope.emptyShippingFirstName || scope.emptyShippingLastName || scope.emptyShippingAddress || scope.emptyShippingState || scope.emptyShippingCity || scope.invalidShippingZipCode || scope.emptyShippingZipCode) {
                     return;
                 }
 
@@ -1686,7 +1661,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.cookieUpdateContactFn = function() {
-                cookieData.contactInfo = scope.newContact;                
+                cookieData.contactInfo = scope.newContact;
                 localStorageService.set(cookieKey, cookieData);
             };
 
@@ -1700,7 +1675,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 localStorageService.set(cookieKey, cookieData);
             };
 
-            
+
 
             scope.cookieUpdateQuantityFn = function(item) {
                 cookieData.products.forEach(function(product, index) {
