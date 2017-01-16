@@ -15,6 +15,7 @@
     .navigation-v1.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
          color: {{component.activetxtcolor}}!important;
          background-color: {{component.nav.pressed.bg.color}};
+         font-weight: {{component.nav.pressed.font.weight}};
     }
 
     .navigation-v1.nav-header-{{component._id}} .navbar.navbgcolor {
@@ -25,12 +26,14 @@
     .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:hover, .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:focus{
         background-color: {{component.nav.hoverbg}} !important;
         color: {{component.nav.hover}} !important;
+        font-weight: {{component.nav.hoverFontWeight}}!important;
     }
     .navigation-v1.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a{
         color: {{component.nav.txtcolor}} !important;
         background-color: {{component.nav.menubgcolor}};
         font-size:{{component.nav.font.size}};
         font-family:{{component.nav.font.family}};
+        font-weight:{{component.nav.font.weight}};
     }
 
 

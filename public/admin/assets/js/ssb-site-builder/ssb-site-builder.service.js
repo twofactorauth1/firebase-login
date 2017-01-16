@@ -57,6 +57,7 @@
         ssbService.removeSectionFromLayoutArea = removeSectionFromLayoutArea;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
         ssbService.getFontFamilyOptions = getFontFamilyOptions;
+        ssbService.getFontWeightOptions = getFontWeightOptions;
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent; //legacy re-impl
@@ -1409,6 +1410,23 @@
                 "'Times New Roman',Times,serif": "Times New Roman",
                 "'Ubuntu',sans-serif": 'Ubuntu',
                 "'Verdana',Geneva,sans-serif": "Verdana"
+            }
+        }
+
+
+
+        /*
+         * Provide list of font weight
+         *
+         * @returns {object}
+         *
+         */
+        function getFontWeightOptions() {
+            return {
+                "bold": "bold",
+                "bolder": "bolder",
+                "normal": 'normal',
+                "lighter": 'Lighter'
             }
         }
 

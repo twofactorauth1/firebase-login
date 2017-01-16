@@ -30,6 +30,20 @@
                 </span>
             </label>
         </div>
+        <div class="form-group">
+            <div class="ssb-wide-input">
+                <label>
+                    Font weight
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Font weight of menu.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <select ng-model="component.nav.font.weight" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="(value, key) in vm.fontWeightOptions" value="{{value}}" ng-selected="{{value == component.nav.font.weight}}">{{key}}</option>
+                </select>
+            </div>
+        </div>
     </div>
 
     <div ng-if="menuActive === 'roll-over'">
@@ -57,6 +71,20 @@
                 </span>
             </label>
         </div>
+        <div class="form-group">
+            <div class="ssb-wide-input">
+                <label>
+                    Font weight
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Font weight of menu.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <select ng-model="component.nav.hoverFontWeight" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="(value, key) in vm.fontWeightOptions" value="{{value}}" ng-selected="{{value == component.nav.font.hover.weight}}">{{key}}</option>
+                </select>
+            </div>
+        </div>
     </div>
 
     <div ng-if="menuActive === 'pressed'">
@@ -83,6 +111,20 @@
                     <i class="fa fa-info-circle" />
                 </span>
             </label>
+        </div>
+        <div class="form-group">
+            <div class="ssb-wide-input">
+                <label>
+                    Font weight
+                    <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Font weight of menu.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <select ng-model="component.nav.pressed.font.weight" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="(value, key) in vm.fontWeightOptions" value="{{value}}" ng-selected="{{value == component.nav.font.pressed.weight}}">{{key}}</option>
+                </select>
+            </div>
         </div>
     </div>
 </div>
