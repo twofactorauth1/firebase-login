@@ -278,6 +278,9 @@ module.exports = {
                         //Set trend to 0 for sorting and 'NA' for display purposes
                         trend = 0;
                         row.trend = 'NA';
+                    } else if(row.lastWeek === row.previousWeek){
+                        trend = 0;
+                        row.trend = 'NA';
                     } else {
                         row.trend = 'Rising';
                     }
@@ -302,7 +305,7 @@ module.exports = {
                 //self.log.debug('rows:', rows);
                 var sortedRows = _.sortBy(rows, function(row){return -row.absTrend});
                 /*
-                 * remove any rows that are "uninteresting"
+                 * remove any rows that are "uninteresting" should be 4
                  */
                 while(sortedRows.length > 4 && self._removeLeastInterestingRow(sortedRows) != 0) {
                     //this space intentionally left blank;
