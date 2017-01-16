@@ -125,6 +125,16 @@
                 }
             };
 
+
+            function checkAndSetShippingSameAsBilling(){
+                if($scope.billing.sameAsBilling){
+                    if ($scope.order.shipping_address && $scope.order.billing_address && $scope.order.billing_address.hasOwnProperty("address_1")) {
+                        $scope.order.shipping_address = angular.copy($scope.order.billing_address);
+                }
+                }
+                
+            }
+
             $scope.getOrder = function () {
                 OrderService.getOrders(function (orders) {
                     if ($stateParams.orderId) {
@@ -845,6 +855,7 @@
                     $scope.saveLoading = false;
                     return;
                 }
+                checkAndSetShippingSameAsBilling();
                 if ($stateParams.orderId) {
                     OrderService.updateOrder($scope.order, function (updatedOrder) {
                         $scope.saveLoading = false;
