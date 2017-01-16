@@ -280,7 +280,7 @@ module.exports = {
                         row.trend = 'NA';
                     } else if(row.lastWeek === row.previousWeek){
                         trend = 0;
-                        row.trend = 'NA';
+                        row.trend = 'Unchanged';
                     } else {
                         row.trend = 'Rising';
                     }
