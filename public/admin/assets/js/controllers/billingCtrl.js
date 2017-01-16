@@ -71,7 +71,19 @@
                 }
             }
             $scope.selectedItemIndex = index;
+            if(invoice && invoice.discount && invoice.discount.coupon){
+                if(invoice.discount.coupon.amount_off)
+                    $scope.selectedInvoiceDiscount = (invoice.discount.coupon.amount_off / 100).toFixed( 2 );
+                else if(invoice.discount.coupon.percent_off && invoice.subtotal){
+                    var coupon_discount = invoice.subtotal * invoice.discount.coupon.percent_off / 100;
+                    $scope.selectedInvoiceDiscount = (coupon_discount / 100).toFixed( 2 );
+                }
+            }
+            else{
+                $scope.selectedInvoiceDiscount = null;
+            }
         };
+
 
         /*
          * @updateStripeIdFn

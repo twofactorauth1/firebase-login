@@ -66,8 +66,9 @@ module.exports = {
         self.log.debug(accountId, userId, '>> getActiveBroadcastMessages');
         var now = moment().toDate();
         var query = {
-            startDate : {$lte:now},
-            endDate : {$gte:now}
+            //startDate : {$lte:now},
+            //endDate : {$gte:now},
+            accountId: {$gte:0}
         };
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
             if(err) {
@@ -100,13 +101,13 @@ module.exports = {
         var self = this;
         self.log.debug(accountId, userId, '>> createBroadcastMessage');
 
-        if(!moment().isDate(startDate)) {
-            return fn('startDate parameter must be a date!');
-        }
+        // if(!moment().isDate(startDate)) {
+        //     return fn('startDate parameter must be a date!');
+        // }
 
-        if(!moment().isDate(endDate)) {
-            return fn('endDate parameter must be a date!');
-        }
+        // if(!moment().isDate(endDate)) {
+        //     return fn('endDate parameter must be a date!');
+        // }
 
         var msg = new $$.m.BroadcastMessage({
             accountId:accountId,
@@ -277,6 +278,9 @@ module.exports = {
                         //Set trend to 0 for sorting and 'NA' for display purposes
                         trend = 0;
                         row.trend = 'NA';
+                    } else if(row.lastWeek === row.previousWeek){
+                        trend = 0;
+                        row.trend = 'Unchanged';
                     } else {
                         row.trend = 'Rising';
                     }
@@ -301,7 +305,7 @@ module.exports = {
                 //self.log.debug('rows:', rows);
                 var sortedRows = _.sortBy(rows, function(row){return -row.absTrend});
                 /*
-                 * remove any rows that are "uninteresting"
+                 * remove any rows that are "uninteresting" should be 4
                  */
                 while(sortedRows.length > 4 && self._removeLeastInterestingRow(sortedRows) != 0) {
                     //this space intentionally left blank;

@@ -87,10 +87,14 @@
             <h4 ng-show='selectedInvoice.paid && !selectedInvoice.refunded'>Amount Paid:
                         <span class="pull-right">${{(selectedInvoice.total/100).toFixed( 2 )}}</span>
                     </h4>
+                    <h4 ng-show='selectedInvoiceDiscount'>Discount:
+                        <span class="pull-right">${{selectedInvoiceDiscount}}</span>
+                    </h4>
                     <h4 ng-show='!selectedInvoice.paid'>Amount Not Paid:
                                 <span class="pull-right">${{(selectedInvoice.total/100).toFixed( 2 )}}</span>
                             </h4>
-        </div>
+
+        </div>      
     </script>
     <script type="text/ng-template" id="bill-summary-modal">
         <div class="modal-header">

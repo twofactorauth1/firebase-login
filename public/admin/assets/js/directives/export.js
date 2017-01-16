@@ -22,8 +22,8 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 			      "contact_email",
 			      "order_id",
 			      "completed_at",
-			      "updated_at",
-			      "created_at",
+			      "modified",
+			      "created",
 			      "status",
 			      "total",
 			      "total_discount",
@@ -44,8 +44,8 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		    	"contact_email": "Email",
 		    	"order_id": "Order Id",
 		    	"completed_at": "Completed At",
-		    	"updated_at": "Updated At",
-		    	"created_at": "Created At",
+		    	"modified": "Updated At",
+		    	"created": "Created At",
 		    	"status": "Status",
 		    	"total": "Total",
 		    	"total_discount": "Total Discount",
@@ -138,6 +138,14 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		        			var _addressShipping = getAddress(val)
 		        			row += '"' + _addressShipping + '",';
 		        		}
+		        		else if(index == "modified"){
+		        			var _updatedDate = getOrderDate(val);
+		        			row += '"' + _updatedDate + '",';
+		        		}
+		        		else if(index == "created"){
+		        			var _created_at = getOrderDate(val);
+		        			row += '"' + _created_at + '",';
+		        		}
 		        		else
 		        			row += '"' + val + '",';
 		        	} 	
@@ -218,6 +226,14 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 				          
 			}
 			return _address.trim();  
+		}
+
+		function getOrderDate(obj){
+			var _date = "";
+			if(obj && obj.date){
+				_date = obj.date;
+			}
+			return _date;
 		}
     }
   }  

@@ -11,6 +11,7 @@
     .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a:hover{
         background-color: {{component.nav.hoverbg}} !important;
         color: {{component.nav.hover}}!important;
+        font-weight: {{component.nav.hoverFontWeight}}!important;
     }
     .navigation-v3.nav-header-{{component._id}} .navbar-default.navbgcolor {
         background: {{component.nav.bg}}!important;
@@ -21,13 +22,15 @@
     .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li a.active {
          color: {{component.activetxtcolor}}!important;
          background-color: {{component.nav.pressed.bg.color}};
+         font-weight: {{component.nav.pressed.font.weight}};
     }
     .navigation-v3.nav-header-{{component._id}} .navbar ul.navbar-nav li {
         border-bottom: 4px solid transparent;
     }
     .navigation-v3.nav-header-{{component._id}} .navbar-default .navbar-nav > li > a{
         color: {{component.nav.txtcolor}} !important;
-        background-color: {{component.nav.menubgcolor}};
+        background-color: {{component.nav.menubgcolor}};        
+        font-weight:{{component.nav.font.weight}};
     }
 
 </style>

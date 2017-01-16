@@ -20,7 +20,10 @@
         var baseAccountAPIUrl = '/api/1.0/account/';
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
         var basePlatformLiveTrafficAPIUrl = '/api/1.0/analytics/admin/live';
+        var baseBroadcastMessagesAPIUrl = '/api/2.0/insights/messages/';
 
+
+        dashboardService.getActiveMessages = getActiveMessages;
         dashboardService.loading = { value:0 };
         dashboardService.updatedWorkstreams = false;
         dashboardService.lastWorkstreamSet = [];
@@ -256,10 +259,25 @@
             dashboardService.getAnalytics();
             dashboardService.getWorkstreams();
             dashboardService.getAccount();
-
+            dashboardService.getActiveMessages();
             if (away) {
                 console.log(away);
             }
+
+        }
+
+        function getActiveMessages() {
+
+            function success(data) {
+                console.log(data);
+                dashboardService.broadcastMessages = data;
+            }
+
+            function error(error) {
+                console.error('dashRequest getActiveMessages error: ', JSON.stringify(error));
+            }
+
+            return dashRequest($http.get(baseBroadcastMessagesAPIUrl + "active").success(success).error(error));
 
         }
 
@@ -271,6 +289,7 @@
             dashboardService.getAnalytics();
             dashboardService.getWorkstreams();
             dashboardService.getLiveTraffic();
+            dashboardService.getActiveMessages();
             dashboardService.numberPolling++;
 		})();
 

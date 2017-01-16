@@ -246,8 +246,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
             'bold',
             'italic',
             'underline',
-            'strikeThrough',
-            'fontFamily',
+            'strikeThrough',            
             'fontSize',
             'color'
         ];

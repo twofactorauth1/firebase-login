@@ -52,6 +52,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     };
 
     vm.fontFamilyOptions = SimpleSiteBuilderService.getFontFamilyOptions();
+    vm.fontWeightOptions = SimpleSiteBuilderService.getFontWeightOptions();
 
 
     $scope.component = vm.component;

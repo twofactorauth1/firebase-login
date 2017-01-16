@@ -115,8 +115,14 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> createBroadcastMessage');
 
         var message = req.body.message;
-        var startDate = moment(req.body.startDate);
-        var endDate = moment(req.body.endDate);
+        var startDate = null;
+        var endDate = null;
+        if(req.body.startDate){
+            startDate = moment(req.body.startDate).toDate();
+        }
+        if(req.body.startDate){
+            endDate = moment(req.body.endDate).toDate();
+        }
 
         manager.createBroadcastMessage(accountId, userId, message, startDate, endDate, function(err, value){
             self.log.debug(accountId, userId, '<< createBroadcastMessage');
@@ -132,6 +138,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var msg = new $$.m.BroadcastMessage(req.body);
         msg.set('_id', req.params.id);
+        var startDate = null;
+        var endDate = null;
+
+        if(req.body.startDate){
+            startDate = moment(req.body.startDate).toDate();
+        }
+        if(req.body.startDate){
+            endDate = moment(req.body.endDate).toDate();
+        }
+
+        msg.set("startDate", startDate);
+        msg.set("endDate", endDate);
+
         manager.updateBroadcastMessage(accountId, userId, msg, function(err, value){
             self.log.debug(accountId, userId, '<< updateBroadcastMessage');
             self.sendResultOrError(resp, err, value, 'Could not update message');
@@ -147,7 +166,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var msgId = req.params.id;
         manager.deleteBroadcastMessage(accountId, userId, msgId, function(err, value){
             self.log.debug(accountId, userId, '<< removeBroadcastMessage');
-            self.sendResultOrError(resp, err, value, 'Could not delete message');
+            if(err) {
+                self.wrapError(resp, 500, err, "Could not delete message");
+            } else {
+                self.send200(resp);
+            }
         });
     }
 
