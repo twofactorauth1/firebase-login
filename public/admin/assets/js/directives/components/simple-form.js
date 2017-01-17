@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('simpleFormComponent',["formValidations", function (formValidations) {
+app.directive('simpleFormComponent',["formValidations", "$timeout", function (formValidations, $timeout) {
   return {
     scope: {
       component: '=',
@@ -13,6 +13,12 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
       scope.isEditing = true;
       scope.nthRow = 'nth-row';
       scope.formValidations = formValidations;
+      scope.elementClass =  '.simple-form-'+ scope.component._id + " .form-submit-button";
+      scope.originalData = {
+          bg: {
+             
+          }
+      };
       if(!angular.isDefined(scope.component.tags)){
         scope.component.tags = [];
         if(scope.component.contact_type)
@@ -82,7 +88,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
         return styleString;
       };
 
-      scope.buttonStyle = function(btn){
+      scope.buttonStyle = function(btn, style){
         var styleString = '';
         if (btn && btn.align) {
             if(btn.align === 'left' || btn.align === 'right')
@@ -92,7 +98,20 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
               styleString += 'margin: 0 auto;';
             }
         }
+        if(style && style.bg && style.bg.color){
+          styleString += ' background-color: ' + style.bg.color + "!important;";
+          styleString += ' border-color: ' + style.bg.color + ";";
+          scope.originalData.color = style.bg.color;
+          scope.originalData.borderColor = style.bg.color;
+        }
+
+        if(style && style.txtcolor){
+          styleString += ' color: ' + style.txtcolor + "!important;";
+          scope.originalData.txtcolor= element.css('color');
+        }
+
         return styleString;
+        
       };
 
       scope.formStyle = function(form){
@@ -107,6 +126,78 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
         }
         return styleString;
       };
+
+      angular.element(document).ready(function() {
+          var unbindWatcher = scope.$watch(function() {              
+              return angular.element(scope.elementClass).length;
+          }, function(newValue, oldValue) {
+              if (newValue) {
+                  unbindWatcher();
+                  $timeout(function() {
+                    
+                    var element = angular.element(scope.elementClass);
+
+
+                    var originalData = {
+                        bg: {
+                            color: element.css('background-color')
+                        },
+                        txtcolor: element.css('color'),
+                        borderColor: element.css('border-color')
+                    };
+                    
+                    var btnActiveStyle = null;
+                    if(element)
+                    {
+                      // bind hover and active events to button
+
+                        element.hover(function(){
+                            var btnHoverStyle = null;                    
+                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.hover)
+                            {
+                              btnHoverStyle = scope.component.formSettings.btnStyle.hover;
+                            }
+
+                            if(btnHoverStyle && btnHoverStyle.bg && btnHoverStyle.bg.color){
+                              this.style.setProperty( 'background-color', btnHoverStyle.bg.color, 'important' );
+                              this.style.setProperty( 'border-color', btnHoverStyle.bg.color, 'important' );
+                            }
+                            if(btnHoverStyle && btnHoverStyle.txtcolor)
+                              this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
+
+                        }, function(){
+                            if(scope.originalData.bg.color)
+                              this.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
+                            else
+                              this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                            if(scope.originalData.txtcolor)
+                              this.style.setProperty( 'color', scope.originalData.txtcolor, 'important' );
+                            else
+                              this.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                            if(scope.originalData.borderColor)
+                              this.style.setProperty( 'border-color', scope.originalData.borderColor, 'important' );
+                            else
+                              this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                        });
+
+                        element.on("mousedown touchstart", function(){
+                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.pressed)
+                            {
+                              btnActiveStyle = scope.component.formSettings.btnStyle.pressed;
+                            }
+                            if(btnActiveStyle && btnActiveStyle.bg && btnActiveStyle.bg.color){
+                              this.style.setProperty( 'background-color', btnActiveStyle.bg.color, 'important' );
+                              this.style.setProperty( 'border-color', btnActiveStyle.bg.color, 'important' );
+                            }
+                            if(btnActiveStyle && btnActiveStyle.txtcolor)
+                              this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
+                        })
+                    }
+                  }, 500);
+              }
+          });
+      })
+
     }
   };
 }]);
