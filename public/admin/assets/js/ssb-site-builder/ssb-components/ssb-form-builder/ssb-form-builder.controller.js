@@ -16,6 +16,13 @@
 
         vm.formBuilder = {};
 
+        vm.originalData = {
+          bg: {
+             
+          }
+        };
+        vm.elementClass =  '.form-builder-'+ vm.component._id + " .form-submit-button";
+
         vm.fieldClass = fieldClass;
 
         vm.fieldStyle = fieldStyle;
@@ -108,6 +115,18 @@
                 if (btn.align === 'center') {
                     styleString += 'margin: 0 auto !important; float:none !important;';
                 }
+            }
+            if(btn && btn.bg && btn.bg.color){
+                styleString += ' background-color: ' + btn.bg.color + "!important;";
+                styleString += ' border-color: ' + btn.bg.color + ";";
+
+                vm.originalData.bg.color = btn.bg.color;
+                vm.originalData.borderColor = btn.bg.color;
+            }
+
+            if(btn && btn.txtcolor){
+              styleString += ' color: ' + btn.txtcolor + "!important;";
+              vm.originalData.txtcolor= btn.txtcolor;
             }
             return styleString;
         };
@@ -344,6 +363,96 @@
             vm.element = element;
             getCampaigns();
         }
+
+
+        angular.element(document).ready(function() {
+          var unbindWatcher = $scope.$watch(function() {              
+              return angular.element(vm.elementClass).length;
+          }, function(newValue, oldValue) {
+              if (newValue) {
+                  unbindWatcher();
+                  $timeout(function() {
+                    
+                    var element = angular.element(vm.elementClass);
+
+
+                    var originalData = {
+                        bg: {
+                            color: element.css('background-color')
+                        },
+                        txtcolor: element.css('color'),
+                        borderColor: element.css('border-color')
+                    };
+                    
+                    var btnActiveStyle = null;
+                    if(element)
+                    {
+                      // bind hover and active events to button
+
+                        element.hover(function(){
+                            var btnHoverStyle = null;                    
+                            if(vm.component.formSettings && vm.component.formSettings.btnStyle && vm.component.formSettings.btnStyle.hover)
+                            {
+                              btnHoverStyle = vm.component.formSettings.btnStyle.hover;
+                            }
+
+                            if(btnHoverStyle && btnHoverStyle.bg && btnHoverStyle.bg.color){
+                              this.style.setProperty( 'background-color', btnHoverStyle.bg.color, 'important' );
+                              this.style.setProperty( 'border-color', btnHoverStyle.bg.color, 'important' );
+                            }
+                            if(btnHoverStyle && btnHoverStyle.txtcolor)
+                              this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
+
+                        }, function(){
+                            if(vm.originalData.bg.color)
+                              this.style.setProperty( 'background-color', vm.originalData.bg.color, 'important' );
+                            else
+                              this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                            if(vm.originalData.txtcolor)
+                              this.style.setProperty( 'color', vm.originalData.txtcolor, 'important' );
+                            else
+                              this.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                            if(vm.originalData.borderColor)
+                              this.style.setProperty( 'border-color', vm.originalData.borderColor, 'important' );
+                            else
+                              this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                        });
+
+                        element.on("mousedown touchstart", function(){
+                            if(vm.component.formSettings && vm.component.formSettings.btnStyle && vm.component.formSettings.btnStyle.pressed)
+                            {
+                              btnActiveStyle = vm.component.formSettings.btnStyle.pressed;
+                            }
+                            if(btnActiveStyle && btnActiveStyle.bg && btnActiveStyle.bg.color){
+                              this.style.setProperty( 'background-color', btnActiveStyle.bg.color, 'important' );
+                              this.style.setProperty( 'border-color', btnActiveStyle.bg.color, 'important' );
+                            }
+                            if(btnActiveStyle && btnActiveStyle.txtcolor)
+                              this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
+                        })
+
+                        element.on("mouseup touchend", function(){
+                            var elem = this;
+                            $timeout(function() {
+                                if(vm.originalData.bg.color)
+                                  elem.style.setProperty( 'background-color', vm.originalData.bg.color, 'important' );
+                                else
+                                  this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                if(vm.originalData.txtcolor)
+                                  elem.style.setProperty( 'color', vm.originalData.txtcolor, 'important' );
+                                else
+                                  elem.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                                if(vm.originalData.borderColor)
+                                  elem.style.setProperty( 'border-color', vm.originalData.borderColor, 'important' );
+                                else
+                                  elem.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                            }, 1000);
+                        })
+                    }
+                  }, 500);
+              }
+          });
+      })
 
     }
 

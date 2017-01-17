@@ -8,9 +8,15 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
       console.log('scope.component ', scope.component);
+      scope.elementClass =  '.simple-form-'+ scope.component._id + " .form-submit-button";
 
       var _campaignObj = null;
       scope.isBusy = false;
+      scope.originalData = {
+          bg: {
+             
+          }
+      };
 
       if (scope.component.campaignId) {
         campaignService.getCampaign(scope.component.campaignId, function(data) {
@@ -93,7 +99,21 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
               styleString += 'margin: 0 auto;';
             }
         }
+        if(btn && btn.bg && btn.bg.color){
+            styleString += ' background-color: ' + btn.bg.color + "!important;";
+            styleString += ' border-color: ' + btn.bg.color + ";";
+
+            scope.originalData.bg.color = btn.bg.color;
+            scope.originalData.borderColor = btn.bg.color;
+        }
+
+        if(btn && btn.txtcolor){
+          styleString += ' color: ' + btn.txtcolor + "!important;";
+          scope.originalData.txtcolor= btn.txtcolor;
+        }
+
         return styleString;
+        
       };
 
       scope.formStyle = function(form){
@@ -111,7 +131,97 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
       function formatString(stringval){
         return stringval.replace(/[^\w-\s]/gi, '');
-      } 
+      }
+
+
+      angular.element(document).ready(function() {
+          var unbindWatcher = scope.$watch(function() {              
+              return angular.element(scope.elementClass).length;
+          }, function(newValue, oldValue) {
+              if (newValue) {
+                  unbindWatcher();
+                  $timeout(function() {
+                    
+                    var element = angular.element(scope.elementClass);
+
+
+                    var originalData = {
+                        bg: {
+                            color: element.css('background-color')
+                        },
+                        txtcolor: element.css('color'),
+                        borderColor: element.css('border-color')
+                    };
+                    
+                    var btnActiveStyle = null;
+                    if(element)
+                    {
+                      // bind hover and active events to button
+
+                        element.hover(function(){
+                            var btnHoverStyle = null;                    
+                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.hover)
+                            {
+                              btnHoverStyle = scope.component.formSettings.btnStyle.hover;
+                            }
+
+                            if(btnHoverStyle && btnHoverStyle.bg && btnHoverStyle.bg.color){
+                              this.style.setProperty( 'background-color', btnHoverStyle.bg.color, 'important' );
+                              this.style.setProperty( 'border-color', btnHoverStyle.bg.color, 'important' );
+                            }
+                            if(btnHoverStyle && btnHoverStyle.txtcolor)
+                              this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
+
+                        }, function(){
+                            if(scope.originalData.bg.color)
+                              this.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
+                            else
+                              this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                            if(scope.originalData.txtcolor)
+                              this.style.setProperty( 'color', scope.originalData.txtcolor, 'important' );
+                            else
+                              this.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                            if(scope.originalData.borderColor)
+                              this.style.setProperty( 'border-color', scope.originalData.borderColor, 'important' );
+                            else
+                              this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                        });
+
+                        element.on("mousedown touchstart", function(){
+                            if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.pressed)
+                            {
+                              btnActiveStyle = scope.component.formSettings.btnStyle.pressed;
+                            }
+                            if(btnActiveStyle && btnActiveStyle.bg && btnActiveStyle.bg.color){
+                              this.style.setProperty( 'background-color', btnActiveStyle.bg.color, 'important' );
+                              this.style.setProperty( 'border-color', btnActiveStyle.bg.color, 'important' );
+                            }
+                            if(btnActiveStyle && btnActiveStyle.txtcolor)
+                              this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
+                        })
+
+                        element.on("mouseup touchend", function(){
+                            var elem = this;
+                            $timeout(function() {
+                                if(scope.originalData.bg.color)
+                                  elem.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
+                                else
+                                  this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                if(scope.originalData.txtcolor)
+                                  elem.style.setProperty( 'color', scope.originalData.txtcolor, 'important' );
+                                else
+                                  elem.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                                if(scope.originalData.borderColor)
+                                  elem.style.setProperty( 'border-color', scope.originalData.borderColor, 'important' );
+                                else
+                                  elem.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                            }, 1000);
+                        })
+                    }
+                  }, 500);
+              }
+          });
+      })
 
       scope.formValidations = formValidations;
       scope.user = {};
