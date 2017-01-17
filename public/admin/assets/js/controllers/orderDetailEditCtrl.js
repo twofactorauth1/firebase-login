@@ -817,7 +817,7 @@
              * -
              */
 
-            $scope.saveOrder = function (flag, cust, invalid) {
+            $scope.saveOrder = function (flag, cust, invalid, required) {
                 $scope.pageSaving = true;
                 $scope.formSubmitted = true;
                 $scope.saveLoading = true;
@@ -850,7 +850,7 @@
                     $scope.saveLoading = false;
                     return;
                 }
-                if (!$scope.order.billing_address || invalid) {
+                if (!$scope.order.billing_address || (invalid && required)) {                    
                     $scope.billingEdit = true;
                     toaster.pop('error', 'Billing details cannot be blank');
                     $scope.saveLoading = false;
