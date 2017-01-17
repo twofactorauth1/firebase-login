@@ -784,6 +784,10 @@
                     $scope.currentStatus = newStatus;
                 }
 
+                if (newStatus === 'paid') {
+                    toaster.pop('success', toasterMsg + '"Paid"');
+                }
+
             };
 
             /*
