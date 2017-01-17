@@ -12,6 +12,11 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
       var _campaignObj = null;
       scope.isBusy = false;
+      scope.originalData = {
+          bg: {
+             
+          }
+      };
 
       if (scope.component.campaignId) {
         campaignService.getCampaign(scope.component.campaignId, function(data) {
@@ -84,33 +89,31 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         return styleString;
       };
 
-      scope.buttonStyle = function(btn, style){
+      scope.buttonStyle = function(btn){
         var styleString = '';
         if (btn && btn.align) {
             if(btn.align === 'left' || btn.align === 'right')
-              styleString += ' float: ' + btn.align + ";";
+              styleString += 'float: ' + btn.align + ";";
 
             if(btn.align === 'center'){
-              styleString += ' margin: 0 auto;';
+              styleString += 'margin: 0 auto;';
             }
         }
-        if(style && style.bg && style.bg.color){
-          styleString += ' background-color: ' + style.bg.color + "!important;";
-          styleString += ' border-color: ' + style.bg.color + "!important;";
+        if(btn && btn.bg && btn.bg.color){
+            styleString += ' background-color: ' + btn.bg.color + "!important;";
+            styleString += ' border-color: ' + btn.bg.color + ";";
+
+            scope.originalData.bg.color = btn.bg.color;
+            scope.originalData.borderColor = btn.bg.color;
         }
 
-        if(style && style.txtcolor){
-          styleString += ' color: ' + style.txtcolor + "!important;";
+        if(btn && btn.txtcolor){
+          styleString += ' color: ' + btn.txtcolor + "!important;";
+          scope.originalData.txtcolor= btn.txtcolor;
         }
-        var element = angular.element(scope.elementClass);
-        scope.originalData = {
-            bg: {
-                color: element.css('background-color')
-            },
-            txtcolor: element.css('color'),
-            borderColor: element.css('border-color')
-        };
+
         return styleString;
+        
       };
 
       scope.formStyle = function(form){
@@ -140,18 +143,21 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                   $timeout(function() {
                     
                     var element = angular.element(scope.elementClass);
+
+
+                    var originalData = {
+                        bg: {
+                            color: element.css('background-color')
+                        },
+                        txtcolor: element.css('color'),
+                        borderColor: element.css('border-color')
+                    };
                     
                     var btnActiveStyle = null;
                     if(element)
                     {
                       // bind hover and active events to button
-                        scope.originalData = {
-                            bg: {
-                                color: element.css('background-color')
-                            },
-                            txtcolor: element.css('color'),
-                            borderColor: element.css('border-color')
-                        };
+
                         element.hover(function(){
                             var btnHoverStyle = null;                    
                             if(scope.component.formSettings && scope.component.formSettings.btnStyle && scope.component.formSettings.btnStyle.hover)
@@ -167,9 +173,18 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                               this.style.setProperty( 'color', btnHoverStyle.txtcolor, 'important' );
 
                         }, function(){
-                            this.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
-                            this.style.setProperty( 'color', scope.originalData.txtcolor, 'important' );
-                            this.style.setProperty( 'border-color', scope.originalData.borderColor, 'important' );
+                            if(scope.originalData.bg.color)
+                              this.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
+                            else
+                              this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                            if(scope.originalData.txtcolor)
+                              this.style.setProperty( 'color', scope.originalData.txtcolor, 'important' );
+                            else
+                              this.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                            if(scope.originalData.borderColor)
+                              this.style.setProperty( 'border-color', scope.originalData.borderColor, 'important' );
+                            else
+                              this.style.setProperty( 'border-color', originalData.borderColor, 'important' );
                         });
 
                         element.on("mousedown touchstart", function(){
@@ -188,7 +203,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                   }, 500);
               }
           });
-      });
+      })
 
       scope.formValidations = formValidations;
       scope.user = {};

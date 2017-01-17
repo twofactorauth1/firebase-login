@@ -88,7 +88,7 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
         return styleString;
       };
 
-      scope.buttonStyle = function(btn, style){
+      scope.buttonStyle = function(btn){
         var styleString = '';
         if (btn && btn.align) {
             if(btn.align === 'left' || btn.align === 'right')
@@ -98,16 +98,17 @@ app.directive('simpleFormComponent',["formValidations", "$timeout", function (fo
               styleString += 'margin: 0 auto;';
             }
         }
-        if(style && style.bg && style.bg.color){
-          styleString += ' background-color: ' + style.bg.color + "!important;";
-          styleString += ' border-color: ' + style.bg.color + ";";
-          scope.originalData.color = style.bg.color;
-          scope.originalData.borderColor = style.bg.color;
+        if(btn && btn.bg && btn.bg.color){
+            styleString += ' background-color: ' + btn.bg.color + "!important;";
+            styleString += ' border-color: ' + btn.bg.color + ";";
+
+            scope.originalData.bg.color = btn.bg.color;
+            scope.originalData.borderColor = btn.bg.color;
         }
 
-        if(style && style.txtcolor){
-          styleString += ' color: ' + style.txtcolor + "!important;";
-          scope.originalData.txtcolor= element.css('color');
+        if(btn && btn.txtcolor){
+          styleString += ' color: ' + btn.txtcolor + "!important;";
+          scope.originalData.txtcolor= btn.txtcolor;
         }
 
         return styleString;
