@@ -189,7 +189,7 @@
                     <div class="panel panel-white form-group bg-white padding-10">
                         <span ng-if="!vm.state.emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
 
-                        <div ng-if="vm.state.emails.length">
+                        <div ng-if="vm.state.emails.length" ng-class="{'disabled': vm.uiState.disableEditing}">
 
                             <ui-select
                                 ng-model="vm.state.campaign.emailSettings.emailId"
