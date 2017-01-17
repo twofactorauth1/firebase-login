@@ -199,6 +199,24 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
                               this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
                         })
+
+                        element.on("mouseup touchend", function(){
+                            var elem = this;
+                            $timeout(function() {
+                                if(scope.originalData.bg.color)
+                                  elem.style.setProperty( 'background-color', scope.originalData.bg.color, 'important' );
+                                else
+                                  this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                if(scope.originalData.txtcolor)
+                                  elem.style.setProperty( 'color', scope.originalData.txtcolor, 'important' );
+                                else
+                                  elem.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                                if(scope.originalData.borderColor)
+                                  elem.style.setProperty( 'border-color', scope.originalData.borderColor, 'important' );
+                                else
+                                  elem.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                            }, 1000);
+                        })
                     }
                   }, 500);
               }

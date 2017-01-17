@@ -430,6 +430,24 @@
                             if(btnActiveStyle && btnActiveStyle.txtcolor)
                               this.style.setProperty( 'color', btnActiveStyle.txtcolor, 'important' );
                         })
+
+                        element.on("mouseup touchend", function(){
+                            var elem = this;
+                            $timeout(function() {
+                                if(vm.originalData.bg.color)
+                                  elem.style.setProperty( 'background-color', vm.originalData.bg.color, 'important' );
+                                else
+                                  this.style.setProperty( 'background-color', originalData.bg.color, 'important' );
+                                if(vm.originalData.txtcolor)
+                                  elem.style.setProperty( 'color', vm.originalData.txtcolor, 'important' );
+                                else
+                                  elem.style.setProperty( 'color', originalData.txtcolor, 'important' );
+                                if(vm.originalData.borderColor)
+                                  elem.style.setProperty( 'border-color', vm.originalData.borderColor, 'important' );
+                                else
+                                  elem.style.setProperty( 'border-color', originalData.borderColor, 'important' );
+                            }, 1000);
+                        })
                     }
                   }, 500);
               }
