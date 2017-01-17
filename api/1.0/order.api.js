@@ -189,6 +189,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 orderManager.updateOrderById(order, function(err, order){
                     self.log.debug(accountId, userId, '<< updateOrder');
                     self.sendResultOrError(res, err, order, 'Error updating order');
+                    self.createUserActivity(req, 'UPDATE_ORDER', null, {id: order.id()}, function(){});
                 });
             }
         });
