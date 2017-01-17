@@ -407,7 +407,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function componentStyle(component) {
         var styleString = ' ';
 
-        if (component.type.indexOf('ssb-') === 0) {
+        if (component.type.indexOf('ssb-') === 0 && component.type !="ssb-form-builder" && component.type != 'ssb-rss-feed' && component.type != 'ssb-form-donate') {
 
             if (component.spacing) {
                 if (component.spacing.pt) {
