@@ -14,6 +14,14 @@ html
             text-align: right!important;
         }
 
+        .text-green {
+            color: #1FBBA6 !important;
+        }
+
+        .text-red {
+            color: #C82E29 !important;
+        }
+
         .insightTable {
             margin: 15px auto;
             font-family: Arial;
@@ -46,6 +54,7 @@ html
         }
 
 
+
   body
     table.insightTable
         thead
@@ -60,7 +69,11 @@ html
                     td= row.name
                     td.textCenter= row.lastWeek
                     td.textCenter= row.previousWeek
-                    td.textCenter= row.trend
+                    - var textClass = '';
+                    - if(row.rawTrend < 0) textClass = 'text-red';
+                    - if(row.rawTrend > 0) textClass = 'text-green';
+                    td.textCenter(class=textClass) #{row.trend} !{row.imgsrc}
+
     if loginTime
         p.text Your most recent login was at #{loginTime}
     else

@@ -52,8 +52,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> testInsightReport');
         var customerAccountId = accountId;
-        var sections = ['weeklyreport'];
-        var destinationAddress = 'kyle@indigenous.io';
+        var sections = ['weeklyreport', 'broadcastmessage'];
+        var destinationAddress = 'kyle@kyle-miller.com';
         var startDate = moment().subtract(7, 'days').toDate();
         var endDate = moment().toDate();
         manager.generateInsightReport(accountId, userId, 2287, sections, destinationAddress, startDate,
@@ -70,7 +70,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> sendInsightReport');
 
         var customerAccountId = req.body.accountId;
-        var sections = ['weeklyreport'];
+        var sections = ['weeklyreport', 'broadcastmessage'];
         var destinationAddress = 'account_managers@indigenous.io';
         if(appConfig.nonProduction === true) {
             destinationAddress = 'test_account_managers@indigenous.io';

@@ -22,6 +22,7 @@ var orderManager = require('../orders/order_manager');
 var appConfig = require('../configs/app.config');
 var numeral = require('numeral');
 var broadcastMessageDao = require('./dao/broadcast_messages.dao');
+var cheerio = require('cheerio');
 
 module.exports = {
 
@@ -196,7 +197,7 @@ module.exports = {
                         self.log.error(accountId, userId, 'Error handling sections:', err);
                         cb(err);
                     } else {
-                        self.log.debug(accountId, userId, 'built section data');
+                        self.log.debug(accountId, userId, 'built section data', sectionDataMap);
                         cb(null, account, sectionDataMap);
                     }
                 });
@@ -277,21 +278,29 @@ module.exports = {
                     } else if((row.previousWeek === 0 || row.previousWeek === '$0.00') && (row.lastWeek === 0 || row.lastWeek === '$0.00')) {
                         //Set trend to 0 for sorting and 'NA' for display purposes
                         trend = 0;
-                        row.trend = 'NA';
+                        row.trend = 'Unchanged';
                     } else if(row.lastWeek === row.previousWeek){
                         trend = 0;
                         row.trend = 'Unchanged';
                     } else {
                         row.trend = 'Rising';
                     }
-
+                    row.rawTrend = trend;
+                    if(trend > 0) {
+                        row.class = 'fa fa-caret-up text-green';
+                        row.imgsrc = '&#x25B2;';
+                    } else if (trend < 0) {
+                        row.class = 'fa fa-caret-down text-red';
+                        row.imgsrc = '&#x25BC;';
+                    } else {
+                        row.class = '';
+                    }
+                    self.log.debug('row.trend = ' + row.trend + ' and row.class = ' + row.class);
                     row.absTrend = Math.abs(trend);
                     row.lastWeekRaw = row.lastWeek;
-                    //row.lastWeek = prefix + row.lastWeek.toLocaleString() + suffix;
                     row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
                     row.previousWeekRaw = row.previousWeek;
                     row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
-                    //row.previousWeek = prefix + row.previousWeek.toLocaleString() + suffix;
                     return row;
                 };
 
@@ -319,46 +328,53 @@ module.exports = {
                             content:jadeHtml
                         });
                     }
+                    self.log.debug('jade html:', jadeHtml);
+                    self.log.debug('base html:', html);
                     cb(err, account, sectionDataMap, html, contact, vars);
                 });
 
             },
-            /*
-            function(account, sectionDataMap, html, contact, jadeHtml, cb) {
-                //build the needed variables for substitution
-                var vars = [];
-                vars.push({
-                    name:'INSIGHTSTARTDATE',
-                    content:moment(startDate).format('MM/DD/YYYY')
-                });
-                vars.push({
-                    name:'INSIGHTENDDATE',
-                    content:moment(endDate).format('MM/DD/YYYY')
-                });
+            function(account, sectionDataMap, html, contact, vars, cb) {
+                var data = sectionDataMap.broadcastmessage[0];
+                var bMessage = '';
 
-                var data = sectionDataMap.weeklyreport;
-                var visitors = '<b>' + data.visitorCount.currentCount + '</b>';
-                var sendCount = '<b>' + data.emailReports.sentCount + '</b>';
-                var openCount = '<b>' + data.emailReports.openCount + '</b>';
-                var clickCount = '<b>' + data.emailReports.clickCount + '</b>';
-                var pageCreate = '<b>' + data.pagesReports.pagesCreated + '</b>';
-                var pageModify = '<b>' + data.pagesReports.pagesModified + '</b>';
-                var publishCount = '<b>' + data.pagesReports.pagesPublished + '</b>';
-                var accountLogins = '<b>' + data.loginReports.loginCount + '</b>';
-                var loginTime = '<b>' + data.loginReports.mostRecentLogin + '</b>';
-
-                var s = '<p>This past week, you had ' + visitors + ' visitors.</p>';
-                s += '<p>You sent ' + sendCount + ' emails, '+ openCount + ' emails were opened and ' + clickCount + ' emails were clicked.</p>';
-                s += '<p>You created ' + pageCreate + ' page(s), modified ' + pageModify + ' page(s) and published ' + publishCount + ' page(s).</p>';
-                s += '<p>There were ' + accountLogins + ' admin sessions with the most recent login at ' + loginTime + '.</p>';
-
-                vars.push({
-                    name:'WEEKLYREPORTSECTION',
-                    content:jadeHtml
+                _.each(sectionDataMap.broadcastmessage, function(msg){
+                    var $$$ = cheerio.load(msg.get('message'));
+                    $$$('span').each(function() {
+                        $$$(this).removeAttr('style');
+                    });
+                    bMessage+= $$$.html();
                 });
-                cb(null, account, sectionDataMap, html, contact, vars);
+                self.log.debug('data:', bMessage);
+                if(data) {
+                    app.render('insights/broadcastmessage', {message:bMessage}, function(err, jadeHtml){
+                        if(jadeHtml) {
+                            vars.push({
+                                name:'BROADCASTMESSAGESECTION',
+                                content:jadeHtml
+                            });
+                        }
+                        self.log.debug('jade html:', jadeHtml);
+                        cb(err, account, sectionDataMap, html, contact, vars);
+                    });
+                } else {
+                    cb(null, account, sectionDataMap, html, contact, vars);
+                }
+
             },
-            */
+            function(account, sectionDataMap, html, contact, vars, cb) {
+                var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                app.render('insights/footer', {siteUrl:siteUrl}, function(err, jadeHtml){
+                    if(jadeHtml) {
+                        vars.push({
+                            name:'FOOTER',
+                            content:jadeHtml
+                        });
+                    }
+                    self.log.debug('jade html:', jadeHtml);
+                    cb(err, account, sectionDataMap, html, contact, vars);
+                });
+            },
             function(account, sectionDataMap, html, contact, reportVars, cb) {
                 //send the email
                 var fromAddress = self.config.fromAddress;
@@ -403,10 +419,29 @@ module.exports = {
         var self = this;
         if(sectionName === 'weeklyreport') {
             return self._handleWeeklyReport(account, startDate, endDate, fn);
+        } else if(sectionName === 'broadcastmessage') {
+            return self._handleBroadcastMessage(account, startDate, endDate, fn);
         } else {
             self.log.warn('No handler for section: ' + sectionName);
             fn(null, '');
         }
+    },
+
+    _handleBroadcastMessage: function(account, startDate, endDate, fn) {
+        var self = this;
+
+        var query = {
+            //startDate : {$lte:now},
+            //endDate : {$gte:now},
+            accountId: {$gte:0}
+        };
+        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+            if(err) {
+                return fn(err);
+            } else {
+                return fn(null, list);
+            }
+        });
     },
 
     _handleWeeklyReport: function(account, startDate, endDate, fn) {
@@ -474,7 +509,7 @@ module.exports = {
         //if any trends are infinity, remove the one with the least magnitude of values
         var leastMagnitudeIndex = -1;
         var leastMagnitudeValue = Infinity;
-        for(var i = sortedRows.length-1; i>=0; i--) {
+        for(i = sortedRows.length-1; i>=0; i--) {
             if(sortedRows[i].trend === 'Rising' && sortedRows[i].lastWeekRaw < leastMagnitudeValue) {
                 leastMagnitudeIndex = i;
                 leastMagnitudeValue = sortedRows[i].lastWeekRaw;
