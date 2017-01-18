@@ -1537,6 +1537,16 @@ module.exports = {
                     }
                 });
 
+                // We should never delete global sections on other pages while saving 'blog' pages
+                if(updatedPage.get("handle") ==='blog-list' || updatedPage.get("handle") ==='blog-post' && sectionsToBeDeleted.length > 0){
+                    var nonBlogGlobalSections = [];
+                    _.each(sectionsToBeDeleted, function(gSection){                        
+                        if(gSection.get('globalHeader') === true || gSection.get('globalFooter') === true){
+                            nonBlogGlobalSections.push(gSection);
+                        }
+                    });
+                    sectionsToBeDeleted = nonBlogGlobalSections;
+                }
                 if(sectionsToBeDeleted.length > 0) {
                     self.log.debug('Removing these global sections:', sectionsToBeDeleted);
                     var idAry = _.map(sectionsToBeDeleted, function(section){return section.id();});
