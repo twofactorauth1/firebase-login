@@ -501,7 +501,7 @@ module.exports = {
     _removeLeastInterestingRow: function(sortedRows) {
         //if any trends are 0, remove them
         for(var i=sortedRows.length-1; i>=0; i--) {
-            if(sortedRows[i].trend === 'NA') {
+            if(sortedRows[i].trend === 'Unchanged') {
                 sortedRows.splice(i, 1);
                 return 1;
             }
