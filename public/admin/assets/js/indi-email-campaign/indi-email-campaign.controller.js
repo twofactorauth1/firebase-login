@@ -646,8 +646,11 @@
                         vm.toggleSelectionFn(tag.matchingTag);
                 }
             });
-            vm.state.originalRecipients = angular.copy(vm.state.recipients);
-            vm.uiState.dataLoaded = true;
+            
+            $timeout(function() {
+               vm.state.originalRecipients = angular.copy(vm.state.recipients);
+            }, 0);
+            vm.uiState.dataLoaded = true; 
         }
 
         function checkIfDirtyFn() {
