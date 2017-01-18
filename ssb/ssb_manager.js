@@ -1537,7 +1537,7 @@ module.exports = {
                     }
                 });
 
-                if(sectionsToBeDeleted.length > 0) {
+                if(sectionsToBeDeleted.length > 0 && updatedPage.get("handle") !=='blog-list' && updatedPage.get("handle") !=='blog-post') {
                     self.log.debug('Removing these global sections:', sectionsToBeDeleted);
                     var idAry = _.map(sectionsToBeDeleted, function(section){return section.id();});
                     var query = {
