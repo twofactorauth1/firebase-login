@@ -175,8 +175,8 @@ module.exports = {
                         results.mostRecentLogin = value;
                         mostRecentLoginQuery.start = value;
                         dao.findOne(mostRecentLoginQuery, $$.m.UserActivity, function(err, userActivity){
-                            results.mostRecentActivity = userActivity.toJSON('public');
-                            if(results.mostRecentActivity) {
+                            if(userActivity) {
+                                results.mostRecentActivity = userActivity.toJSON('public');
                                 geoiputil.getMaxMindGeoForIP(results.mostRecentActivity.ip, function(err, ip_geo_info){
                                     if(ip_geo_info) {
                                         var replacementObject = {
