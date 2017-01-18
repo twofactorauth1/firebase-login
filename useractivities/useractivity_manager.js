@@ -9,6 +9,7 @@ var dao = require('./dao/useractivity.dao');
 var log = $$.g.getLogger("useractivity_manager");
 var async = require('async');
 var userDao = require('../dao/user.dao');
+var geoiputil = require('../utils/geoiputil');
 
 module.exports = {
 
@@ -172,7 +173,30 @@ module.exports = {
                         cb(err);
                     } else {
                         results.mostRecentLogin = value;
-                        cb(null);
+                        mostRecentLoginQuery.start = value;
+                        dao.findOne(mostRecentLoginQuery, $$.m.UserActivity, function(err, userActivity){
+                            results.mostRecentActivity = userActivity.toJSON('public');
+                            if(results.mostRecentActivity) {
+                                geoiputil.getMaxMindGeoForIP(results.mostRecentActivity.ip, function(err, ip_geo_info){
+                                    if(ip_geo_info) {
+                                        var replacementObject = {
+                                            province: ip_geo_info.region,
+                                            city: ip_geo_info.city,
+                                            postal_code: ip_geo_info.postal,
+                                            continent: ip_geo_info.continent,
+                                            country: ip_geo_info.countryName
+                                        };
+                                        results.mostRecentActivity.geo = replacementObject;
+                                        self.log.debug('results.mostRecentActivity:', results.mostRecentActivity);
+                                        cb(null);
+                                    }
+                                });
+                            } else {
+                                self.log.debug('most recent activity:', userActivity);
+                                cb(null);
+                            }
+
+                        });
                     }
                 });
             }

@@ -295,7 +295,7 @@ module.exports = {
                     } else {
                         row.class = '';
                     }
-                    self.log.debug('row.trend = ' + row.trend + ' and row.class = ' + row.class);
+                    //self.log.debug('row.trend = ' + row.trend + ' and row.class = ' + row.class);
                     row.absTrend = Math.abs(trend);
                     row.lastWeekRaw = row.lastWeek;
                     row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
@@ -320,16 +320,24 @@ module.exports = {
                     //this space intentionally left blank;
                 }
                 sortedRows.unshift(buildRow('pageViewsCount', 'Page Views', 'currentCount', 'previousCount', data, '', ''));
-
-                app.render('insights/weeklyreport', {reports:sortedRows, loginTime:data.loginReports.mostRecentLogin}, function(err, jadeHtml){
+                var jadeVars = {
+                    reports:sortedRows,
+                    loginTime:data.loginReports.mostRecentLogin,
+                };
+                if(data.loginReports.mostRecentActivity) {
+                    jadeVars.loginIP = data.loginReports.mostRecentActivity.ip;
+                    jadeVars.loginCity = data.loginReports.mostRecentActivity.geo.city;
+                    jadeVars.loginState = data.loginReports.mostRecentActivity.geo.province;
+                }
+                app.render('insights/weeklyreport', jadeVars, function(err, jadeHtml){
                     if(jadeHtml) {
                         vars.push({
                             name:'WEEKLYREPORTSECTION',
                             content:jadeHtml
                         });
                     }
-                    self.log.debug('jade html:', jadeHtml);
-                    self.log.debug('base html:', html);
+                    //self.log.debug('jade html:', jadeHtml);
+                    //self.log.debug('base html:', html);
                     cb(err, account, sectionDataMap, html, contact, vars);
                 });
 
@@ -345,7 +353,7 @@ module.exports = {
                     });
                     bMessage+= $$$.html();
                 });
-                self.log.debug('data:', bMessage);
+                //self.log.debug('data:', bMessage);
                 if(data) {
                     app.render('insights/broadcastmessage', {message:bMessage}, function(err, jadeHtml){
                         if(jadeHtml) {
@@ -354,7 +362,7 @@ module.exports = {
                                 content:jadeHtml
                             });
                         }
-                        self.log.debug('jade html:', jadeHtml);
+                        //self.log.debug('jade html:', jadeHtml);
                         cb(err, account, sectionDataMap, html, contact, vars);
                     });
                 } else {
@@ -371,7 +379,7 @@ module.exports = {
                             content:jadeHtml
                         });
                     }
-                    self.log.debug('jade html:', jadeHtml);
+                    //self.log.debug('jade html:', jadeHtml);
                     cb(err, account, sectionDataMap, html, contact, vars);
                 });
             },

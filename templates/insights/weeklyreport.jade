@@ -18,6 +18,10 @@ html
             color: #1FBBA6 !important;
         }
 
+        .text-grey {
+            color: #c8c7cc !important;
+        }
+
         .text-red {
             color: #C82E29 !important;
         }
@@ -49,6 +53,12 @@ html
             text-align: center;
             padding-top: 10px
         }
+        p.text-small {
+            font-size:10px;
+            font-family: Arial;
+            text-align: center;
+            padding-top: 5px;
+        }
         .textCenter {
             text-align: center!important;
         }
@@ -76,5 +86,8 @@ html
 
     if loginTime
         p.text Your most recent login was at #{loginTime}
+        if loginIP
+            p.text-small.text-grey This login was made from IP Address #{loginIP} near #{loginCity}, #{loginState}
+
     else
         p.text There have been no logins to your account.
