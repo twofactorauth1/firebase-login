@@ -761,7 +761,7 @@
 
         function getDonations(id) {
             if (vm.component.productSettings.goal) {
-                productService.getAllOrdersForProduct(id, function (data) {
+                productService.getDonationOrdersForProduct(id, function (data) {
                     if (data.total) {
                         var percentage = data.total / vm.component.productSettings.goal * 100;
                         vm.augmentCompletePercentage(percentage);
