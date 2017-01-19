@@ -23,21 +23,13 @@ var appConfig = require('../configs/app.config');
 var numeral = require('numeral');
 var broadcastMessageDao = require('./dao/broadcast_messages.dao');
 var cheerio = require('cheerio');
+var insightsConfig = require('../configs/insights.config');
 
 module.exports = {
 
     log:log,
 
-    config:{
-        //hardcoded for now
-        fromAddress:'insights@indigenous.io',
-        fromName: 'Indigenous Insights',
-        emailId:'bfa86581-c8e4-444e-bf0f-15519eff2bc8',
-        subject:'Insight Report',
-        ccAry:[],
-        replyToAddress: 'account_managers@indigenous.io',
-        replyToName:'Account Managers'
-    },
+    config:insightsConfig,
 
     getAvailableSections: function(accountId, userId, fn) {
         var self = this;
@@ -204,6 +196,7 @@ module.exports = {
             },
             function(account, sectionDataMap, cb) {
                 //get the email HTML
+                self.log.debug('Looking for email with ID:', self.config.emailId);
                 emailDao.getEmailById(self.config.emailId, function(err, email){
                     if(err || !email) {
                         if(!err) {
@@ -322,7 +315,7 @@ module.exports = {
                 sortedRows.unshift(buildRow('pageViewsCount', 'Page Views', 'currentCount', 'previousCount', data, '', ''));
                 var jadeVars = {
                     reports:sortedRows,
-                    loginTime:data.loginReports.mostRecentLogin,
+                    loginTime:data.loginReports.mostRecentLogin
                 };
                 if(data.loginReports.mostRecentActivity) {
                     jadeVars.loginIP = data.loginReports.mostRecentActivity.ip;
@@ -366,6 +359,10 @@ module.exports = {
                         cb(err, account, sectionDataMap, html, contact, vars);
                     });
                 } else {
+                    vars.push({
+                        name:'BROADCASTMESSAGESECTION',
+                        content:''
+                    });
                     cb(null, account, sectionDataMap, html, contact, vars);
                 }
 
