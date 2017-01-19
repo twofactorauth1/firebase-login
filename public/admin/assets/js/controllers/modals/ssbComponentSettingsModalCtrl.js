@@ -661,11 +661,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               $scope.newLink.linkTitle = _label
             }
         }
-        else{
-            if(!update){
-              $scope.newLink.linkTitle = _label
-            }
-        }
     };
 
 
