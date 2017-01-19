@@ -346,6 +346,8 @@ module.exports = {
                     else
                         totalAmount = (subTotal - discount) + shippingCharge + taxAdded;
 
+                    
+                    order.set('total_shipping', shippingCharge.toFixed(2));
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
                     order.set('total_tax', taxAdded.toFixed(2));
@@ -1017,6 +1019,7 @@ module.exports = {
                     }
                     orderDiscount = orderDiscount.toFixed(2);
 
+                    order.set('total_shipping', shippingCharge.toFixed(2));
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
                     order.set('total_tax', taxAdded.toFixed(2));
@@ -1629,7 +1632,7 @@ module.exports = {
                  */
                 totalAmount = subTotal + taxAdded + shippingCharge;
 
-
+                order.set('total_shipping', shippingCharge.toFixed(2));
                 order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
