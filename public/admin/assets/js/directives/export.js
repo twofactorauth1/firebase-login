@@ -1,5 +1,5 @@
 'use strict';
-app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, $timeout, OrderService){
+app.directive('stExport', ['$http', '$timeout', 'OrderService', '$filter', function($http, $timeout, OrderService, $filter){
   return {
     require:'^stTable',
     link:function(scope, element, attr,ctrl){
@@ -231,7 +231,7 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		function getOrderDate(obj){
 			var _date = "";
 			if(obj && obj.date){
-				_date = obj.date;
+				_date = $filter('date')(obj.date, "MMM d yy");
 			}
 			return _date;
 		}
