@@ -27,6 +27,13 @@ var insightsConfig = require('../configs/insights.config');
 var sm = require('../security/sm')(false);
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 
+/*
+ * need to add some dependencies for static loading by scheduler
+ */
+require('./model/insight');
+require('./model/insightjob');
+require('../models/account');
+
 var insightsManager = {
 
     log:log,
@@ -742,7 +749,7 @@ var insightsManager = {
                         cb(err);
                     } else {
                         job.set('jobId', value.id());
-                        dao.saveOrUpdate(job, $$.m.InsightJob, function(err, value){
+                        dao.saveOrUpdate(job, function(err, value){
                             if(err) {
                                 self.log.error('Error re-saving insight job:', err);
                             } else {
