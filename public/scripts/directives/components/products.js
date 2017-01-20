@@ -327,7 +327,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
 
-
+            
             AccountService(function(err, account) {
                 if (err) {
                     console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
@@ -343,6 +343,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     });
                     console.log('Stripe?', scope.stripeInfo);
                     console.log('commerceSettings ', account.commerceSettings);
+                    getAccountSettings(scope.account);
+                }
+            });
+
+            function getAccountSettings(account){
+                if(account){
                     scope.settings = account.commerceSettings;
                     CartDetailsService.commerceSettings = account.commerceSettings;
                     if (scope.settings) {
@@ -356,10 +362,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             }
                         }
                     }
-
-                }
-            });
-
+                }                
+            }
+            
             /*
              * @isValidUSZip
              * - validate the US Zip Code
@@ -1757,7 +1762,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope: scope,
                 backdrop: 'static'
               });
-
+              if(scope.account)
+                getAccountSettings(scope.account);
               $timeout(function () {
                 $('#product-card-details-' + scope.component._id).card({
                     container: '#card-wrapper-' + scope.component._id
