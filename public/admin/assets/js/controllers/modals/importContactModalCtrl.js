@@ -1,6 +1,6 @@
 'use strict';
 /*global app, Papa*/
-app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getContacts', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getContacts, toaster) {
+app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'ContactService', 'userConstant', 'SocialConfigService', 'getContacts', 'contactConstant', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, ContactService, userConstant, SocialConfigService, getContacts, contactConstant, toaster) {
 
   $scope.getContacts = getContacts;
   /*
@@ -15,6 +15,8 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
   $scope.groupList = false;
   $scope.socialAccounts = {};
   $scope.googlePlusActive = false;
+
+  $scope.contactConstant = contactConstant;
 
   SocialConfigService.getAllSocialConfig(function (config) {
     $scope.socialAccounts = config.socialAccounts;
@@ -600,6 +602,32 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
             if (nameParts.indexOf(_colVal) > -1) {
               _formattedContact[_colVal] = _csvResult;
             }
+            // map contact tags
+            if (_formatVal === 'tags') {
+              var contactTags = contactConstant.contact_tags.dp;
+              var _tagsArr = _csvResult.split(",");
+              var _tagsToBeAdded = [];
+                _.each(_tagsArr, function (_tag, index) {
+                  if(_tag){
+                    var _tagData =  _.filter(contactTags, function(cTag){
+                      return cTag.data.toLowerCase() == _tag.toLowerCase() || cTag.label.toLowerCase() == _tag.toLowerCase()
+                    });
+
+                    if(_tagData && _tagData.length){
+                      _tagsToBeAdded.push(_tagData[0].data);
+                    }
+                    else{
+                      _tagsToBeAdded.push(_tag);
+                    }
+                  }
+                }); 
+
+                if(_tagsToBeAdded.length)
+                  _formattedContact[_colVal] = _tagsToBeAdded;
+
+            }
+
+
           }
 
         });
@@ -608,7 +636,6 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
         _formattedContact = angular.copy(blankFormattedContact);
       }
     });
-
     $scope.uploadingServerCsv = true;
     ContactService.resetCount();
     ContactService.importCsvContacts(contactsToAdd, function () {
