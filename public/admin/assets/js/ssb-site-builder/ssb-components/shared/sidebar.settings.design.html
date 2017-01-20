@@ -432,6 +432,17 @@
 
 <h4 ng-if="component.type === 'navigation'" class="ssb-sidebar-sub-heading-separator">Text</h4>
 <div ng-if="component.type === 'navigation'" class="row padding-10">
+    
+    <div class="form-group  margin-bottom-20">
+        <label for="bg_hide" class="margin-bottom-0">
+            Allow mixed case
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Allow menu mixed-case labels">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+        <switch ng-model="component.nav.allowMixedCase" class="pull-right"></switch>
+    </div>
+
     <div class="form-group">
         <div class="ssb-wide-input">
             <label>
@@ -459,6 +470,7 @@
                 </select>
             </div>
     </div>
+
 </div>
 
 <div ng-if="component.type !== 'ssb-element-text' && ((component.bg.img.show && component.bg.img.url) || (component.bg.video.show && component.bg.video.url) )">
