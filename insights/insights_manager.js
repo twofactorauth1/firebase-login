@@ -25,8 +25,9 @@ var broadcastMessageDao = require('./dao/broadcast_messages.dao');
 var cheerio = require('cheerio');
 var insightsConfig = require('../configs/insights.config');
 var sm = require('../security/sm')(false);
+var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 
-module.exports = {
+var insightsManager = {
 
     log:log,
 
@@ -549,8 +550,6 @@ module.exports = {
                          * be sure to CC account_managers@indigenous.io
                          */
                     }
-                    //TODO: remove this line for testing
-                    destinationAddress = 'kyle@indigenous.io';
                     self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
                         if(err || !value) {
                             self.log.error('Error generating report for [' + customerAccountId + ']:', err);
@@ -586,6 +585,172 @@ module.exports = {
                 self.log.info(accountId, userId, 'Report generation took ' + moment().diff(moment(now) + 'seconds'));
                 self.log.debug(accountId, userId, '<< generateInsightsForAllAccounts');
                 return fn(null, insight);
+            }
+        });
+    },
+
+    createOrUpdateInsightJob:function(accountId, userId, scheduledDay, scheduledTime, sendToAccountOwners, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> createOrUpdateInsightJob');
+        var query = {accountId:accountId};
+
+        async.waterfall([
+            function(cb) {
+                dao.findOne(query, $$.m.InsightJob, function(err, job){
+                    cb(err, job);
+                });
+            },
+            function(job, cb) {
+                if(job) {
+                    self.log.debug('Found:', job);
+                    //need to unschedule this job before continuing
+                    var scheduledJobID = job.get('jobId');
+                    scheduledJobsManager.cancelJob(scheduledJobID, function(err, value){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error cancelling existing insight job:', err);
+                            cb(err);
+                        } else {
+                            //set modified date
+                            job.set('modified', {date:new Date(), by:userId});
+                            cb(null, job);
+                        }
+                    });
+                } else {
+                    job = new $$.m.InsightJob({accountId:accountId, created:{date:new Date(), by:userId}});
+                    cb(null, job);
+                }
+            },
+            function(job, cb) {
+                job.set('scheduledTime', {dayOfWeek:scheduledDay, timeOfDay:scheduledTime});
+                if(sendToAccountOwners===true) {
+                    job.set('sendToAccountOwners', true);
+                } else {
+                    job.set('sendToAccountOwners', false);
+                }
+                job.set('_id', accountId);
+                var code = '$$.u.insightsManager.runInsightJob(' + accountId + ');';
+                var send_at = moment().day(scheduledDay).hour(scheduledTime).minute(0);
+                var scheduledJob = new $$.m.ScheduledJob({
+                    accountId: accountId,
+                    scheduledAt: moment(send_at).toDate(),
+                    runAt: null,
+                    job:code,
+                    created:{
+                        date:new Date(),
+                        by:userId
+                    }
+                });
+                scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
+                    if(err || !value) {
+                        self.log.error(accountId, userId, 'Error scheduling job with manager:', err);
+                        cb(err);
+                    } else {
+                        job.set('jobId', value.id());
+                        cb(null, job);
+                    }
+                });
+            },
+            function(job, cb) {
+                self.log.debug('about to save job:', job);
+                dao.saveOrUpdate(job, function(err, savedJob){
+                    self.log.debug('back from the dao:', err);
+                    cb(err, savedJob);
+                });
+            }
+        ], function(err, job){
+            if(err) {
+                self.log.error(accountId, userId, 'Error creating Insights Job:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< createOrUpdateInsightJob');
+                fn(null, job);
+            }
+        });
+
+
+    },
+
+    getInsightJob:function(accountId, userId, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> createOrUpdateInsightJob');
+        var query = {accountId:accountId};
+        dao.findOne(query, $$.m.InsightJob, function(err, job){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting Insight Job:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< createOrUpdateInsightJob');
+                fn(null, job);
+            }
+        });
+    },
+
+    deleteInsightJob:function(accountId, userId, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> deleteInsightJob');
+        var query = {accountId:accountId};
+        dao.removeByQuery(query, $$.m.InsightJob, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error removing Insight Job:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< deleteInsightJob');
+                fn(null, value);
+            }
+        });
+    },
+
+    runInsightJob:function(insightJobId, fn) {
+        var self = this;
+        self.log.debug('fetching job');
+        dao.findOne({_id:insightJobId}, $$.m.InsightJob, function(err, job){
+            if(err || !job) {
+                self.log.error('Could not find job to execute:', err);
+                if(fn) {
+                    fn(err);
+                }
+            } else {
+                var accountId = 0;
+                var userId = 0;
+                var startDate = null;
+                var endDate = null;
+                var scheduledSendDate = null;
+                var sendToAccountOwners = job.get('sendToAccountOwners');
+                self.generateInsightsForAllAccounts(accountId, userId, startDate, endDate, scheduledSendDate, sendToAccountOwners, function(err, value){
+                    self.log.debug('Finished generating insights:', value);
+                    if(err) {
+                        self.log.error('Error during generation:', err);
+                    }
+                    if(fn) {
+                        fn(err);
+                    }
+                });
+                //schedule next run
+                var scheduledDay = job.get('scheduledTime').dayOfWeek;
+                var scheduledTime = job.get('scheduledTime').timeOfDay;
+                var code = '$$.u.insightsManager.runInsightJob(' + job.get('accountId') + ');';
+                var send_at = moment().day(scheduledDay).hour(scheduledTime).minute(0);
+                var scheduledJob = new $$.m.ScheduledJob({
+                    accountId: accountId,
+                    scheduledAt: moment(send_at).toDate(),
+                    runAt: null,
+                    job:code
+                });
+                scheduledJobsManager.scheduleJob(scheduledJob, function(err, value){
+                    if(err || !value) {
+                        self.log.error(accountId, userId, 'Error scheduling job with manager:', err);
+                        cb(err);
+                    } else {
+                        job.set('jobId', value.id());
+                        dao.saveOrUpdate(job, $$.m.InsightJob, function(err, value){
+                            if(err) {
+                                self.log.error('Error re-saving insight job:', err);
+                            } else {
+                                self.log.debug('Job resaved.');
+                            }
+                        });
+                    }
+                });
             }
         });
     },
@@ -699,3 +864,8 @@ module.exports = {
 
 
 };
+
+$$.u = $$.u || {};
+$$.u.insightsManager = insightsManager;
+
+module.exports = insightsManager;

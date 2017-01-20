@@ -26,7 +26,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('sections/available'), this.isAuthAndSubscribedApi.bind(this), this.getAvailableSections.bind(this));
         app.get(this.url('test'), this.isAuthAndSubscribedApi.bind(this), this.testInsightReport.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.sendInsightReport.bind(this));
-        app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.generateAllInsightReports.bind(this));
+        app.post(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.generateAllInsightReports.bind(this));
+        //insights cron job - there can be only one
+        app.get(this.url('job'), this.isAuthAndSubscribedApi.bind(this), this.getInsightsJob.bind(this));
+        app.post(this.url('job'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateInsightsJob.bind(this));
+        app.del(this.url('job'), this.isAuthAndSubscribedApi.bind(this), this.deleteInsightsJob.bind(this));
 
         //broadcast messages
         app.get(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.listBroadcastMessages.bind(this));
@@ -98,6 +102,47 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< generateAllInsightReports');
         });
         self.send200(resp);
+    },
+
+    getInsightsJob: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getInsightsJob');
+        manager.getInsightJob(accountId, userId, function(err, job){
+            self.log.debug(accountId, userId, '<< getInsightsJob');
+            self.sendResultOrError(resp, err, job, 'Could not get insight job');
+        });
+    },
+
+    saveOrUpdateInsightsJob: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> saveOrUpdateInsightsJob');
+
+        //TODO: un-hardcode these sometime
+
+        var scheduledDay = 6;
+        var scheduledTime = 20;
+        var sendToAccountOwners = false;
+
+        manager.createOrUpdateInsightJob(accountId, userId, scheduledDay, scheduledTime, sendToAccountOwners, function(err, job){
+            self.log.debug(accountId, userId, '<< saveOrUpdateInsightsJob');
+            self.sendResultOrError(resp, err, job, 'Could not save insight job');
+        });
+    },
+
+    deleteInsightsJob: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> deleteInsightsJob');
+
+        manager.deleteInsightJob(accountId, userId, function(err, job){
+            self.log.debug(accountId, userId, '<< deleteInsightsJob');
+            self.sendResultOrError(resp, err, job, 'Could not delete insight job');
+        });
     },
 
     listBroadcastMessages: function(req, resp) {
