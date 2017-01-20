@@ -12,14 +12,27 @@ var insight = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             "_id" : null,
-            "accountId": 0,
+            accountId:0,
+            configuration:{
+                startDate:null,
+                endDate:null,
+                scheduledDate:null,
+                sendToAccountOwners:false
+            },
 
+            exclusions:[],
+            expiredTrials:[],
+            invalidSubscriptions:[],
+            includedAccounts:[],
+            processedAccounts:[],
+            emailMessageIds:[],
+            completedDate:null,
             created: {
                 date: new Date(),
                 by: null
             },
             modified: {
-                date: new Date(),
+                date: null,
                 by: null
             },
             _v:"0.1"

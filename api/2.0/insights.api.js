@@ -26,6 +26,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('sections/available'), this.isAuthAndSubscribedApi.bind(this), this.getAvailableSections.bind(this));
         app.get(this.url('test'), this.isAuthAndSubscribedApi.bind(this), this.testInsightReport.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.sendInsightReport.bind(this));
+        app.get(this.url('all'), this.isAuthAndSubscribedApi.bind(this), this.generateAllInsightReports.bind(this));
 
         //broadcast messages
         app.get(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.listBroadcastMessages.bind(this));
@@ -82,6 +83,21 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< sendInsightReport');
             self.sendResultOrError(resp, err, results, 'Could not send insight report');
         });
+    },
+
+    generateAllInsightReports: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> generateAllInsightReports');
+        var startDate = moment().subtract(7, 'days').toDate();
+        var endDate = moment().toDate();
+        var scheduledSendDate = null;
+        var sendToAccountOwners = false;
+        manager.generateInsightsForAllAccounts(accountId, userId, startDate, endDate, scheduledSendDate, sendToAccountOwners, function(err, results){
+            self.log.debug(accountId, userId, '<< generateAllInsightReports');
+        });
+        self.send200(resp);
     },
 
     listBroadcastMessages: function(req, resp) {

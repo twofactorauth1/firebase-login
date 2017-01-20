@@ -24,6 +24,7 @@ var numeral = require('numeral');
 var broadcastMessageDao = require('./dao/broadcast_messages.dao');
 var cheerio = require('cheerio');
 var insightsConfig = require('../configs/insights.config');
+var sm = require('../security/sm')(false);
 
 module.exports = {
 
@@ -410,14 +411,183 @@ module.exports = {
             } else {
                 var result = {
                     data: sectionHTMLMap,
-                    email: emailResponse
+                    email: emailResponse,
+                    emailMessageId: emailResponse.emailmessageId
                 };
                 self.log.debug(accountId, userId, '<< generateInsightReport');
                 return fn(null, result);
             }
         });
+    },
 
+    /**
+     *
+     * @param accountId
+     * @param userId
+     * @param startDate - if null, becomes today-7
+     * @param endDate - if null, becomes today
+     * @param scheduledSendDate - if null, becomes today
+     * @param sendToAccountOwners - T/F
+     * @param fn
+     */
+    generateInsightsForAllAccounts: function(accountId, userId, startDate, endDate, scheduledSendDate, sendToAccountOwners, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> generateInsightsForAllAccounts');
+        var now = moment().toDate();
 
+        if(!startDate) {
+            startDate = moment().subtract(7, 'days').toDate();
+        }
+        if(!endDate) {
+            endDate = now;
+        }
+        if(!scheduledSendDate) {
+            scheduledSendDate = now;
+        }
+        var insightJob = new $$.m.Insight({
+            accountId:accountId,
+            configuration:{
+                startDate:startDate,
+                endDate:endDate,
+                scheduledDate:scheduledSendDate,
+                sendToAccountOwners:sendToAccountOwners
+            },
+
+            exclusions:self.config.accountExclusions,
+            created:{
+                date:new Date(),
+                by:userId
+            }
+        });
+
+        async.waterfall([
+            function(cb){
+                accountDao.findMany({_id:{$nin:self.config.accountExclusions}}, $$.m.Account, cb);
+            },
+            function(accounts, cb) {
+                var accountList = [];
+                var includedAccounts = [];//IDs only
+                var expiredTrials = [];//IDs only
+                var invalidSubscriptions = []; //IDs only
+                async.eachSeries(accounts, function(account, callback){
+                    var billing = account.get('billing');
+                    /*
+                     * Figure out if we should include them:
+                     *  - billing.plan === NO_PLAN_ARGUMENT
+                     *      -- verify trial days remaining
+                     *  - billing.plan === EVERGREEN
+                     *      -- include automatically
+                     *  - otherwise
+                     *  -- verify stripeCustomerId and stripeSubscriptionId
+                     */
+                    if(billing.plan === 'NO_PLAN_ARGUMENT') {
+                        if(sm.isWithinTrial(billing)) {
+                            accountList.push(account);
+                            includedAccounts.push(account.id());
+                            callback();
+                        } else {
+                            expiredTrials.push(account.id());
+                            callback();
+                        }
+                    } else if(billing.plan === 'EVERGREEN') {
+                        accountList.push(account);
+                        includedAccounts.push(account.id());
+                        callback();
+                    } else if(billing.stripeCustomerId && billing.subscriptionId) {
+                        self.log.debug('Validating subscription for:', billing);
+                        sm.isValidSub(account.id(), billing, function(err, isValid){
+                            if(isValid && isValid === true) {
+                                accountList.push(account);
+                                includedAccounts.push(account.id());
+                                callback();
+                            } else {
+                                invalidSubscriptions.push(account.id());
+                                callback();
+                            }
+                        });
+                    } else {
+                        self.log.debug('Skipping account [' + account.id() + ' because of invalid billing');
+                        invalidSubscriptions.push(account.id());
+                        callback();
+                    }
+                }, function(err){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error verifying accounts:', err);
+                        cb(err);
+                    } else {
+                        insightJob.set('includedAccounts', includedAccounts);
+                        insightJob.set('expiredTrials', expiredTrials);
+                        insightJob.set('invalidSubscriptions', invalidSubscriptions);
+                        cb(null, accountList);
+                    }
+                });
+            },
+            function(accounts, cb) {
+                //save insight-in-progress
+                dao.saveOrUpdate(insightJob, function(err, value){
+                    if(err) {
+                        self.log.error('Error saving insight:', err);
+                        cb(err);
+                    } else {
+                        cb(null, accounts, value);
+                    }
+                });
+            },
+            function(accounts, insight, cb) {
+                async.eachSeries(insight.get('includedAccounts'), function(customerAccountId, callback){
+                    self.log.debug(accountId, userId, 'Starting insight generation for ' + customerAccountId);
+                    var sections = constants.availableSections;
+                    var destinationAddress = 'account_managers@indigenous.io';
+                    if(appConfig.nonProduction === true) {
+                        destinationAddress = 'test_account_managers@indigenous.io';
+                    }
+                    if(sendToAccountOwners === true) {
+                        //TODO: this
+                        /*
+                         * look at account.business.emails[0].email
+                         * then check account.ownerUser.username
+                         * be sure to CC account_managers@indigenous.io
+                         */
+                    }
+                    //TODO: remove this line for testing
+                    destinationAddress = 'kyle@indigenous.io';
+                    self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
+                        if(err || !value) {
+                            self.log.error('Error generating report for [' + customerAccountId + ']:', err);
+                            callback(err);
+                        } else {
+                            insight.get('emailMessageIds').push(value.emailMessageId);
+                            insight.get('processedAccounts').push(customerAccountId);
+                            callback();
+                        }
+                    });
+                }, function(err){
+                    //save the insight and continue
+                    if(!err) {
+                        insight.set('completedDate', moment().toDate());
+                    }
+                    dao.saveOrUpdate(insight, function(saveErr, value){
+                        if(saveErr) {
+                            self.log.error('Error saving updated insight:', saveErr);
+                            cb(err);
+                        } else {
+                            self.log.debug('Finished generating insights.');
+                            cb(err, value);
+                        }
+                    });
+                });
+            }
+        ], function(err, insight){
+            if(err) {
+                self.log.error(accountId, userId, 'Error generating insight report:', err);
+                self.log.debug(accountId, userId, 'Final insight:', insight);
+                return fn(err);
+            } else {
+                self.log.info(accountId, userId, 'Report generation took ' + moment().diff(moment(now) + 'seconds'));
+                self.log.debug(accountId, userId, '<< generateInsightsForAllAccounts');
+                return fn(null, insight);
+            }
+        });
     },
 
     _handleSection: function(sectionName, account, startDate, endDate, fn) {
