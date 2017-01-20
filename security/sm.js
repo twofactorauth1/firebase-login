@@ -203,7 +203,7 @@ var securityManager = {
                 log.trace('<< verifySubscription(evergreen: ' + req.session.accountId + ')');
                 return cb(null, true);
             }
-            if(self._isWithinTrial(billing)) {
+            if(self.isWithinTrial(billing)) {
                 req.session.subprivs = defaultSubscriptionPrivs;
                 log.trace('<< verifySubscription(freetrial: ' + req.session.accountId + ')');
                 return cb(null, true);
@@ -305,7 +305,7 @@ var securityManager = {
                 log.trace('<< verifySubscriptionWithoutSettingSessionVariables(evergreen: ' + accountId + ')');
                 return cb(null, true);
             }
-            if(self._isWithinTrial(billing)) {
+            if(self.isWithinTrial(billing)) {
                 log.trace('<< verifySubscriptionWithoutSettingSessionVariables(freetrial: ' + accountId + ')');
                 return cb(null, true);
             }
@@ -432,7 +432,7 @@ var securityManager = {
         });
     },
 
-    _isWithinTrial: function(billing) {
+    isWithinTrial: function(billing) {
         var trialDays = billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
         var endDate = moment(billing.signupDate).add(trialDays, 'days');
 
@@ -442,6 +442,32 @@ var securityManager = {
 
     _isEvergreen: function(billing) {
         return billing.subscriptionId === appConfig.internalSubscription;
+    },
+
+    isValidSub: function(accountId, billing, cb) {
+        stripeDao.getStripeSubscription(billing.stripeCustomerId, billing.subscriptionId, null, function(err, subscription){
+            if(err || !subscription) {
+                log.error('Error getting stripe subscription: ' + err);
+                return cb(err, false);
+            } else if(subscription.status === 'active' || subscription.status === 'trialing') {
+
+                var planId = subscription.plan.id;
+                var planName = subscription.plan.name;
+                subscriptionPrivilegeDao.getByPlanId(accountId, planId, function(err, subPrivs){
+                    if(err || !subPrivs) {
+                        log.error('Error getting subscription privileges for plan [' + planId + '] with accountId [' + accountId + ']: ' + err);
+                        return cb(err, false);
+                    }
+
+                    log.trace('<< _isValidSub(true)');
+                    return cb(null, true);
+                });
+            } else {
+                //TODO: If the sub is expired, put in privs here
+                log.warn('The subscription for account ' + accountId + ' appears to be expired.');
+                return cb(null, false);
+            }
+        });
     }
 
 

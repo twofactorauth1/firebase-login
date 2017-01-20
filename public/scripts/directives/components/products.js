@@ -327,7 +327,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
 
-
+            
             AccountService(function(err, account) {
                 if (err) {
                     console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
@@ -343,6 +343,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     });
                     console.log('Stripe?', scope.stripeInfo);
                     console.log('commerceSettings ', account.commerceSettings);
+                    getAccountSettings(scope.account);
+                }
+            });
+
+            function getAccountSettings(account){
+                if(account){
                     scope.settings = account.commerceSettings;
                     CartDetailsService.commerceSettings = account.commerceSettings;
                     if (scope.settings) {
@@ -356,10 +362,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             }
                         }
                     }
-
-                }
-            });
-
+                }                
+            }
+            
             /*
              * @isValidUSZip
              * - validate the US Zip Code
@@ -1123,10 +1128,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.checkoutModalState = 3;
                     return;
                 }
-                if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
+                if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year || scope.isCardExpired) {
                     scope.checkoutModalState = 3;
                     return;
                 }
+
                 var contact = scope.newContact;
                 if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
                     scope.checkoutModalState = 2;
@@ -1504,8 +1510,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             };
 
+            scope.currentYear = new Date().getYear() - 100;
+            scope.fullCurrentYear = new Date().getFullYear();
+            scope.currentMonth = new Date().getMonth() + 1;
 
             scope.checkCardExpiry = function() {
+                scope.isCardExpired = false;
                 scope.failedOrderMessage = '';
                 var expiry = _.compact($('.modal #expiry').map( function(){return $(this).val(); }).get())[0]
                 if (expiry && expiry.indexOf('/') !== -1) {
@@ -1528,10 +1538,49 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                     $('.modal #card_expiry').addClass('has-error');
                     $('.modal #card_expiry .glyphicon').addClass('glyphicon-remove');
-                } else {
-                    $('.modal #card_expiry .error').html('');
-                    $('.modal #card_expiry .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                    $('.modal #card_expiry').removeClass('has-error').addClass('has-success');
+                    scope.isCardExpired = true;
+                }
+                 else {
+                    scope.yearLength = exp_year.length;
+                    if(scope.yearLength == 2)
+                    {
+                        if (parseInt(exp_year) < parseInt(scope.currentYear)) {
+                            $("#card_expiry .error").html("Card Year has Expired");
+                            $("#card_expiry").addClass('has-error');
+                            $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                            scope.isCardExpired = true;
+                            return;
+                        }
+
+                    }
+                    else if(scope.yearLength == 4)
+                    {
+                        if(parseInt(exp_year) < parseInt(scope.fullCurrentYear)){
+                        $("#card_expiry .error").html("Card Year has Expired");
+                            $("#card_expiry").addClass('has-error');
+                            $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                            scope.isCardExpired = true;
+                            return;
+                        }
+                    }
+                    if (exp_month < scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
+                        $("#card_expiry .error").html("Card Month has Expired");
+                        $("#card_expiry").addClass('has-error');
+                        $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                        scope.isCardExpired = true;
+                    }
+                    else if(exp_month > 12) {
+                        $("#card_expiry .error").html("Card Month is invalid");
+                        $("#card_expiry").addClass('has-error');
+                        $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                        scope.isCardExpired = true;
+                    }
+                    else {
+                        $('.modal #card_expiry .error').html('');
+                        $('.modal #card_expiry .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                        $('.modal #card_expiry').removeClass('has-error').addClass('has-success');
+                        scope.isCardExpired = false;
+                    }
                 }
             };
 
@@ -1713,7 +1762,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope: scope,
                 backdrop: 'static'
               });
-
+              if(scope.account)
+                getAccountSettings(scope.account);
               $timeout(function () {
                 $('#product-card-details-' + scope.component._id).card({
                     container: '#card-wrapper-' + scope.component._id

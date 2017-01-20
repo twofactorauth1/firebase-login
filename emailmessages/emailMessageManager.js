@@ -1422,6 +1422,7 @@ var emailMessageManager = {
                 self.log.debug(response.statusCode);
                 self.log.debug(response.body);
                 self.log.debug(response.headers);
+                response.emailmessageId = emailmessage.id();
                 if (err) {
                     self.log.error('Error sending email:', err);
                     return fn(err);
@@ -2514,7 +2515,7 @@ var emailMessageManager = {
         }
 
 
-        self.log.debug('components >>> ', components);
+        //self.log.debug('components >>> ', components);
 
         emailContent.components = components;
 

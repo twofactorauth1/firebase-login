@@ -22,21 +22,15 @@ var orderManager = require('../orders/order_manager');
 var appConfig = require('../configs/app.config');
 var numeral = require('numeral');
 var broadcastMessageDao = require('./dao/broadcast_messages.dao');
+var cheerio = require('cheerio');
+var insightsConfig = require('../configs/insights.config');
+var sm = require('../security/sm')(false);
 
 module.exports = {
 
     log:log,
 
-    config:{
-        //hardcoded for now
-        fromAddress:'insights@indigenous.io',
-        fromName: 'Indigenous Insights',
-        emailId:'bfa86581-c8e4-444e-bf0f-15519eff2bc8',
-        subject:'Insight Report',
-        ccAry:[],
-        replyToAddress: 'account_managers@indigenous.io',
-        replyToName:'Account Managers'
-    },
+    config:insightsConfig,
 
     getAvailableSections: function(accountId, userId, fn) {
         var self = this;
@@ -196,13 +190,14 @@ module.exports = {
                         self.log.error(accountId, userId, 'Error handling sections:', err);
                         cb(err);
                     } else {
-                        self.log.debug(accountId, userId, 'built section data');
+                        self.log.debug(accountId, userId, 'built section data', sectionDataMap);
                         cb(null, account, sectionDataMap);
                     }
                 });
             },
             function(account, sectionDataMap, cb) {
                 //get the email HTML
+                self.log.debug('Looking for email with ID:', self.config.emailId);
                 emailDao.getEmailById(self.config.emailId, function(err, email){
                     if(err || !email) {
                         if(!err) {
@@ -277,21 +272,29 @@ module.exports = {
                     } else if((row.previousWeek === 0 || row.previousWeek === '$0.00') && (row.lastWeek === 0 || row.lastWeek === '$0.00')) {
                         //Set trend to 0 for sorting and 'NA' for display purposes
                         trend = 0;
-                        row.trend = 'NA';
+                        row.trend = 'Unchanged';
                     } else if(row.lastWeek === row.previousWeek){
                         trend = 0;
                         row.trend = 'Unchanged';
                     } else {
                         row.trend = 'Rising';
                     }
-
+                    row.rawTrend = trend;
+                    if(trend > 0) {
+                        row.class = 'fa fa-caret-up text-green';
+                        row.imgsrc = '&#x25B2;';
+                    } else if (trend < 0) {
+                        row.class = 'fa fa-caret-down text-red';
+                        row.imgsrc = '&#x25BC;';
+                    } else {
+                        row.class = '';
+                    }
+                    //self.log.debug('row.trend = ' + row.trend + ' and row.class = ' + row.class);
                     row.absTrend = Math.abs(trend);
                     row.lastWeekRaw = row.lastWeek;
-                    //row.lastWeek = prefix + row.lastWeek.toLocaleString() + suffix;
                     row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
                     row.previousWeekRaw = row.previousWeek;
                     row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
-                    //row.previousWeek = prefix + row.previousWeek.toLocaleString() + suffix;
                     return row;
                 };
 
@@ -311,54 +314,73 @@ module.exports = {
                     //this space intentionally left blank;
                 }
                 sortedRows.unshift(buildRow('pageViewsCount', 'Page Views', 'currentCount', 'previousCount', data, '', ''));
-
-                app.render('insights/weeklyreport', {reports:sortedRows, loginTime:data.loginReports.mostRecentLogin}, function(err, jadeHtml){
+                var jadeVars = {
+                    reports:sortedRows,
+                    loginTime:data.loginReports.mostRecentLogin
+                };
+                if(data.loginReports.mostRecentActivity) {
+                    jadeVars.loginIP = data.loginReports.mostRecentActivity.ip;
+                    jadeVars.loginCity = data.loginReports.mostRecentActivity.geo.city;
+                    jadeVars.loginState = data.loginReports.mostRecentActivity.geo.province;
+                }
+                app.render('insights/weeklyreport', jadeVars, function(err, jadeHtml){
                     if(jadeHtml) {
                         vars.push({
                             name:'WEEKLYREPORTSECTION',
                             content:jadeHtml
                         });
                     }
+                    //self.log.debug('jade html:', jadeHtml);
+                    //self.log.debug('base html:', html);
                     cb(err, account, sectionDataMap, html, contact, vars);
                 });
 
             },
-            /*
-            function(account, sectionDataMap, html, contact, jadeHtml, cb) {
-                //build the needed variables for substitution
-                var vars = [];
-                vars.push({
-                    name:'INSIGHTSTARTDATE',
-                    content:moment(startDate).format('MM/DD/YYYY')
-                });
-                vars.push({
-                    name:'INSIGHTENDDATE',
-                    content:moment(endDate).format('MM/DD/YYYY')
-                });
+            function(account, sectionDataMap, html, contact, vars, cb) {
+                var data = sectionDataMap.broadcastmessage[0];
+                var bMessage = '';
 
-                var data = sectionDataMap.weeklyreport;
-                var visitors = '<b>' + data.visitorCount.currentCount + '</b>';
-                var sendCount = '<b>' + data.emailReports.sentCount + '</b>';
-                var openCount = '<b>' + data.emailReports.openCount + '</b>';
-                var clickCount = '<b>' + data.emailReports.clickCount + '</b>';
-                var pageCreate = '<b>' + data.pagesReports.pagesCreated + '</b>';
-                var pageModify = '<b>' + data.pagesReports.pagesModified + '</b>';
-                var publishCount = '<b>' + data.pagesReports.pagesPublished + '</b>';
-                var accountLogins = '<b>' + data.loginReports.loginCount + '</b>';
-                var loginTime = '<b>' + data.loginReports.mostRecentLogin + '</b>';
-
-                var s = '<p>This past week, you had ' + visitors + ' visitors.</p>';
-                s += '<p>You sent ' + sendCount + ' emails, '+ openCount + ' emails were opened and ' + clickCount + ' emails were clicked.</p>';
-                s += '<p>You created ' + pageCreate + ' page(s), modified ' + pageModify + ' page(s) and published ' + publishCount + ' page(s).</p>';
-                s += '<p>There were ' + accountLogins + ' admin sessions with the most recent login at ' + loginTime + '.</p>';
-
-                vars.push({
-                    name:'WEEKLYREPORTSECTION',
-                    content:jadeHtml
+                _.each(sectionDataMap.broadcastmessage, function(msg){
+                    var $$$ = cheerio.load(msg.get('message'));
+                    $$$('span').each(function() {
+                        $$$(this).removeAttr('style');
+                    });
+                    bMessage+= $$$.html();
                 });
-                cb(null, account, sectionDataMap, html, contact, vars);
+                //self.log.debug('data:', bMessage);
+                if(data) {
+                    app.render('insights/broadcastmessage', {message:bMessage}, function(err, jadeHtml){
+                        if(jadeHtml) {
+                            vars.push({
+                                name:'BROADCASTMESSAGESECTION',
+                                content:jadeHtml
+                            });
+                        }
+                        //self.log.debug('jade html:', jadeHtml);
+                        cb(err, account, sectionDataMap, html, contact, vars);
+                    });
+                } else {
+                    vars.push({
+                        name:'BROADCASTMESSAGESECTION',
+                        content:''
+                    });
+                    cb(null, account, sectionDataMap, html, contact, vars);
+                }
+
             },
-            */
+            function(account, sectionDataMap, html, contact, vars, cb) {
+                var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                app.render('insights/footer', {siteUrl:siteUrl}, function(err, jadeHtml){
+                    if(jadeHtml) {
+                        vars.push({
+                            name:'FOOTER',
+                            content:jadeHtml
+                        });
+                    }
+                    //self.log.debug('jade html:', jadeHtml);
+                    cb(err, account, sectionDataMap, html, contact, vars);
+                });
+            },
             function(account, sectionDataMap, html, contact, reportVars, cb) {
                 //send the email
                 var fromAddress = self.config.fromAddress;
@@ -389,24 +411,212 @@ module.exports = {
             } else {
                 var result = {
                     data: sectionHTMLMap,
-                    email: emailResponse
+                    email: emailResponse,
+                    emailMessageId: emailResponse.emailmessageId
                 };
                 self.log.debug(accountId, userId, '<< generateInsightReport');
                 return fn(null, result);
             }
         });
+    },
 
+    /**
+     *
+     * @param accountId
+     * @param userId
+     * @param startDate - if null, becomes today-7
+     * @param endDate - if null, becomes today
+     * @param scheduledSendDate - if null, becomes today
+     * @param sendToAccountOwners - T/F
+     * @param fn
+     */
+    generateInsightsForAllAccounts: function(accountId, userId, startDate, endDate, scheduledSendDate, sendToAccountOwners, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> generateInsightsForAllAccounts');
+        var now = moment().toDate();
 
+        if(!startDate) {
+            startDate = moment().subtract(7, 'days').toDate();
+        }
+        if(!endDate) {
+            endDate = now;
+        }
+        if(!scheduledSendDate) {
+            scheduledSendDate = now;
+        }
+        var insightJob = new $$.m.Insight({
+            accountId:accountId,
+            configuration:{
+                startDate:startDate,
+                endDate:endDate,
+                scheduledDate:scheduledSendDate,
+                sendToAccountOwners:sendToAccountOwners
+            },
+
+            exclusions:self.config.accountExclusions,
+            created:{
+                date:new Date(),
+                by:userId
+            }
+        });
+
+        async.waterfall([
+            function(cb){
+                accountDao.findMany({_id:{$nin:self.config.accountExclusions}}, $$.m.Account, cb);
+            },
+            function(accounts, cb) {
+                var accountList = [];
+                var includedAccounts = [];//IDs only
+                var expiredTrials = [];//IDs only
+                var invalidSubscriptions = []; //IDs only
+                async.eachSeries(accounts, function(account, callback){
+                    var billing = account.get('billing');
+                    /*
+                     * Figure out if we should include them:
+                     *  - billing.plan === NO_PLAN_ARGUMENT
+                     *      -- verify trial days remaining
+                     *  - billing.plan === EVERGREEN
+                     *      -- include automatically
+                     *  - otherwise
+                     *  -- verify stripeCustomerId and stripeSubscriptionId
+                     */
+                    if(billing.plan === 'NO_PLAN_ARGUMENT') {
+                        if(sm.isWithinTrial(billing)) {
+                            accountList.push(account);
+                            includedAccounts.push(account.id());
+                            callback();
+                        } else {
+                            expiredTrials.push(account.id());
+                            callback();
+                        }
+                    } else if(billing.plan === 'EVERGREEN') {
+                        accountList.push(account);
+                        includedAccounts.push(account.id());
+                        callback();
+                    } else if(billing.stripeCustomerId && billing.subscriptionId) {
+                        self.log.debug('Validating subscription for:', billing);
+                        sm.isValidSub(account.id(), billing, function(err, isValid){
+                            if(isValid && isValid === true) {
+                                accountList.push(account);
+                                includedAccounts.push(account.id());
+                                callback();
+                            } else {
+                                invalidSubscriptions.push(account.id());
+                                callback();
+                            }
+                        });
+                    } else {
+                        self.log.debug('Skipping account [' + account.id() + ' because of invalid billing');
+                        invalidSubscriptions.push(account.id());
+                        callback();
+                    }
+                }, function(err){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error verifying accounts:', err);
+                        cb(err);
+                    } else {
+                        insightJob.set('includedAccounts', includedAccounts);
+                        insightJob.set('expiredTrials', expiredTrials);
+                        insightJob.set('invalidSubscriptions', invalidSubscriptions);
+                        cb(null, accountList);
+                    }
+                });
+            },
+            function(accounts, cb) {
+                //save insight-in-progress
+                dao.saveOrUpdate(insightJob, function(err, value){
+                    if(err) {
+                        self.log.error('Error saving insight:', err);
+                        cb(err);
+                    } else {
+                        cb(null, accounts, value);
+                    }
+                });
+            },
+            function(accounts, insight, cb) {
+                async.eachSeries(insight.get('includedAccounts'), function(customerAccountId, callback){
+                    self.log.debug(accountId, userId, 'Starting insight generation for ' + customerAccountId);
+                    var sections = constants.availableSections;
+                    var destinationAddress = 'account_managers@indigenous.io';
+                    if(appConfig.nonProduction === true) {
+                        destinationAddress = 'test_account_managers@indigenous.io';
+                    }
+                    if(sendToAccountOwners === true) {
+                        //TODO: this
+                        /*
+                         * look at account.business.emails[0].email
+                         * then check account.ownerUser.username
+                         * be sure to CC account_managers@indigenous.io
+                         */
+                    }
+                    //TODO: remove this line for testing
+                    destinationAddress = 'kyle@indigenous.io';
+                    self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
+                        if(err || !value) {
+                            self.log.error('Error generating report for [' + customerAccountId + ']:', err);
+                            callback(err);
+                        } else {
+                            insight.get('emailMessageIds').push(value.emailMessageId);
+                            insight.get('processedAccounts').push(customerAccountId);
+                            callback();
+                        }
+                    });
+                }, function(err){
+                    //save the insight and continue
+                    if(!err) {
+                        insight.set('completedDate', moment().toDate());
+                    }
+                    dao.saveOrUpdate(insight, function(saveErr, value){
+                        if(saveErr) {
+                            self.log.error('Error saving updated insight:', saveErr);
+                            cb(err);
+                        } else {
+                            self.log.debug('Finished generating insights.');
+                            cb(err, value);
+                        }
+                    });
+                });
+            }
+        ], function(err, insight){
+            if(err) {
+                self.log.error(accountId, userId, 'Error generating insight report:', err);
+                self.log.debug(accountId, userId, 'Final insight:', insight);
+                return fn(err);
+            } else {
+                self.log.info(accountId, userId, 'Report generation took ' + moment().diff(moment(now) + 'seconds'));
+                self.log.debug(accountId, userId, '<< generateInsightsForAllAccounts');
+                return fn(null, insight);
+            }
+        });
     },
 
     _handleSection: function(sectionName, account, startDate, endDate, fn) {
         var self = this;
         if(sectionName === 'weeklyreport') {
             return self._handleWeeklyReport(account, startDate, endDate, fn);
+        } else if(sectionName === 'broadcastmessage') {
+            return self._handleBroadcastMessage(account, startDate, endDate, fn);
         } else {
             self.log.warn('No handler for section: ' + sectionName);
             fn(null, '');
         }
+    },
+
+    _handleBroadcastMessage: function(account, startDate, endDate, fn) {
+        var self = this;
+
+        var query = {
+            //startDate : {$lte:now},
+            //endDate : {$gte:now},
+            accountId: {$gte:0}
+        };
+        broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
+            if(err) {
+                return fn(err);
+            } else {
+                return fn(null, list);
+            }
+        });
     },
 
     _handleWeeklyReport: function(account, startDate, endDate, fn) {
@@ -466,7 +676,7 @@ module.exports = {
     _removeLeastInterestingRow: function(sortedRows) {
         //if any trends are 0, remove them
         for(var i=sortedRows.length-1; i>=0; i--) {
-            if(sortedRows[i].trend === 'NA') {
+            if(sortedRows[i].trend === 'Unchanged') {
                 sortedRows.splice(i, 1);
                 return 1;
             }
@@ -474,7 +684,7 @@ module.exports = {
         //if any trends are infinity, remove the one with the least magnitude of values
         var leastMagnitudeIndex = -1;
         var leastMagnitudeValue = Infinity;
-        for(var i = sortedRows.length-1; i>=0; i--) {
+        for(i = sortedRows.length-1; i>=0; i--) {
             if(sortedRows[i].trend === 'Rising' && sortedRows[i].lastWeekRaw < leastMagnitudeValue) {
                 leastMagnitudeIndex = i;
                 leastMagnitudeValue = sortedRows[i].lastWeekRaw;

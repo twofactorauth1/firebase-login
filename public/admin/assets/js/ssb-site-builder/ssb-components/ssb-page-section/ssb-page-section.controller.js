@@ -610,7 +610,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         var _showSection = false;
         if(section)
         {
-            _showSection = section.visibility || section.visibility === undefined;
+            _showSection = section.visibility !== false;
             if(section.global && section.hiddenOnPages){
                 var _pageHandle;
                 if(vm.state){

@@ -127,11 +127,11 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
             break;
         }
         if (scope.meetTeamIndex !== null)
-          scope.updateTeamNetworks(old_value, mode, social, scope.meetTeamIndex);
+          updateTeamNetworks(old_value, mode, social, scope.meetTeamIndex);
         else
-          scope.updateSocialNetworks(old_value, mode, social);
+          updateSocialNetworks(old_value, mode, social);
         scope.social = {};
-        scope.meetTeamIndex = null;
+        scope.meetTeamIndex = null;        
         scope.closeModal();
       };
 
@@ -192,16 +192,20 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
           return scope.component.networks;
       };
 
-      scope.updateSocialNetworks = function (old_value, mode, new_value) {
+      function updateSocialNetworks(old_value, mode, new_value) {
         var selectedName;
         switch (mode) {
           case "add":
             if (new_value && new_value.name && new_value.url) {
-              scope.component.networks.push({
-                name: new_value.name,
-                url: new_value.url,
-                icon: new_value.icon
-              });
+              $timeout(function () {              
+                scope.$apply(function () {
+                  scope.component.networks.push({
+                    name: new_value.name,
+                    url: new_value.url,
+                    icon: new_value.icon
+                  });
+                });
+              }, 500);
             }
             break;
           case "update":

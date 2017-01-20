@@ -143,10 +143,10 @@
         </div>
     </div>
 
-	<div id="ssb-main" class="ssb-main custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar, 'ssb-blog-hide-social-share': vm.uiState.hideSocialShare }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
+    <div id="ssb-main" class="ssb-main custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar, 'ssb-blog-hide-social-share': vm.uiState.hideSocialShare }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
 
 
-		<div id="componentloader">
+        <div id="componentloader">
 
 
             <ul ng-if="vm.state.page && !vm.state.page.sections.length && vm.uiState.loaded" class="list-unstyled margin-bottom-0">
@@ -160,25 +160,25 @@
                 </li>
             </ul>
 
-			<div
+            <div
                 class="sortable-page-content"
                 ng-sortable="vm.uiState.sortableListPageContentConfig"
                 ng-if="vm.state.page.sections.length && (vm.state.page.layout === 'ssb-1-col-layout' || !vm.state.page.layout)"
                 ng-class="{'ssb-blog-page': vm.uiState.isBlogPage }"
                 >
 
-				<ssb-page-section
-					ng-repeat="section in vm.state.page.sections"
-					section="section"
-					index="$index"
-					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
-					class="ssb-page-section"
-					state="vm.state"
-					ui-state="vm.uiState"
-                    ng-if="section.visibility || vm.section.visibility === undefined">
-				</ssb-page-section>
+                <ssb-page-section
+                    ng-repeat="section in vm.state.page.sections"
+                    section="section"
+                    index="$index"
+                    ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+                    class="ssb-page-section"
+                    state="vm.state"
+                    ui-state="vm.uiState"
+                    ng-if="section.visibility !== false">
+                </ssb-page-section>
 
-			</div>
+            </div>
 
             <div
                 class="ssb-layout__header_2-col_footer" ng-class="{'ssb-layout__header_2-col_footer-loading': vm.uiState.pageSaving}"               
@@ -196,7 +196,7 @@
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
-                            ng-if="section.visibility || vm.section.visibility === undefined">
+                            ng-if="vm.state.page.sections[sectionIndex].visibility !== false">
                         </ssb-page-section>
                         <h1 ng-if="!vm.state.page.layoutModifiers['header'].length">Add Sections</h1>
                     </div>
@@ -214,7 +214,7 @@
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
-                            ng-if="section.visibility || vm.section.visibility === undefined">
+                            ng-if="vm.state.page.sections[sectionIndex] !== false">
                         </ssb-page-section>
                         <h1 ng-if="!vm.state.page.layoutModifiers['2-col-1'].length">Add Sections</h1>
                     </div>
@@ -230,7 +230,7 @@
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
-                            ng-if="section.visibility || vm.section.visibility === undefined">
+                            ng-if="vm.state.page.sections[sectionIndex] !== false">
                         </ssb-page-section>
                         <h1 ng-if="!vm.state.page.layoutModifiers['2-col-2'].length">Add Sections</h1>
                     </div>
@@ -248,7 +248,7 @@
                             class="ssb-page-section"
                             state="vm.state"
                             ui-state="vm.uiState"
-                            ng-if="section.visibility || vm.section.visibility === undefined">
+                            ng-if="vm.state.page.sections[sectionIndex].visibility !== false">
                         </ssb-page-section>
                         <h1 ng-if="!vm.state.page.layoutModifiers['footer'].length">Add Sections</h1>
                     </div>
@@ -256,9 +256,9 @@
 
             </div>
 
-		</div>
+        </div>
 
-	</div>
+    </div>
 
     <ssb-sidebar
         ng-if="vm.state.page"

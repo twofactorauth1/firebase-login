@@ -274,6 +274,15 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 });
                             }
                         }
+                        if(cmd == 'linkRemoveBtn'){
+                            if(editor.selection && editor.selection.element)
+                            {
+                                var aElem = angular.element(editor.selection.element());
+                                if(aElem.length){
+                                    aElem.removeAttr("href");
+                                }
+                            }
+                        }
 
                     }).on('froalaEditor.focus', function (e, editor) {
                        editor.selection.save();

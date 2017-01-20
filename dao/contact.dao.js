@@ -269,7 +269,16 @@ var dao = {
     },
 
     getContactByEmailAndAccount: function(email, accountId, fn) {
-        this.findOne({'details.emails.email':email, 'accountId':accountId}, fn);
+        var query = {
+            $query: {
+               'details.emails.email':email,
+               'accountId':accountId
+            },
+            $orderby: {
+               '_id' : -1
+            }
+        };
+        this.findOne(query, fn);
     },
 
     getContactByEmailAndUserId: function (email, userId, fn) {

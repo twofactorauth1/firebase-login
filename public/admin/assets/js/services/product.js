@@ -124,6 +124,15 @@
                 });
         };
 
+
+        this.getDonationOrdersForProduct = function (id, fn) {
+          var apiUrl = baseUrl + ['products', id, 'donation', 'orders'].join('/');
+          $http.get(apiUrl)
+              .success(function (data, status, headers, config) {
+                  fn(data);
+              });
+        };
+
         this.cloneProduct = function (id, fn) {
           var apiUrl = baseUrl + ['products', id, 'clone'].join('/');
           $http.post(apiUrl)

@@ -62,7 +62,7 @@
                   </select>
                   <label ng-if="newLink.linkType=='page'" for="link-url">Select Page</label>
                   <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
-                  <select ng-if="newLink.linkType=='page'" ng-change="setPageLinkTitle(newLink.linkUrl, false)" placeholder="Select a page" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
+                  <select ng-if="newLink.linkType=='page'" placeholder="Select a page" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
                       <option value="" disabled>Select a Page</option>
                       <option ng-repeat="page in filteredPages  | filterPages:website.linkLists:component.linkLists:component.customnav track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.label == page.title}}">{{page.title}}</option>
                   </select>

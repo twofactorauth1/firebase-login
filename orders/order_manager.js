@@ -346,6 +346,8 @@ module.exports = {
                     else
                         totalAmount = (subTotal - discount) + shippingCharge + taxAdded;
 
+
+                    order.set('total_shipping', shippingCharge.toFixed(2));
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
                     order.set('total_tax', taxAdded.toFixed(2));
@@ -1017,6 +1019,7 @@ module.exports = {
                     }
                     orderDiscount = orderDiscount.toFixed(2);
 
+                    order.set('total_shipping', shippingCharge.toFixed(2));
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
                     order.set('total_tax', taxAdded.toFixed(2));
@@ -1629,7 +1632,7 @@ module.exports = {
                  */
                 totalAmount = subTotal + taxAdded + shippingCharge;
 
-
+                order.set('total_shipping', shippingCharge.toFixed(2));
                 order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
@@ -2366,6 +2369,25 @@ module.exports = {
             log.debug(accountId, userId, '<< listOrdersByProduct ');
             if (err) {
                 log.error(accountId, userId, 'Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+                return fn(null, orders);
+            }
+        });
+    },
+
+    listDonationOrdersForProduct: function (accountId, userId, productId, fn) {
+        var self = this;
+        log.debug(accountId, userId, '>> listDonationOrdersForProduct');
+        var query = {
+            account_id: accountId,
+            'line_items.product_id': productId,
+            status: {$nin: ['failed', 'cancelled' , 'refunded', 'pending_payment']}
+        };
+        dao.findMany(query, $$.m.Order, function (err, orders) {
+            log.debug(accountId, userId, '<< listDonationOrdersForProduct ');
+            if (err) {
+                log.error(accountId, userId, 'Error listing donation orders: ', err);
                 return fn(err, null);
             } else {
                 return fn(null, orders);

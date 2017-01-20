@@ -790,7 +790,7 @@
      */
 
     $scope.getAccount = function() {
-      var promise = AccountService.getAccount(function (_account) {
+      var promise = AccountService.getUpdatedAccount(function (_account) {
         $scope.account = _account;
         $scope.stripeAccountExist = false;
         $scope.paypalAccountExist = $scope.account.commerceSettings.paypal;
