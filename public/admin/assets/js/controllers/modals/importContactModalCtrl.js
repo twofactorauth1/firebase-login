@@ -605,7 +605,8 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
             // map contact tags
             if (_formatVal === 'tags') {
               var contactTags = contactConstant.contact_tags.dp;
-              var _tagsArr = _csvResult.split(",");
+              // Allow multiple tags to be imported using saparated by "|"
+              var _tagsArr = _csvResult.split("|");
               var _tagsToBeAdded = [];
                 _.each(_tagsArr, function (_tag, index) {
                   if(_tag){
