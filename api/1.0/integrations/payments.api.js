@@ -1296,7 +1296,12 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 var customerId = req.params.id;
                 self.getStripeTokenFromAccount(req, function(err, accessToken){
-                    stripeDao.listStripeCards(customerId, accessToken, function(err, value){
+                    /*
+                     * I don't think we need to use the accessToken here.  Right now, the only time we look at a
+                     * customer's cards is from within /admin... and that customer should be on the main account.
+                     */
+
+                    stripeDao.listStripeCards(customerId, null, function(err, value){
                         self.log.debug('<< listCards');
                         var errCode = 500;
 
