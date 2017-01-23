@@ -459,7 +459,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     _.each($scope.contactColumns, function (_column) {
       var _colVal = _column.value;
       var _formatIndex = _formattedColumns[_colVal].index;
-      $scope.previewContact[_colVal] = $scope.csvResults[$scope.currentRow][_formatIndex];
+      $scope.previewContact[_colVal] = angular.copy($scope.csvResults[$scope.currentRow][_formatIndex]);
     });
   };
 
