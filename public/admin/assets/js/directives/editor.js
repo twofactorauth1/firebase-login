@@ -283,6 +283,15 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 }
                             }
                         }
+                        if(cmd == 'linkStyle' && param1 === 'ssb-theme-btn'){
+                            if(editor.selection && editor.selection.element)
+                            {
+                                var aElem = angular.element(editor.selection.element());
+                                if(aElem.hasClass("ssb-theme-btn")){
+                                    aElem.addClass("btn");
+                                }
+                            }
+                        }
 
                     }).on('froalaEditor.focus', function (e, editor) {
                        editor.selection.save();
