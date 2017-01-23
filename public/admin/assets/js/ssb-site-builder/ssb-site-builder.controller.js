@@ -852,7 +852,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
                     var changedPath = jsondiff1[i].path;
-                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2)) {
+                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2) || isEmptyStyleAdded(diff1, diff2, changedPath)) {
 
                         console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -974,6 +974,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 var regex =  /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g ;
                 var compareString1 = diff1.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");
                 var compareString2 = diff2.replace(regex, "").replace(/ ng-scope/g, "").replace(/undefined/g, "");;
+
+                return angular.equals(compareString1, compareString2);
+            }
+    };
+
+
+    function isEmptyStyleAdded(diff1, diff2, path) {
+        if(diff1 &&
+                diff2 &&
+                angular.isDefined(diff1) && angular.isDefined(diff2))
+            {
+                var compareString1 = diff1.replace(/ style=''/g, "");
+                var compareString2 = diff2.replace(/ style=''/g, "");
 
                 return angular.equals(compareString1, compareString2);
             }
