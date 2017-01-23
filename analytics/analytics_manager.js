@@ -1906,7 +1906,7 @@ module.exports = {
         var match = {
             $match:{
                 account_id:accountId,
-                status:{$nin:['failed', 'pending_payment']},
+                status:{$nin:['failed', 'pending_payment', 'refunded']},
                 created_at:{
                     $gte:start,
                     $lte:end
