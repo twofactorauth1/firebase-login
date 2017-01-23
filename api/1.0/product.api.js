@@ -192,9 +192,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 product:product,
                 date: new Date()
             };
-            emailMessageManager.notifyAdmin('productapi@indigenous.io', 'kyle@indigenous.io', null, 'Product Status change', text, data, function(err, value){
-
-            });
         }
         var productId = req.params.id;
         product.set('_id', productId);
