@@ -13,7 +13,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
             },
             templateUrl: '/admin/assets/views/partials/_skeuocard.html',
             link: function(scope, element, attrs, controllers) {
-
+                scope.saveLoading = false;
                 UserService.getAccount(function(account){
                     scope.account = account;
                 });
@@ -220,7 +220,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                     scope.checkCardNumber();
                     scope.checkCardPostcode();
                     if (scope.cardValidated && scope.expirationValidated && scope.cvvValidated && scope.cardNameValidated && scope.cardPostcodeValidated) {
-
+                        scope.saveLoading = true;
 
                         var parent_div = $("." + scope.wrapper).next();
                         if (parent_div.length && parent_div.attr("wrapper-div")) {
@@ -261,6 +261,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                             if (scope.account && scope.account.billing.stripeCustomerId) {
                                 UserService.postAccountBilling(scope.account.billing.stripeCustomerId, token, function(billing) {
                                     scope.updateFn(billing);
+                                    scope.saveLoading = false;
                                 },
                                 function(err){
                                     //ToasterService.clearAll();
@@ -270,10 +271,12 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                     $timeout(function() {
                                       scope.$parent.openModal('change-card-modal');
                                     }, 500);
+                                    scope.saveLoading = false;
                                 });
                                 if(scope.cards && scope.cards.data){
                                     scope.cards.data.forEach(function(value, index) {
                                         PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
+                                        scope.saveLoading = false;
                                     });
                                 }                                
 
@@ -284,9 +287,13 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                             scope.account.billing.stripeCustomerId = stripeUser.id;
                                         UserService.postAccountBilling(stripeUser.id, token, function(billing) {
                                             scope.updateFn(billing);
+                                            scope.saveLoading = false;
                                         });
 
                                     });
+                                }
+                                else{
+                                    scope.saveLoading = false;
                                 }
                             }
                         });
