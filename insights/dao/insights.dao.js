@@ -7,6 +7,7 @@
 
 require('../../dao/base.dao.js');
 require('../model/insight');
+require('../model/insightjob');
 var dao = {
 
     options: {

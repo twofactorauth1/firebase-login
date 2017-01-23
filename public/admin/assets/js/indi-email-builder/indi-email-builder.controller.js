@@ -674,7 +674,7 @@
                         var diff1 = jsondiff1[i].lhs;
                         var diff2 = jsondiff1[i].rhs;
                         var changedPath = jsondiff1[i].path;
-                        if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2)) {
+                        if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || isEmptyStyleAdded(diff1, diff2)) {
 
                             console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -748,6 +748,19 @@
                     angular.isDefined(diff2) &&
                     angular.isDefined(diff2.indexOf) &&
                     diff2.indexOf('data-compiled') === -1
+        };
+
+
+        function isEmptyStyleAdded(diff1, diff2) {
+            if(diff1 &&
+                    diff2 &&
+                    angular.isDefined(diff1) && angular.isDefined(diff2))
+                {
+                    var compareString1 = diff1.replace(/ style=''/g, "");
+                    var compareString2 = diff2.replace(/ style=''/g, "");
+
+                    return angular.equals(compareString1, compareString2);
+                }
         };
 
         function saveWebsite() {
