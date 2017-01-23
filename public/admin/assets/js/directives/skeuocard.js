@@ -271,9 +271,11 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                       scope.$parent.openModal('change-card-modal');
                                     }, 500);
                                 });
-                                scope.cards.data.forEach(function(value, index) {
-                                    PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
-                                });
+                                if(scope.cards && scope.cards.data){
+                                    scope.cards.data.forEach(function(value, index) {
+                                        PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
+                                    });
+                                }                                
 
                             } else {
                                 if (token !== undefined) {
