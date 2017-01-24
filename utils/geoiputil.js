@@ -56,11 +56,14 @@ var geoiputil = {
 
     getMaxMindGeoForIP: function(ip, fn) {
         var self = this;
-        self._initialize();
-        var result = self.mmdb.get(ip);
-        result = self._sanitizeMMResult(ip, result);
-        //log.debug('maxmind thinks ip[' + ip + '] is:', result);
-        fn(null, result);
+        if(ip) {
+            self._initialize();
+            var result = self.mmdb.get(ip);
+            result = self._sanitizeMMResult(ip, result);
+            fn(null, result);
+        } else {
+            fn(null, null);
+        }
     },
 
     _sanitizeMMResult: function(ip, result) {
