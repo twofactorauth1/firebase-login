@@ -452,16 +452,31 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
    */
 
   $scope.updatePreview = function (selected) {
+    
+    var column = angular.copy(selected);
     if (selected && !selected.match) {
       selected.index = null;
     }
+
+    var _colVal,_formatIndex = null;
     var _formattedColumns = $scope.formatColumns();
-    _.each($scope.contactColumns, function (_column) {
-      var _colVal = _column.value;
-      var _formatIndex = _formattedColumns[_colVal].index;
-      $scope.previewContact[_colVal] = angular.copy($scope.csvResults[$scope.currentRow][_formatIndex]);
+    if(column && !column.match){
+      _colVal = column.value;
+      _formatIndex = _formattedColumns[_colVal].index;
+      
+        $scope.previewContact[_colVal] = "";
+    }
+    else{
+      _.each($scope.contactColumns, function (_column) {
+      _colVal = _column.value;
+      _formatIndex = _formattedColumns[_colVal].index;
+      if(angular.isDefined(_formatIndex) && _formatIndex !== null)
+        $scope.previewContact[_colVal] = angular.copy($scope.csvResults[$scope.currentRow][_formatIndex]);
     });
+    }
+    
   };
+
 
   /*
    * @updateColumn
