@@ -273,7 +273,7 @@ var insightsManager = {
                     row.lastWeek = obj[field][lastWeek];
                     row.previousWeek = obj[field][previousWeek];
                     var trend = 0.0000001;//hack for sorting
-                    if(row.previousWeek != 0 && row.previousWeek !== '$0.00') {
+                    if(row.previousWeek != 0 && row.previousWeek !== '$0.00' && row.lastWeek !== row.previousWeek) {
                         trend = (row.lastWeek - row.previousWeek) / row.previousWeek;
                         row.trend = numeral(trend).format('0,0%');
                         trend *=100;//fix magnitude on trend for sorting later
