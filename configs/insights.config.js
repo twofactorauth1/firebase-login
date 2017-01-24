@@ -16,7 +16,7 @@ var accountExclusions = [];
 if(process.env.INSIGHTS_ACCOUNT_EXCLUSIONS) {
     accountExclusions = [];
     _.each(process.env.INSIGHTS_ACCOUNT_EXCLUSIONS.split(','), function(id){
-        accountExclusions.push(id);
+        accountExclusions.push(parseInt(id));
     });
 }
 module.exports = {
