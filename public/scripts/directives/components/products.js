@@ -1563,6 +1563,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             return;
                         }
                     }
+                    else if(scope.yearLength == 3){
+                        $("#card_expiry .error").html("Card Year is not valid");
+                        $("#card_expiry").addClass('has-error');
+                        $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                        scope.isCardExpired = true;
+                        return;
+                    }
+                    
                     if (exp_month < scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
                         $("#card_expiry .error").html("Card Month has Expired");
                         $("#card_expiry").addClass('has-error');
