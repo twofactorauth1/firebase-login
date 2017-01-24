@@ -171,7 +171,7 @@
                                             </label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" name="regular_price" class="form-control" ng-model="product.regular_price" ng-model-options="{ debounce: 800 }" ng-currency min="product.sale_price || 0.00" currency-symbol="">
+                                                <input type="text" name="regular_price" class="form-control" ng-model="product.regular_price" ng-model-options="{ debounce: 10 }" ng-currency min="product.sale_price || 0.00" currency-symbol="">
                                             </div>
                                             <p ng-show="productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine" class="help-block">Regular Price cannot be less than sale price</p>
                                         </div>
@@ -190,7 +190,7 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <span class="input-group-addon">$</span>
-                                                    <input type="text" ng-model-options="{ debounce: 800 }" name="sale_price" class="form-control" ng-model="product.sale_price" ng-currency max="product.regular_price" currency-symbol=""/>
+                                                    <input type="text" ng-model-options="{ debounce: 10 }" name="sale_price" class="form-control" ng-model="product.sale_price" ng-currency max="product.regular_price" currency-symbol=""/>
                                                 </div>
                                                 <p ng-show="productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine" class="help-block">Sale Price cannot be more than regular price</p>
                                             </div>

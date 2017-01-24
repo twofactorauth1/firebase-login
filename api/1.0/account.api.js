@@ -227,13 +227,14 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateCurrentAccountBilling: function(req, res) {
         var self = this;
-        self.log.debug('>> updateCurrentAccountBilling');
         var accountId = self.accountId(req);
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> updateCurrentAccountBilling');
+
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(res);
             } else {
-                var userId = self.userId(req);
                 var billingObj = req.body;
                 billingObj.userId = userId;
                 accountDao.getAccountByID(accountId, function(err, account){
@@ -251,17 +252,18 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 if(billingObj.cardToken && billingObj.stripeCustomerId) {
                                     //we need to add a cardToken to a customer
-                                    paymentManager.addCardToCustomer(billingObj.cardToken, billingObj.stripeCustomerId, null, function(err, value){
+                                    paymentManager.addCardUpdateDefaultAndAttemptPayment(accountId, userId, billingObj.cardToken, billingObj.stripeCustomerId, null, function(err, value){
                                         if(err) {
-                                            self.log.error('Error updating Stripe');
+                                            self.log.error(accountId, userId, 'Error updating Stripe');
                                             return self.wrapError(res, 500, null, err.message, err.message);
                                         } else {
-                                            self.log.debug('<< updateCurrentAccountBilling');
-                                                res.send(updatedAccount);
-                                                self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
-                                                return;
+                                            self.log.debug(accountId, userId, '<< updateCurrentAccountBilling');
+                                            updatedAccount.set('invoice', value);
+                                            res.send(updatedAccount);
+                                            self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
                                         }
                                     });
+
                                 } else {
                                     //we're done here.
                                     self.log.debug('<< updateCurrentAccountBilling');

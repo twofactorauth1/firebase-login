@@ -737,6 +737,10 @@ var insightsManager = {
                 var scheduledTime = job.get('scheduledTime').timeOfDay;
                 var code = '$$.u.insightsManager.runInsightJob(' + job.get('accountId') + ');';
                 var send_at = moment().day(scheduledDay).hour(scheduledTime).minute(0);
+                if(moment(send_at).isBefore(moment())) {
+                    send_at = moment(send_at).add(7, 'days');
+                    self.log.debug('Scheduling ahead a week');
+                }
                 var scheduledJob = new $$.m.ScheduledJob({
                     accountId: accountId,
                     scheduledAt: moment(send_at).toDate(),

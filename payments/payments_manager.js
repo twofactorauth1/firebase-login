@@ -9,6 +9,7 @@ var stripeDao = require('./dao/stripe.dao.js');
 
 var log = $$.g.getLogger("payments_manager");
 var paypalClient = require('./paypal/paypal.client');
+var async = require('async');
 
 module.exports = {
     createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, fn) {
@@ -107,6 +108,74 @@ module.exports = {
             } else {
                 log.debug('<< addCardToCustomer');
                 return fn(null, value);
+            }
+        });
+    },
+
+    addCardUpdateDefaultAndAttemptPayment: function(accountId, userId, cardToken, customerId, accessToken, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> addCardUpdateDefaultAndAttemptPayment');
+        async.waterfall([
+            function(cb) {
+                stripeDao.createStripeCard(customerId, cardToken, accessToken, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error adding card:', err);
+                        cb(err);
+                    } else {
+                        self.log.debug(accountId, userId, 'Added card:', value);
+                        cb(null, value);
+                    }
+                });
+            },
+            function(card, cb) {
+                stripeDao.updateStripeCustomer(customerId, null, null, null, card.id, null, null, null, accessToken, function(err, customer){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error updating default source:', err);
+                        cb(err);
+                    } else {
+                        self.log.debug(accountId, userId, 'Updated customer default card:', customer);
+                        cb(null);
+                    }
+                });
+            },
+            function(cb) {
+                stripeDao.listInvoices(customerId, null, null, 1, null, accessToken, function(err, invoices){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error listing invoices:', err);
+                        cb(err);
+                    } else {
+                        self.log.debug(accountId, userId, 'Got invoices:', invoices);
+                        cb(null, invoices);
+                    }
+                });
+            },
+            function(invoices, cb) {
+                if(invoices && invoices.data && invoices.data.length > 0) {
+                    if(invoices.data[0].attempted === true && invoices.data[0].paid === false) {
+                        stripeDao.payInvoice(invoices.data[0].id, accessToken, function(err, value){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error paying invoice:', err);
+                                cb(err);
+                            } else {
+                                self.log.debug(accountId, userId, 'Paid invoice:', value);
+                                cb(null, value);
+                            }
+                        });
+                    } else {
+                        cb(null);
+                    }
+                } else {
+                    cb(null);
+                }
+            }
+        ], function(err, invoice){
+            if(err) {
+                self.log.error(accountId, userId, 'Error from Stripe:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< addCardUpdateDefaultAndAttemptPayment');
+                fn(null, invoice);
             }
         });
     },
