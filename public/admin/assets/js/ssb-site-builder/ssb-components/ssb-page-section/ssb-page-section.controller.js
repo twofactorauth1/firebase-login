@@ -641,12 +641,20 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
         var elementIsFirstPosition = vm.index === 0;
         var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
-        if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixedLeftNavigation && elementIsFirstPosition && !isBlogPage) {
+        if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixedLeftNavigation && elementIsFirstPosition) {
             $timeout(function() {
-                if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
-                    $(".ssb-page-section:first").addClass("ssb-wrap-left-fixed-left-nav")
-                    $(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");                    
+                if(!isBlogPage){
+                    if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
+                        $(".ssb-page-section:first").addClass("ssb-wrap-left-fixed-left-nav")
+                        $(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");                    
+                    }
                 }
+                else{
+                    if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
+                        $(".ssb-page-layout-row:first").addClass("ssb-wrap-left-fixed-left-nav")
+                        $(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");                    
+                    }
+                }                    
             }, 0);
         }
     }
