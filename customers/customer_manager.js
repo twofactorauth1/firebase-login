@@ -14,6 +14,14 @@ var log = $$.g.getLogger('customer_manager');
 var appConfig = require('../configs/app.config');
 var async = require('async');
 
+
+var s3dao = require('../dao/integrations/s3.dao');
+var fs = require('fs');
+
+var tmp = require('temporary');
+var awsConfig = require('../configs/aws.config');
+var webshot = require('webshot');
+
 module.exports = {
 
     log:log,
@@ -230,11 +238,29 @@ module.exports = {
                     } else {
                         self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
                         if(customerDetails.generateScreenCap){
-                            // code to generate screenCap goes here
-                            // after saving the screenCap to s3 we need to update the url as below
-                            // account.set("templateImageUrl", s3 image url);
+                            self.generateScreenshot(customerId, "index", function(err, url){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error saving customer template account:', err);
+                                    return fn(err);
+                                }
+                                else{
+                                    savedCustomer.set("templateImageUrl", url);
+                                    accountDao.saveOrUpdate(account, function(err, updatedCustomer){
+                                        if(err) {
+                                            self.log.error(accountId, userId, 'Error saving customer template account:', err);
+                                            return fn(err);
+                                        }
+                                        else{
+                                            return fn(null, updatedCustomer);
+                                        }
+                                    })
+                                }
+                            })
                         }
-                        return fn(null, savedCustomer);
+                        else{
+                          return fn(null, savedCustomer);  
+                        }
+                        
                     }
                 });
             } else {
@@ -242,7 +268,67 @@ module.exports = {
             }
 
         });
-    }
+    },
 
+    generateScreenshot: function(accountId, pageHandle, fn) {
+        var self = this;
+        log.debug('>> generateScreenshot');
+        
+        accountDao.getServerUrlByAccount(accountId, function(err, serverUrl){
+            if(err) {
+                log.error('Error getting server url: ' + err);
+                return fn(err, null);
+            }
+            log.debug('got server url');
+
+            if(serverUrl.indexOf('.local') >0) {
+                serverUrl = serverUrl.replace('indigenous.local:3000', 'test.indigenous.io');
+            }
+
+            var name = accountId + "_" + new Date().getTime() + '.png';
+            var tempFile = {
+                name: name,
+                path: 'tmp/' + name
+            };
+            var tempFileName = tempFile.path;
+            //var ssURL = "http://bozu.test.indigenous.io/";
+            var bucket = awsConfig.BUCKETS.ASSETS;
+            var subdir = 'account_' + accountId;
+
+            
+                
+            self._download(serverUrl, tempFileName, function(){
+                log.debug('stored screenshot at ' + tempFileName);
+                tempFile.type = 'image/png';
+                s3dao.uploadToS3(bucket, subdir, tempFile, null, function(err, value){
+                    fs.unlink(tempFile.path, function(err, value){});
+                    if(err) {
+                        log.error('Error uploading to s3: ' + err);
+                        fn(err, null);
+                    } else {
+                        log.debug('Got the following from S3', value);
+                        log.debug('<< generateScreenshot');
+                        fn(null, 'http://' + bucket + '.s3.amazonaws.com/' + subdir + '/' + tempFile.name);
+                    }
+                });
+            });
+        });
+    },
+    _download: function(uri, file, callback){
+        var options = {
+            screenSize: {
+                width: 1280,
+                height: 768
+            },
+            shotSize: {
+                width: 'window',
+                height: 'all'
+            },
+            renderDelay: 5000
+        }    
+        webshot(uri, file, options, function(err) {
+            callback(file);
+        });
+    },
 
 };
