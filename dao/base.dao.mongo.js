@@ -301,8 +301,8 @@ var mongodao = {
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
         var _query = query || {};
-        var _skip = skip || 0;
-        var _limit = limit || 0;
+        var _skip = Number(skip) || 0;
+        var _limit = Number(limit) || 0;
 
         var fxn = function (err, value) {
             if (!err) {
@@ -315,13 +315,14 @@ var mongodao = {
 
         if (fields) {
             if (sort) {
-                mongoColl.find(query, fields).sort(sort).skip(skip).limit(limit).toArray(fxn);
+                mongoColl.find(_query, fields).sort(sort).skip(_skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
             }
         } else {
             if (sort) {
-                mongoColl.find(query).sort(sort).skip(skip).limit(limit).toArray(fxn);
+                console.log('sort:', sort);
+                mongoColl.find(_query, [], sort).skip(_skip).limit(_limit).toArray(fxn);
             } else {
                 mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
             }
