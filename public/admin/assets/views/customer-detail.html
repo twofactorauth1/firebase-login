@@ -284,6 +284,33 @@
                         <tab heading="Analytics" select="resizeAnalytics()">
                             <div data-ng-include=" 'assets/views/partials/single-customer-analytics.html' "></div>
                         </tab>
+                        <tab ng-if="customer.isTemplateAccount" heading="Template Image">
+                            <div>
+                                <div class="col-xs-12">
+                                    <button class="btn btn-info btn-o pull-right" ng-click="saveTemplateAccount()">Save</button>
+                                </div>
+                                <div class="clearfix"></div>
+                                <fieldset>
+                                    <legend>
+                                        Template Image
+                                    </legend>
+                                    <div class="form-group center">
+                                        <div class="customer-template-image-container">
+                                            <div class="customer-template-image">
+                                                <div class="margin-bottom-5">
+                                                   <img ng-src="{{ customer.templateImageUrl }}" err-src="/admin/assets/images/default-page.jpg">
+                                                </div>
+                                            </div>
+                                            <div class="template-image-buttons-edit">
+                                                <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i></span>
+                                                <span class="btn btn-danger" ng-click="removeTemplateImage()"><i class="fa fa-times"></i> </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+
+                            </div>
+                        </tab>
                     </tabset>
                 </div>
             </div>

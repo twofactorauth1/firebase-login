@@ -213,21 +213,27 @@ module.exports = {
         });
     },
 
-    updateCustomerTemplateAccount: function(accountId, userId, customerId, isTemplateAccount, fn) {
+    updateCustomerTemplateAccount: function(accountId, userId, customerId, customerDetails, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> updateCustomerTemplateAccount');
         accountDao.getAccountByID(customerId, function(err, account){
             if(account) {
                 var date = moment();
                 
-                account.set("isTemplateAccount", isTemplateAccount);
-                
+                account.set("isTemplateAccount", customerDetails.isTemplateAccount);                
+                account.set("templateImageUrl", customerDetails.templateImageUrl);
+
                 accountDao.saveOrUpdate(account, function(err, savedCustomer){
                     if(err) {
                         self.log.error(accountId, userId, 'Error saving customer template account:', err);
                         return fn(err);
                     } else {
                         self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
+                        if(customerDetails.generateScreenCap){
+                            // code to generate screenCap goes here
+                            // after saving the screenCap to s3 we need to update the url as below
+                            // account.set("templateImageUrl", s3 image url);
+                        }
                         return fn(null, savedCustomer);
                     }
                 });

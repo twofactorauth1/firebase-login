@@ -198,19 +198,27 @@
             function (isConfirm) {
                 //Update template account flag
                 if (isConfirm) {
-                    customerService.updateCustomerTemplateAccount($scope.customer._id, isTemplateAccount, function(err, customer){
-                        if(err) {
-                            toaster.pop('warning', err.message);
-                        } else {
-                            toaster.pop('success', 'customer updated.');
-                        }
-                    });
+                    updateCustomerDetails(isTemplateAccount);
                 }
                 else{
                     $scope.customer.isTemplateAccount = !isTemplateAccount;
                 }
             });
         };
+
+        $scope.saveTemplateAccount = function(){
+            updateCustomerDetails(false);
+        }
+
+        function updateCustomerDetails(isTemplateAccount){
+            customerService.updateCustomerTemplateAccount($scope.customer, isTemplateAccount, function(err, customer){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Account template updated.');
+                }
+            });
+        }
 
         $scope.addNewUser = function() {
             console.log('Adding the following:', $scope.newuser);
@@ -421,6 +429,48 @@
                 }
             }
             return formattedDate.format("M/D/YY");
+        };
+
+
+        $scope.openMediaModal = function () {
+            $scope.showInsert = true;
+            $scope.modalInstance = $modal.open({
+                templateUrl: 'media-modal',
+                controller: 'MediaModalCtrl',
+                keyboard: false,
+                backdrop: 'static',
+                size: 'lg',
+                resolve: {
+                    showInsert: function () {
+                        return $scope.showInsert;
+                    },
+                    insertMedia: function () {
+                        return $scope.updateImage;
+                    },
+                    isSingleSelect: function () {
+                        return true;
+                    }
+                }
+            });
+        };
+
+
+        /*
+         * @insertPhoto
+         * -
+         */
+
+        $scope.updateImage = function (asset) {
+            $scope.customer.templateImageUrl = asset.url;
+        };
+
+        /*
+         * @insertPhoto
+         * -
+         */
+
+        $scope.removeTemplateImage = function () {
+            $scope.customer.templateImageUrl = null;
         };
 
         (function init() {

@@ -145,17 +145,16 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         var customerId = parseInt(req.params.id);
-        var isTemplateAccount = req.body.isTemplateAccount;
+        var customerDetails = req.body;
         if(accountId === appConfig.mainAccountID) {
-            manager.updateCustomerTemplateAccount(accountId, userId, customerId, isTemplateAccount,  function(err, customer){
+            manager.updateCustomerTemplateAccount(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
                 self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
-                self.sendResultOrError(resp, err, customer, 'Error updating template account');
+                self.sendResultOrError(resp, err, updatedCustomer, 'Error updating template account');
             });
         } else {
             self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
         }
     }
-    
 
 });
 
