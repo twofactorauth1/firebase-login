@@ -328,8 +328,14 @@ var insightsManager = {
                 };
                 if(data.loginReports.mostRecentActivity) {
                     jadeVars.loginIP = data.loginReports.mostRecentActivity.ip;
-                    jadeVars.loginCity = data.loginReports.mostRecentActivity.geo.city;
-                    jadeVars.loginState = data.loginReports.mostRecentActivity.geo.province;
+                    if(data.loginReports.mostRecentActivity.geo) {
+                        jadeVars.loginCity = data.loginReports.mostRecentActivity.geo.city;
+                        jadeVars.loginState = data.loginReports.mostRecentActivity.geo.province;
+                    } else {
+                        jadeVars.loginCity = '';
+                        jadeVars.loginState = '';
+                    }
+
                 }
                 app.render('insights/weeklyreport', jadeVars, function(err, jadeHtml){
                     if(jadeHtml) {

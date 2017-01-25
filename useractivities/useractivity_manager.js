@@ -189,6 +189,8 @@ module.exports = {
                                         results.mostRecentActivity.geo = replacementObject;
                                         self.log.debug('results.mostRecentActivity:', results.mostRecentActivity);
                                         cb(null);
+                                    } else {
+                                        cb(null);
                                     }
                                 });
                             } else {
