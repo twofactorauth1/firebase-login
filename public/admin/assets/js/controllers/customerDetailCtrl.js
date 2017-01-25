@@ -181,6 +181,37 @@
             });
         };
 
+        $scope.updateCustomerTemplateAccount = function(isTemplateAccount) {
+            var text = isTemplateAccount ? "Set this customer as template account" : "Unset this customer as template account"
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: text,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                noActionButtonText: 'Cancel',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                //Update template account flag
+                if (isConfirm) {
+                    customerService.updateCustomerTemplateAccount($scope.customer._id, isTemplateAccount, function(err, customer){
+                        if(err) {
+                            toaster.pop('warning', err.message);
+                        } else {
+                            toaster.pop('success', 'customer updated.');
+                        }
+                    });
+                }
+                else{
+                    $scope.customer.isTemplateAccount = !isTemplateAccount;
+                }
+            });
+        };
+
         $scope.addNewUser = function() {
             console.log('Adding the following:', $scope.newuser);
             customerService.addNewUser($scope.customer._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){

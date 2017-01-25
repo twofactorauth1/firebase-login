@@ -211,6 +211,31 @@ module.exports = {
             }
 
         });
+    },
+
+    updateCustomerTemplateAccount: function(accountId, userId, customerId, isTemplateAccount, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> updateCustomerTemplateAccount');
+        accountDao.getAccountByID(customerId, function(err, account){
+            if(account) {
+                var date = moment();
+                
+                account.set("isTemplateAccount", isTemplateAccount);
+                
+                accountDao.saveOrUpdate(account, function(err, savedCustomer){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error saving customer template account:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
+                        return fn(null, savedCustomer);
+                    }
+                });
+            } else {
+                return fn('account not found', null);
+            }
+
+        });
     }
 
 

@@ -187,6 +187,19 @@
             });
         }
 
+        this.updateCustomerTemplateAccount = function(id, value, fn){
+            var apiUrl = [baseUrl, 'customer', id].join('/');
+            var body = {isTemplateAccount:value};
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache) {
+                    cache.get(id).isTemplateAccount = data.isTemplateAccount;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        }
 
     }]);
 }(angular));
