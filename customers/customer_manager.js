@@ -238,7 +238,7 @@ module.exports = {
                     } else {
                         self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
                         if(customerDetails.generateScreenCap){
-                            self.generateScreenshot(customerId, "index", function(err, url){
+                            self.generateScreenshot(customerId, accountId, "index", function(err, url){
                                 if(err) {
                                     self.log.error(accountId, userId, 'Error saving customer template account:', err);
                                     return fn(err);
@@ -270,7 +270,7 @@ module.exports = {
         });
     },
 
-    generateScreenshot: function(accountId, pageHandle, fn) {
+    generateScreenshot: function(customerId, accountId,  pageHandle, fn) {
         var self = this;
         log.debug('>> generateScreenshot');
         
@@ -285,7 +285,7 @@ module.exports = {
                 serverUrl = serverUrl.replace('indigenous.local:3000', 'test.indigenous.io');
             }
 
-            var name = accountId + "_" + new Date().getTime() + '.png';
+            var name = customerId + "_" + new Date().getTime() + '.png';
             var tempFile = {
                 name: name,
                 path: 'tmp/' + name
@@ -294,7 +294,6 @@ module.exports = {
             //var ssURL = "http://bozu.test.indigenous.io/";
             var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + accountId;
-
             
                 
             self._download(serverUrl, tempFileName, function(){
@@ -314,6 +313,7 @@ module.exports = {
             });
         });
     },
+
     _download: function(uri, file, callback){
         var options = {
             screenSize: {
