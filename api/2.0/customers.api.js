@@ -31,6 +31,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCustomer.bind(this));
         app.get(this.url('single/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSingleCustomer.bind(this));
         app.post(this.url('customer/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addCustomerNotes.bind(this));
+        app.post(this.url('customer/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateCustomerTemplateAccount.bind(this));
 
         //app.delete(this.url(':type/:key'), this.isAuthAndSubscribedApi.bind(this), this.deleteComponentData.bind(this));
 
@@ -137,8 +138,23 @@ _.extend(api.prototype, baseApi.prototype, {
         } else {
             self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
         }
+    },
+
+    updateCustomerTemplateAccount: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var customerId = parseInt(req.params.id);
+        var customerDetails = req.body;
+        if(accountId === appConfig.mainAccountID) {
+            manager.updateCustomerTemplateAccount(accountId, userId, customerId, customerDetails, function(err, updatedCustomer){
+                self.log.debug(accountId, userId, '<< updateCustomerTemplateAccount');
+                self.sendResultOrError(resp, err, updatedCustomer, 'Error updating template account');
+            });
+        } else {
+            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+        }
     }
-    
 
 });
 

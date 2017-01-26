@@ -187,6 +187,26 @@
             });
         }
 
+        this.updateCustomerTemplateAccount = function(customer, generateScreenCap, fn){
+            var id = customer._id;
+            
+            var apiUrl = [baseUrl, 'customer', id].join('/');
+            var body = {
+                isTemplateAccount:customer.isTemplateAccount,
+                templateImageUrl: customer.templateImageUrl,
+                generateScreenCap: generateScreenCap
+            };
+            var cache = this.getCache();
+            $http.post(apiUrl, body).success(function(data){
+                if(cache) {
+                    cache.get(id).isTemplateAccount = data.isTemplateAccount;
+                    cache.get(id).templateImageUrl = data.templateImageUrl;
+                }
+                fn(null, data);
+            }).error(function(err){
+                fn(err);
+            });
+        }
 
     }]);
 }(angular));

@@ -181,6 +181,45 @@
             });
         };
 
+        $scope.updateCustomerTemplateAccount = function(isTemplateAccount) {
+            var text = isTemplateAccount ? "Set this customer as template account" : "Unset this customer as template account"
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: text,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                noActionButtonText: 'Cancel',
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                //Update template account flag
+                if (isConfirm) {
+                    updateCustomerDetails(isTemplateAccount);
+                }
+                else{
+                    $scope.customer.isTemplateAccount = !isTemplateAccount;
+                }
+            });
+        };
+
+        $scope.saveTemplateAccount = function(){
+            updateCustomerDetails(false);
+        }
+
+        function updateCustomerDetails(isTemplateAccount){
+            customerService.updateCustomerTemplateAccount($scope.customer, isTemplateAccount, function(err, customer){
+                if(err) {
+                    toaster.pop('warning', err.message);
+                } else {
+                    toaster.pop('success', 'Account template updated.');
+                }
+            });
+        }
+
         $scope.addNewUser = function() {
             console.log('Adding the following:', $scope.newuser);
             customerService.addNewUser($scope.customer._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
@@ -390,6 +429,48 @@
                 }
             }
             return formattedDate.format("M/D/YY");
+        };
+
+
+        $scope.openMediaModal = function () {
+            $scope.showInsert = true;
+            $scope.modalInstance = $modal.open({
+                templateUrl: 'media-modal',
+                controller: 'MediaModalCtrl',
+                keyboard: false,
+                backdrop: 'static',
+                size: 'lg',
+                resolve: {
+                    showInsert: function () {
+                        return $scope.showInsert;
+                    },
+                    insertMedia: function () {
+                        return $scope.updateImage;
+                    },
+                    isSingleSelect: function () {
+                        return true;
+                    }
+                }
+            });
+        };
+
+
+        /*
+         * @insertPhoto
+         * -
+         */
+
+        $scope.updateImage = function (asset) {
+            $scope.customer.templateImageUrl = asset.url;
+        };
+
+        /*
+         * @insertPhoto
+         * -
+         */
+
+        $scope.removeTemplateImage = function () {
+            $scope.customer.templateImageUrl = null;
         };
 
         (function init() {

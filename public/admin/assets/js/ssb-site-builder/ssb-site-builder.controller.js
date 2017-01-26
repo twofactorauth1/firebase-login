@@ -985,6 +985,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 diff2 &&
                 angular.isDefined(diff1) && angular.isDefined(diff2))
             {
+                if(!_.isString(diff1)) {
+                    diff1 = "" + diff1;
+                }
+                if(!_.isString(diff2)) {
+                    diff2 = "" + diff2;
+                }
                 var compareString1 = diff1.replace(/ style=''/g, "");
                 var compareString2 = diff2.replace(/ style=''/g, "");
 

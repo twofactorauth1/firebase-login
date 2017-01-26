@@ -235,6 +235,23 @@
     clear: left;
 }
 
+@media screen and (min-width: 768px) {
+    .ssb-page-section.ssb-wrap-left-fixed-left-nav, .ssb-page-layout-row.ssb-wrap-left-fixed-left-nav{
+        position: fixed;
+        z-index: 10;
+        width: 300px;
+        ul.navbar-nav li{
+            display: block;
+        }
+        .ssb-section-section{
+            height: 100vh;
+            overflow: auto;
+        }
+    }
+    .ssb-wrap-fixed-right-nav{
+        margin-left:300px;
+    }
+}
 
 @import "ssb-sections/ssb-header.less";
 @import "ssb-sections/ssb-hero.less";
