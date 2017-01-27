@@ -272,17 +272,14 @@ var mongodao = {
 
         if (fields) {
             if (sort) {
-                mongoColl.find(query, fields, {sort: [
-                    [sort, 'ascending']
-                ]}).skip(skip).limit(limit).toArray(fxn);
+                //mongoColl.find(query, fields, {sort: [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+                mongoColl.find(query, fields).sort( {sort:1}).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
             }
         } else {
             if (sort) {
-                mongoColl.find(query, {sort: [
-                    [sort, 'ascending']
-                ]}).skip(skip).limit(limit).toArray(fxn);
+                mongoColl.find(query).sort({sort:1}).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
             }
@@ -315,6 +312,7 @@ var mongodao = {
 
         if (fields) {
             if (sort) {
+                console.log('sort:', sort);
                 mongoColl.find(_query, fields).sort(sort).skip(_skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
