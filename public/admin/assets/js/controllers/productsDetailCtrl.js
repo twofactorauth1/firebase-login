@@ -632,6 +632,10 @@
       }
     }
 
+    function checkIfEmailContentChanged() {
+      return $scope.emailToSend && $scope.originalEmailToSend && !angular.equals($scope.emailToSend, $scope.originalEmailToSend);
+    }
+
     function checkIfTagsChanged() {
       return !angular.equals($scope.originalTags, $scope.product_tags);
     }
@@ -639,7 +643,7 @@
     $scope.checkIfDirty = function(){
       var isDirty = false;
       if($scope.originalProduct)
-        if((!angular.equals($scope.originalProduct, $scope.product)) || checkIfTagsChanged())
+        if((!angular.equals($scope.originalProduct, $scope.product)) || checkIfTagsChanged() || checkIfEmailContentChanged())
           isDirty = true;
       return isDirty;
     }

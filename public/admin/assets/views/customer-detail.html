@@ -72,14 +72,7 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                <tr>
-                                                    <td>Template Account:</td>
-                                                    <td>
-                                                        <div ng-show="customer">
-                                                            <switch ng-model="customer.isTemplateAccount" ng-change="updateCustomerTemplateAccount(customer.isTemplateAccount)" class="pull-right margin-bottom-10"></switch>
-                                                        </div>
-                                                    </td>
-                                                </tr>
+                                                
                                                 <tr>
                                                     <td>Custom Domain:</td>
                                                     <td>
@@ -109,6 +102,14 @@
                                                     <td>
                                                         <div>
                                                             {{contact.details[0].company}}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Template Account:</td>
+                                                    <td>
+                                                        <div ng-show="customer">
+                                                            <switch ng-model="customer.isTemplateAccount" ng-change="updateCustomerTemplateAccount(customer.isTemplateAccount)" class="pull-right margin-bottom-10"></switch>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -296,10 +297,9 @@
                                     </legend>
                                     <div class="form-group center">
                                         <div class="customer-template-image-container">
-                                            <div class="customer-template-image">
-                                                <div class="margin-bottom-5">
+                                            <div class="customer-template-image thumbnail margin-bottom-5">
+                                                
                                                    <img ng-src="{{ customer.templateImageUrl }}" err-src="/admin/assets/images/default-page.jpg">
-                                                </div>
                                             </div>
                                             <div class="template-image-buttons-edit">
                                                 <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i></span>

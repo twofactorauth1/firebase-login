@@ -724,6 +724,8 @@
                         OrderService.completeOrder($scope.order._id, note, function (completedOrder) {
                             toaster.pop('success', toasterMsg + '"Completed"');
                             $scope.originalOrder.status = 'completed';
+                            $scope.order.completed_at = completedOrder.completed_at;
+                            $scope.originalOrder.completed_at = completedOrder.completed_at;
                             var update = false;
                             if (angular.equals($scope.order, $scope.originalOrder))
                                 update = true;
