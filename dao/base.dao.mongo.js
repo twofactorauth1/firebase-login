@@ -305,7 +305,7 @@ var mongodao = {
             if (!err) {
                 return self._wrapArrayMongo(value, fields, type, fn);
             } else {
-                self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                self.log.error("An error occurred: #_findAllWithFieldsSortAndLimitMongo() with query: " + JSON.stringify(query), err);
                 fn(err, value);
             }
         };
