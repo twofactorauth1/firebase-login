@@ -170,7 +170,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }
                 }
 
-
+                // Special case to allow empty healcode-widget tag
+                $.merge(froalaConfig.htmlAllowedEmptyTags, ["healcode-widget"]);
 
                 $timeout(function() {
 
@@ -197,6 +198,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         editor.$placeholder.text(attrs.placeholder);
                     }
 
+                    //$.merge(editor.opts.htmlAllowedTags, ["healcode-widget"]);
+                    //$.merge(editor.opts.htmlAllowedAttrs, ["data-version", "data-link-class", "data-site-id", "data-mb-site-id", "data-type","data-inner-html", "data-service-id"]);
+                    //$.merge(editor.opts.htmlAllowedEmptyTags, ["healcode-widget"]);
+                    
                 }).froalaEditor(froalaConfig)
 
                     .on('froalaEditor.contentChanged', function(e, editor) {
