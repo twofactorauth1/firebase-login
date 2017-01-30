@@ -647,20 +647,28 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
                         $(".ssb-page-section:first").addClass("ssb-wrap-left-fixed-left-nav")
                         $(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");  
-                        var _leftNavWidth = $(".ssb-wrap-left-fixed-left-nav").width();
-                        $(".ssb-wrap-fixed-right-nav").css("margin-left", _leftNavWidth + "px");                
+                                        
                     }
                 }
                 else{
                     if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
                         $(".ssb-page-layout-row:first").addClass("ssb-wrap-left-fixed-left-nav")
                         $(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");
-                        var _leftNavWidth = $(".ssb-wrap-left-fixed-left-nav").width();
-                        $(".ssb-wrap-fixed-right-nav").css("margin-left", _leftNavWidth + "px");
+                        
                     }
-                }                    
+                } 
+
+                $scope.$watch(
+                    function () {
+                        return $(".ssb-wrap-left-fixed-left-nav").width();
+                    },
+                    function (value) {
+                        $(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
+                    }
+                )                   
             }, 0);
         }
+
     }
 
 }
