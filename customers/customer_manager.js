@@ -274,7 +274,7 @@ module.exports = {
         var self = this;
         log.debug('>> generateScreenshot');
         
-        accountDao.getServerUrlByAccount(accountId, function(err, serverUrl){
+        accountDao.getServerUrlByAccount(customerId, function(err, serverUrl){
             if(err) {
                 log.error('Error getting server url: ' + err);
                 return fn(err, null);
