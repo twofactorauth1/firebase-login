@@ -280,3 +280,6 @@
 
     <!-- <div id="ssb-froala-scrollable-container"></div> -->
 </div>
+<div ng-if="vm.state.page && vm.state.website ">
+    <user-scripts class="user-scripts" handle="vm.state.page.handle" website="vm.state.website" account="vm.state.account"></user-scripts>
+</div>
