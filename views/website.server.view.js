@@ -179,6 +179,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 });
 
                 data.pages = pageHolder;
+                
                 // self.log.debug('pageHolder:', pageHolder);
                 data.account = value;
                 value.website = value.website || {};
@@ -203,7 +204,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 } else {
                     data.title = value.website.title;
                 }
-
+                data.currentPageHandle = handle;
                 data.author = 'Indigenous';//TODO: wut?
                 data.segmentIOWriteKey = '';
                 data.website = value.website || {};
@@ -429,6 +430,8 @@ _.extend(view.prototype, BaseView.prototype, {
                 } else {
                     data.title = value.website.title;
                 }
+
+                data.currentPageHandle = handle;
 
                 data.author = 'Indigenous';//TODO: wut?
                 data.segmentIOWriteKey = '';

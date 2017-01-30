@@ -470,7 +470,10 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
                 //if contextual menu is already open, open directly from single click
                 if (pvm.uiState.showSectionPanel) {
-                    editControlComponent.find('.ssb-settings-btn').click();
+                    $timeout(function() {
+                        editControlComponent.find('.ssb-settings-btn').click();    
+                    }, 0);
+                    
                 }
 
                 /*

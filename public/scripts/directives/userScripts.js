@@ -19,6 +19,9 @@ angular.module('mainApp')
                         else if($location.$$path.indexOf("/author/") > -1 || $location.$$path.indexOf("/tag/") > -1){
                             handle = 'blog'
                         }
+                        if(!handle){
+                            handle = attr.handle;
+                        }
                         console.info('User Script >>>', handle);
 
                         accountService(function(err, account) {
