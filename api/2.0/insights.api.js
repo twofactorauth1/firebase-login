@@ -97,7 +97,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var startDate = moment().subtract(7, 'days').toDate();
         var endDate = moment().toDate();
         var scheduledSendDate = null;
-        var sendToAccountOwners = false;
+        var sendToAccountOwners = true;
         manager.generateInsightsForAllAccounts(accountId, userId, startDate, endDate, scheduledSendDate, sendToAccountOwners, function(err, results){
             self.log.debug(accountId, userId, '<< generateAllInsightReports');
         });
