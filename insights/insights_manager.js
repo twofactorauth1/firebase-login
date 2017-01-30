@@ -198,7 +198,7 @@ var insightsManager = {
                         self.log.error(accountId, userId, 'Error handling sections:', err);
                         cb(err);
                     } else {
-                        self.log.debug(accountId, userId, 'built section data', sectionDataMap);
+                        //self.log.debug(accountId, userId, 'built section data', sectionDataMap);
                         cb(null, account, sectionDataMap);
                     }
                 });
@@ -413,10 +413,12 @@ var insightsManager = {
                 var ccAry = self.config.ccAry;
                 var replyToAddress = self.config.replyToAddress;
                 var replyToName = self.config.replyToName;
+
                 emailMessageManager.sendInsightEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
                     _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, function(err, value){
                         cb(err, sectionDataMap, value);
                     });
+                
             }
         ], function(err, sectionHTMLMap, emailResponse){
             if(err) {
@@ -566,6 +568,7 @@ var insightsManager = {
                             var business = customerAccount.get('business');
                             if(business && business.emails && business.emails[0] && business.emails[0].email) {
                                 destinationAddress = business.emails[0].email;
+                                self.log.debug(accountId, userId, 'destination address:', destinationAddress);
                                 self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
                                     if(err || !value) {
                                         self.log.error('Error generating report for [' + customerAccountId + ']:', err);
@@ -584,6 +587,7 @@ var insightsManager = {
                                         callback();
                                     } else {
                                         destinationAddress = user.get('email');
+                                        self.log.debug('ownerUser destination address:', destinationAddress);
                                         self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
                                             if(err || !value) {
                                                 self.log.error('Error generating report for [' + customerAccountId + ']:', err);
@@ -611,6 +615,7 @@ var insightsManager = {
                             });
                         }
                     } else {
+                        self.log.debug('sending to account manager');
                         self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
                             if(err || !value) {
                                 self.log.error('Error generating report for [' + customerAccountId + ']:', err);
