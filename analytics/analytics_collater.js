@@ -87,14 +87,27 @@ var collator = {
             keen.timestamp = sessionEvent.get('server_time_dt');
             sessionEvent.set('keen', keen);
             geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
-                var replacementObject = {
-                    province: ip_geo_info.region,
-                    city: ip_geo_info.city,
-                    postal_code: ip_geo_info.postal,
-                    continent: ip_geo_info.continent,
-                    country: ip_geo_info.countryName
-                };
-                sessionEvent.set('maxmind', replacementObject);
+                if(ip_geo_info) {
+                    var replacementObject = {
+                        province: ip_geo_info.region,
+                        city: ip_geo_info.city,
+                        postal_code: ip_geo_info.postal,
+                        continent: ip_geo_info.continent,
+                        country: ip_geo_info.countryName
+                    };
+                    sessionEvent.set('maxmind', replacementObject);
+                } else {
+                    var replacementObject = {
+                        province: '',
+                        city: '',
+                        postal_code: '',
+                        continent: '',
+                        country: ''
+                    };
+                    sessionEvent.set('maxmind', replacementObject);
+                    log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
+                }
+
                 if(!value) {
                     log.debug('No pings found for session ' + sessionEvent.id() + '.  Closing.');
                     collator._closeSessionWithNoPings(sessionEvent, callback);
