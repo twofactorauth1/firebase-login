@@ -198,7 +198,7 @@ var insightsManager = {
                         self.log.error(accountId, userId, 'Error handling sections:', err);
                         cb(err);
                     } else {
-                        self.log.debug(accountId, userId, 'built section data', sectionDataMap);
+                        //self.log.debug(accountId, userId, 'built section data', sectionDataMap);
                         cb(null, account, sectionDataMap);
                     }
                 });
@@ -413,10 +413,12 @@ var insightsManager = {
                 var ccAry = self.config.ccAry;
                 var replyToAddress = self.config.replyToAddress;
                 var replyToName = self.config.replyToName;
+
                 emailMessageManager.sendInsightEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
                     _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, function(err, value){
                         cb(err, sectionDataMap, value);
                     });
+                
             }
         ], function(err, sectionHTMLMap, emailResponse){
             if(err) {
@@ -556,23 +558,76 @@ var insightsManager = {
                         destinationAddress = 'test_account_managers@indigenous.io';
                     }
                     if(sendToAccountOwners === true) {
-                        //TODO: this
                         /*
                          * look at account.business.emails[0].email
                          * then check account.ownerUser.username
                          * be sure to CC account_managers@indigenous.io
                          */
-                    }
-                    self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
-                        if(err || !value) {
-                            self.log.error('Error generating report for [' + customerAccountId + ']:', err);
-                            callback(err);
+                        var customerAccount = _.find(accounts, function(account){return account.id() === customerAccountId});
+                        if(customerAccount) {
+                            var business = customerAccount.get('business');
+                            if(business && business.emails && business.emails[0] && business.emails[0].email) {
+                                destinationAddress = business.emails[0].email;
+                                self.log.debug(accountId, userId, 'destination address:', destinationAddress);
+                                self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
+                                    if(err || !value) {
+                                        self.log.error('Error generating report for [' + customerAccountId + ']:', err);
+                                        callback(err);
+                                    } else {
+                                        insight.get('emailMessageIds').push(value.emailMessageId);
+                                        insight.get('processedAccounts').push(customerAccountId);
+                                        callback();
+                                    }
+                                });
+                            } else {
+                                var ownerUserId = customerAccount.get('ownerUser');
+                                userDao.getById(parseInt(ownerUserId), $$.m.User, function(err, user){
+                                    if(err || !user) {
+                                        self.log.error('Error finding ownerUser:', err);
+                                        callback();
+                                    } else {
+                                        destinationAddress = user.get('email');
+                                        self.log.debug('ownerUser destination address:', destinationAddress);
+                                        self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
+                                            if(err || !value) {
+                                                self.log.error('Error generating report for [' + customerAccountId + ']:', err);
+                                                callback(err);
+                                            } else {
+                                                insight.get('emailMessageIds').push(value.emailMessageId);
+                                                insight.get('processedAccounts').push(customerAccountId);
+                                                callback();
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         } else {
-                            insight.get('emailMessageIds').push(value.emailMessageId);
-                            insight.get('processedAccounts').push(customerAccountId);
-                            callback();
+                            self.log.warn(accountId, userId, 'Could not find account in accounts List for [' + customerAccountId + ']');
+                            self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
+                                if(err || !value) {
+                                    self.log.error('Error generating report for [' + customerAccountId + ']:', err);
+                                    callback(err);
+                                } else {
+                                    insight.get('emailMessageIds').push(value.emailMessageId);
+                                    insight.get('processedAccounts').push(customerAccountId);
+                                    callback();
+                                }
+                            });
                         }
-                    });
+                    } else {
+                        self.log.debug('sending to account manager');
+                        self.generateInsightReport(accountId, userId, customerAccountId, sections, destinationAddress, startDate, endDate, function(err, value){
+                            if(err || !value) {
+                                self.log.error('Error generating report for [' + customerAccountId + ']:', err);
+                                callback(err);
+                            } else {
+                                insight.get('emailMessageIds').push(value.emailMessageId);
+                                insight.get('processedAccounts').push(customerAccountId);
+                                callback();
+                            }
+                        });
+                    }
+
                 }, function(err){
                     //save the insight and continue
                     if(!err) {
