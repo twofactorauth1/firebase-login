@@ -418,7 +418,7 @@ var insightsManager = {
                     _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, function(err, value){
                         cb(err, sectionDataMap, value);
                     });
-                
+
             }
         ], function(err, sectionHTMLMap, emailResponse){
             if(err) {
@@ -650,7 +650,7 @@ var insightsManager = {
                 self.log.debug(accountId, userId, 'Final insight:', insight);
                 return fn(err);
             } else {
-                self.log.info(accountId, userId, 'Report generation took ' + moment().diff(moment(now) + 'seconds'));
+                self.log.info(accountId, userId, 'Report generation took ' + moment().diff(moment(now))+ 'seconds');
                 self.log.debug(accountId, userId, '<< generateInsightsForAllAccounts');
                 return fn(null, insight);
             }
