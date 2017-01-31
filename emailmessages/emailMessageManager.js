@@ -1402,6 +1402,12 @@ var emailMessageManager = {
                         request.body.reply_to.name = replyToName;
                     }
                 }
+                if(ccAry && ccAry.length > 0) {
+                    request.body.personalizations[0].cc = [];
+                    _.each(ccAry, function(ccAddress){
+                        request.body.personalizations[0].cc.push({email:ccAddress});
+                    });
+                }
                 self._safeStoreEmail(request.body, accountId, userId, emailId, function(err, emailmessage){
                     if(err) {
                         self.log.error('Error storing email (this should not happen):', err);
