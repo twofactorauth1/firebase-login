@@ -159,7 +159,8 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
           _.extend(asset, response.files[0]);       
           originalAsset.checked = true;
           asset.checked = true;
-          $scope.m.singleSelect(asset);   
+          $scope.m.singleSelect(asset);  
+          ToasterService.showWithTitle('success', 'Replacement image has been uploaded', 'Note: images are cached by the browser for an hour. Flush your browser cache to see the latest media (or wait)');
         }
     }
     else{
@@ -285,6 +286,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
 
   $scope.m.singleSelect = function (asset) {
     $scope.singleSelected = asset.checked;
+    
     $timeout(function () {
       if (!$scope.isSingleSelect || !$scope.singleSelected || $scope.selectModel.select_all) {
         //$scope.batch.push(asset);

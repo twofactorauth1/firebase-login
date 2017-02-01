@@ -12,6 +12,10 @@
       toaster.pop(status, msg);
     };
 
+    this.showWithTitle = function(status, title, msg) {
+      toaster.pop(status, title, msg);
+    };
+
     this.clearAll = function() {
       toaster.clear('*');
     };
