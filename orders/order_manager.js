@@ -348,6 +348,10 @@ module.exports = {
 
 
                     order.set('total_shipping', shippingCharge.toFixed(2));
+                    // For Donation
+                    if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
+                        order.set('total_shipping', 0);
+                    }
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
                     order.set('total_tax', taxAdded.toFixed(2));
@@ -1020,6 +1024,10 @@ module.exports = {
                     orderDiscount = orderDiscount.toFixed(2);
 
                     order.set('total_shipping', shippingCharge.toFixed(2));
+                    // For Donation
+                    if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
+                        order.set('total_shipping', 0);
+                    }
                     order.set('tax_rate', taxPercent);
                     order.set('subtotal', subTotal.toFixed(2));
                     order.set('total_tax', taxAdded.toFixed(2));
@@ -1633,6 +1641,10 @@ module.exports = {
                 totalAmount = subTotal + taxAdded + shippingCharge;
 
                 order.set('total_shipping', shippingCharge.toFixed(2));
+                // For Donation
+                if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
+                    order.set('total_shipping', 0);
+                }
                 order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
