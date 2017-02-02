@@ -132,6 +132,12 @@
 .fr-color-set.sp-container .sp-palette-toggle.fr-command:hover
 {
     background: inherit !important;
+    color: #ffffff !important;
+}
+button.sp-palette-toggle.fr-command
+{
+    background: inherit !important;
+    color: #243948 !important;
 }
 .fr-color-set .sp-palette-button-container{
     float: none;
