@@ -24,6 +24,7 @@ var prodSingleHostString = "mongodb://indiapp2:Ind1genous2016!@ds139559-a0.mlab.
 
 //PROD
 //var connectionString = prodString;
+//var singleHostString = prodSingleHostString;
 
 //TEST
 var connectionString = testString;
