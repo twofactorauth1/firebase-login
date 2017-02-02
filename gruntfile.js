@@ -285,7 +285,8 @@ module.exports = function(grunt) {
             stripe_cleanup: ['payments/tests/stripe_cleanup.js'],
             ssb: ['ssb/test/ssb_manager_test.js'],
             scheduler: ['scheduledjobs/tests/manager_test.js'],
-            selenium: ['test/selenium/*_test.js']
+            selenium: ['test/selenium/*_test.js'],
+            mlab:['test/mongo.dao_test.js']
             //ngparse:['utils/test/ngparser_test.js']
         },
 
@@ -697,7 +698,7 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('tests', ['nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
-            'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup', 'nodeunit:ssb']);
+            'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup', 'nodeunit:ssb' ]);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testUtils', ['nodeunit:utils']);

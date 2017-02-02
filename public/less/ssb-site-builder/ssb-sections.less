@@ -235,24 +235,6 @@
     clear: left;
 }
 
-@media screen and (min-width: 768px) {
-    .ssb-page-section.ssb-wrap-left-fixed-left-nav, .ssb-page-layout-row.ssb-wrap-left-fixed-left-nav{
-        position: fixed;
-        z-index: 10;
-        max-width: 360px;
-        min-width: 250px;
-        ul.navbar-nav li{
-            display: block;
-        }
-        .ssb-section-section{
-            height: 100vh;
-            overflow: auto;
-        }
-    }
-    .ssb-wrap-fixed-right-nav{
-        margin-left:250px;
-    }
-}
 
 @media screen and (max-width: 767px) {    
     .ssb-wrap-fixed-right-nav{
@@ -271,3 +253,4 @@
 @import "ssb-sections/ssb-contact-us.less";
 @import "ssb-sections/ssb-text-image-video.less";
 @import "ssb-sections/ssb-products.less";
+@import "ssb-sections/ssb-vertical-nav.less";

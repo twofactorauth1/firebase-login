@@ -110,7 +110,8 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
             }
 
             angular.element(document).ready(function () {
-                setTimeout(function () {
+                $document.scrollTop(0);
+                $timeout(function () {
                     var locId = $location.$$hash;
                     if (locId) {
                         var element = document.getElementById(locId);

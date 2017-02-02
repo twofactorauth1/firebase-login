@@ -94,6 +94,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
         toolbarInline: true,
         toolbarVisibleWithoutSelection: true,
         scrollableContainer: '#ssb-froala-scrollable-container',
+        charCounterCount: false,
         // allowedEmptyTags: ['a'],
         toolbarButtons: toolbarbuttons,
         toolbarButtonsMD: toolbarButtonsWithSeparators,

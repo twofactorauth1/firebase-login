@@ -319,7 +319,7 @@ if (process.env.NODE_ENV != "testing") {
         {
             persistence:{
                 type:'mongodb',
-                connectionString:mongoConfig.MONGODB_CONNECT,
+                connectionString:mongoConfig.MONGODB_SINGLE_HOST,
                 eventsCollection: 'scheduled_events',
                 options:{}
             }

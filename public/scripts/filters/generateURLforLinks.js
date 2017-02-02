@@ -17,7 +17,7 @@ mainApp.filter('generateURLforLinks', function () {
                 return linkToObject.data;
                 break;
             case "section":                
-                if(linkToObject.page)
+                if(linkToObject.page && linkToObject.page !== "index")
                     return '/'+linkToObject.page+'/#'+linkToObject.data;
                 else
                     return '/#'+linkToObject.data;

@@ -272,17 +272,14 @@ var mongodao = {
 
         if (fields) {
             if (sort) {
-                mongoColl.find(query, fields, {sort: [
-                    [sort, 'ascending']
-                ]}).skip(skip).limit(limit).toArray(fxn);
+                //mongoColl.find(query, fields, {sort: [[sort, 'ascending']]}).skip(skip).limit(limit).toArray(fxn);
+                mongoColl.find(query, fields).sort( {sort:1}).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
             }
         } else {
             if (sort) {
-                mongoColl.find(query, {sort: [
-                    [sort, 'ascending']
-                ]}).skip(skip).limit(limit).toArray(fxn);
+                mongoColl.find(query).sort({sort:1}).skip(skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
             }
@@ -301,27 +298,29 @@ var mongodao = {
         var collection = this.getTable(type);
         var mongoColl = this.mongo(collection);
         var _query = query || {};
-        var _skip = skip || 0;
-        var _limit = limit || 0;
+        var _skip = Number(skip) || 0;
+        var _limit = Number(limit) || 0;
 
         var fxn = function (err, value) {
             if (!err) {
                 return self._wrapArrayMongo(value, fields, type, fn);
             } else {
-                self.log.error("An error occurred: #_findAllWithFieldsAndLimitMongo() with query: " + JSON.stringify(query), err);
+                self.log.error("An error occurred: #_findAllWithFieldsSortAndLimitMongo() with query: " + JSON.stringify(query), err);
                 fn(err, value);
             }
         };
 
         if (fields) {
             if (sort) {
-                mongoColl.find(query, fields).sort(sort).skip(skip).limit(limit).toArray(fxn);
+                console.log('sort:', sort);
+                mongoColl.find(_query, fields).sort(sort).skip(_skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
             }
         } else {
             if (sort) {
-                mongoColl.find(query).sort(sort).skip(skip).limit(limit).toArray(fxn);
+                console.log('sort:', sort);
+                mongoColl.find(_query, [], sort).skip(_skip).limit(_limit).toArray(fxn);
             } else {
                 mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
             }

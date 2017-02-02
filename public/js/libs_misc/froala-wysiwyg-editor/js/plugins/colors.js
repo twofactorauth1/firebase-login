@@ -66,7 +66,11 @@
         }
     },
     isIE: document.documentMode || /Edge/.test(navigator.userAgent),
-    isButton: false
+    isButton: false,
+    selectedElement: {
+      color: '',
+      bg: ''
+    } 
   });
 
   a.FE.PLUGINS.colors = function (editor) {
@@ -81,7 +85,8 @@
     function _showColorsPopup () {
       var $btn = editor.$tb.find('.fr-command[data-cmd="color"]');
 
-
+      editor.opts.selectedElement.bg = "";
+      editor.opts.selectedElement.color = "";
 
       var $popup = editor.popups.get('colors.picker');
       if (!$popup) $popup = _initColorsPopup();
@@ -96,7 +101,7 @@
         // Colors popup left and top position.
         var left = $btn.offset().left + $btn.outerWidth() / 2;
         var top = $btn.offset().top + (editor.opts.toolbarBottom ? 10 : $btn.outerHeight() - 10);
-        editor.selection.save();
+        //editor.selection.save();
 
         editor.popups.show('colors.picker', left, top, $btn.outerHeight());
         if (editor.opts.isIE)
@@ -109,7 +114,10 @@
             $(".sp-input").show();
         }
 
-        editor.selection.restore();
+        //editor.selection.restore();
+
+        
+
         _setInitialColors();
       }
     }
@@ -119,6 +127,8 @@
      */
     function _hideColorsPopup () {
       // Hide popup.
+    editor.opts.selectedElement.bg = "";
+    editor.opts.selectedElement.color = "";
       editor.popups.hide('colors.picker');
     }
 
@@ -208,7 +218,7 @@
      colors_html += '<div class="sp-palette-button-container sp-cf"><button type="button" class="sp-palette-toggle fr-command" data-cmd="'+dataToggle+'">less</button></div>';
 
      colors_html += '</div>';
-     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input style="display:none;" class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelColor" href="#">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="'+dataChooseColor+'">choose</button></div></div>'
+     colors_html += '<div class="sp-picker-container"><div class="sp-top sp-cf"><div class="sp-fill"></div><div class="sp-top-inner"><div class="sp-color fr-command" data-cmd="'+dataCmdSpectrum+'" style="background-color: rgb(255, 0, 0);"><div class="sp-sat"><div class="sp-val"><div class="sp-dragger" style="display: none;"></div></div></div></div><div class="sp-clear sp-clear-display fr-command" data-cmd="'+ dataCmdClear +'" title="Clear Color Selection"></div><div class="sp-hue"><div class="sp-slider" style="display: none;"></div></div></div><div class="sp-alpha"><div class="sp-alpha-inner"><div class="sp-alpha-handle" style="display: none;"></div></div></div></div><div class="sp-input-container sp-cf"><input style="display:none;" class="sp-input" type="text" spellcheck="false" placeholder=""></div><div class="sp-initial sp-thumb sp-cf"></div><div class="sp-button-container sp-cf"><a class="sp-cancel fr-command" data-cmd="cancelAndCloseColor" href="javascript:void(0)">cancel</a><button type="button" class="sp-choose fr-command" data-cmd="'+dataChooseColor+'">choose</button></div></div>'
      colors_html += '</div>';
       return colors_html
     }
@@ -235,15 +245,18 @@
 
 
       // The color css property.
+      var color = "";
       var color_type;
       if (tab == 'background') {
         color_type = 'background-color';
+        color = editor.opts.selectedElement.bg || $element.css(color_type);
       }
       else {
         color_type = 'color';
+        color = editor.opts.selectedElement.color || $element.css(color_type);
       }
 
-      var color = $element.css(color_type);
+      
       if(editor.opts.isButton){
         color = editor.opts.button.css(color_type);
       }
@@ -267,14 +280,33 @@
 
         // Select the correct color.
         else {
-          $popup.find('.fr-' + tab + '-color .fr-select-color[data-param1="' + editor.helpers.RGBToHex($element.css(color_type)) + '"]').addClass('fr-selected-color');
+            if(!editor.opts.selectedElement.color && !editor.opts.selectedElement.bg){
+            editor.opts.selectedElement.color = $element.css("color");
+            editor.opts.selectedElement.bg = $element.css("background-color");
+          }
+          var colorVal = "";
+          if (tab == 'background') {
+            colorVal = editor.opts.selectedElement.bg;
+        }
+        else {
+           colorVal = editor.opts.selectedElement.color;
+        }
+            $popup.find('.fr-' + tab + '-color .fr-select-color[data-param1="' + editor.helpers.RGBToHex(colorVal) + '"]').addClass('fr-selected-color'); 
+          
           break;
         }
       }
-      if(!editor.opts.isButton){
-        color = $element.css(color_type)
+      if(!editor.opts.isButton)     
+        {
+      var colorVal = "";
+      if (tab == 'background') {
+        colorVal = editor.opts.selectedElement.bg;
+      }
+      else {
+         colorVal = editor.opts.selectedElement.color;
+      }
         setTimeout(function() {
-            initializeSpectrum(color_type, color);
+            initializeSpectrum(color_type, colorVal);
         }, 0)
       }
     }
@@ -346,6 +378,8 @@
         if(editor.opts.isButton)
           editor.events.trigger("bgColorChange", [val]);
 
+        editor.opts.selectedElement.bg = val;
+
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='backgroundColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
 
@@ -368,7 +402,7 @@
 
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            editor.selection.save();
+            //editor.selection.save();
         })
       }
 
@@ -403,11 +437,14 @@
         else
             editor.format.applyStyle('color', val);
 
+
+        editor.opts.selectedElement.color = val;
+
         if(editor.opts.isButton)
           editor.events.trigger("txtColorChange", [val]);
 
         setTimeout(function(){
-            editor.selection.save();
+            //editor.selection.save();
         })
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
@@ -431,7 +468,7 @@
         $popup.find('input.sp-input').val("");
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            editor.selection.save();
+            //editor.selection.save();
         })
       }
       if(init){
@@ -448,7 +485,7 @@
       $popup.find('input.sp-input').val("");
       // Remove text color.
       if(tab === 'text') {
-
+        editor.opts.selectedElement.bg = "";
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
 
         if(editor.opts.isButton)
@@ -460,14 +497,14 @@
           editor.events.trigger("txtColorChange", []);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            editor.selection.save();
+            //editor.selection.save();
             closeColorPicker();
         })
         
       }
       else{
         $(".fr-command.fr-select-color[data-cmd='backgroundColor']").removeClass("fr-selected-color");
-
+        editor.opts.selectedElement.color = "";
         if(editor.opts.isButton)
             editor.opts.button.css('background-color', "");
         else
@@ -476,7 +513,7 @@
           editor.events.trigger("bgColorChange", []);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            editor.selection.save();
+            //editor.selection.save();
             closeColorPicker();
         })
         
@@ -491,6 +528,7 @@
             background(editor.opts.defaultColors.background.color || 'REMOVE');
             text(editor.opts.defaultColors.text.color || 'REMOVE');
         }
+
       _hideColorsPopup();
     }
 
@@ -499,7 +537,7 @@
         var container = val === 'text' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color");
         var textInput = container.find(".sp-input");
         var color = textInput.val();
-        editor.selection.restore();
+        //editor.selection.restore();
         if(val === 'text'){
            text(color || 'REMOVE');
         }
@@ -772,7 +810,7 @@
                 //e.preventDefault();
                 //e.stopPropagation();
                 var realRgb = $(element).val();
-                editor.selection.restore();
+                //editor.selection.restore();
                 if(val === 'color')
                     text(realRgb, true);
                 else
@@ -812,7 +850,7 @@
 
         function move(e) {
             editor.events.disableBlur();
-            editor.selection.restore();
+            //editor.selection.restore();
             if (dragging) {
                 // Mouseup happened outside of window
                 if (editor.opts.isIE && doc.documentMode < 9 && !e.button) {
@@ -913,7 +951,7 @@
       else {
         if (this.$el.find('.fr-marker')) {
           this.events.disableBlur();
-          this.selection.restore();
+          //this.selection.restore();
         }
         this.popups.hide('colors.picker');
       }
@@ -926,7 +964,7 @@
     undo: true,
     callback: function (cmd, val) {
         //this.events.disableBlur();
-        this.selection.restore();
+        //this.selection.restore();
         this.colors.text(val, true);
     }
   });
@@ -936,7 +974,7 @@
     undo: true,
     callback: function (cmd, val) {
         //this.events.disableBlur();
-        this.selection.restore();
+        //this.selection.restore();
         this.colors.background(val, true);
     }
   });
@@ -990,7 +1028,7 @@
   });
 
   // Cancel current color selection
-  a.FE.RegisterCommand('cancelColor', {
+  a.FE.RegisterCommand('cancelAndCloseColor', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {

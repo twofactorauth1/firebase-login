@@ -24,3 +24,6 @@ a.fr-command[data-param1='PRE'] {
 .fr-view table tr td{
 	color: initial;
 }
+.fr-popup .fr-input-line input+label, .fr-popup .fr-input-line textarea+label{
+  background: transparent;
+}
