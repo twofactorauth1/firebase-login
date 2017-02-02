@@ -68,11 +68,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$rootScope', 'pagesService', '$wind
 
             checkIntercom(data);
             angular.element(document).ready(function () {
-                setTimeout(function () {
+                $document.scrollTop(0);
+                $timeout(function () {
                     var locId = $location.$$hash;
                     if (locId) {
                         var element = document.getElementById(locId);
-                        if (element) {
+                        if (element && element.length) {
                             $document.scrollToElementAnimated(element, 0, 1000);
                         }
                     }
