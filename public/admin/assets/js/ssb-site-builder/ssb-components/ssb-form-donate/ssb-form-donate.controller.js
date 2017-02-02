@@ -601,7 +601,12 @@
 
         };
 
+        vm.currentYear = new Date().getYear() - 100;
+        vm.fullCurrentYear = new Date().getFullYear();
+        vm.currentMonth = new Date().getMonth() + 1;
+
         function checkCardExpiry() {
+            vm.isCardExpired = false;
             vm.failedOrderMessage = "";
             var expiry = $('.donation-v1 #expiry').val();
             var card_expiry = expiry.split("/");
@@ -621,10 +626,56 @@
                 }
                 $(".donation-v1 #card_expiry").addClass('has-error');
                 $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                vm.isCardExpired = true;
             } else {
-                $(".donation-v1 #card_expiry .error").html("");
-                $(".donation-v1 #card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                $(".donation-v1 #card_expiry").removeClass('has-error').addClass('has-success');
+                vm.yearLength = exp_year.length;
+                if(vm.yearLength == 2)
+                {
+                    if (parseInt(exp_year) < parseInt(vm.currentYear)) {
+                        $(".donation-v1 #card_expiry .error").html("Card Year has Expired");
+                        $(".donation-v1 #card_expiry").addClass('has-error');
+                        $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                        vm.isCardExpired = true;
+                        return;
+                    }
+
+                }
+                else if(vm.yearLength == 4)
+                {
+                    if(parseInt(exp_year) < parseInt(vm.fullCurrentYear)){
+                    $(".donation-v1 #card_expiry .error").html("Card Year has Expired");
+                        $(".donation-v1 #card_expiry").addClass('has-error');
+                        $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                        vm.isCardExpired = true;
+                        return;
+                    }
+                }
+                else if(vm.yearLength == 3){
+                    $(".donation-v1 #card_expiry .error").html("Card Year is not valid");
+                    $(".donation-v1 #card_expiry").addClass('has-error');
+                    $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                    vm.isCardExpired = true;
+                    return;
+                }
+                
+                if (exp_month < vm.currentMonth && parseInt(exp_year) <= vm.currentYear) {
+                    $(".donation-v1 #card_expiry .error").html("Card Month has Expired");
+                    $(".donation-v1 #card_expiry").addClass('has-error');
+                    $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                    vm.isCardExpired = true;
+                }
+                else if(exp_month > 12) {
+                    $(".donation-v1 #card_expiry .error").html("Card Month is invalid");
+                    $(".donation-v1 #card_expiry").addClass('has-error');
+                    $(".donation-v1 #card_expiry .glyphicon").addClass('glyphicon-remove');
+                    vm.isCardExpired = true;
+                }
+                else {
+                    $('.donation-v1 #card_expiry .error').html('');
+                    $('.donation-v1 #card_expiry .glyphicon').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    $('.donation-v1 #card_expiry').removeClass('has-error').addClass('has-success');
+                    vm.isCardExpired = false;
+                }
             }
         };
 
@@ -675,6 +726,11 @@
                     vm.checkCardNumber();
                     vm.checkCardExpiry();
                     vm.checkCardCvv();
+                    vm.checkoutModalState = 4;
+                    return;
+                }
+
+                if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year || vm.isCardExpired) {
                     vm.checkoutModalState = 4;
                     return;
                 }
