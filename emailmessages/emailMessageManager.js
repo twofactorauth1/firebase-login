@@ -2544,7 +2544,7 @@ var emailMessageManager = {
 
     },
 
-    getMessagesSentOpenedClicked: function(accountId, userId, startDate, endDate, fn) {
+    getMessagesSentOpenedClicked: function(accountId, userId, startDate, endDate, previousStart, previousEnd, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getMessagesSentOpenedClicked');
         var sentQuery = {
@@ -2568,7 +2568,7 @@ var emailMessageManager = {
                 $lte:endDate
             }
         };
-        var results = {};
+        var results = {sentCount:{}, openCount:{}, clickCount:{}};
         async.waterfall([
             function(cb) {
                 dao.findCount(sentQuery, $$.m.Emailmessage, function(err, value){
@@ -2576,7 +2576,7 @@ var emailMessageManager = {
                         self.log.error('Error finding sentCount:', err);
                         cb(err);
                     } else {
-                        results.sentCount = value;
+                        results.sentCount.current = value;
                         cb();
                     }
                 });
@@ -2587,7 +2587,7 @@ var emailMessageManager = {
                         self.log.error('Error finding openCount:', err);
                         cb(err);
                     } else {
-                        results.openCount = value;
+                        results.openCount.current = value;
                         cb();
                     }
                 });
@@ -2598,7 +2598,46 @@ var emailMessageManager = {
                         self.log.error('Error finding clickCount:', err);
                         cb(err);
                     } else {
-                        results.clickCount = value;
+                        results.clickCount.current = value;
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                sentQuery.sendDate.$gte = previousStart;
+                sentQuery.sendDate.$lte = previousEnd;
+                dao.findCount(sentQuery, $$.m.Emailmessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding sentCount:', err);
+                        cb(err);
+                    } else {
+                        results.sentCount.previous = value;
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                openQuery.openedDate.$gte = previousStart;
+                openQuery.openedDate.$lte = previousEnd;
+                dao.findCount(openQuery, $$.m.Emailmessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding openCount:', err);
+                        cb(err);
+                    } else {
+                        results.openCount.previous = value;
+                        cb();
+                    }
+                });
+            },
+            function(cb) {
+                clickQuery.clickedDate.$gte = previousStart;
+                clickQuery.clickedDate.$lte = previousEnd;
+                dao.findCount(clickQuery, $$.m.Emailmessage, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding clickCount:', err);
+                        cb(err);
+                    } else {
+                        results.clickCount.previous = value;
                         cb();
                     }
                 });

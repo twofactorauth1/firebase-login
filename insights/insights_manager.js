@@ -312,8 +312,11 @@ var insightsManager = {
                 rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
-                //rows.push(buildRow('', 'Emails'));
-                //self.log.debug('rows:', rows);
+                self.log.debug('data:', JSON.stringify(data));
+                rows.push(buildRow('sentCount', 'Emails Sent', 'current', 'previous', data.emailReports, '', ''));
+                rows.push(buildRow('openCount', 'Emails Opened', 'current', 'previous', data.emailReports, '', ''));
+                rows.push(buildRow('clickCount', 'Emails Clicked', 'current', 'previous', data.emailReports, '', ''));
+                self.log.debug('rows:', rows);
                 var sortedRows = _.sortBy(rows, function(row){return -row.absTrend});
                 /*
                  * remove any rows that are "uninteresting" should be 4
@@ -419,6 +422,7 @@ var insightsManager = {
                         cb(err, sectionDataMap, value);
                     });
 
+                //cb(null, sectionDataMap, {emailmessageId:''});
             }
         ], function(err, sectionHTMLMap, emailResponse){
             if(err) {
@@ -900,7 +904,7 @@ var insightsManager = {
                 ssbManager.getPagesCreatedModifiedPublished(accountId, userId, startDate, endDate, callback);
             },
             emailReports: function(callback) {
-                emailMessageManager.getMessagesSentOpenedClicked(accountId, userId, startDate, endDate, callback);
+                emailMessageManager.getMessagesSentOpenedClicked(accountId, userId, startDate, endDate, previousStart, previousEnd, callback);
             },
             loginReports: function(callback) {
                 userActivityManager.countNonAdminLogins(accountId, userId, startDate, endDate, callback);
