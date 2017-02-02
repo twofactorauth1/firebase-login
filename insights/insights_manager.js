@@ -871,6 +871,9 @@ var insightsManager = {
                 var openCount = 0;
                 var clickCount = 0;
                 var bounceCount = 0;
+                var bounceAddresses = [];
+                var bounceAccounts = [];
+                var bounceEmailIDs = [];
                 _.each(messages, function(message){
                     if(message.get('sendDate')) {
                         sentCount++;
@@ -886,6 +889,9 @@ var insightsManager = {
                     }
                     if(message.get('bouncedDate')) {
                         bounceCount++;
+                        bounceAddresses.push(message.get('receiver'));
+                        bounceAccounts.push(message.get('accountId'));
+                        bounceEmailIDs.push(message.id());
                     }
                 });
                 var stats = {
@@ -893,7 +899,10 @@ var insightsManager = {
                     deliverCount:deliverCount,
                     openCount:openCount,
                     clickCount:clickCount,
-                    bounceCount:bounceCount
+                    bounceCount:bounceCount,
+                    bounceAddresses:bounceAddresses,
+                    bounceAccounts:bounceAccounts,
+                    bounceEmailIDs:bounceEmailIDs
                 };
                 self.log.debug(accountId, userId, '<< getInsightStatistics');
                 fn(null, stats);
