@@ -198,7 +198,10 @@
         });
 
         (function init() {
-
+            $timeout(function() {
+                reflowCharts();
+            }, 1000);
+            
         })();
 
     }]);

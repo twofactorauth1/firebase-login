@@ -16,6 +16,13 @@ app
           customPredicate.is_image = predicate.is_image == 'true' ? true : false;
         }
 
+        if (predicate.tags) {
+          input = _.filter(input, function(x) {            
+            return x.tags && _.contains(_.invoke(x.tags, "toLowerCase"), predicate.tags.toLowerCase())
+          });
+          delete customPredicate['tags'];
+        }
+
         return $filter('filter')(input, customPredicate, true);
     }
 });

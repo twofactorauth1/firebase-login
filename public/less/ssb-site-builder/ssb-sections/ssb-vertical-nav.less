@@ -4,9 +4,6 @@
         z-index: 10;
         max-width: 360px;
         min-width: 250px;
-        ul.navbar-nav li{
-            display: block;
-        }
         .ssb-section-section{
             height: 100vh;
             overflow: auto;
@@ -14,11 +11,16 @@
         [navigation-component]{
             width: 100% !important;
             float:none !important;
+            .navbar-collapse{
+                float:none !important;
+            }
             ul.navbar-nav{
                 float: none !important;
+                text-align: center !important;
                 width: 100% !important;
                 li{
                     float: none !important;
+                    display: block !important;
                 }
             }
         }
