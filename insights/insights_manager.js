@@ -831,6 +831,76 @@ var insightsManager = {
         });
     },
 
+    getInsightStatistics: function(accountId, userId, insightId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getInsightStatistics');
+        async.waterfall([
+            function(cb) {
+                dao.getById(insightId, $$.m.Insight, function(err, insight){
+                    if(err) {
+                        self.log.error('Error fetching insight:', err);
+                        cb(err);
+                    } else {
+                        cb(null, insight);
+                    }
+                });
+            },
+            function(insight, cb) {
+                if(!insight) {
+                    cb('Could not find insight');
+                } else {
+                    var emailMessageIds = insight.get('emailMessageIds');
+                    var query = {_id: {$in:emailMessageIds}};
+                    emailDao.findMany(query, $$.m.Emailmessage, function(err, messages){
+                        if(err) {
+                            self.log.error('Error finding emails:', err);
+                            cb(err);
+                        } else {
+                            cb(null, insight, messages);
+                        }
+                    });
+                }
+            }
+        ], function(err, insight, messages){
+            if(err) {
+                self.log.error('Error finding stats:', err);
+                fn(err);
+            } else {
+                var sentCount = 0;
+                var deliverCount = 0;
+                var openCount = 0;
+                var clickCount = 0;
+                var bounceCount = 0;
+                _.each(messages, function(message){
+                    if(message.get('sendDate')) {
+                        sentCount++;
+                    }
+                    if(message.get('deliveredDate')) {
+                        deliverCount++;
+                    }
+                    if(message.get('openedDate')) {
+                        openCount++;
+                    }
+                    if(message.get('clickedDate')) {
+                        clickCount++;
+                    }
+                    if(message.get('bouncedDate')) {
+                        bounceCount++;
+                    }
+                });
+                var stats = {
+                    sentCount:sentCount,
+                    deliverCount:deliverCount,
+                    openCount:openCount,
+                    clickCount:clickCount,
+                    bounceCount:bounceCount
+                };
+                self.log.debug(accountId, userId, '<< getInsightStatistics');
+                fn(null, stats);
+            }
+        });
+    },
+
     _handleSection: function(sectionName, account, startDate, endDate, fn) {
         var self = this;
         if(sectionName === 'weeklyreport') {
