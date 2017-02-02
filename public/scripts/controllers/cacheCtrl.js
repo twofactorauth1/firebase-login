@@ -115,7 +115,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
                     var locId = $location.$$hash;
                     if (locId) {
                         var element = document.getElementById(locId);
-                        if (element && element.length) {
+                        if (element) {
                             $document.scrollToElementAnimated(element, 0, 1000);
                         }
                     }
