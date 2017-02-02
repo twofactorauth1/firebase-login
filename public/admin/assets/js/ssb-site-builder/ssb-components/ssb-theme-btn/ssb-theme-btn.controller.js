@@ -457,6 +457,38 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             var template = getEditControlTemplate();
             $compile(template)($scope, compiledEditControl);
 
+            var _state = angular.copy(pvm.uiState.showSectionPanel);
+            pvm.uiState.showSectionPanel = false;
+
+            $timeout(function() {
+                pvm.uiState.showSectionPanel = _state;
+                setActiveElementId();
+                positionEditControl();
+
+                var editControlComponent = $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]')
+
+                editControlComponent.addClass('on');
+
+                //if contextual menu is already open, open directly from single click
+                if (pvm.uiState.showSectionPanel) {
+                    $timeout(function() {
+                        editControlComponent.find('.ssb-settings-btn').click();    
+                    }, 0);
+                    
+                }
+
+                /*
+                 * if contextual menu is already open, open directly from single click
+                 */
+                if (pvm.uiState.showSectionPanel || SimpleSiteBuilderService.isIENotEdge) {
+                    $timeout(function() {
+                        editControlComponent.find('.ssb-settings-btn').click();
+                    });
+                }
+
+            });
+
+
         // else set active element (for contextual menu) and position the edit control and make visible
         } else {
             $timeout(function() {
