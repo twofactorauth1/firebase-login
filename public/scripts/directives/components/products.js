@@ -1898,7 +1898,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (style.priceFontFamily) {
                         styleString += 'font-family: ' + style.priceFontFamily + "!important;";
                     }
-                    if (style.titleTextSize) {
+                    if (style.priceTextSize) {
                         styleString += 'font-size: ' + style.priceTextSize + "px !important;";
                     }
                     if (style.priceTextColor) {

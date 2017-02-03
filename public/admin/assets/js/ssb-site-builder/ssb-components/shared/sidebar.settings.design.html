@@ -218,17 +218,7 @@
             <option value="">--Select--</option>
             <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.headingFontFamily}}">{{key}}</option>
         </select>
-    </div>
-    <div class="form-group">
-        <label>
-            Font(Description Text)
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for description"><i class="fa fa-info-circle" /></span>
-        </label>
-        <select ng-model="component.formSettings.descriptionFontFamily" class="form-control margin-bottom-0">
-            <option value="">--Select--</option>
-            <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.descriptionFontFamily}}">{{key}}</option>
-        </select>
-    </div>
+    </div>    
     <div class="form-group">
         <label>
             Font(Button)
@@ -261,7 +251,7 @@
     <div class="form-group">
         <label>
             Title Font
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for description"><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for title"><i class="fa fa-info-circle" /></span>
         </label>
         <select ng-model="component.formSettings.titleFontFamily" class="form-control margin-bottom-0">
             <option value="">--Select--</option>
@@ -271,7 +261,7 @@
     <div class="form-group">
         <label for="txt_size">
             Title Font Size
-           <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="text size of entire form"><i class="fa fa-info-circle" /></span>
+           <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="text size of title"><i class="fa fa-info-circle" /></span>
         </label>
         <div class="col-xs-7 pull-right">
             <input type="text" ng-model="component.formSettings.titleTextSize" min="6" max="96" touchspin>
@@ -294,7 +284,7 @@
     <div class="form-group">
         <label>
             Price Font
-            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for description"><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for price"><i class="fa fa-info-circle" /></span>
         </label>
         <select ng-model="component.formSettings.priceFontFamily" class="form-control margin-bottom-0">
             <option value="">--Select--</option>
@@ -304,7 +294,7 @@
     <div class="form-group">
         <label for="txt_size">
             Price Font Size
-           <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="text size of entire form"><i class="fa fa-info-circle" /></span>
+           <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="text size of price"><i class="fa fa-info-circle" /></span>
         </label>
         <div class="col-xs-7 pull-right">
             <input type="text" ng-model="component.formSettings.priceTextSize" min="6" max="96" touchspin>
@@ -317,7 +307,40 @@
         </div>
         <label>
             Price Font Color
-            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Font color of title.">
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Font color of price.">
+                <i class="fa fa-info-circle" />
+            </span>
+        </label>
+    </div>
+
+    <!-- Description Settings -->
+    <div class="form-group">
+        <label>
+            Description Font
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="font family for description"><i class="fa fa-info-circle" /></span>
+        </label>
+        <select ng-model="component.formSettings.descriptionFontFamily" class="form-control margin-bottom-0">
+            <option value="">--Select--</option>
+            <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.descriptionFontFamily}}">{{key}}</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="txt_size">
+            Description Font Size
+           <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="text size of description"><i class="fa fa-info-circle" /></span>
+        </label>
+        <div class="col-xs-7 pull-right">
+            <input type="text" ng-model="component.formSettings.descriptionTextSize" min="6" max="96" touchspin>
+        </div>
+    </div>
+    <div class="form-group ssb-spectrum-color-picker-small">
+        <div class="ssb-spectrum-color-picker-background-container">
+            <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'rgb'" options="vm.spectrum.options" ng-model="component.formSettings.descriptionTextColor"></spectrum-colorpicker>
+            <i class="fa fa-eyedropper" />
+        </div>
+        <label>
+            Description Font Color
+            <span tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Font color of description.">
                 <i class="fa fa-info-circle" />
             </span>
         </label>
