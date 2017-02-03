@@ -170,7 +170,7 @@
 
       var dataToggle = "toggleBgSpectrum";
 
-      var dataChooseColor = "chooseBGColor";
+      var dataChooseColor = "chooseCellBGColor";
 
       // Create colors html.
       var colors_html = '<div class="sp-container sp-light sp-alpha-enabled sp-clear-enabled sp-initial-disabled fr-color-set fr-' + tab + '-color' + ((editor.opts.cellColorsDefaultTab == tab || (editor.opts.cellColorsDefaultTab != 'text' && editor.opts.cellColorsDefaultTab != 'background' && tab == 'text')) ? ' fr-selected-set' : '') + '">';
@@ -256,8 +256,9 @@
     /*
      * Change background color.
      */
-    function backgroundCellColor (val, init) {
+    function backgroundCellColor (val, init, reload) {
       var $popup = editor.popups.get('cellColor.picker');
+      editor.popups.show('cellColor.picker');
       // Set background  color.
       if (val != 'REMOVE') {
         $popup.find('input.sp-input').val(val);
@@ -291,9 +292,20 @@
         initializeCellSpectrum("background-color", val);
       }
 
+      if(reload)
+      _refreshColorPicker();  
+      
+
 
 
      // _hideCellColorsPopup();
+    }
+
+
+    function _refreshColorPicker(){
+      setTimeout(function(){
+          editor.popups.show('cellColor.picker');
+      }, 0)
     }
 
     
@@ -316,7 +328,7 @@
      */
     function closeCellColorPicker(cancel) {
         if(cancel){
-            backgroundCellColor(editor.opts.defaultCellColors.background.color || 'REMOVE');            
+            backgroundCellColor(editor.opts.defaultCellColors.background.color || 'REMOVE', false, false);            
         }
       _hideCellColorsPopup();
     }
@@ -326,7 +338,7 @@
         var container = val === 'text' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color");
         var textInput = container.find(".sp-input");
         var color = textInput.val();
-        backgroundCellColor(color || 'REMOVE');
+        backgroundCellColor(color || 'REMOVE', false, false);
         _hideCellColorsPopup();
 
     }
@@ -458,7 +470,7 @@
                 var realHex = realColor.toHexString(),
                     realRgb = realColor.toRgbString();
                     if(!update){
-                        backgroundCellColor(realRgb);
+                        backgroundCellColor(realRgb, false, false);
                     }
 
                 // Update the replaced elements background color (with actual selected color)
@@ -594,7 +606,7 @@
                 //e.preventDefault();
                 //e.stopPropagation();
                 var realRgb = $(element).val();
-                backgroundCellColor(realRgb, true);
+                backgroundCellColor(realRgb, true, false);
                 _hideCellColorsPopup();
             }
         });
@@ -735,7 +747,7 @@
   a.FE.RegisterCommand('cellBackgroundColor', {
     undo: true,
     callback: function (cmd, val) {        
-        this.tableCellColors.backgroundCellColor(val, true);
+        this.tableCellColors.backgroundCellColor(val, true, true);
     }
   });
 
@@ -760,7 +772,7 @@
   });
 
   // Choose bg color picker
-  a.FE.RegisterCommand('chooseBGColor', {
+  a.FE.RegisterCommand('chooseCellBGColor', {
     undo: false,
     focus: false,
     callback: function (cmd, val) {

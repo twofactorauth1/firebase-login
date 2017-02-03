@@ -56,12 +56,12 @@
         });
 
         $scope.selectedDate = {
-            startDate: moment().subtract(29, 'days').startOf('day'),
+            startDate: moment().subtract(6, 'days').startOf('day'),
             endDate: moment()
         };
 
         $scope.pickerOptions = {
-            startDate: moment().subtract(29, 'days').toDate(),
+            startDate: moment().subtract(6, 'days').toDate(),
             endDate: moment().toDate(),
             format: 'YYYY-MM-DD',
             opens: 'left',

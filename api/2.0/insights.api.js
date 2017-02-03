@@ -31,6 +31,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('job'), this.isAuthAndSubscribedApi.bind(this), this.getInsightsJob.bind(this));
         app.post(this.url('job'), this.isAuthAndSubscribedApi.bind(this), this.saveOrUpdateInsightsJob.bind(this));
         app.del(this.url('job'), this.isAuthAndSubscribedApi.bind(this), this.deleteInsightsJob.bind(this));
+        //statistics
+        app.get(this.url(':id/stats'), this.isAuthAndSubscribedApi.bind(this), this.getInsightStatistics.bind(this));
 
         //broadcast messages
         app.get(this.url('messages'), this.isAuthAndSubscribedApi.bind(this), this.listBroadcastMessages.bind(this));
@@ -143,6 +145,19 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< deleteInsightsJob');
             self.sendResultOrError(resp, err, job, 'Could not delete insight job');
         });
+    },
+
+    getInsightStatistics: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getInsightStatistics');
+        var id = req.params.id;
+        manager.getInsightStatistics(accountId, userId, id, function(err, stats){
+            self.log.debug(accountId, userId, '<< getInsightStatistics');
+            self.sendResultOrError(resp, err, stats, 'Could not get insight statistics');
+        });
+
     },
 
     listBroadcastMessages: function(req, resp) {

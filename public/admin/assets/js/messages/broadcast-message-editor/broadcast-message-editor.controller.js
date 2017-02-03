@@ -21,6 +21,11 @@
 
         function saveMessage() {        
             vm.uiState.saveLoading = true;
+            if(!vm.state.message.startDate || !vm.state.message.endDate) {
+                vm.uiState.saveLoading = false;
+                toaster.pop('warn', 'Missing Message Dates.', 'Please enter start and end dates for the broadcast message.');
+                return;
+            }
             if(vm.state.message && !vm.state.message._id){
                 return BroadcastMessagesService.createMessage(vm.state.message).then(function(message) {
                     console.log('message created');

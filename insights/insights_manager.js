@@ -68,8 +68,8 @@ var insightsManager = {
         self.log.debug(accountId, userId, '>> getActiveBroadcastMessages');
         var now = moment().toDate();
         var query = {
-            //startDate : {$lte:now},
-            //endDate : {$gte:now},
+            startDate : {$lte:now},
+            endDate : {$gte:now},
             accountId: {$gte:0}
         };
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
@@ -312,8 +312,11 @@ var insightsManager = {
                 rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
-                //rows.push(buildRow('', 'Emails'));
-                //self.log.debug('rows:', rows);
+                self.log.debug('data:', JSON.stringify(data));
+                rows.push(buildRow('sentCount', 'Emails Sent', 'current', 'previous', data.emailReports, '', ''));
+                rows.push(buildRow('openCount', 'Emails Opened', 'current', 'previous', data.emailReports, '', ''));
+                rows.push(buildRow('clickCount', 'Emails Clicked', 'current', 'previous', data.emailReports, '', ''));
+                self.log.debug('rows:', rows);
                 var sortedRows = _.sortBy(rows, function(row){return -row.absTrend});
                 /*
                  * remove any rows that are "uninteresting" should be 4
@@ -419,6 +422,7 @@ var insightsManager = {
                         cb(err, sectionDataMap, value);
                     });
 
+                //cb(null, sectionDataMap, {emailmessageId:''});
             }
         ], function(err, sectionHTMLMap, emailResponse){
             if(err) {
@@ -827,6 +831,85 @@ var insightsManager = {
         });
     },
 
+    getInsightStatistics: function(accountId, userId, insightId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getInsightStatistics');
+        async.waterfall([
+            function(cb) {
+                dao.getById(insightId, $$.m.Insight, function(err, insight){
+                    if(err) {
+                        self.log.error('Error fetching insight:', err);
+                        cb(err);
+                    } else {
+                        cb(null, insight);
+                    }
+                });
+            },
+            function(insight, cb) {
+                if(!insight) {
+                    cb('Could not find insight');
+                } else {
+                    var emailMessageIds = insight.get('emailMessageIds');
+                    var query = {_id: {$in:emailMessageIds}};
+                    emailDao.findMany(query, $$.m.Emailmessage, function(err, messages){
+                        if(err) {
+                            self.log.error('Error finding emails:', err);
+                            cb(err);
+                        } else {
+                            cb(null, insight, messages);
+                        }
+                    });
+                }
+            }
+        ], function(err, insight, messages){
+            if(err) {
+                self.log.error('Error finding stats:', err);
+                fn(err);
+            } else {
+                var sentCount = 0;
+                var deliverCount = 0;
+                var openCount = 0;
+                var clickCount = 0;
+                var bounceCount = 0;
+                var bounceAddresses = [];
+                var bounceAccounts = [];
+                var bounceEmailIDs = [];
+                _.each(messages, function(message){
+                    if(message.get('sendDate')) {
+                        sentCount++;
+                    }
+                    if(message.get('deliveredDate')) {
+                        deliverCount++;
+                    }
+                    if(message.get('openedDate')) {
+                        openCount++;
+                    }
+                    if(message.get('clickedDate')) {
+                        clickCount++;
+                    }
+                    if(message.get('bouncedDate')) {
+                        bounceCount++;
+                        bounceAddresses.push(message.get('receiver'));
+                        bounceAccounts.push(message.get('accountId'));
+                        bounceEmailIDs.push(message.id());
+                    }
+                });
+                var stats = {
+                    sentCount:sentCount,
+                    deliverCount:deliverCount,
+                    openCount:openCount,
+                    clickCount:clickCount,
+                    bounceCount:bounceCount,
+                    bounceAddresses:bounceAddresses,
+                    bounceAccounts:bounceAccounts,
+                    bounceEmailIDs:bounceEmailIDs
+                };
+                self.log.debug(accountId, userId, '<< getInsightStatistics');
+                fn(null, stats);
+            }
+        });
+    },
+
     _handleSection: function(sectionName, account, startDate, endDate, fn) {
         var self = this;
         if(sectionName === 'weeklyreport') {
@@ -900,7 +983,7 @@ var insightsManager = {
                 ssbManager.getPagesCreatedModifiedPublished(accountId, userId, startDate, endDate, callback);
             },
             emailReports: function(callback) {
-                emailMessageManager.getMessagesSentOpenedClicked(accountId, userId, startDate, endDate, callback);
+                emailMessageManager.getMessagesSentOpenedClicked(accountId, userId, startDate, endDate, previousStart, previousEnd, callback);
             },
             loginReports: function(callback) {
                 userActivityManager.countNonAdminLogins(accountId, userId, startDate, endDate, callback);
