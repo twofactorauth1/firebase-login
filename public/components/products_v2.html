@@ -1,0 +1,63 @@
+<div data-edit class="products-v1" data-class="products" data-id="{{component._id}}">
+    <div class="products">
+        <header class="jumbotron hero-spacer col-xs-12d" ng-style="{'background-color': component.boxColor || 'transparent'}" ng-if="!component.hideTextComponents">
+            <div class="title">
+                <div elem ng-model="component.title"></div>
+            </div>
+            <div class="text">
+                <div elem ng-model="component.text"></div>
+            </div>
+        </header>
+        <div ng-if="filteredProducts.length" class="tab-pane active" id="{{productSection['product-section-id']}}">
+            <div class="responsive-product-tile" data-class="product-section-id" ng-class="{
+                    'col-xs-12 col-sm-10 col-sm-offset-1': filteredProducts.length == 1,
+                    'col-xs-12 col-sm-6': filteredProducts.length == 2,
+                    'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
+                }" ng-repeat="product in filteredProducts">
+                <div class="product product-widget" >
+                    <div class="thumbnail" ng-attr-style="{{gridStyle(component.cell)}}">
+                        <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
+                        <div ng-if="product.is_image || product.icon" class="product-img">
+                            <div ng-if="product.is_image" class="img-wrap">
+                                <div class="product-img" ng-if="isImage(product.icon)">
+                                    <img ng-src="{{::product.icon}}" class="img-responsive" err-src="/images/default-media.png"/>
+                                </div>
+                                <div class="product-img" ng-if="!isImage(product.icon)">
+                                    <img class="img-responsive" src="/images/default-media.png"/>
+                                </div>
+                            </div>
+                            <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
+                                <i ng-style="{'color':component.iconColor}" class="fa {{::product.icon}}"></i>
+                            </div>
+                        </div>
+                        <div ng-if="!product.is_image && !product.icon" class="no-product-img">
+                            <div class="img-wrap no-preview">
+                                <h3>No Preview <br> Available</h3>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="caption" ng-style="{'color':component.txtcolor}">
+                            <h4 class="title center widget-title" ng-attr-style="{{titleStyle(component.formSettings)}}">{{product.name | characters:50 :true}}</h4>
+                            <div class="clearfix"></div>
+                            <h4 class="center widget-price" ng-attr-style="{{priceStyle(component.formSettings)}}"><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix mb15"></div>
+        </div>
+        <div ng-if="products.length > component.numtodisplay && component.numtodisplay != 0">
+            <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)"></pagination>
+        </div>
+        <div ng-if="isEditing && originalProducts && originalProducts.length === 0" class="col-xs-12 center">
+            <h2 class="margin-bottom-30">No product to display.</h2>
+            <a ng-click="addProducts()" class=" btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
+        </div>
+    </div>
+    <a ng-show="!isEditing" href="#" class="btn ssb-theme-btn btn-primary btn-lg btnLaunchCart" ng-click='showModalFn()'>
+        <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
+    </a>
+    <a ng-show="isEditing" href="#" tooltip-placement="bottom" tooltip="This button is functional only at front end" class="btn ssb-theme-btn btn-primary btn-lg btnLaunchCart">
+        <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
+    </a>
+</div>

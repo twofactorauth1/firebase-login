@@ -1,0 +1,26 @@
+.products-v2 {
+    @media screen and (min-width: 992px) {
+        .responsive-product-tile:nth-child(3n+4){
+            clear: left;
+        }
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 991px) {
+        .responsive-product-tile:nth-child(2n+3){
+            clear: left;
+        }
+    }
+
+    ul.pagination{
+        float: right;
+    }
+
+    .product-widget{
+        .widget-title{
+            min-height: 50px;
+        }
+        .thumbnail{
+            border: none;
+        }
+    }
+}    
