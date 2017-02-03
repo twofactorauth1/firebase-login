@@ -1866,6 +1866,48 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             }, true)
 
+            scope.gridStyle = function(cell){
+                var styleString = ' ';
+                if (cell && cell.bg && cell.bg.color) {
+                    styleString += 'background-color: ' + cell.bg.color + "!important;";
+                } 
+                return styleString;
+            }
+
+      
+            scope.titleStyle = function(style){
+                var styleString = ' ';
+                if(style){
+                    if (style.titleFontFamily) {
+                        styleString += 'font-family: ' + style.titleFontFamily + "!important;";
+                    }
+                    if (style.titleTextSize) {
+                        styleString += 'font-size: ' + style.titleTextSize + "px !important;";
+                    }
+                    if (style.titleTextColor) {
+                        styleString += 'color: ' + style.titleTextColor + "!important;";
+                    }
+                }
+
+                return styleString;
+            }
+
+            scope.priceStyle = function(style){
+                var styleString = ' ';
+                if(style){
+                    if (style.priceFontFamily) {
+                        styleString += 'font-family: ' + style.priceFontFamily + "!important;";
+                    }
+                    if (style.titleTextSize) {
+                        styleString += 'font-size: ' + style.priceTextSize + "px !important;";
+                    }
+                    if (style.priceTextColor) {
+                        styleString += 'color: ' + style.priceTextColor + "!important;";
+                    }
+                }
+                return styleString;
+            }
+
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie_' + $scope.component._id;
