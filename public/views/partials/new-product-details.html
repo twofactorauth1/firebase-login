@@ -54,12 +54,12 @@
                             </button>
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="{{selectedProduct.externalLinklinkUrl}}" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
+                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
                                 </div>
                             </a>
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="javascript:void(0)" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && !selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
+                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
                                 </div>
                             </a>
                     </div>
@@ -84,12 +84,12 @@
                             </button>
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="{{selectedProduct.externalLinklinkUrl}}" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
+                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
                                 </div>
                             </a>
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="javascript:void(0)" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && !selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
+                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
                                 </div>
                             </a>
                     </div>
