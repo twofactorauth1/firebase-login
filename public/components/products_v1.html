@@ -61,12 +61,12 @@
                             </button>
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="{{product.externalLinklinkUrl}}" ng-if="(product.type | uppercase) == 'EXTERNAL' && product.externalLinklinkUrl" target="{{product.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText || 'External Link'}}
+                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
                                 </div>
                             </a>
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="javascript:void(0)" ng-if="(product.type | uppercase) == 'EXTERNAL' && !product.externalLinklinkUrl" target="{{product.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText || 'External Link'}}
+                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
                                 </div>
                             </a>
                         </div>
