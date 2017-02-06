@@ -1930,6 +1930,22 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 return styleString;
             }
 
+            scope.descriptionStyle = function(style){
+                var styleString = ' ';
+                if(style){
+                    if (style.descriptionFontFamily) {
+                        styleString += 'font-family: ' + style.descriptionFontFamily + "!important;";
+                    }
+                    if (style.descriptionTextSize) {
+                        styleString += 'font-size: ' + style.descriptionTextSize + "px !important;";
+                    }
+                    if (style.descriptionTextColor) {
+                        styleString += 'color: ' + style.descriptionTextColor + "!important;";
+                    }
+                }
+                return styleString;
+      }
+
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie_' + $scope.component._id;

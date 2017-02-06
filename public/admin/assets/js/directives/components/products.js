@@ -201,6 +201,22 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
         }
         return styleString;
       }
+
+      scope.descriptionStyle = function(style){
+        var styleString = ' ';
+        if(style){
+          if (style.descriptionFontFamily) {
+            styleString += 'font-family: ' + style.descriptionFontFamily + "!important;";
+          }
+          if (style.descriptionTextSize) {
+            styleString += 'font-size: ' + style.descriptionTextSize + "px !important;";
+          }
+          if (style.descriptionTextColor) {
+            styleString += 'color: ' + style.descriptionTextColor + "!important;";
+          }
+        }
+        return styleString;
+      }
     }
   };
 }]);
