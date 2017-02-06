@@ -687,6 +687,19 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.openProductDetailsModal();
             };
 
+
+            scope.openNewProductDetailsModal = function(product){
+                
+                scope.selectedProduct = product;
+
+                scope.modalInstance = $modal.open({
+                    templateUrl: 'new-product-details-modal',
+                    keyboard: true,
+                    size: 'md',
+                    scope: scope
+                });
+            }
+
             /*
              * @selectChanged
              * - one of the selected attributes has changed
