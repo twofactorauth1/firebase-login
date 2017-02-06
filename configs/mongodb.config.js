@@ -30,16 +30,6 @@ var prodSingleHostString = "mongodb://indiapp2:Ind1genous2016!@ds139559-a1.mlab.
 var connectionString = testString;
 var singleHostString = testSingleHostString;
 
-var testHost = 'lighthouse.1.mongolayer.com';
-var testPort = '10303';
-var testUsername = 'indiweb-test';
-var testPassword = 'testing123';
-
-var prodHost = 'lighthouse.0.mongolayer.com';
-var prodPort = '10188';
-var prodUsername = 'indiapp';
-var prodPassword = '1ndigenous2015!';
-
 /*
  * Override the connection string with an environment variable
  */
@@ -58,12 +48,4 @@ module.exports = {
     MONGODB_SINGLE_HOST: singleHostString,
     PROD_MONGODB_CONNECT: prodString,
     TEST_MONGODB_CONNECT: testString,
-    TEST_HOST: testHost,
-    TEST_PORT: testPort,
-    TEST_USER: testUsername,
-    TEST_PASS: testPassword,
-    PROD_HOST: prodHost,
-    PROD_PORT: prodPort,
-    PROD_USER: prodUsername,
-    PROD_PASS: prodPassword
 };
