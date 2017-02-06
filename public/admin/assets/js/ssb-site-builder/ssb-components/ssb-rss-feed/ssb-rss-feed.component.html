@@ -12,8 +12,8 @@
                 	</div>
 		            <ul class="ssb-rss-feed-list" ng-if="!vm.loading">	                
 		                <li ng-repeat="feed in vm.feeds | filter:filterText | limitTo:vm.component.settings.count">                  
-		                    <p class="rss-feed-title" ng-attr-style="{{vm.titleStyle()}}"><a class="btn-link ssb-theme-btn padding-top-0" href="{{feed.link}}" ng-bind-html="feed.title"></a></p>
-		                    <p class="rss-feed-description" ng-attr-style="{{vm.descriptionStyle()}}"><a class="btn-link ssb-theme-btn padding-top-0" href="{{feed.link}}" ng-bind-html="feed.description"></a></p>
+		                    <p class="rss-feed-title" ng-attr-style="{{vm.titleStyle()}}"><a class="btn-link ssb-theme-btn padding-top-0" href="{{feed.link}}" target="_blank" ng-bind-html="feed.title"></a></p>
+		                    <p class="rss-feed-description" ng-attr-style="{{vm.descriptionStyle()}}"><a class="btn-link ssb-theme-btn padding-top-0" href="{{feed.link}}" target="_blank" ng-bind-html="feed.description"></a></p>
 		                    <hr ng-if="vm.component.settings.horizontalRule"> 
 		                </li>
 		            </ul>
