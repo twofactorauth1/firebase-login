@@ -698,6 +698,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     size: 'md',
                     scope: scope
                 });
+
+                
+                $timeout(function () {
+                    angular.element(".modal-backdrop").addClass("product-description-modal-background");
+                    angular.element(".modal-content").addClass("product-description-modal-content");
+                    
+                }, 0);
+
             }
 
             /*
