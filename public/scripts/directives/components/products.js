@@ -703,6 +703,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 $timeout(function () {
                     angular.element(".modal-backdrop").addClass("product-description-modal-background");
                     angular.element(".modal-content").addClass("product-description-modal-content");
+                    angular.element(".modal-dialog").addClass("product-description-modal-dialog");
                     
                 }, 0);
 
