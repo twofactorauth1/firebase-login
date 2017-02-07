@@ -15,6 +15,8 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
       //assign and hold the currentProductPage for pagination
       scope.currentProductPage = 1;
 
+      scope.currentPath = angular.copy($location);
+      
       /*
        * @filterTags
        * - if component has tags filter them or return the _product

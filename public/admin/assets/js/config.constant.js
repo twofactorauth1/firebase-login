@@ -690,6 +690,7 @@ app.constant('JS_REQUIRES', {
     'orderByArrayLength': 'assets/js/filters/orderByArrayLength.js',
     'toTrusted': 'assets/js/filters/to_trusted.js',
     'generateURLforLinks': 'assets/js/filters/generateURLforLinks.js',
+    'generateURLforProduct': 'assets/js/filters/generateURLforProduct.js',
     'selectedTags': 'assets/js/filters/productTags.js',
     'propsFilter': 'assets/js/filters/propsFilter.js',
     'cleanType': 'assets/js/filters/cleanType.js',
