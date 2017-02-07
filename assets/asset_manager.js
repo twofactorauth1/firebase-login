@@ -11,6 +11,7 @@ var log = $$.g.getLogger("asset_manager");
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
 var async = require('async');
+var appConfig = require('../configs/app.config');
 
 module.exports = {
 
@@ -37,6 +38,9 @@ module.exports = {
             file.path = temporaryPath;
             var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + asset.get('accountId');
+            if(appConfig.nonProduction === true) {
+                subdir = 'test_' + subdir;
+            }
             asset.set('source', 'S3');
             s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
                 if(err) {
