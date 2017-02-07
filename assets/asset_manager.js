@@ -272,6 +272,10 @@ module.exports = {
                 fn(null, list);
             }
         });
+    },
+
+    copyS3Asset: function(accountId, userId, sourceUrl, destUrl, fn) {
+        
     }
 
 };
