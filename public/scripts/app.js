@@ -71,7 +71,8 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/404', {
                 templateUrl: '../views/404.html',
@@ -160,11 +161,13 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/cached/:page', {
                 controller: 'CacheCtrl as cacheCtrl',
-                templateUrl: '../views/cache.html'
+                templateUrl: '../views/cache.html',
+                reloadOnSearch: false
             })
             .when('/preview/:pageId', {
                 controller: 'PreviewCtrl as previewCtrl',

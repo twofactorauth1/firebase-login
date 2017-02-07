@@ -14,7 +14,7 @@
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
                 }" ng-repeat="product in filteredProducts">
-                <a class="product product-widget" ng-click="openNewProductDetailsModal(product)">
+                <a class="product product-widget" href="{{product|generateURLforProducts:currentPath}}" ng-click="openNewProductDetailsModal(product)">
                     <div class="thumbnail" ng-attr-style="{{gridStyle(component.cell)}}">
                         <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
                         <div ng-if="product.is_image || product.icon" class="product-img">

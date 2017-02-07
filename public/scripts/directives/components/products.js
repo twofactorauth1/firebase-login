@@ -45,7 +45,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
-
+            scope.currentPath = angular.copy($location);
             scope.$watch('addresses.shipping', function(val){
                 if(val){
                     scope.addresses.labelText = "Billing Address";
@@ -705,9 +705,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     angular.element(".modal-content").addClass("product-description-modal-content");
                     angular.element(".modal-dialog").addClass("product-description-modal-dialog");
                     
+                    
                 }, 0);
+                
+                $location.search('productId', product._id);
+                
 
             }
+
             
 
             /*
