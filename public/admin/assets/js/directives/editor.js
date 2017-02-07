@@ -288,6 +288,20 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 }
                             }
                         }
+                        // if(cmd == 'linkInsert'){
+                        //     if(editor.selection && editor.selection.element)
+                        //     {
+                        //         var aElem = angular.element(editor.selection.element());
+                        //         if(aElem.length){
+                        //             if(aElem.attr("href").indexOf("#") === 0){
+                        //                 aElem.attr("du-smooth-scroll", '');
+                        //             }
+                        //             else{
+                        //                 aElem.removeAttr("du-smooth-scroll");
+                        //             }
+                        //         }
+                        //     }
+                        // }
                         if(cmd == 'linkStyle' && param1 === 'ssb-theme-btn'){
                             if(editor.selection && editor.selection.element)
                             {
