@@ -14,7 +14,7 @@
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
                 }" ng-repeat="product in filteredProducts">
-                <div class="product product-widget" ng-click="openNewProductDetailsModal(product)">
+                <a class="product product-widget" ng-click="openNewProductDetailsModal(product)">
                     <div class="thumbnail" ng-attr-style="{{gridStyle(component.cell)}}">
                         <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
                         <div ng-if="product.is_image || product.icon" class="product-img">
@@ -42,7 +42,7 @@
                             <h4 class="center widget-price" ng-attr-style="{{priceStyle(component.formSettings)}}"><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="clearfix mb15"></div>
         </div>

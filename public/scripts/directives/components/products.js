@@ -708,6 +708,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }, 0);
 
             }
+            
 
             /*
              * @selectChanged
