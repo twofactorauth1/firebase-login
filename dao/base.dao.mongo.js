@@ -726,7 +726,7 @@ var mongodao = {
                 fn(err);
             } else {
                 self.log.debug('<< _findAndModifyMongo');
-                fn(null, value);
+                fn(null, value.value);
             }
         });
     },

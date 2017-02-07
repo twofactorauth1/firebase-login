@@ -195,7 +195,7 @@ var scheduledJobManager = {
                 self.log.error('Error marking job for execution:', err);
                 fn(err);
             } else if(!value) {
-                self.log.info('Could not get lock on job [' + jobId + '].  Skipping.')
+                self.log.info('Could not get lock on job [' + jobId + '].  Skipping.');
                 fn(null, null);
             } else {
                 try {

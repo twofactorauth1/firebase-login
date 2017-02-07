@@ -2,9 +2,9 @@
 
 app.directive('ssbDataStyles', ssbDataStyles);
 
-ssbDataStyles.$inject = ['$timeout', '$location'];
+ssbDataStyles.$inject = ['$timeout', '$location', '$compile'];
 /* @ngInject */
-function ssbDataStyles($timeout, $location) {
+function ssbDataStyles($timeout, $location, $compile) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs, ctrl) {
@@ -95,6 +95,10 @@ function ssbDataStyles($timeout, $location) {
                                 var element = $(this);
                                 if(element.attr("href") && element.attr("target") === undefined && element.attr("href").indexOf("/blog") > -1 && element.attr("href").indexOf($location.host()) > -1 ){
                                     element.attr("target", "_self");
+                                }
+                                if(element.attr("href") && element.attr("href").indexOf("#") === 0 && element.attr("href").length > 1){
+                                    element.attr("du-smooth-scroll", '');
+                                    $compile( element )(scope);
                                 }
                             })
 
