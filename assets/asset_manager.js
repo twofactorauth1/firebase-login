@@ -108,6 +108,9 @@ module.exports = {
                 file.path = temporaryPath;
                 var bucket = awsConfig.BUCKETS.ASSETS;
                 var subdir = 'account_' + asset.get('accountId');
+                if(appConfig.nonProduction === true) {
+                    subdir = 'test_' + subdir;
+                }
                 asset.set('source', 'S3');
                 existingAsset.set('mimeType', file.type);
                 existingAsset.set('size', file.size);
