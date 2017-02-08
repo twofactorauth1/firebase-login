@@ -124,6 +124,30 @@ var dao = {
                 }
             });
         });
+    },
+
+    copyObject: function(sourceBucket, sourceKey, destBucket, destKey, contentType, fn) {
+        var self = this;
+        var AWS = require('aws-sdk');
+
+        AWS.config.region = "";
+        var s3 = new AWS.S3();
+
+        var params = {
+            Bucket: destBucket,
+            CopySource: sourceBucket + "/" + sourceKey,
+            Key: destKey,
+            CacheControl:"max-age=3600",
+            ContentType: contentType
+        };
+        s3.copyObject(params, function(err, value){
+            if(err) {
+                self.log.error('Failed to copy object:', err);
+                fn(err);
+            } else {
+                fn(null, value);
+            }
+        });
     }
 };
 
