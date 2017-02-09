@@ -7,6 +7,7 @@ var websiteDao = require('../ssb/dao/website.dao');
 var pageDao = require('../ssb/dao/page.dao');
 var sectionDao = require('../ssb/dao/section.dao');
 var emailDao = require('../cms/dao/email.dao');
+var campaignDao = require('../campaign/dao/campaign.dao');
 
 var async = require('async');
 
@@ -203,11 +204,24 @@ var accountManager = {
                 /*
                  * Copy campaigns
                  */
-                //TODO: this
-                cb(null, account);
+                self._copyCampaigns(accountId, userId, srcAccountId, account.id(), idMap, function(err, value){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error copying campaigns:', err);
+                        cb(err);
+                    } else {
+                        cb(null, account);
+                    }
+                });
+
             }
-        ], function(err){
-            //TODO: this
+        ], function(err, account){
+            if(err) {
+                self.log.error(accountId, userId, 'Error copying account:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< copyAccountTemplate');
+                fn(null, account);
+            }
         });
     },
 
@@ -366,6 +380,60 @@ var accountManager = {
             return str;
         };
         return checkObjectFxn(json);
+    },
+
+    _copyCampaigns: function(accountId, userId, srcAccountId, destAccountId, idMap, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> _copyCampaigns');
+        var query = {accountId:srcAccountId};
+        campaignDao.findMany(query, $$.m.Campaign, function(err, campaigns){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding campaigns:', err);
+                fn(err);
+            } else {
+                async.each(campaigns, function(campaign, cb){
+                    var sourceCampaignId = campaign.id();
+                    campaign.set('_id', null);
+                    campaign.set('accountId', destAccountId);
+                    campaign.set('contacts', []);
+                    var statistics = {
+                        "emailsBounced" : 0,
+                        "emailsSent" : 0,
+                        "emailsOpened" : 0,
+                        "emailsClicked" : 0,
+                        "participants" : 0
+                    };
+                    campaign.set('statistics', statistics);
+                    var emailSettings = campaign.get('emailSettings');
+                    var oldEmailId = emailSettings.emailId;
+                    emailSettings.fromEmail = '';
+                    emailSettings.fromName = '';
+                    emailSettings.replyTo = '';
+                    emailSettings.emailId = idMap.emails[oldEmailId];
+                    campaign.set('emailSettings', emailSettings);
+                    var created = {date:new Date(), by:userId};
+                    campaign.set('created', created);
+                    campaign.set('modified', created);
+                    campaignDao.saveOrUpdate(campaign, function(err, savedCampaign){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error saving campaign:', err);
+                            cb(err);
+                        } else {
+                            idMap.campaigns[sourceCampaignId] = savedCampaign.id();
+                            cb();
+                        }
+                    });
+                }, function(err){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error copying campaigns:', err);
+                        fn(err);
+                    } else {
+                        self.log.debug(accountId, userId, '<< _copyCampaigns');
+                        fn(null);
+                    }
+                });
+            }
+        });
     }
 };
 
