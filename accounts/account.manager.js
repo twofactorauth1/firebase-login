@@ -6,6 +6,7 @@ var assetManager = require('../assets/asset_manager');
 var websiteDao = require('../ssb/dao/website.dao');
 var pageDao = require('../ssb/dao/page.dao');
 var sectionDao = require('../ssb/dao/section.dao');
+var emailDao = require('../cms/dao/email.dao');
 
 var async = require('async');
 
@@ -154,8 +155,49 @@ var accountManager = {
                 /*
                  * Copy emails
                  */
-                //TODO: this
-                cb(null, account);
+                var query = {accountId:srcAccountId, latest:true};
+                emailDao.findMany(query, $$.m.cms.Email, function(err, emails){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting emails:', err);
+                        cb(err);
+                    } else {
+                        idMap.emails = idMap.emails || {};
+                        async.eachSeries(emails, function(email, callback){
+                            var sourceId = email.id();
+                            email.set('_id', null);
+                            email.set('accountId', account.id());
+                            //not sure about fromName, fromEmail, replyTo
+                            email.set('fromName', '');
+                            email.set('fromEmail', '');
+                            email.set('replyTo', '');
+                            var created = {date:new Date(), by:userId};
+                            email.set('created', created);
+                            email.set('modified', modified);
+                            var components = email.get('components');
+                            _.each(components, function(component){
+                                self._fixJSONAssetReferences(component, idMap);
+                            });
+                            email.set('components', components);
+                            emailDao.saveOrUpdate(email, function(err, savedEmail){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error saving email:', err);
+                                    callback(err);
+                                } else {
+                                    var destId = savedEmail.id();
+                                    idMap.emails[sourceId] = destId;
+                                    callback();
+                                }
+                            });
+                        }, function(err){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error copying emails:', err);
+                                cb(err);
+                            } else {
+                                cb(null, account);
+                            }
+                        });
+                    }
+                });
             },
             function(account, cb) {
                 /*
@@ -211,7 +253,13 @@ var accountManager = {
                 var oldId = sectionId;
                 section.set('_id', null);
                 section.set('accountId', destAccountId);
-                //TODO: fix references
+                //TODO: check if this works?
+
+                var sectionJSON = section.toJSON();
+                self.log.debug('Before transformation:', sectionJSON);
+                sectionJSON = self._fixJSONAssetReferences(sectionJSON);
+                self.log.debug('After transformation:', sectionJSON);
+                section = new $$.m.ssb.Section(sectionJSON);
                 sectionDao.saveOrUpdate(section, function(err, savedSection){
                     if(err) {
                         self.log.error(accountId, userId, 'Error saving sections:', err);
@@ -281,6 +329,43 @@ var accountManager = {
                 });
             }
         });
+    },
+
+    _fixJSONAssetReferences: function(json, idMap) {
+        var checkObjectFxn = function(obj){
+            /*
+             * If obj is an Array, iterate and call checkObj or fixString
+             * If obj is an Object, iterate over keys and call checkObj or fixString
+             */
+            if(_.isArray(obj)) {
+                _.each(obj, function(_obj){
+                    if(_.isObject(_obj)) {
+                        checkObjectFxn(_obj);
+                    } else {
+                        _obj = fixStringFxn(_obj);
+                    }
+                });
+            } else if(_.isObject(obj)) {
+                _.each(_.keys(obj), function(_obj){
+                    if(_.isObject(_obj)) {
+                        checkObjectFxn(_obj);
+                    } else {
+                        _obj = fixStringFxn(_obj);
+                    }
+                });
+            }
+        };
+        var fixStringFxn = function(str) {
+            _.each(_.keys(idMap.assets), function(srcUrl){
+                /*
+                 * This is a neat trick: http://stackoverflow.com/questions/4371565/can-you-create-javascript-regexes-on-the-fly-using-string-variables
+                 * s.split(string_to_replace).join(replacement)
+                 */
+                str = str.split(srcUrl).join(idMap.assets[srcUrl]);
+            });
+            return str;
+        };
+        return checkObjectFxn(json);
     }
 };
 
