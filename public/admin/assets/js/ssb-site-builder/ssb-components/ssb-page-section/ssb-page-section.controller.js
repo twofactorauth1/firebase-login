@@ -512,7 +512,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             dup.insertAfter(vm.element);
         } else {
             $timeout(function() {
-                new StickyState(vm.element[0]);
+                $(vm.element[0]).sticky({zIndex:999});
+                //new StickyState(vm.element[0]);
             }, 2000);
         }
         vm.elementLoaded = true;

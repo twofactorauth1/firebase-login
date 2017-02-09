@@ -1154,6 +1154,7 @@ module.exports = {
                 var pageSections = page.get('sections');
                 async.eachSeries(pagesToUpdateAry, function(pageToUpdate, callback){
                     var newPageSections = [];
+                    console.log(pageToUpdate);
                     _.each(pageToUpdate.get('sections'), function(section){
                         var sectionID = section._id.replace(/_.*/g, "");
                         var updatedSection = _.find(pageSections, function(pageSection){
