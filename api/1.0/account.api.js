@@ -16,6 +16,8 @@ var productManager = require('../../products/product_manager');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
 var userManager = require('../../dao/user.manager');
 var moment = require('moment');
+var accountManager = require('../../accounts/account.manager');
+var utils = require('../../utils/commonutils');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -52,7 +54,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url(':id/displaysetting'), this.isAuthApi.bind(this), this.updateAccountDisplaySetting.bind(this));
         app.put(this.url(':id/setting'), this.isAuthApi.bind(this), this.updateAccountSetting.bind(this));
         app.put(this.url(':id/website'), this.isAuthApi.bind(this), this.updateAccountWebsiteInfo.bind(this));
-
+        app.post(this.url(':id/copy'), this.isAuthApi.bind(this), this.copyTemplateAccount.bind(this));
+        app.get(this.url(':id/copy'), this.isAuthApi.bind(this), this.testCopyTemplateAccount.bind(this));
 
         app.delete(this.url(':id'), this.isAuthApi.bind(this), this.deleteAccount.bind(this));
 
@@ -505,6 +508,36 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    testCopyTemplateAccount: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> copyTemplateAccount');
+
+        var srcAccountId = parseInt(req.params.id);
+        var destSubdomain = 'kyletesting-' + utils.idutils.generateUniqueAlphaNumericShort();
+
+        accountManager.copyAccountTemplate(accountId, userId, srcAccountId, destSubdomain, function(err, newAccount){
+            self.log.debug(accountId, userId, '<< copyTemplateAccount');
+            self.sendResultOrError(resp, err, newAccount, "Error copying Account");
+        });
+    },
+
+    copyTemplateAccount: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> copyTemplateAccount');
+
+        var srcAccountId = parseInt(req.params.id);
+        var destSubdomain = req.body.subdomain;
+
+        accountManager.copyAccountTemplate(accountId, userId, srcAccountId, destSubdomain, function(err, newAccount){
+            self.log.debug(accountId, userId, '<< copyTemplateAccount');
+            self.sendResultOrError(resp, err, newAccount, "Error copying Account");
+        });
     },
 
     updateAccountWebsiteInfo: function(req,resp) {

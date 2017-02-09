@@ -82,7 +82,7 @@ var accountManager = {
                     cb('Could not create new account');
                 } else {
                     self.log.debug(accountId, userId, 'Created new account with id:' + account.id());
-                    self._copyAssets(srcAccountId, account.id(), idMap, function(err, updatedIdMap){
+                    self._copyAssets(accountId, userId, srcAccountId, account.id(), idMap, function(err, updatedIdMap){
                         //I don't think we need the udpatedIdMap... the reference should hold
                         cb(err, account);
                     });
@@ -173,7 +173,7 @@ var accountManager = {
                             email.set('replyTo', '');
                             var created = {date:new Date(), by:userId};
                             email.set('created', created);
-                            email.set('modified', modified);
+                            email.set('modified', created);
                             var components = email.get('components');
                             _.each(components, function(component){
                                 self._fixJSONAssetReferences(component, idMap);
@@ -262,28 +262,39 @@ var accountManager = {
         var self = this;
         self.log.debug(accountId, userId, '>> _copySections');
         var sectionIdAry = [];
-        async.eachSeries(sections, function(sectionId, cb){
+        async.eachSeries(sections, function(sectionRef, cb){
+            var sectionId = sectionRef._id;
+            self.log.debug(accountId, userId, 'Copying section [' + sectionId + ']');
             sectionDao.getById(sectionId, $$.m.ssb.Section, function(err, section){
-                var oldId = sectionId;
-                section.set('_id', null);
-                section.set('accountId', destAccountId);
-                //TODO: check if this works?
-
-                var sectionJSON = section.toJSON();
-                self.log.debug('Before transformation:', sectionJSON);
-                sectionJSON = self._fixJSONAssetReferences(sectionJSON);
-                self.log.debug('After transformation:', sectionJSON);
-                section = new $$.m.ssb.Section(sectionJSON);
-                sectionDao.saveOrUpdate(section, function(err, savedSection){
-                    if(err) {
-                        self.log.error(accountId, userId, 'Error saving sections:', err);
-                        cb(err);
-                    } else {
-                        idMap.sections[oldId] = savedSection.id();
-                        sectionIdAry.push(savedSection.id());
+                if(err) {
+                    self.log.error(accountId, userId, 'Error finding section:', err);
+                    cb(err);
+                } else {
+                    if(!section) {
+                        self.log.warn(accountId, userId, 'No section found with id [' + sectionId + ']');
                         cb();
                     }
-                });
+                    var oldId = sectionId;
+                    section.set('_id', null);
+                    section.set('accountId', destAccountId);
+                    //TODO: check if this works?
+
+                    var sectionJSON = section.toJSON();
+                    self.log.debug('Before transformation:', sectionJSON);
+                    sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
+                    self.log.debug('After transformation:', sectionJSON);
+                    section = new $$.m.ssb.Section(sectionJSON);
+                    sectionDao.saveOrUpdate(section, function(err, savedSection){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error saving sections:', err);
+                            cb(err);
+                        } else {
+                            idMap.sections[oldId] = savedSection.id();
+                            sectionIdAry.push(savedSection.id());
+                            cb();
+                        }
+                    });
+                }
             });
         }, function(err){
             if(err) {
@@ -320,7 +331,7 @@ var accountManager = {
                     assetManager.copyS3Asset(accountId, userId, sourceUrl, destUrl, contentType, function(err, value){
                         if(err) {
                             self.log.error('Error copying asset:', err);
-                            fn(err);
+                            cb(err);
                         } else {
                             assetManager.updateAsset(asset, function(err, value){
                                 if(err) {
@@ -379,13 +390,15 @@ var accountManager = {
             });
             return str;
         };
-        return checkObjectFxn(json);
+        checkObjectFxn(json);
+        return json;
     },
 
     _copyCampaigns: function(accountId, userId, srcAccountId, destAccountId, idMap, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> _copyCampaigns');
         var query = {accountId:srcAccountId};
+        idMap.campaigns = idMap.campaigns || {};
         campaignDao.findMany(query, $$.m.Campaign, function(err, campaigns){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding campaigns:', err);
@@ -405,12 +418,15 @@ var accountManager = {
                     };
                     campaign.set('statistics', statistics);
                     var emailSettings = campaign.get('emailSettings');
-                    var oldEmailId = emailSettings.emailId;
-                    emailSettings.fromEmail = '';
-                    emailSettings.fromName = '';
-                    emailSettings.replyTo = '';
-                    emailSettings.emailId = idMap.emails[oldEmailId];
-                    campaign.set('emailSettings', emailSettings);
+                    if(emailSettings) {
+                        var oldEmailId = emailSettings.emailId;
+                        emailSettings.fromEmail = '';
+                        emailSettings.fromName = '';
+                        emailSettings.replyTo = '';
+                        emailSettings.emailId = idMap.emails[oldEmailId];
+                        campaign.set('emailSettings', emailSettings);
+                    }
+
                     var created = {date:new Date(), by:userId};
                     campaign.set('created', created);
                     campaign.set('modified', created);

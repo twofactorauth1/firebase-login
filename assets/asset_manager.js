@@ -280,10 +280,14 @@ module.exports = {
         self.log.debug(accountId, userId, '>> copyS3Asset');
 
         var sourceBucket = 'indigenous-digital-assets';
-        var sourceKey = sourceUrl.replace('.*indigenous-digital-assets/', '');
+        var sourceKey = sourceUrl.replace(/.*indigenous-digital-assets\//gi, '');
         var destBucket = 'indigenous-digital-assets';
-        var destKey = destUrl.replace('.*indigenous-digital-assets/', '');
+        var destKey = destUrl.replace(/.*indigenous-digital-assets\//gi, '');
 
+        self.log.debug(accountId, userId, 'sourceBucket:' + sourceBucket);
+        self.log.debug(accountId, userId, 'sourceKey:' + sourceKey);
+        self.log.debug(accountId, userId, 'destBucket:' + destBucket);
+        self.log.debug(accountId, userId, 'destKey:' + destKey);
 
         s3dao.copyObject(sourceBucket, sourceKey, destBucket, destKey, contentType, function(err, value){
             if(err) {
