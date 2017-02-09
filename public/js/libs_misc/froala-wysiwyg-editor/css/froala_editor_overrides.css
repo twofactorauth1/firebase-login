@@ -36,3 +36,6 @@ a.fr-command[data-param1='PRE'] {
 .fr-command.ssb-editor-style-line-height-5 {
     line-height: 200% !important;
 }
+.fr-popup .fr-buttons .fr-dropdown-menu{
+  z-index: 4;
+}
