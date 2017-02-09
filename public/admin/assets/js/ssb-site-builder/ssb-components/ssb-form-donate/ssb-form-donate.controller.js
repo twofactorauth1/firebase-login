@@ -486,7 +486,7 @@
                 "shipping_address": {
                     "first_name": formatted.first,
                     "last_name": formatted.last,
-                    "phone": vm.formBuilder.Phone || '',
+                    "phone": vm.formBuilder.phone || '',
                     "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
                     "country": "US",
                     "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',
@@ -499,7 +499,7 @@
                 "billing_address": {
                     "first_name": formatted.first,
                     "last_name": formatted.last,
-                    "phone": vm.formBuilder.Phone || '',
+                    "phone": vm.formBuilder.phone || '',
                     "city": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].city : '',
                     "country": "US",
                     "address_1": formatted.details[0].addresses.length ? formatted.details[0].addresses[0].address : '',

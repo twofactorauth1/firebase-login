@@ -11,6 +11,7 @@ var log = $$.g.getLogger("asset_manager");
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
 var async = require('async');
+var appConfig = require('../configs/app.config');
 
 module.exports = {
 
@@ -37,6 +38,9 @@ module.exports = {
             file.path = temporaryPath;
             var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + asset.get('accountId');
+            if(appConfig.nonProduction === true) {
+                subdir = 'test_' + subdir;
+            }
             asset.set('source', 'S3');
             s3dao.uploadToS3(bucket, subdir, file, true, function(err, value){
                 if(err) {
@@ -104,6 +108,9 @@ module.exports = {
                 file.path = temporaryPath;
                 var bucket = awsConfig.BUCKETS.ASSETS;
                 var subdir = 'account_' + asset.get('accountId');
+                if(appConfig.nonProduction === true) {
+                    subdir = 'test_' + subdir;
+                }
                 asset.set('source', 'S3');
                 existingAsset.set('mimeType', file.type);
                 existingAsset.set('size', file.size);
@@ -263,6 +270,28 @@ module.exports = {
             } else {
                 self.log.debug('<< findByTag');
                 fn(null, list);
+            }
+        });
+    },
+
+    copyS3Asset: function(accountId, userId, sourceUrl, destUrl, contentType, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> copyS3Asset');
+
+        var sourceBucket = 'indigenous-digital-assets';
+        var sourceKey = sourceUrl.replace('.*indigenous-digital-assets/', '');
+        var destBucket = 'indigenous-digital-assets';
+        var destKey = destUrl.replace('.*indigenous-digital-assets/', '');
+
+
+        s3dao.copyObject(sourceBucket, sourceKey, destBucket, destKey, contentType, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error copying object:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< copyS3Asset');
+                fn(null, value);
             }
         });
     }
