@@ -1888,6 +1888,28 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             });
 
 
+            scope.$watch('products', function(products){
+                if(products && products.length > 0 && !CartDetailsService.productLoaded){
+                    if($location.search().productId){
+                        var productId = $location.search().productId;
+                        var _found = _.find(products, function(product) {
+                            return product._id === productId;
+                        });
+                        if(_found){
+                            CartDetailsService.productLoaded = true;
+                            $timeout(function() {                                
+                                    scope.openNewProductDetailsModal(_found);
+                            }, 1000);
+                        }
+                    }
+                }
+            });
+
+            scope.$on("$routeChangeStart", function (scope, next, current) {
+                CartDetailsService.productLoaded = false;
+            });
+
+
             scope.$watch('showDiscount', function(_discount){
                 if(angular.isDefined(_discount)){
                     calculateDiscount();
