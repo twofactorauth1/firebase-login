@@ -38,7 +38,8 @@ var mainApp = angular
         'wu.masonry',
         'slugifier',
         'LocalStorageModule',
-        'ngMap'
+        'ngMap',
+        'ngTextTruncate'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
         //$locationProvider.html5Mode(true);

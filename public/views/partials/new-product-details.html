@@ -4,6 +4,7 @@
       <div class="modal-header">
           <button type="button" class="close hidden-xs" aria-hidden="true" ng-click="closeProductDetailsModal();">&times;</button>
           <div class="model-back-close visible-xs" ng-click="closeProductDetailsModal();"><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
+          <a class="btn-link ssb-theme-btn back-to-products hidden" href="javascript:void(0)" ng-click="closeProductDetailsModal();">Go Back to all products</a>
       </div>
       <div class="modal-body">
   			<div class="col-sm-6 product">
@@ -63,7 +64,10 @@
                                 </div>
                             </a>
                     </div>
-                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 visible-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}">{{selectedProduct.description | characters : 500 : true}}</p>
+                    
+
+                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 visible-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}" ng-text-truncate="selectedProduct.description" ng-tt-chars-threshold="500" ng-tt-more-label="(More details)" ng-tt-less-label="Hide"></p>
+
                     <div class="clearfix"></div>
                     <div class="actions margin-top-20 visible-xs" ng-style="{'font-family': component.formSettings.buttonFontFamily}">
                             <a class="btn ss b-theme-btn btn-primary btn-block center" href="#" ng-if="selectedProduct.hasVariations" ng-click="updateSelectedProduct(selectedProduct)">
@@ -93,7 +97,8 @@
                                 </div>
                             </a>
                     </div>
-                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 hidden-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}">{{selectedProduct.description | characters : 650 : true}}</p>
+                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 hidden-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}"  ng-text-truncate="selectedProduct.description" ng-tt-chars-threshold="500" ng-tt-more-label="(More details)" ng-tt-less-label="Hide"></p>
+                   
 
                 </div>
             </div>    

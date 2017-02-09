@@ -69,4 +69,32 @@
             }
         }
     }
-}    
+}
+
+.detailed-product-description-modal-dialog{
+    .btn-link.ngTruncateToggleText{
+        display:none !important;
+    }
+    .back-to-products{
+        display: block !important;
+    }
+    .close, .model-back-close{
+        display:none !important;
+    }
+    @media screen and (min-width: 768px){
+        margin:0 !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        .product-description-modal-content{
+            border-radius: 0 !important;
+        }
+        .products-v2{
+            max-width: 768px;
+            margin: auto auto;
+        }
+        .product-description{
+            text-align: left;
+        }
+
+    }
+}

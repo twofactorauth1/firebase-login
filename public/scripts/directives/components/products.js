@@ -705,6 +705,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     angular.element(".modal-content").addClass("product-description-modal-content");
                     angular.element(".modal-dialog").addClass("product-description-modal-dialog");
                     
+
+                    $('body').on('click touchstart', '.btn-link.ngTruncateToggleText', function () {
+                        angular.element(".product-description-modal-dialog").addClass("detailed-product-description-modal-dialog");
+                    });
                     
                 }, 0);
                 
@@ -1899,7 +1903,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             CartDetailsService.productViewLoaded = true;
                             $timeout(function() {                                
                                     scope.openNewProductDetailsModal(_found);
-                            }, 1000);
+                            }, 2000);
                         }
                     }
                 }
