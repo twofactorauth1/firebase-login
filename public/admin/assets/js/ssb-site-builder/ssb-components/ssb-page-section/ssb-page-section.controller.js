@@ -514,7 +514,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
             $timeout(function() {
                 $(vm.element[0]).sticky({zIndex:999});
                 //new StickyState(vm.element[0]);
-            }, 2000);
+            }, 1000);
         }
         vm.elementLoaded = true;
     }
