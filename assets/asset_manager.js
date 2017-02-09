@@ -274,8 +274,26 @@ module.exports = {
         });
     },
 
-    copyS3Asset: function(accountId, userId, sourceUrl, destUrl, fn) {
-        
+    copyS3Asset: function(accountId, userId, sourceUrl, destUrl, contentType, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> copyS3Asset');
+
+        var sourceBucket = 'indigenous-digital-assets';
+        var sourceKey = sourceUrl.replace('.*indigenous-digital-assets/', '');
+        var destBucket = 'indigenous-digital-assets';
+        var destKey = destUrl.replace('.*indigenous-digital-assets/', '');
+
+
+        s3dao.copyObject(sourceBucket, sourceKey, destBucket, destKey, contentType, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error copying object:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< copyS3Asset');
+                fn(null, value);
+            }
+        });
     }
 
 };
