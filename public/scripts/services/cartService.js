@@ -17,7 +17,7 @@
 
         cartService.checkIfStateTaxable = checkIfStateTaxable;
 
-        cartService.productLoaded = false;
+        cartService.productViewLoaded = false;
 
         cartService.total = 0;
         cartService.cartTax = 0;
