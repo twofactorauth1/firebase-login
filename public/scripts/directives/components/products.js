@@ -695,7 +695,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.modalInstance = $modal.open({
                     templateUrl: 'new-product-details-modal',
                     keyboard: true,
-                    size: 'md',
+                    size: 'lg',
                     scope: scope
                 });
 
@@ -704,7 +704,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     angular.element(".modal-backdrop").addClass("product-description-modal-background");
                     angular.element(".modal-content").addClass("product-description-modal-content");
                     angular.element(".modal-dialog").addClass("product-description-modal-dialog");
-                    
+                    angular.element(".modal.fade").addClass("product-description-modal");
 
                     $('body').on('click touchstart', '.btn-link.ngTruncateToggleText', function () {
                         angular.element(".product-description-modal-dialog").addClass("detailed-product-description-modal-dialog");
