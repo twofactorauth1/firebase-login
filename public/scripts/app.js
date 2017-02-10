@@ -172,7 +172,8 @@ var mainApp = angular
             })
             .when('/preview/:pageId', {
                 controller: 'PreviewCtrl as previewCtrl',
-                templateUrl: '../views/main.html'
+                templateUrl: '../views/main.html',
+                reloadOnSearch: false
             })
             .when('/preview/:pageId/:postId', {
                 controller: 'PreviewCtrl as previewCtrl',
