@@ -13,11 +13,11 @@ var config = require('./app.config');
 var localString = "mongodb://localhost/local_indigenous";
 //var testString = "mongodb://indiweb-test2016:testing456@ds127949.mlab.com:27949/test_indigenous";
 var testString = "mongodb://indiweb-test2016:testing456@ds139559-a0.mlab.com:39559,ds139559-a1.mlab.com:39559/test_indigenous?replicaSet=rs-ds139559";
-var testSingleHostString = "mongodb://indiweb-test2016:testing456@ds139559-a1.mlab.com:39559/test_indigenous";
+var testSingleHostString = "mongodb://indiweb-test2016:testing456@ds139559-a0.mlab.com:39559/test_indigenous";
 //var prodString = "mongodb://indiapp2:Ind1genous2016!@lighthouse.1.mongolayer.com:10188,lighthouse.0.mongolayer.com:10188/prod_indigenous?replicaSet=set-53f6b4cc19627093350038e8";
 //var prodString = "mongodb://indiapp2:Ind1genous2016!@lighthouse.6.mongolayer.com:10007,lighthouse.7.mongolayer.com:10007/prod_indigenous?replicaSet=set-582c8c97304fb61ff6000632";
 var prodString = "mongodb://indiapp2:Ind1genous2016!@ds139559-a0.mlab.com:39559,ds139559-a1.mlab.com:39559/prod_indigenous?replicaSet=rs-ds139559";
-var prodSingleHostString = "mongodb://indiapp2:Ind1genous2016!@ds139559-a1.mlab.com:39559/prod_indigenous";
+var prodSingleHostString = "mongodb://indiapp2:Ind1genous2016!@ds139559-a0.mlab.com:39559/prod_indigenous";
 
 //LOCAL
 //var connectionString = localString;
