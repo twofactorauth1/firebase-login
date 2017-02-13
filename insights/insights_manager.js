@@ -418,7 +418,7 @@ var insightsManager = {
                 var replyToName = self.config.replyToName;
 
                 emailMessageManager.sendInsightEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
-                    _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, function(err, value){
+                    _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, accountId, function(err, value){
                         cb(err, sectionDataMap, value);
                     });
 
