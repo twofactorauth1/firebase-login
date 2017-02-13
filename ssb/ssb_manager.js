@@ -1732,7 +1732,7 @@ module.exports = {
                 timingLog.warn('setAsHomePage: ' + checkTime.diff(startTime));
                 startTime = checkTime;
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
-                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
+                    pageDao.getLatestPageByHandle(accountId, 'index', function(err, page) {
                         if (err) {
                             self.log.error(accountId, userId,'Error getting index page: ' + err);
                             cb(err);

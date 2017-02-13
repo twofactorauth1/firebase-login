@@ -23,6 +23,13 @@ var dao = {
         self.findOne(query, $$.m.ssb.Page, fn);
     },
 
+
+    getLatestPageByHandle: function(accountId, handle, fn) {
+        var self = this;
+        var query = {handle: handle, accountId:accountId, latest:true};
+        self.findOne(query, $$.m.ssb.Page, fn);
+    },
+
     getLatestPageForWebsite: function(websiteId, pageName, accountId, fn) {
         var self = this;
         var query = {
