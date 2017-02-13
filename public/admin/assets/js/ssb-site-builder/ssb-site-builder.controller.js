@@ -852,7 +852,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
                     var changedPath = jsondiff1[i].path;
-                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2) || isEmptyStyleAdded(diff1, diff2, changedPath)) {
+                    if (dataIsCompiledAdded(diff1, diff2) || dataIsCompiledRemoved(diff1, diff2) || dataIsPublishedDate(diff1, diff2, changedPath) || dataIsSliderInitialized(diff1, diff2, changedPath) || isDataCompiledChanged(diff1, diff2) || isEmptyStyleAdded(diff1, diff2, changedPath)) {
 
                         console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
@@ -979,6 +979,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             }
     };
 
+    function dataIsSliderInitialized(diff1, diff2, path) {
+        var ret = false;
+        
+        if(path){
+            if(path.indexOf("slider") > -1){
+                if(diff1 && diff1.sliderDotColorOpacity === null && !diff2){
+                    ret = true;
+                }
+            }
+        }
+        return ret;
+    };
 
     function isEmptyStyleAdded(diff1, diff2, path) {
         if(diff1 &&
