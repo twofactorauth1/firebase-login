@@ -1685,7 +1685,7 @@ module.exports = {
                                                     //put it next to last, if there's a footer
                                                     var lastSection = pageSections[pageSections.length - 1];
 
-                                                    if (lastSection && lastSection.get('name') === 'Footer'){
+                                                    if (lastSection && lastSection.get("components").length && lastSection.get("components")[0].type === 'footer'){
                                                         insertAt = pageSections.length - 1;
                                                     } else {
                                                         insertAt = pageSections.length;
