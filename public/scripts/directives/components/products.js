@@ -705,6 +705,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     angular.element(".modal-content").addClass("product-description-modal-content");
                     angular.element(".modal-dialog").addClass("product-description-modal-dialog");
                     angular.element(".modal.fade").addClass("product-description-modal");
+                    angular.element(".product-description-modal .btn-link").addClass("ssb-theme-btn")
 
                     $('body').on('click touchstart', '.btn-link.ngTruncateToggleText', function () {
                         angular.element(".product-description-modal-dialog").addClass("detailed-product-description-modal-dialog");
