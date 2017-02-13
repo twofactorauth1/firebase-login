@@ -1685,7 +1685,7 @@ module.exports = {
                                                     //put it next to last, if there's a footer
                                                     var lastSection = pageSections[pageSections.length - 1];
 
-                                                    if (lastSection && lastSection.get('name') === 'Footer'){
+                                                    if (lastSection && lastSection.get("components").length && lastSection.get("components")[0].type === 'footer'){
                                                         insertAt = pageSections.length - 1;
                                                     } else {
                                                         insertAt = pageSections.length;
@@ -1732,7 +1732,7 @@ module.exports = {
                 timingLog.warn('setAsHomePage: ' + checkTime.diff(startTime));
                 startTime = checkTime;
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
-                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
+                    pageDao.getLatestPageByHandle(accountId, 'index', function(err, page) {
                         if (err) {
                             self.log.error(accountId, userId,'Error getting index page: ' + err);
                             cb(err);

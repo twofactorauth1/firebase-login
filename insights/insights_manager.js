@@ -72,6 +72,8 @@ var insightsManager = {
             endDate : {$gte:now},
             accountId: {$gte:0}
         };
+
+        console.log(query);
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding active messages:', err);
