@@ -26,6 +26,17 @@
                 toaster.pop('warn', 'Missing Message Dates.', 'Please enter start and end dates for the broadcast message.');
                 return;
             }
+
+
+            if(vm.state.message.endDate){                
+                var _date = new Date(vm.state.message.endDate);
+                // Setting time of the selected day to maximum
+                _date.setHours(23);
+                _date.setMinutes(59);
+                _date.setSeconds(59);
+                vm.state.message.endDate = _date;
+            }
+
             if(vm.state.message && !vm.state.message._id){
                 return BroadcastMessagesService.createMessage(vm.state.message).then(function(message) {
                     console.log('message created');
