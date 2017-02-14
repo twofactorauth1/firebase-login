@@ -72,6 +72,8 @@ var insightsManager = {
             endDate : {$gte:now},
             accountId: {$gte:0}
         };
+
+        console.log(query);
         broadcastMessageDao.findMany(query, $$.m.BroadcastMessage, function(err, list){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding active messages:', err);
@@ -418,7 +420,7 @@ var insightsManager = {
                 var replyToName = self.config.replyToName;
 
                 emailMessageManager.sendInsightEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
-                    _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, function(err, value){
+                    _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, accountId, function(err, value){
                         cb(err, sectionDataMap, value);
                     });
 

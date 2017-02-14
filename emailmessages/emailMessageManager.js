@@ -1331,7 +1331,7 @@ var emailMessageManager = {
     },
 
     sendInsightEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId,
-                               contactId, vars, emailId, ccAry, repyToAddress, replyToName, fn) {
+                               contactId, vars, emailId, ccAry, repyToAddress, replyToName, mainAccountId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> sendInsightEmail');
         async.waterfall([
@@ -1408,7 +1408,7 @@ var emailMessageManager = {
                         request.body.personalizations[0].cc.push({email:ccAddress});
                     });
                 }
-                self._safeStoreEmail(request.body, accountId, userId, emailId, function(err, emailmessage){
+                self._safeStoreEmail(request.body, mainAccountId, userId, emailId, function(err, emailmessage){
                     if(err) {
                         self.log.error('Error storing email (this should not happen):', err);
                         cb(err);

@@ -897,13 +897,19 @@ var dao = {
                 } else {
                     //this contact already exists.  Let's merge in new data.
                     var existingId = existingContact.id();
+                    var _existingTags = existingContact.get('tags') || [];
+
                     self.log.warn('Merging contact with id: ' + existingId);
                     contact.set('created', existingContact.get('created'));
                     self.log.warn('Here is what we have:', contact);
                     var merged =  _.extend(existingContact, contact);
                     merged.set('_id', existingId);
                     self.log.warn('Here is what we have now:', merged);
-                    //union details, notes, siteActivity
+                    //union details, notes, siteActivity, tags
+                    // Tags append to existing contact if exists
+                    
+                    merged.set('tags', _.union(_existingTags, contact.get('tags') || []));
+
                     merged.set('details', _.union(existingContact.get('details'), contact.get('details')));
                     merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
                     merged.set('siteActivity', _.union(existingContact.get('siteActivity'), contact.get('siteActivity')));

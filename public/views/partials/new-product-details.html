@@ -1,0 +1,109 @@
+<script type="text/ng-template" id="new-product-details-modal">
+
+  <div class="products-v2" id="new-product-details-content">
+      <div class="modal-header">
+          <button type="button" class="close hidden-xs" aria-hidden="true" ng-click="closeProductDetailsModal();">&times;</button>
+          <div class="model-back-close visible-xs" ng-click="closeProductDetailsModal();"><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
+          <a class="btn-link ssb-theme-btn back-to-products hidden" href="javascript:void(0)" ng-click="closeProductDetailsModal();">Go Back to all products</a>
+      </div>
+      <div class="modal-body">
+  			<div class="col-sm-6 product">
+                <div ng-if="selectedProduct.onSaleToday" class="ribbon red"><span>SALE</span></div>
+                <div ng-if="selectedProduct.is_image || selectedProduct.icon">
+                    <div ng-if="selectedProduct.is_image" class="img-wrap">
+                        <div class="modal-product-img" ng-if="isImage(selectedProduct.icon)">
+                            <img ng-src="{{::selectedProduct.icon}}" class="img-responsive" err-src="/images/default-media.png"/>
+                        </div>
+                        <div class="modal-product-img" ng-if="!isImage(selectedProduct.icon)">
+                            <img class="img-responsive" src="/images/default-media.png"/>
+                        </div>
+                    </div>
+                    <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">
+                        <i ng-style="{'color':component.iconColor}" class="fa {{::selectedProduct.icon}}"></i>
+                    </div>
+                </div>
+                <div ng-if="!selectedProduct.is_image && !selectedProduct.icon" class="no-product-img">
+                    <div class="img-wrap no-preview">
+                        <h3>No Preview <br> Available</h3>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                
+            </div>
+            <div class="col-sm-6 product-details-container">
+            	<div class="" ng-style="{'color':component.txtcolor}">
+                    <h4 class="modal-widget-title" ng-attr-style="{{titleStyle(component.formSettings)}}">{{selectedProduct.name | characters:50 :true}}</h4>
+                    <div class="clearfix"></div>
+                    <h4 class="modal-widget-price" ng-attr-style="{{priceStyle(component.formSettings)}}"><span ng-class="{'strikethrough text-small': selectedProduct.onSaleToday}">{{selectedProduct.regular_price | currency}}</span><span ng-if="selectedProduct.onSaleToday">{{selectedProduct.sale_price | currency}}</span></h4>
+                    <div class="clearfix"></div>
+                    <div class="actions margin-top-20 hidden-xs" ng-style="{'font-family': component.formSettings.buttonFontFamily}">
+                            <a class="btn ss b-theme-btn btn-primary btn-block center" href="#" ng-if="selectedProduct.hasVariations" ng-click="updateSelectedProduct(selectedProduct)">
+                                Select Options
+                            </a>
+                            <button ng-disabled='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, selectedProduct)" href="javascript:void(0)" ng-if="(selectedProduct.type | uppercase) != 'EXTERNAL' && itemClicked(selectedProduct) != true && !selectedProduct.hasVariations">
+                                <div data-class="btn-text" ng-hide='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
+                                    </span> Add to Cart
+                                </div>
+                                <div data-class="btn-text" ng-show='selectedselectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
+                                    <span class="fa fa-shopping-cart"></span> Stripe account needed
+                                </div>
+                            </button>
+                            <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="(selectedProduct.type | uppercase) != 'EXTERNAL' && itemClicked(selectedProduct) == true && !selectedProduct.hasVariations">
+                                <div data-class="btn-text">
+                                    <span class="fa fa-check"></span> Added to Cart!
+                                </div>
+                            </button>
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="{{selectedProduct.externalLinklinkUrl}}" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
+                                <div data-class="btn-text">
+                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText | characters : 35 : true || 'External Link'}}
+                                </div>
+                            </a>
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="javascript:void(0)" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && !selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
+                                <div data-class="btn-text">
+                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText | characters : 35 : true || 'External Link'}}
+                                </div>
+                            </a>
+                    </div>
+                    
+
+                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 visible-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}" ng-text-truncate="selectedProduct.description" ng-tt-chars-threshold="500" ng-tt-more-label="(More details)" ng-tt-less-label="Hide"></p>
+
+                    <div class="clearfix"></div>
+                    <div class="actions margin-top-20 visible-xs" ng-style="{'font-family': component.formSettings.buttonFontFamily}">
+                            <a class="btn ss b-theme-btn btn-primary btn-block center" href="#" ng-if="selectedProduct.hasVariations" ng-click="updateSelectedProduct(selectedProduct)">
+                                Select Options
+                            </a>
+                            <button ng-disabled='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, selectedProduct)" href="javascript:void(0)" ng-if="(selectedProduct.type | uppercase) != 'EXTERNAL' && itemClicked(selectedProduct) != true && !selectedProduct.hasVariations">
+                                <div data-class="btn-text" ng-hide='selectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
+                                    Add to Cart <i class="fa fa-plus"></i>
+                                </div>
+                                <div data-class="btn-text" ng-show='selectedselectedProduct.type == "SUBSCRIPTION" && !stripeInfo'>
+                                    <span class="fa fa-shopping-cart"></span> Stripe account needed
+                                </div>
+                            </button>
+                            <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="(selectedProduct.type | uppercase) != 'EXTERNAL' && itemClicked(selectedProduct) == true && !selectedProduct.hasVariations">
+                                <div data-class="btn-text">
+                                    <span class="fa fa-check"></span> Added to Cart!
+                                </div>
+                            </button>
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="{{selectedProduct.externalLinklinkUrl}}" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
+                                <div data-class="btn-text">
+                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText | characters : 35 : true || 'External Link'}}
+                                </div>
+                            </a>
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="javascript:void(0)" ng-if="(selectedProduct.type | uppercase) == 'EXTERNAL' && !selectedProduct.externalLinklinkUrl" target="{{selectedProduct.externalLinkOpenIn}}">
+                                <div data-class="btn-text">
+                                    <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText | characters : 35 : true || 'External Link'}}
+                                </div>
+                            </a>
+                    </div>
+                    <p ng-if="selectedProduct.description" class="description product-description margin-top-20 hidden-xs" ng-attr-style="{{descriptionStyle(component.formSettings)}}"  ng-text-truncate="selectedProduct.description" ng-tt-chars-threshold="500" ng-tt-more-label="(More details)" ng-tt-less-label="Hide"></p>
+                   
+
+                </div>
+            </div>    
+          <div class="clearfix"></div>
+      </div>
+  </div>
+
+</script>

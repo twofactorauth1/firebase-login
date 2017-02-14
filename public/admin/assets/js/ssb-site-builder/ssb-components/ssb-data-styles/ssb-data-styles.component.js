@@ -98,7 +98,20 @@ function ssbDataStyles($timeout, $location, $compile) {
                                 }
                                 if(element.attr("href") && element.attr("href").indexOf("#") === 0 && element.attr("href").length > 1){
                                     element.attr("du-smooth-scroll", '');
-                                    $compile( element )(scope);
+                                    if(element.hasClass("ssb-theme-btn")){
+                                        var _bg = element.css("background-color");
+                                        var _txtcolor = element.css("color");
+                                        $compile( element )(scope);
+                                        // Need to rest the text and background color
+                                        $timeout(function() {
+                                            element.css("background-color", _bg);
+                                            element.css("color", _txtcolor);
+                                        }, 0);
+                                    }
+                                    else{
+                                        $compile( element )(scope);                                    
+                                    }
+                                    
                                 }
                             })
 

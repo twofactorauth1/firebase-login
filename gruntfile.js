@@ -658,7 +658,11 @@ module.exports = function(grunt) {
         dbArchiveUtil.uploadToS3('archive', s3Config.AWS_ACCESS_KEY, s3Config.AWS_SECRET_ACCESS_KEY, s3Config.AWS_REGION, s3Config.BUCKETS.DB_ARCHIVES, done);
     });
 
-
+    grunt.registerTask('dbperf', 'DB Performance', function() {
+        var done = this.async();
+        var dbPerfUtil = require('./utils/dbperfutil');
+        dbPerfUtil.run(done);
+    });
 
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');

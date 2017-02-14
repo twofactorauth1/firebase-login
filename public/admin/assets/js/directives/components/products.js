@@ -15,6 +15,8 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
       //assign and hold the currentProductPage for pagination
       scope.currentProductPage = 1;
 
+      scope.currentPath = angular.copy($location);
+      
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
@@ -160,7 +162,63 @@ app.directive('productsComponent', ['ProductService', '$location', '$timeout', '
           return !isIcon;
       }
 
+      scope.gridStyle = function(cell){
+        var styleString = ' ';
+        if (cell && cell.bg && cell.bg.color) {
+            styleString += 'background-color: ' + cell.bg.color + "!important;";
+        } 
+        return styleString;
+      }
 
+      
+      scope.titleStyle = function(style){
+        var styleString = ' ';
+        if(style){
+          if (style.titleFontFamily) {
+            styleString += 'font-family: ' + style.titleFontFamily + "!important;";
+          }
+          if (style.titleTextSize) {
+            styleString += 'font-size: ' + style.titleTextSize + "px !important;";
+          }
+          if (style.titleTextColor) {
+            styleString += 'color: ' + style.titleTextColor + "!important;";
+          }
+        }
+         
+        return styleString;
+      }
+
+      scope.priceStyle = function(style){
+        var styleString = ' ';
+        if(style){
+          if (style.priceFontFamily) {
+            styleString += 'font-family: ' + style.priceFontFamily + "!important;";
+          }
+          if (style.priceTextSize) {
+            styleString += 'font-size: ' + style.priceTextSize + "px !important;";
+          }
+          if (style.priceTextColor) {
+            styleString += 'color: ' + style.priceTextColor + "!important;";
+          }
+        }
+        return styleString;
+      }
+
+      scope.descriptionStyle = function(style){
+        var styleString = ' ';
+        if(style){
+          if (style.descriptionFontFamily) {
+            styleString += 'font-family: ' + style.descriptionFontFamily + "!important;";
+          }
+          if (style.descriptionTextSize) {
+            styleString += 'font-size: ' + style.descriptionTextSize + "px !important;";
+          }
+          if (style.descriptionTextColor) {
+            styleString += 'color: ' + style.descriptionTextColor + "!important;";
+          }
+        }
+        return styleString;
+      }
     }
   };
 }]);

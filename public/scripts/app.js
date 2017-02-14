@@ -38,7 +38,8 @@ var mainApp = angular
         'wu.masonry',
         'slugifier',
         'LocalStorageModule',
-        'ngMap'
+        'ngMap',
+        'ngTextTruncate'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
         //$locationProvider.html5Mode(true);
@@ -62,7 +63,7 @@ var mainApp = angular
                 controller: 'CacheCtrl as cacheCtrl'
                 */
                 template: function(urlattr) {
-                    var s = '<div class="main-include" data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/index";
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
@@ -71,7 +72,8 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/404', {
                 templateUrl: '../views/404.html',
@@ -83,7 +85,7 @@ var mainApp = angular
                     if(window.indigenous.ssbBlog === true) {
                         _pageName = 'blog-list';
                     }
-                    var s = '<div class="main-include" data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + _pageName;
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
@@ -101,7 +103,7 @@ var mainApp = angular
                         _pageName = 'blog-list';
                     }
 
-                    var s = '<div class="main-include" data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + _pageName;
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
@@ -118,8 +120,8 @@ var mainApp = angular
                     if(window.indigenous.ssbBlog === true) {
                         _pageName = 'blog-list';
                     }
-
-                    var s = '<div class="main-include" data-ng-include="';
+ 
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + _pageName;
                         if(urlattr.cachebuster) {
                             s+='?cachebuster=' + urlattr.cachebuster;
@@ -151,7 +153,7 @@ var mainApp = angular
             .when('/:name', {
                 template: function(urlattr) {
 
-                    var s = '<div class="main-include" data-ng-include="';
+                    var s = '<div class="main-include" ssb-data-styles data-ng-include="';
                     s += " '/template/" + urlattr.name.toLowerCase();
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
@@ -160,15 +162,18 @@ var mainApp = angular
                     s += ' "></div>';
                     return s;
                 },
-                controller: 'CacheCtrl as cacheCtrl'
+                controller: 'CacheCtrl as cacheCtrl',
+                reloadOnSearch: false
             })
             .when('/cached/:page', {
                 controller: 'CacheCtrl as cacheCtrl',
-                templateUrl: '../views/cache.html'
+                templateUrl: '../views/cache.html',
+                reloadOnSearch: false
             })
             .when('/preview/:pageId', {
                 controller: 'PreviewCtrl as previewCtrl',
-                templateUrl: '../views/main.html'
+                templateUrl: '../views/main.html',
+                reloadOnSearch: false
             })
             .when('/preview/:pageId/:postId', {
                 controller: 'PreviewCtrl as previewCtrl',

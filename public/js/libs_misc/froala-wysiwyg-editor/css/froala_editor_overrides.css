@@ -36,3 +36,22 @@ a.fr-command[data-param1='PRE'] {
 .fr-command.ssb-editor-style-line-height-5 {
     line-height: 200% !important;
 }
+.fr-popup .fr-buttons .fr-dropdown-menu{
+  z-index: 4;
+}
+
+.fr-image-size-layer.fr-layer .fr-input-line label, .fr-image-by-url-layer.fr-layer .fr-input-line label{
+  display: none;
+}
+
+.fr-image-size-layer.fr-layer .fr-input-line .fr-not-empty + label, .fr-image-by-url-layer.fr-layer .fr-input-line .fr-not-empty + label{
+  display: block !important;
+}
+
+.fr-video-upload-layer.fr-layer.fr-active{
+  background: #243948 !important;
+}
+
+.fr-video-size-layer.fr-layer.fr-active .fr-video-group .fr-input-line{
+  width: calc(50% - 2em) !important;
+}

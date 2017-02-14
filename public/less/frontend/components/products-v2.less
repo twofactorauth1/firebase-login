@@ -1,0 +1,119 @@
+.products-v2 {
+
+
+   .modal-widget-price, .widget-price{
+        span.strikethrough {
+            color: inherit;
+        }
+    }
+    .products.new-product-container{
+        position: relative;
+        z-index: 2;
+    }
+   
+    
+    @media screen and (min-width: 992px) {
+        .responsive-product-tile:nth-child(3n+4){
+            clear: left;
+        }
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 991px) {
+        .responsive-product-tile:nth-child(2n+3){
+            clear: left;
+        }
+    }
+
+    ul.pagination{
+        float: right;
+    }
+
+    .product-widget{
+        .widget-title{
+            min-height: 50px;
+        }
+        .thumbnail{
+            border: none;
+            background: transparent;
+        }
+        outline: none !important;
+        text-decoration: none !important;
+    }
+}
+
+#new-product-details-content{
+    .modal-header {
+        padding: 10px;
+        border-bottom: none;
+    }
+    .modal-widget-title{
+       // min-height: 40px;
+    }
+    .product-details-container{
+        margin-top: -10px;
+    }
+    .modal-product-img {
+        img {
+            margin-right: 15px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+    }
+}
+
+.product-description-modal-background{
+    background: whitesmoke !important;
+}
+.product-description-modal-content{
+    border: none !important;
+}
+.product-description-modal-dialog{
+    @media screen and (max-width: 767px){
+        margin:0 !important;
+        .product-description-modal-content{
+            border-radius: 0 !important;
+        }
+        .actions{
+            .btn{
+                padding-top: 15px;
+                padding-bottom: 15px;
+                i{
+                    padding-right:15px;
+                    float: right;
+                }
+            }
+        }
+    }
+}
+
+.detailed-product-description-modal-dialog{
+    .btn-link.ngTruncateToggleText{
+        display:none !important;
+    }
+    .back-to-products{
+        display: block !important;
+    }
+    .close, .model-back-close{
+        display:none !important;
+    }
+    @media screen and (min-width: 768px){
+        margin:0 !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        .product-description-modal-content{
+            border-radius: 0 !important;
+        }
+        .products-v2{
+            max-width: 900px;
+            margin: auto auto;
+        }
+        .product-description{
+            text-align: left;
+        }
+
+    }
+}
+
+.btn-link.ngTruncateToggleText{
+    cursor: pointer; 
+}

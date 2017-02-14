@@ -851,9 +851,8 @@
 
 
         $scope.$on('$renderSingleCustomerAnalytics', function(event, args) {
-            $timeout(function() {
-                $(window).resize();
-                if(!$scope.loadCharts)
+            $timeout(function() {                
+                if(!$scope.loadCharts){                  
                     CustomerService.getSingleCustomer($stateParams.customerId, function(err, customer){
                         if(customer.created && customer.created.date)
                         {
@@ -867,9 +866,10 @@
                         setFilterDates();
                         $scope.runAnalyticsReports();
                     })
-                    
+                }
+                
             }, 0);
-
+            reflowCharts();
         });
 
 

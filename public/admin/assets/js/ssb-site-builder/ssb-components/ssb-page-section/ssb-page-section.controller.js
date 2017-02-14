@@ -72,9 +72,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
                     classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
                     if(vm.elementLoaded){
-                        classString += ' ssb-fixed sticky fixedsection';
-
-                        if (vm.index === 0) {
+                        if(!section.fixedLeftNavigation || (section.fixedLeftNavigation && vm.index > 0)){
+                            classString += ' ssb-fixed sticky fixedsection';
+                        }
+                        if (vm.index === 0 && !section.fixedLeftNavigation) {
                             classString += ' ssb-fixed-first-element';
                         }
                     }
@@ -503,17 +504,20 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
      * - If fixed element is first on page, just make it fixed
      * - Else, create new StickyState for element to fix at scroll position
      */
-    function setFixedPosition() {
-        var elementIsFirstPosition = vm.index === 0;
-        if (elementIsFirstPosition) {
-            var dup = vm.element.clone();
-            dup.addClass('ssb-fixed-clone-element');
-            dup.attr('id', 'clone_of_' + vm.section._id);
-            dup.insertAfter(vm.element);
-        } else {
-            $timeout(function() {
-                new StickyState(vm.element[0]);
-            }, 2000);
+    function setFixedPosition(_isVerticalNav) {
+        if(!_isVerticalNav){
+            var elementIsFirstPosition = vm.index === 0;
+            if (elementIsFirstPosition) {
+                var dup = vm.element.clone();
+                dup.addClass('ssb-fixed-clone-element');
+                dup.attr('id', 'clone_of_' + vm.section._id);
+                dup.insertAfter(vm.element);
+            } else {
+                $timeout(function() {
+                    $(vm.element[0]).sticky({zIndex:999});
+                    //new StickyState(vm.element[0]);
+                }, 1000);
+            }
         }
         vm.elementLoaded = true;
     }
@@ -632,16 +636,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         $timeout(function() {
             vm.sectionInitDelayDone = true;
         });
-
-        if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
-            $timeout(function() {
-                vm.setFixedPosition();
-            }, 0);
-        }
-
+        var _isVerticalNav = false;
         var elementIsFirstPosition = vm.index === 0;
         var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
         if (!vm.uiState && vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition) {
+            _isVerticalNav = true;
             $timeout(function() {
                 if(!isBlogPage){
                     if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
@@ -668,6 +667,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 )                   
             }, 0);
         }
+
+        if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
+            $timeout(function() {
+                vm.setFixedPosition(_isVerticalNav);
+            }, 0);
+        }
+
+        
 
     }
 

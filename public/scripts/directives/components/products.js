@@ -45,7 +45,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
             scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
-
+            scope.currentPath = angular.copy($location);
             scope.$watch('addresses.shipping', function(val){
                 if(val){
                     scope.addresses.labelText = "Billing Address";
@@ -686,6 +686,39 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 scope.openProductDetailsModal();
             };
+
+
+            scope.openNewProductDetailsModal = function(product){
+                
+                scope.selectedProduct = product;
+
+                scope.modalInstance = $modal.open({
+                    templateUrl: 'new-product-details-modal',
+                    keyboard: true,
+                    size: 'lg',
+                    scope: scope
+                });
+
+                
+                $timeout(function () {
+                    angular.element(".modal-backdrop").addClass("product-description-modal-background");
+                    angular.element(".modal-content").addClass("product-description-modal-content");
+                    angular.element(".modal-dialog").addClass("product-description-modal-dialog");
+                    angular.element(".modal.fade").addClass("product-description-modal");
+                    angular.element(".product-description-modal .btn-link").addClass("ssb-theme-btn")
+
+                    $('body').on('click touchstart', '.btn-link.ngTruncateToggleText', function () {
+                        angular.element(".product-description-modal-dialog").addClass("detailed-product-description-modal-dialog");
+                    });
+                    
+                }, 0);
+                
+                $location.search('productId', product._id);
+                
+
+            }
+
+            
 
             /*
              * @selectChanged
@@ -1860,11 +1893,91 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             });
 
 
+            scope.$watch('products', function(products){
+                if(products && products.length > 0 && !CartDetailsService.productViewLoaded){
+                    if($location.search().productId){
+                        var productId = $location.search().productId;
+                        var _found = _.find(products, function(product) {
+                            return product._id === productId;
+                        });
+                        if(_found){
+                            CartDetailsService.productViewLoaded = true;
+                            $timeout(function() {                                
+                                    scope.openNewProductDetailsModal(_found);
+                            }, 2000);
+                        }
+                    }
+                }
+            });
+
+            scope.$on("$routeChangeStart", function (scope, next, current) {
+                CartDetailsService.productViewLoaded = false;
+            });
+
+
             scope.$watch('showDiscount', function(_discount){
                 if(angular.isDefined(_discount)){
                     calculateDiscount();
                 }
             }, true)
+
+            scope.gridStyle = function(cell){
+                var styleString = ' ';
+                if (cell && cell.bg && cell.bg.color) {
+                    styleString += 'background-color: ' + cell.bg.color + "!important;";
+                } 
+                return styleString;
+            }
+
+      
+            scope.titleStyle = function(style){
+                var styleString = ' ';
+                if(style){
+                    if (style.titleFontFamily) {
+                        styleString += 'font-family: ' + style.titleFontFamily + "!important;";
+                    }
+                    if (style.titleTextSize) {
+                        styleString += 'font-size: ' + style.titleTextSize + "px !important;";
+                    }
+                    if (style.titleTextColor) {
+                        styleString += 'color: ' + style.titleTextColor + "!important;";
+                    }
+                }
+
+                return styleString;
+            }
+
+            scope.priceStyle = function(style){
+                var styleString = ' ';
+                if(style){
+                    if (style.priceFontFamily) {
+                        styleString += 'font-family: ' + style.priceFontFamily + "!important;";
+                    }
+                    if (style.priceTextSize) {
+                        styleString += 'font-size: ' + style.priceTextSize + "px !important;";
+                    }
+                    if (style.priceTextColor) {
+                        styleString += 'color: ' + style.priceTextColor + "!important;";
+                    }
+                }
+                return styleString;
+            }
+
+            scope.descriptionStyle = function(style){
+                var styleString = ' ';
+                if(style){
+                    if (style.descriptionFontFamily) {
+                        styleString += 'font-family: ' + style.descriptionFontFamily + "!important;";
+                    }
+                    if (style.descriptionTextSize) {
+                        styleString += 'font-size: ' + style.descriptionTextSize + "px !important;";
+                    }
+                    if (style.descriptionTextColor) {
+                        styleString += 'color: ' + style.descriptionTextColor + "!important;";
+                    }
+                }
+                return styleString;
+      }
 
         },
         controller: function($scope) {
