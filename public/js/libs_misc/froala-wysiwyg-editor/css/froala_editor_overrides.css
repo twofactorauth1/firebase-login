@@ -47,3 +47,7 @@ a.fr-command[data-param1='PRE'] {
 .fr-image-size-layer.fr-layer .fr-input-line .fr-not-empty + label, .fr-image-by-url-layer.fr-layer .fr-input-line .fr-not-empty + label{
   display: block !important;
 }
+
+.fr-video-upload-layer.fr-layer.fr-active{
+  background: #243948 !important;
+}
