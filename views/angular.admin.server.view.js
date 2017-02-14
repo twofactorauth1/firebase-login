@@ -32,9 +32,9 @@ _.extend(view.prototype, BaseView.prototype, {
         };
 
         var self = this;
-        this.getAccountByHost(_req, function(err, value) {
-            if (!err && value != null) {
-                data.account = value.toJSON();
+        this.getAccountByHost(_req, function(err, account) {
+            if (!err && account != null) {
+                data.account = account.toJSON();
                 //determine trial days remaining
                 data.account.billing = data.account.billing || {};
                 var trialDays = data.account.billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
@@ -94,7 +94,13 @@ _.extend(view.prototype, BaseView.prototype, {
 
                     //console.dir(data);
                     logger.debug('Starting render');
-                    self.resp.render('admin', data);
+                    if(data.account.orgId) {
+                        logger.debug('Rendering var admin');
+                        self.resp.render('var/demo/admin', data);
+                    } else {
+                        self.resp.render('admin', data);
+                    }
+
                     logger.debug('<< show [' + _req.originalUrl + ']');
                     //logger.debug('_cleanUp');
                     self.cleanUp();
