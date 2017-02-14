@@ -127,9 +127,9 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
             break;
         }
         if (scope.meetTeamIndex !== null)
-          updateTeamNetworks(old_value, mode, social, scope.meetTeamIndex);
+          scope.updateTeamNetworks(old_value, mode, social, scope.meetTeamIndex);
         else
-          updateSocialNetworks(old_value, mode, social);
+          scope.updateSocialNetworks(old_value, mode, social);
         scope.social = {};
         scope.meetTeamIndex = null;        
         scope.closeModal();
