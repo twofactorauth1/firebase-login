@@ -8,6 +8,7 @@ var pageDao = require('../ssb/dao/page.dao');
 var sectionDao = require('../ssb/dao/section.dao');
 var emailDao = require('../cms/dao/email.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
+var productDao = require('../products/dao/product.dao');
 
 var async = require('async');
 
@@ -43,7 +44,7 @@ var defaultBilling = {
 var accountManager = {
     log:LOG,
 
-    copyAccountTemplate:function(accountId, userId, srcAccountId, destSubdomain, fn){
+    copyAccountTemplate:function(accountId, userId, srcAccountId, destAccountId, fn){
         var self = this;
         self.log.debug(accountId, userId, '>> copyAccountTemplate');
         var rollbackHandler = {};
@@ -56,22 +57,8 @@ var accountManager = {
                 if(!account) {
                     cb('source account with id[' + srcAccountId + '] not found');
                 } else {
-                    //clear out important sections of the account object
-                    account.set('_id', '');
-                    account.set('subdomain', destSubdomain);
-                    account.set('customDomain', '');
-                    account.set('domain', '');
-                    account.set('token', '');
-                    idMap.websiteId = account.get('website').websiteId;
-                    account.set('business', defaultBusiness);
-                    account.set('billing', defaultBilling);
-                    var created = {date:new Date(), by:userId};
-                    account.set('created', created);
-                    account.set('modified', created);
-                    account.set('accountUrl', 'https://' + destSubdomain + '.' + appConfig.subdomain_suffix);
-                    account.set('signupPage', 'API');
-                    account.set('ownerUser', '');
-                    accountDao.saveOrUpdate(account, cb);
+                    //fetch destination account
+                    accountDao.getAccountByID(destAccountId, cb);
                 }
             },
             function(account, cb){
@@ -79,9 +66,9 @@ var accountManager = {
                  * COPY ASSETS
                  */
                 if(!account) {
-                    cb('Could not create new account');
+                    cb('Could not find destination account');
                 } else {
-                    self.log.debug(accountId, userId, 'Created new account with id:' + account.id());
+                    self.log.debug(accountId, userId, 'Found destination account with id:' + account.id());
                     self._copyAssets(accountId, userId, srcAccountId, account.id(), idMap, function(err, updatedIdMap){
                         //I don't think we need the udpatedIdMap... the reference should hold
                         cb(err, account);
@@ -213,6 +200,57 @@ var accountManager = {
                     }
                 });
 
+            },
+            function(account, cb) {
+                /*
+                 * Copy Products
+                 * -- emailSettings
+                 * -- assets
+                 */
+                var query = {accountId:srcAccountId};
+                productDao.findMany(query, $$.m.Product, function(err, products){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding products');
+                        cb(err);
+                    } else {
+                        idMap.products = idMap.products || {};
+                        async.eachSeries(products, function(product, callback){
+                            var srcProductId = product.id();
+                            product.set('_id', null);
+                            product.set('accountId', destAccountId);
+                            var created = {date: new Date(), by:userId};
+                            product.set('created', created);
+                            product.set('modified', created);
+                            var emailSettings = product.get('emailSettings');
+                            if(emailSettings && emailSettings.emailId) {
+                                emailSettings.emailId = idMap.emails[emailSettings.emailId];
+                                emailSettings.fromEmail = '';
+                                emailSettings.fromName = '';
+                                emailSettings.replyTo = '';
+                                emailSettings.bcc = '';
+                                product.set('emailSettings', emailSettings);
+                            }
+                            var productJSON = self._fixJSONAssetReferences(product.toJSON(), idMap);
+                            var destProduct = new $$.m.Product(productJSON);
+                            productDao.saveOrUpdate(destProduct, function(err, savedProduct){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error saving product:', err);
+                                    callback(err);
+                                } else {
+                                    idMap.products[srcProductId] = savedProduct.id();
+                                    callback();
+                                }
+                            });
+                        }, function(err){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error copying products:', err);
+                                cb(err);
+                            } else {
+                                cb(null, account);
+                            }
+                        });
+                    }
+                });
             }
         ], function(err, account){
             if(err) {

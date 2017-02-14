@@ -517,9 +517,8 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> copyTemplateAccount');
 
         var srcAccountId = parseInt(req.params.id);
-        var destSubdomain = 'kyletesting-' + utils.idutils.generateUniqueAlphaNumericShort();
 
-        accountManager.copyAccountTemplate(accountId, userId, srcAccountId, destSubdomain, function(err, newAccount){
+        accountManager.copyAccountTemplate(accountId, userId, srcAccountId, accountId, function(err, newAccount){
             self.log.debug(accountId, userId, '<< copyTemplateAccount');
             self.sendResultOrError(resp, err, newAccount, "Error copying Account");
         });
@@ -532,9 +531,9 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> copyTemplateAccount');
 
         var srcAccountId = parseInt(req.params.id);
-        var destSubdomain = req.body.subdomain;
 
-        accountManager.copyAccountTemplate(accountId, userId, srcAccountId, destSubdomain, function(err, newAccount){
+
+        accountManager.copyAccountTemplate(accountId, userId, srcAccountId, accountId, function(err, newAccount){
             self.log.debug(accountId, userId, '<< copyTemplateAccount');
             self.sendResultOrError(resp, err, newAccount, "Error copying Account");
         });
