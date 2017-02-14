@@ -21,6 +21,7 @@
         var baseSectionAPIUrlv2 = '/api/2.0/cms/sections/';
         var baseComponentAPIUrlv2 = '/api/2.0/cms/components/';
         var basePagesWebsiteAPIUrl = '/api/2.0/cms/website/';
+        var baseAccountTemplateAPIUrlv2 = '/api/1.0/account/templates/';
 
         ssbService.getSite = getSite;
         ssbService.getPage = getPage;
@@ -93,6 +94,7 @@
         ssbService.saveOtherPageLinks = saveOtherPageLinks;
         ssbService.getAccount = getAccount;
         ssbService.isImage = isImage;
+        ssbService.getAccountTemplates = getAccountTemplates;
 
         /**
          * This represents the category sorting for the add content panel
@@ -889,6 +891,31 @@
           return (
             ssbRequest($http({
               url: baseSiteTemplateAPIUrlv2,
+              method: 'GET'
+            }).success(success).error(error))
+          )
+
+        }
+
+
+        /**
+         * Get list of site templates
+         *
+         */
+        function getAccountTemplates() {
+
+          function success(data) {
+            ssbService.accountTemplates = data;
+            console.log('SimpleSiteBuilderService getAccountTemplates: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService getAccountTemplates error: ', JSON.stringify(error));
+          }
+
+          return (
+            ssbRequest($http({
+              url: baseAccountTemplateAPIUrlv2,
               method: 'GET'
             }).success(success).error(error))
           )
