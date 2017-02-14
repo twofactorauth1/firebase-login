@@ -46,7 +46,6 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
             } else {
                 vm.uiState.loading = false;
             }
-
         }
 
     }, true);
@@ -66,19 +65,11 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
 
     /*
      * Select Account Template
-     *
-     * - set template on website
-     * - check response has created index page handle
-     * - get latest pages from server
-     * - get latest website from server (so it includes latest linkLists and themeId)
-     * - get latest theme data for that theme
-     * - forward to editor with index page active
-     *
-     * - TODO: can optimize this when theme is materialized on website response
+     *     
      */
     function selectAccountTemplate(templateId) {
         vm.uiState.loading = true;
-        SimpleSiteBuilderService.setSiteTemplate(templateId).then(function(response) {
+        SimpleSiteBuilderService.copyAccountTemplate(templateId).then(function(response) {
             console.log(response.data);
             if (response.data.ok && response.data.indexPageId) {
                 //get all pages

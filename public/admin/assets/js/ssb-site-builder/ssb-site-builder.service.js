@@ -21,7 +21,7 @@
         var baseSectionAPIUrlv2 = '/api/2.0/cms/sections/';
         var baseComponentAPIUrlv2 = '/api/2.0/cms/components/';
         var basePagesWebsiteAPIUrl = '/api/2.0/cms/website/';
-        var baseAccountTemplateAPIUrlv2 = '/api/1.0/account/templates/';
+        var baseAccountAPIUrl = '/api/1.0/account/';
 
         ssbService.getSite = getSite;
         ssbService.getPage = getPage;
@@ -95,6 +95,7 @@
         ssbService.getAccount = getAccount;
         ssbService.isImage = isImage;
         ssbService.getAccountTemplates = getAccountTemplates;
+        ssbService.copyAccountTemplate = copyAccountTemplate;
 
         /**
          * This represents the category sorting for the add content panel
@@ -915,7 +916,7 @@
 
           return (
             ssbRequest($http({
-              url: baseAccountTemplateAPIUrlv2,
+              url: baseAccountAPIUrl + "templates",
               method: 'GET'
             }).success(success).error(error))
           )
@@ -948,6 +949,25 @@
                         siteThemeId: siteTemplate.siteThemeId,
                         siteThemeOverrides: siteTemplate.siteThemeOverrides
                     }
+                }).success(success).error(error))
+            )
+        }
+
+
+        function copyAccountTemplate(accountTemplateId) {
+
+            function success(data) {
+                console.log('SimpleSiteBuilderService copyAccountTemplate: ' + data);
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService copyAccountTemplate error: ', JSON.stringify(error));
+            }
+
+            return (
+                ssbRequest($http({
+                    url: baseAccountAPIUrl + accountTemplateId + '/copy',
+                    method: 'POST'
                 }).success(success).error(error))
             )
         }

@@ -21,7 +21,7 @@
 
         <ul class="list-unstyled">
 
-            <li ng-repeat="template in vm.state.accountTemplates track by $index" class="ssb-site-template-grid-item col-sm-6 col-lg-4 col-xl-3">
+            <li ng-repeat="template in vm.state.accountTemplates track by $index" ng-click="vm.selectAccountTemplate(template._id)" class="ssb-site-template-grid-item col-sm-6 col-lg-4 col-xl-3">
                 <div class="ssb-site-template-grid-item-inner">
 
                     <div class="ssb-site-template-img-container">
