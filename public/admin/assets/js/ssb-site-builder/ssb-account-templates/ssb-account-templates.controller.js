@@ -71,28 +71,29 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
         vm.uiState.loading = true;
         SimpleSiteBuilderService.copyAccountTemplate(templateId).then(function(response) {
             console.log(response.data);
-            if (response.data.ok && response.data.indexPageId) {
+            if (response.data) {
                 //get all pages
-                SimpleSiteBuilderService.getPages();
+                SimpleSiteBuilderService.getPages().then(function(pages){
+                    vm.state.pages = pages.data;
+                    //get latest website
+                    SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
 
-                //get latest website
-                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                        //set theme
+                        SimpleSiteBuilderService.setupTheme(vm.state.website).then(function() {
 
-                    //set theme
-                    SimpleSiteBuilderService.setupTheme(vm.state.website).then(function() {
+                            //forward to editor
+                            vm.redirectToEditor();
 
-                        //forward to editor
-                        $timeout(function() {
-                            $location.path('/website/site-builder/pages/' + response.data.indexPageId);
-                        }, 500);
+                            //clear loading var
+                            $timeout(function() {
+                                vm.uiState.loading = false;
+                            }, 5000);
 
-                        //clear loading var
-                        $timeout(function() {
-                            vm.uiState.loading = false;
-                        }, 5000);
-
+                        });
                     });
-                });
+                })
+
+                
             }
         });
     }
