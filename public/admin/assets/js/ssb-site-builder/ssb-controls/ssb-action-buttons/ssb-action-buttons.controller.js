@@ -22,7 +22,7 @@ function ssbSiteBuilderActionButtonsController($scope, $attrs, $filter, SimpleSi
     vm.historyDropdownFn = historyDropdownFn;
 
     $scope.$watch(vm.state, function(newValue, oldValue) {
-        if (angular.isDefined(vm.state.page.published)) {
+        if (angular.isDefined(vm.state.page.published) && vm.state.page.published) {
             if (vm.state.page.published.date < vm.state.page.modified.date) {
                 if (vm.spinTimeoutPromise) {
                     $timeout.cancel(vm.spinTimeoutPromise);
