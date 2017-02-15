@@ -14,7 +14,7 @@ function ssbDataStyles($timeout, $location, $compile) {
         function enabledynamicStyles(ssbContainer) {
 
             angular.element(document).ready(function() {
-                
+
                 var unbindWatcher = scope.$watch(function() {
                     return angular.element('.ssb-theme-btn').length;
                 }, function(newValue, oldValue) {
@@ -96,10 +96,10 @@ function ssbDataStyles($timeout, $location, $compile) {
                                 if(element.attr("href") && element.attr("target") === undefined && element.attr("href").indexOf("/blog") > -1 && element.attr("href").indexOf($location.host()) > -1 ){
                                     element.attr("target", "_self");
                                 }
-                                // Temporary fix
-                                // if(element.attr("href") && element.attr("href") === "/shop" && $location.$$host === "emikagifts.indigenous.io"){
-                                //     element.attr("target", "_self");
-                                // }
+                                // Temporary fix - Emika/ECWID integration. Force reload of shop page for plugin
+                                if(element.attr("href") && element.attr("href") === "/shop" && $location.$$host === "emikagifts.indigenous.io"){
+                                     element.attr("target", "_self");
+                                }
                                 if(element.attr("href") && element.attr("href").indexOf("#") === 0 && element.attr("href").length > 1){
                                     element.attr("du-smooth-scroll", '');
                                     if(element.hasClass("ssb-theme-btn")){
@@ -113,9 +113,9 @@ function ssbDataStyles($timeout, $location, $compile) {
                                         }, 0);
                                     }
                                     else{
-                                        $compile( element )(scope);                                    
+                                        $compile( element )(scope);
                                     }
-                                    
+
                                 }
                             })
 
