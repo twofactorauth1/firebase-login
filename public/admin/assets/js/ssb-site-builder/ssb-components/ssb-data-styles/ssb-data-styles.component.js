@@ -20,12 +20,10 @@ function ssbDataStyles($timeout, $location, $compile) {
                 }, function(newValue, oldValue) {
                     unbindWatcher1();
                     $timeout(function() {
-                        var elements = angular.element("script[type='text/javascript-lazy']");
+                        var elements = angular.element("script[type='text/javascript']");
                         elements.each(function() {
                             var elem = $(this);
-                            var code = elem.text();
-                            var f = new Function(code);
-                            f();  
+                            $compile( element )(scope); 
                         })
                     }, 1000)
                 })
