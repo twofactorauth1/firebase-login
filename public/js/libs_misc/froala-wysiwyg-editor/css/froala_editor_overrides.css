@@ -55,3 +55,7 @@ a.fr-command[data-param1='PRE'] {
 .fr-video-size-layer.fr-layer.fr-active .fr-video-group .fr-input-line{
   width: calc(50% - 2em) !important;
 }
+
+.fr-video-embed-layer.fr-layer.fr-active .fr-input-line textarea.fr-not-empty + label{
+  display: none;
+}

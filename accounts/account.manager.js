@@ -87,31 +87,42 @@ var accountManager = {
                         self.log.error(accountId, userId, 'Could not find website');
                         cb('Could not find websites');
                     } else {
-                        var sourceWebsite = websites[0];
-                        idMap.website = idMap.website || {};
-                        idMap.website.sourceId = sourceWebsite.id();
-                        sourceWebsite.set('_id', null);
-                        sourceWebsite.set('accountId', account.id());
-                        var created = {date:new Date(), by:userId};
-                        sourceWebsite.set('created', created);
-                        sourceWebsite.set('modified', created);
-                        if(sourceWebsite.get('settings') && sourceWebsite.get('settings').favicon) {
-                            var settings = sourceWebsite.get('settings');
-                            var url = settings.favicon;
-                            if(idMap.assets[url]) {
-                                settings.favicon = idMap.assets[url];
-                                sourceWebsite.set('settings', settings);
-                            }
-                        }
-                        websiteDao.saveOrUpdate(sourceWebsite, function(err, destWebsite){
+                        websiteDao.getWebsitesForAccount(destAccountId, function(err, destWebsites){
                             if(err) {
-                                self.log.error(accountId, userId, 'Error saving website:', err);
+                                self.log.error(accountId, userId, 'Error finding websites:', err);
                                 cb(err);
+                            } else if(!destWebsites || !destWebsites.length || destWebsites.length < 1) {
+                                self.log.error(accountId, userId, 'Could not find website');
+                                cb('Could not find websites');
                             } else {
-                                idMap.website.destId = destWebsite.id();
-                                cb(null, account);
+                                var sourceWebsite = websites[0];
+                                idMap.website = idMap.website || {};
+                                idMap.website.sourceId = sourceWebsite.id();
+                                sourceWebsite.set('_id', destWebsites[0].id());
+                                sourceWebsite.set('accountId', account.id());
+                                var created = {date:new Date(), by:userId};
+                                sourceWebsite.set('created', created);
+                                sourceWebsite.set('modified', created);
+                                if(sourceWebsite.get('settings') && sourceWebsite.get('settings').favicon) {
+                                    var settings = sourceWebsite.get('settings');
+                                    var url = settings.favicon;
+                                    if(idMap.assets[url]) {
+                                        settings.favicon = idMap.assets[url];
+                                        sourceWebsite.set('settings', settings);
+                                    }
+                                }
+                                websiteDao.saveOrUpdate(sourceWebsite, function(err, destWebsite){
+                                    if(err) {
+                                        self.log.error(accountId, userId, 'Error saving website:', err);
+                                        cb(err);
+                                    } else {
+                                        idMap.website.destId = destWebsite.id();
+                                        cb(null, account);
+                                    }
+                                });
                             }
                         });
+
                     }
                 });
             },
@@ -322,13 +333,14 @@ var accountManager = {
                     sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
                     self.log.debug('After transformation:', sectionJSON);
                     section = new $$.m.ssb.Section(sectionJSON);
+                    section.set("enabled", true)
                     sectionDao.saveOrUpdate(section, function(err, savedSection){
                         if(err) {
                             self.log.error(accountId, userId, 'Error saving sections:', err);
                             cb(err);
                         } else {
                             idMap.sections[oldId] = savedSection.id();
-                            sectionIdAry.push(savedSection.id());
+                            sectionIdAry.push({"_id": savedSection.id()});
                             cb();
                         }
                     });
