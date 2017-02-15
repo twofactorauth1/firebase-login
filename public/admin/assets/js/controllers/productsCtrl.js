@@ -225,22 +225,6 @@
 
             $window.location = _redirectUrl;
         };
-
-        $scope.sortFn = function (field) {
-            if ($scope.sortFields[field]) {
-                if ($scope.sortFields[field] == 1) {
-                    $scope.sortFields[field] = -1;
-                } else {
-                    $scope.sortFields[field] = 1;
-                }
-            } else {
-                $scope.sortFields = {};
-                $scope.sortFields[field] = 1;
-            }
-            ProductService.getProductsWithSort($scope.sortFields, function (products) {
-                $scope.products = products;
-                filterContactPhotos(products);
-            });
-        };
+        
     }]);
 }(angular));
