@@ -14,6 +14,19 @@ function ssbDataStyles($timeout, $location, $compile) {
         function enabledynamicStyles(ssbContainer) {
 
             angular.element(document).ready(function() {
+                $("script[type='text/javascript']")
+                var unbindWatcher1 = scope.$watch(function() {
+                    return angular.element("script[type='text/javascript']").length;
+                }, function(newValue, oldValue) {
+                    unbindWatcher1();
+                    $timeout(function() {
+                        var elements = angular.element("script[type='text/javascript-lazy']");
+                        elements.each(function() {
+                            var element = $(this);
+                            $compile( element )(scope); 
+                        })
+                    }, 1000)
+                })
 
                 var unbindWatcher = scope.$watch(function() {
                     return angular.element('.ssb-theme-btn').length;
