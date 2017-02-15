@@ -333,13 +333,14 @@ var accountManager = {
                     sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
                     self.log.debug('After transformation:', sectionJSON);
                     section = new $$.m.ssb.Section(sectionJSON);
+                    section.set("enabled", true)
                     sectionDao.saveOrUpdate(section, function(err, savedSection){
                         if(err) {
                             self.log.error(accountId, userId, 'Error saving sections:', err);
                             cb(err);
                         } else {
                             idMap.sections[oldId] = savedSection.id();
-                            sectionIdAry.push(savedSection.id());
+                            sectionIdAry.push({"_id": savedSection.id()});
                             cb();
                         }
                     });
