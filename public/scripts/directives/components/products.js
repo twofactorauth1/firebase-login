@@ -867,12 +867,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     var match = _.find(CartDetailsService.items, function(item) {
                         return item._id === productMatch._id;
                     });
-                    if (match) {
-                        match.quantity = parseInt(match.quantity, 10) + quantity;
-                    } else {
+                    if (!match)
                         CartDetailsService.addItemToCart(productMatch, scope.cart_discount, scope.percent_off);
-                    }
-
                 }
 
             };
