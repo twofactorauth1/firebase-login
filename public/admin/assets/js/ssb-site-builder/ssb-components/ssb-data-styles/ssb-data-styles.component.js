@@ -13,21 +13,8 @@ function ssbDataStyles($timeout, $location, $compile) {
 
         function enabledynamicStyles(ssbContainer) {
 
-            angular.element(document).ready(function() {
+            angular.element(document).ready(function() {                
                 
-                var unbindWatcher1 = scope.$watch(function() {
-                    return angular.element("script[type='text/javascript-lazy']").length;
-                }, function(newValue, oldValue) {
-                    unbindWatcher1();
-                    $timeout(function() {
-                        var elements = angular.element("script[type='text/javascript']");
-                        elements.each(function() {
-                            var elem = $(this);
-                            $compile( element )(scope); 
-                        })
-                    }, 1000)
-                })
-
                 var unbindWatcher = scope.$watch(function() {
                     return angular.element('.ssb-theme-btn').length;
                 }, function(newValue, oldValue) {
