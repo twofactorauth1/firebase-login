@@ -641,31 +641,29 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
         if (!vm.uiState && vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition) {
             _isVerticalNav = true;
-            $timeout(function() {
-                if(!isBlogPage){
-                    if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
-                        $(".ssb-page-section:first").addClass("ssb-wrap-left-fixed-left-nav")
-                        $(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");  
-                                        
-                    }
-                }
-                else{
-                    if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
-                        $(".ssb-page-layout-row:first").addClass("ssb-wrap-left-fixed-left-nav")
-                        $(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");
-                        
-                    }
-                } 
 
-                $scope.$watch(
-                    function () {
-                        return $(".ssb-wrap-left-fixed-left-nav").width();
-                    },
-                    function (value) {
-                        $(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
-                    }
-                )                   
-            }, 0);
+            if(!isBlogPage){
+                if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
+                    $(".ssb-page-section:first").addClass("ssb-wrap-left-fixed-left-nav")
+                    $(".ssb-page-section").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");                                     
+                }
+            }
+            else{
+                if(!angular.element(".ssb-wrap-left-fixed-left-nav").length){
+                    $(".ssb-page-layout-row:first").addClass("ssb-wrap-left-fixed-left-nav")
+                    $(".ssb-page-layout-row").slice(1).wrapAll( "<div class='ssb-wrap-fixed-right-nav' />");
+                    
+                }
+            } 
+
+            $scope.$watch(
+                function () {
+                    return $(".ssb-wrap-left-fixed-left-nav").width();
+                },
+                function (value) {
+                    $(".ssb-wrap-fixed-right-nav").css("margin-left", value + "px");
+                }
+            )
         }
 
         if (!vm.uiState && vm.section &&  vm.section.layoutModifiers && vm.section.layoutModifiers.fixed) {
