@@ -192,7 +192,7 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
           return scope.component.networks;
       };
 
-      function updateSocialNetworks(old_value, mode, new_value) {
+      scope.updateSocialNetworks = function(old_value, mode, new_value) {
         var selectedName;
         switch (mode) {
           case "add":
