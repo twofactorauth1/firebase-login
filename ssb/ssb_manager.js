@@ -303,6 +303,7 @@ module.exports = {
                     $query: {
                        accountId:accountId,
                        globalHeader:true,
+                       global:true,
                        latest: true
                     },
                     $orderby: {
@@ -324,6 +325,7 @@ module.exports = {
                     $query: {
                         accountId:accountId,
                         globalFooter:true,
+                        global:true,
                         latest: true
                     },
                     $orderby: {
