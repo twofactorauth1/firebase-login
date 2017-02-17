@@ -410,8 +410,16 @@
 
         if(editor.opts.isButton)
             editor.opts.button.css('background-color', val);        
-        else
-            editor.format.applyStyle('background-color', val);
+        else{
+            if($(editor.$el).find("span") && $(editor.$el).find("span").length)
+              $(editor.$el).find("span").removeClass("ssb-bg-color-inline-block");
+              editor.format.applyStyle('background-color', val);              
+                $(editor.$el).find("span").filter(function() {  
+                  var color = $(this).css('background-color');          
+              return color != 'transparent' && color != 'rgba(0, 0, 0, 0)';
+          }).addClass("ssb-bg-color-inline-block");
+              
+        }
         
         if(editor.opts.isButton)
           editor.events.trigger("bgColorChange", [val]);
