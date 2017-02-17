@@ -27,6 +27,7 @@ a.fr-command[data-param1='PRE'] {
 .fr-popup .fr-input-line input+label, .fr-popup .fr-input-line textarea+label{
   background: transparent;
 }
+.fr-command.ssb-editor-style-line-height-normal,
 .fr-command.ssb-editor-style-line-height-small-1,
 .fr-command.ssb-editor-style-line-height-small-2 ,
 .fr-command.ssb-editor-style-line-height-1,
