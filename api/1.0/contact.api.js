@@ -886,6 +886,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         self.log.error('Error creating subscribe activity: ' + err);
                                         //if we can't create the activity... that's fine.  We have already created the contact.
                                     }
+                                    self.createUserActivity(req, 'CREATE_CONTACT', null, {id: savedContact.id()}, function(){});
                                     return self.sendResult(resp, savedContact);
                                 });
 

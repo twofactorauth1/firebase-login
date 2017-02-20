@@ -191,6 +191,7 @@ $.FroalaEditor.build = _.memoize(function(type) {
         tableColors: [].concat.apply([], spectrumColors),
         tableColorsStep: 10,
         paragraphStyles: {
+            'ssb-editor-style-line-height-normal' : 'Line Height Normal',
             'ssb-editor-style-line-height-small-1': 'Line Height Small 1',
             'ssb-editor-style-line-height-small-2': 'Line Height Small 2',
             'ssb-editor-style-line-height-1': 'Line Height 1',

@@ -230,6 +230,8 @@
       var $popup = editor.popups.get('colors.picker');
       var $element = $(editor.selection.element());
 
+      var $orginalElement = $(editor.selection.element());
+
         var isButton = $element.hasClass("ssb-theme-btn");
         if(isButton){
             editor.opts.button = $element;
@@ -266,50 +268,86 @@
       $popup.find('.fr-' + tab + '-color .fr-select-color').removeClass('fr-selected-color');
 
       // Find the selected color.
-      while ($element.get(0) != editor.$el.get(0)) {
-        // Transparent or black.
-        if(editor.opts.isButton){
-          color = editor.opts.button.css(color_type);
-          setTimeout(function() {
+      // text color
+
+      if(editor.opts.isButton) {        
+        color = editor.opts.button.css(color_type);
+        setTimeout(function() {
             initializeSpectrum(color_type, color);
         }, 0)
-        }
-        if ($element.css(color_type) == 'transparent' || $element.css(color_type) == 'rgba(0, 0, 0, 0)') {
+      }
+
+
+      while ($element.get(0) != editor.$el.get(0) && !editor.opts.selectedElement.color && !editor.opts.isButton) {
+        // Transparent or black.
+        
+        if ($element.css('color') == 'transparent' || $element.css('color') == 'rgba(0, 0, 0, 0)') {
           $element = $element.parent();
         }
 
         // Select the correct color.
         else {
-            if(!editor.opts.selectedElement.color && !editor.opts.selectedElement.bg){
+            
             editor.opts.selectedElement.color = $element.css("color");
-            editor.opts.selectedElement.bg = $element.css("background-color");
+            
+            var colorVal = "";
+            if (tab == 'background') {
+              colorVal = editor.opts.selectedElement.bg;
           }
-          var colorVal = "";
-          if (tab == 'background') {
-            colorVal = editor.opts.selectedElement.bg;
-        }
-        else {
-           colorVal = editor.opts.selectedElement.color;
-        }
+          else {
+             colorVal = editor.opts.selectedElement.color;
+          }
             $popup.find('.fr-' + tab + '-color .fr-select-color[data-param1="' + editor.helpers.RGBToHex(colorVal) + '"]').addClass('fr-selected-color'); 
           
           break;
         }
       }
+
+
+      var $element = $orginalElement;
+
+      while ($element.get(0) != editor.$el.get(0) && !editor.opts.selectedElement.bg && !editor.opts.isButton) {
+        // Transparent or black.
+        
+        
+        if ($element.css("background-color") == 'transparent' || $element.css("background-color") == 'rgba(0, 0, 0, 0)') {
+          $element = $element.parent();
+        }
+
+        // Select the correct color.
+        else {
+            
+            //editor.opts.selectedElement.color = $element.css("color");
+            editor.opts.selectedElement.bg = $element.css("background-color");
+            
+            var colorVal = "";
+            if (tab == 'background') {
+              colorVal = editor.opts.selectedElement.bg;
+          }
+          else {
+             colorVal = editor.opts.selectedElement.color;
+          }
+            $popup.find('.fr-' + tab + '-color .fr-select-color[data-param1="' + editor.helpers.RGBToHex(colorVal) + '"]').addClass('fr-selected-color'); 
+          
+          break;
+        }
+      }
+
+
       if(!editor.opts.isButton)     
         {
-      var colorVal = "";
-      if (tab == 'background') {
-        colorVal = editor.opts.selectedElement.bg;
+        var colorVal = "";
+        if (tab == 'background') {
+          colorVal = editor.opts.selectedElement.bg;
+        }
+        else {
+           colorVal = editor.opts.selectedElement.color;
+        }
+          setTimeout(function() {
+              initializeSpectrum(color_type, colorVal);
+          }, 0)
+        }
       }
-      else {
-         colorVal = editor.opts.selectedElement.color;
-      }
-        setTimeout(function() {
-            initializeSpectrum(color_type, colorVal);
-        }, 0)
-      }
-    }
 
     function _setInitialColors () {
       var $element = $(editor.selection.element());
@@ -372,8 +410,16 @@
 
         if(editor.opts.isButton)
             editor.opts.button.css('background-color', val);        
-        else
-            editor.format.applyStyle('background-color', val);
+        else{
+            if($(editor.$el).find("span") && $(editor.$el).find("span").length)
+              $(editor.$el).find("span").removeClass("ssb-bg-color-inline-block");
+              editor.format.applyStyle('background-color', val);              
+                $(editor.$el).find("span").filter(function() {  
+                  var color = $(this).css('background-color');          
+              return color != 'transparent' && color != 'rgba(0, 0, 0, 0)';
+          }).addClass("ssb-bg-color-inline-block");
+              
+        }
         
         if(editor.opts.isButton)
           editor.events.trigger("bgColorChange", [val]);

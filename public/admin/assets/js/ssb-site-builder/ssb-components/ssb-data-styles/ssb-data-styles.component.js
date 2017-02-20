@@ -97,7 +97,7 @@ function ssbDataStyles($timeout, $location, $compile) {
                                     element.attr("target", "_self");
                                 }
                                 // Temporary fix - Emika/ECWID integration. Force reload of shop page for plugin
-                                if(element.attr("href") && element.attr("href") === "/shop" && $location.$$host === "emikagifts.indigenous.io"){
+                                if(element.attr("href") && $location.$$host === "emikagifts.indigenous.io" && (element.attr("href") === "/shop" || element.attr("href").match("emikagifts.indigenous.io/shop"))){
                                      element.attr("target", "_self");
                                 }
                                 if(element.attr("href") && element.attr("href").indexOf("#") === 0 && element.attr("href").length > 1){
