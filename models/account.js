@@ -13,7 +13,7 @@ var account = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
-
+            orgId:0,
             company: {
                 name:"",
                 type:0,
