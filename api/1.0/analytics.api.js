@@ -1899,7 +1899,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> allAdminReports (' + req.query.start + ', ' + req.query.end + ')');
         var start = req.query.start;
         var end = req.query.end;
-
+        var startTime = new Date().getTime();
 
         if(!end) {
             end = moment().toDate();
@@ -1926,7 +1926,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('previousEnd:', previousEnd);
 
         if(accountId === appConfig.mainAccountID) {
-            async.parallel({
+            async.parallelLimit({
                 visitorReports: function(callback){
                     analyticsManager.getVisitorReports(accountId, userId, start, end, true, callback);
                 },
@@ -1975,8 +1975,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 emailsReport: function(callback) {
                     analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
                 }
-            }, function(err, results){
-                self.log.debug(accountId, userId, '<< allAdminReports');
+            }, 2, function(err, results){
+                var duration = new Date().getTime() - startTime;
+                self.log.debug(accountId, userId, '<< allAdminReports [' + duration + ']');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
             });
         } else {
