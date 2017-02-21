@@ -65,7 +65,8 @@
       test_regex: /^.*((youtu.be)|(youtube.com))\/((v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))?\??v?=?([^#\&\?]*).*/,
       url_regex: /(?:https?:\/\/)?(?:www\.)?(?:m\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/)?([0-9a-zA-Z_\-]+)(.+)?/g,
       url_text: '//www.youtube.com/embed/$1',
-      html: '<iframe width="640" height="360" src="{url}?wmode=opaque" frameborder="0" allowfullscreen></iframe>'
+      html: '<iframe width="640" height="360" src="{url}?wmode=opaque" frameborder="0" allowfullscreen></iframe>',
+      html_non_autoplay: '<iframe width="640" height="360" src="{url}?wmode=opaquerel=0" frameborder="0" allowfullscreen></iframe>'
     },
     {
       test_regex: /^.*(vimeo\.com\/)((channels\/[A-z]+\/)|(groups\/[A-z]+\/videos\/))?([0-9]+)/,
@@ -560,19 +561,15 @@
     }
 
 
-
-    function insertByMediaAsset (link, current_video) {
+    // insert media manager video
+    function insertByMediaAsset (link, current_video) {     
       
-      var video = null;
-      $current_video = current_video;
-      for (var i = 0; i < $.FE.VIDEO_PROVIDERS.length; i++) {
-        var vp = $.FE.VIDEO_PROVIDERS[i];
-        
-          video = link.replace(vp.url_regex, vp.url_text);
-          video = vp.html.replace(/\{url\}/, video);
-          break;
+      $current_video = current_video;       
+      var width = editor.opts.videoDefaultWidth;
+      if (width && width != 'auto') {
+        width = width + 'px';
       }
-
+      var video = '<video width="'+width+'" controls><source src="'+link+'"></video>';
 
       if (video) {
         insert(video);
