@@ -418,7 +418,11 @@ var insightsManager = {
                 var ccAry = self.config.ccAry;
                 var replyToAddress = self.config.replyToAddress;
                 var replyToName = self.config.replyToName;
-
+                //Add Jim to insights email for Main in Prod.
+                if(_accountId === appConfig.mainAccountID && appConfig.nonProduction !== true) {
+                    ccAry = ccAry || [];
+                    ccAry.push('jim@indigenous.io');
+                }
                 emailMessageManager.sendInsightEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent,
                     _accountId, userId, contactId, vars, emailId, ccAry, replyToAddress, replyToName, accountId, function(err, value){
                         cb(err, sectionDataMap, value);
@@ -502,7 +506,11 @@ var insightsManager = {
                      *  - otherwise
                      *  -- verify stripeCustomerId and stripeSubscriptionId
                      */
-                    if(billing.plan === 'NO_PLAN_ARGUMENT') {
+                    if(account.id() === appConfig.mainAccountID) {
+                        accountList.push(account);
+                        includedAccounts.push(account.id());
+                        callback();
+                    } else if(billing.plan === 'NO_PLAN_ARGUMENT') {
                         if(sm.isWithinTrial(billing)) {
                             accountList.push(account);
                             includedAccounts.push(account.id());
