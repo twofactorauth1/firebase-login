@@ -21,6 +21,9 @@ a.fr-command[data-param1='PRE'] {
 .fr-view img.fr-dib.fr-fil{
 	    margin-left: 0 !important;
 }
+.fr-view table{
+  min-width: 100%;
+}
 .fr-view table tr td{
 	color: initial;
 }
