@@ -624,6 +624,15 @@ var dao = {
 
             }
         });
+    },
+
+    listAccountTemplates: function(accountId, userId, fn){
+        var self = this;
+        var query = {
+            isTemplateAccount: true
+        };
+
+        self.findMany(query, fn);
     }
 };
 

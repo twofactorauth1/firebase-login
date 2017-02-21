@@ -53,13 +53,27 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/site-builder',
         template: '<div ui-view class=""></div>',
         title: 'Simple Site Builder'
-    }).state('app.website.ssbSiteBuilder.pages', {
+    })
+    // .state('app.website.ssbSiteBuilder.pages', {
+    //     url: '/pages/',
+    //     template: "<ssb-site-templates></ssb-site-templates>",
+    //     title: 'Choose a site template',
+    //     icon: 'ti-layout-media-left-alt',
+    //     resolve: loadSequence('simpleSiteBuilderService')
+    // })
+
+
+
+    .state('app.website.ssbSiteBuilder.pages', {
         url: '/pages/',
-        template: "<ssb-site-templates></ssb-site-templates>",
-        title: 'Choose a site template',
+        template: "<ssb-account-templates></ssb-account-templates>",
+        title: 'Choose a account template',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('simpleSiteBuilderService')
-    }).state('app.website.ssbSiteBuilder.editor', {
+    })
+
+
+    .state('app.website.ssbSiteBuilder.editor', {
         url: '/pages/:pageId',
         template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
         title: 'Simple Site Builder Page Editor',

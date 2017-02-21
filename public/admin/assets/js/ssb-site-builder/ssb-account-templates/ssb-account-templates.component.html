@@ -1,0 +1,49 @@
+<div class="site-templates-container account-templates-container">
+
+    <div class="loading-editor" ct-fullheight="window" ng-hide="!vm.uiState.loading">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
+             Loading...
+            </h1>
+        </div>
+    </div>
+
+    <section id="page-title" class="padding-top-15 padding-bottom-15" ng-hide="vm.uiState.loading">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1 class="mainTitle">Site Builder</h1>
+                <span class="mainDescription">Choose a template account to get started.</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="ssb-site-template-grid" ng-hide="vm.uiState.loading">
+
+        <ul class="list-unstyled">
+
+            <li ng-repeat="template in vm.state.accountTemplates track by $index" ng-click="vm.selectAccountTemplate(template._id)" class="ssb-site-template-grid-item col-sm-6 col-lg-4 col-xl-3">
+                <div class="ssb-site-template-grid-item-inner">
+
+                    <div class="ssb-site-template-img-container">
+
+                        
+                        <img  class="ssb-site-template-img img-responsive" ng-src="{{ template.templateImageUrl }}" err-src="/admin/assets/images/default-page.jpg">
+
+                        <div class="ssb-site-template-description hidden">
+                            <p>{{template.subdomain}}</p>
+                        </div>
+
+                    </div>
+
+                    <h1>
+                        <a href class="btn btn-primary btn-o" style="text-transform:capitalize">{{template.subdomain}}</a>
+                    </h1>
+
+                </div>
+
+            </li>
+
+        </ul>
+
+    </section>
+</div>
