@@ -45,7 +45,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
     vm.toggleSidebarPanel = toggleSidebarPanel;
-    vm.resizeWindow = resizeWindow
+    vm.resizeWindow = resizeWindow;
+    vm.isTextColumnNum = isTextColumnNum;
 
     vm.uiState = {
         loading: 0,
@@ -164,7 +165,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         toggleSidebarPanel: vm.toggleSidebarPanel,
 
-        resizeWindow: vm.resizeWindow
+        resizeWindow: vm.resizeWindow,
+
+        isTextColumnNum: vm.isTextColumnNum
 
     };
 
@@ -1368,6 +1371,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         $timeout(function() {
             $(window).trigger('resize');
         }, 500);
+    }
+
+
+    function isTextColumnNum(component){
+        return component && component.layoutModifiers && component.layoutModifiers.columns && angular.isDefined(component.layoutModifiers.columns.columnsNum);        
     }
 
     function init(element) {

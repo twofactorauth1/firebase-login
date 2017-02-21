@@ -82,8 +82,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     
 
                 }
-                if(section.layoutModifiers.columns && section.layoutModifiers.columns.columnsNum){
-                    var _col = section.layoutModifiers.columns.columnsNum;
+                if(section.layoutModifiers.columns && angular.isDefined(section.layoutModifiers.columns.columnsNum)){
+                    var _col = section.layoutModifiers.columns.columnsNum || 1;
                     classString += ' ssb-text-column-layout ssb-text-column-' + _col;
                 }
 
@@ -297,7 +297,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
 
         if(vm.section.layoutModifiers && vm.section.layoutModifiers.columns){
-            if (vm.section.layoutModifiers.columns.columnsNum) {
+            if (angular.isDefined(vm.section.layoutModifiers.columns.columnsNum)) {
                 var _lastCoulmnFullWidth = false;
                 var actualColumnsToIgnore = [];
                 if(vm.section.layoutModifiers.columns.ignoreColumns && vm.section.layoutModifiers.columns.ignoreColumns.length){
@@ -314,7 +314,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                 }
                 var fixedColumn = actualColumnsToIgnore.indexOf(index) > -1 ? true : false;
 
-                var colCount = parseInt(vm.section.layoutModifiers.columns.columnsNum);
+                var colCount = parseInt(vm.section.layoutModifiers.columns.columnsNum) || 1;
                 var colClass = " col-xs-12 col-md-" + Math.floor(12/colCount);
                 
                 if(!fixedColumn) {
