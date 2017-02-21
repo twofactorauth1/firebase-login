@@ -855,6 +855,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getUserReport');
+        var startTime = new Date().getTime();
         var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
@@ -971,7 +972,8 @@ module.exports = {
                 cb(null, result);
             }
         ], function(err, results){
-            self.log.debug(accountId, userId, '<< getUserReport');
+            var duration = new Date().getTime() - startTime;
+            self.log.debug(accountId, userId, '<< getUserReport [' + duration + ']');
             fn(err, results);
         });
 
@@ -1579,6 +1581,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> pageAnalyticsReport');
+        var startTime = new Date().getTime();
 
         var stageAry = [];
         if(isAggregate === true) {
@@ -1654,7 +1657,7 @@ module.exports = {
             stageAry.push(group2);
         }
 
-
+        //self.log.debug(accountId, userId, 'stageAry:', JSON.stringify(stageAry));
         dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
             if(err) {
                 self.log.error('Error finding current month:', err);
@@ -1677,13 +1680,15 @@ module.exports = {
                                 result['id'] = result['url.path'];
                                 result['url.path'] = map[result['url.path']];
                             });
-                            self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                            var duration = new Date().getTime() - startTime;
+                            self.log.debug(accountId, userId, '<< pageAnalyticsReport [' + duration + ']');
                             fn(null, value);
                         }
 
                     });
                 } else {
-                    self.log.debug(accountId, userId, '<< trafficSourcesReport');
+                    var duration = new Date().getTime() - startTime;
+                    self.log.debug(accountId, userId, '<< pageAnalyticsReport [' + duration + ']');
                     fn(null, value);
                 }
 
