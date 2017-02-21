@@ -324,9 +324,10 @@ module.exports = {
                 var query = {
                     $query: {
                         accountId:accountId,
-                        globalFooter:true,
+                        
                         global:true,
-                        latest: true
+                        latest: true,
+                        'components.0.type': 'footer'
                     },
                     $orderby: {
                         'modified.date' : -1
@@ -370,6 +371,7 @@ module.exports = {
                     jsonSections.push(header.toReference());
                     //find and remove the default header
                    sections = _.filter(sections, function(section){
+
                        if(section.get('name') !== 'Header') {
                            return true;
                        }
@@ -388,15 +390,15 @@ module.exports = {
 
                 if(footer) {
                     //find and remove the default footer
-                    sections = _.filter(sections, function(section){
-                        if(section.get('name') !== 'Footer') {
+                    sections = _.filter(sections, function(section){                        
+                        if(section.get("components").length && section.get("components")[0].type !== 'footer') {
                             return true;
                         }
                     });
 
                     if(gsections){
                         gsections = _.filter(gsections, function(section){
-                            if(section.get('name') !== 'Footer') {
+                            if(section.get("components").length && section.get("components")[0].type !== 'footer') {
                                return true;
                             }
                         });
