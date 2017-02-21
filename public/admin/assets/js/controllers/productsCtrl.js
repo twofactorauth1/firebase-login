@@ -11,7 +11,7 @@
             allowAddOns: true
         };
         $scope.sortFields = {'modified.date': -1};
-
+        $scope.defaultSortorder = "reverse";
         console.log('ProductConstant.product_types.dp ', ProductConstant.product_types.dp);
         $scope.productTypeOptions = ProductConstant.product_types.dp;
 

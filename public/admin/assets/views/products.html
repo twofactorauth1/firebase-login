@@ -112,7 +112,7 @@
                         <th class="hidden-xs" st-sort="status">Status</th>
                         <th st-sort="name">Name</th>
                         <th class="hidden-xs" st-sort="type">Type</th>
-                        <th class="hidden-xs" st-sort="modified.date">Modified</th>
+                        <th class="hidden-xs" st-sort-default="{{defaultSortorder}}" st-sort="modified.date">Modified</th>
                     </tr>
                     <tr ng-if="showFilter">
                         <th>
