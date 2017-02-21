@@ -1938,7 +1938,7 @@
 
   // Register the font size command.
   $.FE.RegisterCommand('insertVideo', {
-    title: 'Insert Video',
+    title: 'Insert Media',
     undo: false,
     focus: true,
     refreshAfterCallback: false,
