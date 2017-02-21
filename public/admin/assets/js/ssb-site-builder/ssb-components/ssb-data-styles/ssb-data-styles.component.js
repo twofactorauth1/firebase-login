@@ -100,6 +100,9 @@ function ssbDataStyles($timeout, $location, $compile) {
                                 if(element.attr("href") && $location.$$host === "emikagifts.indigenous.io" && (element.attr("href") === "/shop" || element.attr("href").match("emikagifts.indigenous.io/shop"))){
                                      element.attr("target", "_self");
                                 }
+                                if(element.attr("href") && $location.$$host === "emikagifts.com" && (element.attr("href") === "/shop" || element.attr("href").match("emikagifts.com/shop"))){
+                                    element.attr("target", "_self");
+                                }
                                 if(element.attr("href") && element.attr("href").indexOf("#") === 0 && element.attr("href").length > 1){
                                     element.attr("du-smooth-scroll", '');
                                     if(element.hasClass("ssb-theme-btn")){
