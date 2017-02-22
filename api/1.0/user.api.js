@@ -424,6 +424,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var middle = req.body.middle;
         var campaignId = req.body.campaignId;
         var existingUser = req.body.existingUser;
+        var orgId = req.body.orgId;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
@@ -457,6 +458,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> last', lastName);
         self.log.debug('>> campaignId', campaignId);
         self.log.debug('>> existingUser', existingUser);
+        self.log.debug('>> orgId', orgId);
 
         var name = {
             first:firstName,
@@ -477,7 +479,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         callback(null, accountAndUser.user, accountAndUser.account);
                     });
                 } else {
-                    userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, function (err, accountAndUser) {
+                    userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, orgId, function (err, accountAndUser) {
                         if (err) {
                             self.log.error('Error creating account or user: ' + err);
                             return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
@@ -755,7 +757,7 @@ _.extend(api.prototype, baseApi.prototype, {
             last:lastName
         };
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, function (err, accountAndUser) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, 0, function (err, accountAndUser) {
             var userObj = accountAndUser.user;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {

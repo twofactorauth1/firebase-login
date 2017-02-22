@@ -27,6 +27,9 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
         if ($scope.insertMediaType) {
           $scope.m.selectAll(scope.insertMediaType, true);
         }
+        else if($scope.showType !== "all"){
+          $scope.m.selectAll($scope.showType, true);
+        }
         $timeout(function() {
           $scope.loadingAssets = false;
         }, 500);
@@ -200,6 +203,9 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.lastSelect = null;
   $scope.isSingleSelect = isSingleSelect;
   $scope.showType = "all";
+  if(insertMedia && insertMedia.name === 'insertVideoMedia'){
+    $scope.showType = "video";
+  }
   $scope.editingImage = false;
   $scope.selectModel = {
     select_all: false

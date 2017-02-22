@@ -309,6 +309,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 if(aElem.hasClass("ssb-theme-btn")){
                                     aElem.addClass("btn");
                                 }
+                                else if(aElem.is("span") && aElem.closest(".ssb-theme-btn").length){
+                                    aElem.closest(".ssb-theme-btn").addClass("btn");
+                                }
                             }
                         }
 

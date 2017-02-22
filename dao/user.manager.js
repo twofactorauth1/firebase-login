@@ -323,7 +323,7 @@ module.exports = {
         });
     },
 
-    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, orgId, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
@@ -502,6 +502,7 @@ module.exports = {
                         _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
                         email: email
                     });
+                    updatedAccount.set('orgId', orgId);
                     accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
                         if(err) {
                             log.error('Error saving account: ' + err);

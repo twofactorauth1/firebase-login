@@ -22,6 +22,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.insertMedia = insertMedia;
+    vm.insertVideoMedia = insertVideoMedia;
     vm.addFroalaImage = addFroalaImage;
     vm.state.imageEditor = {};
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
@@ -44,7 +45,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.isNavHero = isNavHero;
     vm.isSortableDisabled = angular.element($window).width() < 768 ? true : false
     vm.toggleSidebarPanel = toggleSidebarPanel;
-    vm.resizeWindow = resizeWindow
+    vm.resizeWindow = resizeWindow;
+    vm.isTextColumnNum = isTextColumnNum;
 
     vm.uiState = {
         loading: 0,
@@ -163,7 +165,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         toggleSidebarPanel: vm.toggleSidebarPanel,
 
-        resizeWindow: vm.resizeWindow
+        resizeWindow: vm.resizeWindow,
+
+        isTextColumnNum: vm.isTextColumnNum
 
     };
 
@@ -711,6 +715,49 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
+
+    function openVideoMediaModal(modal, controller, index, size) {
+        console.log('openModal >>> ', modal, controller, index);
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'md',
+            resolve: {
+                vm: function() {
+                    return vm;
+                }
+            }
+        };
+
+        if (controller) {
+            _modal.controller = controller;
+
+            _modal.resolve.showInsert = function () {
+              return vm.showInsert;
+            };
+
+            _modal.resolve.insertMedia = function () {
+              return vm.insertVideoMedia;
+            };
+
+            _modal.resolve.isSingleSelect = function () {
+                return true;
+            };
+        }
+
+        if (size) {
+            _modal.size = 'lg';
+        }
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+
+    }
+
     function addSectionToPage(section, version) {
       SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance);
     }
@@ -723,6 +770,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         $timeout(function() {
             vm.state.imageEditor.editor.image.insert(asset.url, !1, null, vm.state.imageEditor.img);
+        }, 0);
+
+    };
+
+
+    function insertVideoMedia(asset) {
+        addFroalaVideo(asset);
+    };
+
+    function addFroalaVideo(asset) {
+
+        $timeout(function() {
+            vm.callBackOnVideoInsert(asset.url, vm.callBackVedio);
         }, 0);
 
     };
@@ -770,9 +830,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
+    // Hook froala insert up to our Media Manager
+    window.clickandInsertVideoButton = function (editor, video, callBack) {
+      console.log('clickandInsertImageButton >>> ');
+      vm.callBackOnVideoInsert = callBack;
+      vm.callBackVedio = video;
+      if(editor){
+        vm.showInsert = true;
+      }
+      openVideoMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+    };
+
     $scope.$on('focusEditor', function (event, args) {
       vm.state.imageEditor.editor = args.editor;
       vm.state.imageEditor.img = null;
+      vm.state.imageEditor.video = null;
     });
     $scope.$on('activeEditor', function (event, args) {
       if(args.editor)
@@ -1299,6 +1371,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         $timeout(function() {
             $(window).trigger('resize');
         }, 500);
+    }
+
+
+    function isTextColumnNum(component){
+        return component && component.layoutModifiers && component.layoutModifiers.columns && angular.isDefined(component.layoutModifiers.columns.columnsNum);        
     }
 
     function init(element) {

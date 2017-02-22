@@ -126,6 +126,27 @@ var accountManager = {
                     }
                 });
             },
+            // Update blog and blog list version and set inactive
+            function(account, cb){
+                var query = {accountId:account.id(), latest:true};
+                pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding pages:', err);
+                        cb(err);
+                    } else {
+                        async.eachSeries(pages, function(page, callback){
+                            self._updateBlogPages(account.id(), userId, page, callback);
+                        }, function(err){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error updating blog pages:', err);
+                                cb(err);
+                            } else {
+                                cb(null, account);
+                            }
+                        });
+                    } 
+                });      
+            },
             function(account, cb) {
                 /*
                  * Copy pages and sections
@@ -142,6 +163,39 @@ var accountManager = {
                         }, function(err){
                             if(err) {
                                 self.log.error(accountId, userId, 'Error copyingPage:', err);
+                                cb(err);
+                            } else {
+                                cb(null, account);
+                            }
+                        });
+                    }
+                });
+            },
+            function(account, cb) {
+                /*
+                 * Update old emails
+                 */
+                var query = {accountId:account.id(), latest:true};
+                emailDao.findMany(query, $$.m.cms.Email, function(err, emails){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting old emails:', err);
+                        cb(err);
+                    } else {
+                        
+                        async.eachSeries(emails, function(email, callback){
+                            
+                            email.set('latest', false);
+                            emailDao.saveOrUpdate(email, function(err, savedEmail){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error saving old email:', err);
+                                    callback(err);
+                                } else {                                    
+                                    callback();
+                                }
+                            });
+                        }, function(err){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error copying old emails:', err);
                                 cb(err);
                             } else {
                                 cb(null, account);
@@ -210,7 +264,6 @@ var accountManager = {
                         cb(null, account);
                     }
                 });
-
             },
             function(account, cb) {
                 /*
@@ -274,6 +327,22 @@ var accountManager = {
         });
     },
 
+    _updateBlogPages: function(accountId, userId, page, fn){  
+        
+        page.set('latest', false);
+        page.set('version', 0);
+        //var currentVersion = 0;
+        // page.set('_id', page.id() + '_' + currentVersion);
+        pageDao.saveOrUpdate(page, function(err, value){
+            if(err) {                
+                self.log.error(accountId, userId, 'Error saving page:', err);
+                fn(err);
+            } else {
+                fn();
+            }
+        });
+    },
+
     _copyPage: function(accountId, userId, srcAccountId, destAccountId, destWebsiteId, idMap, page, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> _copyPage [' + page.id() + ']');
@@ -323,27 +392,30 @@ var accountManager = {
                         self.log.warn(accountId, userId, 'No section found with id [' + sectionId + ']');
                         cb();
                     }
-                    var oldId = sectionId;
-                    section.set('_id', null);
-                    section.set('accountId', destAccountId);
-                    //TODO: check if this works?
+                    else{
+                        var oldId = sectionId;
+                        section.set('_id', null);
+                        section.set('accountId', destAccountId);
+                        //TODO: check if this works?
 
-                    var sectionJSON = section.toJSON();
-                    self.log.debug('Before transformation:', sectionJSON);
-                    sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
-                    self.log.debug('After transformation:', sectionJSON);
-                    section = new $$.m.ssb.Section(sectionJSON);
-                    section.set("enabled", true)
-                    sectionDao.saveOrUpdate(section, function(err, savedSection){
-                        if(err) {
-                            self.log.error(accountId, userId, 'Error saving sections:', err);
-                            cb(err);
-                        } else {
-                            idMap.sections[oldId] = savedSection.id();
-                            sectionIdAry.push({"_id": savedSection.id()});
-                            cb();
-                        }
-                    });
+                        var sectionJSON = section.toJSON();
+                        self.log.debug('Before transformation:', sectionJSON);
+                        sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
+                        self.log.debug('After transformation:', sectionJSON);
+                        section = new $$.m.ssb.Section(sectionJSON);
+                        section.set("enabled", true)
+                        sectionDao.saveOrUpdate(section, function(err, savedSection){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error saving sections:', err);
+                                cb(err);
+                            } else {
+                                idMap.sections[oldId] = savedSection.id();
+                                sectionIdAry.push({"_id": savedSection.id()});
+                                cb();
+                            }
+                        });
+                    }
+                    
                 }
             });
         }, function(err){
