@@ -386,7 +386,13 @@ module.exports = {
 
                 }
 
+                // If global footer don't exist then find the footer on the page
 
+                if(!footer){
+                    footer = _.find(sections, function(section){
+                        return section.get("components").length && section.get("components")[0].type === 'footer';
+                    });
+                }
 
                 if(footer) {
                     //find and remove the default footer
@@ -404,7 +410,10 @@ module.exports = {
                         });
                     }
                 }
-                _.each(sections, function(section){
+
+
+
+                _.each(sections, function(section){                    
                     jsonSections.push(section.toReference());
                 });
 
