@@ -323,27 +323,30 @@ var accountManager = {
                         self.log.warn(accountId, userId, 'No section found with id [' + sectionId + ']');
                         cb();
                     }
-                    var oldId = sectionId;
-                    section.set('_id', null);
-                    section.set('accountId', destAccountId);
-                    //TODO: check if this works?
+                    else{
+                        var oldId = sectionId;
+                        section.set('_id', null);
+                        section.set('accountId', destAccountId);
+                        //TODO: check if this works?
 
-                    var sectionJSON = section.toJSON();
-                    self.log.debug('Before transformation:', sectionJSON);
-                    sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
-                    self.log.debug('After transformation:', sectionJSON);
-                    section = new $$.m.ssb.Section(sectionJSON);
-                    section.set("enabled", true)
-                    sectionDao.saveOrUpdate(section, function(err, savedSection){
-                        if(err) {
-                            self.log.error(accountId, userId, 'Error saving sections:', err);
-                            cb(err);
-                        } else {
-                            idMap.sections[oldId] = savedSection.id();
-                            sectionIdAry.push({"_id": savedSection.id()});
-                            cb();
-                        }
-                    });
+                        var sectionJSON = section.toJSON();
+                        self.log.debug('Before transformation:', sectionJSON);
+                        sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
+                        self.log.debug('After transformation:', sectionJSON);
+                        section = new $$.m.ssb.Section(sectionJSON);
+                        section.set("enabled", true)
+                        sectionDao.saveOrUpdate(section, function(err, savedSection){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error saving sections:', err);
+                                cb(err);
+                            } else {
+                                idMap.sections[oldId] = savedSection.id();
+                                sectionIdAry.push({"_id": savedSection.id()});
+                                cb();
+                            }
+                        });
+                    }
+                    
                 }
             });
         }, function(err){

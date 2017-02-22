@@ -115,6 +115,10 @@ var aws = require('aws-sdk');
 var awsConfigs = require('./configs/aws.config');
 aws.config.update(awsConfigs);
 
+// RequestTimeTooSkewed error with S3 upload
+// aws.config.update({
+//     correctClockSkew: true
+// });
 
 //---------------------------------------------------------
 //  INIT APPLICATION
