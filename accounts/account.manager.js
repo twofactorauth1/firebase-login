@@ -126,6 +126,27 @@ var accountManager = {
                     }
                 });
             },
+            // Update blog and blog list version and set inactive
+            function(account, cb){
+                var query = {accountId:account.id(), latest:true};
+                pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding pages:', err);
+                        cb(err);
+                    } else {
+                        async.eachSeries(pages, function(page, callback){
+                            self._updateBlogPages(account.id(), userId, page, callback);
+                        }, function(err){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error updating blog pages:', err);
+                                cb(err);
+                            } else {
+                                cb(null, account);
+                            }
+                        });
+                    } 
+                });      
+            },
             function(account, cb) {
                 /*
                  * Copy pages and sections
@@ -270,6 +291,22 @@ var accountManager = {
             } else {
                 self.log.debug(accountId, userId, '<< copyAccountTemplate');
                 fn(null, account);
+            }
+        });
+    },
+
+    _updateBlogPages: function(accountId, userId, page, fn){  
+        
+        page.set('latest', false);
+        page.set('version', 0);
+        //var currentVersion = 0;
+        // page.set('_id', page.id() + '_' + currentVersion);
+        pageDao.saveOrUpdate(page, function(err, value){
+            if(err) {                
+                self.log.error(accountId, userId, 'Error saving page:', err);
+                fn(err);
+            } else {
+                fn();
             }
         });
     },
