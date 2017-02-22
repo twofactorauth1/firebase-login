@@ -173,6 +173,39 @@ var accountManager = {
             },
             function(account, cb) {
                 /*
+                 * Update old emails
+                 */
+                var query = {accountId:account.id(), latest:true};
+                emailDao.findMany(query, $$.m.cms.Email, function(err, emails){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error getting old emails:', err);
+                        cb(err);
+                    } else {
+                        
+                        async.eachSeries(emails, function(email, callback){
+                            
+                            email.set('latest', false);
+                            emailDao.saveOrUpdate(email, function(err, savedEmail){
+                                if(err) {
+                                    self.log.error(accountId, userId, 'Error saving old email:', err);
+                                    callback(err);
+                                } else {                                    
+                                    callback();
+                                }
+                            });
+                        }, function(err){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error copying old emails:', err);
+                                cb(err);
+                            } else {
+                                cb(null, account);
+                            }
+                        });
+                    }
+                });
+            },
+            function(account, cb) {
+                /*
                  * Copy emails
                  */
                 var query = {accountId:srcAccountId, latest:true};
@@ -231,7 +264,6 @@ var accountManager = {
                         cb(null, account);
                     }
                 });
-
             },
             function(account, cb) {
                 /*
