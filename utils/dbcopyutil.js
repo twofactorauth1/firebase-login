@@ -7,9 +7,14 @@ var SUBSCRIPTION_ID = 'sub_6HfA5moT1ErVcM';
 var STRIPE_PLAN_ID = 'jtospfftdw';
 var STRIPE_ACCESS_TOKEN = 'sk_test_osAnWDulUbCkgw0D2kkwo1Ju';
 var STRIPE_REFRESH_TOKEN = 'rt_5NU1M6ubOAkICDJs0TpIa8iCRHDUwbSaC7VJgPXQ75MCfFGZ';
+
+var PROD_STRIPE_CUSTOMER_ID = 'cus_5WAjoVo4WgofRd';
+var PROD_SUBSCRIPTION_ID = 'EVERGREEN';
+var PROD_STRIPE_PLAN_ID = 'EVERGREEN';
+
 var utils = require('./commonutils');
 require('../configs/log4js.config').configure();
-var UUID = require('node-uuid')
+var UUID = require('node-uuid');
 
 var defaultSubscriptionPrivs = [
     'integrations/payments',
@@ -35,26 +40,26 @@ var copyutil = {
     log: $$.g.getLogger("copyutil"),
 
     //TODO: make this safe!
-    // copyAccountFromTestToProd : function(accountId, cb) {
-    //     var self = this;
-    //     self._copyAccount(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, cb);
-    // },
+    copyAccountFromTestToProd : function(accountId, cb) {
+         var self = this;
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, true, true, cb);
+    },
 
     copyAccountFromTestToTest : function(accountId, cb) {
         var self = this;
-        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, true, cb);
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, true, null, cb);
     },
 
     copyAccountFromProdToTest: function(accountId, cb) {
         var self = this;
         //self._copyAccount(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
-        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, null, cb);
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, null, null, cb);
 
     },
 
     copyAccountFromProdToProd: function(accountId, cb) {
         var self = this;
-        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, true, cb);
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, true, null, cb);
 
     },
 
@@ -300,7 +305,7 @@ var copyutil = {
     },
 
 
-    _copyAccountWithUpdatedStripeIDs: function(srcAccountId, srcDBUrl, destDBUrl, forceNewAccount, fn) {
+    _copyAccountWithUpdatedStripeIDs: function(srcAccountId, srcDBUrl, destDBUrl, forceNewAccount, useProdStripe, fn) {
         var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
         var destMongo = mongoskin.db(destDBUrl, {safe: true});
 
@@ -402,6 +407,9 @@ var copyutil = {
                         { $inc: { seq: 1 } },
                         { new: true, upsert: true },
                         function (err, value) {
+                            if(value && value.value && !value.hasOwnProperty('seq')) {
+                                value = value.value;
+                            }
                             if (!err && value != null && value.hasOwnProperty('seq')) {
                                 cb(null, value.seq);
                             } else {
@@ -430,11 +438,14 @@ var copyutil = {
                                 { $inc: { seq: 1 } },
                                 { new: true, upsert: true },
                                 function (err, value) {
+                                    if(value && value.value && !value.hasOwnProperty('seq')) {
+                                        value = value.value;
+                                    }
                                     if (!err && value != null && value.hasOwnProperty('seq')) {
                                         cb(null, value.seq);
                                     } else {
                                         console.log('Error getting nextAccountId:', err);
-                                        cb(null, 99999);
+                                        cb(null, 999999);
                                     }
                                 }
                             );
@@ -447,14 +458,21 @@ var copyutil = {
             function(newAccountId, cb) {
                 console.log('New AccountId:' + newAccountId);
                 accountToSave._id = newAccountId;
-                accountToSave.billing.stripeCustomerId = STRIPE_CUSTOMER_ID;
-                accountToSave.billing.subscriptionId = SUBSCRIPTION_ID;
-                accountToSave.billing.plan = STRIPE_PLAN_ID;
-                if(accountToSave.credentials['type'=='stripe']) {
-                    var credentials = accountToSave.credentials['type'=='stripe'];
-                    credentials.accessToken = STRIPE_ACCESS_TOKEN;
-                    credentials.refreshToken = STRIPE_REFRESH_TOKEN;
+                if(useProdStripe === true) {
+                    accountToSave.billing.stripeCustomerId = PROD_STRIPE_CUSTOMER_ID;
+                    accountToSave.billing.subscriptionId = PROD_SUBSCRIPTION_ID;
+                    accountToSave.billing.plan = PROD_STRIPE_PLAN_ID;
+                } else {
+                    accountToSave.billing.stripeCustomerId = STRIPE_CUSTOMER_ID;
+                    accountToSave.billing.subscriptionId = SUBSCRIPTION_ID;
+                    accountToSave.billing.plan = STRIPE_PLAN_ID;
+                    if(accountToSave.credentials['type'=='stripe']) {
+                        var credentials = accountToSave.credentials['type'=='stripe'];
+                        credentials.accessToken = STRIPE_ACCESS_TOKEN;
+                        credentials.refreshToken = STRIPE_REFRESH_TOKEN;
+                    }
                 }
+
 
                 if (forceNewAccount) {
                     var uniqueDomainSuffix = $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
