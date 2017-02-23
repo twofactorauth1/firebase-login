@@ -21,7 +21,7 @@
 
         <ul class="list-unstyled">
 
-            <li ng-repeat="template in vm.state.accountTemplates track by $index" ng-click="vm.selectAccountTemplate(template._id)" class="ssb-site-template-grid-item col-sm-6 col-lg-4 col-xl-3">
+            <li ng-repeat="template in vm.state.accountTemplates track by $index" ng-click="vm.selectAccountTemplate(template)" class="ssb-site-template-grid-item col-sm-6 col-lg-4 col-xl-3">
                 <div class="ssb-site-template-grid-item-inner">
 
                     <div class="ssb-site-template-img-container">
@@ -36,7 +36,7 @@
                     </div>
 
                     <h1>
-                        <a href class="btn btn-primary btn-o" style="text-transform:capitalize">{{template.subdomain}}</a>
+                        <a href class="btn btn-primary btn-o" style="text-transform:capitalize">{{template.subdomain || template.name}}</a>
                     </h1>
 
                 </div>

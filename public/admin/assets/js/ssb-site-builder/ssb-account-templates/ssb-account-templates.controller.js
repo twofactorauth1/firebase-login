@@ -53,13 +53,28 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
 
 
     /*
-     * Get Site Templates
+     * Get Account Templates
      */
     function getAccountTemplates() {
         SimpleSiteBuilderService.getAccountTemplates().then(function(accountTemplates) {
-            if (accountTemplates.data) {
-                vm.state.accountTemplates = accountTemplates.data.reverse();
-            }
+           
+            var accountTemplatesData = accountTemplates.data ? accountTemplates.data.reverse() : [];              
+            SimpleSiteBuilderService.getSiteTemplates().then(function(siteTemplates) {
+                if (siteTemplates.data) {
+                    
+                    var siteTemplates = siteTemplates.data;
+
+                    var _blankSiteTemplate = _.find(siteTemplates, function (template) {
+                      return template.name === 'Blank Page Template';
+                    });
+                    if(_blankSiteTemplate){
+                       _blankSiteTemplate.templateImageUrl =  _blankSiteTemplate.previewUrl;
+                       _blankSiteTemplate.isBlankTemplate = true;
+                       accountTemplatesData.push(_blankSiteTemplate);
+                    }
+                }
+                vm.state.accountTemplates = accountTemplatesData;   
+            });
         });
     }
 
@@ -67,35 +82,50 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
      * Select Account Template
      *     
      */
-    function selectAccountTemplate(templateId) {
+    function selectAccountTemplate(template) {
         vm.uiState.loading = true;
-        SimpleSiteBuilderService.copyAccountTemplate(templateId).then(function(response) {
-            console.log(response.data);
-            if (response.data) {
-                //get all pages
-                SimpleSiteBuilderService.getPages().then(function(pages){
-                    vm.state.pages = pages.data;
-                    //get latest website
-                    SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+        if(template.isBlankTemplate){
+            
+            SimpleSiteBuilderService.setSiteTemplate(template).then(function(response) {
+                console.log(response.data);
+                if (response.data) {
+                    getPages();
+                }
+            });
+        }
+        else{
+           
+            SimpleSiteBuilderService.copyAccountTemplate(template._id).then(function(response) {
+                console.log(response.data);
+                if (response.data) {
+                    getPages();
+                }
+            });
+        }
+    }
 
-                        //set theme
-                        SimpleSiteBuilderService.setupTheme(vm.state.website).then(function() {
+    function getPages(){
+        //get all pages
+        SimpleSiteBuilderService.getPages().then(function(pages){
+            vm.state.pages = pages.data;
+            //get latest website
+            SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
 
-                            //forward to editor
-                            vm.redirectToEditor();
+                //set theme
+                SimpleSiteBuilderService.setupTheme(vm.state.website).then(function() {
 
-                            //clear loading var
-                            $timeout(function() {
-                                vm.uiState.loading = false;
-                            }, 5000);
+                    //forward to editor
+                    vm.redirectToEditor();
 
-                        });
-                    });
-                })
+                    //clear loading var
+                    $timeout(function() {
+                        vm.uiState.loading = false;
+                    }, 5000);
 
-                
-            }
-        });
+                });
+            });
+        })
+
     }
 
     function redirectToEditor() {
