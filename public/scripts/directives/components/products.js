@@ -1912,8 +1912,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         });
                         if(_found){
                             CartDetailsService.productViewLoaded = true;
-                            $timeout(function() {                                
-                                    scope.openNewProductDetailsModal(_found);
+                            $timeout(function() {    
+                                    if(scope.component.version === 2)                            
+                                        scope.openNewProductDetailsModal(_found);
+                                    else
+                                        scope.updateSelectedProduct(_found);
                             }, 2000);
                         }
                     }

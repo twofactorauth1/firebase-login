@@ -14,74 +14,76 @@
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
                 }" ng-repeat="product in filteredProducts">
-                <div class="product">
-                    <div class="thumbnail">
-                        <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
-                        <div ng-if="product.is_image || product.icon" class="product-img">
-                            <div ng-if="product.is_image" class="img-wrap">
-                                <div class="product-img" ng-if="isImage(product.icon)">
-                                    <img ng-src="{{::product.icon}}" class="img-responsive" err-src="/images/default-media.png"/>
+                <a class="product product-widget" href="{{product|generateURLforProducts:currentPath}}">
+                    <div class="product">
+                        <div class="thumbnail">
+                            <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
+                            <div ng-if="product.is_image || product.icon" class="product-img">
+                                <div ng-if="product.is_image" class="img-wrap">
+                                    <div class="product-img" ng-if="isImage(product.icon)">
+                                        <img ng-src="{{::product.icon}}" class="img-responsive" err-src="/images/default-media.png"/>
+                                    </div>
+                                    <div class="product-img" ng-if="!isImage(product.icon)">
+                                        <img class="img-responsive" src="/images/default-media.png"/>
+                                    </div>
                                 </div>
-                                <div class="product-img" ng-if="!isImage(product.icon)">
-                                    <img class="img-responsive" src="/images/default-media.png"/>
+                                <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
+                                    <i ng-style="{'color':component.iconColor}" class="fa {{::product.icon}}"></i>
                                 </div>
                             </div>
-                            <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
-                                <i ng-style="{'color':component.iconColor}" class="fa {{::product.icon}}"></i>
+                            <div ng-if="!product.is_image && !product.icon" class="no-product-img">
+                                <div class="img-wrap no-preview">
+                                    <h3>No Preview <br> Available</h3>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
-                        </div>
-                        <div ng-if="!product.is_image && !product.icon" class="no-product-img">
-                            <div class="img-wrap no-preview">
-                                <h3>No Preview <br> Available</h3>
+                            <div class="caption" ng-style="{'color':component.txtcolor}">
+                                <h4 class="pull-right" ng-style="{'font-family': component.formSettings.headingFontFamily}" ><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
+                                <h4 class="title" ng-style="{'font-family': component.formSettings.headingFontFamily}"><a ng-style="{'color':component.txtcolor}" href="#" ng-click="updateSelectedProduct(product)" >{{product.name | characters:28 :true}}</a></h4>
+                                <div class="clearfix"></div>
+                                <p class="description product-description" ng-click="updateSelectedProduct(product)" ng-style="{'font-family': component.formSettings.descriptionFontFamily}">{{product.description | characters : 650 : true}}</p>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="caption" ng-style="{'color':component.txtcolor}">
-                            <h4 class="pull-right" ng-style="{'font-family': component.formSettings.headingFontFamily}" ><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
-                            <h4 class="title" ng-style="{'font-family': component.formSettings.headingFontFamily}"><a ng-style="{'color':component.txtcolor}" href="#" ng-click="updateSelectedProduct(product)" >{{product.name | characters:28 :true}}</a></h4>
-                            <div class="clearfix"></div>
-                            <p class="description product-description" ng-click="updateSelectedProduct(product)" ng-style="{'font-family': component.formSettings.descriptionFontFamily}">{{product.description | characters : 650 : true}}</p>
-                        </div>
-                        <div class="actions" ng-style="{'font-family': component.formSettings.buttonFontFamily}">
-                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" ng-click="updateSelectedProduct(product)">
-                                Select Options
-                            </a>
-                            <button ng-disabled='product.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="(product.type | uppercase) != 'EXTERNAL' && itemClicked(product) != true && !product.hasVariations">
-                                <div data-class="btn-text" ng-hide='product.type == "SUBSCRIPTION" && !stripeInfo'>
-                                    <span class="fa fa-shopping-cart"></span> Add to Cart
-                                </div>
-                                <div data-class="btn-text" ng-show='product.type == "SUBSCRIPTION" && !stripeInfo'>
-                                    <span class="fa fa-shopping-cart"></span> Stripe account needed
-                                </div>
-                            </button>
-                            <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="(product.type | uppercase) != 'EXTERNAL' && itemClicked(product) == true && !product.hasVariations">
-                                <div data-class="btn-text">
-                                    <span class="fa fa-check"></span> Added to Cart!
-                                </div>
-                            </button>
-                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="{{product.externalLinklinkUrl}}" ng-if="(product.type | uppercase) == 'EXTERNAL' && product.externalLinklinkUrl" target="{{product.externalLinkOpenIn}}">
-                                <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
-                                </div>
-                            </a>
-                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="javascript:void(0)" ng-if="(product.type | uppercase) == 'EXTERNAL' && !product.externalLinklinkUrl" target="{{product.externalLinkOpenIn}}">
-                                <div data-class="btn-text">
-                                    <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
-                                </div>
-                            </a>
-                        </div>
-                        <div class="ratings hidden">
-                            <p class="pull-right">15 reviews</p>
-                            <p>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                            </p>
+                            <div class="actions" ng-style="{'font-family': component.formSettings.buttonFontFamily}">
+                                <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" ng-click="updateSelectedProduct(product)">
+                                    Select Options
+                                </a>
+                                <button ng-disabled='product.type == "SUBSCRIPTION" && !stripeInfo' class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="(product.type | uppercase) != 'EXTERNAL' && itemClicked(product) != true && !product.hasVariations">
+                                    <div data-class="btn-text" ng-hide='product.type == "SUBSCRIPTION" && !stripeInfo'>
+                                        <span class="fa fa-shopping-cart"></span> Add to Cart
+                                    </div>
+                                    <div data-class="btn-text" ng-show='product.type == "SUBSCRIPTION" && !stripeInfo'>
+                                        <span class="fa fa-shopping-cart"></span> Stripe account needed
+                                    </div>
+                                </button>
+                                <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="(product.type | uppercase) != 'EXTERNAL' && itemClicked(product) == true && !product.hasVariations">
+                                    <div data-class="btn-text">
+                                        <span class="fa fa-check"></span> Added to Cart!
+                                    </div>
+                                </button>
+                                <a class="btn ssb-theme-btn btn-primary btn-block center" href="{{product.externalLinklinkUrl}}" ng-if="(product.type | uppercase) == 'EXTERNAL' && product.externalLinklinkUrl" target="{{product.externalLinkOpenIn}}">
+                                    <div data-class="btn-text">
+                                        <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
+                                    </div>
+                                </a>
+                                <a class="btn ssb-theme-btn btn-primary btn-block center" href="javascript:void(0)" ng-if="(product.type | uppercase) == 'EXTERNAL' && !product.externalLinklinkUrl" target="{{product.externalLinkOpenIn}}">
+                                    <div data-class="btn-text">
+                                        <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText | characters : 35 : true || 'External Link'}}
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="ratings hidden">
+                                <p class="pull-right">15 reviews</p>
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>    
             </div>
             <div class="clearfix mb15"></div>
         </div>
