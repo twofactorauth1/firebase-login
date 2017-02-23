@@ -59,6 +59,7 @@
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
         ssbService.getFontFamilyOptions = getFontFamilyOptions;
         ssbService.getFontWeightOptions = getFontWeightOptions;
+        ssbService.getLocationFinderRanges = getLocationFinderRanges;
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent; //legacy re-impl
@@ -1475,6 +1476,41 @@
                 "normal": 'normal',
                 "lighter": 'Lighter'
             }
+        }
+
+
+
+
+        /*
+         * Provide list of font weight
+         *
+         * @returns {object}
+         *
+         */
+        function getLocationFinderRanges() {
+            
+            return [{
+                "description": "5 miles",
+                "value": 5 
+            },{
+                "description": "10 miles",
+                "value": 10 
+            },
+            {
+                "description": "25 miles",
+                "value": 25 
+            },
+            {
+                "description": "50 miles",
+                "value": 50 
+            },
+            {
+                "description": "100 miles",
+                "value": 100
+            },{
+                "description": "200 miles",
+                "value": 200
+            }]
         }
 
         /*
