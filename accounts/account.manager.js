@@ -48,6 +48,7 @@ var accountManager = {
         var self = this;
         self.log.debug(accountId, userId, '>> copyAccountTemplate');
         var rollbackHandler = {};
+        var srcAccount = null;
         var idMap = {};
         async.waterfall([
             function(cb) {
@@ -58,22 +59,31 @@ var accountManager = {
                     cb('source account with id[' + srcAccountId + '] not found');
                 } else {
                     //fetch destination account
+                    srcAccount = account;                    
                     accountDao.getAccountByID(destAccountId, cb);
                 }
             },
             function(account, cb){
-                /*
-                 * COPY ASSETS
+                 /*
+                 * COPY Account Settings
                  */
                 if(!account) {
                     cb('Could not find destination account');
                 } else {
                     self.log.debug(accountId, userId, 'Found destination account with id:' + account.id());
-                    self._copyAssets(accountId, userId, srcAccountId, account.id(), idMap, function(err, updatedIdMap){
-                        //I don't think we need the udpatedIdMap... the reference should hold
+                    self._copyAccountSettings(accountId, userId, srcAccountId, account.id(), account, srcAccount, function(err, updatedAccount){                        
                         cb(err, account);
                     });
                 }
+            },
+            function(account, cb){
+                /*
+                 * COPY ASSETS
+                 */                
+                self._copyAssets(accountId, userId, srcAccountId, account.id(), idMap, function(err, updatedIdMap){                    
+                    //I don't think we need the udpatedIdMap... the reference should hold
+                    cb(err, account);
+                });
             },
             function(account, cb) {
                 /*
@@ -570,6 +580,28 @@ var accountManager = {
                         fn(null);
                     }
                 });
+            }
+        });
+    },
+
+    _copyAccountSettings: function(accountId, userId, srcAccountId, destAccountId, destAccount, srcAccount, fn){
+        var self = this;
+        self.log.debug(accountId, userId, '>> _copyAccountSettings');
+        var _showHideSettings = srcAccount.get("showhide");
+        var _email_preferences = srcAccount.get("email_preferences");
+        var _commerceSettings = srcAccount.get("commerceSettings");
+        destAccount.set("showhide", _showHideSettings);
+        destAccount.set("email_preferences", _email_preferences);
+        destAccount.set("commerceSettings", _commerceSettings);
+        var modified = {date:new Date(), by:userId};        
+        destAccount.set('modified', modified);
+        accountDao.saveOrUpdate(destAccount, function(err, updatedAccount){
+            if(err) {
+                self.log.error(accountId, userId, 'Error saving account settings:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< _copyAccountSettings');
+                fn(null, updatedAccount);
             }
         });
     }
