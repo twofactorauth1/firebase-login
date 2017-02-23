@@ -26,7 +26,7 @@
                     <div class="features-wrap">
 
                         <div class="col-sm-12 padding-top-15">
-                            <div class="feature-block" ng-click="newAccount.plan = component.productIds['MANAGEDSERVICES']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['MANAGEDSERVICES'] }">
+                            <div class="feature-block" ng-click="newAccount.plan = component.productIds['RVLVRPLAN']" ng-class="{ 'selected-plan': newAccount.plan === component.productIds['RVLVRPLAN'] }">
                                 <div class="">
                                     <div class="" style="">
                                         <div>
@@ -58,13 +58,7 @@
                                         <div data-empty="true" class="center">
                                             <br>
                                         </div>
-                                        <div class="center">
-                                            <span style="font-size: 18px;">
-                                                <a class="btn btn-primary ssb-theme-btn ssb-element ssb-element-button" data-ssb-active-style=" background-color: ;" data-ssb-class="{&quot;ssb-element&quot;:true,&quot;ssb-element-button&quot;:true,&quot;ssb-hide-during-load&quot;:false}" data-ssb-hover-style=" background-color: ;" data-ssb-style=" "  style="color: rgb(255, 255, 255) !important; background-color: rgb(239, 160, 34) !important;">
-                                                    <strong>Choose</strong>
-                                                </a>
-                                            </span>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -122,7 +116,7 @@
                                        ng-model-options="{ debounce: 800 }"
                                        placeholder="Business Name"
                                        style="width:100%"/>
-                                    <span class="input-group-addon">.indigenous.io</span>
+                                    <span class="input-group-addon">.gorvlvr.com</span>
                                 </div>
 
                             </div>
@@ -130,8 +124,8 @@
                             <div class="clearfix"></div>
                             <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
                             <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
-                            <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong>. You can change it at any time.</span>
-                            <span class="help-block" ng-show="dotComExt">This field is for your Indigenous account subdomain. You may point the domain of your choosing to your site at any time.</span>
+                            <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.gorvlvr.com</strong>. You can change it at any time.</span>
+                            <span class="help-block" ng-show="dotComExt">This field is for your gorvlvr account subdomain. You may point the domain of your choosing to your site at any time.</span>
                         </div>
                         <div class="clearfix"></div>
                         <hr>
