@@ -167,7 +167,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         resizeWindow: vm.resizeWindow,
 
-        isTextColumnNum: vm.isTextColumnNum
+        isTextColumnNum: vm.isTextColumnNum,
+
+        locationFinderOptions: SimpleSiteBuilderService.getLocationFinderRanges()
 
     };
 

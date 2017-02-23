@@ -1,0 +1,13 @@
+<div class="row padding-10">
+
+    <div class="form-group">
+        <label>
+            Default location finder range
+            <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Set default location finder range"><i class="fa fa-info-circle" /></span>
+        </label>
+        <select ng-model="component.settings.locationFinderRange" class="form-control margin-bottom-0">
+            <option ng-repeat="location in vm.uiState.locationFinderOptions" value="{{location.value}}" ng-selected="{{location.value == component.settings.locationFinderRange}}">{{location.description}}</option>
+        </select>
+    </div>
+   
+</div>

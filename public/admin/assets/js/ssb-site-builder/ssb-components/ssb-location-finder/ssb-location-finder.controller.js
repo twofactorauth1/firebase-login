@@ -22,7 +22,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.searchAddress = '';
     vm.searchLat = '';
     vm.searchLong = '';
-    vm.searchRadius = 5;
+    
     vm.searchResults = {}; // { count: 10, results: [] }
     vm.loading = false;
     vm.markers = [];
@@ -52,6 +52,11 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.getDirectionsLink = getDirectionsLink;
     vm.onDestroy = onDestroy;
     vm.addStaticLocations = addStaticLocations;
+    vm.searchRadius = 5;
+   
+    if(vm.component.settings && vm.component.settings.locationFinderRange)
+        vm.searchRadius = angular.copy(vm.component.settings.locationFinderRange);
+           
 
     // Chris - my bad..
     if(vm.component.isHelm === false){
@@ -65,6 +70,41 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             resetSearchButton();
         }
     });
+
+    $scope.$watch('vm.component.settings.locationFinderRange', function(val) {
+        if (val) {
+            vm.searchRadius = angular.copy(val);
+        }
+    });
+
+    vm.locationFinderOptions = [
+        {
+            "description": "5 miles",
+            "value": 5 
+        },
+        {
+            "description": "10 miles",
+            "value": 10 
+        },
+        {
+            "description": "25 miles",
+            "value": 25 
+        },
+        {
+            "description": "50 miles",
+            "value": 50 
+        },
+        {
+            "description": "100 miles",
+            "value": 100
+        },
+        {
+            "description": "200 miles",
+            "value": 200
+        }
+    ]
+
+
 
     function setupMap() {
 
