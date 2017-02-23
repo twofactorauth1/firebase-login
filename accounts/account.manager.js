@@ -116,7 +116,7 @@ var accountManager = {
                                 if(sourceWebsite.get('settings') && sourceWebsite.get('settings').favicon) {
                                     var settings = sourceWebsite.get('settings');
                                     var url = settings.favicon;
-                                    if(idMap.assets[url]) {
+                                    if(idMap.assets && idMap.assets[url]) {
                                         settings.favicon = idMap.assets[url];
                                         sourceWebsite.set('settings', settings);
                                     }
