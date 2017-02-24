@@ -108,11 +108,17 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
         //get all pages
         SimpleSiteBuilderService.getPages().then(function(pages){
             vm.state.pages = pages.data;
+            // get Latest account settings
+            SimpleSiteBuilderService.getAccount();
             //get latest website
             SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
 
                 //set theme
                 SimpleSiteBuilderService.setupTheme(vm.state.website).then(function() {
+
+                    // Set code permissions
+
+                    SimpleSiteBuilderService.setPermissions();
 
                     //forward to editor
                     vm.redirectToEditor();

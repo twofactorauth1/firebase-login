@@ -7,10 +7,9 @@
 <div ng-show="!isFormValid">
     <div ng-class="component.type+'-v'+component.version">
         <div class="payment-form-header">
-            <div style="max-width:1024px!important;margin:0 auto;">
-                <img src="//s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="pull-left hidden-xs" style="display: block;">
-                <img src="//s3-us-west-2.amazonaws.com/indigenous-admin/logo-mark.png" width="57" height="57" class="pull-left visible-xs" style="display: block;">
-                <span>RVLVR</span>
+            <div style="max-width:800px!important;margin:0 auto;">
+                <img src="/images/rvlvr_logo_black.png" height="50" class="pull-left hidden-xs" style="display: block;">
+                <img src="/images/rvlvr_logo_black.png" height="35" class="pull-left pull-down visible-xs" style="display: block;">
                 <p class="pull-right" style="line-height: 65px;">Already have an account? <a href="/login">Log In</a></p>
             </div>
             <div class="clearfix"></div>
@@ -21,7 +20,15 @@
                     <h2 class="center text-bold margin-bottom-5">Getting Started</h2>
                     <h3 class="center">We just need some information.</h3>
                 </div>
+
                 <div class="signup-body">
+
+                    <div class="padding-15 rvlvr-securematics-logo-container">
+                        <img src="/images/securematics_logo_black.png" class="rvlvr-securematics-logo">
+                        <h4 class="center rvlvr-securematics-fee">$2.500 signup fee covered courtesy of Securematics.</h4>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
 
                     <div class="features-wrap">
 
@@ -34,7 +41,7 @@
                                         </div>
                                         <div class="center">
                                             <span class="plan-title">
-                                                <strong class=""><span>RVLVR | Indigenous Managed Servicess&nbsp;</span></strong>
+                                                <span>MONTHLY PLAN
                                             </span>
                                         </div>
                                         <div class="center">
@@ -45,13 +52,10 @@
                                     </div>
                                 </div>
                                 <div class="feature-content">
-                                    <div class="margin-top-20">
+                                    <div class="margin-top-10">
                                         <div class="center">
                                             <span class="plan-amount">
-                                                <strong><span>$100 /</span></strong>
-                                            </span>
-                                            <span class="plan-duration">
-                                                <strong class=""><span>month</span></strong>
+                                                <strong><span>All-in-one Digital Platform</span></strong>
                                             </span>
                                         </div>
 
@@ -64,7 +68,7 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
-                        <div class="form-group padding-top-20">
+                        <div class="form-group padding-top-20 hidden">
 
                             <div style="display:inline-block" class=" padding-top-10">
                                 <span class="sign-up-small-text">* language here</span>
@@ -152,18 +156,6 @@
                                     <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control" style="width:100%; padding-right:0px">
                                     <span class="glyphicon form-control-feedback"></span>
                                     <span class="error help-block" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <!-- Coupon DETAILS -->
-                                <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'has-success': couponIsValid && !checkingCoupon && newAccount.coupon}" style="padding-left:0; padding-right:0">
-                                    <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
-                                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'glyphicon glyphicon-ok': couponIsValid && newAccount.coupon && !checkingCoupon}"></span>
-
-                                    <span class="coupon-spinner" ng-class="{'fa fa-2x fa-spinner fa-spin':checkingCoupon}"></span>
-
-                                    <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon">Invalid Coupon</span>
-                                    <span class="success help-block" ng-if="newAccount.coupon && couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
                                 </div>
                             </div>
                         </div>
