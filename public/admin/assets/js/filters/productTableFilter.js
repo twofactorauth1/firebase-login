@@ -23,6 +23,6 @@ app
           delete customPredicate['tags'];
         }
 
-        return $filter('filter')(input, customPredicate, true);
+        return $filter('filter')(input, customPredicate, false);
     }
 });
