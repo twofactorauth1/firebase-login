@@ -21,7 +21,13 @@
                     <h2 class="center text-bold margin-bottom-5">Getting Started</h2>
                     <h3 class="center">We just need some information.</h3>
                 </div>
+
                 <div class="signup-body">
+
+                    <div class="padding-15 rvlvr-securematics-logo-container">
+                        <img src="/images/securematics_logo_black.png" class="rvlvr-securematics-logo">
+                        <h4 class="center rvlvr-securematics-fee">$2.500 signup fee covered courtesy of Securematics.</h4>
+                    </div>
 
                     <div class="features-wrap">
 
@@ -152,18 +158,6 @@
                                     <input placeholder="CVC" ng-blur="checkCardCvv()" type="text" id="cvc" name="cvc" class="form-control" style="width:100%; padding-right:0px">
                                     <span class="glyphicon form-control-feedback"></span>
                                     <span class="error help-block" />
-                                </div>
-                            </div>
-                            <div class="row">
-                                <!-- Coupon DETAILS -->
-                                <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'has-success': couponIsValid && !checkingCoupon && newAccount.coupon}" style="padding-left:0; padding-right:0">
-                                    <input class="form-control" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"  />
-                                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon, 'glyphicon glyphicon-ok': couponIsValid && newAccount.coupon && !checkingCoupon}"></span>
-
-                                    <span class="coupon-spinner" ng-class="{'fa fa-2x fa-spinner fa-spin':checkingCoupon}"></span>
-
-                                    <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon && newAccount.coupon">Invalid Coupon</span>
-                                    <span class="success help-block" ng-if="newAccount.coupon && couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
                                 </div>
                             </div>
                         </div>
