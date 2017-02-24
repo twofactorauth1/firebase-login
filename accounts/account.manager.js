@@ -9,6 +9,7 @@ var sectionDao = require('../ssb/dao/section.dao');
 var emailDao = require('../cms/dao/email.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
 var productDao = require('../products/dao/product.dao');
+var organizationDao = require('../organizations/dao/organization.dao');
 
 var async = require('async');
 
