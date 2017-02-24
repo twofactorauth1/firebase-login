@@ -401,19 +401,20 @@ var accountManager = {
                     if(!section) {
                         self.log.warn(accountId, userId, 'No section found with id [' + sectionId + ']');
                         cb();
-                    }
-                    else{
+                    } else if(idMap.sections[sectionId]){
+                        self.log.debug(accountId, userId, 'Skipping section with id [' + sectionId + '] because it was already copied');
+                        cb();
+                    } else {
                         var oldId = sectionId;
                         section.set('_id', null);
                         section.set('accountId', destAccountId);
-                        //TODO: check if this works?
 
                         var sectionJSON = section.toJSON();
                         self.log.debug('Before transformation:', sectionJSON);
                         sectionJSON = self._fixJSONAssetReferences(sectionJSON, idMap);
                         self.log.debug('After transformation:', sectionJSON);
                         section = new $$.m.ssb.Section(sectionJSON);
-                        section.set("enabled", true)
+                        section.set("enabled", true);
                         sectionDao.saveOrUpdate(section, function(err, savedSection){
                             if(err) {
                                 self.log.error(accountId, userId, 'Error saving sections:', err);
