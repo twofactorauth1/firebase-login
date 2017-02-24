@@ -15,6 +15,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 //TODO: set true plan _id's
                 scope.newAccount.plan = scope.component.productIds['ALLINONE'];
                 scope.newAccount.addSignupFee = true;
+            } else if(scope.component.version === 3) {
+                scope.newAccount.plan = scope.component.productIds['RVLVRPLAN'];
             }
 
             scope.emailValidation = formValidations.email;

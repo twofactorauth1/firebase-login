@@ -1913,7 +1913,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         if(_found){
                             CartDetailsService.productViewLoaded = true;
                             $timeout(function() {    
-                                    if(scope.component.version === 2)                            
+                                    if(scope.component.version == 2)                            
                                         scope.openNewProductDetailsModal(_found);
                                     else
                                         scope.updateSelectedProduct(_found);
