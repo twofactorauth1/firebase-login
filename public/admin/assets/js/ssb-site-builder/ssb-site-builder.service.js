@@ -1837,7 +1837,7 @@
             if (ssbService.page && ssbService.page.sections) {
                 ssbService.page.sections.forEach(function (sectionValue, sectionIndex) {
                     sectionValue.components.forEach(function (value, index) {
-                        if (value && value.type === 'masthead' && value._id == masthead_id) {
+                        if (value && value.type === 'masthead' && value._id == masthead_id && ssbService.page.sections[sectionIndex - 1]) {
                             var navComponent = _.findWhere(ssbService.page.sections[sectionIndex - 1].components, { type: 'navigation' });
                             if (
                                 sectionIndex != 0 &&
