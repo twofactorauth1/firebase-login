@@ -404,6 +404,7 @@ var accountManager = {
                         cb();
                     } else if(idMap.sections[sectionId]){
                         self.log.debug(accountId, userId, 'Skipping section with id [' + sectionId + '] because it was already copied');
+                        // Add global section to section array of the page
                         sectionIdAry.push({"_id": idMap.sections[sectionId]});
                         cb();
                     } else {
