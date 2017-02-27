@@ -288,20 +288,16 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 }
                             }
                         }
-                        // if(cmd == 'linkInsert'){
-                        //     if(editor.selection && editor.selection.element)
-                        //     {
-                        //         var aElem = angular.element(editor.selection.element());
-                        //         if(aElem.length){
-                        //             if(aElem.attr("href").indexOf("#") === 0){
-                        //                 aElem.attr("du-smooth-scroll", '');
-                        //             }
-                        //             else{
-                        //                 aElem.removeAttr("du-smooth-scroll");
-                        //             }
-                        //         }
-                        //     }
-                        // }
+                        if(cmd === 'tableHeader'){
+                            var $popup = editor.popups.get('table.edit');
+                            if($popup){
+                                var $btn = $popup.find('.fr-command[data-cmd="tableHeader"]');
+                                if ($btn && $btn.hasClass('fr-active')) {
+                                    $btn.removeClass("fr-active");
+                                }  
+                            }
+                            
+                        }
                         if(cmd == 'linkStyle' && param1 === 'ssb-theme-btn'){
                             if(editor.selection && editor.selection.element)
                             {

@@ -42,7 +42,7 @@ var copyutil = {
     //TODO: make this safe!
     copyAccountFromTestToProd : function(accountId, cb) {
          var self = this;
-        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, true, true, cb);
+        self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.TEST_MONGODB_CONNECT, mongoConfig.PROD_MONGODB_CONNECT, false, true, cb);
     },
 
     copyAccountFromTestToTest : function(accountId, cb) {
@@ -596,7 +596,9 @@ var copyutil = {
                     section.accountId = newAccountId;
 
                     if (forceNewAccount) {
+                        section.oldId = section._id;
                         section._id = utils.idutils.generateUUID();
+                        console.log('saving section and changing id from [' + section.oldId + '] to [' + section._id + ']');
                     }
 
                     sectionsCollection.save(section, function(err, savedSection){
@@ -604,7 +606,7 @@ var copyutil = {
                             console.log('Error saving section:' + err);
                             callback(err);
                         } else {
-                            console.log('Saved section:' + savedSection._id);
+                            //console.log('Saved section:' + savedSection._id, savedSection);
                             callback();
                         }
                     });

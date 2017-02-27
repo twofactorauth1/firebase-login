@@ -9,6 +9,7 @@ var sectionDao = require('../ssb/dao/section.dao');
 var emailDao = require('../cms/dao/email.dao');
 var campaignDao = require('../campaign/dao/campaign.dao');
 var productDao = require('../products/dao/product.dao');
+var organizationDao = require('../organizations/dao/organization.dao');
 
 var async = require('async');
 
@@ -403,6 +404,8 @@ var accountManager = {
                         cb();
                     } else if(idMap.sections[sectionId]){
                         self.log.debug(accountId, userId, 'Skipping section with id [' + sectionId + '] because it was already copied');
+                        // Add global section to section array of the page
+                        sectionIdAry.push({"_id": idMap.sections[sectionId]});
                         cb();
                     } else {
                         var oldId = sectionId;

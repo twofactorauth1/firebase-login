@@ -70,7 +70,7 @@ function ssbSiteBuilderAccountTemplatesController($scope, $attrs, $filter, $docu
                     if(_blankSiteTemplate){
                        _blankSiteTemplate.templateImageUrl =  _blankSiteTemplate.previewUrl;
                        _blankSiteTemplate.isBlankTemplate = true;
-                       accountTemplatesData.push(_blankSiteTemplate);
+                       accountTemplatesData.splice(0, 0, _blankSiteTemplate);
                     }
                 }
                 vm.state.accountTemplates = accountTemplatesData;   

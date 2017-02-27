@@ -18,7 +18,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
 
         if ($scope.components && $scope.components.length > 0) {
             $scope.components.forEach(function (value, index) {
-                if (value && value.type === 'masthead' && value._id == masthead_id) {
+                if (value && value.type === 'masthead' && value._id == masthead_id && $scope.components[index - 1]) {
                     if (index != 0 && $scope.components[index - 1].type == "navigation") {
                         data.allowUndernav = true;
                         data.navComponent =  $scope.components[index - 1];
@@ -30,7 +30,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
         } else if ($scope.sections && $scope.sections.length > 0) {
             $scope.sections.forEach(function (sectionValue, sectionIndex) {
                 sectionValue.components.forEach(function (value, index) {
-                    if (value && value.type === 'masthead' && value._id == masthead_id) {
+                    if (value && value.type === 'masthead' && value._id == masthead_id && $scope.sections[sectionIndex - 1]) {
                         var navComponent = _.findWhere($scope.sections[sectionIndex - 1].components, { type: 'navigation' });
                         if (
                             sectionIndex != 0 &&
