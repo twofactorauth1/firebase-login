@@ -29,14 +29,14 @@
                         
                         <img  class="ssb-site-template-img img-responsive" ng-src="{{ template.templateImageUrl }}" err-src="/admin/assets/images/default-page.jpg">
 
-                        <div class="ssb-site-template-description hidden">
-                            <p>{{template.subdomain}}</p>
+                        <div class="ssb-site-template-description" ng-if="template.business.description || template.description">
+                            <p ng-text-truncate="template.business.description || template.description" ng-tt-chars-threshold="350" ng-tt-no-toggling></p>
                         </div>
 
                     </div>
 
                     <h1>
-                        <a href class="btn btn-primary btn-o" style="text-transform:capitalize">{{template.subdomain || template.name}}</a>
+                        <a href class="btn btn-primary btn-o" style="text-transform:capitalize">{{template.business.name || template.subdomain || template.name}}</a>
                     </h1>
 
                 </div>
