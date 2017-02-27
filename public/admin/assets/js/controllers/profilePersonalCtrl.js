@@ -140,7 +140,7 @@
 
       // check if password needs to be changed
       if($scope.passwordChanged()) {
-        if( $scope.validatePasswords() ) {
+        if($scope.checkPasswordLength($scope.auth) && $scope.validatePasswords()) {
           UserService.setPassword($scope.auth.password, function(user) {
             console.log('---- changed password successfully -----');
             toaster.pop('success', 'Password changed.');
@@ -148,6 +148,7 @@
         }
         else {
           console.log('passwords are not valid');
+          toaster.pop('error', 'Passwords are not valid.');
         }
       }
     };
@@ -174,5 +175,15 @@
       $scope.originalprofileUser = null;
       $scope.profileUser = null;
     }
+
+    $scope.checkPasswordLength = function(auth) {
+        if (auth.password && auth.password.length < 6) {            
+            $scope.passwordInValid = true;
+        } else {
+            $scope.passwordInValid = false;
+        }
+        return !$scope.passwordInValid;
+    };
+
   }]);
 })(angular);
