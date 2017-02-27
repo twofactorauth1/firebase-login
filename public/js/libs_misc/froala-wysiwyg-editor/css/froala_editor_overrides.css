@@ -39,11 +39,13 @@ a.fr-command[data-param1='PRE'] {
   z-index: 4;
 }
 
-.fr-image-size-layer.fr-layer .fr-input-line label, .fr-image-by-url-layer.fr-layer .fr-input-line label{
+.fr-image-size-layer.fr-layer .fr-input-line label, .fr-image-by-url-layer.fr-layer .fr-input-line label,
+.fr-image-alt-layer.fr-layer .fr-input-line label{
   display: none;
 }
 
-.fr-image-size-layer.fr-layer .fr-input-line .fr-not-empty + label, .fr-image-by-url-layer.fr-layer .fr-input-line .fr-not-empty + label{
+.fr-image-size-layer.fr-layer .fr-input-line .fr-not-empty + label, .fr-image-by-url-layer.fr-layer .fr-input-line .fr-not-empty + label,
+.fr-image-alt-layer.fr-layer .fr-input-line .fr-not-empty + label,{
   display: block !important;
 }
 
