@@ -404,6 +404,7 @@ var accountManager = {
                         cb();
                     } else if(idMap.sections[sectionId]){
                         self.log.debug(accountId, userId, 'Skipping section with id [' + sectionId + '] because it was already copied');
+                        sectionIdAry.push({"_id": idMap.sections[sectionId]});
                         cb();
                     } else {
                         var oldId = sectionId;
