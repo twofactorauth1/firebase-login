@@ -298,6 +298,20 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                             }
                             
                         }
+                        if(cmd === 'clearFormatting'){
+                            
+                                var _selection = editor.$el;
+                                var videoElems = _selection.find("video");
+                                if(videoElems.length){
+                                    videoElems.each(function() {
+                                        var element = $(this);
+                                        if (!element.parents('span.fr-video.fr-dvb').length) {
+                                            element.wrap( "<span class='fr-video fr-dvb' />");
+                                        }
+                                    })
+                                }
+                            
+                        }
                         if(cmd == 'linkStyle' && param1 === 'ssb-theme-btn'){
                             if(editor.selection && editor.selection.element)
                             {
