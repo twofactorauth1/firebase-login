@@ -771,7 +771,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function addFroalaImage(asset) {
 
         $timeout(function() {
-            vm.state.imageEditor.editor.image.insert(asset.url, !1, null, vm.state.imageEditor.img);
+            SimpleSiteBuilderService.isImage(asset.url).then(function(response){
+                if(response === false){
+                   vm.state.imageEditor.editor.video.insertByMediaAsset(asset.url);
+                }
+                else{
+                    vm.state.imageEditor.editor.image.insert(asset.url, !1, null, vm.state.imageEditor.img);
+                }
+            })
+            
+            
         }, 0);
 
     };
@@ -846,7 +855,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$on('focusEditor', function (event, args) {
       vm.state.imageEditor.editor = args.editor;
       vm.state.imageEditor.img = null;
-      vm.state.imageEditor.video = null;
     });
     $scope.$on('activeEditor', function (event, args) {
       if(args.editor)
