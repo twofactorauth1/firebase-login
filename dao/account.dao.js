@@ -10,6 +10,7 @@ require('../models/account');
 var urlUtils = require('../utils/urlutils');
 var appConfig = require('../configs/app.config');
 var async = require('async');
+var orgDao = require('../organizations/dao/organization.dao');
 
 var dao = {
 
@@ -78,6 +79,35 @@ var dao = {
         }
     },
 
+    getServerUrlByAccountAndOrg: function(accountId, orgId, fn) {
+        var self = this;
+
+        if (orgId > 0) {
+            orgDao.getById(orgId, $$.m.Organization, function(err, organization){
+                if(err) {
+                    return fn(err);
+                } else if (!organization) {
+                    return fn('No organization found');
+                } else {
+                    self.getById(accountId, $$.m.Account, function(err, account){
+                        if(err) {
+                            return fn(err);
+                        } else if (!account) {
+                            return fn("No account found", "No account found");
+                        } else {
+                            var orgSuffix = organization.get('signupSettings').suffix;
+                            var subdomain = account.get('subdomain');
+                            var url = appConfig.getOrganizationUrl(subdomain, orgSuffix);
+                            return fn(null, url);
+                        }
+                    });
+                }
+            });
+        } else {
+            this.getServerUrlByAccount(accountId, fn);
+        }
+    },
+
     getServerDomainByAccount: function(accountId, fn) {
         var self = this;
         self.getById(accountId, function(err, value){
@@ -134,7 +164,9 @@ var dao = {
             return this.getAccountByID(appConfig.mainAccountID, fn);
             //return fn(null, true);
         }
-
+        if(parsed.isOrgRoot) {
+            return this.getAccountBySubdomainAndOrg(parsed.subdomain, parsed.orgDomain, fn);
+        }
         if (parsed.subdomain != null || parsed.domain != null) {
             var cb = function (err, value) {
                 if (err) {
@@ -150,6 +182,24 @@ var dao = {
                 return this.getAccountByDomain(parsed.domain, cb);
             }
         }
+    },
+
+    getAccountBySubdomainAndOrg: function(subdomain, domain, fn) {
+        var self = this;
+        self.log.debug('>> getAccountBySubdomainAndOrg(' + subdomain + ', ' + domain + ', fn)');
+        orgDao.getByOrgDomain(domain, function(err, organization){
+            if(err) {
+                fn(err);
+            } else if(!organization){
+                fn('No organization found');
+            } else {
+                if(subdomain) {
+                    self.findOne({orgId:organization.id(), subdomain:subdomain}, $$.m.Account, fn);
+                } else {
+                    self.findOne({_id:organization.get('adminAccount')}, $$.m.Account, fn);
+                }
+            }
+        });
     },
 
     getAccountByBillingCustomerId: function (customerId, fn) {

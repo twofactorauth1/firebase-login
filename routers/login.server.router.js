@@ -223,6 +223,28 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
                             self = req = resp = null;
                             return;
+                        } else if(subObject.isOrgRoot === true){
+                            self.log.debug('redirecting based on organization');
+
+                            authenticationDao.getAuthenticatedUrlForAccountAndOrg(value.id(), self.userId(req), _path, null, subObject.orgDomain, function (err, authUrl) {
+                                if (err) {
+                                    self.log.debug('redirecting to /home');
+                                    resp.redirect("/home");
+                                    self = null;
+                                    return;
+                                }
+
+                                self.log.debug('redirecting to ' + authUrl);
+                                req.session.subdomain = value.get('subdomain');
+                                req.session.domain = value.get('domain') || value.get('customDomain');
+                                req.session.accountId = value.id();
+                                req.session.unAuthAccountId = value.id();
+                                self.log.debug('req.session:', req.session);
+                                resp.redirect(authUrl);
+                                userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
+
+                                self = null;
+                            });
                         } else if(subObject.domain && value.get('customDomain')===subObject.domain && accountId === value.id()){
                             self.log.debug('Redirecting based on domain');
                             authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), _path, function (err, authUrl) {

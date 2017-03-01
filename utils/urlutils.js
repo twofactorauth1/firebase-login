@@ -35,7 +35,7 @@ var urlutils = {
             , isMainApp = false;
 
         globalSubdomains = globalSubdomains.split(",");
-
+        var orgRootHosts = process.env.ORG_ROOT_HOSTS.split(',');
 
         if(host) {
             //tldtools wants a fully-qualified domain... we need to add http.
@@ -43,7 +43,7 @@ var urlutils = {
             //_log.debug('before:', obj.subdomain);
             //replace 'www' (and a trailing '.' if its there) from the beginning of the string with an empty string
             subdomain = obj.subdomain.replace(/^www$/gi, '').replace(/^www\./gi, '');
-            //_log.debug('after:', subdomain);
+
             if(subdomain === '' && obj.domain === defaultHost) {
                 subdomain = null;
                 isMainApp = true;
@@ -62,7 +62,7 @@ var urlutils = {
                 }
                 var matchedEnvironment = _.filter(globalEnvironments.split(','), function(_env){return modifier === _env});
                 if(matchedEnvironment && matchedEnvironment.length > 0) {
-                    //_log.debug('environment: ' + matchedEnvironment);
+                    _log.debug('environment: ' + matchedEnvironment);
                     var regexp = new RegExp('\.?' + matchedEnvironment[0] + '\$', 'i');
                     subdomain = subdomain.replace(regexp, '');
                     environment = matchedEnvironment;
@@ -90,13 +90,22 @@ var urlutils = {
         if(subdomain === '' && domain === 'indigenous') {
             isMainApp = true;
         }
+        var isOrgRoot = false;
+        if(_.contains(orgRootHosts, domain + '.' + obj.tld)) {
+            isOrgRoot = true;
+        } else {
+            _log.debug('orgRootHosts:', orgRootHosts);
+            _log.debug('does not contain:', domain+'.' + obj.tld);
+        }
         var returnObj = {
             'isMainApp': isMainApp,
             'subdomain': subdomain,
             'domain': domain+ '.' + obj.tld,
-            'environment': environment
+            'orgDomain': domain,
+            'environment': environment,
+            isOrgRoot: isOrgRoot
         };
-        _log.trace('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain );
+        _log.debug('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain, returnObj);
         return returnObj;
     },
 

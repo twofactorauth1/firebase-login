@@ -14,6 +14,7 @@ var crypto = require('../utils/security/crypto');
 var appConfig = require('../configs/app.config');
 var urlUtils = require('../utils/urlutils');
 var userActivityManager = require('../useractivities/useractivity_manager');
+var orgDao = require('../organizations/dao/organization.dao');
 
 var dao = {
 
@@ -667,6 +668,26 @@ var dao = {
         });
     },
 
+    getAuthenticatedUrlForAccountAndOrg: function(accountId, userId, path, expirationSeconds, orgDomain, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getAuthenticatedUrlForAccountAndOrg');
+        orgDao.getByOrgDomain(orgDomain, function(err, organization){
+            if(err) {
+                return fn(err);
+            } else if(!organization){
+                return fn('No organization found');
+            } else {
+                self.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
+                    if (err) {
+                        return fn(err, value);
+                    } else {
+                        self._constructAuthenticatedOrganizationUrl(accountId, organization.id(), value, path, fn);
+                    }
+                });
+            }
+        });
+    },
+
 
     verifyAuthToken: function (accountId, token, remove, fn) {
         var self = this;
@@ -706,6 +727,36 @@ var dao = {
 
     _constructAuthenticatedUrl: function(accountId, authToken, path, fn) {
         accountDao.getServerUrlByAccount(accountId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var serverUrl = value;
+
+            if (path == null || path == "" || path == "/") {
+                if (accountId > 0) {
+                    path = "admin";
+                } else {
+                    path = "home";
+                }
+            }
+
+            if (path != null && path.charAt(0) != "/") {
+                path = "/" + path;
+            }
+
+            if (path != null) {
+                serverUrl += path;
+            }
+
+            serverUrl += "?authtoken=" + authToken;
+
+            fn(null, serverUrl);
+        });
+    },
+
+    _constructAuthenticatedOrganizationUrl: function(accountId, orgId, authToken, path, fn) {
+        accountDao.getServerUrlByAccountAndOrg(accountId, orgId, function(err, value){
             if (err) {
                 return fn(err, value);
             }
