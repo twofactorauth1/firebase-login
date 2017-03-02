@@ -1,4 +1,4 @@
-<div class="analytic-tile-container image--basic" ng-hide="!vm.uiDetails.data">
+<div class="analytic-tile-container image--basic" ng-hide="!vm.uiDetails.header">
 
     <div class="indi-rounded panel panel-white text-center">
 
@@ -9,10 +9,17 @@
         <div class="analytic-details">           
                 <table style="width:100%;">
                     <tr style="background: rgba(0, 0, 0, 0.5); height: 40px; text-transform: uppercase;">
-                        <th ng-repeat="header in vm.uiDetails.data">
-                            {{header.name }}
+                        <th ng-repeat="obj in vm.uiDetails.header">
+                            {{obj.label }}
                         </th>
                     </tr>
+                    <tbody>                        
+                        <tr ng-repeat="item in vm.uiDetails.data">
+                            <td>{{item.field1}}</td>
+                            <td>{{item.field2}}</td>
+                            <td ng-if="item.field3">{{item.field3}}</td>
+                        </tr>
+                    </tbody>
                 </table>
 
             <div class="analytic-button-container center margin-top-10">
