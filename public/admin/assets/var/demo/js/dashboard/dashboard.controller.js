@@ -37,41 +37,72 @@
 
         function buildViewModel() {
 
-            var incompleteWorkstreams = [];
-            var completeWorkstreams = [];
-            var completeBlocks = 0;
-            var incompleteBlocks = 0;
-            var analyticsWidgets = [];
-            //var unlockedAnalyticsWidgets = []
+            // var incompleteWorkstreams = [];
+            // var completeWorkstreams = [];
+            // var completeBlocks = 0;
+            // var incompleteBlocks = 0;
+            // var analyticsWidgets = [];
+            // //var unlockedAnalyticsWidgets = []
 
-            _.each(vm.state.workstreams, function(workstream){
+            // _.each(vm.state.workstreams, function(workstream){
 
-                var analyticsWidgetsCopy = angular.copy(workstream.analyticWidgets);
+            //     var analyticsWidgetsCopy = angular.copy(workstream.analyticWidgets);
 
-                _.each(analyticsWidgetsCopy, function(analytic){
-                    analytic.completed = workstream.unlocked && workstream.completed;
-                    analyticsWidgets.push(analytic);
-                });
+            //     _.each(analyticsWidgetsCopy, function(analytic){
+            //         analytic.completed = workstream.unlocked && workstream.completed;
+            //         analyticsWidgets.push(analytic);
+            //     });
 
-                completeBlocks = workstream.blocks.filter(function(block) { return block.complete; }).length;
-                incompleteBlocks = workstream.blocks.filter(function(block) { return !block.complete; }).length;
+            //     completeBlocks = workstream.blocks.filter(function(block) { return block.complete; }).length;
+            //     incompleteBlocks = workstream.blocks.filter(function(block) { return !block.complete; }).length;
 
-                workstream.completeRatio = completeBlocks + ' out of ' + (completeBlocks + incompleteBlocks) + ' completed.';
-                workstream.completePercentage = $filter('number')(100 * completeBlocks / (completeBlocks + incompleteBlocks), 0);
+            //     workstream.completeRatio = completeBlocks + ' out of ' + (completeBlocks + incompleteBlocks) + ' completed.';
+            //     workstream.completePercentage = $filter('number')(100 * completeBlocks / (completeBlocks + incompleteBlocks), 0);
 
-            });
-
-
-            //remove duplicates and set to state, and sort
-            //vm.state.lockedAnalyticsWidgets = _.uniq(lockedAnalyticsWidgets, function(w) { return w.name; });
-            vm.state.analyticsWidgets = _.sortBy(_.uniq(analyticsWidgets, function(w) { return w.name; }), function(x) {
-                return vm.analyticDisplayOrder[x.name] && !x.completed
-            });
+            // });
 
 
+            // //remove duplicates and set to state, and sort
+            // //vm.state.lockedAnalyticsWidgets = _.uniq(lockedAnalyticsWidgets, function(w) { return w.name; });
+            // vm.state.analyticsWidgets = _.sortBy(_.uniq(analyticsWidgets, function(w) { return w.name; }), function(x) {
+            //     return vm.analyticDisplayOrder[x.name] && !x.completed
+            // });
 
-            vm.state.completeWorkstreams = completeWorkstreams;
-            vm.state.incompleteWorksreams = incompleteWorkstreams;
+
+
+            // vm.state.completeWorkstreams = completeWorkstreams;
+            // vm.state.incompleteWorksreams = incompleteWorkstreams;
+
+            vm.state.analyticsWidgets = [{
+               'completed': false,
+               'link': "#",
+               'name': 'Inventory'  
+            },
+            {
+               'completed': false,
+               'link': "#",
+               'name': 'Quotes'  
+            },
+            {
+               'completed': false,
+               'link': "#",
+               'name': 'PurchaseOrders'  
+            },
+            {
+               'completed': false,
+               'link': "#",
+               'name': 'Invoices'  
+            },
+            {
+               'completed': false,
+               'link': "#",
+               'name': 'Renewals'  
+            },
+            {
+               'completed': false,
+               'link': "#",
+               'name': 'Promotions'  
+            }]
 
         }
 

@@ -1,6 +1,6 @@
 (function(){
 
-app.directive('dashboardAnalyticTileComponent', dashboardAnalyticTile);
+app.directive('dashboardAnalyticTileDemoComponent', dashboardAnalyticTile);
 /* @ngInject */
 function dashboardAnalyticTile() {
 
@@ -12,7 +12,7 @@ function dashboardAnalyticTile() {
             analytic: '='
         },
         replace: true,
-        templateUrl: 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.html',
+        templateUrl: 'assets/var/demo/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.html',
         controller: 'DashboardAnalyticTileComponentController',
         controllerAs: 'vm',
         bindToController: true,

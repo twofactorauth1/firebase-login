@@ -6,19 +6,14 @@
 
         <h3 class="analytic-title indi-rounded-title">{{vm.uiDetails.widgetTitle}}</h3>
 
-        <div class="analytic-details">
-
-            <div ng-repeat="mydata in vm.uiDetails.data" class="col-xs-12 title-container">
-
-                <div class="analytic-data-label">
-                    <span class="pull-left">{{mydata.analyticDataLabel}}</span>
-                </div>
-
-                <div class="analytic-data-value">
-                    <span class="pull-right">{{mydata.analyticDataValue}}</span>
-                </div>
-
-            </div>
+        <div class="analytic-details">           
+                <table style="width:100%;">
+                    <tr style="background: rgba(0, 0, 0, 0.5); height: 40px; text-transform: uppercase;">
+                        <th ng-repeat="header in vm.uiDetails.data">
+                            {{header.name }}
+                        </th>
+                    </tr>
+                </table>
 
             <div class="analytic-button-container center margin-top-10">
                 <a href="{{vm.analytic.link}}" class="center btn btn-primary btn-lg btn-wide btn-o ng-scope"></i>{{vm.uiDetails.buttonTitle}}</a>

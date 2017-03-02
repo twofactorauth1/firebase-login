@@ -14,13 +14,23 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     vm.uiDetails = [];
 
     //TODO: get from Dashboard.service
-    vm.analyticData = {
+    /*vm.analyticData = {
         'visitors': {},
         'contacts': {},
         'CampaignMetrics': {},
         'Revenue': {},
         'SocialMedia': {}
-    };
+    };*/
+
+
+        vm.analyticData = {
+            'Inventory': {},
+            'Quotes': {},
+            'PurchaseOrders': {},
+            'Invoices': {},
+            'Renewals': {},
+            'Promotions': {}
+        };
 
     function analyticMap() {
         var ret = {};
@@ -28,106 +38,73 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
         if (analyticsObject) {
             switch(vm.analytic.name) {
-                case 'visitors':
+                case 'Inventory':
 
-                    ret.widgetTitle = 'Website';
-                    ret.buttonTitle = 'View Analytics';
+                    ret.widgetTitle = 'Inventory';
+                    ret.buttonTitle = 'Check Inventory';
                     ret.data = [
-                        {
-                            analyticDataLabel: 'MTD New Visitors',
-                            analyticDataValue: analyticsObject.visitors.total
-                        },
-                        {
-                            analyticDataLabel: 'MTD Uniques',
-                            analyticDataValue: analyticsObject.allvisitors.total
-                        },
-                        {
-                            analyticDataLabel: 'MTD Page Views',
-                            analyticDataValue: analyticsObject.pageViews.total
-                        }
+                        {name: 'SKU #'},
+                        {name: 'Vender'},
+                        {name: 'Qty OH'}
                     ];
 
                     break;
 
-                case 'contacts':
+                case 'Quotes':
 
-                    ret.widgetTitle = 'Contacts';
-                    ret.buttonTitle = 'View Contacts';
+                    ret.widgetTitle = 'Quotes';
+                    ret.buttonTitle = 'Build a quote';
                     ret.data = [
-                        {
-                            analyticDataLabel: 'MTD Contacts',
-                            analyticDataValue: analyticsObject.contacts.total
-                        },
-                        {
-                            analyticDataLabel: 'MTD Leads',
-                            analyticDataValue: analyticsObject.contacts.leadTotal
-                        }
-                    ]
+                        {name: 'Quote #'},
+                        {name: 'End User'},
+                        {name: 'Amount'}
+                    ];
 
                     break;
-                case 'CampaignMetrics':
+                case 'PurchaseOrders':
 
-                    ret.widgetTitle = 'Campaigns';
-                    ret.buttonTitle = 'View Campaigns';
+                    ret.widgetTitle = 'Purchase Orders';
+                    ret.buttonTitle = 'Submit a PO';
                     ret.data = [
-                        {
-                            analyticDataLabel: 'MTD Sent',
-                            analyticDataValue: analyticsObject.campaigns.totalSent
-                        },
-                        {
-                            analyticDataLabel: 'MTD Opened',
-                            analyticDataValue: analyticsObject.campaigns.totalOpened
-                        },
-                        {
-                            analyticDataLabel: 'MTD Clicked',
-                            analyticDataValue: analyticsObject.campaigns.totalClicked
-                        }
-                    ]
+                        {name: 'PO #'},
+                        {name: 'Amount'},
+                        {name: 'Status'}
+                    ];
 
                     break;
-                case 'SocialMedia':
+                case 'Invoices':
 
-                    ret.widgetTitle = 'Social Media';
-                    ret.buttonTitle = 'View Social Networks';
+                    ret.widgetTitle = 'Invoices';
+                    ret.buttonTitle = 'Pay Invoice';
                     ret.data = [
-                        {
-                            analyticDataLabel: 'Facebook',
-                            analyticDataValue: function () {
-                                return vm.analyticData['SocialMedia'].facebook
-                            }
-                        },
-                        {
-                            analyticDataLabel: 'Twitter',
-                            analyticDataValue: function () {
-                                return vm.analyticData['SocialMedia'].twitter
-                            }
-                        }
-                    ]
-
+                        {name: 'Invoice #'},
+                        {name: 'Amount'},
+                        {name: 'Due Date'}
+                    ];
                     break;
-                case 'Orders':
+                
+                case 'Renewals':
 
-                    break;
-                case 'Revenue':
-
-                    ret.widgetTitle = 'E-Commerce';
-                    ret.buttonTitle = 'View Orders';
+                    ret.widgetTitle = 'Renewals';
+                    ret.buttonTitle = 'View All renewals';
                     ret.data = [
-                        {
-                            analyticDataLabel: 'YTD Order Rev.',
-                            analyticDataValue: '$' + parseFloat(analyticsObject.revenue.YTDTotalAmount).toFixed(2)
-                        },
-                        {
-                            analyticDataLabel: 'YTD Tax Collected',
-                            analyticDataValue: analyticsObject.revenue.YTDTotalTax
-                        },
-                        {
-                            analyticDataLabel: 'YTD New Orders',
-                            analyticDataValue: analyticsObject.revenue.YTDTotalOrders
-                        }
-                    ]
+                        {name: 'Date'},
+                        {name: 'End User'},
+                        {name: 'Amount'}
+                    ];
 
                     break;
+                case 'Promotions':
+
+                    ret.widgetTitle = 'Promotions';
+                    ret.buttonTitle = 'View Promotions';
+                    ret.data = [
+                        {name: 'Promotion'},
+                        {name: 'Promo Potential'}
+                    ];
+
+                    break;
+                
                 default:
                 //code
             }

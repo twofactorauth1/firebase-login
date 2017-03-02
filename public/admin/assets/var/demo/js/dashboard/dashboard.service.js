@@ -256,10 +256,18 @@
             dashboardService.polls = 0;
             dashboardService.numberPolling++;
 
-            dashboardService.getAnalytics();
-            dashboardService.getWorkstreams();
+            //dashboardService.getAnalytics();
+            dashboardService.state.analytics = {
+                'Inventory': {},
+                'Quotes': {},
+                'PurchaseOrders': {},
+                'Invoices': {},
+                'Renewals': {},
+                'Promotions': {}
+            };
+            //dashboardService.getWorkstreams();
             dashboardService.getAccount();
-            dashboardService.getActiveMessages();
+            //dashboardService.getActiveMessages();
             if (away) {
                 console.log(away);
             }
