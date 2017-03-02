@@ -248,7 +248,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('onboardingCtrl')
     }).state('app.dohy', {
         url: '/dashboard',
-        templateUrl: "/admin/assets/js/dashboard/dohy.html",
+        templateUrl: "/admin/assets/var/demo/js/dashboard/dashboard.html",
         title: 'Dashboard',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'jsVideoUrlParser', 'highcharts')

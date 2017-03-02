@@ -1,0 +1,66 @@
+<div ng-controller="DOHYCtrl as vm" class="dohy-dashboard-inner"style="background-image: url('/admin/assets/var/demo/images/securematics-dashoboard-background.jpg')">
+    <div class="dohy-dashboard-layer">
+    </div>
+
+    <!-- start: DASHBOARD TITLE -->
+    <section id="page-title" class="padding-top-25 padding-bottom-15">
+        <div class="row">
+            <div>
+                <div class="dashboard-logo margin-bottom-10" ng-class="{ 'indi-circle': !vm.state.account.business.logo }">
+                    <img ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')" ng-src="{{vm.state.account.business.logo}}" err-src="assets/images/default-media.png" alt="" ng-class="{ 'indi-circle-img': !vm.state.account.business.logo }">
+                </div>
+                <div class="dashboard-logo-edit cursor-pointer margin-bottom-10">
+                    <span ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')"><i class="fa fa-edit"></i> EDIT LOGO </span>
+                </div>
+                <!-- <span class="mainDescription">Choose Your Own Adventure</span> -->
+                <div class="indi-help-text center">
+                    <span ng-if="vm.state.account.billing.plan==='NO_PLAN_ARGUMENT'">
+                        You have <a href='/admin/#/account/billing'><span class="workstream-button button-o">{{::account.trialDaysRemaining}}</span></a> trial days remaining. Ready to join? <a href='/admin/#/account/billing'>Select your plan.</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- end: DASHBOARD TITLE -->
+
+    <div class="workstream-container container-fluid container-fullw" style="padding-top:0px;">
+
+
+        <!-- start: Analytics -->
+        <section class="image-grid row">
+
+            <div ng-if="vm.state.broadCastMessage.message" class="indi-rounded panel panel-white margin-top-15" style="position:relative; margin-left: 15px; padding-left:15px; margin-right:15px; padding-right:15px;">
+                <div class="panel-heading border-light">
+                    <p class="message-title" ng-bind-html="vm.state.broadCastMessage.message | unsafe"></p>
+                </div>
+                
+            </div>
+
+            <h1 class="mainTitle">
+                Key Business Insights
+            </h1>
+
+            
+
+            <div
+                ng-repeat="analytic in vm.state.analyticsWidgets track by analytic.name"
+                class="analytic-unlocked col-xs-12 col-sm-6 " ng-class="{'col-md-4 col-lg-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-6 col-md-6 col-lg-4': !app.layout.isSidebarClosed}">
+                <dashboard-analytic-tile-component
+                    state="vm.state"
+                    ui-state="vm.uiState"
+                    analytic="analytic">
+                </dashboard-analytic-tile-component>
+            </div>
+
+        </section>
+        <!-- end: Analytics -->
+
+    </div>
+
+    <div class="indi-help-text center">
+        <span>
+            Need some help getting started? <a href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', '')">Contact</a> our Success Team
+        </span>
+    </div>
+
+</div>

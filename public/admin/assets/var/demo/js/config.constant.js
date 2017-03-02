@@ -630,7 +630,7 @@ app.constant('JS_REQUIRES', {
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importContactModalCtrl': 'assets/js/controllers/modals/importContactModalCtrl.js',
     'onboardingCtrl': 'assets/js/controllers/onboardingCtrl.js',
-    'DOHYCtrl': 'assets/js/dashboard/dashboard.controller.js',
+    'DOHYCtrl': 'assets/var/demo/js/dashboard/dashboard.controller.js',
     // 'DashboardWorkstreamTileComponent': 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.component.js',
     'DashboardWorkstreamTileComponentController': 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.controller.js',
     // 'DashboardAnalyticTileComponent': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.js',
