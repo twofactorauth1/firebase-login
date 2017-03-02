@@ -103,7 +103,7 @@
             </div>
         </a>
     </li>
-	<li ng-class="{'active open':$state.includes('app.marketing')}">
+	<li ng-class="{'active open':$state.includes('app.marketing')}" class="hidden">
 		<a href="javascript:void(0)">
 			<div class="item-content">
 				<div class="item-media">
@@ -114,7 +114,7 @@
 				</div>
 			</div>
 		</a>
-		<ul class="sub-menu">
+		<ul class="sub-menu hidden" >
             <li ui-sref-active="active" ng-if="account.showhide.ssbSiteBuilder">
                 <a ui-sref="app.website.ssbSiteBuilder.pages">
                     <span class="title"> Website </span>
