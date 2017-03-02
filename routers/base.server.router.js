@@ -220,6 +220,7 @@ _.extend(baseRouter.prototype, {
         logger.debug('>> isHomeAuth (' + req.originalUrl + ') session accountId: ' + req.session.accountId);
         var path = req.url;
         if (req.isAuthenticated()) {
+            logger.trace('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
                 if(req.session.accountId === -1) {
@@ -227,6 +228,7 @@ _.extend(baseRouter.prototype, {
                     logger.debug('returning next');
                     return next();
                 } else {
+                    logger.trace('Getting auth url for accountId:', req.session.accountId);
                     authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
                         function(err, value){
                             if (err) {
@@ -247,7 +249,7 @@ _.extend(baseRouter.prototype, {
 
             } else {
                 if(req.originalUrl.indexOf('authtoken') === -1) {
-                    logger.debug('<< isHomeAuth');
+                    logger.debug('<< isHomeAuth (next)');
                     return next();
                 } else {
 
@@ -258,6 +260,7 @@ _.extend(baseRouter.prototype, {
 
             }
         } else {
+            logger.trace('!isAuthenticated');
             var checkAuthToken = function(req, fn) {
                 if (req.query.authtoken != null) {
                     var accountId = 0;
@@ -277,6 +280,8 @@ _.extend(baseRouter.prototype, {
                         });
                     });
                 } else {
+                    logger.trace('No auth token at req.query.authtoken:', req.query);
+                    logger.trace('req.originalUrl:', req.originalUrl);
                     return fn("No auth token found");
                 }
             };
@@ -307,6 +312,8 @@ _.extend(baseRouter.prototype, {
                     });
                 });
             } else {
+                logger.debug('req.session:', req.session);
+                logger.debug('req.session.accountId:', req.session.accountId);
                 checkAuthToken(req, function(err, value) {
                     if (!err) {
                         //need to remove the auth token here.
@@ -340,10 +347,10 @@ _.extend(baseRouter.prototype, {
         //     return resp.redirect('/interim.html');
         // }
         if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1) && req.session.midSignup !== true) {
-            logger.trace('isAuthenticated');
+            logger.trace('isAuthenticated!');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
                 //need to redirect
-
+                logger.trace('isMainApp === true');
                 authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
                     function(err, value){
                         if (err) {
@@ -376,13 +383,17 @@ _.extend(baseRouter.prototype, {
                     }
                 );
             } else {
+                logger.trace('isMainApp === false');
                 if(req.originalUrl.indexOf('authtoken') === -1) {
                     logger.trace('<< isAuth');
                     if(req.session.accountId === -1) {
                         logger.debug('redirecting to /home');
                         return resp.redirect('/home');
+                    } else {
+                        logger.trace('returning next');
+                        return next();
                     }
-                    return next();
+
                 } else {
 
                     var redirectUrl = req.originalUrl.replace(/\?authtoken.*/g, "");

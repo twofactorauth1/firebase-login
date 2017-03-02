@@ -60,6 +60,8 @@ var dao = {
 
 
     getServerUrlByAccount: function (accountId, fn) {
+        var self = this;
+
         if (accountId > 0) {
             this.getById(accountId, function (err, value) {
                 if (err) {
@@ -69,10 +71,13 @@ var dao = {
                 if (value == null) {
                     return fn("No account found", "No account found");
                 }
+                if(value.get('orgId') && value.get('orgId') > 0) {
+                    self.getServerUrlByAccountAndOrg(accountId, value.get('orgId'), fn);
+                } else {
+                    var url = appConfig.getServerUrl(value.get("subdomain"), value.get("domain"));
+                    fn(null, url);
+                }
 
-                var url = appConfig.getServerUrl(value.get("subdomain"), value.get("domain"));
-
-                fn(null, url);
             });
         } else {
             fn(null, appConfig.getServerUrl(null, null));
@@ -320,15 +325,52 @@ var dao = {
                         obj.subdomain = val.get('subdomain');
                         obj.domain = val.get('domain');
                         obj.logo = val.get('business').logo;
-                        data.push(obj);
+                        if(val.get('orgId') && val.get('orgId') > 0) {
+                            //skipping
+                        } else {
+                            data.push(obj);
+                        }
                     }
-
                     callback();
                 }
             });
         }, function (err) {
             fn(null, data);
         });
+    },
+
+    getPreviewDataForOrg: function(idAry, orgDomain, fn) {
+        var self = this;
+        var data = [];
+        orgDao.getByOrgDomain(orgDomain, function(err, organization){
+            if(err || !organization) {
+                fn(err || 'No organization found');
+            } else {
+                var orgId = organization.id();
+                async.each(idAry, function(id, callback){
+                    var query = {_id:id, orgId:orgId};
+                    self.findOne(query, $$.m.Account, function(err, val){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            var obj = {};
+                            if (val) {
+                                obj.id = id;
+                                obj.subdomain = val.get('subdomain');
+                                obj.domain = val.get('domain');
+                                obj.logo = val.get('business').logo;
+                                data.push(obj);
+                            }
+
+                            callback();
+                        }
+                    });
+                }, function(err){
+                    fn(null, data);
+                });
+            }
+        });
+
     },
 
     deleteAccountAndArtifacts: function (accountId, fn) {
