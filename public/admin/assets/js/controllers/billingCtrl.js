@@ -143,9 +143,9 @@
                     product.managedServices = false;
                 }
 
-                //if (product.name.contains('RVLVR')) {
-                //    return; // Excl. RVLVR plans
-                //}
+                if (product.name.contains('RVLVR')) {
+                    return; // Excl. RVLVR plans
+                }
 
                 if (hasStripePlans && activeStripePlan) {
                     PaymentService.getIndigenousStripePlan(activeStripePlan.id, function (plan) {
