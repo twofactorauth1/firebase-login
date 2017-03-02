@@ -14,10 +14,9 @@ var organization = $$.m.ModelBase.extend({
             "_id" : null,
             "name":null,
             "adminAccount":0,
+            "adminUser":4,
             "signupSettings":{},
             "orgDomain":'',
-
-
             created: {
                 date: new Date(),
                 by: null

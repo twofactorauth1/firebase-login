@@ -8,6 +8,7 @@
 var baseApi = require('../base.api');
 var userDao = require('../../dao/user.dao');
 var accountDao = require('../../dao/account.dao');
+var orgDao = require('../../organizations/dao/organization.dao');
 var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
 var authenticationDao = require('../../dao/authentication.dao');
@@ -582,9 +583,19 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             },
             function(accountId, subId, user, stripeCustomerId, sub, account, callback) {
+                if(orgId && orgId>0) {
+                    orgDao.getById(orgId, $$.m.Organization, function(err, organization){
+                        callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization);
+                    });
+                } else {
+                    callback(null, accountId, subId, user, stripeCustomerId, sub, account, null);
+                }
+            },
+            function(accountId, subId, user, stripeCustomerId, sub, account, organization, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
-                    authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin/welcome", function (err, value) {
+
+                    authenticationDao.getAuthenticatedUrlForAccountAndOrgObject(accountId, user.id(), 'admin/welcome', null, organization, function(err, value){
                         self.log.debug('Redirecting to: ' + value);
                         if (err) {
                             res.redirect("/home");
@@ -621,7 +632,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         billing.closeLeadID = leadId;
                                         accountDao.saveOrUpdate(account, function(){});
                                     }
-                                     /*
+                                    /*
                                      * If there is a campaign associated with this new user, update it async.
                                      */
                                     if(campaignId) {
@@ -674,15 +685,33 @@ _.extend(api.prototype, baseApi.prototype, {
                                         } else {
                                             self.log.debug('Admin user added to account ' + accountId);
                                         }
-                                        callback(null, accountId);
+
+                                        if(organization && organization.get('adminUser') && organization.get('adminUser') > 1) {
+                                            self.log.debug('Adding the org admin user to the new account');
+                                            var orgAdminUser = organization.get('adminUser');
+                                            userManager.addUserToAccount(accountId, orgAdminUser, ['super', 'admin', 'member'], orgAdminUser, function(err, value){
+                                                if(err) {
+                                                    self.log.error('Error adding org admin user to account:', err);
+                                                } else {
+                                                    self.log.debug('Org Admin user added to account ' + accountId);
+                                                }
+                                                callback(null, accountId);
+                                            });
+                                        } else {
+                                            callback(null, accountId);
+                                        }
+
                                     });
+
                                 });
 
                             }
                         });
                         self.log.debug('<< initalizeUserAndAccount: ', json);
                         res.send(json);
+
                     });
+
                 });
             }
         ], function(err, accountId){

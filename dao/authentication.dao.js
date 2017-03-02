@@ -688,6 +688,17 @@ var dao = {
         });
     },
 
+    getAuthenticatedUrlForAccountAndOrgObject: function(accountId, userId, path, expirationSeconds, organization, fn) {
+        var self = this;
+        self.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            } else {
+                self._constructAuthenticatedOrganizationUrl(accountId, organization.id(), value, path, fn);
+            }
+        });
+    },
+
 
     verifyAuthToken: function (accountId, token, remove, fn) {
         var self = this;
