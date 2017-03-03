@@ -42,4 +42,116 @@
             max-height: inherit;
         }
     }
+
+    .inbox-widget-container{
+        border-radius: 8px;
+        .tabbable{
+            min-height: 250px;
+            margin-right: -35px;
+            background: #fff!important;
+            ul.nav.nav-tabs{
+
+                li{                    
+                    border-bottom: 1px solid #eeeeee;
+                    a{
+                        margin: 0 !important;
+                        border :none !important;
+                        color: #48b1cc;
+                        i{
+                            font-size: 17px;
+                        }
+                    }
+                }
+                li.active{
+                    a{
+                        background: #48b1cc !important;
+                        color: #fff !important;
+                    }
+                }
+
+                
+            } 
+
+            ul.message-container-top{
+                list-style: none;                
+                padding: 0;
+                margin-bottom: 0;
+                li{
+                    padding: 20px;
+                    border: 1px solid #eeeeee;
+                    border-top: 0;
+                }
+            }
+
+            .message-container-left{
+                               
+                .message-user{ 
+                    float: left;
+                    margin-right: 10px;
+                    img{
+                        max-width: 50px;
+                        border-radius: 30%;
+                        margin:0;
+                    }    
+                }
+                .message-title{
+                    font-size: 16px;
+                    color: #2C3030;
+                }
+                .message-date{                    
+                    float: right;
+                    color: #48b1cc;
+                }
+                .btn.btn-message{
+                    border-radius: 0;
+                    height: 50px;
+                }
+            }
+
+            .message-container{
+                margin-left: -15px;
+                margin-top: -15px; 
+                padding: 0;
+            } 
+
+            .active-message{
+                background: rgba(230,230,250, 0.3);
+            }
+
+            .message-container-right{
+                margin-left: 0px;
+                margin-top: -14px;
+                min-height: 300px;
+                .message-user{ 
+                    float: left;
+                    margin-right: 10px;
+                    img{
+                        max-width: 60px;
+                        border-radius: 30%;
+                        margin:0;
+                    }    
+                }
+                .message-date{
+                    color: #48b1cc;
+                }
+                ul.message-container-top{                    
+                    li{
+                        border-left: none;
+                        border-right: none;
+                    }    
+                }
+            }  
+        }
+        .message-footer{
+            min-height:50px;
+            background: rgba(0, 0, 0, 0.75);
+            margin-bottom: 40px;
+            .footer-text{
+                line-height: 50px;
+            }
+            .black-border-right{
+                border-right: solid 1px gray;
+            }
+        }
+    }
 }    

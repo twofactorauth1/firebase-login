@@ -40,7 +40,10 @@
                 Key Business Insights
             </h1>
 
-            
+            <dashboard-inbox-component
+                state="vm.state"
+                ui-state="vm.uiState">
+            </dashboard-inbox-component>
 
             <div
                 ng-repeat="analytic in vm.state.analyticsWidgets track by analytic.name"
