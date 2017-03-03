@@ -94,8 +94,8 @@ var urlutils = {
         if(_.contains(orgRootHosts, domain + '.' + obj.tld)) {
             isOrgRoot = true;
         } else {
-            _log.debug('orgRootHosts:', orgRootHosts);
-            _log.debug('does not contain:', domain+'.' + obj.tld);
+            //_log.debug('orgRootHosts:', orgRootHosts);
+            //_log.debug('does not contain:', domain+'.' + obj.tld);
         }
         var returnObj = {
             'isMainApp': isMainApp,
@@ -105,7 +105,7 @@ var urlutils = {
             'environment': environment,
             isOrgRoot: isOrgRoot
         };
-        _log.debug('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain, returnObj);
+        //_log.debug('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain, returnObj);
         return returnObj;
     },
 

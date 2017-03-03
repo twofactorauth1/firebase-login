@@ -188,7 +188,12 @@ module.exports = {
             _serverUrl += subdomain;
         }
         if(nonProduction) {
-            _serverUrl += '.test';
+            if(process.env.ENV_SUBDOMAIN) {
+                _serverUrl += '.' + process.env.ENV_SUBDOMAIN;
+            } else {
+                _serverUrl += '.test';
+            }
+
         }
         _serverUrl += '.' + orgDomainSuffix;
 

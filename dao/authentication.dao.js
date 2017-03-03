@@ -15,12 +15,89 @@ var appConfig = require('../configs/app.config');
 var urlUtils = require('../utils/urlutils');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var orgDao = require('../organizations/dao/organization.dao');
+var async = require('async');
 
 var dao = {
 
     options: {
         name: "authentication.dao",
         defaultModel: $$.m.User
+    },
+
+    _authenticateByUsernamePassword: function(req, username, password, fn) {
+        var self = this;
+        self.log.debug('>> authenticating by username & password: ' + username);
+        var host = req.get('host');
+        var parsedHost = urlUtils.getSubdomainFromHost(host);
+        /*
+         * 2 big decisions: are we routing to an org or indigenous
+         *                  are we routing to /home or /admin (multiple accounts or 1 account)
+         */
+        accountDao.getAccountByHost(host, function (err, account) {
+            if(err) {
+                self.log.error('Error finding account by host:', err);
+                fn(err);
+            } else if(!account || !account.id()) {
+                self.log.debug('No account found with username:' + username);
+                fn('No account found');
+            } else {
+                if(parsedHost.isOrgRoot === true) {
+                    return self.__authenticateByUsernamePasswordOrganization(req, username, password, account, parsedHost, fn);
+                } else {
+                    return self.__authenticateByUsernamePasswordNoOrg(req, username, password, account, parsedHost, fn);
+                }
+            }
+        });
+    },
+
+    __authenticateByUsernamePasswordOrganization: function(req, username, password, account, parsedHost, fn) {
+        var self = this;
+        self.log.debug('authenticating by organization');
+        orgDao.getByOrgDomain(parsedHost.orgDomain, function(err, organization){
+            if(err || !organization) {
+                self.log.error('Error getting organization:', err);
+                return fn(err || 'Organization not found');
+            } else {
+                /*
+                 * if account.id() === organization.adminAccount, -> /home
+                 * else if user.getAllAccountIds().length > 1 -> /home
+                 * else -> account /admin
+                 */
+                userDao.getUserByUsername(username, function (err, user) {
+                    if(err) {
+                        self.log.error('Error getting user by username:', err);
+                        fn(err);
+                    } else {
+                        user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function (err, value) {
+                            if(err || !value || value === false) {
+                                log.info("Error occurred verifying password");
+                                return fn(err, "An error occurred verifying password - " + err);
+                            } else {
+                                req.session.permissions = user.getPermissionsForAccount(account.id());
+                                if(account.id() === organization.get('adminAccount') || user.getAllAccountIds().length > 1) {
+                                    req.session.accounts = user.getAllAccountIds();
+                                    req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
+                                    log.info("Login successful. AccountId is now " + req.session.accountId);
+                                    log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
+                                    accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                        log.debug('got preview data');
+                                        req.session.accounts = data;
+                                        return fn(null, user);
+                                    });
+                                } else {
+
+                                }
+                            }
+                        });
+                    }
+                });
+
+            }
+        });
+    },
+
+    __authenticateByUsernamePasswordNoOrg: function(req, username, password, account, parsedHost, fn) {
+
     },
 
     authenticateByUsernamePassword: function (req, username, password, fn) {
@@ -59,6 +136,7 @@ var dao = {
                                 } else {
                                     req.session.permissions = user.getPermissionsForAccount(appConfig.mainAccountID);
                                     if(user.getAllAccountIds().length > 1) {
+                                        log.trace('user has multiple accounts');
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
                                         log.info("Login successful. AccountId is now " + req.session.accountId);
@@ -69,6 +147,7 @@ var dao = {
                                             return fn(null, user);
                                         });
                                     } else {
+                                        log.trace('user has one account');
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = user.getAllAccountIds()[0];
                                         req.session.unAuthAccountId = user.getAllAccountIds()[0];

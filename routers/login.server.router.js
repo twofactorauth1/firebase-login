@@ -215,10 +215,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         var accountIds = req.user.getAllAccountIds();
                         var subObject = urlUtils.getSubdomainFromRequest(req);
                         if(subObject.isMainApp && accountIds.length > 1) {
-                            self.log.debug('redirecting to /home');
+                            self.log.debug('redirecting to /home for main app');
                             req.session.accountId = -1;
                             self.log.debug('setting the redirect in cookies to ', _path);
                             cookies.setRedirectUrl(req, resp, _path);
+                            self.log.debug('req.isAuthenticated():' + req.isAuthenticated());
                             resp.redirect("/home");
                             userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
                             self = req = resp = null;
@@ -227,7 +228,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             self.log.debug('redirecting based on organization');
                             //TODO: handle accountId != orgAdminAccount
                             if(accountIds.length > 1) {
-                                self.log.debug('redirecting to /home');
+                                self.log.debug('redirecting to /home for org root');
                                 req.session.accountId = -1;
                                 self.log.debug('setting the redirect in cookies to ', _path);
                                 cookies.setRedirectUrl(req, resp, _path);
