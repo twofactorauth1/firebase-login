@@ -164,8 +164,35 @@ if (appConfig.cookie_subdomain === '.indigenous.io' || appConfig.cookie_subdomai
     sess.cookie.secure = true // serve secure cookies
 }
 */
-app.use(express.session(sess));
+//app.use(express.session(sess));
+//-----------------------------------------------------
+// MULTIPLE DOMAIN SESSION COOKIES
+//-----------------------------------------------------
+var mwCache = Object.create(null);
+var sess = {
+    store: mongoStore,
+    secret: 'mys3cr3t',
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000,
+        domain: appConfig.cookie_subdomain
+    }, //stay open for 1 day of inactivity across all subdomains
+    key: appConfig.cookie_name};
+function virtualHostSession(req, res, next) {
+    var host = req.get('host'); //maybe normalize with toLowerCase etc
+    var hostSession = mwCache[host];
+    if (!hostSession) {
+        console.log('No hostSession for ' + host);
+        if(host.replace(':3000', '').endsWith('gorvlvr.com')) {
+            //console.log('using .gorvlvr.com');
+            sess.cookie.domain = '.gorvlvr.com';
+        }
+        hostSession = mwCache[host] = express.session(sess);
+    }
+    hostSession(req, res, next);
+    //don't need to call next since hostSession will do it for you
+}
 
+app.use(virtualHostSession);
 //Middle ware to refresh the session cookie expiration on every hit
 app.use(function (req, res, next) {
     req.session._garbage = Date();
@@ -232,7 +259,7 @@ var allowCrossDomain = function (req, res, next) {
     } else {
         res.send({auth: false});
     }
-}
+};
 log.info('Allowing xd scripting calls from: ' + appConfig.xdhost_whitelist.join());
 app.use(allowCrossDomain);
 

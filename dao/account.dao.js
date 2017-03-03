@@ -10,6 +10,7 @@ require('../models/account');
 var urlUtils = require('../utils/urlutils');
 var appConfig = require('../configs/app.config');
 var async = require('async');
+var orgDao = require('../organizations/dao/organization.dao');
 
 var dao = {
 
@@ -59,6 +60,8 @@ var dao = {
 
 
     getServerUrlByAccount: function (accountId, fn) {
+        var self = this;
+
         if (accountId > 0) {
             this.getById(accountId, function (err, value) {
                 if (err) {
@@ -68,13 +71,45 @@ var dao = {
                 if (value == null) {
                     return fn("No account found", "No account found");
                 }
+                if(value.get('orgId') && value.get('orgId') > 0) {
+                    self.getServerUrlByAccountAndOrg(accountId, value.get('orgId'), fn);
+                } else {
+                    var url = appConfig.getServerUrl(value.get("subdomain"), value.get("domain"));
+                    fn(null, url);
+                }
 
-                var url = appConfig.getServerUrl(value.get("subdomain"), value.get("domain"));
-
-                fn(null, url);
             });
         } else {
             fn(null, appConfig.getServerUrl(null, null));
+        }
+    },
+
+    getServerUrlByAccountAndOrg: function(accountId, orgId, fn) {
+        var self = this;
+
+        if (orgId > 0) {
+            orgDao.getById(orgId, $$.m.Organization, function(err, organization){
+                if(err) {
+                    return fn(err);
+                } else if (!organization) {
+                    return fn('No organization found');
+                } else {
+                    self.getById(accountId, $$.m.Account, function(err, account){
+                        if(err) {
+                            return fn(err);
+                        } else if (!account) {
+                            return fn("No account found", "No account found");
+                        } else {
+                            var orgSuffix = organization.get('signupSettings').suffix;
+                            var subdomain = account.get('subdomain');
+                            var url = appConfig.getOrganizationUrl(subdomain, orgSuffix);
+                            return fn(null, url);
+                        }
+                    });
+                }
+            });
+        } else {
+            this.getServerUrlByAccount(accountId, fn);
         }
     },
 
@@ -134,7 +169,9 @@ var dao = {
             return this.getAccountByID(appConfig.mainAccountID, fn);
             //return fn(null, true);
         }
-
+        if(parsed.isOrgRoot) {
+            return this.getAccountBySubdomainAndOrg(parsed.subdomain, parsed.orgDomain, fn);
+        }
         if (parsed.subdomain != null || parsed.domain != null) {
             var cb = function (err, value) {
                 if (err) {
@@ -150,6 +187,24 @@ var dao = {
                 return this.getAccountByDomain(parsed.domain, cb);
             }
         }
+    },
+
+    getAccountBySubdomainAndOrg: function(subdomain, domain, fn) {
+        var self = this;
+        self.log.debug('>> getAccountBySubdomainAndOrg(' + subdomain + ', ' + domain + ', fn)');
+        orgDao.getByOrgDomain(domain, function(err, organization){
+            if(err) {
+                fn(err);
+            } else if(!organization){
+                fn('No organization found');
+            } else {
+                if(subdomain) {
+                    self.findOne({orgId:organization.id(), subdomain:subdomain}, $$.m.Account, fn);
+                } else {
+                    self.findOne({_id:organization.get('adminAccount')}, $$.m.Account, fn);
+                }
+            }
+        });
     },
 
     getAccountByBillingCustomerId: function (customerId, fn) {
@@ -270,15 +325,52 @@ var dao = {
                         obj.subdomain = val.get('subdomain');
                         obj.domain = val.get('domain');
                         obj.logo = val.get('business').logo;
-                        data.push(obj);
+                        if(val.get('orgId') && val.get('orgId') > 0) {
+                            //skipping
+                        } else {
+                            data.push(obj);
+                        }
                     }
-
                     callback();
                 }
             });
         }, function (err) {
             fn(null, data);
         });
+    },
+
+    getPreviewDataForOrg: function(idAry, orgDomain, fn) {
+        var self = this;
+        var data = [];
+        orgDao.getByOrgDomain(orgDomain, function(err, organization){
+            if(err || !organization) {
+                fn(err || 'No organization found');
+            } else {
+                var orgId = organization.id();
+                async.each(idAry, function(id, callback){
+                    var query = {_id:id, orgId:orgId};
+                    self.findOne(query, $$.m.Account, function(err, val){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            var obj = {};
+                            if (val) {
+                                obj.id = id;
+                                obj.subdomain = val.get('subdomain');
+                                obj.domain = val.get('domain');
+                                obj.logo = val.get('business').logo;
+                                data.push(obj);
+                            }
+
+                            callback();
+                        }
+                    });
+                }, function(err){
+                    fn(null, data);
+                });
+            }
+        });
+
     },
 
     deleteAccountAndArtifacts: function (accountId, fn) {

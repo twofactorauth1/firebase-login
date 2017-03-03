@@ -223,6 +223,70 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
                             self = req = resp = null;
                             return;
+                        } else if(subObject.isOrgRoot === true){
+                            self.log.debug('redirecting based on organization');
+                            //TODO: handle accountId != orgAdminAccount
+                            if(accountIds.length > 1) {
+                                self.log.debug('redirecting to /home');
+                                req.session.accountId = -1;
+                                self.log.debug('setting the redirect in cookies to ', _path);
+                                cookies.setRedirectUrl(req, resp, _path);
+                                resp.redirect("/home");
+                                userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
+                                self = req = resp = null;
+                                return;
+                            } else if(value.id() !== accountId){
+                                authenticationDao.getAuthenticatedUrlForAccountAndOrg(parseInt(accountId), self.userId(req), _path, null, subObject.orgDomain, function (err, value) {
+                                    if (err) {
+                                        self.log.debug('redirecting to /home');
+                                        resp.redirect("/home");
+                                        self = null;
+                                        return;
+                                    }
+                                    accountDao.getAccountByID(accountId, function(err, account){
+                                        if (err) {
+                                            self.log.debug('redirecting to /home');
+                                            resp.redirect("/home");
+                                            self = null;
+                                            return;
+                                        } else {
+                                            self.log.debug('Setting subdomain to: ' + account.get('subdomain'));
+                                            req.session.subdomain = account.get('subdomain');
+                                            req.session.domain = account.get('domain');
+                                            req.session.accountId = account.id();
+                                            req.session.unAuthAccountId = account.id();
+                                            self.log.debug('redirecting to ' + value);
+
+                                            resp.redirect(value);
+                                            userActivityManager.createUserLoginActivity(accountId, self.userId(req), requestorProps, function(){});
+                                            self = null;
+                                            return;
+                                        }
+                                    });
+
+                                });
+                            } else {
+                                authenticationDao.getAuthenticatedUrlForAccountAndOrg(value.id(), self.userId(req), _path, null, subObject.orgDomain, function (err, authUrl) {
+                                    if (err) {
+                                        self.log.debug('redirecting to /home');
+                                        resp.redirect("/home");
+                                        self = null;
+                                        return;
+                                    }
+                                    self.log.debug('value:', value);
+                                    self.log.debug('redirecting to ' + authUrl);
+                                    req.session.subdomain = value.get('subdomain');
+                                    req.session.domain = value.get('domain') || value.get('customDomain');
+                                    req.session.accountId = value.id();
+                                    req.session.unAuthAccountId = value.id();
+                                    self.log.debug('req.session:', req.session);
+                                    resp.redirect(authUrl);
+                                    userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
+
+                                    self = null;
+                                });
+                            }
+
                         } else if(subObject.domain && value.get('customDomain')===subObject.domain && accountId === value.id()){
                             self.log.debug('Redirecting based on domain');
                             authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), _path, function (err, authUrl) {

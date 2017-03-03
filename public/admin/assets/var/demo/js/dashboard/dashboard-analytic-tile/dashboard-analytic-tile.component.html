@@ -1,0 +1,32 @@
+<div class="analytic-tile-container image--basic" ng-hide="!vm.uiDetails.header">
+
+    <div class="indi-rounded panel panel-white text-center">
+
+        <img class="indi-rounded-img" src="//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.uiDetails.widgetTitle}}" />
+
+        <h3 class="analytic-title indi-rounded-title">{{vm.uiDetails.widgetTitle}}</h3>
+
+        <div class="analytic-details">           
+                <table class="analytic-details-table">
+                    <tr class="header-row">
+                        <th ng-repeat="obj in vm.uiDetails.header">
+                            {{obj.label }}
+                        </th>
+                    </tr>
+                    <tbody>                        
+                        <tr class="content-row" ng-repeat="item in vm.uiDetails.data">
+                            <td>{{item.field1}}</td>
+                            <td>{{item.field2}}</td>
+                            <td ng-if="item.field3">{{item.field3}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            <div class="analytic-button-container center margin-top-10">
+                <a href="{{vm.analytic.link}}" class="center btn btn-primary btn-lg btn-wide btn-o ng-scope"></i>{{vm.uiDetails.buttonTitle}}</a>
+            </div>
+
+        </div>
+
+    </div>
+</div>

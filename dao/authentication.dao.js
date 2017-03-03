@@ -14,6 +14,7 @@ var crypto = require('../utils/security/crypto');
 var appConfig = require('../configs/app.config');
 var urlUtils = require('../utils/urlutils');
 var userActivityManager = require('../useractivities/useractivity_manager');
+var orgDao = require('../organizations/dao/organization.dao');
 
 var dao = {
 
@@ -114,50 +115,130 @@ var dao = {
                     }
                 });
             } else {
-                log.info("logging into account with id: " + account.id());
 
-                userDao.getUserForAccount(account.id(), username, function (err, value) {
-                    if (err) {
-                        log.error("An error occurred retrieving user for account: ", err);
-                        return fn(err, "An error occurred retrieving user for account");
-                    } else {
-                        if (value == null) {
-                            log.info("User not found for account");
-                            return fn("User not found for account", "Incorrect username");
-                        } else {
-                            log.info("User found for account");
+                if(parsedHost.isOrgRoot) {
+                    log.info('logging into organization');
+                    req.session.accountId = 0;
+                    userDao.getUserByUsername(username, function (err, value) {
+                        if (!err) {
+                            if (value == null) {
+                                log.info("No user found");
+                                return fn("User not found", "Incorrect username");
+                            }
+
                             var user = value;
-                            user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function (err, value) {
+
+                            user.verifyPassword(password, $$.constants.user.credential_types.LOCAL, function (err, value) {
                                 if (!err) {
                                     if (value === false) {
                                         log.info("Incorrect password");
                                         return fn("Incorrect password", "Incorrect password");
                                     } else {
-                                        req.session.permissions = user.getPermissionsForAccount(account.id());
-                                        log.info("Authentication succeeded");
-                                        req.session.accountId = account.id();
-                                        req.session.subdomain = account.get('subdomain');
-                                        req.session.domain = account.get('domain');
-                                        if(!self._verifyActiveTrialOrSub(account) ) {
-                                            log.debug('locking session for account ' + req.session.accountId);
-                                            req.session.locked_sub = true;
-                                            account.set('locked_sub', true);
-                                            accountDao.saveOrUpdate(account, function(err, savedAccount){
+                                        //TODO: this might be wrong
+                                        req.session.permissions = user.getPermissionsForAccount(appConfig.mainAccountID);
+                                        if(user.getAllAccountIds().length > 1) {
+                                            req.session.accounts = user.getAllAccountIds();
+                                            req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
+                                            log.info("Login successful. AccountId is now " + req.session.accountId);
+                                            log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
+                                            accountDao.getPreviewDataForOrg(req.session.accounts, parsedHost.orgDomain, function(err, data){
+                                                log.debug('got preview data');
+                                                req.session.accounts = data;
                                                 return fn(null, user);
                                             });
                                         } else {
-                                            return fn(null, user);
+                                            req.session.accounts = user.getAllAccountIds();
+                                            req.session.accountId = user.getAllAccountIds()[0];
+                                            req.session.unAuthAccountId = user.getAllAccountIds()[0];
+                                            req.session.subdomain = account.get('subdomain');
+                                            req.session.domain = account.get('domain');
+
+                                            accountDao.getAccountByID(req.session.accountId, function(err, authAccount){
+                                                if(!self._verifyActiveTrialOrSub(authAccount) ) {
+                                                    log.debug('locking session for account ' + req.session.accountId);
+                                                    req.session.locked_sub = true;
+                                                    authAccount.set('locked_sub', true);
+                                                    accountDao.saveOrUpdate(authAccount, function(err, savedAccount){
+                                                        log.info("Login successful. AccountId is now " + req.session.accountId);
+                                                        log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
+                                                        accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                                            log.debug('got preview data');
+                                                            req.session.accounts = data;
+                                                            return fn(null, user);
+                                                        });
+                                                    });
+                                                } else {
+                                                    log.info("Login successful. AccountId is now " + req.session.accountId);
+                                                    log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
+                                                    accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                                        log.debug('got preview data');
+                                                        req.session.accounts = data;
+                                                        return fn(null, user);
+                                                    });
+                                                }
+
+                                            });
+
                                         }
+
 
                                     }
                                 } else {
-                                    log.info("An error occurred verifying password", err);
-                                    return fn(err, "An error occurred verifying encrypted password");
+                                    log.info("Error occurred verifying password");
+                                    return fn(err, "An error occurred verifying password - " + err);
                                 }
                             });
+                        } else {
+                            fn(err, value);
                         }
-                    }
-                });
+                    });
+                } else {
+                    log.info("logging into account with id: " + account.id());
+                    userDao.getUserForAccount(account.id(), username, function (err, value) {
+                        if (err) {
+                            log.error("An error occurred retrieving user for account: ", err);
+                            return fn(err, "An error occurred retrieving user for account");
+                        } else {
+                            if (value == null) {
+                                log.info("User not found for account");
+                                return fn("User not found for account", "Incorrect username");
+                            } else {
+                                log.info("User found for account");
+                                var user = value;
+                                user.verifyPasswordForAccount(account.id(), password, $$.constants.user.credential_types.LOCAL, function (err, value) {
+                                    if (!err) {
+                                        if (value === false) {
+                                            log.info("Incorrect password");
+                                            return fn("Incorrect password", "Incorrect password");
+                                        } else {
+                                            req.session.permissions = user.getPermissionsForAccount(account.id());
+                                            log.info("Authentication succeeded");
+                                            req.session.accountId = account.id();
+                                            req.session.subdomain = account.get('subdomain');
+                                            req.session.domain = account.get('domain');
+                                            if(!self._verifyActiveTrialOrSub(account) ) {
+                                                log.debug('locking session for account ' + req.session.accountId);
+                                                req.session.locked_sub = true;
+                                                account.set('locked_sub', true);
+                                                accountDao.saveOrUpdate(account, function(err, savedAccount){
+                                                    return fn(null, user);
+                                                });
+                                            } else {
+                                                return fn(null, user);
+                                            }
+
+                                        }
+                                    } else {
+                                        log.info("An error occurred verifying password", err);
+                                        return fn(err, "An error occurred verifying encrypted password");
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+
+
             }
         });
     },
@@ -667,6 +748,37 @@ var dao = {
         });
     },
 
+    getAuthenticatedUrlForAccountAndOrg: function(accountId, userId, path, expirationSeconds, orgDomain, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getAuthenticatedUrlForAccountAndOrg');
+        orgDao.getByOrgDomain(orgDomain, function(err, organization){
+            if(err) {
+                return fn(err);
+            } else if(!organization){
+                return fn('No organization found');
+            } else {
+                self.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
+                    if (err) {
+                        return fn(err, value);
+                    } else {
+                        self._constructAuthenticatedOrganizationUrl(accountId, organization.id(), value, path, fn);
+                    }
+                });
+            }
+        });
+    },
+
+    getAuthenticatedUrlForAccountAndOrgObject: function(accountId, userId, path, expirationSeconds, organization, fn) {
+        var self = this;
+        self.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            } else {
+                self._constructAuthenticatedOrganizationUrl(accountId, organization.id(), value, path, fn);
+            }
+        });
+    },
+
 
     verifyAuthToken: function (accountId, token, remove, fn) {
         var self = this;
@@ -706,6 +818,36 @@ var dao = {
 
     _constructAuthenticatedUrl: function(accountId, authToken, path, fn) {
         accountDao.getServerUrlByAccount(accountId, function(err, value) {
+            if (err) {
+                return fn(err, value);
+            }
+
+            var serverUrl = value;
+
+            if (path == null || path == "" || path == "/") {
+                if (accountId > 0) {
+                    path = "admin";
+                } else {
+                    path = "home";
+                }
+            }
+
+            if (path != null && path.charAt(0) != "/") {
+                path = "/" + path;
+            }
+
+            if (path != null) {
+                serverUrl += path;
+            }
+
+            serverUrl += "?authtoken=" + authToken;
+
+            fn(null, serverUrl);
+        });
+    },
+
+    _constructAuthenticatedOrganizationUrl: function(accountId, orgId, authToken, path, fn) {
+        accountDao.getServerUrlByAccountAndOrg(accountId, orgId, function(err, value){
             if (err) {
                 return fn(err, value);
             }

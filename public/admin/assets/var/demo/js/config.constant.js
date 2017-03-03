@@ -630,11 +630,15 @@ app.constant('JS_REQUIRES', {
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importContactModalCtrl': 'assets/js/controllers/modals/importContactModalCtrl.js',
     'onboardingCtrl': 'assets/js/controllers/onboardingCtrl.js',
-    'DOHYCtrl': 'assets/js/dashboard/dashboard.controller.js',
-    // 'DashboardWorkstreamTileComponent': 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.component.js',
-    'DashboardWorkstreamTileComponentController': 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.controller.js',
-    // 'DashboardAnalyticTileComponent': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.js',
-    'DashboardAnalyticTileComponentController': 'assets/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.controller.js',
+    'DOHYCtrl': 'assets/var/demo/js/dashboard/dashboard.controller.js',
+    
+    'DashboardWorkstreamTileComponentController': 'assets/var/demo/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.controller.js',
+    'DashboardAnalyticTileComponent': 'assets/var/demo/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.component.js',
+    'DashboardAnalyticTileComponentController': 'assets/var/demo/js/dashboard/dashboard-analytic-tile/dashboard-analytic-tile.controller.js',
+    'DashboardInboxComponent': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.component.js',
+    'DashboardInboxComponentController': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
+
+
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
@@ -673,7 +677,7 @@ app.constant('JS_REQUIRES', {
     'orderService': 'assets/js/services/order.js',
     'assetsService': 'assets/js/services/assets.js',
     'geocodeService': 'assets/js/services/geocode.js',
-    'dashboardService': 'assets/js/dashboard/dashboard.service.js',
+    'dashboardService': 'assets/var/demo/js/dashboard/dashboard.service.js',
     'simpleSiteBuilderService': 'assets/js/ssb-site-builder/ssb-site-builder.service.js',
     'emailBuilderService': 'assets/js/indi-email-builder/indi-email-builder.service.js',
     'indiLoginModalService': 'assets/js/indi-login-modal/indi-login-modal.service.js',

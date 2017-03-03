@@ -8,6 +8,7 @@
 var baseApi = require('../base.api');
 var userDao = require('../../dao/user.dao');
 var accountDao = require('../../dao/account.dao');
+var orgDao = require('../../organizations/dao/organization.dao');
 var passport = require('passport');
 var cookies = require('../../utils/cookieutil');
 var authenticationDao = require('../../dao/authentication.dao');
@@ -582,118 +583,158 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             },
             function(accountId, subId, user, stripeCustomerId, sub, account, callback) {
+                if(orgId && orgId>0) {
+                    orgDao.getById(orgId, $$.m.Organization, function(err, organization){
+                        callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization);
+                    });
+                } else {
+                    callback(null, accountId, subId, user, stripeCustomerId, sub, account, null);
+                }
+            },
+            function(accountId, subId, user, stripeCustomerId, sub, account, organization, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
-                    authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin/welcome", function (err, value) {
-                        self.log.debug('Redirecting to: ' + value);
-                        if (err) {
-                            res.redirect("/home");
-                            self = null;
-                            return;
-                        }
-                        user.set("accountUrl", value.toLowerCase());
-                        var json = user.toJSON('public', {accountId:accountId});
-
-                        req.session.midSignup = false;
-                        self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, "Congratulations, your account was successfully created.", function(){});
-                        var activity = new $$.m.ContactActivity({
-                            accountId: accountId,
-                            activityType: "ACCOUNT_CREATED",
-                            detail : "Congratulations, your account was successfully created.",
-                            start: new Date()
-                        });
-                        contactActivityManager.createActivity(activity, function(err, value){});
-
-                        self.log.debug('Creating customer contact for main account.');
-                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, self.ip(req), function(err, contact){
+                    if(organization) {
+                        authenticationDao.getAuthenticatedUrlForAccountAndOrgObject(accountId, user.id(), 'admin/welcome', null, organization, function(err, value){
                             if(err) {
-                                self.log.error('Error creating customer for user: ' + user.id());
+                                res.redirect("/home");
+                                self = null;
+                                return;
                             } else {
-                                self.log.debug('Created customer for user:' + user.id());
+                                if(err) {
+                                    res.redirect("/home");
+                                    self = null;
+                                    return;
+                                } else {
+                                    callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization, value);
+                                }
 
-                                self.createLead(user, account, sub, ipAddress, function(err, leadId) {
-                                    userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
-                                        self.log.debug('Sent welcome email');
-                                    });
-                                    if(leadId) {
-                                        //set the close.io leadId in the account billing section.
-                                        var billing = account.get('billing');
-                                        billing.closeLeadID = leadId;
-                                        accountDao.saveOrUpdate(account, function(){});
+                            }
+
+                        });
+                    } else {
+                        authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), 'admin/welcome', null, function(err, value){
+                            callback(err, accountId, subId, user, stripeCustomerId, sub, account, organization, value);
+                        });
+                    }
+                });
+            },
+            function(accountId, subId, user, stripeCustomerId, sub, account, organization, value, callback){
+                self.log.debug('Redirecting to: ' + value);
+
+                user.set("accountUrl", value.toLowerCase());
+                var json = user.toJSON('public', {accountId:accountId});
+
+                req.session.midSignup = false;
+                self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, "Congratulations, your account was successfully created.", function(){});
+                var activity = new $$.m.ContactActivity({
+                    accountId: accountId,
+                    activityType: "ACCOUNT_CREATED",
+                    detail : "Congratulations, your account was successfully created.",
+                    start: new Date()
+                });
+                contactActivityManager.createActivity(activity, function(err, value){});
+
+                self.log.debug('Creating customer contact for main account.');
+                contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, self.ip(req), function(err, contact){
+                    if(err) {
+                        self.log.error('Error creating customer for user: ' + user.id());
+                    } else {
+                        self.log.debug('Created customer for user:' + user.id());
+
+                        self.createLead(user, account, sub, ipAddress, function(err, leadId) {
+                            userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
+                                self.log.debug('Sent welcome email');
+                            });
+                            if(leadId) {
+                                //set the close.io leadId in the account billing section.
+                                var billing = account.get('billing');
+                                billing.closeLeadID = leadId;
+                                accountDao.saveOrUpdate(account, function(){});
+                            }
+                            /*
+                             * If there is a campaign associated with this new user, update it async.
+                             */
+                            if(campaignId) {
+                                self.log.debug('Updating campaign with id: ' + campaignId);
+                                campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
+                                    if(err) {
+                                        self.log.error('Error handling campaign signup: ' + err);
+                                    } else {
+                                        self.log.debug('Handled signup.');
                                     }
-                                     /*
-                                     * If there is a campaign associated with this new user, update it async.
-                                     */
-                                    if(campaignId) {
-                                        self.log.debug('Updating campaign with id: ' + campaignId);
-                                        campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
+                                });
+                            }
+
+                            var activity = new $$.m.ContactActivity({
+                                accountId: appConfig.mainAccountID,
+                                contactId: contact.id(),
+                                activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                                detail : "Subscribed to Indigenous",
+                                start: new Date(),
+                                extraFields: {
+                                    plan: plan,
+                                    setupFee: setupFee,
+                                    coupon: coupon,
+                                    amount: (sub.plan.amount / 100),
+                                    plan_name: sub.plan.name
+                                }
+                            });
+                            contactActivityManager.createActivity(activity, function(err, value){});
+                            self.log.debug('creating Order for main account');
+                            if(sub.id !=='NOSUBSCRIPTION') {
+                                paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+                                    if(err) {
+                                        self.log.error('Error getting invoice for subscription: ' + err);
+                                    } else {
+                                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), accountId, function(err, order){
                                             if(err) {
-                                                self.log.error('Error handling campaign signup: ' + err);
+                                                self.log.error('Error creating order for invoice: ' + err);
                                             } else {
-                                                self.log.debug('Handled signup.');
+                                                self.log.debug('Order created.');
                                             }
                                         });
                                     }
+                                });
+                            }
 
-                                    var activity = new $$.m.ContactActivity({
-                                        accountId: appConfig.mainAccountID,
-                                        contactId: contact.id(),
-                                        activityType: $$.m.ContactActivity.types.SUBSCRIBE,
-                                        detail : "Subscribed to Indigenous",
-                                        start: new Date(),
-                                        extraFields: {
-                                            plan: plan,
-                                            setupFee: setupFee,
-                                            coupon: coupon,
-                                            amount: (sub.plan.amount / 100),
-                                            plan_name: sub.plan.name
-                                        }
-                                    });
-                                    contactActivityManager.createActivity(activity, function(err, value){});
-                                    self.log.debug('creating Order for main account');
-                                    if(sub.id !=='NOSUBSCRIPTION') {
-                                        paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
-                                            if(err) {
-                                                self.log.error('Error getting invoice for subscription: ' + err);
-                                            } else {
-                                                orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), accountId, function(err, order){
-                                                    if(err) {
-                                                        self.log.error('Error creating order for invoice: ' + err);
-                                                    } else {
-                                                        self.log.debug('Order created.');
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
+                            self.log.debug('Adding the admin user to the new account');
+                            userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
+                                if(err) {
+                                    self.log.error('Error adding admin user to account:', err);
+                                } else {
+                                    self.log.debug('Admin user added to account ' + accountId);
+                                }
 
-                                    self.log.debug('Adding the admin user to the new account');
-                                    userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
+                                if(organization && organization.get('adminUser') && organization.get('adminUser') > 1) {
+                                    self.log.debug('Adding the org admin user to the new account');
+                                    var orgAdminUser = organization.get('adminUser');
+                                    userManager.addUserToAccount(accountId, orgAdminUser, ['super', 'admin', 'member'], orgAdminUser, function(err, value){
                                         if(err) {
-                                            self.log.error('Error adding admin user to account:', err);
+                                            self.log.error('Error adding org admin user to account:', err);
                                         } else {
-                                            self.log.debug('Admin user added to account ' + accountId);
+                                            self.log.debug('Org Admin user added to account ' + accountId);
                                         }
                                         callback(null, accountId);
                                     });
-                                });
+                                } else {
+                                    callback(null, accountId);
+                                }
 
-                            }
+                            });
+
                         });
-                        self.log.debug('<< initalizeUserAndAccount: ', json);
-                        res.send(json);
-                    });
+
+                    }
                 });
+                self.log.debug('<< initalizeUserAndAccount: ', json);
+                res.send(json);
             }
         ], function(err, accountId){
             //we don't really need to do anything here.
             self.log.debug('Finished creating account [' + accountId + ']');
             return;
         });
-
-
-
-
     },
 
 

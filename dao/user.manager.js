@@ -458,7 +458,6 @@ module.exports = {
             },
             function addBlogPages(accountId, websiteId, user, callback) {
                 log.debug(accountId, user.id(), 'creating blog pages');
-                //TODO: call ssbManager to create blog pages
                 ssbManager.addBlogPages(accountId, websiteId, user.id(), function(err, blogPages){
                     if(err) {
                         self.log.error(accountId, user.id(), 'Error adding blog pages:', err);

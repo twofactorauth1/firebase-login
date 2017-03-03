@@ -10,6 +10,11 @@ require('../model/organization');
 
 var dao = {
 
+    getByOrgDomain: function(domain, fn) {
+        var query = {orgDomain:domain};
+        this.findOne(query, $$.m.Organization, fn);
+    },
+
     options: {
         name:"organization.dao",
         defaultModel: $$.m.Organization

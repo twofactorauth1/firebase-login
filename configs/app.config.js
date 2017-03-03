@@ -49,8 +49,10 @@ if (process.env.IS_PROXIED == null) {
 if (process.env.ROOT_HOST == null) {
     if (process.env.NODE_ENV == environments.DEVELOPMENT || process.env.NODE_ENV == environments.TESTING) {
         process.env.ROOT_HOST = "indigenous.local";
+        process.env.ORG_ROOT_HOSTS = 'test.gorvlvr.com,gorvlvr.com';
     } else {
         process.env.ROOT_HOST = "indigenous.io";
+        process.env.ORG_ROOT_HOSTS = 'gorvlvr.com';
     }
 
 }
@@ -172,6 +174,30 @@ module.exports = {
         return _serverUrl;
     },
 
+    getOrganizationUrl: function(subdomain, orgDomainSuffix) {
+        if(!subdomain && !orgDomainSuffix) {
+            return wwwUrl;
+        }
+        if(!orgDomainSuffix) {
+            return this.getServerUrl(subdomain);
+        }
+
+        var _serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
+
+        if(subdomain) {
+            _serverUrl += subdomain;
+        }
+        if(nonProduction) {
+            _serverUrl += '.test';
+        }
+        _serverUrl += '.' + orgDomainSuffix;
+
+        if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
+            _serverUrl += ":" + process.env.PORT;
+        }
+        return _serverUrl;
+    },
+
     getServerRequestUrl: function (subdomain, domain, protocol) {
         if (subdomain == null && domain == null) {
             return wwwUrl;
@@ -202,5 +228,9 @@ module.exports = {
         }
 
         return serverDomain;
+    },
+
+    getDBOrgDomain: function(customDomain) {
+
     }
 };
