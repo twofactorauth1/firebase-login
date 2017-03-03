@@ -127,8 +127,8 @@
                     height: 50px;
                 }
                 ul.message-container-top{
-                   li:first-child{                        
-                        border-left: #32CD32 5px solid;
+                    li:first-child{                        
+                       //border-left: #32CD32 5px solid; 
                     } 
                 }
             }
@@ -141,6 +141,10 @@
 
             .active-message{
                 background: rgba(230,230,250, 0.3);
+            }
+
+            li.active-message{
+                border-left: #32CD32 5px solid !important;
             }
 
             .message-container-right{
