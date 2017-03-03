@@ -7,14 +7,14 @@
         <h3 class="analytic-title indi-rounded-title">{{vm.uiDetails.widgetTitle}}</h3>
 
         <div class="analytic-details">           
-                <table style="width:100%;">
-                    <tr style="background: rgba(0, 0, 0, 0.5); height: 40px; text-transform: uppercase;">
+                <table class="analytic-details-table">
+                    <tr class="header-row">
                         <th ng-repeat="obj in vm.uiDetails.header">
                             {{obj.label }}
                         </th>
                     </tr>
                     <tbody>                        
-                        <tr ng-repeat="item in vm.uiDetails.data">
+                        <tr class="content-row" ng-repeat="item in vm.uiDetails.data">
                             <td>{{item.field1}}</td>
                             <td>{{item.field2}}</td>
                             <td ng-if="item.field3">{{item.field3}}</td>
