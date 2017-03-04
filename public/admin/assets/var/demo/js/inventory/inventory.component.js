@@ -6,7 +6,7 @@ function inventoryComponent() {
 
     return {
         restrict: 'E',
-        scope: {},        
+        scope: {},      
         templateUrl: 'assets/var/demo/js/inventory/inventory.component.html',
         controller: 'InventoryComponentController',
         controllerAs: 'vm',
