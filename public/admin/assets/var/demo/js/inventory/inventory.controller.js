@@ -24,7 +24,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout)
 	    		vendor: "Pulse Secure" + _rand,
 	    		sku: 'PSA50' + _rand,
 	    		description: "Pulse Secure appliance 50" + _rand + "Base System",
-	    		qty: Math.floor((Math.random() * 100) + 1)
+	    		qty: Math.floor((Math.random() * 100) + 1)	
     		}
     		inventory.push(_d);
 		}
