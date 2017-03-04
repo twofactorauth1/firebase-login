@@ -101,7 +101,7 @@
         // Colors popup left and top position.
         var left = $btn.offset().left + $btn.outerWidth() / 2;
         var top = $btn.offset().top + (editor.opts.toolbarBottom ? 10 : $btn.outerHeight() - 10);
-        //editor.selection.save();
+        editor.selection.save();
 
         editor.popups.show('colors.picker', left, top, $btn.outerHeight());
         if (editor.opts.isIE)
@@ -114,7 +114,7 @@
             $(".sp-input").show();
         }
 
-        //editor.selection.restore();
+        editor.selection.restore();
 
         
 
@@ -448,7 +448,7 @@
 
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            //editor.selection.save();
+            editor.selection.save();
         })
       }
 
@@ -490,7 +490,7 @@
           editor.events.trigger("txtColorChange", [val]);
 
         setTimeout(function(){
-            //editor.selection.save();
+            editor.selection.save();
         })
         $(".fr-command.fr-select-color[data-cmd='textColor']").removeClass("fr-selected-color");
         $(".fr-command.fr-select-color[data-cmd='textColor'][data-param1='"+val_hex+"']").addClass("fr-selected-color");
@@ -514,7 +514,7 @@
         $popup.find('input.sp-input').val("");
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            //editor.selection.save();
+            editor.selection.save();
         })
       }
       if(init){
@@ -543,7 +543,7 @@
           editor.events.trigger("txtColorChange", []);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            //editor.selection.save();
+            editor.selection.save();
             closeColorPicker();
         })
         
@@ -559,7 +559,7 @@
           editor.events.trigger("bgColorChange", []);
         setTimeout(function(){
             editor.events.trigger("contentChanged");
-            //editor.selection.save();
+            editor.selection.save();
             closeColorPicker();
         })
         
@@ -583,7 +583,7 @@
         var container = val === 'text' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color");
         var textInput = container.find(".sp-input");
         var color = textInput.val();
-        //editor.selection.restore();
+        editor.selection.restore();
         if(val === 'text'){
            text(color || 'REMOVE');
         }
@@ -856,7 +856,7 @@
                 //e.preventDefault();
                 //e.stopPropagation();
                 var realRgb = $(element).val();
-                //editor.selection.restore();
+                editor.selection.restore();
                 if(val === 'color')
                     text(realRgb, true);
                 else
@@ -864,7 +864,6 @@
                 _hideColorsPopup();
             }
         });
-
     }
 
     function draggable(element, onmove, onstart, onstop) {
@@ -896,7 +895,7 @@
 
         function move(e) {
             editor.events.disableBlur();
-            //editor.selection.restore();
+            editor.selection.restore();
             if (dragging) {
                 // Mouseup happened outside of window
                 if (editor.opts.isIE && doc.documentMode < 9 && !e.button) {
