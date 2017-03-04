@@ -38,7 +38,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "/admin/assets/var/demo/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'DashboardInboxComponent'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular', 'indi-login-modal', 'productTableFilter', 'ngCurrency', 'DashboardAnalyticTileComponent', 'DashboardInboxComponent', 'InventoryComponent'),
         abstract: true
     }).state('app.dashboard', {
         url: "/_dashboard",
@@ -252,6 +252,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Dashboard',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'DashboardInboxComponentController', 'jsVideoUrlParser', 'highcharts')
+    })
+    .state('app.inventory', {
+        url: '/inventory',
+        templateUrl: "/admin/assets/var/demo/js/inventory/inventory.html",
+        title: 'Inventory',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('InventoryComponentController')
     }).state('app.account.users', {
         url: '/users',
         templateUrl: "/admin/assets/js/users/users.html",

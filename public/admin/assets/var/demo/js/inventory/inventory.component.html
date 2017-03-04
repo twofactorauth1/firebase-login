@@ -1,0 +1,147 @@
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">INVENTORY</h1>
+            <span ng-if="vm.inventory" class="mainDescription">There are currently {{vm.inventory.length}} products.</span>
+        </div>
+    </div>
+</section>
+
+
+
+
+<div st-table="vm.displayedProducts" st-safe-src="vm.inventory" >
+    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0">
+                    <div class="panel-body">
+                        <form role="form" class="ng-pristine ng-valid row">
+                            <div class="hidden-xs">
+                                <div class="col-xs-12 col-sm-6 padding-left-0">
+                                    <div class="form-group">
+                                        <div class="col-xs-8 col-sm-9">
+                                            <span class="input-icon">
+                                        <input type="text" st-search placeholder="Search by status, name, type..." id="form-field-14" class="form-control">
+                                        <i class="ti-search"></i>
+                                    </span>
+                                        </div>
+                                        <div class="col-xs-4 col-sm-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                <div class="form-group col-xs-12 col-sm-6 row margin-bottom-0 padding-right-0 pull-right">
+                                    <div class="col-xs-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-import ng-click-active hidden" ng-click="openImportModal()">
+                                            <span>Import</span>
+                                        </button>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-export ng-click-active hidden">
+                                            <span>Export</span>
+                                        </button>
+                                        <div class="form-group">
+                                            <div class="btn-group tableView">
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                    <div class="col-xs-6 col-xs-offset-6 col-sm-4 center">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openProductModal()">
+                                            <span>New</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="visible-xs">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <div class="col-xs-7">
+                                            <span class="input-icon">
+                                        <input type="text" st-search placeholder="Search by status, name, type..." id="form-field-14" class="form-control">
+                                        <i class="ti-search"></i>
+                                    </span>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                <div class="form-group col-xs-12 padding-top-10">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <div class="btn-group pull-left">
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                                <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active pull-right" ng-click="openProductModal()">
+                                            <span>New</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}">
+        <thead ng-class="{'bg-white': tableView == 'grid'}">
+            <tr>
+                <th>List</th>
+                <th st-sort="status">Vendor</th>
+                <th st-sort="name">Sku</th>
+                <th st-sort="type">Description</th>
+                <th st-sort="modified.date">Quantity on hand</th>
+            </tr>
+            <tr ng-if="showFilter">
+                <th>
+                    <input st-search="name" placeholder="List" class="form-control" type="search" />
+                </th>
+                <th>
+                    <input st-search="vendor" placeholder="Vendor" class="form-control" type="search" />
+                </th>
+                <th>
+                    <input st-search="sku" placeholder="SKU" class="form-control" type="search" />
+                </th>
+                <th>
+                    <input st-search="description" placeholder="Description" class="form-control" type="search" />
+                </th>
+                <th >
+                    <input st-search="qty" placeholder="Quantity" class="form-control" type="search" />
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="viewSingleProduct(product)">
+                
+                <td><strong>List: </strong><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                              
+                <td><strong>Vendor: </strong><span ng-text-truncate="product.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                <td><strong>Sku: </strong>{{product.sku}}</td>
+                <td><strong>Description: </strong><span ng-text-truncate="product.description" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                <td><strong>Qty: </strong>{{product.qty}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+    <div class="load1 csspinner height-400" ng-show="!vm.inventory"></div>
+</div>
