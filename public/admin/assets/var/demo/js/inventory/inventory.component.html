@@ -21,7 +21,7 @@
 	                                    <div class="form-group">
 	                                        <div class="col-xs-8 col-sm-9">
 	                                            <span class="input-icon">
-	                                        <input type="text" st-search placeholder="Search by list, vendor, sku..." id="form-field-14" class="form-control">
+	                                        <input type="text" st-search placeholder="Search by name, vendor, sku..." id="form-field-14" class="form-control">
 	                                        <i class="ti-search"></i>
 	                                    </span>
 	                                        </div>
@@ -100,11 +100,11 @@
 	    <table class="table table-hover" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th st-sort="name">List</th>
-	                <th st-sort="vendor">Vendor</th>
-	                <th st-sort="sku">Sku</th>
-	                <th class="hidden-xs" st-sort="description">Description</th>
-	                <th st-sort="qty">Quantity on hand</th>
+	                <th st-sort="name" class="name-col">List</th>
+	                <th st-sort="vendor" class="vendor-col">Vendor</th>
+	                <th st-sort="sku" class="sku-col">Sku</th>
+	                <th class="hidden-xs desc-col" st-sort="description">Description</th>
+	                <th st-sort="qty" class="qty-col">Quantity on hand</th>
 	            </tr>
 	            <tr ng-if="showFilter">
 	                <th>
@@ -119,7 +119,7 @@
 	                <th class="hidden-xs">
 	                    <input st-search="description" placeholder="Description" class="form-control" type="search" />
 	                </th>
-	                <th >
+	                <th>
 	                    <input st-search="qty" placeholder="Quantity" class="form-control" type="search" />
 	                </th>
 	            </tr>
@@ -127,11 +127,11 @@
 	        <tbody>
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="viewSingleProduct(product)">
 	                
-	                <td><strong>List: </strong><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td><strong>List: </strong><span class="list-name"></span><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                              
-	                <td><strong>Vendor: </strong><span ng-text-truncate="product.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td class="vendorCoulmn"><strong>Vendor: </strong><span ng-text-truncate="product.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                <td><strong>Sku: </strong>{{product.sku}}</td>
-	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.description" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.description" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></td>
 	                <td class="qtyColumn"><strong>Qty: </strong>{{product.qty}}</td>
 	            </tr>
 	        </tbody>

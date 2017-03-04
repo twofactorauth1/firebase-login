@@ -1,8 +1,58 @@
 .inventory.inventory-container{
+	table{
+		th{
+			text-transform: uppercase;
+			font-weight: normal;
+			color: #398da3 !important;
+		}
+		td.vendorCoulmn span{
+			color:#70c2d7 !important;
+		}
+
+
+		
+	}
+
 	table.bg-white{
+		th.name-col{
+			width:20%;
+		}
+		th.vendor-col{
+			width:20%;
+		}
+		th.sku-col{
+			width: 15%;
+		}
+		th.desc-col{
+			width: 30%;
+		}
+		th.qty-col{
+			width: 15%;
+		}
 		td.qtyColumn{
 			text-align: right;
 			padding-right: 4%;
+		}
+		tr:hover{
+			td:first-child{
+				border-left: #32CD32 4px solid
+			}
+		}
+		tr{
+			height: 4em;
+			td:first-child{
+				border-left: transparent 4px solid;
+			}
+		}
+		.list-name{
+			width: 27px;
+		    height: 27px;
+		    display: inline-block;
+		    background: #48b1cc !important;
+		    border-radius: 30%;
+		    margin-right: 10px;
+		    margin-top: -7px;
+		    float:left;
 		}
 	}
 }
