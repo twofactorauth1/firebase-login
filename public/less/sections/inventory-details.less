@@ -26,4 +26,38 @@ inventory-details-component{
 			}
 		}
 	}
+	ul.sales-timeline-container{
+		list-style: none;
+		padding:0;
+		margin-right: -10px;
+		li{
+			padding: 10px;			
+			line-height: 2.5em;
+			border-bottom: rgba(0, 0, 0, 0.07) 1px solid;
+			.timeline-user{	
+				img{
+					width: 32px;
+				    height: 32px;
+				    border-radius: 30%;
+				    float: left;
+				    padding: 0;
+				    margin: 0;
+				    margin-right: 5px;
+				}
+			}
+			.timeline-text-green{
+				color: #32CD32;
+			}
+			.timeline-text-blue{
+				color: #30D1E1;
+			}
+		}
+		li:last-child {
+    		border-bottom: none;
+		}
+		span.time-line-time{
+			color: #8ea5b8;
+			opacity: 0.7;
+		}
+	}
 }
