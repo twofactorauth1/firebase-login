@@ -177,10 +177,9 @@ function virtualHostSession(req, res, next) {
     var host = req.get('host'); //maybe normalize with toLowerCase etc
     var hostSession = mwCache[host];
     if (!hostSession) {
-        //console.log('No hostSession for ' + host);
+        console.log('No hostSession for ' + host);
         if(host.replace(':3000', '').endsWith('gorvlvr.com')) {
-            //console.log('using .gorvlvr.com');
-            //sess.cookie.domain = '.gorvlvr.com';
+            console.log('using .gorvlvr.com');
             var sess = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
@@ -192,14 +191,15 @@ function virtualHostSession(req, res, next) {
             };
             hostSession = mwCache[host] = express.session(sess);
         } else {
+            console.log('creating session for ' + appConfig.cookie_subdomain);
             var sess = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
                 cookie: {
                     maxAge: 24 * 60 * 60 * 1000,
-                    domain: '.gorvlvr.com'
+                    domain: appConfig.cookie_subdomain
                 }, //stay open for 1 day of inactivity across all subdomains
-                key: appConfig.cookie_subdomain
+                key: appConfig.cookie_name
             };
             hostSession = mwCache[host] = express.session(sess);
         }
