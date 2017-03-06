@@ -94,7 +94,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
                     //console.dir(data);
                     logger.debug('Starting render');
-                    if(data.account.orgId) {
+                    if(data.account.orgId && data.account.orgId === 2) {
                         logger.debug('Rendering var admin');
                         self.resp.render('var/demo/admin', data);
                     } else {
