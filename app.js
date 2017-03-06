@@ -149,6 +149,7 @@ app.use(express.methodOverride());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.cookieParser('mys3cr3tco00k13s'));
+/*
 var sess = {
     store: mongoStore,
     secret: 'mys3cr3t',
@@ -157,7 +158,7 @@ var sess = {
         domain: appConfig.cookie_subdomain
     }, //stay open for 1 day of inactivity across all subdomains
     key: appConfig.cookie_name};
-
+*/
 /*
 if (appConfig.cookie_subdomain === '.indigenous.io' || appConfig.cookie_subdomain === '.test.indigenous.io') {
     app.set('trust proxy', 1) // trust first proxy
@@ -189,7 +190,7 @@ function virtualHostSession(req, res, next) {
             hostSession = mwCache[host] = express.session(sess);
         } else {
             console.log('creating session for ' + appConfig.cookie_subdomain);
-            var sess = {
+            var sess1 = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
                 cookie: {
@@ -198,8 +199,10 @@ function virtualHostSession(req, res, next) {
                 }, //stay open for 1 day of inactivity across all subdomains
                 key: appConfig.cookie_name
             };
-            hostSession = mwCache[host] = express.session(sess);
+            hostSession = mwCache[host] = express.session(sess1);
         }
+    } else {
+
     }
     hostSession(req, res, next);
     //don't need to call next since hostSession will do it for you
