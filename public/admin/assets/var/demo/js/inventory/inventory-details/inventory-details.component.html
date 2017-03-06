@@ -16,3 +16,41 @@
     </button>
 </div>
 <div class="clearfix"></div>
+<div class="inventory-details-container">
+    <div class="col-sm-5 col-xs-12 inventory-details-left-panel">
+        <div class="form-group">
+            <h4>Vendor</h4>
+            <div class="description">
+                {{vm.inventory.vendor}}
+            </div>
+            <hr>
+        </div>
+        <div class="form-group">
+            <h4>SKU</h4>
+            <span class="required">*</span>
+            <div class="description">
+                {{vm.inventory.sku}}
+            </div>
+            <hr>
+        </div>
+        <div class="form-group">
+            <h4>Description</h4>
+            <span class="required">*</span>
+            <div class="description">
+                {{vm.inventory.description}}
+            </div>
+            <hr>
+        </div>
+        <div class="form-group">
+            <h4>Quantity on Hand</h4>
+            <span class="required">*</span>
+            <div class="description">
+                {{vm.inventory.qty}}
+            </div>
+            <hr>
+        </div>
+    </div>    
+    <div class="col-sm-7 col-xs-12">
+       
+    </div>
+</div>
