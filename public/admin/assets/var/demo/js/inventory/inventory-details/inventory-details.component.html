@@ -1,0 +1,17 @@
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">{{ vm.inventory.name || 'No Product Name'}} </h1>
+                <span class="mainDescription">{{vm.inventory.description}}</span>
+            </div>
+        </div>
+    </section>
+    <div class="col-xs-12">
+        
+        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="backToContacts()">
+            Back to Contacts
+        </button>
+        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5" ng-click="backToOrder()">
+            Edit
+        </button>
+    </div>
