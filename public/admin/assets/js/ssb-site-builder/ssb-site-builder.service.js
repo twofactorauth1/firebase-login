@@ -1425,6 +1425,7 @@
             return {
                 "'Arial',Helvetica,sans-serif": "Arial",
                 "'Amatic SC', cursive": "Amatic SC",
+                "'Berlin', sans-serif": "Berlin",
                 "'Delius Swash Caps', cursive": 'Delius Swash Caps',
                 "'Droid Serif',serif": 'Droid Serif',
                 "'Georgia',serif": "Georgia",

@@ -638,7 +638,17 @@ app.constant('JS_REQUIRES', {
     'DashboardInboxComponent': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.component.js',
     'DashboardInboxComponentController': 'assets/var/demo/js/dashboard/dashboard-inbox-widget/dashboard-inbox.controller.js',
 
+    // Inventory
 
+    
+    'InventoryComponent': 'assets/var/demo/js/inventory/inventory.component.js',
+    'InventoryComponentController': 'assets/var/demo/js/inventory/inventory.controller.js',
+    'InventoryService': 'assets/var/demo/js/inventory/inventory.service.js',
+    // Inventory Details
+
+    
+    'InventoryDetailsComponent': 'assets/var/demo/js/inventory/inventory-details/inventory-details.component.js',
+    'InventoryDetailsController': 'assets/var/demo/js/inventory/inventory-details/inventory-details.controller.js',    
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',

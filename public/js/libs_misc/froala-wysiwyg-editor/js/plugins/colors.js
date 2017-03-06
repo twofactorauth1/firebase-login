@@ -583,7 +583,7 @@
         var container = val === 'text' ? popup.find(".fr-color-set.sp-container.fr-text-color") : popup.find(".fr-color-set.sp-container.fr-background-color");
         var textInput = container.find(".sp-input");
         var color = textInput.val();
-        //editor.selection.restore();
+        editor.selection.restore();
         if(val === 'text'){
            text(color || 'REMOVE');
         }
@@ -856,13 +856,16 @@
                 //e.preventDefault();
                 //e.stopPropagation();
                 var realRgb = $(element).val();
-                //editor.selection.restore();
+                editor.selection.restore();
                 if(val === 'color')
                     text(realRgb, true);
                 else
                     background(realRgb, true);
                 _hideColorsPopup();
             }
+        });
+        $(element).off("focus").on("focus", function(e){
+            editor.selection.save();
         });
 
     }
@@ -997,7 +1000,7 @@
       else {
         if (this.$el.find('.fr-marker')) {
           this.events.disableBlur();
-          //this.selection.restore();
+          this.selection.restore();
         }
         this.popups.hide('colors.picker');
       }
@@ -1009,8 +1012,8 @@
   a.FE.RegisterCommand('textColor', {
     undo: true,
     callback: function (cmd, val) {
-        //this.events.disableBlur();
-        //this.selection.restore();
+        this.events.disableBlur();
+        this.selection.restore();
         this.colors.text(val, true);
     }
   });
@@ -1019,8 +1022,8 @@
   a.FE.RegisterCommand('backgroundColor', {
     undo: true,
     callback: function (cmd, val) {
-        //this.events.disableBlur();
-        //this.selection.restore();
+        this.events.disableBlur();
+        this.selection.restore();
         this.colors.background(val, true);
     }
   });
