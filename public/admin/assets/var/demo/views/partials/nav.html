@@ -31,8 +31,8 @@
 			</div>
 		</a>
 	</li>
-    <li ng-class="{'active open':$state.includes('app.inventory')}">
-        <a href="javascript:void(0)">
+    <li ui-sref-active="active">
+        <a ui-sref="app.inventory">
             <div class="item-content">
                 <div class="item-media">
                     <i class="ti-package"></i>
@@ -43,6 +43,7 @@
             </div>
         </a>
     </li>
+    
     <li ng-class="{'active open':$state.includes('app.quotes')}">
         <a href="javascript:void(0)">
             <div class="item-content">
@@ -137,7 +138,7 @@
             </li>
 		</ul>
 	</li>
-	<li ng-class="{'active open':$state.includes('app.support')}">
+	<li class="hidden" ng-class="{'active open':$state.includes('app.support')}">
 		<a href="javascript:void(0)">
 			<div class="item-content">
 				<div class="item-media">

@@ -1,0 +1,105 @@
+<section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">{{ vm.inventory.name || 'No Product Name'}} </h1>
+            <span class="mainDescription">{{vm.inventory.description}}</span>
+        </div>
+    </div>
+</section>
+<div class="inventory-top-buttons container-fluid container-fullw bg-white">
+    
+    <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.backToInventory()">
+        Back to Inventory
+    </button>
+    <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="backToOrder()">
+        Edit
+    </button>
+</div>
+<div class="clearfix"></div>
+<div class="inventory-details-container">
+    <div class="col-sm-5 col-xs-12 inventory-details-left-panel">
+        <div class="form-group">
+            <h4>Vendor</h4>
+            <span class="required">*</span>
+            <div class="description">
+                {{vm.inventory.vendor}}
+            </div>
+            <hr>
+        </div>
+        <div class="form-group">
+            <h4>SKU</h4>
+            <span class="required">*</span>
+            <div class="description">
+                {{vm.inventory.sku}}
+            </div>
+            <hr>
+        </div>
+        <div class="form-group">
+            <h4>Description</h4>
+            <span class="required">*</span>
+            <div class="description">
+                {{vm.inventory.description}}
+            </div>
+            <hr>
+        </div>
+        <div class="form-group">
+            <h4>Quantity on Hand</h4>
+            <span class="required">*</span>
+            <div class="description">
+                {{vm.inventory.qty}}
+            </div>
+            <hr>
+        </div>
+    </div>    
+    <div class="col-sm-7 col-xs-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-white margin-top-15" id="sales">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title text-primary"><span class="text-bold">Sales</h4>
+                    </div>
+                    <div class="panel-body" style="position: relative" ng-if="salesConfig">
+                        <div class="height-215">
+                            <highchart config="salesConfig" id="sales-chart"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-white margin-top-15" id="salesTimeline">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title text-primary"><span class="text-bold">Sales Timeline</h4>
+                        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                    </div>
+                    <div collapse="salesTimeline" class="panel-wrapper">
+                        <div class="panel-body no-padding">
+                            <ul class="sales-timeline-container panel-scroll">
+                                <li ng-repeat="timeline in vm.salesTimelineData">
+                                    <div class="col-xs-4">
+                                        {{timeline._date}} <span class="time-line-time">{{timeline._time}}</span>
+                                    </div>
+                                    <div class="col-xs-4 timeline-user">
+                                        <img class="thumbnail img-circle" src="/admin/assets/images/default-user.png">
+                                        {{timeline.userName}}
+                                    </div>
+                                    <div class="col-xs-2 center">
+                                        {{timeline.qty}}
+                                    </div>
+                                    <div class="col-xs-2 text-right" ng-class="{'timeline-text-green': timeline.grown, 'timeline-text-blue' : !timeline.grown}">
+                                    <span ng-if="timeline.grown">+</span>
+                                    <span ng-if="!timeline.grown">-</span>
+                                        {{timeline.revenue}}
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -70,8 +70,13 @@
             margin-right: -35px;
             background: #fff!important;
             ul.nav.nav-tabs{
-
-                li{                    
+                @media screen and (max-width: 767px) {
+                    float: none !important;
+                }
+                li{ 
+                    @media screen and (max-width: 767px) {
+                        float: left !important;
+                    }                  
                     border-bottom: 1px solid #eeeeee;
                     a{
                         margin: 0 !important;
@@ -145,6 +150,7 @@
 
             li.active-message{
                 border-left: #32CD32 5px solid !important;
+                padding-left: 10px !important;
             }
 
             .message-container-right{

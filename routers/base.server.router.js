@@ -342,10 +342,7 @@ _.extend(baseRouter.prototype, {
         var path = req.url;
         logger.trace('path:', path);
         var redirectParam = req.query.redirectTo;
-        //logger.debug('req.session.locked: ' + req.session.locked);
-        // if(req.session.locked === 'true' || req.session.locked === true) {
-        //     return resp.redirect('/interim.html');
-        // }
+
         if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1) && req.session.midSignup !== true) {
             logger.trace('isAuthenticated!');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
@@ -385,7 +382,7 @@ _.extend(baseRouter.prototype, {
             } else {
                 logger.trace('isMainApp === false');
                 if(req.originalUrl.indexOf('authtoken') === -1) {
-                    logger.trace('<< isAuth');
+                    logger.trace('<< isAuth (no authtoken)');
                     if(req.session.accountId === -1) {
                         logger.debug('redirecting to /home');
                         return resp.redirect('/home');
@@ -395,7 +392,7 @@ _.extend(baseRouter.prototype, {
                     }
 
                 } else {
-
+                    logger.trace('replacing authtoken from ' + req.originalUrl);
                     var redirectUrl = req.originalUrl.replace(/\?authtoken.*/g, "");
                     logger.trace('redirecting to ' + redirectUrl);
                     return resp.redirect(redirectUrl);
