@@ -155,9 +155,16 @@ _.extend(baseRouter.prototype, {
                         logger.debug("host: " + req.get("host") + " -> accountId:0");
                         req.session.accountId = 0;
                     } else {
+                        //TODO: fix this
                         logger.trace("host: " + req.get("host") + " -> accountId:" + value.id());
-                        req.session.unAuthAccountId = 'new';
-                        req.session.unAuthSubdomain = 'new';
+                        /*
+                         * This is causing problems with /signup
+                         * req.session.unAuthAccountId = 'new';
+                         * req.session.unAuthSubdomain = 'new';
+                         * req.session.unAuthDomain = value.get('domain');
+                         */
+                        req.session.unAuthAccountId = value.id();
+                        req.session.unAuthSubdomain = value.get('subdomain');
                         req.session.unAuthDomain = value.get('domain');
                     }
                 } else {
