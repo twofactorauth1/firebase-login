@@ -401,6 +401,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
         }
 
+        if(component.slider && component.slider.stretchImage){
+            classString += ' ssb-component-stretch-image';
+        }
+
         return classString;
 
     }

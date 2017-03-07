@@ -182,7 +182,7 @@
                 //position: absolute;
                 //top:-30px;
                 min-width: 100%;
-                min-height: 100px !important;
+                min-height: 250px !important;
             });
         }
 
@@ -321,14 +321,23 @@
             .testimonials-v2{
                 position: absolute;
                 .slick-track{
-                    width: 100%;
+                    width: 100% !important;
                 }
                 .single-testimonial{
-                    width: 100%;
+                    width: 100% !important;
                 }
             }
         });
 
+    }
+    .ssb-page-section-layout-nav-hero-v2 [testimonials-component].ssb-component-stretch-image{
+        .slick-slide .img img {
+            @media screen and (max-width: 767px) {
+                max-width: none !important;
+                width: 200% !important;
+                min-height: 600px !important;
+            }
+        }
     }
 
 }
