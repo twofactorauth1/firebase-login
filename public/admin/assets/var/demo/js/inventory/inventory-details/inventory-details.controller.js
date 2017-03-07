@@ -2,9 +2,9 @@
 
 app.controller('InventoryDetailsController', inventoryDetailsController);
 
-inventoryDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'InventoryService'];
+inventoryDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'InventoryService', 'ChartAnalyticsService'];
 /* @ngInject */
-function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, InventoryService) {
+function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, InventoryService, ChartAnalyticsService) {
 
     var vm = this;
 
@@ -56,6 +56,8 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
         vm.inventory = response;
     })
+
+    vm.salesConfig = ChartAnalyticsService.salesDemoChart;
 
     function init(element) {
         vm.element = element;

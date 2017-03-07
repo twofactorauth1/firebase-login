@@ -58,9 +58,9 @@
                     <div class="panel-heading border-light">
                         <h4 class="panel-title text-primary"><span class="text-bold">Sales</h4>
                     </div>
-                    <div class="panel-body" style="position: relative" ng-if="salesConfig">
+                    <div class="panel-body" style="position: relative" ng-if="vm.salesConfig">
                         <div class="height-215">
-                            <highchart config="salesConfig" id="sales-chart"></highchart>
+                            <highchart config="vm.salesConfig" id="sales-chart"></highchart>
                         </div>
                     </div>
                 </div>
