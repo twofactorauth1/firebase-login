@@ -173,7 +173,7 @@ var mwCache = Object.create(null);
 
 function virtualHostSession(req, res, next) {
     var host = req.get('host'); //maybe normalize with toLowerCase etc
-    var hostSession = mwCache[host];
+    var hostSession = null;// can't cache this for now... bummer.
     if (!hostSession) {
         console.log('No hostSession for ' + host);
         if(host.replace(':3000', '').endsWith('gorvlvr.com')) {
@@ -185,7 +185,7 @@ function virtualHostSession(req, res, next) {
                     maxAge: 24 * 60 * 60 * 1000,
                     domain: '.gorvlvr.com'
                 }, //stay open for 1 day of inactivity across all subdomains
-                key: appConfig.cookie_name
+                key: 'gorvlvr_connect.sid'
             };
             hostSession = mwCache[host] = express.session(sess);
         } else {
@@ -202,7 +202,7 @@ function virtualHostSession(req, res, next) {
             hostSession = mwCache[host] = express.session(sess1);
         }
     } else {
-
+        //console.log('Using this session:', hostSession);
     }
     hostSession(req, res, next);
     //don't need to call next since hostSession will do it for you
