@@ -56,8 +56,9 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
     InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
         vm.inventory = response;
     })
-
-    vm.salesConfig = ChartAnalyticsService.salesDemoChart;
+    ChartAnalyticsService.salesDemoChart(function(data){
+        vm.salesConfig = data;
+    });
 
     function init(element) {
         vm.element = element;

@@ -57,12 +57,15 @@
                 <div class="panel panel-white margin-top-15" id="sales">
                     <div class="panel-heading border-light">
                         <h4 class="panel-title text-primary"><span class="text-bold">Sales</h4>
+                        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                     </div>
-                    <div class="panel-body" style="position: relative" ng-if="vm.salesConfig">
-                        <div class="height-215">
-                            <highchart config="vm.salesConfig" id="sales-chart"></highchart>
+                    <div collapse="sales" class="panel-wrapper">
+                        <div class="panel-body" style="position: relative">
+                            <div class="height-215">
+                                <highchart config="vm.salesConfig" id="sales-chart"></highchart>
+                            </div>
                         </div>
-                    </div>
+                    </div>    
                 </div>
             </div>
         </div>

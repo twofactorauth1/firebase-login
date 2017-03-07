@@ -1292,62 +1292,52 @@
 
         this.salesDemoChart = function(fn) {
             var config = {
+                options: {
                     chart: {
-                        type: 'column'
+                        type: 'column',
+                        backgroundColor:'rgba(255, 255, 255, 0.1)'
                     },
+                    colors: ['#32CD32', '#30D1E1'],
                     title: {
-                        text: 'Stacked column chart'
-                    },
-                    xAxis: {
-                        categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas']
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Total fruit consumption'
-                        },
-                        stackLabels: {
-                            enabled: true,
-                            style: {
-                                fontWeight: 'bold',
-                                color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                            }
-                        }
+                        text: ''
                     },
                     legend: {
-                        align: 'right',
-                        x: -30,
-                        verticalAlign: 'top',
-                        y: 25,
-                        floating: true,
-                        backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
-                        borderColor: '#CCC',
-                        borderWidth: 1,
-                        shadow: false
+                        enabled: false
+                    },
+                    exporting: {
+                        enabled: false
                     },
                     tooltip: {
-                        headerFormat: '<b>{point.x}</b><br/>',
-                        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+                        
                     },
                     plotOptions: {
                         column: {
                             stacking: 'normal',
                             dataLabels: {
-                                enabled: true,
+                                enabled: false,
                                 color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
                             }
                         }
-                    },
-                    series: [{
-                        name: 'John',
-                        data: [5, 3, 4, 7, 2]
-                    }, {
-                        name: 'Jane',
-                        data: [2, 2, 3, 2, 1]
-                    }, {
-                        name: 'Joe',
-                        data: [3, 4, 4, 2, 5]
-                    }]
+                    }
+                },
+                xAxis:{                    
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', "Aug", 'Sep', 'Oct', 'Nov', 'Dec']                    
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    minTickInterval: 1,
+                    title: {
+                        text: ''
+                    }
+                },
+                series: [{
+                    name: 'Views',
+                    data: [5, 3, 4, 7, 2, 8, 10, 6, 8, 9, 2, 1]
+                }, {
+                    name: 'Sales',
+                    data: [3, 4, 4, 2, 5, 6, 4, 9, 2, 8, 3, 6]
+                }]
             };
             fn(config);
         };
