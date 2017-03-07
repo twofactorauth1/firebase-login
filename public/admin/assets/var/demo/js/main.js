@@ -16,7 +16,7 @@ function ($rootScope, $state, $stateParams, $injector) {
     // GLOBAL APP SCOPE
     // set below basic information
     $rootScope.app = {
-        name: 'WhiteLabel', // name of your project
+        name: 'Securematics Portal', // name of your project
         author: 'Indigenous Software, INC', // author's name or company name
         description: 'An all in one solution for small to medium sized businesses.', // brief description
         version: '1.0', // current version

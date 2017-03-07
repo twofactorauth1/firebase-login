@@ -264,7 +264,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         templateUrl: "/admin/assets/var/demo/js/inventory/inventory-details/inventory-details.html",
         title: 'Single Inventory',
         icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('InventoryDetailsController', 'InventoryService')
+        resolve: loadSequence('InventoryDetailsController', 'InventoryService', 'highcharts', 'chartAnalyticsService')
     }).state('app.account.users', {
         url: '/users',
         templateUrl: "/admin/assets/js/users/users.html",

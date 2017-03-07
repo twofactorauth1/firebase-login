@@ -31,7 +31,7 @@
 			</div>
 		</a>
 	</li>
-    <li ui-sref-active="active">
+    <li ng-class="{'active open':$state.includes('app.inventory') || $state.includes('app.singleInventory')}">
         <a ui-sref="app.inventory">
             <div class="item-content">
                 <div class="item-media">
