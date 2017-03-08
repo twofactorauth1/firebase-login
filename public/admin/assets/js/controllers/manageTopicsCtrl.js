@@ -31,8 +31,8 @@
       created: function (value) {
         return value.created.date;
       },
-      modified: function (value) {
-        return value.modified.date;
+      updated: function (value) {
+        return value.updated.date;
       }
     };
 
