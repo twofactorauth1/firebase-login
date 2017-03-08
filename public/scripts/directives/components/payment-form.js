@@ -235,6 +235,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             angular.element("#card_expiry").addClass('has-error');
                                             angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
                                             break;
+                                        default:
+                                            angular.element("#card_number .error").html(error.message);
+                                            angular.element("#card_number").addClass('has-error');
+                                            angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                            break; 
                                     }
                                 } else {
                                     newUser.cardToken = token;
@@ -444,6 +449,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             angular.element("#card_expiry").addClass('has-error');
                                             angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
                                             break;
+                                        default:
+                                            angular.element("#card_number .error").html(error.message);
+                                            angular.element("#card_number").addClass('has-error');
+                                            angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                            break;     
                                     }
                                 } else {
                                     newUser.cardToken = token;

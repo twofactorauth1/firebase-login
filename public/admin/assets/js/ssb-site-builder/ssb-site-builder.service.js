@@ -1630,16 +1630,21 @@
                 })
 
             } else if (type === 'thumbnail-slider') {
-
-                if (update) {
-                    component.thumbnailCollection[index].url = asset.url;
-                    component.thumbnailCollection[index].img = "<img src='"+ asset.url +"'/>";
-                } else {
-                    component.thumbnailCollection.splice(index + 1, 0, {
-                        url: asset.url,
-                        img: "<img src='"+ asset.url +"'/>"
-                    });
-                }
+                isImage(asset.url).then(function(response){
+                    if(response === false){
+                        console.log("Not a valid image.")
+                        return;
+                    }
+                    if (update) {
+                        component.thumbnailCollection[index].url = asset.url;
+                        component.thumbnailCollection[index].img = "<img src='"+ asset.url +"'/>";
+                    } else {
+                        component.thumbnailCollection.splice(index + 1, 0, {
+                            url: asset.url,
+                            img: "<img src='"+ asset.url +"'/>"
+                        });
+                    }
+                })
 
             } else if (type === 'meet-team') {
                 component.teamMembers[index].profilepic = asset.url;

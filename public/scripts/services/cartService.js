@@ -110,7 +110,7 @@
                         if(item.shipping_charges && item.shipping_charges.item_override_charge){
                             _overrides += item.quantity * item.shipping_charges.item_override_charge;
                         } else {
-                            _nonOverrides = _nonOverrides += item.quantity * shipping.charge;
+                            _nonOverrides = _nonOverrides += item.quantity * parseFloat(shipping.charge);
                         }
                     } else if(shipping.chargeType === 'order' && item.shipping_charges && item.shipping_charges.item_order_additive_charge){
                         _overrides += item.quantity * item.shipping_charges.item_order_additive_charge;
@@ -119,7 +119,7 @@
             });
 
             if(shipping.chargeType === 'order'){
-                _totalShippingCharges = _overrides + shipping.charge;
+                _totalShippingCharges = _overrides + parseFloat(shipping.charge);
             } else if(shipping.chargeType === 'item'){
                 _totalShippingCharges = _overrides + _nonOverrides;
             }

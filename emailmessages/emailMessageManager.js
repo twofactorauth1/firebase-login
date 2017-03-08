@@ -17,7 +17,6 @@ var async = require('async');
 var juice = require('juice');
 var appConfig = require('../configs/app.config');
 var sendgridConfig = require('../configs/sendgrid.config');
-var sendgrid  = require('sendgrid')(sendgridConfig.API_KEY);
 var dao = require('./dao/emailmessage.dao');
 var scheduledJobsManager = require('../scheduledjobs/scheduledjobs_manager');
 var serialize = require('node-serialize');
@@ -1701,6 +1700,48 @@ var emailMessageManager = {
             } else {
                 self.log.debug(accountId, userId, '<< findMessagesByCampaign');
                 return fn(err, messages);
+            }
+        });
+    },
+
+    findOpenedMessagesByCampaign: function(accountId, campaignId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> findMessagesByCampaign');
+        var query = {
+            accountId:accountId,
+            batchId:campaignId,
+            openedDate:{$ne:null}
+        };
+
+
+        dao.findMany(query, $$.m.Emailmessage, function(err, messages){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding campaign emails:', err);
+                return fn(err);
+            } else {
+                var reportLines = [];
+                reportLines.push('name,phone,email,openDate');
+                async.eachSeries(messages, function(message, callback){
+                    contactDao.getContactByEmailAndAccount(message.get('receiver'), accountId, function(err, contact){
+                        if(err || !contact) {
+                            self.log.debug('Error getting contact for email:' + message.get('receiver'), err);
+                            callback();
+                        } else {
+                            var reportLine = '';
+                            reportLine += contact.get('first') + ' ' + contact.get('last') + ',';
+                            reportLine += contact.getPrimaryPhone() + ',';
+                            reportLine += message.get('receiver') + ',';
+                            reportLine += message.get('openedDate');
+                            reportLines.push(reportLine);
+                            callback();
+                        }
+                    });
+                }, function(err){
+                    self.log.debug(accountId, userId, '<< findMessagesByCampaign');
+                    return fn(err, reportLines);
+                });
+
+
             }
         });
     },
