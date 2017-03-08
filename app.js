@@ -175,9 +175,9 @@ function virtualHostSession(req, res, next) {
     var host = req.get('host'); //maybe normalize with toLowerCase etc
     var hostSession = null;// can't cache this for now... bummer.
     if (!hostSession) {
-        console.log('No hostSession for ' + host);
+        //console.log('No hostSession for ' + host);
         if(host.replace(':3000', '').endsWith('gorvlvr.com')) {
-            console.log('using .gorvlvr.com');
+            //console.log('using .gorvlvr.com');
             var sess = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
@@ -189,7 +189,7 @@ function virtualHostSession(req, res, next) {
             };
             hostSession = mwCache[host] = express.session(sess);
         } else {
-            console.log('creating session for ' + appConfig.cookie_subdomain);
+            //console.log('creating session for ' + appConfig.cookie_subdomain);
             var sess1 = {
                 store: mongoStore,
                 secret: 'mys3cr3t',
