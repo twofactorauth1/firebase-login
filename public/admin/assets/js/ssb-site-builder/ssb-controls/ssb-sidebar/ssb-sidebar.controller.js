@@ -4,11 +4,11 @@
  * this allows us to use sortable + accordion
  */
 app.config(['$provide', function ($provide){
-	$provide.decorator('accordionDirective', function($delegate) {
-		var directive = $delegate[0];
-		directive.replace = true;
-		return $delegate;
-	});
+    $provide.decorator('accordionDirective', function($delegate) {
+        var directive = $delegate[0];
+        directive.replace = true;
+        return $delegate;
+    });
 }]);
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
@@ -70,23 +70,23 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
 
     vm.sortableOptions = {
-    	handle: '.ssb-sidebar-move-handle',
-		onSort: function (evt) {
-			console.log(evt);
+        handle: '.ssb-sidebar-move-handle',
+        onSort: function (evt) {
+            console.log(evt);
             vm.setActiveSection(evt.newIndex);
-		},
-		onStart: function (evt) {
-			vm.dragging = true;
-		},
-		onEnd: function (evt) {
-			vm.dragging = false;
-		}
+        },
+        onStart: function (evt) {
+            vm.dragging = true;
+        },
+        onEnd: function (evt) {
+            vm.dragging = false;
+        }
     };
 
     //TODO: move into config services
     vm.spectrum = {
-  	  options: SimpleSiteBuilderService.getSpectrumColorOptions()
-  	};
+      options: SimpleSiteBuilderService.getSpectrumColorOptions()
+    };
 
     //TODO: move into config services
     vm.social_links = [{
@@ -233,12 +233,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         container.src = null;
     }
 
-  	function getPlatformSections() {
+    function getPlatformSections() {
         // alert('used!')
-  		// SimpleSiteBuilderService.getPlatformSections().then(function(data) {
+        // SimpleSiteBuilderService.getPlatformSections().then(function(data) {
     //     vm.platformSections = data;
       // });
-  	}
+    }
 
     function getPlatformComponents() {
       SimpleSiteBuilderService.getPlatformComponents();
@@ -246,11 +246,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     //TODO: handle versions
     function addComponentToSection(component, sectionIndex) {
-    	return (
-    		SimpleSiteBuilderService.getComponent(component, 1).then(function(response) {
-    			vm.state.page.sections[sectionIndex].components.push(response.data);
-    		})
-    	)
+        return (
+            SimpleSiteBuilderService.getComponent(component, 1).then(function(response) {
+                vm.state.page.sections[sectionIndex].components.push(response.data);
+            })
+        )
     }
 
     function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
@@ -412,17 +412,17 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       });
     }
 
-  	function saveWebsite() {
-  		vm.state.pendingWebsiteChanges = false;
-  		return (
-  			SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
-  				console.log('website saved');
-  			})
-  		)
-  	}
+    function saveWebsite() {
+        vm.state.pendingWebsiteChanges = false;
+        return (
+            SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+                console.log('website saved');
+            })
+        )
+    }
 
     //TODO: refactor, this function exists in multiple controllers :)
-  	function savePage() {
+    function savePage() {
         vm.state.saveLoading = true;
         var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
@@ -502,22 +502,22 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     }
 
-  	function cancelPendingEdits() {
+    function cancelPendingEdits() {
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
       SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
       SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
-  	function togglePageSectionAccordion(index) {
-  		if (vm.uiState.accordion.sections[index].isOpen) {
-  			SimpleSiteBuilderService.setActiveSection(index);
-  		}
+    function togglePageSectionAccordion(index) {
+        if (vm.uiState.accordion.sections[index].isOpen) {
+            SimpleSiteBuilderService.setActiveSection(index);
+        }
     }
 
     function setActiveComponent(index) {
-  		//TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
-  		SimpleSiteBuilderService.setActiveComponent(index);
+        //TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
+        SimpleSiteBuilderService.setActiveComponent(index);
     }
 
     function setActiveSection(index) {
@@ -525,6 +525,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         $timeout(function() {
           SimpleSiteBuilderService.setActiveSection(index);
           if (vm.state.page.sections[index].visibility) {
+            vm.uiState.navigation.sectionPanel.reset();
+            var section = vm.state.page.sections[index];
+            var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-') + ' Section';
+            vm.uiState.navigation.sectionPanel.loadPanel({ id: '', name: name });
             vm.uiState.showSectionPanel = true;
             vm.scrollToActiveSection();
           }
@@ -667,16 +671,16 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function checkForDuplicatePage(pageHandle) {
-  		SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
-  			vm.uiState.duplicateUrl = dup;
-  		})
+        SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+            vm.uiState.duplicateUrl = dup;
+        })
     }
 
     function addToMainMenu(id) {
-  		console.log('add page to main menu: ' + id);
-  		// SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
-  		// 	vm.uiState.duplicateUrl = dup;
-  		// })
+        console.log('add page to main menu: ' + id);
+        // SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+        //  vm.uiState.duplicateUrl = dup;
+        // })
     }
 
     function createPage(template) {
@@ -1102,15 +1106,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             });
         })
 
-		vm.donationProductTags = [];
-		ProductService.getProducts(function(products) {
-			products.forEach(function(product, index) {
-				if (product.type === 'DONATION' && product.status.toLowerCase() === 'active') {
-					vm.donationProductTags.push({data: product._id, label: product.name});
-				}
+        vm.donationProductTags = [];
+        ProductService.getProducts(function(products) {
+            products.forEach(function(product, index) {
+                if (product.type === 'DONATION' && product.status.toLowerCase() === 'active') {
+                    vm.donationProductTags.push({data: product._id, label: product.name});
+                }
 
-			});
-		});
+            });
+        });
     }
 }
 
