@@ -512,10 +512,29 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         if(!_isVerticalNav){
             var elementIsFirstPosition = vm.index === 0;
             if (elementIsFirstPosition) {
-                var dup = vm.element.clone();
-                dup.addClass('ssb-fixed-clone-element');
-                dup.attr('id', 'clone_of_' + vm.section._id);
-                dup.insertAfter(vm.element);
+                // Preview page
+                if($location.$$path.indexOf("/preview/") == 0){                  
+                    var dup = vm.element.clone();                        
+                    dup.addClass('ssb-fixed-clone-element');
+                    dup.attr('id', 'clone_of_' + vm.section._id);
+                    dup.insertAfter(vm.element);
+                    $scope.$watch(
+                        function () {
+                            return angular.element(".ssb-fixed-first-element").height();
+                        },
+                        function (value) {                                
+                            if(dup)
+                                dup.css("min-height", value + "px");
+                        }
+                    ) 
+                }
+                else{
+                    var dup = vm.element.clone();
+                    dup.addClass('ssb-fixed-clone-element');
+                    dup.attr('id', 'clone_of_' + vm.section._id);
+                    dup.insertAfter(vm.element);
+                }
+                
             } else {
                 $timeout(function() {
                     $(vm.element[0]).sticky({zIndex:999});
