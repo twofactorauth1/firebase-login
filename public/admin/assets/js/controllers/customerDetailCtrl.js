@@ -255,7 +255,20 @@
             $scope.closeModal();
         };
 
+        $scope.checkPasswordLength = function() {
+            $scope.passwordInValid = false;
+            if ($scope.edituser && $scope.edituser.password1 && $scope.edituser.password1.length < 6) {            
+                $scope.passwordInValid = true;
+            } else {
+                $scope.passwordInValid = false;
+            }
+        };
+
         $scope.setUserPassword = function(userId) {
+            $scope.checkPasswordLength();
+            if($scope.passwordInValid){
+                return;
+            }
             customerService.setUserPassword(userId, $scope.edituser.password1, function(err, data){
                 if(err) {
                     toaster.pop('warning', err.message);
