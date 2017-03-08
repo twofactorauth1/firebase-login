@@ -736,6 +736,10 @@ _.extend(api.prototype, baseApi.prototype, {
             sessionEvent.set('subdomain', subdomainObj.subdomain);
         }
 
+        if(subdomainObj.isOrgRoot === true) {
+            sessionEvent.set('orgDomain', subdomainObj.orgDomain);
+        }
+
 
 
         analyticsManager.storeSessionEvent(sessionEvent, function(err){
