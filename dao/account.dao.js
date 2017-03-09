@@ -51,11 +51,18 @@ var dao = {
     },
 
 
-    getAccountByDomain: function (domain, fn) {
+    __getAccountByDomain: function (domain, fn) {
         this.findOne({$or: [
             {domain: domain},
             {customDomain: domain}
         ]}, fn);
+    },
+
+    /*
+     * We do not use the 'domain' property currently.
+     */
+    getAccountByDomain: function (domain, fn) {
+        this.findOne({customDomain: domain}, fn);
     },
 
 
