@@ -16,6 +16,7 @@ var async = require('async');
 var accountDao = require('../dao/account.dao');
 var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
+var accountManager = require('../accounts/account.manager');
 
 module.exports = {
 
@@ -1965,6 +1966,20 @@ module.exports = {
         stageAry.push(group1);
 
         async.waterfall([
+            function(cb) {
+                if(orgId !== null) {
+                    accountManager.getAccountIdsByOrg(accountId, userId, orgId, function(err, accountIds){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            match.$match.account_id = {$in:accountIds};
+                            cb();
+                        }
+                    });
+                } else {
+                    cb();
+                }
+            },
             function(cb){
                 orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, value){
                     var resultAry = [];
