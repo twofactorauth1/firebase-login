@@ -24,7 +24,20 @@ app.constant('formValidations', {
    'contactTags': /^[a-z\d\-_\s]+$/i
   });
 
-
+app.constant('dashboardBackgrounds', {
+    urls: [
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/1.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/2.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/3.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/4.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/5.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/6.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/7.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/8.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/9.jpg",
+        "//s3-us-west-2.amazonaws.com/indigenous-admin/org_1/10.jpg"
+    ]
+});
 
 
 /*
