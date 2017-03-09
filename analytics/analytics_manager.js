@@ -1871,6 +1871,9 @@ module.exports = {
                 }
             }
         };
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
         stageAry.push(match);
         var group1 = {
             $group: {

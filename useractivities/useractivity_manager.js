@@ -27,12 +27,13 @@ module.exports = {
         });
     },
 
-    createUserLoginActivity: function(accountId, userId, requestorProps, fn) {
+    createUserLoginActivity: function(accountId, userId, requestorProps, orgId, fn) {
         var self = this;
         log.debug('>> createUserLoginActivity');
         var data = requestorProps || {};
         data.accountId = accountId;
         data.userId = userId;
+        data.orgId = orgId;
         data.activityType = $$.m.UserActivity.types.LOGIN;
         var activity = new $$.m.UserActivity(data);
 

@@ -198,7 +198,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                                 resp.redirect(redirectUrl);
 
-                                userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
+                                userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, value.get('orgId'), function(){});
 
                                 return;
                             });
@@ -221,7 +221,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             cookies.setRedirectUrl(req, resp, _path);
                             self.log.debug('req.isAuthenticated():' + req.isAuthenticated());
                             resp.redirect("/home");
-                            userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
+                            userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, value.get('orgId'), function(){});
                             self = req = resp = null;
                             return;
                         } else if(subObject.isOrgRoot === true){
@@ -233,7 +233,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                 self.log.debug('setting the redirect in cookies to ', _path);
                                 cookies.setRedirectUrl(req, resp, _path);
                                 resp.redirect("/home");
-                                userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
+                                userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, value.get('orgId'), function(){});
                                 self = req = resp = null;
                                 return;
                             } else if(value.id() !== accountId){
@@ -259,7 +259,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                             self.log.debug('redirecting to ' + value);
 
                                             resp.redirect(value);
-                                            userActivityManager.createUserLoginActivity(accountId, self.userId(req), requestorProps, function(){});
+                                            userActivityManager.createUserLoginActivity(accountId, self.userId(req), requestorProps, account.get('orgId'), function(){});
                                             self = null;
                                             return;
                                         }
@@ -282,7 +282,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                     req.session.unAuthAccountId = value.id();
                                     self.log.debug('req.session:', req.session);
                                     resp.redirect(authUrl);
-                                    userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
+                                    userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, value.get('orgId'), function(){});
 
                                     self = null;
                                 });
@@ -304,7 +304,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                 req.session.accountId = value.id();
                                 req.session.unAuthAccountId = value.id();
                                 resp.redirect(authUrl);
-                                userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
+                                userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, value.get('orgId'), function(){});
 
                                 self = null;
                             });
@@ -321,7 +321,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                                 self.log.debug('redirecting to ' + value);
                                 resp.redirect(value);
-                                userActivityManager.createUserLoginActivity(appConfig.mainAccountID, self.userId(req), requestorProps, function(){});
+                                userActivityManager.createUserLoginActivity(appConfig.mainAccountID, self.userId(req), requestorProps, value.get('orgId'), function(){});
                                 self = null;
                                 return;
                             });
@@ -351,7 +351,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                         self.log.debug('redirecting to ' + value);
 
                                         resp.redirect(value);
-                                        userActivityManager.createUserLoginActivity(accountId, self.userId(req), requestorProps, function(){});
+                                        userActivityManager.createUserLoginActivity(accountId, self.userId(req), requestorProps, account.get('orgId'), function(){});
                                         self = null;
                                         return;
                                     }
@@ -385,7 +385,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                     req.session.accountId = value.id();
                                     req.session.unAuthAccountId = value.id();
                                     resp.redirect(authUrl);
-                                    userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
+                                    userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, value.get('orgId'), function(){});
 
                                     self = null;
                                 });
