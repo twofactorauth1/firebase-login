@@ -18,6 +18,7 @@ var appConfig = require('../../configs/app.config');
 var accountDao = require('../../dao/account.dao');
 var moment = require('moment');
 var emailMessageManager = require('../../emailmessages/emailMessageManager');
+var organizationDao = require('../../organizations/dao/organization.dao');
 require('superagent');
 
 
@@ -811,7 +812,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        analyticsManager.getVisitorReports(accountId, userId, start, end, false, function(err, value){
+        analyticsManager.getVisitorReports(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< runVisitorsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -841,7 +842,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
 
-        analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, function(err, value){
+        analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< visitorLocationsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -871,7 +872,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
 
-        analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, function(err, value){
+        analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< visitorDeviceReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -911,7 +912,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('previousStart:', previousStart);
         self.log.debug('previousEnd:', previousEnd);
 
-        analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, function(err, value){
+        analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< userReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -951,7 +952,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('previousStart:', previousStart);
         self.log.debug('previousEnd:', previousEnd);
 
-        analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, function(err, value){
+        analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< pageviewsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -991,7 +992,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('previousStart:', previousStart);
         self.log.debug('previousEnd:', previousEnd);
 
-        analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, function(err, value){
+        analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< sessionsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -1030,7 +1031,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('previousStart:', previousStart);
         self.log.debug('previousEnd:', previousEnd);
 
-        analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, function(err, value){
+        analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< sessionLengthReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -1059,7 +1060,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, function(err, value){
+        analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< trafficSourcesReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -1088,7 +1089,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        analyticsManager.newVsReturningReport(accountId, userId, start, end, false, function(err, value){
+        analyticsManager.newVsReturningReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< newVsReturningReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -1117,7 +1118,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, function(err, value){
+        analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< pageAnalyticsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -1146,7 +1147,7 @@ _.extend(api.prototype, baseApi.prototype, {
             start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
             self.log.debug('start:', start);
         }
-        analyticsManager.getUserAgentReport(accountId, userId, start, end, false, function(err, value){
+        analyticsManager.getUserAgentReport(accountId, userId, start, end, false, null, function(err, value){
             self.log.debug(accountId, userId, '<< getUserAgentsReport');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -1192,43 +1193,43 @@ _.extend(api.prototype, baseApi.prototype, {
 
         async.parallel({
             visitorReports: function(callback){
-                analyticsManager.getVisitorReports(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorReports(accountId, userId, start, end, false, null, callback);
             },
             visitorLocationsReport: function(callback) {
-                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, null, callback);
             },
             visitorLocationsByCountryReport: function(callback) {
-                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, null, callback);
             },
             visitorDeviceReport: function(callback) {
-                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, null, callback);
             },
             userReport: function(callback) {
-                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             pageViewsReport: function(callback) {
-                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             sessionsReport: function(callback) {
-                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             sessionLengthReport: function(callback) {
-                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             trafficSourcesReport: function(callback) {
-                analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, callback);
+                analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, null, callback);
             },
             newVsReturningReport: function(callback) {
-                analyticsManager.newVsReturningReport(accountId, userId, start, end, false, callback);
+                analyticsManager.newVsReturningReport(accountId, userId, start, end, false, null, callback);
             },
             pageAnalyticsReport: function(callback) {
-                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, callback);
+                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, null, callback);
             },
             userAgents: function(callback) {
-                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, null, callback);
             },
             revenueReport: function(callback) {
-                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             }
         }, function(err, results){
             self.log.debug(accountId, userId, '<< allReports');
@@ -1276,46 +1277,46 @@ _.extend(api.prototype, baseApi.prototype, {
 
         async.parallel({
             visitorReports: function(callback){
-                analyticsManager.getVisitorReports(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorReports(accountId, userId, start, end, false, null, callback);
             },
             visitorLocationsReport: function(callback) {
-                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, null, callback);
             },
             visitorLocationsByCountryReport: function(callback) {
-                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, null, callback);
             },
             visitorDeviceReport: function(callback) {
-                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, null, callback);
             },
             userReport: function(callback) {
-                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             pageViewsReport: function(callback) {
-                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             sessionsReport: function(callback) {
-                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             sessionLengthReport: function(callback) {
-                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             trafficSourcesReport: function(callback) {
-                analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, callback);
+                analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, null, callback);
             },
             newVsReturningReport: function(callback) {
-                analyticsManager.newVsReturningReport(accountId, userId, start, end, false, callback);
+                analyticsManager.newVsReturningReport(accountId, userId, start, end, false, null, callback);
             },
             pageAnalyticsReport: function(callback) {
-                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, callback);
+                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, null, callback);
             },
             userAgents: function(callback) {
-                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, null, callback);
             },
             revenueReport: function(callback) {
-                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             emailsReport: function(callback) {
-                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             }
         }, function(err, results){
             self.log.debug(accountId, userId, '<< allCustomerReports');
@@ -1347,9 +1348,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getDailyActiveUsers(accountId, userId, start, end, function(err, results){
+            analyticsManager.getDailyActiveUsers(accountId, userId, start, end, null, function(err, results){
                 self.log.debug(accountId, userId, '<< getDailyActiveUsers');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getDailyActiveUsers(accountId, userId, start, end, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getDailyActiveUsers');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1382,9 +1403,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getVisitorReports(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.getVisitorReports(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< runAdminVisitorsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getVisitorReports(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< runAdminVisitorsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1417,9 +1458,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminVisitorLocationsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminVisitorLocationsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1451,9 +1512,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminVisitorLocationsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminVisitorLocationsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1485,9 +1566,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('start:', start);
         }
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminVisitorDeviceReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminVisitorDeviceReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1526,9 +1627,29 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+            analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminUserReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminUserReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1566,9 +1687,29 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+            analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminPageviewsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminPageviewsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1606,9 +1747,29 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+            analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminSessionsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminSessionsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1646,9 +1807,29 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+            analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminSessionLengthReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminSessionLengthReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1678,9 +1859,29 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.trafficSourcesReport(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.trafficSourcesReport(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminTrafficSourcesReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.trafficSourcesReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminTrafficSourcesReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1711,9 +1912,29 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.newVsReturningReport(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.newVsReturningReport(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminNewVsReturningReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.newVsReturningReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminNewVsReturningReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1744,9 +1965,29 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.pageAnalyticsReport(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.pageAnalyticsReport(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< adminPageAnalyticsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.pageAnalyticsReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< adminPageAnalyticsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1758,7 +1999,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var userId = self.userId(req);
         var accountId = self.accountId(req);
-        self.log.debug(accountId, userId, '>> adminPageAnalyticsReport (' + req.query.start + ', ' + req.query.end + ')');
+        self.log.debug(accountId, userId, '>> getAdminUserAgentsReport (' + req.query.start + ', ' + req.query.end + ')');
         var start = req.query.start;
         var end = req.query.end;
 
@@ -1777,9 +2018,29 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getUserAgentReport(accountId, userId, start, end, true, function(err, results){
-                self.log.debug(accountId, userId, '<< adminPageAnalyticsReport');
+            analyticsManager.getUserAgentReport(accountId, userId, start, end, true, null, function(err, results){
+                self.log.debug(accountId, userId, '<< getAdminUserAgentsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getUserAgentReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getAdminUserAgentsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1810,9 +2071,29 @@ _.extend(api.prototype, baseApi.prototype, {
         }
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getOSReport(accountId, userId, start, end, true, function(err, results){
+            analyticsManager.getOSReport(accountId, userId, start, end, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< getAdminOSReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getOSReport(accountId, userId, start, end, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getAdminOSReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1848,9 +2129,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var previousEnd = start;
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+            analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< getAdminRevenue');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getAdminRevenue');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1886,9 +2187,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var previousEnd = start;
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, function(err, results){
+            analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, null, function(err, results){
                 self.log.debug(accountId, userId, '<< getAdminEmailsReport');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, organization.id(), function(err, results){
+                            self.log.debug(accountId, userId, '<< getAdminEmailsReport');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
@@ -1930,65 +2251,92 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('previousEnd:', previousEnd);
 
         if(accountId === appConfig.mainAccountID) {
-            async.parallelLimit({
-                visitorReports: function(callback){
-                    analyticsManager.getVisitorReports(accountId, userId, start, end, true, callback);
-                },
-                visitorLocationsReport: function(callback) {
-                    analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, callback);
-                },
-                visitorLocationsByCountryReport: function(callback) {
-                    analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, callback);
-                },
-                visitorDeviceReport: function(callback) {
-                    analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, callback);
-                },
-                userReport: function(callback) {
-                    analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
-                },
-                pageViewsReport: function(callback) {
-                    analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
-                },
-                sessionsReport: function(callback) {
-                    analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
-                },
-                sessionLengthReport: function(callback) {
-                    analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
-                },
-                trafficSourcesReport: function(callback) {
-                    analyticsManager.trafficSourcesReport(accountId, userId, start, end, true, callback);
-                },
-                newVsReturningReport: function(callback) {
-                    analyticsManager.newVsReturningReport(accountId, userId, start, end, true, callback);
-                },
-                pageAnalyticsReport: function(callback) {
-                    analyticsManager.pageAnalyticsReport(accountId, userId, start, end, true, callback);
-                },
-                dau: function(callback) {
-                    analyticsManager.getDailyActiveUsers(accountId, userId, start, end, callback);
-                },
-                userAgents: function(callback) {
-                    analyticsManager.getUserAgentReport(accountId, userId, start, end, true, callback);
-                },
-                revenueReport: function(callback) {
-                    analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, callback);
-                },
-                osReport: function(callback) {
-                    analyticsManager.getOSReport(accountId, userId, start, end, true, callback);
-                },
-                emailsReport: function(callback) {
-                    analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
-                }
-            }, 2, function(err, results){
+            self._runAllAdminReports(accountId, userId, start, end, previousStart, previousEnd, null, function(err, results){
                 var duration = new Date().getTime() - startTime;
                 self.log.debug(accountId, userId, '<< allAdminReports [' + duration + ']');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        self._runAllAdminReports(accountId, userId, start, end, previousStart, previousEnd, organization.id(), function(err, results){
+                            var duration = new Date().getTime() - startTime;
+                            self.log.debug(accountId, userId, '<< allAdminReports [' + duration + ']');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
             return self.send403(resp);
         }
 
+    },
+
+    _runAllAdminReports: function(accountId, userId, start, end, previousStart, previousEnd, orgId, fn) {
+        async.parallelLimit({
+            visitorReports: function(callback){
+                analyticsManager.getVisitorReports(accountId, userId, start, end, true, orgId, callback);
+            },
+            visitorLocationsReport: function(callback) {
+                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            visitorLocationsByCountryReport: function(callback) {
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            visitorDeviceReport: function(callback) {
+                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            userReport: function(callback) {
+                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, true, orgId, callback);
+            },
+            pageViewsReport: function(callback) {
+                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, true, orgId, callback);
+            },
+            sessionsReport: function(callback) {
+                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, true, orgId, callback);
+            },
+            sessionLengthReport: function(callback) {
+                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, true, orgId, callback);
+            },
+            trafficSourcesReport: function(callback) {
+                analyticsManager.trafficSourcesReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            newVsReturningReport: function(callback) {
+                analyticsManager.newVsReturningReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            pageAnalyticsReport: function(callback) {
+                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            dau: function(callback) {
+                analyticsManager.getDailyActiveUsers(accountId, userId, start, end, orgId, callback);
+            },
+            userAgents: function(callback) {
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            revenueReport: function(callback) {
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, orgId, callback);
+            },
+            osReport: function(callback) {
+                analyticsManager.getOSReport(accountId, userId, start, end, true, orgId, callback);
+            },
+            emailsReport: function(callback) {
+                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, orgId, callback);
+            }
+        }, 2, function(err, results){
+            fn(err, results);
+        });
     },
 
     getLiveVisitors: function(req, resp) {
