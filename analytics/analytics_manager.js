@@ -243,7 +243,7 @@ module.exports = {
         });
     },
 
-    getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, fn) {
+    getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.trace(accountId, userId, '>> getLiveVistiors');
@@ -304,6 +304,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 

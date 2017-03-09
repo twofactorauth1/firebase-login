@@ -2345,7 +2345,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
         self.log.trace(accountId, userId, '>> getLiveVisitors');
 
-        analyticsManager.getLiveVisitors(accountId, userId, 60, false, function(err, value){
+        analyticsManager.getLiveVisitors(accountId, userId, 60, false, null, function(err, value){
             self.log.trace(accountId, userId, '<< getLiveVisitors');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -2358,9 +2358,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
         self.log.trace(accountId, userId, '>> getAdminLiveVisitors');
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getLiveVisitors(accountId, userId, 60, true, function(err, value){
+            analyticsManager.getLiveVisitors(accountId, userId, 60, true, null, function(err, value){
                 self.log.trace(accountId, userId, '<< getAdminLiveVisitors');
                 self.sendResultOrError(resp, err, value, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getLiveVisitors(accountId, userId, 60, true, organization.id(), function(err, value){
+                            self.log.trace(accountId, userId, '<< getAdminLiveVisitors');
+                            self.sendResultOrError(resp, err, value, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
             });
         } else {
             self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');

@@ -59,7 +59,7 @@ module.exports = {
     },
 
     getCustomers: function(accountId, userId, sortBy, sortDir, skip, limit, fn) {
-
+        fn(null, null);
     },
 
     getMainCustomer: function(accountId, userId, customerId, fn) {
