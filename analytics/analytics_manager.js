@@ -2231,115 +2231,141 @@ module.exports = {
         }
         clicksByDayStageAry.push(clicksGroup);
 
-        async.parallel({
-            campaigns: function campaigns(cb){
-                dao.aggregateWithCustomStages(campaignsByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
-                            }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        async.waterfall([
+            function(callback) {
+                if(orgId !== null) {
+                    accountManager.getAccountIdsByOrg(accountId, userId, orgId, function(err, accountIds){
+                        if(err) {
+                            callback(err);
                         } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                            match.$match.accountId = {$in:accountIds};
+                            emailsMatch.$match.accountId = {$in:accountIds};
+                            opensMatch.$match.accountId = {$in:accountIds};
+                            clicksMatch.$match.accountId = {$in:accountIds};
+                            callback();
                         }
-                        resultAry.push(result);
                     });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                    }
-                    cb(err, resultAry);
-                });
+                } else {
+                    callback();
+                }
             },
-            emails: function emails(cb) {
-                dao.aggregateWithCustomStages(emailsByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
+            function(callback) {
+                async.parallel({
+                    campaigns: function campaigns(cb){
+                        dao.aggregateWithCustomStages(campaignsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                             }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                        } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
-                        }
-                        resultAry.push(result);
-                    });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                    }
-                    cb(err, resultAry);
-                });
-            },
-            opens: function opens(cb){
-                dao.aggregateWithCustomStages(opensByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
+                            cb(err, resultAry);
+                        });
+                    },
+                    emails: function emails(cb) {
+                        dao.aggregateWithCustomStages(emailsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                             }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                        } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
-                        }
-                        resultAry.push(result);
-                    });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                    }
-                    cb(err, resultAry);
-                });
-            },
-            clicks: function clicks(cb){
-                dao.aggregateWithCustomStages(clicksByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
+                            cb(err, resultAry);
+                        });
+                    },
+                    opens: function opens(cb){
+                        dao.aggregateWithCustomStages(opensByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                             }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                        } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
-                        }
-                        resultAry.push(result);
-                    });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                            cb(err, resultAry);
+                        });
+                    },
+                    clicks: function clicks(cb){
+                        dao.aggregateWithCustomStages(clicksByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                            }
+                            cb(err, resultAry);
+                        });
                     }
-                    cb(err, resultAry);
+                }, function(err, results){
+                    callback(err, results);
+
                 });
             }
-        }, function(err, results){
+        ], function(err, results){
             self.log.debug(accountId, userId, '<< getCampaignEmailsReport');
             return fn(err, results);
         });
+
+
 
     },
 
