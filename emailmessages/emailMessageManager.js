@@ -1728,10 +1728,10 @@ var emailMessageManager = {
                             callback();
                         } else {
                             csv += message.get('receiver') + ',';
-                            csv += message.get('deliveredDate') || '' + ',';
-                            csv += message.get('openedDate') || '' + ',';
-                            csv += message.get('clickedDate') || '' + ',';
-                            csv += '';//(Need to check for if contact is unsubscribed)
+                            csv += (message.get('deliveredDate') || false) + ',';
+                            csv += (message.get('openedDate') || false) + ',';
+                            csv += (message.get('clickedDate') || false) + ',';
+                            csv += 'n/a';//(Need to check for if contact is unsubscribed)
                             csv += '\n';
                             callback();
                         }
