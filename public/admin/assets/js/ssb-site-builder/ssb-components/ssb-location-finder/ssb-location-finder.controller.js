@@ -14,6 +14,9 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         geocodeService = $injector.get('geocodeService');
     }
    
+    if ($injector.has("GeocodeService")) {
+        geocodeService = $injector.get('GeocodeService');
+    }
 
     var vm = this;
 
