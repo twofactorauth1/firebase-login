@@ -83,7 +83,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
 
     $scope.$watch('vm.component.settings.mapZoom', function(val) {
-        if (val && vm.map) {
+        if (val && vm.map && Object.keys(vm.map).length) {
             vm.map.setZoom(val);
         }
     });
