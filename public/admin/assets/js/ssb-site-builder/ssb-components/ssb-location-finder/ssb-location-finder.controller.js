@@ -77,6 +77,13 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         }
     });
 
+
+    $scope.$watch('vm.component.settings.mapZoom', function(val) {
+        if (val && vm.map) {
+            vm.map.setZoom(val);
+        }
+    });
+
     vm.locationFinderOptions = [
         {
             "description": "5 miles",
