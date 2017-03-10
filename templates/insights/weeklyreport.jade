@@ -90,11 +90,10 @@ html
 
     if loginTime
         p.text Your most recent login was at #{loginTime}
-        if loginIP
+        if loginIP && loginCity
+            p.text-small.text-grey This login was made from IP Address #{loginIP} near #{loginCity}, #{loginState}
+        else if loginIP
             p.text-small.text-grey This login was made from IP Address #{loginIP}
-            if loginCity
-                p.text-small.text-grey This login was made from IP Address #{loginIP} near #{loginCity}, #{loginState}
-	
 
     else
         p.text There have been no logins to your account.
