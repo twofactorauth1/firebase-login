@@ -10,6 +10,7 @@ var s3Dao = require('../../../dao/integrations/s3.dao.js');
 var route53Dao = require('../../../dao/integrations/route53.dao');
 var accountDao = require('../../../dao/account.dao');
 var async = require('async');
+var appConfig = require('../../../configs/app.config');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -110,14 +111,20 @@ _.extend(api.prototype, baseApi.prototype, {
                         });
                     },
                     function(account, cb) {
-                        route53Dao.addDomainConfig(accountId, userId, domain, indiAccountId, account.get('subdomain'), function(err, value){
-                            if(err) {
-                                self.log.error('Error adding domain:', err);
-                                cb(err);
-                            } else {
-                                cb(null, account, value);
-                            }
-                        });
+                        if(appConfig.nonProduction === true) {
+                            self.log.info(accountId, userId, 'Skipping domain creation in non-prod environment');
+                            cb(null, account, {});
+                        } else {
+                            route53Dao.addDomainConfig(accountId, userId, domain, indiAccountId, account.get('subdomain'), function(err, value){
+                                if(err) {
+                                    self.log.error('Error adding domain:', err);
+                                    cb(err);
+                                } else {
+                                    cb(null, account, value);
+                                }
+                            });
+                        }
+
                     },
                     function(account, zone, cb) {
                         account.set('customDomain', domain);
