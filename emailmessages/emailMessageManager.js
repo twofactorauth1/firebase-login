@@ -1727,13 +1727,38 @@ var emailMessageManager = {
                             self.log.debug('Error getting contact for email:' + message.get('receiver'), err);
                             callback();
                         } else {
-                            csv += message.get('receiver') + ',';
-                            csv += (message.get('deliveredDate') || false) + ',';
-                            csv += (message.get('openedDate') || false) + ',';
-                            csv += (message.get('clickedDate') || false) + ',';
-                            csv += 'n/a';//(Need to check for if contact is unsubscribed)
-                            csv += '\n';
-                            callback();
+                            var isUnsubscribed = null;
+                            var unsubscribeCheckQuery = {
+                                'event.accountId': new RegExp('^'+ accountId +'$', "i"),
+                                'event.contactId':new RegExp('^'+ contact.id() +'$', "i"),
+                                'event.event':'unsubscribe',
+                                'event.campaignId': campaignId,
+                                'event.emailId': message.get("emailId"),
+                                'event.emailmessageId': message.id()
+                            };
+                            dao.exists(unsubscribeCheckQuery, $$.m.Unsubscription, function(err, value){
+                                if(err) {
+                                    log.error('Exception thrown checking for unsubscribe: ' + err);
+                                    fn(err, null);
+                                } else{
+
+                                    if(value === true){
+                                        isUnsubscribed = true;
+                                    }
+                                    else{
+                                        isUnsubscribed = false;
+                                    }
+                                    csv += message.get('receiver') + ',';
+                                    csv += (message.get('deliveredDate') || false) + ',';
+                                    csv += (message.get('openedDate') || false) + ',';
+                                    csv += (message.get('clickedDate') || false) + ',';
+                                    csv += isUnsubscribed;
+                                    csv += '\n';
+                                    callback();
+                                }
+                            });
+                            
+                            
                         }
                     });
                 }, function(err){
