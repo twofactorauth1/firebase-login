@@ -327,6 +327,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         var campaignId = req.params.id;
+        console.log(campaignId);
         self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);

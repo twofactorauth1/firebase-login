@@ -122,5 +122,12 @@
       $scope.modalInstance.close();
     };
 
+
+    $scope.downloadReport = function(_id){
+      CampaignService.downloadReport(_id, function (campaigns) {
+        console.log(campaigns);
+      })
+    }
+
   }]);
 })(angular);
