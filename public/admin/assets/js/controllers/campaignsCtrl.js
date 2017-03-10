@@ -125,6 +125,7 @@
 
     $scope.downloadReport = function(_id){
       CampaignService.downloadReport(_id);
+      toaster.pop('success', 'Please wait while report is downloading...');
     }
 
   }]);
