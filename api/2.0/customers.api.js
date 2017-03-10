@@ -10,7 +10,8 @@ var dao = require('../../customers/dao/customer.dao');
 var manager = require('../../customers/customer_manager');
 
 var appConfig = require('../../configs/app.config');
-
+var urlUtils = require('../../utils/urlutils');
+var orgDao = require('../../organizations/dao/organization.dao');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -59,6 +60,25 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug(accountId, userId, '<< listCustomers');
                 self.sendResultOrError(resp, err, customers, 'Error listing customers');
             });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            orgDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error getting organization:', err);
+                    self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        manager.getOrganizationCustomers(accountId, userId, organization.id(), sortBy, sortDir, skip, limit, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    } else {
+                        manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    }
+                }
+            });
         } else {
             manager.getCustomers(accountId, userId, sortBy, sortDir, skip, limit , function(err, customers){
                 self.log.debug(accountId, userId, '<< listCustomers');
@@ -80,6 +100,25 @@ _.extend(api.prototype, baseApi.prototype, {
             manager.getMainCustomers(accountId, userId, null, null, null, null, function(err, customers){
                 self.log.debug(accountId, userId, '<< listAllCustomers');
                 self.sendResultOrError(resp, err, customers, 'Error listing customers');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            orgDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err) {
+                    self.log.error(accountId, userId, 'Error getting organization:', err);
+                    self.wrapError(resp, 500, 'Error getting Organization', 'Error getting organization');
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        manager.getOrganizationCustomers(accountId, userId, organization.id(), null, null, null, null, function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    } else {
+                        manager.getCustomers(accountId, userId, null, null, null, null , function(err, customers){
+                            self.log.debug(accountId, userId, '<< listAllCustomers');
+                            self.sendResultOrError(resp, err, customers, 'Error listing customers');
+                        });
+                    }
+                }
             });
         } else {
             manager.getCustomers(accountId, userId, null, null, null, null , function(err, customers){
@@ -103,7 +142,17 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResultOrError(resp, err, customer, 'Error getting customer');
             });
         } else {
-            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+            self.isOrgAdmin(accountId, userId, req, function(err, val){
+                if(val === true) {
+                    manager.getOrgCustomer(accountId, userId, customerId, urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, customer){
+                        self.log.debug(accountId, userId, '<< getCustomer');
+                        self.sendResultOrError(resp, err, customer, 'Error getting customer');
+                    });
+                } else {
+                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+                }
+            });
+
         }
     },
 
