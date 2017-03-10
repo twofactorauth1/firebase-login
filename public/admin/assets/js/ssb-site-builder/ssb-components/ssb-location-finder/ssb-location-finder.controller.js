@@ -57,7 +57,6 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.onDestroy = onDestroy;
     vm.addStaticLocations = addStaticLocations;
     vm.searchRadius = 5;
-   
     if(vm.component.settings && vm.component.settings.locationFinderRange)
         vm.searchRadius = angular.copy(vm.component.settings.locationFinderRange);
            
@@ -195,9 +194,11 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             vm.map.setCenter(center);
         });
         
-        // if(vm.component.isHelm === false && geocodeService){
-        //     loadAllLocations();
-        // }
+        if(vm.component.isHelm === false && geocodeService){
+            $timeout(function() {
+                loadAllLocations();
+            }, 0);            
+        }
 
     }
 
@@ -206,6 +207,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         vm.loading = true;
         geocodeService.getAllLocations().then(function(data) {
             vm.searchResults = data.data;
+            vm.setMapCenter(41.8853195, -87.6285088); // rowdydow
             vm.displayMarkers();
         }).catch(function(err) {
             console.error(JSON.stringify(err));
