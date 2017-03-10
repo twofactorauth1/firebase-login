@@ -124,9 +124,7 @@
 
 
     $scope.downloadReport = function(_id){
-      CampaignService.downloadReport(_id, function (campaigns) {
-        console.log(campaigns);
-      })
+      CampaignService.downloadReport(_id);
     }
 
   }]);

@@ -1709,8 +1709,8 @@ var emailMessageManager = {
         self.log.debug(accountId, userId, '>> findMessagesByCampaign');
         var query = {
             accountId:accountId,
-            batchId:campaignId,
-            openedDate:{$ne:null}
+            batchId:campaignId//,
+            //openedDate:{$ne:null}
         };
 
 
@@ -1719,29 +1719,27 @@ var emailMessageManager = {
                 self.log.error(accountId, userId, 'Error finding campaign emails:', err);
                 return fn(err);
             } else {
-                var reportLines = [];
-                reportLines.push('name,phone,email,openDate');
+                var headers = ['email', 'delivered', 'opened', 'clicked', 'unsubscribed'];
+                var csv = headers.join(',') + '\n';
                 async.eachSeries(messages, function(message, callback){
                     contactDao.getContactByEmailAndAccount(message.get('receiver'), accountId, function(err, contact){
                         if(err || !contact) {
                             self.log.debug('Error getting contact for email:' + message.get('receiver'), err);
                             callback();
                         } else {
-                            var reportLine = '';
-                            reportLine += contact.get('first') + ' ' + contact.get('last') + ',';
-                            reportLine += contact.getPrimaryPhone() + ',';
-                            reportLine += message.get('receiver') + ',';
-                            reportLine += message.get('openedDate');
-                            reportLines.push(reportLine);
+                            csv += message.get('receiver') + ',';
+                            csv += message.get('deliveredDate') || '' + ',';
+                            csv += message.get('openedDate') || '' + ',';
+                            csv += message.get('clickedDate') || '' + ',';
+                            csv += '';//(Need to check for if contact is unsubscribed)
+                            csv += '\n';
                             callback();
                         }
                     });
                 }, function(err){
                     self.log.debug(accountId, userId, '<< findMessagesByCampaign');
-                    return fn(err, reportLines);
+                    return fn(err, csv);
                 });
-
-
             }
         });
     },

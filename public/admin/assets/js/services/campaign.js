@@ -180,12 +180,9 @@
             return deferred.promise;
         };
 
-        this.downloadReport = function(campaignId, fn){
+        this.downloadReport = function(campaignId){
             var apiUrl = baseUrl + [campaignId, 'statistics', 'opens'].join('/');
-            $http.get(apiUrl)
-            .success(function (data) {
-                fn(data);
-            });
+            window.location = apiUrl;
         }
 
     });
