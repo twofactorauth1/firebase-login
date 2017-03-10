@@ -1729,8 +1729,8 @@ var emailMessageManager = {
                         } else {
                             var isUnsubscribed = null;
                             var unsubscribeCheckQuery = {
-                                'event.accountId': new RegExp('^'+ accountId +'$', "i"),
-                                'event.contactId':new RegExp('^'+ contact.id() +'$', "i"),
+                                'event.accountId': accountId.toString(),
+                                'event.contactId':contact.id().toString(),
                                 'event.event':'unsubscribe',
                                 'event.campaignId': campaignId,
                                 'event.emailId': message.get("emailId"),
