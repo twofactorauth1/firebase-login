@@ -30,7 +30,24 @@ module.exports = {
                 return fn(null, response);
             }
         });
+    },
+    findAllLocations: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> findAllLocations');
+        var query = {accountId:accountId};
+        dao.findMany(query, $$.m.Location, function(err, locations){
+            if(err) {
+                self.log.error('Error finding locations:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< findAllLocations');
+                var response = {
+                    count:locations.length,
+                    results:locations
+                };
+                return fn(null, response);
+            }
+        });
     }
-
 
 };

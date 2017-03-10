@@ -327,12 +327,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         var campaignId = req.params.id;
+        console.log(campaignId);
         self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 emailMessageManager.findOpenedMessagesByCampaign(accountId, campaignId, userId, function(err, messages){
                     self.log.debug(accountId, userId, '<< getCampaignOpens');
+                    resp.set('Content-Type', 'text/csv');
+                    var _fileName = "report_" + new Date().getTime() + '.csv';
+                    resp.setHeader('Content-disposition', 'attachment; filename='+_fileName);
                     self.sendResultOrError(resp, err, messages, "Error finding campaign messages");
 
                 });

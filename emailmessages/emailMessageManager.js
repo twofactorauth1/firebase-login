@@ -1709,8 +1709,8 @@ var emailMessageManager = {
         self.log.debug(accountId, userId, '>> findMessagesByCampaign');
         var query = {
             accountId:accountId,
-            batchId:campaignId,
-            openedDate:{$ne:null}
+            batchId:campaignId//,
+            //openedDate:{$ne:null}
         };
 
 
@@ -1719,29 +1719,52 @@ var emailMessageManager = {
                 self.log.error(accountId, userId, 'Error finding campaign emails:', err);
                 return fn(err);
             } else {
-                var reportLines = [];
-                reportLines.push('name,phone,email,openDate');
+                var headers = ['Email', 'Delivered', 'Opened', 'Clicked', 'Unsubscribed'];
+                var csv = headers.join(',') + '\n';
                 async.eachSeries(messages, function(message, callback){
                     contactDao.getContactByEmailAndAccount(message.get('receiver'), accountId, function(err, contact){
                         if(err || !contact) {
                             self.log.debug('Error getting contact for email:' + message.get('receiver'), err);
                             callback();
                         } else {
-                            var reportLine = '';
-                            reportLine += contact.get('first') + ' ' + contact.get('last') + ',';
-                            reportLine += contact.getPrimaryPhone() + ',';
-                            reportLine += message.get('receiver') + ',';
-                            reportLine += message.get('openedDate');
-                            reportLines.push(reportLine);
-                            callback();
+                            var isUnsubscribed = null;
+                            var unsubscribeCheckQuery = {
+                                'event.accountId': accountId.toString(),
+                                'event.contactId':contact.id().toString(),
+                                'event.event':'unsubscribe',
+                                'event.campaignId': campaignId,
+                                'event.emailId': message.get("emailId"),
+                                'event.emailmessageId': message.id()
+                            };
+                            dao.exists(unsubscribeCheckQuery, $$.m.Unsubscription, function(err, value){
+                                if(err) {
+                                    log.error('Exception thrown checking for unsubscribe: ' + err);
+                                    fn(err, null);
+                                } else{
+
+                                    if(value === true){
+                                        isUnsubscribed = true;
+                                    }
+                                    else{
+                                        isUnsubscribed = false;
+                                    }
+                                    csv += message.get('receiver') + ',';
+                                    csv += (message.get('deliveredDate') || false) + ',';
+                                    csv += (message.get('openedDate') || false) + ',';
+                                    csv += (message.get('clickedDate') || false) + ',';
+                                    csv += isUnsubscribed;
+                                    csv += '\n';
+                                    callback();
+                                }
+                            });
+                            
+                            
                         }
                     });
                 }, function(err){
                     self.log.debug(accountId, userId, '<< findMessagesByCampaign');
-                    return fn(err, reportLines);
+                    return fn(err, csv);
                 });
-
-
             }
         });
     },

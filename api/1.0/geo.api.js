@@ -27,6 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('search/address/:address'), this.setup.bind(this), this.searchAddress.bind(this));
         app.get(this.url('address/verify'), this.setup.bind(this), this.verifyAddress.bind(this));
         app.get(this.url('locations'), this.setup.bind(this), this.findLocations.bind(this));
+        app.get(this.url('all/locations'), this.setup.bind(this), this.findAllLocations.bind(this));
     },
 
 
@@ -80,6 +81,19 @@ _.extend(api.prototype, baseApi.prototype, {
         manager.findLocations(accountId, userId, lat ,lon, distance, function(err, locations){
             self.log.debug(accountId, userId, '<< findLocations');
             self.sendResultOrError(resp, err, locations, 'Error finding locations');
+        });
+
+    },
+
+    findAllLocations: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.currentAccountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> findAllLocations');
+        
+        manager.findAllLocations(accountId, userId, function(err, locations){
+            self.log.debug(accountId, userId, '<< findAllLocations');
+            self.sendResultOrError(resp, err, locations, 'Error finding all locations');
         });
 
     }

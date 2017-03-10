@@ -64,5 +64,10 @@
         });
     };
 
+    this.getAllLocations = function (fn) {
+        var apiUrl = baseUrl + 'geo/all/locations';
+        return $http.get(apiUrl);
+    };
+
   });
 }(angular));

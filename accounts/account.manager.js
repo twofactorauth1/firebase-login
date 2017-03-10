@@ -45,6 +45,27 @@ var defaultBilling = {
 var accountManager = {
     log:LOG,
 
+    getAccountIdsByOrg: function(accountId, userId, orgId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getAccountIdsByOrg');
+        var query = {
+            orgId:orgId
+        };
+        accountDao.findMany(query, $$.m.Account, function(err, accounts){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding accounts:', err);
+                return fn(err);
+            } else {
+                var accountIds = [];
+                _.each(accounts, function(account){
+                    accountIds.push(account.id());
+                });
+                self.log.debug(accountId, userId, '<< getAccountIdsByOrg');
+                return fn(null, accountIds);
+            }
+        });
+    },
+
     copyAccountTemplate:function(accountId, userId, srcAccountId, destAccountId, fn){
         var self = this;
         self.log.debug(accountId, userId, '>> copyAccountTemplate');

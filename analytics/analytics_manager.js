@@ -16,6 +16,7 @@ var async = require('async');
 var accountDao = require('../dao/account.dao');
 var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
+var accountManager = require('../accounts/account.manager');
 
 module.exports = {
 
@@ -242,7 +243,7 @@ module.exports = {
         });
     },
 
-    getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, fn) {
+    getLiveVisitors: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.trace(accountId, userId, '>> getLiveVistiors');
@@ -303,6 +304,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -629,7 +633,7 @@ module.exports = {
         }
     },
 
-    getVisitorReports: function(accountId, userId, startDate, endDate, isAggregate, fn) {
+    getVisitorReports: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorReports');
@@ -649,6 +653,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
         var group1 = {
@@ -747,7 +754,7 @@ module.exports = {
 
     },
 
-    getVisitorLocationsReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
+    getVisitorLocationsReport: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorLocationsReport');
@@ -766,6 +773,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -786,7 +796,7 @@ module.exports = {
         });
     },
 
-    getVisitorLocationsByCountryReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
+    getVisitorLocationsByCountryReport: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getVisitorLocationsByCountryReport');
@@ -804,6 +814,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -829,7 +842,7 @@ module.exports = {
         });
     },
 
-    getVisitorDeviceReport: function(accountId, userId, startDate, endDate, isAggregate, fn) {
+    getVisitorDeviceReport: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
 
         var self = this;
         self.log = _log;
@@ -849,6 +862,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -876,7 +892,7 @@ module.exports = {
         });
     },
 
-    getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+    getUserReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getUserReport');
@@ -897,6 +913,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -1004,7 +1023,7 @@ module.exports = {
 
     },
 
-    getPageViewsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+    getPageViewsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getPageViewsReport');
@@ -1023,6 +1042,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
         var group = {
@@ -1117,7 +1139,7 @@ module.exports = {
 
     },
 
-    getSessionsReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+    getSessionsReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getSessionsReport');
@@ -1137,6 +1159,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -1243,7 +1268,7 @@ module.exports = {
 
     },
 
-    sessionLengthReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+    sessionLengthReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> sessionLengthReport');
@@ -1262,6 +1287,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -1464,7 +1492,7 @@ module.exports = {
 
     },
 
-    trafficSourcesReport: function(accountId, userId, start, end, isAggregate, fn) {
+    trafficSourcesReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> trafficSourcesReport');
@@ -1482,6 +1510,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -1507,7 +1538,7 @@ module.exports = {
         });
     },
 
-    newVsReturningReport: function(accountId, userId, start, end, isAggregate, fn) {
+    newVsReturningReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> newVsReturningReport');
@@ -1527,6 +1558,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -1566,43 +1600,7 @@ module.exports = {
         });
     },
 
-    pageAnalyticsReport: function(accountId, userId, start, end, isAggregate, fn) {
-        /*
-         var params2 = {
-         event_collection: 'page_data',
-         analyses: {
-         "pageviews": {
-         "analysis_type": "count"
-         },
-         "uniquePageviews": {
-         "analysis_type": "count_unique",
-         "target_property": "session_id"
-         },
-         "timeOnPage": {
-         "analysis_type": "sum",
-         "target_property": "timeOnPage"
-         },
-         "avgTimeOnPage": {
-         "analysis_type": "average",
-         "target_property": "timeOnPage"
-         },
-         "entrances": {
-         "analysis_type": "count",
-         "target_property": "entrance"
-         },
-         "exits": {
-         "analysis_type": "count",
-         "target_property": "exit"
-         }
-         },
-         timeframe: {
-         "start": date.startDate,
-         "end": date.endDate
-         },
-         group_by: 'url.path',
-         filters: filters
-         };
-         */
+    pageAnalyticsReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> pageAnalyticsReport');
@@ -1619,6 +1617,9 @@ module.exports = {
                     timeOnPage:{$gte:0, $lte:3600000}
                 }
             };
+            if(orgId !== null) {
+                match.$match.orgId = orgId;
+            }
             stageAry.push(match);
 
             var group1 = {
@@ -1655,6 +1656,7 @@ module.exports = {
                     timeOnPage:{$gte:0, $lte:3600000}
                 }
             };
+
             stageAry.push(match);
 
             var group1 = {
@@ -1814,7 +1816,7 @@ module.exports = {
         return zeroedResultAry;
     },
 
-    getUserAgentReport: function(accountId, userId, start, end, isAggregate, fn) {
+    getUserAgentReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getUserAgentReport');
@@ -1831,6 +1833,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -1854,7 +1859,7 @@ module.exports = {
         });
     },
 
-    getDailyActiveUsers: function(accountId, userId, start, end, fn) {
+    getDailyActiveUsers: function(accountId, userId, start, end, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getDailyActiveUsers');
@@ -1870,6 +1875,9 @@ module.exports = {
                 }
             }
         };
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
         stageAry.push(match);
         var group1 = {
             $group: {
@@ -1926,7 +1934,7 @@ module.exports = {
         });
     },
 
-    getRevenueByMonth: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+    getRevenueByMonth: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getRevenueByMonth');
@@ -1961,6 +1969,20 @@ module.exports = {
         stageAry.push(group1);
 
         async.waterfall([
+            function(cb) {
+                if(orgId !== null) {
+                    accountManager.getAccountIdsByOrg(accountId, userId, orgId, function(err, accountIds){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            match.$match.account_id = {$in:accountIds};
+                            cb();
+                        }
+                    });
+                } else {
+                    cb();
+                }
+            },
             function(cb){
                 orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, value){
                     var resultAry = [];
@@ -2045,7 +2067,7 @@ module.exports = {
         });
     },
 
-    getOSReport: function(accountId, userId, start, end, isAggregate, fn) {
+    getOSReport: function(accountId, userId, start, end, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getOSReport');
@@ -2062,6 +2084,9 @@ module.exports = {
         };
         if(isAggregate === true) {
             delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
         }
         stageAry.push(match);
 
@@ -2083,7 +2108,7 @@ module.exports = {
         });
     },
 
-    getCampaignEmailsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, fn) {
+    getCampaignEmailsReport: function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
         self.log.debug(accountId, userId, '>> getCampaignEmailsReport');
@@ -2209,115 +2234,141 @@ module.exports = {
         }
         clicksByDayStageAry.push(clicksGroup);
 
-        async.parallel({
-            campaigns: function campaigns(cb){
-                dao.aggregateWithCustomStages(campaignsByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
-                            }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+        async.waterfall([
+            function(callback) {
+                if(orgId !== null) {
+                    accountManager.getAccountIdsByOrg(accountId, userId, orgId, function(err, accountIds){
+                        if(err) {
+                            callback(err);
                         } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                            match.$match.accountId = {$in:accountIds};
+                            emailsMatch.$match.accountId = {$in:accountIds};
+                            opensMatch.$match.accountId = {$in:accountIds};
+                            clicksMatch.$match.accountId = {$in:accountIds};
+                            callback();
                         }
-                        resultAry.push(result);
                     });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                    }
-                    cb(err, resultAry);
-                });
+                } else {
+                    callback();
+                }
             },
-            emails: function emails(cb) {
-                dao.aggregateWithCustomStages(emailsByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
+            function(callback) {
+                async.parallel({
+                    campaigns: function campaigns(cb){
+                        dao.aggregateWithCustomStages(campaignsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                             }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                        } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
-                        }
-                        resultAry.push(result);
-                    });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                    }
-                    cb(err, resultAry);
-                });
-            },
-            opens: function opens(cb){
-                dao.aggregateWithCustomStages(opensByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
+                            cb(err, resultAry);
+                        });
+                    },
+                    emails: function emails(cb) {
+                        dao.aggregateWithCustomStages(emailsByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                             }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                        } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
-                        }
-                        resultAry.push(result);
-                    });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
-                    }
-                    cb(err, resultAry);
-                });
-            },
-            clicks: function clicks(cb){
-                dao.aggregateWithCustomStages(clicksByDayStageAry, $$.m.Emailmessage, function(err, value) {
-                    var resultAry = [];
-                    _.each(value, function (entry) {
-                        var result = {
-                            total: entry.count,
-                            timeframe: {
-                                start: entry._id.yearMonthDay
+                            cb(err, resultAry);
+                        });
+                    },
+                    opens: function opens(cb){
+                        dao.aggregateWithCustomStages(opensByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
                             }
-                        };
-                        if(granularity === 'hours') {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
-                        } else {
-                            result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
-                        }
-                        resultAry.push(result);
-                    });
-                    resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
-                    if(granularity === 'hours') {
-                        resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
-                    } else {
-                        resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                            cb(err, resultAry);
+                        });
+                    },
+                    clicks: function clicks(cb){
+                        dao.aggregateWithCustomStages(clicksByDayStageAry, $$.m.Emailmessage, function(err, value) {
+                            var resultAry = [];
+                            _.each(value, function (entry) {
+                                var result = {
+                                    total: entry.count,
+                                    timeframe: {
+                                        start: entry._id.yearMonthDay
+                                    }
+                                };
+                                if(granularity === 'hours') {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                                } else {
+                                    result.timeframe.end = moment(entry._id.yearMonthDay).add(1, 'days').format('YYYY-MM-DD');
+                                }
+                                resultAry.push(result);
+                            });
+                            resultAry = _.sortBy(resultAry, function(result){return result.timeframe.start;});
+                            if(granularity === 'hours') {
+                                resultAry = self._zeroMissingHours(resultAry, {total:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                            } else {
+                                resultAry = self._zeroMissingDays(resultAry, {total:0}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                            }
+                            cb(err, resultAry);
+                        });
                     }
-                    cb(err, resultAry);
+                }, function(err, results){
+                    callback(err, results);
+
                 });
             }
-        }, function(err, results){
+        ], function(err, results){
             self.log.debug(accountId, userId, '<< getCampaignEmailsReport');
             return fn(err, results);
         });
+
+
 
     },
 

@@ -1,0 +1,23 @@
+//-
+    * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+    *
+    * All use or reproduction of any or all of this content must be approved.
+    * Please contact info@indigenous.io for approval or questions.
+
+if (serverProps)
+
+    if (serverProps.posts)
+
+        script(id="indigenous-precache-sitedata-posts", type="application/json").
+            #{serverProps.posts}
+
+        script(type="text/javascript").                
+                window.indigenous = window.indigenous || {};
+
+    //- if (serverProps.pages)
+
+    //-     script(id="indigenous-precache-sitedata-pages", type="application/json").
+    //-         #{serverProps.pages}
+
+    script.
+        #{setServerProps(serverProps)}

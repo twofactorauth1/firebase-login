@@ -180,5 +180,10 @@
             return deferred.promise;
         };
 
+        this.downloadReport = function(campaignId){
+            var apiUrl = baseUrl + [campaignId, 'statistics', 'opens'].join('/');
+            window.location = apiUrl;
+        }
+
     });
 }(angular));

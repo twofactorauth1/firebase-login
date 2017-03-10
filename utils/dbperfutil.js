@@ -69,46 +69,46 @@ var perfutil = {
     _runCustomerAnalytics: function(accountId, userId, start, end, previousStart, previousEnd, cb) {
         async.parallel({
             visitorReports: function(callback){
-                analyticsManager.getVisitorReports(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorReports(accountId, userId, start, end, false, null, callback);
             },
             visitorLocationsReport: function(callback) {
-                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, false, null, callback);
             },
             visitorLocationsByCountryReport: function(callback) {
-                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, false, null, callback);
             },
             visitorDeviceReport: function(callback) {
-                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, false, null, callback);
             },
             userReport: function(callback) {
-                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             pageViewsReport: function(callback) {
-                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             sessionsReport: function(callback) {
-                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             sessionLengthReport: function(callback) {
-                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             trafficSourcesReport: function(callback) {
-                analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, callback);
+                analyticsManager.trafficSourcesReport(accountId, userId, start, end, false, null, callback);
             },
             newVsReturningReport: function(callback) {
-                analyticsManager.newVsReturningReport(accountId, userId, start, end, false, callback);
+                analyticsManager.newVsReturningReport(accountId, userId, start, end, false, null, callback);
             },
             pageAnalyticsReport: function(callback) {
-                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, callback);
+                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, false, null, callback);
             },
             userAgents: function(callback) {
-                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, callback);
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, false, null, callback);
             },
             revenueReport: function(callback) {
-                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             },
             emailsReport: function(callback) {
-                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, false, callback);
+                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, false, null, callback);
             }
         }, function(err, results){
             cb(err, results);
@@ -118,52 +118,52 @@ var perfutil = {
     _runPlatformAnalytics: function(accountId, userId, start, end, previousStart, previousEnd, cb) {
         async.parallel({
             visitorReports: function(callback){
-                analyticsManager.getVisitorReports(accountId, userId, start, end, true, callback);
+                analyticsManager.getVisitorReports(accountId, userId, start, end, true, null, callback);
             },
             visitorLocationsReport: function(callback) {
-                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, callback);
+                analyticsManager.getVisitorLocationsReport(accountId, userId, start, end, true, null, callback);
             },
             visitorLocationsByCountryReport: function(callback) {
-                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, callback);
+                analyticsManager.getVisitorLocationsByCountryReport(accountId, userId, start, end, true, null, callback);
             },
             visitorDeviceReport: function(callback) {
-                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, callback);
+                analyticsManager.getVisitorDeviceReport(accountId, userId, start, end, true, null, callback);
             },
             userReport: function(callback) {
-                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                analyticsManager.getUserReport(accountId, userId, start, end, previousStart, previousEnd, true, null, callback);
             },
             pageViewsReport: function(callback) {
-                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                analyticsManager.getPageViewsReport(accountId, userId, start, end, previousStart, previousEnd, true, null, callback);
             },
             sessionsReport: function(callback) {
-                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                analyticsManager.getSessionsReport(accountId, userId, start, end, previousStart, previousEnd, true, null, callback);
             },
             sessionLengthReport: function(callback) {
-                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                analyticsManager.sessionLengthReport(accountId, userId, start, end, previousStart, previousEnd, true, null, callback);
             },
             trafficSourcesReport: function(callback) {
-                analyticsManager.trafficSourcesReport(accountId, userId, start, end, true, callback);
+                analyticsManager.trafficSourcesReport(accountId, userId, start, end, true, null, callback);
             },
             newVsReturningReport: function(callback) {
-                analyticsManager.newVsReturningReport(accountId, userId, start, end, true, callback);
+                analyticsManager.newVsReturningReport(accountId, userId, start, end, true, null, callback);
             },
             pageAnalyticsReport: function(callback) {
-                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, true, callback);
+                analyticsManager.pageAnalyticsReport(accountId, userId, start, end, true, null, callback);
             },
             dau: function(callback) {
-                analyticsManager.getDailyActiveUsers(accountId, userId, start, end, callback);
+                analyticsManager.getDailyActiveUsers(accountId, userId, start, end, null, callback);
             },
             userAgents: function(callback) {
-                analyticsManager.getUserAgentReport(accountId, userId, start, end, true, callback);
+                analyticsManager.getUserAgentReport(accountId, userId, start, end, true, null, callback);
             },
             revenueReport: function(callback) {
-                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                analyticsManager.getRevenueByMonth(accountId, userId, start, end, previousStart, previousEnd, true, null, callback);
             },
             osReport: function(callback) {
-                analyticsManager.getOSReport(accountId, userId, start, end, true, callback);
+                analyticsManager.getOSReport(accountId, userId, start, end, true, null, callback);
             },
             emailsReport: function(callback) {
-                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, callback);
+                analyticsManager.getCampaignEmailsReport(accountId, userId, start, end, previousStart, previousEnd, true, null, callback);
             }
         }, function(err, results){
             cb(err, results);

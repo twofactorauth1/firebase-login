@@ -37,9 +37,12 @@
       $scope.emails = data;
     });
 
-    $scope.viewSingle = function (campaign) {
+    $scope.viewSingle = function ($event, campaign) {
       // var tableState = $scope.getSortOrder();
       // $state.current.sort = tableState.sort;
+      if($event.target && angular.element($event.target).hasClass("no-redirect-link")){
+        return;
+      }
       if ($scope.account.showhide.ssbEmail) {
         $state.go('app.emailCampaign', {id: campaign._id});
       } else {
@@ -118,6 +121,12 @@
     $scope.cancel = function () {
       $scope.modalInstance.close();
     };
+
+
+    $scope.downloadReport = function(_id){
+      CampaignService.downloadReport(_id);
+      toaster.pop('success', 'Please wait while report is downloading...');
+    }
 
   }]);
 })(angular);

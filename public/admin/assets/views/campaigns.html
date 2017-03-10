@@ -67,6 +67,9 @@
                                 <th class="hidden-xs" st-sort="statistics.emailsOpened" translate="campaign.OPENRATE">Opens</th>
                                 <th class="hidden-xs" st-sort="statistics.emailsClicked" translate="campaign.CLICKRATE">Clicks</th>
                                 <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
+                                <th ng-class="{'center': tableView != 'grid'}">
+                                    
+                                </th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
@@ -92,7 +95,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="campaign in displayedCampaigns" ng-click="viewSingle(campaign)" class="cursor-pointer">
+                            <tr ng-repeat="campaign in displayedCampaigns" ng-click="viewSingle($event, campaign)" class="cursor-pointer">
                                 <td colspan="7" ng-if="tableView == 'grid'" class="no-padding">
                                     <div class="panel panel-white margin-bottom-0">
                                         <div class="panel-heading" ng-class="{
@@ -202,6 +205,9 @@
                                 <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Opened: </strong><span class=" text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsOpened, campaign.statistics.emailsSent)}}%)</span></td>
                                 <td class="hidden-xs" ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class=" text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{percentCalFn(campaign.statistics.emailsClicked, campaign.statistics.emailsOpened)}}%)</span></td>
                                 <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
+                                <td class="">
+                                    <div class=""><a ng-click="downloadReport(campaign._id)" href="javascript:void(0);"><span class="hidden-xs no-redirect-link">Download Report</span><span class="ti-export visible-xs no-redirect-link"></span></a></div>
+                                </td>
                                 <!-- <td ng-if="tableView != 'grid'" class="center">
                                     <div class="dropdown">
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-2x fa-ellipsis-v" style="color:#eea236;"></span></a>

@@ -9,5 +9,10 @@
             <option ng-repeat="location in vm.uiState.locationFinderOptions" value="{{location.value}}" ng-selected="{{location.value == component.settings.locationFinderRange}}">{{location.description}}</option>
         </select>
     </div>
+    <div class="form-group" ng-init="vm.component.settings.mapZoom = vm.component.settings.mapZoom || 11">
+	    <label for="mapZoom">Map Zoom:</label>
+	    <rzslider name="mapZoom" rz-slider-model="vm.component.settings.mapZoom" rz-slider-options="{floor: 1, ceil: 19}"></rzslider>
+	    <div class="help-block">Zoom level on map 1 (World) - 19 (Street) </div>
+	</div>
    
 </div>

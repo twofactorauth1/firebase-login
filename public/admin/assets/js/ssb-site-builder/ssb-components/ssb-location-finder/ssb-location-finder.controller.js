@@ -13,6 +13,10 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     if ($injector.has("geocodeService")) {
         geocodeService = $injector.get('geocodeService');
     }
+   
+    if ($injector.has("GeocodeService")) {
+        geocodeService = $injector.get('GeocodeService');
+    }
 
     var vm = this;
 
@@ -74,6 +78,13 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     $scope.$watch('vm.component.settings.locationFinderRange', function(val) {
         if (val) {
             vm.searchRadius = angular.copy(val);
+        }
+    });
+
+
+    $scope.$watch('vm.component.settings.mapZoom', function(val) {
+        if (val && vm.map) {
+            vm.map.setZoom(val);
         }
     });
 
@@ -144,6 +155,12 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     function initMap() {
 
+        var zoomLevel = 11;
+
+        if(vm.component && vm.component.settings && vm.component.settings.mapZoom){
+            zoomLevel = vm.component.settings.mapZoom;
+        }
+
         // var MY_MAPTYPE_ID = 'custom_style';
         var MY_MAPTYPE_ID = 'HYBRID';
 
@@ -153,7 +170,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         vm.initIcons();
 
         var mapOptions = {
-            zoom: 11,
+            zoom: zoomLevel,
             center: vm.mapCenterLocation,
             mapTypeControl: false,
             scrollwheel: false,
@@ -177,7 +194,24 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             google.maps.event.trigger(vm.map, "resize");
             vm.map.setCenter(center);
         });
+        
+        if(vm.component.isHelm === false && geocodeService){
+            loadAllLocations();
+        }
 
+    }
+
+
+    function loadAllLocations(){
+        vm.loading = true;
+        geocodeService.getAllLocations().then(function(data) {
+            vm.searchResults = data.data;
+            vm.displayMarkers();
+        }).catch(function(err) {
+            console.error(JSON.stringify(err));
+        }).finally(function() {
+            vm.loading = false;
+        });
     }
 
     function initIcons() {
@@ -333,7 +367,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         vm.markerCluster = new MarkerClusterer(vm.map, vm.markers, vm.clusterOptions);
 
         if (vm.searchResults.results.length) {
-            console.debug(vm.searchBasisMarker.getPosition().lat(), vm.searchBasisMarker.getPosition().lng());
+            //console.debug(vm.searchBasisMarker.getPosition().lat(), vm.searchBasisMarker.getPosition().lng());
             vm.bounds.extend(vm.searchBasisMarker.getPosition());
             vm.map.fitBounds(vm.bounds);
         }
@@ -409,7 +443,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
                 location.state + ' ' +
                 location.zip + ' ' +
                 location.country;
-        return geocodeService && geocodeService.getDirectionsLinkGoogle(vm.searchAddress, destinationAddress);
+        return geocodeService && geocodeService.getDirectionsLinkGoogle &&  geocodeService.getDirectionsLinkGoogle(vm.searchAddress, destinationAddress);
     }
 
     function onDestroy() {
