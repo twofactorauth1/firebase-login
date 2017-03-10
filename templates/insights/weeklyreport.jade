@@ -90,8 +90,10 @@ html
 
     if loginTime
         p.text Your most recent login was at #{loginTime}
-        if loginIP && loginCity
+        if loginIP && loginCity && loginState
             p.text-small.text-grey This login was made from IP Address #{loginIP} near #{loginCity}, #{loginState}
+        else if loginIP && loginCity
+            p.text-small.text-grey This login was made from IP Address #{loginIP} near #{loginCity}
         else if loginIP
             p.text-small.text-grey This login was made from IP Address #{loginIP}
 
