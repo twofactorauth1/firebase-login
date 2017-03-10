@@ -195,9 +195,9 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             vm.map.setCenter(center);
         });
         
-        if(vm.component.isHelm === false && geocodeService){
-            loadAllLocations();
-        }
+        // if(vm.component.isHelm === false && geocodeService){
+        //     loadAllLocations();
+        // }
 
     }
 
