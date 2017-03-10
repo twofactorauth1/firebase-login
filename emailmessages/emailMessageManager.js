@@ -1719,7 +1719,7 @@ var emailMessageManager = {
                 self.log.error(accountId, userId, 'Error finding campaign emails:', err);
                 return fn(err);
             } else {
-                var headers = ['email', 'delivered', 'opened', 'clicked', 'unsubscribed'];
+                var headers = ['Email', 'Delivered', 'Opened', 'Clicked', 'Unsubscribed'];
                 var csv = headers.join(',') + '\n';
                 async.eachSeries(messages, function(message, callback){
                     contactDao.getContactByEmailAndAccount(message.get('receiver'), accountId, function(err, contact){
