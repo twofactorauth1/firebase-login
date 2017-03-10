@@ -144,6 +144,12 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
     function initMap() {
 
+        var zoomLevel = 11;
+
+        if(vm.component && vm.component.settings && vm.component.settings.mapZoom){
+            zoomLevel = vm.component.settings.mapZoom;
+        }
+
         // var MY_MAPTYPE_ID = 'custom_style';
         var MY_MAPTYPE_ID = 'HYBRID';
 
@@ -153,7 +159,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         vm.initIcons();
 
         var mapOptions = {
-            zoom: 11,
+            zoom: zoomLevel,
             center: vm.mapCenterLocation,
             mapTypeControl: false,
             scrollwheel: false,
