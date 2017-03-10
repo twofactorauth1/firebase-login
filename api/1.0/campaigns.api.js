@@ -335,6 +335,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 emailMessageManager.findOpenedMessagesByCampaign(accountId, campaignId, userId, function(err, messages){
                     self.log.debug(accountId, userId, '<< getCampaignOpens');
                     resp.set('Content-Type', 'text/csv');
+                    var _fileName = "report_" + new Date().getTime() + '.csv';
+                    resp.setHeader('Content-disposition', 'attachment; filename='+_fileName);
                     self.sendResultOrError(resp, err, messages, "Error finding campaign messages");
 
                 });
