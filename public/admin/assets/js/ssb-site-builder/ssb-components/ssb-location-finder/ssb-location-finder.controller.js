@@ -13,6 +13,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     if ($injector.has("geocodeService")) {
         geocodeService = $injector.get('geocodeService');
     }
+   
 
     var vm = this;
 
@@ -190,7 +191,24 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             google.maps.event.trigger(vm.map, "resize");
             vm.map.setCenter(center);
         });
+        
+        if(vm.component.isHelm === false && geocodeService){
+            loadAllLocations();
+        }
 
+    }
+
+
+    function loadAllLocations(){
+        vm.loading = true;
+        geocodeService.getAllLocations().then(function(data) {
+            vm.searchResults = data.data;
+            vm.displayMarkers();
+        }).catch(function(err) {
+            console.error(JSON.stringify(err));
+        }).finally(function() {
+            vm.loading = false;
+        });
     }
 
     function initIcons() {
@@ -346,7 +364,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
         vm.markerCluster = new MarkerClusterer(vm.map, vm.markers, vm.clusterOptions);
 
         if (vm.searchResults.results.length) {
-            console.debug(vm.searchBasisMarker.getPosition().lat(), vm.searchBasisMarker.getPosition().lng());
+            //console.debug(vm.searchBasisMarker.getPosition().lat(), vm.searchBasisMarker.getPosition().lng());
             vm.bounds.extend(vm.searchBasisMarker.getPosition());
             vm.map.fitBounds(vm.bounds);
         }
@@ -422,7 +440,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
                 location.state + ' ' +
                 location.zip + ' ' +
                 location.country;
-        return geocodeService && geocodeService.getDirectionsLinkGoogle(vm.searchAddress, destinationAddress);
+        return geocodeService && geocodeService.getDirectionsLinkGoogle &&  geocodeService.getDirectionsLinkGoogle(vm.searchAddress, destinationAddress);
     }
 
     function onDestroy() {

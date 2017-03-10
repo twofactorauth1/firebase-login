@@ -65,6 +65,11 @@ mainApp.service('geocodeService', ['$http', function ($http) {
         return $http.get(apiUrl);
     };
 
+    this.getAllLocations = function (fn) {
+        var apiUrl = baseUrl + 'geo/all/locations';
+        return $http.get(apiUrl);
+    };
+
     this.getDirectionsLinkGoogle = function (startAddress, destinationAddress) {
         var urlEncodedStartAddress = encodeURIComponent(startAddress || '');
         var urlEncodedDestinationAddress = encodeURIComponent(destinationAddress);
