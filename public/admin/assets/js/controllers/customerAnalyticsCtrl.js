@@ -411,7 +411,7 @@
             // Traffic Sources
             // ======================================
 
-            $scope.trafficSourceData = results.trafficSourcesReport;
+            $scope.trafficSourceData = ChartAnalyticsService.mergeLiveTrafficData(results.trafficSourcesReport);
 
             // ======================================
             // New vs. Returning Customers
