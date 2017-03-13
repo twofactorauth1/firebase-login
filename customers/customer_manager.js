@@ -339,6 +339,67 @@ module.exports = {
         });
     },
 
+    getSingleOrgCustomer: function(accountId, userId, customerId, orgDomain, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getSingleOrgCustomer');
+        orgDao.getByOrgDomain(orgDomain, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting organization:', err);
+                fn(err);
+            } else if(!organization) {
+                self.log.error(accountId, userId, 'Organization was not found');
+                fn('Organization was not found');
+            } else {
+                var query = {_id:customerId, orgId:organization.id()};
+                accountDao.findOne(query, $$.m.Account, function(err, account){
+                    self.log.debug(accountId, userId, '<< getSingleOrgCustomer');
+                    return fn(null, account);
+                });
+            }
+        });
+    },
+
+    addOrgCustomerNotes: function(accountId, userId, customerId, note, orgDomain, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> addOrgCustomerNotes');
+        orgDao.getByOrgDomain(orgDomain, function(err, organization){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting organization:', err);
+                fn(err);
+            } else if(!organization) {
+                self.log.error(accountId, userId, 'No organization found');
+                fn('No organization found');
+            } else {
+                accountDao.getAccountByIdAndOrg(customerId, organization.id(), function(err, account){
+                    if(account) {
+                        var date = moment();
+                        var notes = account.get("notes") || [];
+                        var _noteToPush = {
+                            note: note,
+                            user_id: userId,
+                            date: date.toISOString()
+                        };
+                        notes.push(_noteToPush);
+                        account.set("notes", notes);
+                        self.log.debug(notes);
+
+                        accountDao.saveOrUpdate(account, function(err, savedCustomer){
+                            if(err) {
+                                self.log.error(accountId, userId, 'Error saving customer notes:', err);
+                                return fn(err);
+                            } else {
+                                self.log.debug(accountId, userId, '<< addCustomerNotes');
+                                return fn(null, savedCustomer);
+                            }
+                        });
+                    } else {
+                        return fn('account not found', null);
+                    }
+                });
+            }
+        });
+    },
+
     addCustomerNotes: function(accountId, userId, customerId, note, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> addCustomerNotes');

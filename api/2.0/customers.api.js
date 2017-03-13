@@ -169,7 +169,17 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResultOrError(resp, err, customer, 'Error getting customer');
             });
         } else {
-            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+            self.isOrgAdmin(accountId, userId, req, function(err, val){
+                if(val === true) {
+                    manager.getSingleOrgCustomer(accountId, userId, customerId, urlUtils.getSubdomainFromRequest(req).orgDomain,function(err, customer){
+                        self.log.debug(accountId, userId, '<< getCustomer');
+                        self.sendResultOrError(resp, err, customer, 'Error getting customer');
+                    });
+
+                } else {
+                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+                }
+            });
         }
     },
 
@@ -185,7 +195,18 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.sendResultOrError(resp, err, customer, 'Error adding notes');
             });
         } else {
-            self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+            self.isOrgAdmin(accountId, userId, req, function(err, val) {
+                if (val === true) {
+                    var orgDomain = urlUtils.getSubdomainFromRequest(req).orgDomain;
+                    manager.addOrgCustomerNotes(accountId, userId, customerId, notes, orgDomain, function(err, customer){
+                        self.log.debug(accountId, userId, '<< addCustomerNotes');
+                        self.sendResultOrError(resp, err, customer, 'Error adding notes');
+                    });
+                } else {
+                    self.wrapError(resp, 400, 'Unsupported Method', 'This method is unsupported');
+                }
+            });
+
         }
     },
 
