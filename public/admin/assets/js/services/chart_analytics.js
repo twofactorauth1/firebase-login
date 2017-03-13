@@ -362,8 +362,8 @@
         };
 
         this.mergeLiveTrafficData = function(trafficSourceData){
-            var unfilterData = _.filter(trafficSourceData, function(data){ return data["referrer.domain"].indexOf("www.") === 0 });
-            var filteredData = _.filter(trafficSourceData, function(data){ return data["referrer.domain"].indexOf("www.") !== 0});
+            var unfilterData = _.filter(trafficSourceData, function(data){ return (data["referrer.domain"] && data["referrer.domain"].indexOf("www.") === 0) });
+            var filteredData = _.filter(trafficSourceData, function(data){ return (!data["referrer.domain"] || data["referrer.domain"].indexOf("www.") !== 0)});
 
             var trafficSourcesReportData = filteredData;
             _.each(unfilterData, function(result){
