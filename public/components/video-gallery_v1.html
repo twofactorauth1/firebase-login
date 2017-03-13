@@ -1,0 +1,20 @@
+<div ng-class="component.type+'-v'+component.version">
+    <div class="video-gallery-title">
+        <div elem ng-model="component.title"></div>
+    </div>
+      
+    <div class="col-sm-6 col-md-4 col-xs-12 video-wrap responsive-video-widget {{isEditing ? 'editing' : ''}}" ng-repeat="collection in component.collections">
+        <div class="video-height">
+            <div elem ng-model="collection.video"></div>      
+        </div>                    
+        
+        <div ng-if="isEditing" class="delete-single-video center" ng-click="deleteVideoFromGallery($index)">
+            <button class="ng-scope btn-delete-single-video" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this video."><i class='fa fa-trash'></i></button>
+        </div>
+        <div ng-if="isEditing" class="center" ng-click="addNewVideo(component._id, $index)" >
+            <a class="add-addtional" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another video."><i class='fa fa-plus'></i></a>
+        </div>
+    </div>
+        
+    <button ng-if="isEditing && component.collections.length === 0" ng-click="addNewVideo(component._id,0)" class="btn ssb-theme-btn btn-primary btn-lg pull-right btn-add-video" >Add new Video</button>
+</div>

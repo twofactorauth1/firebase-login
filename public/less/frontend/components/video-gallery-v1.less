@@ -1,0 +1,62 @@
+.editing.video-wrap {
+    &:hover {
+        border: 4px dashed rgba(0, 0, 0, 0.4);
+        padding-right: 6px;
+        padding-left: 6px;
+        margin-top: -4px;
+        margin-bottom: 0px;
+        .add-addtional {
+            display: block;
+            font-size: 28px;
+        }
+        .video-gallery{
+            min-height: 196px;
+        }
+        .delete-single-video {
+            .btn-delete-single-video {
+                background: rgba(0, 0, 0, 0.5);
+                display: block;
+                border: 0;
+                color: #ffffff;
+                padding: 10px 15px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 999;    
+            }
+        }
+    }
+    .delete-single-video {
+        .btn-delete-single-video {
+            display: none;
+        }
+    }
+}
+
+[video-gallery-component] {
+    .single-video {
+        padding: 0;
+        margin: 0;
+    }    
+    .video-height {
+        overflow: hidden;
+        margin: 10px 0 20px 0;
+    }
+    @media screen and (min-width: 992px) {
+        .responsive-video-widget:nth-child(3n+2){
+            clear: left;
+        }
+    }
+
+    @media screen and (min-width: 768px) and (max-width: 991px) {
+        .responsive-video-widget:nth-child(2n+2){
+            clear: left;
+        }
+    }
+
+    .video-gallery-title{
+        position:relative;
+    }
+
+
+}

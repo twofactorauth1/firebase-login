@@ -16,6 +16,7 @@ var logger = global.getLogger("base.api");
 var userActivityManager = require('../useractivities/useractivity_manager');
 var accountDao = require("../dao/account.dao");
 var middleware = require('../common/sharedMiddleware');
+var orgDao = require('../organizations/dao/organization.dao');
 
 //this flag instructs the securitymanager to verify the subscription.
 var verifySubscription = true;
@@ -522,6 +523,17 @@ _.extend(apiBase.prototype, {
         });
         userActivityManager.createUserActivity(activity, function(err, value){
             return fn(err, value);
+        });
+    },
+
+    isOrgAdmin: function(accountId, userId, req, fn) {
+        var parsedUrl = urlUtils.getSubdomainFromRequest(req);
+        orgDao.getByOrgDomain(parsedUrl.orgDomain, function(err, organization){
+            if(organization && organization.get('adminAccount') === accountId) {
+                fn(null, true);
+            } else {
+                fn(null, false);
+            }
         });
     }
 

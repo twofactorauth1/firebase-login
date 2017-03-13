@@ -361,6 +361,26 @@
             return strOutput || false;
         };
 
+        this.mergeLiveTrafficData = function(trafficSourceData){
+            var unfilterData = _.filter(trafficSourceData, function(data){ return data["referrer.domain"].indexOf("www.") === 0 });
+            var filteredData = _.filter(trafficSourceData, function(data){ return data["referrer.domain"].indexOf("www.") !== 0});
+
+            var trafficSourcesReportData = filteredData;
+            _.each(unfilterData, function(result){
+                var matchData = _.find(trafficSourcesReportData, function(data){ return data["referrer.domain"] == result["referrer.domain"].replace("www.", "") })
+                if(matchData){
+                    matchData.result += result.result;
+                }
+                else{
+                    trafficSourcesReportData.push({
+                        "referrer.domain": result["referrer.domain"],
+                        "result": result.result
+                    })
+                }
+            })
+            return trafficSourcesReportData;
+        };
+
         /*
          * I assume these timeframes are the past 30days and the past 60 days.
          * .utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
