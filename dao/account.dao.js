@@ -27,6 +27,10 @@ var dao = {
 
     },
 
+    getAccountByIdAndOrg: function(id, orgId, fn) {
+        this.findOne({_id:id, orgId:orgId}, fn);
+    },
+
 
     getAccountByToken: function (token, fn) {
         this.findOne({
