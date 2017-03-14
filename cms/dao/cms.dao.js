@@ -16,7 +16,6 @@ var themesConfig = require('../../configs/themes.config.js');
 
 var Website = require('../model/website');
 var Page = require('../model/page');
-var Email = require('../model/email');
 var BlogPost = require('../model/blogpost');
 
 var ssbThemeDao = require('../../ssb/dao/theme.dao.js');
@@ -156,39 +155,6 @@ var dao = {
     },
 
 
-    /**
-     * Retrieves a signed copy of the theme config by AccountId.  This is suitable
-     * for sending out to be modified and returned / updated
-     *
-     * @param accountId
-     * @param fn
-     * @private
-     */
-    getThemeConfigSignedByAccountId: function(accountId, fn) {
-        var self = this;
-        accountDao.getById(accountId, function(err, value) {
-            if (err) {
-                fn(err, value);
-                fn = null;
-            }
-
-            if (value == null) {
-                fn("No Account found with ID: [" + accountId + "]");
-                fn = value = null;
-            }
-
-            var website = value.get("website");
-            var themeId = "default";
-            if (website != null) {
-                themeId = website.themeId || "default";
-            }
-
-            self._getThemeConfig(themeId, true, fn);
-            value = website = themeId = fn = self = null;
-        });
-    },
-
-
     _getThemeConfig: function(themeId, signed, fn) {
         var self = this,
             pathToThemeConfig = themesConfig.PATH_TO_THEMES + "/" + themeId + "/config.json",
@@ -294,14 +260,6 @@ var dao = {
                 self.log.error('Exception in getComponentVersions: ' + err);
                 fn(err, null);
             } else {
-                /*
-                var numVersions = _.reduce(files, function(memo, filename){
-                    if(filename.indexOf(type) ===0) {
-                        memo++;
-                    }
-                    return memo;
-                }, 0);
-                */
                 var versionAry = [];
                 _.each(files, function(element, index, list){
                     if(element.indexOf(type + '_v') === 0) {
@@ -366,24 +324,10 @@ var dao = {
         });
     },
 
-    getPageByType: function(accountId, websiteId, pageType, fn) {
-        var self = this;
-        var query = {};
-        query.accountId = accountId;
-        if(websiteId) {
-            query.websiteId = websiteId;
-        }
-        query.page_type = pageType;
-        query.latest = true;
-        return this.findOne(query, Page, fn);
-    },
-
     getPageByHandle: function(accountId, websiteId, handle, fn) {
-        var self = this;
         var query = {};
         query.accountId = accountId;
         query.websiteId = websiteId;
-        query.type = 'page';
         query.handle = handle;
         query.latest = true;
         return this.findOne(query, Page, fn);
@@ -391,7 +335,6 @@ var dao = {
 
     getBlogPostForWebsite: function(accountId, blogPostUrl, fn) {
         console.log('Post ID (getBlogPostForWebsite): ' + blogPostUrl + ' Account ID: ' + accountId);
-        var self = this;
         accountId = accountId.toString();
         blogPostUrl = blogPostUrl.toString();
         console.log('Account ID: ' + accountId + ' Blog Post Url: ' + JSON.stringify(blogPostUrl));
@@ -403,7 +346,6 @@ var dao = {
     },
 
     getAllBlogPostsForWebsite: function(accountId, fn) {
-        var self = this;
         accountId = accountId.toString();
         var query = {
             accountId: accountId
@@ -413,7 +355,6 @@ var dao = {
 
     getBlogPostsWithTagsForWebsite: function(accountId, tag, fn) {
         console.log('Getting Posts with tag: ' + tag);
-        var self = this;
         accountId = accountId.toString();
         var query = {
             accountId: accountId,
@@ -424,7 +365,6 @@ var dao = {
 
     getAllTagsFromPosts: function(blogposts, fn) {
         var self = this;
-
         var tags = [];
 
         for (var i = blogposts.length - 1; i >= 0; i--) {
@@ -441,7 +381,6 @@ var dao = {
 
     getAllCategoriesFromPosts: function(blogposts, fn) {
         var self = this;
-
         var categories = [];
 
         for (var i = blogposts.length - 1; i >= 0; i--) {
@@ -455,7 +394,6 @@ var dao = {
 
     getBlogPostsWithAuthorForWebsite: function(accountId, author, fn) {
         console.log('Getting Posts with author: ' + author);
-        var self = this;
         accountId = accountId.toString();
         var query = {
             accountId: accountId,
@@ -466,7 +404,6 @@ var dao = {
 
     getBlogPostsWithCategoryForWebsite: function(accountId, category, fn) {
         console.log('Getting Posts with category: ' + category);
-        var self = this;
         accountId = accountId.toString();
         var query = {
             accountId: accountId,
@@ -847,8 +784,7 @@ var dao = {
     },
 
     updateWebsiteSettings: function(websiteObj, accountId, websiteId, fn) {
-        var self = this,
-            website;
+        var self = this;
         //ensure website exists and belongs to this account
         self.getById(websiteId, Website, function(err, value) {
             if (err) {
@@ -1559,7 +1495,7 @@ var dao = {
         });
 
         var defaultPageArray = [welcomeEmailPage, newOrderEmailPage, orderProcessingEmailPage,
-            orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage, 
+            orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage,
              newDonationEmailPage];
 
         async.each(defaultPageArray, function(page, callback){
