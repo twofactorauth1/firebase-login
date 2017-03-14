@@ -325,6 +325,7 @@ var dao = {
     },
 
     getPageByHandle: function(accountId, websiteId, handle, fn) {
+        var self = this;
         var query = {};
         query.accountId = accountId;
         query.websiteId = websiteId;
@@ -334,6 +335,7 @@ var dao = {
     },
 
     getBlogPostForWebsite: function(accountId, blogPostUrl, fn) {
+        var self = this;
         console.log('Post ID (getBlogPostForWebsite): ' + blogPostUrl + ' Account ID: ' + accountId);
         accountId = accountId.toString();
         blogPostUrl = blogPostUrl.toString();
@@ -346,6 +348,7 @@ var dao = {
     },
 
     getAllBlogPostsForWebsite: function(accountId, fn) {
+        var self = this;
         accountId = accountId.toString();
         var query = {
             accountId: accountId
@@ -354,6 +357,7 @@ var dao = {
     },
 
     getBlogPostsWithTagsForWebsite: function(accountId, tag, fn) {
+        var self = this;
         console.log('Getting Posts with tag: ' + tag);
         accountId = accountId.toString();
         var query = {
@@ -393,6 +397,7 @@ var dao = {
     },
 
     getBlogPostsWithAuthorForWebsite: function(accountId, author, fn) {
+        var self = this;
         console.log('Getting Posts with author: ' + author);
         accountId = accountId.toString();
         var query = {
@@ -403,6 +408,7 @@ var dao = {
     },
 
     getBlogPostsWithCategoryForWebsite: function(accountId, category, fn) {
+        var self = this;
         console.log('Getting Posts with category: ' + category);
         accountId = accountId.toString();
         var query = {
