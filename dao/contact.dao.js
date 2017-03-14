@@ -896,6 +896,9 @@ var dao = {
                     });
                 } else {
                     //this contact already exists.  Let's merge in new data.
+
+                    var _logo = existingContact.get("photo");
+
                     var existingId = existingContact.id();
                     var _existingTags = existingContact.get('tags') || [];
 
@@ -912,7 +915,13 @@ var dao = {
 
                     merged.set('details', _.union(existingContact.get('details'), contact.get('details')));
                     merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
+                    
                     merged.set('siteActivity', _.union(existingContact.get('siteActivity'), contact.get('siteActivity')));
+                    
+                    if(!merged.get('photo'))
+                    {
+                        merged.set('photo', _logo);
+                    }
                     return self.saveOrUpdate(merged, fn);
                 }
             });
