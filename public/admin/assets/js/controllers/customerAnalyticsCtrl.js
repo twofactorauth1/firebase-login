@@ -140,6 +140,18 @@
                 $scope.pagedformattedTopPages = _.reject(pagedformattedTopPages, function (analytics) {
                     return !angular.isDefined(analytics.page)
                 });
+
+                //Frontrunner Sites Pageviews
+                var _topFiveAccounts =_.first(_.sortBy($scope.pagedformattedTopPages, function(num){ return -num.pageviews; }), 5);
+                
+                var accountIdArray = _.map(_topFiveAccounts, function(account){
+                    return account.accountId; 
+                });
+
+                ChartAnalyticsService.getFrontrunnerSitesPageviews($scope.date, $scope.analyticsAccount, accountIdArray, function (data) {
+                    console.log(data);
+                })
+
                 $scope.setNewReportData(data);
             });
         };

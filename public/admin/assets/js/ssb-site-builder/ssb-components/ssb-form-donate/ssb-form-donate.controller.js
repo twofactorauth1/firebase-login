@@ -31,6 +31,7 @@
             $routeParams = $injector.get('$routeParams');
         }
 
+
         var vm = this;
 
         vm.init = init;
@@ -81,6 +82,7 @@
         vm.formInvalidFn = formInvalidFn;
         vm.openModalFn = openModalFn;
         vm.closeModalFn = closeModalFn;
+        
 
         vm.nthRow = 'nth-row';
 
@@ -457,10 +459,11 @@
             }
 
             var url = $location.absUrl().split('?')[0];
+            var _donationAmount = vm.formBuilder.amount;
             var order = {
                 //"customer_id": customer._id,
                 "cancelUrl": url + '?state=2&comp=donation',
-                "returnUrl": url + '?state=5&comp=donation',
+                "returnUrl": url + '?state=5&comp=donation&amount='+_donationAmount,
                 "isAnonymous": vm.isAnonymous,
                 "customer": formatted,
                 "session_id": null,
@@ -903,8 +906,16 @@
         function setInitialCheckoutState() {
             if ($routeParams && $routeParams.state && $routeParams.comp == 'donation') {
                 vm.checkoutModalState = parseInt($routeParams.state);
+                
                 $timeout(function () {
                     vm.openModalFn();
+                    if(!vm.formBuilder){
+                        vm.formBuilder = {};
+                    }
+                    if($routeParams.amount){                        
+                        vm.formBuilder.amount = parseFloat($routeParams.amount);
+                        vm.donationAmout = angular.copy(vm.formBuilder.amount);
+                    }
                 }, 1000);
 
                 if (vm.checkoutModalState == 5 && orderCookieData) {
@@ -1002,8 +1013,10 @@
 
         function setDonationAmount(amount){
             if(amount)
-                vm.formBuilder.amount = parseFloat(amount);
+                vm.formBuilder.amount = parseFloat(amount);            
         }
+
+        
 
         function init(element) {
             vm.element = element;
@@ -1022,6 +1035,8 @@
                 }
             });
 
+
+
             if (vm.component.productSettings) {
 
                 vm.getProduct();
@@ -1036,6 +1051,4 @@
         }
 
     }
-
-
 })();

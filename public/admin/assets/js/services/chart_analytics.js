@@ -426,6 +426,12 @@
             });
         };
 
+        this.getFrontrunnerSitesPageviews = function(date, account, accountIdArray, fn) {
+            SiteAnalyticsService.getFrontrunnerSitesPageviews(date.startDate, date.endDate, accountIdArray, function(data){
+                fn(data);
+            });
+        };
+
         this.getPlatformTraffic = function(fn) {
             SiteAnalyticsService.runPlatformTraffic(fn);
         };

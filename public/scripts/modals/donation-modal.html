@@ -182,8 +182,8 @@
                 <div class="clearfix" style="margin-bottom:30px"></div>
 
                 <h3 class="donate-step-header center mb20">
-                                        Thank you for your {{vm.formBuilder.amount | currency:undefined:0}} donation.
-                                    </h3>
+                    Thank you for your {{vm.formBuilder.amount || vm.donationAmout | currency:undefined:0}} donation.
+                </h3>
 
                 <p class="center">
                     Help raise even more money by sharing this page.

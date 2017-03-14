@@ -558,6 +558,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 campaignManager.duplicateCampaign(accountId, campaignId, campaignName, userId, function(err, campaign){
                     self.log.debug(accountId, userId, '<< duplicateCampaign');
+                    self.createUserActivity(req, 'CREATE_DUPLICATE_CAMPAIGN', null, null, function(){});
                     self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
                 });
             }
