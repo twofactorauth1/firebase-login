@@ -17,6 +17,7 @@ var accountDao = require('../dao/account.dao');
 var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var accountManager = require('../accounts/account.manager');
+var geoiputil = require('../utils/geoiputil');
 
 module.exports = {
 
@@ -180,7 +181,30 @@ module.exports = {
                                 });
                             }, function(err){
                                 _log.debug('Created contact activities for session event');
-                                dao.saveOrUpdate(sessionEvent, fn);
+                                geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
+                                    if (ip_geo_info) {
+                                        var replacementObject = {
+                                            province: ip_geo_info.region,
+                                            city: ip_geo_info.city,
+                                            postal_code: ip_geo_info.postal,
+                                            continent: ip_geo_info.continent,
+                                            country: ip_geo_info.countryName
+                                        };
+                                        sessionEvent.set('maxmind', replacementObject);
+                                    } else {
+                                        var replacementObject = {
+                                            province: '',
+                                            city: '',
+                                            postal_code: '',
+                                            continent: '',
+                                            country: ''
+                                        };
+                                        sessionEvent.set('maxmind', replacementObject);
+                                        log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
+                                    }
+                                    dao.saveOrUpdate(sessionEvent, fn);
+                                });
+
                             });
                         }
                     });

@@ -86,6 +86,7 @@ var collator = {
             //set keen.timestamp to be OUR server time
             keen.timestamp = sessionEvent.get('server_time_dt');
             sessionEvent.set('keen', keen);
+            //TODO: remove this once all sessionEvents have maxmind object
             geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
                 if(ip_geo_info) {
                     var replacementObject = {
