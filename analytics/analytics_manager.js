@@ -1139,6 +1139,45 @@ module.exports = {
 
     },
 
+    getPageViewPerformanceReport: function(accountId, userId, start, end, isAggregate, orgId, accountIds, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getPageViewsReport');
+        var granularity = self._determineGranularity(start, end);
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:start,
+                    $lte:end
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+        var group = {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
+                count:{$sum:1}
+            }
+        };
+        if(granularity === 'hours') {
+            group.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+        }
+        stageAry.push(group);
+
+       var result = []; 
+       fn(null, result);
+
+    },
+
     getSessionsReport:function(accountId, userId, start, end, previousStart, previousEnd, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;

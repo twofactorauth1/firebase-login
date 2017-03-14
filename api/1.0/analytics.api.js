@@ -90,6 +90,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('live'), this.isAuthAndSubscribedApi.bind(this), this.getLiveVisitors.bind(this));
         app.get(this.url('admin/live'), this.isAuthAndSubscribedApi.bind(this), this.getAdminLiveVisitors.bind(this));
+        app.get(this.url('admin/pageViewPerformance'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewPerformance.bind(this));
     },    
 
 
@@ -1717,6 +1718,63 @@ _.extend(api.prototype, baseApi.prototype, {
         }
     },
 
+    getPageViewPerformance: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.debug(accountId, userId, '>> getPageViewPerformance (' + req.query.start + ', ' + req.query.end + ')');
+        var start = req.query.start;
+        var end = req.query.end;
+        var accountIds = req.query.accountIDs;
+
+
+
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+
+
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }        
+
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getPageViewPerformanceReport(accountId, userId, start, end, true, null, accountIds, function(err, results){
+                self.log.debug(accountId, userId, '<< getPageViewPerformance');
+                self.sendResultOrError(resp, err, results, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getPageViewPerformanceReport(accountId, userId, start, end, true, organization.id(), accountIds, function(err, results){
+                            self.log.debug(accountId, userId, '<< getPageViewPerformance');
+                            self.sendResultOrError(resp, err, results, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+    },
+
     adminSessionsReport: function(req, resp) {
         var self = this;
         var userId = self.userId(req);
@@ -1836,6 +1894,7 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.send403(resp);
         }
     },
+
     adminTrafficSourcesReport: function(req, resp) {
         var self = this;
         var userId = self.userId(req);
