@@ -1031,6 +1031,13 @@
             }
         });
 
+        $scope.$watch('frontrunnerSite', function (value, oldValue) {
+            if(angular.isDefined(value) && angular.isDefined(oldValue) && !angular.equals(value, oldValue) && $scope.dataLoaded){
+                AnalyticsWidgetStateService.setPlateformAnalyticsWidgetStates("frontrunnerSite", value);
+                reflowCharts();
+            }
+        });
+
         $scope.setAnalyticsWidgetStates = function(){
             AnalyticsWidgetStateService.getPlateformAnalyticsWidgetStates();
             $timeout(function() {
@@ -1047,6 +1054,7 @@
                 $scope.rev = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.rev;
                 $scope.os = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.os;
                 $scope.campaigns = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.campaigns;
+                $scope.frontrunnerSite = AnalyticsWidgetStateService.plateformAnalyticsWidgetStateConfig.frontrunnerSite;
                 $scope.dataLoaded = true;
                 reflowCharts();
             }, 0);

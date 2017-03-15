@@ -24,6 +24,7 @@
             "os": false,
             "campaigns": false,
             "locationsGlobal": false,
+            "frontrunnerSite": false,
             "analytics_visitors_legend": true,
             "analytics_visits_legend": true,
             "analytics_pageviews_legend": true,
