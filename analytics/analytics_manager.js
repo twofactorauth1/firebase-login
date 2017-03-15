@@ -380,8 +380,7 @@ module.exports = {
                 dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
                     _.each(value, function(result){
                         result['ip_geo_info.province'] = result._id;
-                    });
-                    console.log()
+                    });                    
                     self.log.debug(accountId, userId, '<< getLiveVisitors');
                     //fn(err, value);
                     if(results.length > 0){
