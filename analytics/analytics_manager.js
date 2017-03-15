@@ -393,50 +393,6 @@ module.exports = {
 
     },
 
-
-
-    getVisitorLocationsReport: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
-        var self = this;
-        self.log = _log;
-        self.log.debug(accountId, userId, '>> getVisitorLocationsReport');
-
-        var stageAry = [];
-        var match = {
-            $match:{
-                accountId:accountId,
-                server_time_dt:{
-                    $gte:startDate,
-                    $lte:endDate
-                },
-                fingerprint:{$ne:null},
-                "maxmind.country":"United States"
-            }
-        };
-        if(isAggregate === true) {
-            delete match.$match.accountId;
-        }
-        if(orgId !== null) {
-            match.$match.orgId = orgId;
-        }
-        stageAry.push(match);
-
-        var group1 = {
-            $group: {
-                _id: '$maxmind.province',
-                result: {$sum:1}
-            }
-        };
-        stageAry.push(group1);
-
-        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
-            _.each(value, function(result){
-                result['ip_geo_info.province'] = result._id;
-            });
-            self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
-            fn(err, value);
-        });
-    },
-
     getVisitorCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;

@@ -181,10 +181,11 @@
             $scope.locationData = locationData;
         }
 
-        $scope.$watch('locationData',  function (locationData) {
-            if(angular.isDefined(locationData)){
+        $scope.$watch('locationData',  function (locationData, oldData) {
+            if(angular.isDefined(locationData) && !angular.equals(locationData, oldData)){
                 $timeout(function () {
-                    ChartAnalyticsService.visitorLocations(locationData, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
+                    var _data = angular.copy(locationData);
+                    ChartAnalyticsService.visitorLocations(_data, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
                 }, 200);
             }
         });
