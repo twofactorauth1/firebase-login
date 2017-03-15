@@ -1812,12 +1812,7 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
-            $and: [
-                {$or: [{secure:false},{secure:{$exists:false}}]},
-                {$or: [{latest:true},{latest:{$exists:false}}]}
-            ]
-
-
+            $and: [{secure:false},{latest:true}]
         };
         self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
@@ -1850,10 +1845,7 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
-            $and: [
-                {$or: [{secure:false},{secure:{$exists:false}}]},
-                {$or: [{latest:true},{latest:{$exists:false}}]}
-            ]
+            $and: [{secure:false},{latest:true}]
         };
         self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
@@ -1888,12 +1880,7 @@ module.exports = {
         self.log.debug('>> getEmailsByAccountId');
         var query = {
             accountId: accountId,
-            $and: [
-                {$or: [{secure:false},{secure:{$exists:false}}]},
-                {$or: [{latest:true},{latest:{$exists:false}}]}
-            ]
-
-
+            $and: [{secure:false},{latest:true}]
         };
         self.log.debug('start query');
         emailDao.findMany(query, $$.m.cms.Email, function(err, list){
@@ -2011,10 +1998,7 @@ module.exports = {
             accountId: accountId,
             websiteId: websiteId,
             latest: true,
-            $and: [
-                {$or: [{secure:false},{secure:{$exists:false}}]},
-                {$or: [{latest:true},{latest:{$exists:false}}]}
-            ]
+            $and: [{secure:false},{latest:true}]
         };
         var skip =  skip;
         var limit = limit;
