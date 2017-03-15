@@ -1192,8 +1192,9 @@ module.exports = {
                     count:{$sum:1}
             }
         };
+        console.log("HHHHHHHHHHHHH")
         if(granularity === 'hours') {
-            group.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+            group.$group._id._date.$dateToString.format = '%Y-%m-%d %H:00';
         }
         stageAry.push(group);
 
