@@ -1725,8 +1725,12 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> getPageViewPerformance (' + req.query.start + ', ' + req.query.end + ')');
         var start = req.query.start;
         var end = req.query.end;
-        var accountIds = req.query.accountIDs;
-
+        var accountIds = [];
+        if(req.query.accountIds) {
+            accountIds = req.query.accountIds.split(',');
+            accountIds =  _.map(accountIds, function(val){return parseInt(val)});
+        };
+        self.log.debug(accountId, userId, 'accountIds:', accountIds);
 
 
         if(!end) {
@@ -1745,7 +1749,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }        
 
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getPageViewPerformanceReport(accountId, userId, start, end, true, null, accountIds, function(err, results){
+            analyticsManager.getPageViewPerformanceReport(accountId, userId, start, end, null, accountIds, function(err, results){
                 self.log.debug(accountId, userId, '<< getPageViewPerformance');
                 self.sendResultOrError(resp, err, results, 'Error getting report');
             });
@@ -1759,7 +1763,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(resp);
                 } else {
                     if(organization.get('adminAccount') === accountId) {
-                        analyticsManager.getPageViewPerformanceReport(accountId, userId, start, end, true, organization.id(), accountIds, function(err, results){
+                        analyticsManager.getPageViewPerformanceReport(accountId, userId, start, end, organization.id(), accountIds, function(err, results){
                             self.log.debug(accountId, userId, '<< getPageViewPerformance');
                             self.sendResultOrError(resp, err, results, 'Error getting report');
                         });

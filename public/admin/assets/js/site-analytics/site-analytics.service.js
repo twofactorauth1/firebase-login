@@ -102,7 +102,7 @@
             var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var accountIdsString = accountIdArray.join(",");
-            return saRequest($http.get(frontrunnerSitesPageviewsAPIUrl + '?accountIDs='+ accountIdsString +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
+            return saRequest($http.get(frontrunnerSitesPageviewsAPIUrl + '?accountIds='+ accountIdsString +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
             
         }
 

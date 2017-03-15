@@ -17,6 +17,7 @@ var accountDao = require('../dao/account.dao');
 var orderDao = require('../orders/dao/order.dao');
 var emailMessageManager = require('../emailmessages/emailMessageManager');
 var accountManager = require('../accounts/account.manager');
+var geoiputil = require('../utils/geoiputil');
 
 module.exports = {
 
@@ -180,7 +181,30 @@ module.exports = {
                                 });
                             }, function(err){
                                 _log.debug('Created contact activities for session event');
-                                dao.saveOrUpdate(sessionEvent, fn);
+                                geoiputil.getMaxMindGeoForIP(sessionEvent.get('ip_address'), function(err, ip_geo_info) {
+                                    if (ip_geo_info) {
+                                        var replacementObject = {
+                                            province: ip_geo_info.region,
+                                            city: ip_geo_info.city,
+                                            postal_code: ip_geo_info.postal,
+                                            continent: ip_geo_info.continent,
+                                            country: ip_geo_info.countryName
+                                        };
+                                        sessionEvent.set('maxmind', replacementObject);
+                                    } else {
+                                        var replacementObject = {
+                                            province: '',
+                                            city: '',
+                                            postal_code: '',
+                                            continent: '',
+                                            country: ''
+                                        };
+                                        sessionEvent.set('maxmind', replacementObject);
+                                        log.warn('Could not find geo info for ' + sessionEvent.get('ip_address'));
+                                    }
+                                    dao.saveOrUpdate(sessionEvent, fn);
+                                });
+
                             });
                         }
                     });
@@ -1139,42 +1163,85 @@ module.exports = {
 
     },
 
-    getPageViewPerformanceReport: function(accountId, userId, start, end, isAggregate, orgId, accountIds, fn) {
+    getPageViewPerformanceReport: function(accountId, userId, start, end, orgId, accountIds, fn) {
         var self = this;
         self.log = _log;
-        self.log.debug(accountId, userId, '>> getPageViewsReport');
+        self.log.debug(accountId, userId, '>> getPageViewPerformanceReport');
         var granularity = self._determineGranularity(start, end);
 
         var stageAry = [];
         var match = {
             $match:{
-                accountId:accountId,
+                accountId:{$in: accountIds},
                 server_time_dt:{
                     $gte:start,
                     $lte:end
                 }
             }
         };
-        if(isAggregate === true) {
-            delete match.$match.accountId;
-        }
+
         if(orgId !== null) {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
         var group = {
             $group: {
-                _id: { $dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
-                count:{$sum:1}
+                _id: {
+                    _date: {$dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
+                    accountId:'$accountId'},
+                    count:{$sum:1}
             }
         };
         if(granularity === 'hours') {
-            group.$group._id.$dateToString.format = '%Y-%m-%d %H:00';
+            group.$group._id._date.$dateToString.format = '%Y-%m-%d %H:00';
         }
         stageAry.push(group);
 
-       var result = []; 
-       fn(null, result);
+        dao.aggregateWithCustomStages(stageAry, $$.m.PageEvent, function(err, value) {
+            if(err) {
+                self.log.error('Error finding current month:', err);
+                fn(err);
+            } else {
+                var resultsByAccount = {};
+                var resultAry = null;
+                _.each(value, function (entry) {
+                    if(resultsByAccount[entry._id.accountId]) {
+                        resultAry = resultsByAccount[entry._id.accountId];
+                    } else {
+                        resultsByAccount[entry._id.accountId] = [];
+                        resultAry = resultsByAccount[entry._id.accountId];
+                    }
+                    var result = {
+                        accountId: entry._id.accountId,
+                        value: entry.count,
+                        timeframe: {
+                            start: entry._id._date
+                        }
+                    };
+                    if(granularity === 'hours') {
+                        result.timeframe.end = moment(entry._id._date).add(1, 'hours').format('YYYY-MM-DD HH:mm');
+                    } else {
+                        result.timeframe.end = moment(entry._id._date).add(1, 'days').format('YYYY-MM-DD');
+                    }
+                    resultAry.push(result);
+                });
+                var results = _.mapObject(resultsByAccount, function(val, key){
+                    val = _.sortBy(val, function(result){return result.timeframe.start});
+                    if(granularity === 'hours') {
+                        val = self._zeroMissingHours(val, {accountId:key, value:0}, moment(start).format('YYYY-MM-DD HH:mm'), moment(end).format('YYYY-MM-DD HH:mm'));
+                    } else {
+                        val = self._zeroMissingDays(val, {value:0, accountId:key}, moment(start).format('YYYY-MM-DD'), moment(end).format('YYYY-MM-DD'));
+                    }
+                    return val;
+                });
+
+
+
+                self.log.debug(accountId, userId, '<< getPageViewPerformanceReport');
+                fn(null, results);
+            }
+        });
+
 
     },
 
