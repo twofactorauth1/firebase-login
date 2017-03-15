@@ -182,7 +182,7 @@
                     ChartAnalyticsService.frontrunnerSitesPageviews(_data, series, function(data){
                         $scope.frontrunnerSitesPageviewsConfig = data;                    
                     });
-                })
+                });
 
                 $scope.setNewReportData(data);
             });
