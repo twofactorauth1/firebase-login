@@ -271,45 +271,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.trace(accountId, userId, '>> getLiveVistiors');
-        /*
-         {
-         $match:{
-         server_time_dt: {$gte: new ISODate('2016-12-05 21:00:00.000Z')}
-         }
-         },
-         {
-         $sort:{session_id:1, server_time_dt:-1}
-         },
-         {
-         $group:{
-         _id:{
-         session_id:'$session_id',
-         secondsAgo:{$add:[{
-         "$subtract": [
-         { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
-         { "$mod": [
-         { "$subtract": [ "$server_time_dt", new Date("1970-01-01") ] },
-         1000 * 60
-         ]}
-         ]}, new Date(0)]}
-         },
-         count:{$sum:1},
-         lastPing: {$first:'$server_time_dt'}
-         }
-         },
-         {
-         $group:{
-         _id: '$_id.secondsAgo',
-         count:{$sum:'$count'}
-         }
-         },
-         {
-         $sort:{'_id':-1}
-         }
-         */
-
-
-
+        
 
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
             lookBackInMinutes = 30;
@@ -385,10 +347,94 @@ module.exports = {
                     results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
                 }
                 self.log.trace(accountId, userId, '<< getLiveVistiors');
-                fn(null, results);
+                
+
+                // Adding location data
+                var stageAry = [];
+                var match = {
+                    $match:{
+                        accountId:accountId,
+                        server_time_dt:{
+                            $gte:targetDate.toDate()
+                        },
+                        fingerprint:{$ne:null},
+                        "maxmind.country":"United States"
+                    }
+                };
+                if(isAggregate === true) {
+                    delete match.$match.accountId;
+                }
+                if(orgId !== null) {
+                    match.$match.orgId = orgId;
+                }
+                stageAry.push(match);
+
+                var group1 = {
+                    $group: {
+                        _id: '$maxmind.province',
+                        result: {$sum:1}
+                    }
+                };
+                stageAry.push(group1);
+
+                dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+                    _.each(value, function(result){
+                        result['ip_geo_info.province'] = result._id;
+                    });
+                    self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
+                    //fn(err, value);
+                    if(results.length > 0){
+                        results[0].locations = value;
+                    }
+                    fn(null, results);
+                });
             }
         });
 
+    },
+
+
+
+    getVisitorLocationsReport: function(accountId, userId, startDate, endDate, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.debug(accountId, userId, '>> getVisitorLocationsReport');
+
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:startDate,
+                    $lte:endDate
+                },
+                fingerprint:{$ne:null},
+                "maxmind.country":"United States"
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+
+        var group1 = {
+            $group: {
+                _id: '$maxmind.province',
+                result: {$sum:1}
+            }
+        };
+        stageAry.push(group1);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
+            _.each(value, function(result){
+                result['ip_geo_info.province'] = result._id;
+            });
+            self.log.debug(accountId, userId, '<< getVisitorLocationsReport');
+            fn(err, value);
+        });
     },
 
     getVisitorCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
