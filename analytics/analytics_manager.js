@@ -1189,7 +1189,7 @@ module.exports = {
                 _id: {
                     _date: {$dateToString: { format: "%Y-%m-%d", date: "$server_time_dt" }},
                     accountId:'$accountId'},
-                count:{$sum:1}
+                    count:{$sum:1}
             }
         };
         if(granularity === 'hours') {
