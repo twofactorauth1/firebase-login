@@ -18,7 +18,7 @@
                     <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
                     <input date-range-picker class="form-control deshboard-date-picker date-picker" type="text" ng-model="selectedDate" options="pickerOptions" />
                     <span class="input-group-addon" ng-click="displayDatePicker()"><i class="fa fa-chevron-down fa-fw"></i></span>
-                </div>                
+                </div>
             </div>
             <div class="space20 visible-xs"></div>
             <div class="pull-left analytics-dashboard-btn" ng-class="{'col-xs-12 col-sm-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-4': !app.layout.isSidebarClosed}">
@@ -449,7 +449,7 @@
         <div class="col-sm-12" >
             <div id="frontrunnerSite" class="panel panel-white" ng-class="{'load1 csspinner': !frontrunnerSitesPageviewsConfig.options}">
                 <div class="panel-heading border-light">
-                    <h4 class="panel-title text-primary">Frontrunner Sites <span class="text-bold">Pageviews</span></h4>
+                    <h4 class="panel-title text-primary"><span class="text-bold">Most Active</span> Sites (pageviews)</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div class="panel-wrapper" collapse="frontrunnerSite">
