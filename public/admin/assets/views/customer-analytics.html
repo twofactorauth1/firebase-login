@@ -444,5 +444,23 @@
             </div>
         </div>
     </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="col-sm-12" >
+            <div id="campaigns" class="panel panel-white" ng-class="{'load1 csspinner': !frontrunnerSitesPageviewsConfig.options}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Frontrunner Sites <span class="text-bold">Pageviews</span></h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div class="panel-wrapper" collapse="campaigns">
+                    <div class="panel-body">
+                        <div class="campaigns-wrap">
+                            <highchart config="frontrunnerSitesPageviewsConfig" id="frontrunnerSites-chart"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>
