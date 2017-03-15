@@ -332,7 +332,8 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                emailMessageManager.findOpenedMessagesByCampaign(accountId, campaignId, userId, function(err, messages){
+                emailMessageManager.getCampaignPerformanceReport(accountId, campaignId, userId, function(err, messages) {
+                //emailMessageManager.findOpenedMessagesByCampaign(accountId, campaignId, userId, function(err, messages){
                     self.log.debug(accountId, userId, '<< getCampaignOpens');
                     resp.set('Content-Type', 'text/csv');
                     var _fileName = "report_" + new Date().getTime() + '.csv';

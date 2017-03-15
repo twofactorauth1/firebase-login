@@ -50,7 +50,8 @@ module.exports = {
         ACCOUNT_WEBSITES: "indigenous-account-websites",
         ASSETS: 'indigenous-digital-assets',
         SCREENSHOTS: 'indigenous-screenshots',
-        DB_ARCHIVES: 'indigenous-db-archives'
+        DB_ARCHIVES: 'indigenous-db-archives',
+        REPORTS: 'indigenous-reports'
     },
     "accessKeyId":AWS_ACCESS_KEY,
     "secretAccessKey":AWS_SECRET_ACCESS_KEY,

@@ -27,6 +27,9 @@ if(appConfig.nonProduction === true) {
     subjectPrefix = '[TEST] ';
 }
 
+var s3dao = require('../dao/integrations/s3.dao');
+var s3Config = require('../configs/aws.config');
+
 require('./model/unsubscription');
 
 
@@ -1704,6 +1707,115 @@ var emailMessageManager = {
         });
     },
 
+    getCampaignPerformanceReport: function(accountId, campaignId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getCampaignPerformanceReport');
+        var startTime = null;
+        async.waterfall([
+            function(cb) {
+                var stageAry = [];
+                var match = {$match:{accountId:accountId, batchId:campaignId}};
+                stageAry.push(match);
+                var project = {$project:{receiver:1, deliveredDate:1, openedDate:1, clickedDate:1, emailId:1, _id:1}};
+                stageAry.push(project);
+                startTime = new Date().getTime();
+                dao.aggregateWithCustomStages(stageAry,$$.m.Emailmessage, function(err, results){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error in aggregation:', err);
+                        cb(err);
+                    } else {
+                        cb(null, results);
+                    }
+                });
+            },
+            function(results, cb) {
+                var emailMessageQueryDuration = new Date().getTime() - startTime;
+                self.log.info(accountId, userId, 'Email Query Duration:', emailMessageQueryDuration);
+                var headers = ['Email', 'Delivered', 'Opened', 'Clicked', 'Unsubscribed'];
+                var csv = headers.join(',') + '\n';
+
+                var unsubGrouping = {};
+                var count = 0;
+                var arrayCount = 0;
+                unsubGrouping[arrayCount] = [];
+                _.each(results, function(result){
+                    if(count > 1000) {
+                        count = 0;
+                        arrayCount += 1;
+                        unsubGrouping[arrayCount] = [];
+                    }
+                    unsubGrouping[arrayCount].push(result.receiver);
+                    count++;
+                });
+                var unsubscriptions = {};
+                async.each(_.keys(unsubGrouping),
+                    function(groupNum, callback){
+                        var query = {emailAddress:{$in:unsubGrouping[groupNum]}};
+                        dao.findMany(query, $$.m.Unsubscription, function(err, value){
+                            if(value && value.length > 0) {
+                                _.each(value, function(unsub){
+                                    unsubscriptions[unsub.get('emailAddress')] = true;
+                                });
+                            }
+                            callback();
+                        });
+                }, function(err){
+                    _.each(results, function(message){
+                        var isUnsubscribed = false;
+                        if(unsubscriptions[message.receiver]) {
+                            isUnsubscribed = true;
+                        }
+                        csv += message.receiver + ',';
+                        csv += (message.deliveredDate || false) + ',';
+                        csv += (message.openedDate || false) + ',';
+                        csv += (message.clickedDate || false) + ',';
+                        csv += isUnsubscribed;
+                        csv += '\n';
+                    });
+                    cb(err, csv);
+                });
+
+            }
+        ], function(err, csv){
+            self.log.debug(accountId, userId, '<< getCampaignPerformanceReport');
+            return fn(err, csv);
+        });
+    },
+
+    asyncCampaignPerformanceReport: function(accountId, campaignId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> asyncCampaignPerformanceReport');
+
+        async.waterfall([
+            function(cb) {
+                //get and return URL
+                var key = campaignId + new Date().getTime() + '.csv';
+                var url =  "http://s3.amazonaws.com/" + s3Config.BUCKETS.REPORTS + "/" + key;
+                fn(null, url);
+                cb(null, key);
+            },
+            function(key, cb) {
+                var query = {
+                    accountId:accountId,
+                    batchId:campaignId//,
+                    //openedDate:{$ne:null}
+                };
+
+                var startTime = new Date().getTime();
+                dao.findManyWithFields(query, {receiver:1, deliveredDate:1, openedDate:1, clickedDate:1}, $$.m.Emailmessage, function(err, messages){
+                    if(err) {
+                        self.log.error(accountId, userId, 'Error finding campaign emails:', err);
+                        cb(err);
+                    } else {
+                        var emailMessageQueryDuration = new Date().getTime() - startTime;
+                        self.log.info(accountId, userId, 'Email Query Duration:', emailMessageQueryDuration);
+                    }
+                });
+            }
+        ], function(err){});
+
+    },
+
     findOpenedMessagesByCampaign: function(accountId, campaignId, userId, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> findMessagesByCampaign');
@@ -1713,12 +1825,14 @@ var emailMessageManager = {
             //openedDate:{$ne:null}
         };
 
-
-        dao.findMany(query, $$.m.Emailmessage, function(err, messages){
+        var startTime = new Date().getTime();
+        dao.findManyWithFields(query, {receiver:1, deliveredDate:1, openedDate:1, clickedDate:1}, $$.m.Emailmessage, function(err, messages){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding campaign emails:', err);
                 return fn(err);
             } else {
+                var emailMessageQueryDuration = new Date().getTime() - startTime;
+                self.log.info(accountId, userId, 'Email Query Duration:', emailMessageQueryDuration);
                 var headers = ['Email', 'Delivered', 'Opened', 'Clicked', 'Unsubscribed'];
                 var csv = headers.join(',') + '\n';
                 async.eachSeries(messages, function(message, callback){
@@ -1744,8 +1858,7 @@ var emailMessageManager = {
 
                                     if(value === true){
                                         isUnsubscribed = true;
-                                    }
-                                    else{
+                                    } else{
                                         isUnsubscribed = false;
                                     }
                                     csv += message.get('receiver') + ',';
