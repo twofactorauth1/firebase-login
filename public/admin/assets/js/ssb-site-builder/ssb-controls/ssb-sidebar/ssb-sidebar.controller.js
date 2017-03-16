@@ -747,18 +747,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     enabled: true
                 });
 
-                // Add video gallery to video filter as well
-
-                var _videoGallerySection = _.find(vm.enabledPlatformSections, {
-                    title: 'Video Gallery'
-                });
-
-                if(_videoGallerySection){
-                    var _videoGallerySectionClone = angular.copy(_videoGallerySection);
-                    _videoGallerySectionClone.filter = "video";
-                    vm.enabledPlatformSections.push(_videoGallerySectionClone);
-                }
-
 
                 /*
                  * The unique filter values of all the enabled components, sorted

@@ -2930,7 +2930,8 @@ module.exports = {
             description:1,
             enabled:1,
             title: 1,
-            version: 1
+            version: 1,
+            filterArray: 1
         };
 
         sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){

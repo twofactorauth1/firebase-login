@@ -718,6 +718,7 @@ app.constant('JS_REQUIRES', {
     'filterPages': 'assets/js/filters/filterPages.js',
     'sortListPages': 'assets/js/filters/sortListPages.js',
     'productTableFilter': 'assets/js/filters/productTableFilter.js',
+    'filterSsbSections': 'assets/js/filters/filterSsbSections.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js'
