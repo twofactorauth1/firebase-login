@@ -234,17 +234,15 @@
 
         function setAwayFromDashboard(away) {
             dashboardService.awayFromDashboard = away;
-
-            dashboardService.polls = 0;
-            dashboardService.numberPolling++;
-
-            dashboardService.getAnalytics();
-            dashboardService.getWorkstreams();
-            dashboardService.getAccount();
-            dashboardService.getActiveMessages();
-            if (away) {
-                console.log(away);
-            }
+            //dashboardService.polls = 0;
+            //dashboardService.numberPolling++;
+            //dashboardService.getAnalytics();
+            //dashboardService.getWorkstreams();
+            //dashboardService.getAccount();
+            //dashboardService.getActiveMessages();
+            //if (away) {
+            //    console.log(away);
+            //}
 
         }
 
