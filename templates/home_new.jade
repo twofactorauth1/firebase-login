@@ -36,8 +36,10 @@ block content
                       span www.indigenous.io
                     if val.domain
                       span=val.domain
-                    if !val.domain && val.subdomain && val.subdomain != 'main'
+                    if !val.domain && val.subdomain && val.subdomain != 'main' && val.orgId != 1
                       span=val.subdomain+ '.indigenous.io'
+                    if !val.domain && val.subdomain && val.subdomain != 'main' && val.orgId == 1
+                      span=val.subdomain+ '.gorvlvr.com'  
                     i.fa.fa-chevron-right.pull-right
                   div.clearfix
         // start: COPYRIGHT
