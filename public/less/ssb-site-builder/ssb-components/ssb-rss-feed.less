@@ -42,5 +42,28 @@
         }
     }
 }
+.ssb-page-section-layout-3-col-v3{
+    @media screen and (max-width: 767px) {
+        [ssb-rss-feed-component]{
+            width: 100%;
+            &:not(:nth-last-child(2)){
+                .inner-page{
+                    padding-bottom: 0 !important;
+                }
+            }
+        }
+    }    
+}
 
-
+.ssb-page-section-layout-2-col-v2{
+    @media screen and (max-width: 767px) {
+        [ssb-rss-feed-component]{
+            width: 100%;
+            &:not(:nth-last-child(2)){                
+                .inner-page{
+                    padding-bottom: 0 !important;
+                }
+            }
+        }
+    }
+}

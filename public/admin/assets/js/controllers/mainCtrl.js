@@ -2,8 +2,8 @@
 /**
  * Indigenous Main Controller
  */
-app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant',
-  function ($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant) {
+app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant',
+  function ($rootScope, $scope, $state, $translate, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant) {
 
     AccountService.getAccount(function (account) {
       $scope.account = account;
@@ -91,16 +91,16 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
     };
 
     // save settings to local storage
-    if (angular.isDefined($localStorage.layout)) {
-      $scope.app.layout = $localStorage.layout;
+    // if (angular.isDefined($localStorage.layout)) {
+    //   $scope.app.layout = $localStorage.layout;
 
-    } else {
-      $localStorage.layout = $scope.app.layout;
-    }
-    $scope.$watch('app.layout', function () {
-      // save to local storage
-      $localStorage.layout = $scope.app.layout;
-    }, true);
+    // } else {
+    //   $localStorage.layout = $scope.app.layout;
+    // }
+    // $scope.$watch('app.layout', function () {
+    //   // save to local storage
+    //   $localStorage.layout = $scope.app.layout;
+    // }, true);
 
     //global function to scroll page up
     $scope.toTheTop = function () {
