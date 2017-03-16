@@ -101,7 +101,7 @@
                                 </div>
 
 
-                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.filteredSections = (vm.sections | unique:'_id' | orderBy:['title', 'version'] | filter:{ enabled: true })" ng-if="sectionFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
+                                <div sectionId = "{{section._id}}" ng-repeat="section in  vm.uiState.filteredSections = (vm.sections | orderBy:['title', 'version'] | filter:{ enabled: true })" ng-if="sectionFilter.lowercase == 'all'" class="ssb-sidebar-add-section margin-bottom-15" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
                                     <div class="ssb-sidebar-add-section-img">
                                         <div class="img-wrap">
                                             <a>
