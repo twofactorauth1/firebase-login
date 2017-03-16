@@ -1812,7 +1812,8 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
-            $and: [{secure:false},{latest:true}]
+            secure:false,
+            latest:true
         };
         self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
@@ -1845,7 +1846,8 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
-            $and: [{secure:false},{latest:true}]
+            secure:false,
+            latest:true
         };
         self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
@@ -1880,7 +1882,7 @@ module.exports = {
         self.log.debug('>> getEmailsByAccountId');
         var query = {
             accountId: accountId,
-            $and: [{latest:true}]
+            latest:true
         };
         self.log.debug('start query');
         emailDao.findMany(query, $$.m.cms.Email, function(err, list){
@@ -1998,7 +2000,7 @@ module.exports = {
             accountId: accountId,
             websiteId: websiteId,
             latest: true,
-            $and: [{secure:false},{latest:true}]
+            secure:false
         };
         var skip =  skip;
         var limit = limit;
