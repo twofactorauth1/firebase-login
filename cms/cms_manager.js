@@ -1880,7 +1880,7 @@ module.exports = {
         self.log.debug('>> getEmailsByAccountId');
         var query = {
             accountId: accountId,
-            $and: [{secure:false},{latest:true}]
+            $and: [{latest:true}]
         };
         self.log.debug('start query');
         emailDao.findMany(query, $$.m.cms.Email, function(err, list){
