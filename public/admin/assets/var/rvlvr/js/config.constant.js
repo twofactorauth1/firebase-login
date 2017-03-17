@@ -712,11 +712,8 @@ app.constant('JS_REQUIRES', {
     'productTableFilter': 'assets/js/filters/productTableFilter.js',
     'filterSsbSections': 'assets/js/filters/filterSsbSections.js',
 
-
-      //*** Directives
+    //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js'
-
-
   },
   //*** angularJS Modules
   modules: [
