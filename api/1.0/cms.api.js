@@ -367,6 +367,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.fromName >>> ', emailDataObj.content.fromName);
         self.log.debug('emailContent.replyTo >>> ', emailDataObj.content.replyTo);
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
+        self.log.debug('emailContent._id >>> ', emailDataObj.content._id);
         var accountId = parseInt(self.currentAccountId(req));
 
         app.render('emails/base_email_v2', emailMessageManager.contentTransformations(emailDataObj), function(err, html){
@@ -386,7 +387,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     html,
                     accountId,
                     [],
-                    null,
+                    emailDataObj.content._id,
                     function(err, result){
                       self.log.debug('mandrill return');
                       self.sendResultOrError(resp, err, result, "Error Sending Test Email");

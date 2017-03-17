@@ -19,36 +19,25 @@ var dao = {
 
     getPageById: function(accountId, pageId, fn) {
         var self = this;
-        var query = {_id: pageId, accountId:accountId, latest:true};
+        var query = {_id: pageId, accountId:accountId};
         self.findOne(query, $$.m.ssb.Page, fn);
     },
 
-
     getLatestPageByHandle: function(accountId, handle, fn) {
         var self = this;
-        var query = {handle: handle, accountId:accountId, latest:true};
+        var query = {handle: handle, accountId:accountId};
         self.findOne(query, $$.m.ssb.Page, fn);
     },
 
     getLatestPageForWebsite: function(websiteId, pageName, accountId, fn) {
         var self = this;
-        var query = {
-            websiteId: websiteId,
-            handle: pageName,
-            accountId: accountId,
-            latest: true
-        };
+        var query = {websiteId: websiteId, handle: pageName, accountId: accountId};
         self.findOne(query, $$.m.ssb.Page, fn);
     },
 
     getPublishedPageForWebsite: function(websiteId, pageName, accountId, fn) {
         var self = this;
-        var query = {
-            websiteId: websiteId,
-            handle: pageName,
-            accountId: accountId,
-            latest: true
-        };
+        var query = {websiteId: websiteId, handle: pageName, accountId: accountId};
         self.findOne(query, self.publishedPageObj, fn);
     },
 

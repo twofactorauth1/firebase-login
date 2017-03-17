@@ -146,7 +146,47 @@
                 vm.state.broadCastMessage = messages[0];
             }
             else{
-                vm.state.broadCastMessage = null;   
+                vm.state.broadCastMessage = null;
+            }
+        });
+
+
+        function loadLocationChart(data){
+            var locationData = [];
+            if (data) {
+                var _formattedLocations = [];
+                _.each(data, function (loc) {
+                    if (loc['ip_geo_info.province']) {
+                        _formattedLocations.push(loc);
+                    }
+                });
+                // $scope.mostPopularState = _.max(_formattedLocations, function (o) {
+                //     return o.result;
+                // });
+                _.each(data, function (location) {
+                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                    if (_geo_info) {
+                        var subObj = {};
+                        subObj.code = _geo_info;
+                        subObj.value = location.result;
+                        var locationExists = _.find(locationData, function (loc) {
+                            return loc.code === location.code;
+                        });
+                        if (!locationExists && subObj.value) {
+                            locationData.push(subObj);
+                        }
+                    }
+                });
+            }
+            $scope.locationData = locationData;
+        }
+
+        $scope.$watch('locationData',  function (locationData, oldData) {
+            if(angular.isDefined(locationData) && !angular.equals(locationData, oldData)){
+                $timeout(function () {
+                    var _data = angular.copy(locationData);
+                    ChartAnalyticsService.visitorLocationsDOHY(_data, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
+                }, 200);
             }
         });
 
@@ -155,7 +195,8 @@
                 if(!$scope.liveTrafficConfig) {
                     //initialize chart
                     var trafficData = _.pluck(liveTraffic, 'count');
-
+                    var locationData = liveTraffic[0].locations;
+                    loadLocationChart(locationData);
                     var categories = [];
                     for(var i=0; i<liveTraffic.length; i++) {
                         categories.push("" + (liveTraffic.length - i));
@@ -169,18 +210,20 @@
                     //updateChart
 
                     //figure out what's different
-                    
+
                     var chart = $('#live-traffic-chart').highcharts();
                     if(chart)
                         chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
 
                     $scope.liveTraffic = liveTraffic;
+                    var locationData = liveTraffic[0].locations;
+                    loadLocationChart(locationData);
                     $timeout(DashboardService.getLiveTraffic, 15000);
                 }
 
             }
         });
-        
+
         function reflowCharts(){
             window.Highcharts.charts.forEach(function(chart){
                 if(chart){
@@ -201,7 +244,7 @@
             $timeout(function() {
                 reflowCharts();
             }, 1000);
-            
+
         })();
 
     }]);
