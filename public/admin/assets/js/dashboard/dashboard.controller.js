@@ -146,7 +146,7 @@
                 vm.state.broadCastMessage = messages[0];
             }
             else{
-                vm.state.broadCastMessage = null;   
+                vm.state.broadCastMessage = null;
             }
         });
 
@@ -185,7 +185,7 @@
             if(angular.isDefined(locationData) && !angular.equals(locationData, oldData)){
                 $timeout(function () {
                     var _data = angular.copy(locationData);
-                    ChartAnalyticsService.visitorLocations(_data, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
+                    ChartAnalyticsService.visitorLocationsDOHY(_data, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
                 }, 200);
             }
         });
@@ -210,7 +210,7 @@
                     //updateChart
 
                     //figure out what's different
-                    
+
                     var chart = $('#live-traffic-chart').highcharts();
                     if(chart)
                         chart.series[0].setData(_.pluck(liveTraffic, 'count'), true);
@@ -223,7 +223,7 @@
 
             }
         });
-        
+
         function reflowCharts(){
             window.Highcharts.charts.forEach(function(chart){
                 if(chart){
@@ -244,7 +244,7 @@
             $timeout(function() {
                 reflowCharts();
             }, 1000);
-            
+
         })();
 
     }]);

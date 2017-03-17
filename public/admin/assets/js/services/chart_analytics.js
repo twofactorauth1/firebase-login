@@ -603,7 +603,7 @@
                             },
                             events: {
                                 legendItemClick: function(event) {
-                                    setLegendVisibility(_widgetName, this.name, !this.visible)                        
+                                    setLegendVisibility(_widgetName, this.name, !this.visible)
                                 }
                             }
                         }
@@ -626,7 +626,7 @@
                     {
                         name: 'Visitors',
                         data: readyVisitorsData,
-                        visible: isVisibleLegend("Visitors", _widgetName) 
+                        visible: isVisibleLegend("Visitors", _widgetName)
                     },
                     {
                         name: 'Visits',
@@ -993,14 +993,14 @@
                     pointFormat: '{point.code}: {point.value}'
                 }
             };
-            
+
             if ($("#visitor_locations_global").length) {
                 console.log('"#visitor_locations_global');
                 var chart1 = new Highcharts.Map({
                     chart: {
                         renderTo: 'visitor_locations_global',
                         height: 360,
-                        zoomType : false 
+                        zoomType : false
                     },
 
                     title: {
@@ -1037,7 +1037,7 @@
                         worldSeries
                     ],
                     xAxis:{
-                        
+
                     },
                     credits: {
                         enabled: false
@@ -1051,7 +1051,7 @@
             console.log('countryData:', countryData);
             console.log('countryMap:', countryMap);
 
-            
+
             var usSeries = {
                 animation: {
                     duration: 1000
@@ -1073,7 +1073,7 @@
                     chart: {
                         renderTo: 'visitor_locations',
                         height: 360,
-                        zoomType : false 
+                        zoomType : false
                     },
 
                     title: {
@@ -1110,7 +1110,71 @@
                         usSeries
                     ],
                     xAxis:{
-                        
+
+                    },
+                    credits: {
+                        enabled: false
+                    }
+                });
+            }
+        };
+
+        this.visitorLocationsDOHY = function (locationData, highchartsData, countryData, countryMap) {
+            var usSeries = {
+                animation: {
+                    duration: 0
+                },
+                data: locationData,
+                mapData: highchartsData,
+                joinBy: ['postal-code', 'code'],
+                dataLabels: {
+                    enabled: false
+                },
+                name: '# of Visitors',
+                tooltip: {
+                    pointFormat: '{point.code}: {point.value}'
+                }
+            };
+            if ($("#visitor_locations").length) {
+                console.log('"#visitor_locations');
+                var chart1 = new Highcharts.Map({
+                    chart: {
+                        renderTo: 'visitor_locations',
+                        height: 240,
+                        zoomType : false,
+                        backgroundColor:'rgba(255, 255, 255, 0.1)'
+                    },
+
+                    title: {
+                        text: ''
+                    },
+
+                    exporting: {
+                        enabled: false
+                    },
+
+                    legend: {
+                        enabled: false
+                    },
+
+                    mapNavigation: {
+                        enableButtons: false,
+                        enableDoubleClickZoom: false,
+                        enableTouchZoom: false
+                    },
+
+                    colorAxis: {
+                        min: 1,
+                        type: 'logarithmic',
+                        minColor: '#7cb5ec',
+                        maxColor: '#224f5b'
+                    },
+
+                    series: [
+                        usSeries
+                    ],
+                    xAxis:{
+
                     },
                     credits: {
                         enabled: false
@@ -1398,7 +1462,7 @@
                         enabled: false
                     },
                     tooltip: {
-                        
+
                     },
                     plotOptions: {
                         column: {
@@ -1410,8 +1474,8 @@
                         }
                     }
                 },
-                xAxis:{                    
-                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', "Aug", 'Sep', 'Oct', 'Nov', 'Dec']                    
+                xAxis:{
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', "Aug", 'Sep', 'Oct', 'Nov', 'Dec']
                 },
                 yAxis: {
                     allowDecimals: false,
