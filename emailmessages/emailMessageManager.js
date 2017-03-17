@@ -218,18 +218,23 @@ var emailMessageManager = {
                                 userAccountAry.push({});
                                 callback();
                             } else {
-                                userAry.push(user);
-                                var firstAccountId = user.get('accounts')[0].accountId;
-                                accountDao.getAccountByID(firstAccountId, function (err, userAccount) {
-                                    if(err) {
-                                        self.log.error('error retrieving firstAccountId:', err);
-                                        userAccountAry.push({});
-                                        callback();
-                                    } else {
-                                        userAccountAry.push(userAccount);
-                                        callback();
-                                    }
-                                });
+                                if(user){
+                                    userAry.push(user);
+                                    var firstAccountId = user.get('accounts')[0].accountId;
+                                    accountDao.getAccountByID(firstAccountId, function (err, userAccount) {
+                                        if(err) {
+                                            self.log.error('error retrieving firstAccountId:', err);
+                                            userAccountAry.push({});
+                                            callback();
+                                        } else {
+                                            userAccountAry.push(userAccount);
+                                            callback();
+                                        }
+                                    });
+                                }
+                                else{
+                                    callback();
+                                }
                             }
                         });
                     }, function(err){
