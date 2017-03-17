@@ -169,7 +169,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         isTextColumnNum: vm.isTextColumnNum,
 
-        locationFinderOptions: SimpleSiteBuilderService.getLocationFinderRanges()
+        locationFinderOptions: SimpleSiteBuilderService.getLocationFinderRanges(),
+
+        alignmentOptions : ['left', 'center', 'right']
 
     };
 
