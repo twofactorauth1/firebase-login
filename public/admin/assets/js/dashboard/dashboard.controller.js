@@ -205,7 +205,7 @@
                     $scope.liveTraffic = liveTraffic;
                     $scope.liveTrafficConfig = liveTrafficConfig;
                     $scope.liveTrafficCategories = categories;
-                    $timeout(DashboardService.getLiveTraffic, 15000);
+                    $timeout(DashboardService.getLiveTraffic, 30000);
                 } else {
                     //updateChart
 
