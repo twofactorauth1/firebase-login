@@ -776,11 +776,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                    vm.state.imageEditor.editor.video.insertByMediaAsset(asset.url);
                 }
                 else{
-                    vm.state.imageEditor.editor.image.insert(asset.url, !1, null, vm.state.imageEditor.img);
+                    if(vm.callBackImage)
+                        vm.callBackOnImageInsert(asset.url, vm.callBackImage);
+                    else
+                        vm.state.imageEditor.editor.image.insertByMediaCallback(asset.url, vm.state.imageEditor.img);                    
                 }
-            })
-            
-            
+            }) 
         }, 0);
 
     };
@@ -822,9 +823,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     // Hook froala insert up to our Media Manager
-    window.clickandInsertImageButton = function (editor, image) {
+    window.clickandInsertImageButton = function (editor, image, callBack) {
       console.log('clickandInsertImageButton >>> ');
-
+        vm.callBackOnImageInsert = callBack;
+        vm.callBackImage = image;
         if(editor){
             vm.showInsert = true;
             vm.state.imageEditor.editor = editor;
