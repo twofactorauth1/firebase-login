@@ -1082,7 +1082,7 @@
         }
 
         $scope.viewSingleOrder = function (orderId) {
-            $location.path('/commerce/orders/' + orderId);
+            $state.go('app.commerce.orderdetail', {orderId: orderId});
         }
 
 

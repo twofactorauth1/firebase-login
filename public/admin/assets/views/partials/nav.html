@@ -118,7 +118,7 @@
             </li>
         </ul>
     </li>
-	<li ng-class="{'active open':$state.includes('app.products', 'app.orders')}">
+	<li ng-class="{'active open':$state.includes('app.commerce.products') || $state.includes('app.commerce.orders') || $state.includes('app.commerce.orderdetail')}">
 		<a href="javascript:void(0)">
 			<div class="item-content">
 				<div class="item-media">
