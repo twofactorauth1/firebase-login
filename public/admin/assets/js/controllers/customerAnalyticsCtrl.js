@@ -83,23 +83,23 @@
         });
 
         $scope.platformTraffic = function() {
-            ChartAnalyticsService.getPlatformTraffic(function(data){
-                var trafficData = _.pluck(data, 'count');
-                var liveTrafficConfig = ChartAnalyticsService.liveTraffic(trafficData);
-                $scope.liveTraffic = data;
-                $scope.liveTrafficConfig = liveTrafficConfig;
+            ChartAnalyticsService.getPlatformTraffic(function(platformData){
+                var platformTrafficData = _.pluck(platformData, 'count');
+                var livePlatformTrafficConfig = ChartAnalyticsService.liveTraffic(platformTrafficData);
+                $scope.livePlatformTraffic = platformData;
+                $scope.livePlatformTrafficConfig = livePlatformTrafficConfig;
 
-                $timeout($scope.updatePlatformTraffic, 60000);
+                $timeout($scope.updatePlatformTraffic, 15000);
             });
         };
 
         $scope.updatePlatformTraffic = function() {
-            ChartAnalyticsService.getPlatformTraffic(function(data){
-                var chart = $('#live-traffic-chart').highcharts();
-                chart.series[0].setData(_.pluck(data, 'count'), true);
+            ChartAnalyticsService.getPlatformTraffic(function(platformData){
+                var chart = $('#live-platform-traffic-chart').highcharts();
+                chart.series[0].setData(_.pluck(platformData, 'count'), true);
 
-                $scope.liveTraffic = data;
-                $timeout($scope.updatePlatformTraffic, 60000);
+                $scope.livePlatformTraffic = platformData;
+                $timeout($scope.updatePlatformTraffic, 15000);
             });
         };
 
@@ -143,19 +143,19 @@
 
                 //Frontrunner Sites Pageviews
                 var _topFiveAccounts =_.first(_.sortBy($scope.pagedformattedTopPages, function(num){ return -num.pageviews; }), 5);
-                
+
                 var accountIdArray = _.map(_topFiveAccounts, function(account){
-                    return account.accountId; 
+                    return account.accountId;
                 });
 
                 ChartAnalyticsService.getFrontrunnerSitesPageviews($scope.date, $scope.analyticsAccount, accountIdArray, function (data) {
-                    
+
                     var _data = _.object(_.map(data, function (value, key) {
                         var item = _.find(_topFiveAccounts, function(account){
-                            return account.accountId == key; 
+                            return account.accountId == key;
                         });
                         if(item){
-                            return [item.page, value];    
+                            return [item.page, value];
                         }
                     }));
                     var series = [];
@@ -177,10 +177,10 @@
                             data: _chartData
                         }
                         series.push(sData);
-                    }); 
-                    
+                    });
+
                     ChartAnalyticsService.frontrunnerSitesPageviews(_data, series, function(data){
-                        $scope.frontrunnerSitesPageviewsConfig = data;                    
+                        $scope.frontrunnerSitesPageviewsConfig = data;
                     });
                 });
 
@@ -718,7 +718,7 @@
             //=======================================
 
             $scope.locationData = locationData;
-            
+
             $scope.locationLabel = 'States';
             $scope.locationsLength = locationData.length;
             $scope.mostPopularLabel = $scope.mostPopularState['ip_geo_info.province'];
@@ -729,7 +729,7 @@
             $scope.locationsLengthCountry = $scope.countryLocationData.length;
             $scope.mostPopularLabelCountry = $scope.mostPopularCountry['ip_geo_info.country'];
 
-            
+
             $scope.displayVisitors = $scope.visitors > 0;
 
             $scope.renderAnalyticsCharts();
@@ -931,7 +931,7 @@
         };
 
         function reflowCharts(){
-            window.Highcharts.charts.forEach(function(chart){                
+            window.Highcharts.charts.forEach(function(chart){
                 $timeout(function() {
                     if(chart)
                         chart.reflow();
@@ -1084,15 +1084,15 @@
         var timer=undefined;
         function setDashboardMode(){
             $rootScope.app.layout.isAnalyticsDashboardMode = true;
-            timer = $interval(function(){                
+            timer = $interval(function(){
                 console.log("Refreshing");
                 $scope.runAnalyticsReports();
                 $scope.platformTraffic();
             }, $scope.analyticsRefreshAfterTime);
         }
 
-        function setDesktopMode(){    
-            $rootScope.app.layout.isAnalyticsDashboardMode = false;            
+        function setDesktopMode(){
+            $rootScope.app.layout.isAnalyticsDashboardMode = false;
             if(angular.isDefined(timer))
             {
                 $interval.cancel(timer);

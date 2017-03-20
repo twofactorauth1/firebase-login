@@ -393,6 +393,58 @@ module.exports = {
 
     },
 
+
+    getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+        
+
+        if(!lookBackInMinutes || lookBackInMinutes === 0) {
+            lookBackInMinutes = 30;
+        }
+        var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
+        var rightnow = moment.utc().subtract('minutes', 1);
+        //self.log.debug('targetDate:', targetDate.toDate());
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:targetDate.toDate()
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+        
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
+            if(err) {
+                self.log.error('Error getting analytics:', err);
+                fn(err);
+            } else {
+                var _resultDetails = [];
+                self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                _.each(results, function(sessionEvent){
+                    var _liveDetail = {
+                        "_id": sessionEvent._id,
+                        "session_id": sessionEvent.session_id,
+                        "ip_address": sessionEvent.ip_address,
+                        "maxmind": sessionEvent.maxmind,
+                        "timestamp": sessionEvent.server_time_dt
+                    }
+                    _resultDetails.push(_liveDetail);
+                });
+                fn(null, _resultDetails);
+            }
+        });
+    },
+
     getVisitorCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
         var self = this;
         self.log = _log;

@@ -89,6 +89,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customer/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allCustomerReports.bind(this));
 
         app.get(this.url('live'), this.isAuthAndSubscribedApi.bind(this), this.getLiveVisitors.bind(this));
+        app.get(this.url('liveDetails'), this.isAuthAndSubscribedApi.bind(this), this.getLiveVisitorDetails.bind(this));
+        app.get(this.url('admin/liveDetails'), this.isAuthAndSubscribedApi.bind(this), this.getAdminLiveVisitorDetails.bind(this));
         app.get(this.url('admin/live'), this.isAuthAndSubscribedApi.bind(this), this.getAdminLiveVisitors.bind(this));
         app.get(this.url('admin/pageViewPerformance'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewPerformance.bind(this));
     },    
@@ -2413,7 +2415,7 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
 
-    },
+    },    
 
     getAdminLiveVisitors: function(req, resp) {
         var self = this;
@@ -2437,6 +2439,56 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(organization.get('adminAccount') === accountId) {
                         analyticsManager.getLiveVisitors(accountId, userId, 60, true, organization.id(), function(err, value){
                             self.log.trace(accountId, userId, '<< getAdminLiveVisitors');
+                            self.sendResultOrError(resp, err, value, 'Error getting report');
+                        });
+                    } else {
+                        self.log.warn(accountId, userId, 'Non-orgAdmin account attempted to call admin reports!');
+                        return self.send403(resp);
+                    }
+                }
+            });
+        } else {
+            self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+            return self.send403(resp);
+        }
+
+    },
+
+    getLiveVisitorDetails: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+
+        analyticsManager.getLiveVisitorDetails(accountId, userId, 60, false, null, function(err, value){
+            self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
+    },
+
+    getAdminLiveVisitorDetails: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+        if(accountId === appConfig.mainAccountID) {
+            analyticsManager.getLiveVisitorDetails(accountId, userId, 60, true, null, function(err, value){
+                self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                self.sendResultOrError(resp, err, value, 'Error getting report');
+            });
+        } else if(urlUtils.getSubdomainFromRequest(req).isOrgRoot === true){
+            /*
+             * Check if we are a org admin
+             */
+            organizationDao.getByOrgDomain(urlUtils.getSubdomainFromRequest(req).orgDomain, function(err, organization){
+                if(err || !organization) {
+                    self.log.warn(accountId, userId, 'Non-main account attempted to call admin reports!');
+                    return self.send403(resp);
+                } else {
+                    if(organization.get('adminAccount') === accountId) {
+                        analyticsManager.getLiveVisitorDetails(accountId, userId, 60, true, organization.id(), function(err, value){
+                            self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
                             self.sendResultOrError(resp, err, value, 'Error getting report');
                         });
                     } else {
