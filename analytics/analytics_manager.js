@@ -397,12 +397,9 @@ module.exports = {
     getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
-        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
-        
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');       
 
-        if(!lookBackInMinutes || lookBackInMinutes === 0) {
-            lookBackInMinutes = 30;
-        }
+        
         var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
         var rightnow = moment.utc().subtract('minutes', 1);
         //self.log.debug('targetDate:', targetDate.toDate());

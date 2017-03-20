@@ -23,6 +23,7 @@
         var baseBroadcastMessagesAPIUrl = '/api/2.0/insights/messages/';
         var baseLiveVisitorDetailsAPIUrl = '/api/1.0/analytics/liveDetails';
 
+        var defaultLookBackInMinutesInterval = 60;
 
         dashboardService.getActiveMessages = getActiveMessages;
         dashboardService.loading = { value:0 };
@@ -210,7 +211,7 @@
             function error(err) {
                 console.error('Dashboard Service getLiveVisitorDetails error: ', JSON.stringify(err));
             }
-            return dashRequest($http.get(baseLiveVisitorDetailsAPIUrl).success(success).error(error));
+            return dashRequest($http.get(baseLiveVisitorDetailsAPIUrl + "?lookBackInMinutes="+ defaultLookBackInMinutesInterval).success(success).error(error));
         }
 
         function getAccount(account) {
