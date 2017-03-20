@@ -432,13 +432,12 @@ module.exports = {
                 self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
                 
                 _.each(results, function(sessionEvent){
-                    
                     var _liveDetail = {
                         "_id": sessionEvent._id,
                         "session_id": sessionEvent.session_id,
                         "ip_address": sessionEvent.ip_address,
                         "maxmind": sessionEvent.maxmind,
-                        "timestamp": sessionEvent.server_time_dt
+                        "timestamp": moment.utc(sessionEvent.server_time_dt).local().format("YYYY-MM-DD HH:mm:ss")
                     }
                     _resultDetails.push(_liveDetail);
                 });
