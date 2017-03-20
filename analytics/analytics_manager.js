@@ -435,7 +435,8 @@ module.exports = {
                         "_id": sessionEvent._id,
                         "session_id": sessionEvent.session_id,
                         "ip_address": sessionEvent.ip_address,
-                        "maxmind": sessionEvent.maxmind
+                        "maxmind": sessionEvent.maxmind,
+                        "timestamp": sessionEvent.server_time_dt
                     }
                     _resultDetails.push(_liveDetail);
                 });
