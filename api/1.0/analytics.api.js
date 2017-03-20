@@ -89,6 +89,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('customer/reports/all'), this.isAuthAndSubscribedApi.bind(this), this.allCustomerReports.bind(this));
 
         app.get(this.url('live'), this.isAuthAndSubscribedApi.bind(this), this.getLiveVisitors.bind(this));
+        app.get(this.url('liveDetails'), this.isAuthAndSubscribedApi.bind(this), this.getLiveVisitorDetails.bind(this));
         app.get(this.url('admin/live'), this.isAuthAndSubscribedApi.bind(this), this.getAdminLiveVisitors.bind(this));
         app.get(this.url('admin/pageViewPerformance'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewPerformance.bind(this));
     },    
@@ -2413,6 +2414,19 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
 
+    },
+
+    getLiveVisitorDetails: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = self.accountId(req);
+        
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+
+        analyticsManager.getLiveVisitorDetails(accountId, userId, 60, false, null, function(err, value){
+            self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+            self.sendResultOrError(resp, err, value, 'Error getting report');
+        });
     },
 
     getAdminLiveVisitors: function(req, resp) {
