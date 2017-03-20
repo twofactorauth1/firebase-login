@@ -2460,8 +2460,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
 
         self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
-        console.log("SSSSSSSSSSSSSSSSSSS")
-        console.log(req.query.lookBackInMinutes);
+        
         var lookBackInMinutes = req.query.lookBackInMinutes;
 
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
