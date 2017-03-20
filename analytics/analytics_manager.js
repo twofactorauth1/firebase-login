@@ -430,7 +430,9 @@ module.exports = {
             } else {
                 var _resultDetails = [];
                 self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                
                 _.each(results, function(sessionEvent){
+                    
                     var _liveDetail = {
                         "_id": sessionEvent._id,
                         "session_id": sessionEvent.session_id,
