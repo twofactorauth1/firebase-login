@@ -25,6 +25,7 @@ var BlogView = require('../views/blog.server.view');
 var RSSView = require('../views/rss.server.view');
 var UAParser = require('ua-parser-js');
 var parser = new UAParser();
+var urlUtils = require('../utils/urlutils');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -361,14 +362,29 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                         userManager.addUserToAccount(account.id(), userId, roleAry, userId, function(err, user){
                             req.session.accounts = user.getAllAccountIds();
-                            accountDao.getPreviewData(req.session.accounts, function(err, data) {
-                                self.log.debug('updated preview data');
-                                req.session.accounts = data;
-                                userActivityManager.createUserActivity(userActivity, function(err, value){
-                                    self.log.debug('<< handleAddAccount');
-                                    resp.redirect('/home');
+                            var parsedHost = urlUtils.getSubdomainFromRequest(req);
+                            if(parsedHost.isOrgRoot) {
+                                //self.log.debug('Is org root');
+                                accountDao.getPreviewDataForOrg(req.session.accounts, parsedHost.orgDomain, function(err, data){
+                                    self.log.debug('updated preview data', data);
+                                    req.session.accounts = data;
+                                    userActivityManager.createUserActivity(userActivity, function(err, value){
+                                        self.log.debug('<< handleAddAccount');
+                                        resp.redirect('/home');
+                                    });
                                 });
-                            });
+                            } else {
+                                //self.log.warn('IS NOT ORG ROOT');
+                                accountDao.getPreviewData(req.session.accounts, function(err, data) {
+                                    self.log.debug('updated preview data');
+                                    req.session.accounts = data;
+                                    userActivityManager.createUserActivity(userActivity, function(err, value){
+                                        self.log.debug('<< handleAddAccount');
+                                        resp.redirect('/home');
+                                    });
+                                });
+                            }
+
 
                         });
                     } else {

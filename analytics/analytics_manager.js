@@ -397,12 +397,9 @@ module.exports = {
     getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
-        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
-        
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');       
 
-        if(!lookBackInMinutes || lookBackInMinutes === 0) {
-            lookBackInMinutes = 30;
-        }
+        
         var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
         var rightnow = moment.utc().subtract('minutes', 1);
         //self.log.debug('targetDate:', targetDate.toDate());
@@ -429,18 +426,47 @@ module.exports = {
                 fn(err);
             } else {
                 var _resultDetails = [];
-                self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
-                _.each(results, function(sessionEvent){
-                    var _liveDetail = {
-                        "_id": sessionEvent._id,
-                        "session_id": sessionEvent.session_id,
-                        "ip_address": sessionEvent.ip_address,
-                        "maxmind": sessionEvent.maxmind,
-                        "timestamp": sessionEvent.server_time_dt
-                    }
-                    _resultDetails.push(_liveDetail);
+
+                async.eachLimit(results, 10, function(sessionEvent, cb){
+                    var query = {session_id:sessionEvent.session_id};
+                    var skip = 0;
+                    var limit = 1;
+                    var sort = {server_time:-1};
+                    var fields = null;
+                    var type = $$.m.PageEvent;
+                    dao.findAllWithFieldsSortAndLimit(query, skip, limit, sort, fields, type, function(err, pageEvent){
+                        if(err) {
+                            self.log.error('Error getting page event:', err);
+                            cb();
+                        } else if(pageEvent) {
+                            var pEvent = pageEvent[0];
+                            _resultDetails.push({
+                                "_id": sessionEvent._id,
+                                "session_id": sessionEvent.session_id,
+                                "ip_address": sessionEvent.ip_address,
+                                "maxmind": sessionEvent.maxmind,   
+                                "user_agent": sessionEvent.user_agent,                             
+                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss'),
+                                lastSeen: moment(pEvent.get('server_time_dt')).format('YYYY-MM-DD HH:mm:ss'),
+                                pageRequested:pEvent.get('url').source
+                            });
+                            cb();
+                        } else {
+                            _resultDetails.push({
+                                "_id": sessionEvent._id,
+                                "session_id": sessionEvent.session_id,
+                                "ip_address": sessionEvent.ip_address,
+                                "maxmind": sessionEvent.maxmind,
+                                "user_agent": sessionEvent.user_agent,
+                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss')
+                            });
+                            cb();
+                        }
+                    });
+                }, function(err){
+                    self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                    fn(err, _resultDetails);                
                 });
-                fn(null, _resultDetails);
             }
         });
     },

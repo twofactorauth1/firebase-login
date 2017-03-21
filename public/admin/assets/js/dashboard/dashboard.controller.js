@@ -18,6 +18,7 @@
         vm.openMediaModal = openMediaModal;
         vm.insertMedia = insertMedia;
         vm.buildViewModel = buildViewModel;
+        vm.setActiveVisitorIndex = setActiveVisitorIndex;
         vm.workstreamDisplayOrder = _.invert(_.object(_.pairs(DashboardService.workstreamDisplayOrder)));
         vm.analyticDisplayOrder = _.invert(_.object(_.pairs(DashboardService.analyticDisplayOrder)));
 
@@ -223,6 +224,43 @@
 
             }
         });
+
+
+        $scope.$watch(function() { return DashboardService.liveVisitorDetails;}, function(liveVisitorDetails){            
+            vm.state.liveVisitorDetails = liveVisitorDetails;
+            if(liveVisitorDetails && liveVisitorDetails.length){
+                setActiveVisitorIndex(0, true);
+            }
+            $timeout(DashboardService.getLiveVisitorDetails, 15000);
+        });
+
+        function setActiveVisitorIndex(index, reload){
+            if(reload && vm.activeVisitorDetail){
+                var selectedVisitorDetail = _.findWhere(vm.state.liveVisitorDetails, {
+                   _id: vm.activeVisitorDetail._id
+                });
+                if(selectedVisitorDetail){
+                    var selectedVisitorIndex = _.findIndex(vm.state.liveVisitorDetails, selectedVisitorDetail);
+                    if(selectedVisitorIndex > -1){
+                        vm.selectedVisitorIndex = selectedVisitorIndex;
+                        vm.activeVisitorDetail = vm.state.liveVisitorDetails[selectedVisitorIndex];
+                    }
+                    else{
+                        vm.selectedVisitorIndex = index;
+                        vm.activeVisitorDetail = vm.state.liveVisitorDetails[index];
+                    }
+                }
+                else{
+                    vm.selectedVisitorIndex = index;
+                    vm.activeVisitorDetail = vm.state.liveVisitorDetails[index];
+                }
+            }
+            else{
+                vm.selectedVisitorIndex = index;
+                vm.activeVisitorDetail = vm.state.liveVisitorDetails[index];
+            }
+            
+        }
 
         function reflowCharts(){
             window.Highcharts.charts.forEach(function(chart){

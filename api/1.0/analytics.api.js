@@ -2460,8 +2460,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = self.accountId(req);
 
         self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+        
+        var lookBackInMinutes = req.query.lookBackInMinutes;
 
-        analyticsManager.getLiveVisitorDetails(accountId, userId, 60, false, null, function(err, value){
+        if(!lookBackInMinutes || lookBackInMinutes === 0) {
+            lookBackInMinutes = 30;
+        }
+
+        analyticsManager.getLiveVisitorDetails(accountId, userId, lookBackInMinutes, false, null, function(err, value){
             self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
             self.sendResultOrError(resp, err, value, 'Error getting report');
         });
@@ -2472,8 +2478,13 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         var accountId = self.accountId(req);
         self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+        var lookBackInMinutes = req.query.lookBackInMinutes;
+
+        if(!lookBackInMinutes || lookBackInMinutes === 0) {
+            lookBackInMinutes = 30;
+        }
         if(accountId === appConfig.mainAccountID) {
-            analyticsManager.getLiveVisitorDetails(accountId, userId, 60, true, null, function(err, value){
+            analyticsManager.getLiveVisitorDetails(accountId, userId, lookBackInMinutes, true, null, function(err, value){
                 self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
                 self.sendResultOrError(resp, err, value, 'Error getting report');
             });
@@ -2487,7 +2498,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(resp);
                 } else {
                     if(organization.get('adminAccount') === accountId) {
-                        analyticsManager.getLiveVisitorDetails(accountId, userId, 60, true, organization.id(), function(err, value){
+                        analyticsManager.getLiveVisitorDetails(accountId, userId, lookBackInMinutes, true, organization.id(), function(err, value){
                             self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
                             self.sendResultOrError(resp, err, value, 'Error getting report');
                         });

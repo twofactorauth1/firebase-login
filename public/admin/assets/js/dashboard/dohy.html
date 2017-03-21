@@ -40,29 +40,103 @@
                 Key Business Insights
             </h1>
 
-            <div>
-                <div class="indi-rounded panel panel-white margin-top-15" id="overview" style="position:relative; margin-left: 15px; padding-left:15px; margin-right:15px; padding-right:15px;" ng-class="{'load1 csspinner': !liveTrafficConfig}">
-                    <div class="panel-heading border-light">
-                        <h3 class="text-primary analytic-title"><strong>Live</strong> Visitors (per minute)</h3>
-                    </div>
+
+            <section class="indi-rounded panel panel-white dashboard-live-widget-container" style="">
+                <tabset class="tabbable tabs-left margin-bottom-0">
+                    <tab>
+                        <tab-heading>
+                            <i class="ti-bar-chart"></i>
+                        </tab-heading>
+                        
+                        <div>
+                            <div class="" id="overview"  ng-class="{'load1 csspinner': !liveTrafficConfig}">
+                                <div class="panel-heading border-light live-overview-container">
+                                    <h3 class="text-primary analytic-title"><strong>Live</strong> Visitors (per minute)</h3>
+                                </div>
+                                <div class="panel-body" style="position: relative" >
+                                    <div class="height-215 col-sm-8" ng-if="liveTrafficConfig">
+                                        <a href="/admin/#/website/site-analytics?date_filter=today"><highchart config="liveTrafficConfig" id="live-traffic-chart"></highchart></a>
+                                    </div>
+                                    <div class="height-215 col-sm-4">
+                                        <div id="visitor_locations" ng-if="locationData"></div>
+                                    </div>
+
+                                </div>
+
+                                <div class="panel-footer border-light">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </tab>
+                    <tab>
+                        <tab-heading>
+                            <i class="ti-user"></i>
+                        </tab-heading>
+                        <div class="panel-heading border-light live-overview-container">
+                            <h3 class="text-primary analytic-title"><strong>Live</strong> Visitors Details</h3>
+                        </div>
                         <div class="panel-body" style="position: relative" >
-                            <div class="height-215 col-sm-8" ng-if="liveTrafficConfig">
-                                <a href="/admin/#/website/site-analytics?date_filter=today"><highchart config="liveTrafficConfig" id="live-traffic-chart"></highchart></a>
+                            <div class="live-visitor-details" ng-if="vm.state.liveVisitorDetails.length">
+                                <!-- Live visitor details- -->
+                                
+                                <div class="col-sm-5 visitor-left-pane">
+                                    <ul class="">
+                                    
+                                        <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails"  ng-click ="vm.setActiveVisitorIndex($index)">
+                                            <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>
+                                            <div class="col-xs-8 visitor-timestamp">{{visitorDetail.timestamp}}</div>
+                                        </li>
+                                    </ul>    
+                                </div>
+                                <div class="col-sm-7 visitor-right-pane">
+                                    <ul> 
+                                        <li>
+                                            <div class="col-xs-4"><strong>Last Seen</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.lastSeen}}</div>
+                                        </li>
+                                        <li>
+                                            <div class="col-xs-4"><strong>Page Requested</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.pageRequested}}</div>
+                                        </li>
+                                        <li>    
+                                            <div class="col-xs-4"><strong>IP Address</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.ip_address}}</div>
+                                        </li>
+                                        <li>    
+                                            <div class="col-xs-4"><strong>Continent</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.continent}}</div>
+                                        </li>
+                                        <li>    
+                                            <div class="col-xs-4"><strong>Country</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.country}}</div>
+                                        </li>
+                                        <li>    
+                                            <div class="col-xs-4"><strong>City</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.city}}</div>
+                                        </li>
+                                        <li>    
+                                            <div class="col-xs-4"><strong>Browser</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.user_agent.browser.name}} {{vm.activeVisitorDetail.user_agent.browser.version}}</div>
+                                        </li> 
+                                        <li>    
+                                            <div class="col-xs-4"><strong>OS Details</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.user_agent.os.name}} {{vm.activeVisitorDetail.user_agent.os.version}}</div>
+                                        </li>     
+                                    </ul>
+                                </div> 
                             </div>
-                            <div class="height-215 col-sm-4">
-                                <div id="visitor_locations" ng-if="locationData"></div>
-                            </div>
-
                         </div>
+                    </tab>
+                    
 
-                        <div class="panel-footer border-light">
+                </tabset>
+    
+                <div class="clearfix"></div>
+            </section>
 
-                        </div>
-                </div>
-            </div>
-
-
-
+               
             <div
                 ng-repeat="analytic in vm.state.analyticsWidgets track by analytic.name"
                 class="analytic-unlocked col-xs-12 col-sm-6 " ng-class="{'col-md-4 col-lg-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-6 col-md-6 col-lg-4': !app.layout.isSidebarClosed}">

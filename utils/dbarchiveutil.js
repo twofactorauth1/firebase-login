@@ -421,9 +421,62 @@ var archiveUtil = {
         });
 
 
+    },
+
+    cleanupPingCollection: function(fn) {
+        var self = this;
+        self.log.debug('>> cleanupPingCollection');
+        var dbConnect = mongoConfig.PROD_MONGODB_CONNECT;
+        var db = mongoskin.db(dbConnect, {safe:true});
+        var sourceCollection = db.collection('ping_events');
+        var sessionCollection = db.collection('session_events');
+        var batchSize = 500;
+        var skip = 0;
+        var numUpdated = 0;
+        var query = {server_time:{$lt:1483228800000}};
+        var iteration = 0;
+
+        async.doWhilst(function(callback){
+            numUpdated = 0;
+            sourceCollection.find(query).skip(skip).limit(batchSize).toArray(function(err, docs){
+                if(err) {
+                    self.log.error('Error finding ping events:', err);
+                    callback(err);
+                } else if(docs) {
+                    //self.log.debug('found ' + docs.length + ' docs', docs);
+                    async.each(docs, function(doc, cb){
+                        sessionCollection.find({session_id:doc.session_id}, []).limit(1).toArray(function(err, sessionEvent){
+                            if(sessionEvent && sessionEvent.sessionEnd !== 0) {
+                                //self.log.debug('Removing pingEvent with id:', doc._id);
+                                sourceCollection.remove(doc);
+                                numUpdated++;
+                                cb();
+                            } else {
+                                skip++;
+                                cb();
+                            }
+                        });
+                    }, function(err){
+                        if(err) {
+                            self.log.error(err);
+                        }
+                        iteration++;
+                        callback(err);
+                    });
+                } else {
+                    self.log.warn('Found this for docs:', docs);
+                    callback();
+                }
+            });
+        }, function(){
+            self.log.info('Iteration: '+ iteration + ' - numUpdated:' + numUpdated + ' - skip:' + skip);
+            return numUpdated > 0;
+        }, function(err){
+            self.log.info('Finished.');
+            self.log.info('Iterations: ' + iteration);
+            fn();
+        });
     }
-
-
 };
 
 module.exports = archiveUtil;
