@@ -444,7 +444,8 @@ module.exports = {
                                 "_id": sessionEvent._id,
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
-                                "maxmind": sessionEvent.maxmind,                                
+                                "maxmind": sessionEvent.maxmind,   
+                                "user_agent": sessionEvent.user_agent,                             
                                 "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss'),
                                 lastSeen: moment(pEvent.get('server_time_dt')).format('YYYY-MM-DD HH:mm:ss'),
                                 pageRequested:pEvent.get('url').source
@@ -456,6 +457,7 @@ module.exports = {
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
+                                "user_agent": sessionEvent.user_agent,
                                 "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss')
                             });
                             cb();

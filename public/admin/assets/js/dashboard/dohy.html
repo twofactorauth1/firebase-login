@@ -82,7 +82,7 @@
                                 <!-- Live visitor details- -->
                                 
                                 <div class="col-sm-5 visitor-left-pane">
-                                    <ul class="visitor-main-details">
+                                    <ul class="">
                                     
                                         <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails"  ng-click ="vm.setActiveVisitorIndex($index)">
                                             <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>
@@ -115,7 +115,15 @@
                                         <li>    
                                             <div class="col-xs-4"><strong>City</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.city}}</div>
-                                        </li>    
+                                        </li>
+                                        <li>    
+                                            <div class="col-xs-4"><strong>Browser</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.user_agent.browser.name}} {{vm.activeVisitorDetail.user_agent.browser.version}}</div>
+                                        </li> 
+                                        <li>    
+                                            <div class="col-xs-4"><strong>OS Details</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.user_agent.os.name}} {{vm.activeVisitorDetail.user_agent.os.version}}</div>
+                                        </li>     
                                     </ul>
                                 </div> 
                             </div>
