@@ -445,8 +445,8 @@ module.exports = {
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
-                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format("YYYY-MM-DD HH:mm:ss"),
-                                lastSeen: moment.utc(pEvent.get('server_time_dt')).local().format("YYYY-MM-DD HH:mm:ss"),
+                                "timestamp": sessionEvent.server_time_dt,
+                                lastSeen: pEvent.get('server_time_dt'),
                                 pageRequested:pEvent.get('url').source
                             });
                             cb();
@@ -456,7 +456,7 @@ module.exports = {
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
-                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format("YYYY-MM-DD HH:mm:ss")
+                                "timestamp": sessionEvent.server_time_dt
                             });
                             cb();
                         }
