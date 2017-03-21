@@ -45,7 +45,7 @@
                 <tabset class="tabbable tabs-left margin-bottom-0">
                     <tab>
                         <tab-heading>
-                            <i class="ti-control-stop"></i>
+                            <i class="ti-bar-chart"></i>
                         </tab-heading>
                         
                         <div>
@@ -82,7 +82,7 @@
                                 <!-- Live visitor details- -->
                                 
                                 <div class="col-sm-5 visitor-left-pane">
-                                    <ul class="">
+                                    <ul class="visitor-main-details">
                                     
                                         <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails"  ng-click ="vm.setActiveVisitorIndex($index)">
                                             <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>

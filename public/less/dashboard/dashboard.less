@@ -551,8 +551,8 @@
     .tabbable{
         border-radius: 8px !important;
         .tab-content{
-            border-left: solid 1px #EFEFF4;
-            
+            border: none;
+            border-left: solid 1px #EFEFF4;            
         }
         .tab-pane{
             margin-left:-15px;
@@ -588,6 +588,10 @@
                     color: #fff !important;
                 }
             }
+
+            li > a{
+                min-width: 50px;
+            }
             
         } 
 
@@ -595,7 +599,6 @@
             margin-left: -15px;
             margin-top: -15px;
             .visitor-left-pane{
-                min-height: 250px;
                 max-height: 300px;
                 overflow: auto;
                 border-right: solid 1px #EFEFF4;
@@ -612,6 +615,12 @@
                     }
                     li{
                         line-height: 2.5em;
+                        float: left;
+                        width: 100%;
+                        border-bottom: 1px solid #e2e2e4;
+                    }
+                    li:nth-child(odd) {
+                        background-color: #efeff0;
                     }
                 }
             }
@@ -633,13 +642,12 @@
                 font-weight: bold;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                outline: solid 1px #EFEFF4;
             }
             .visitor-timestamp{
                 color: #48b1cc;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                border-bottom: solid 1px #EFEFF4;
+                
             }
 
         }

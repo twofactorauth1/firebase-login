@@ -206,7 +206,7 @@
                     $scope.liveTraffic = liveTraffic;
                     $scope.liveTrafficConfig = liveTrafficConfig;
                     $scope.liveTrafficCategories = categories;
-                    //$timeout(DashboardService.getLiveTraffic, 15000);
+                    $timeout(DashboardService.getLiveTraffic, 15000);
                 } else {
                     //updateChart
 
@@ -219,7 +219,7 @@
                     $scope.liveTraffic = liveTraffic;
                     var locationData = liveTraffic[0].locations;
                     loadLocationChart(locationData);
-                    //$timeout(DashboardService.getLiveTraffic, 15000);
+                    $timeout(DashboardService.getLiveTraffic, 15000);
                 }
 
             }
@@ -231,7 +231,7 @@
             if(liveVisitorDetails && liveVisitorDetails.length){
                 setActiveVisitorIndex(0, true);
             }
-            //$timeout(DashboardService.getLiveVisitorDetails, 15000);
+            $timeout(DashboardService.getLiveVisitorDetails, 15000);
         });
 
         function setActiveVisitorIndex(index, reload){
