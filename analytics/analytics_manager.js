@@ -397,12 +397,9 @@ module.exports = {
     getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
-        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
-        
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');       
 
-        if(!lookBackInMinutes || lookBackInMinutes === 0) {
-            lookBackInMinutes = 30;
-        }
+        
         var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
         var rightnow = moment.utc().subtract('minutes', 1);
         //self.log.debug('targetDate:', targetDate.toDate());
@@ -429,6 +426,7 @@ module.exports = {
                 fn(err);
             } else {
                 var _resultDetails = [];
+
                 async.eachLimit(results, 10, function(sessionEvent, cb){
                     var query = {session_id:sessionEvent.session_id};
                     var skip = 0;
@@ -441,14 +439,15 @@ module.exports = {
                             self.log.error('Error getting page event:', err);
                             cb();
                         } else if(pageEvent) {
+                            var pEvent = pageEvent[0];
                             _resultDetails.push({
                                 "_id": sessionEvent._id,
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
-                                "timestamp": sessionEvent.server_time_dt,
-                                lastSeen:pageEvent.get('server_time_dt'),
-                                pageRequested:pageEvent.get('url').source
+                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format("YYYY-MM-DD HH:mm:ss"),
+                                lastSeen: moment.utc(pEvent.get('server_time_dt')).local().format("YYYY-MM-DD HH:mm:ss"),
+                                pageRequested:pEvent.get('url').source
                             });
                             cb();
                         } else {
@@ -457,16 +456,15 @@ module.exports = {
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
-                                "timestamp": sessionEvent.server_time_dt
+                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format("YYYY-MM-DD HH:mm:ss")
                             });
                             cb();
                         }
                     });
                 }, function(err){
                     self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
-                    fn(err, _resultDetails);
+                    fn(err, _resultDetails);                
                 });
-               
             }
         });
     },

@@ -21,7 +21,9 @@
         var baseLiveTrafficAPIUrl = '/api/1.0/analytics/live';
         var basePlatformLiveTrafficAPIUrl = '/api/1.0/analytics/admin/live';
         var baseBroadcastMessagesAPIUrl = '/api/2.0/insights/messages/';
+        var baseLiveVisitorDetailsAPIUrl = '/api/1.0/analytics/liveDetails';
 
+        var defaultLookBackInMinutesInterval = 60;
 
         dashboardService.getActiveMessages = getActiveMessages;
         dashboardService.loading = { value:0 };
@@ -60,6 +62,7 @@
         dashboardService.getAnalytics = getAnalytics;
         dashboardService.getAccount = getAccount;
         dashboardService.getLiveTraffic = getLiveTraffic;
+        dashboardService.getLiveVisitorDetails = getLiveVisitorDetails;
         dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
 
 
@@ -200,6 +203,17 @@
             return dashRequest($http.get(basePlatformLiveTrafficAPIUrl).success(success).error(error));
         }
 
+
+        function getLiveVisitorDetails() {
+            function success(data) {
+                dashboardService.liveVisitorDetails = data;
+            }
+            function error(err) {
+                console.error('Dashboard Service getLiveVisitorDetails error: ', JSON.stringify(err));
+            }
+            return dashRequest($http.get(baseLiveVisitorDetailsAPIUrl + "?lookBackInMinutes="+ defaultLookBackInMinutesInterval).success(success).error(error));
+        }
+
         function getAccount(account) {
 
             function success(data) {
@@ -269,6 +283,7 @@
             dashboardService.getAnalytics();
             dashboardService.getWorkstreams();
             dashboardService.getLiveTraffic();
+            dashboardService.getLiveVisitorDetails();
             dashboardService.getActiveMessages();
             dashboardService.numberPolling++;
 		})();
