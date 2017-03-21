@@ -362,7 +362,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                         userManager.addUserToAccount(account.id(), userId, roleAry, userId, function(err, user){
                             req.session.accounts = user.getAllAccountIds();
-                            var parsedHost = urlUtils.getSubdomainFromHost(req);
+                            var parsedHost = urlUtils.getSubdomainFromRequest(req);
                             if(parsedHost.isOrgRoot) {
                                 //self.log.debug('Is org root');
                                 accountDao.getPreviewDataForOrg(req.session.accounts, parsedHost.orgDomain, function(err, data){
