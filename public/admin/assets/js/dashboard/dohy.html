@@ -47,7 +47,7 @@
                         <tab-heading>
                             <i class="ti-bar-chart"></i>
                         </tab-heading>
-                        
+
                         <div>
                             <div class="" id="overview"  ng-class="{'load1 csspinner': !liveTrafficConfig}">
                                 <div class="panel-heading border-light live-overview-container">
@@ -80,18 +80,18 @@
                         <div class="panel-body" style="position: relative" >
                             <div class="live-visitor-details" ng-if="vm.state.liveVisitorDetails.length">
                                 <!-- Live visitor details- -->
-                                
+
                                 <div class="col-sm-5 visitor-left-pane">
                                     <ul class="">
-                                    
-                                        <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails"  ng-click ="vm.setActiveVisitorIndex($index)">
+
+                                        <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails | orderBy:'-timestamp'"  ng-click ="vm.setActiveVisitorIndex($index)">
                                             <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>
                                             <div class="col-xs-8 visitor-timestamp">{{visitorDetail.timestamp}}</div>
                                         </li>
-                                    </ul>    
+                                    </ul>
                                 </div>
                                 <div class="col-sm-7 visitor-right-pane">
-                                    <ul> 
+                                    <ul>
                                         <li>
                                             <div class="col-xs-4"><strong>Last Seen</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.lastSeen}}</div>
@@ -100,43 +100,51 @@
                                             <div class="col-xs-4"><strong>Page Requested</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.pageRequested}}</div>
                                         </li>
-                                        <li>    
+                                        <li>
                                             <div class="col-xs-4"><strong>IP Address</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.ip_address}}</div>
                                         </li>
-                                        <li>    
+                                        <li ng-if="vm.activeVisitorDetail.maxmind.continent">
                                             <div class="col-xs-4"><strong>Continent</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.continent}}</div>
                                         </li>
-                                        <li>    
+                                        <li ng-if="vm.activeVisitorDetail.maxmind.country">
                                             <div class="col-xs-4"><strong>Country</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.country}}</div>
                                         </li>
-                                        <li>    
+                                        <li ng-if="vm.activeVisitorDetail.maxmind.province">
+                                            <div class="col-xs-4"><strong>State</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.province}}</div>
+                                        </li>
+                                        <li ng-if="vm.activeVisitorDetail.maxmind.city">
                                             <div class="col-xs-4"><strong>City</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.city}}</div>
                                         </li>
-                                        <li>    
+                                        <li ng-if="vm.activeVisitorDetail.maxmind.postal_code">
+                                            <div class="col-xs-4"><strong>Postal Code</strong></div>
+                                            <div class="col-xs-8">{{vm.activeVisitorDetail.maxmind.postal_code}}</div>
+                                        </li>
+                                        <li>
                                             <div class="col-xs-4"><strong>Browser</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.user_agent.browser.name}} {{vm.activeVisitorDetail.user_agent.browser.version}}</div>
-                                        </li> 
-                                        <li>    
+                                        </li>
+                                        <li>
                                             <div class="col-xs-4"><strong>OS Details</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.user_agent.os.name}} {{vm.activeVisitorDetail.user_agent.os.version}}</div>
-                                        </li>     
+                                        </li>
                                     </ul>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </tab>
-                    
+
 
                 </tabset>
-    
+
                 <div class="clearfix"></div>
             </section>
 
-               
+
             <div
                 ng-repeat="analytic in vm.state.analyticsWidgets track by analytic.name"
                 class="analytic-unlocked col-xs-12 col-sm-6 " ng-class="{'col-md-4 col-lg-3': app.layout.isSidebarClosed, 'col-xs-12 col-sm-6 col-md-6 col-lg-4': !app.layout.isSidebarClosed}">
