@@ -271,7 +271,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.trace(accountId, userId, '>> getLiveVistiors');
-
+        
 
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
             lookBackInMinutes = 30;
@@ -347,7 +347,7 @@ module.exports = {
                     results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
                 }
                 self.log.trace(accountId, userId, '<< getLiveVistiors');
-
+                
 
                 // Adding location data
                 var stageAry = [];
@@ -380,7 +380,7 @@ module.exports = {
                 dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
                     _.each(value, function(result){
                         result['ip_geo_info.province'] = result._id;
-                    });
+                    });                    
                     self.log.debug(accountId, userId, '<< getLiveVisitors');
                     //fn(err, value);
                     if(results.length > 0){
@@ -397,9 +397,9 @@ module.exports = {
     getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
-        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');       
 
-
+        
         var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
         var rightnow = moment.utc().subtract('minutes', 1);
         //self.log.debug('targetDate:', targetDate.toDate());
@@ -419,7 +419,7 @@ module.exports = {
             match.$match.orgId = orgId;
         }
         stageAry.push(match);
-
+        
         dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
             if(err) {
                 self.log.error('Error getting analytics:', err);
@@ -444,10 +444,10 @@ module.exports = {
                                 "_id": sessionEvent._id,
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
-                                "maxmind": sessionEvent.maxmind,
-                                "user_agent": sessionEvent.user_agent,
-                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss').tz(moment.tz.guess()),
-                                lastSeen: moment(pEvent.get('server_time_dt')).format('YYYY-MM-DD HH:mm:ss').tz(moment.tz.guess()),
+                                "maxmind": sessionEvent.maxmind,   
+                                "user_agent": sessionEvent.user_agent,                             
+                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss'),
+                                lastSeen: moment(pEvent.get('server_time_dt')).format('YYYY-MM-DD HH:mm:ss'),
                                 pageRequested:pEvent.get('url').source
                             });
                             cb();
@@ -458,14 +458,14 @@ module.exports = {
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
-                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss').tz(moment.tz.guess())
+                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss')
                             });
                             cb();
                         }
                     });
                 }, function(err){
                     self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
-                    fn(err, _resultDetails);
+                    fn(err, _resultDetails);                
                 });
             }
         });
