@@ -231,7 +231,7 @@ _.extend(view.prototype, BaseView.prototype, {
 
                 if (pageHolder[handle] && pageHolder[handle].seo && pageHolder[handle].seo.keywords && pageHolder[handle].seo.keywords.length) {
                     data.seo.keywords = _.pluck(pageHolder[handle].seo.keywords,"text").join(",");
-                } else if (value.website.seo.keywords && value.website.seo.keywords.length) {
+                } else if (value.website.seo && value.website.seo.keywords && value.website.seo.keywords.length) {
                     data.seo.keywords = _.pluck(value.website.seo.keywords,"text").join(",");
                 }
 
