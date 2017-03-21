@@ -664,6 +664,12 @@ module.exports = function(grunt) {
         dbPerfUtil.run(done);
     });
 
+    grunt.registerTask('cleanupPings', 'Cleanup Pings', function(){
+        var done = this.async();
+        var dbArchiveUtil = require('./utils/dbarchiveutil');
+        dbArchiveUtil.cleanupPingCollection(done);
+    });
+
     // grunt.registerTask('serve', 'Start a custom web server.', function() {
     //     grunt.log.writeln('Starting web server on port 80.');
     //     require('./app.js');
