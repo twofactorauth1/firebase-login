@@ -17,7 +17,7 @@
                     <form name="formBuilder" ng-submit="vm.createUser(formBuilder)">
 
                         <div class="form-builder-layout" ng-switch="vm.component.layout">
-                            <div ng-switch-when="1" class="form-layout-1 input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="1" class="form-layout-1 input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}"  ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <span ng-if="!val.optional" class="required">*</span>
                                     <label class="control-label">{{val.label || val.type}}</label>
@@ -37,7 +37,7 @@
 
 
                             </div>
-                            <div ng-switch-when="2" class="form-layout-2 input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="2" class="form-layout-2 input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <span ng-if="!val.optional" class="required">*</span>
                                     <label class="col-sm-2 control-label">{{val.label || val.type}}</label>
@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div ng-switch-when="3" class="form-layout-3 col-sm-12 input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="3" class="form-layout-3 col-sm-12 input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div class="col-sm-6">
                                     <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible && val.name !== 'message'" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <span ng-if="!val.optional" class="required">*</span>
@@ -84,7 +84,7 @@
                                 </div>
 
                             </div>
-                            <div ng-switch-when="4" class="form-layout-4 input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="4" class="form-layout-4 input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <span ng-if="!val.optional" class="required">*</span>
                                     <input ng-if="val.name !== 'message'" placeholder="{{val.label || val.type}}" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)">
@@ -103,7 +103,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div ng-switch-default class="form-layout-custom input-fields {{vm.nthRow}}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
+                            <div ng-switch-default class="form-layout-custom input-fields {{vm.nthRow}}" ng-class="{'input-field-spacing': vm.component.formSettings.spacing.pr}" ng-attr-style="{{vm.inputContainerStyle(vm.component.formSettings)}}">
                                 <div ng-attr-style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group {{vm.fieldClass()}}" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo" ng-class="{ 'has-error' : (formBuilder.{{val.name}}.$invalid || formBuilder.{{val.name}}.$error.$required) && !formBuilder.{{val.name}}.$pristine }">
                                     <span ng-if="!val.optional" class="required">*</span>
                                     <input ng-if="val.name !== 'message'" type="text" class="form-control" ng-model="vm.formBuilder[val.name]" ng-attr-style="{{vm.inputStyle(vm.component.formSettings)}}" name="{{val.name}}" ng-required='!val.optional' ng-pattern="vm.addPattern(val)" placeholder="{{val.label || val.type}}">
@@ -155,50 +155,50 @@
             font-size: 14px !important;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row2 div:nth-child(2n) {
             padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row2 div:nth-child(2n+1) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row2 div:nth-child(2n+1) {
             padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
             clear: left;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row3 div:nth-child(3n) {
             padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:nth-child(3n+1) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row3 div:nth-child(3n+1) {
             padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row3 div:not(:nth-child(3n)), .input-fields.nth-row3 div:not(:nth-child(3n+1)) {
-            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-        }
-
-        .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n) {
-            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
-        }
-
-        .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:nth-child(4n+1) {
-            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
-        }
-
-        .form-builder-{{vm.component._id}} .input-fields.nth-row4 div:not(:nth-child(4n)), .input-fields.nth-row4 div:not(:nth-child(4n+1)) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row3 div:not(:nth-child(3n)), .input-field-spacing.input-fields.nth-row3 div:not(:nth-child(3n+1)) {
             padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
             padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row4 div:nth-child(4n) {
             padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:nth-child(5n+1) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row4 div:nth-child(4n+1) {
             padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }
 
-        .form-builder-{{vm.component._id}} .input-fields.nth-row5 div:not(:nth-child(5n)), .input-fields.nth-row5 div:not(:nth-child(5n+1)) {
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row4 div:not(:nth-child(4n)), .input-field-spacing.input-fields.nth-row4 div:not(:nth-child(4n+1)) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row5 div:nth-child(5n) {
+            padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row5 div:nth-child(5n+1) {
+            padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
+        }
+
+        .form-builder-{{vm.component._id}} .input-field-spacing.input-fields.nth-row5 div:not(:nth-child(5n)), .input-field-spacing.input-fields.nth-row5 div:not(:nth-child(5n+1)) {
             padding-left: {{vm.component.formSettings.spacing.pr/2}}px !important;
             padding-right: {{vm.component.formSettings.spacing.pr/2}}px !important;
         }

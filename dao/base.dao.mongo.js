@@ -313,14 +313,14 @@ var mongodao = {
 
         if (fields) {
             if (sort) {
-                console.log('sort:', sort);
+                //console.log('sort:', sort);
                 mongoColl.find(_query, fields).sort(sort).skip(_skip).limit(limit).toArray(fxn);
             } else {
                 mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
             }
         } else {
             if (sort) {
-                console.log('sort:', sort);
+                //console.log('sort:', sort);
                 mongoColl.find(_query, [], sort).skip(_skip).limit(_limit).toArray(fxn);
             } else {
                 mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);

@@ -13,6 +13,7 @@
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.commerce.PRODUCTS"></h1>
                 <span class="mainDescription" ng-if="products.length">You currently have {{products.length}} products in your store. ({{displayedProducts.length || 0}} in filtered view)</span>
+                <span class="mainDescription" ng-if="!products">Loading products..</span>
             </div>
         </div>
     </section>

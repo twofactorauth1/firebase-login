@@ -21,6 +21,7 @@
         vm.setActiveVisitorIndex = setActiveVisitorIndex;
         vm.workstreamDisplayOrder = _.invert(_.object(_.pairs(DashboardService.workstreamDisplayOrder)));
         vm.analyticDisplayOrder = _.invert(_.object(_.pairs(DashboardService.analyticDisplayOrder)));
+        vm.convertUtcToLocal = convertUtcToLocal;
 
         $scope.$watch(function() { return DashboardService.state }, function(state) {
 
@@ -263,12 +264,11 @@
         }
 
         function reflowCharts(){
-            window.Highcharts.charts.forEach(function(chart){
-                if(chart){
-                    $timeout(function() {
+            window.Highcharts.charts.forEach(function(chart){                
+                $timeout(function() {
+                    if(angular.isDefined(chart) && Object.keys(chart).length)
                         chart.reflow();
-                    }, 500);
-                }
+                }, 1000);
             })
         };
 
@@ -277,6 +277,13 @@
                 reflowCharts();
             }
         });
+
+
+        function convertUtcToLocal(_date){
+            if(_date){
+              return moment.utc(_date).local().format('YYYY-MM-DD HH:mm:ss')
+            }
+        }
 
         (function init() {
             $timeout(function() {

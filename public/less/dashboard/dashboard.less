@@ -556,7 +556,7 @@
         }
         .tab-pane{
             margin-left:-15px;
-            min-height: 100px;
+            min-height: 360px;
             padding: 0px;
         }
         @media screen and (max-width: 767px) {
@@ -599,7 +599,7 @@
             margin-left: -15px;
             margin-top: -15px;
             .visitor-left-pane{
-                max-height: 300px;
+                max-height: 290px;
                 overflow: auto;
                 border-right: solid 1px #EFEFF4;
                 padding-right:0;
@@ -627,6 +627,8 @@
             .visitor-right-pane{
                 padding-top: 10px;
                 line-height: 1.6em;
+                max-height:290px;
+                overflow: auto;
                 ul{
                     list-style: none;
                     margin: 0;
@@ -634,6 +636,9 @@
                     li{
                         display:inline-block;
                         width:100%;
+                    }
+                    ul.page-events{
+                        padding: 5px;
                     }
                 }
 

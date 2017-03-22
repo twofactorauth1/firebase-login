@@ -271,7 +271,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.trace(accountId, userId, '>> getLiveVistiors');
-        
+
 
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
             lookBackInMinutes = 30;
@@ -347,7 +347,7 @@ module.exports = {
                     results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
                 }
                 self.log.trace(accountId, userId, '<< getLiveVistiors');
-                
+
 
                 // Adding location data
                 var stageAry = [];
@@ -380,7 +380,7 @@ module.exports = {
                 dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
                     _.each(value, function(result){
                         result['ip_geo_info.province'] = result._id;
-                    });                    
+                    });
                     self.log.debug(accountId, userId, '<< getLiveVisitors');
                     //fn(err, value);
                     if(results.length > 0){
@@ -397,9 +397,9 @@ module.exports = {
     getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
         var self = this;
         self.log = _log;
-        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');       
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
 
-        
+
         var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
         var rightnow = moment.utc().subtract('minutes', 1);
         //self.log.debug('targetDate:', targetDate.toDate());
@@ -418,8 +418,10 @@ module.exports = {
         if(orgId !== null) {
             match.$match.orgId = orgId;
         }
-        stageAry.push(match);
         
+
+        stageAry.push(match);
+
         dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
             if(err) {
                 self.log.error('Error getting analytics:', err);
@@ -434,21 +436,27 @@ module.exports = {
                     var sort = {server_time:-1};
                     var fields = null;
                     var type = $$.m.PageEvent;
-                    dao.findAllWithFieldsSortAndLimit(query, skip, limit, sort, fields, type, function(err, pageEvent){
+                    dao.findAllWithFieldsSortAndLimit(query, skip, null, sort, fields, type, function(err, pageEvents){
                         if(err) {
                             self.log.error('Error getting page event:', err);
                             cb();
-                        } else if(pageEvent) {
-                            var pEvent = pageEvent[0];
+                        } else if(pageEvents) {
+                            var _pageEvents = [];
+                            _.each(pageEvents, function(pEvent){
+                                _pageEvents.push({
+                                    pageTime : pEvent.get('server_time_dt'),
+                                    pageRequested : pEvent.get('url').source
+                                }) 
+                            });
                             _resultDetails.push({
                                 "_id": sessionEvent._id,
                                 "session_id": sessionEvent.session_id,
                                 "ip_address": sessionEvent.ip_address,
-                                "maxmind": sessionEvent.maxmind,   
-                                "user_agent": sessionEvent.user_agent,                             
-                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss'),
-                                lastSeen: moment(pEvent.get('server_time_dt')).format('YYYY-MM-DD HH:mm:ss'),
-                                pageRequested:pEvent.get('url').source
+                                "maxmind": sessionEvent.maxmind,
+                                "user_agent": sessionEvent.user_agent,
+                                "timestamp": sessionEvent.server_time_dt,
+                                "server_time": sessionEvent.server_time,
+                                pageEvents : _pageEvents
                             });
                             cb();
                         } else {
@@ -458,14 +466,16 @@ module.exports = {
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
-                                "timestamp": moment(sessionEvent.server_time_dt).format('YYYY-MM-DD HH:mm:ss')
+                                "timestamp": sessionEvent.server_time_dt,
+                                "server_time": sessionEvent.server_time,
                             });
                             cb();
                         }
                     });
                 }, function(err){
                     self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
-                    fn(err, _resultDetails);                
+                    _resultDetails = _.sortBy(_resultDetails, function(result){return -result.server_time;});
+                    fn(err, _resultDetails);
                 });
             }
         });
