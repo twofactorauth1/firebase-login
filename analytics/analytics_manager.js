@@ -434,12 +434,18 @@ module.exports = {
                     var sort = {server_time:-1};
                     var fields = null;
                     var type = $$.m.PageEvent;
-                    dao.findAllWithFieldsSortAndLimit(query, skip, limit, sort, fields, type, function(err, pageEvent){
+                    dao.findAllWithFieldsSortAndLimit(query, skip, null, sort, fields, type, function(err, pageEvents){
                         if(err) {
                             self.log.error('Error getting page event:', err);
                             cb();
-                        } else if(pageEvent) {
-                            var pEvent = pageEvent[0];
+                        } else if(pageEvents) {
+                            var _pageEvents = [];
+                            _.each(pageEvents, function(pEvent){
+                                _pageEvents.push({
+                                    pageTime : moment.utc(pEvent.get('server_time_dt')).local().format('YYYY-MM-DD HH:mm:ss'),
+                                    pageRequested : pEvent.get('url').source
+                                }) 
+                            });
                             _resultDetails.push({
                                 "_id": sessionEvent._id,
                                 "session_id": sessionEvent.session_id,
@@ -447,8 +453,7 @@ module.exports = {
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
                                 "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss'),
-                                lastSeen: moment.utc(pEvent.get('server_time_dt')).local().format('YYYY-MM-DD HH:mm:ss'),
-                                pageRequested:pEvent.get('url').source
+                                pageEvents : _pageEvents
                             });
                             cb();
                         } else {
