@@ -83,8 +83,7 @@
 
                                 <div class="col-sm-5 visitor-left-pane">
                                     <ul class="">
-
-                                        <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails track by $index"  ng-click ="vm.setActiveVisitorIndex($index)">
+                                        <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails track by $index"  ng-click ="vm.setActiveVisitorIndex($index)" class="cursor-pointer">
                                             <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>
                                             <div class="col-xs-8 visitor-timestamp">{{vm.convertUtcToLocal(visitorDetail.timestamp)}}</div>
                                         </li>
@@ -92,7 +91,7 @@
                                 </div>
                                 <div class="col-sm-7 visitor-right-pane">
                                     <ul>
-                                        
+
                                         <li>
                                             <div class="col-xs-4"><strong>IP Address</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.ip_address}}</div>
@@ -125,14 +124,12 @@
                                             <div class="col-xs-4"><strong>OS Details</strong></div>
                                             <div class="col-xs-8">{{vm.activeVisitorDetail.user_agent.os.name}} {{vm.activeVisitorDetail.user_agent.os.version}}</div>
                                         </li>
-                                        <li>
-                                            <hr>
-                                            <ul class="page-events">
-                                                <li ng-repeat="pageEvent in vm.activeVisitorDetail.pageEvents | orderBy:'-pageTime'">
-                                                   <div class="col-xs-4">{{vm.convertUtcToLocal(pageEvent.pageTime)}}</div>
-                                                    <div class="col-xs-8">{{pageEvent.pageRequested}}</div>
-                                                </li> 
-                                            </ul>
+                                    </ul>
+                                    <hr>
+                                    <ul class="page-events">
+                                        <li ng-repeat="pageEvent in vm.activeVisitorDetail.pageEvents | orderBy:'-pageTime'">
+                                           <div class="col-xs-4">{{vm.convertUtcToLocal(pageEvent.pageTime)}}</div>
+                                            <div class="col-xs-8">{{pageEvent.pageRequested}}</div>
                                         </li>
                                     </ul>
                                 </div>
