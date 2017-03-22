@@ -5,9 +5,9 @@
 
 	app.factory('DashboardService', DashboardService);
 
-	DashboardService.$inject = ['$http', '$q', '$timeout', 'dashboardBackgrounds'];
+	DashboardService.$inject = ['$http', '$q', '$rootScope', '$timeout', 'dashboardBackgrounds'];
 	/* @ngInject */
-	function DashboardService($http, $q, $timeout, dashboardBackgrounds) {
+	function DashboardService($http, $q, $rootScope, $timeout, dashboardBackgrounds) {
 
         var dashboardService = {
             state: {
@@ -274,6 +274,11 @@
             return dashRequest($http.get(baseBroadcastMessagesAPIUrl + "active").success(success).error(error));
 
         }
+
+
+        $rootScope.$on('$ssbAccountUpdated', function(event, account) {
+            dashboardService.getAccount();
+        });
 
 
 
