@@ -265,7 +265,7 @@
         function reflowCharts(){
             window.Highcharts.charts.forEach(function(chart){                
                 $timeout(function() {
-                    if(angular.isDefined(chart))
+                    if(angular.isDefined(chart) && Object.keys(chart).length)
                         chart.reflow();
                 }, 1000);
             })
