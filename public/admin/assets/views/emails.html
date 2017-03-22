@@ -56,7 +56,7 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedEmails">
+                    <table class="table table-striped table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView != 'grid'}" ng-show="displayedEmails">
                         <thead>
                             <tr>
                                 <!--<th class="center">Screenshot</th>-->
@@ -88,9 +88,9 @@
                                <!-- <td class="center">
                                     <img id="template_screenshot_{{template._id}}" ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td> -->
-                                <td><strong>Title: </strong><span ng-text-truncate="template.title" ng-tt-chars-threshold="16" ng-tt-no-toggling tooltip-placement="top" tooltip="{{template.title}}" tooltip-enable="template.title.length > 16"></span></td>
+                                <td><strong>Title: </strong><span ng-text-truncate="template.title" ng-tt-chars-threshold="16" ng-tt-no-toggling tooltip-placement="top" tooltip="{{template.title}}" tooltip-enable="template.title.length > 16" style="line-height:38px;"></span></td>
                                 <td><strong>Type: </strong><span ng-text-truncate="template.type" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
-                                <td><strong>Sent: </strong><span>{{template.stats.sends}}</span></td>
+                                <td><strong>Sent: </strong><span >{{template.stats.sends}}</span></td>
                                 <td><strong>Clicks: </strong><span>{{template.stats.clicks}}</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{template.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{template.modified.date | date:'MMM d yy'}}</td>

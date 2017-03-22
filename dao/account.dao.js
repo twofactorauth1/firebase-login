@@ -370,6 +370,7 @@ var dao = {
                                 obj.subdomain = val.get('subdomain');
                                 obj.domain = val.get('domain');
                                 obj.logo = val.get('business').logo;
+                                obj.orgId = val.get('orgId');
                                 data.push(obj);
                             }
 

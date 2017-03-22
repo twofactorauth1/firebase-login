@@ -271,7 +271,7 @@ module.exports = {
         var self = this;
         self.log = _log;
         self.log.trace(accountId, userId, '>> getLiveVistiors');
-        
+
 
         if(!lookBackInMinutes || lookBackInMinutes === 0) {
             lookBackInMinutes = 30;
@@ -347,7 +347,7 @@ module.exports = {
                     results = self._zeroMissingMinutes(value.reverse(), {count:0}, targetDate.toDate(), rightnow.toDate());
                 }
                 self.log.trace(accountId, userId, '<< getLiveVistiors');
-                
+
 
                 // Adding location data
                 var stageAry = [];
@@ -380,7 +380,7 @@ module.exports = {
                 dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, value) {
                     _.each(value, function(result){
                         result['ip_geo_info.province'] = result._id;
-                    });                    
+                    });
                     self.log.debug(accountId, userId, '<< getLiveVisitors');
                     //fn(err, value);
                     if(results.length > 0){
@@ -391,6 +391,84 @@ module.exports = {
             }
         });
 
+    },
+
+
+    getLiveVisitorDetails: function(accountId, userId, lookBackInMinutes, isAggregate, orgId, fn) {
+        var self = this;
+        self.log = _log;
+        self.log.trace(accountId, userId, '>> getLiveVisitorDetails');
+
+
+        var targetDate = moment.utc().subtract('minutes', lookBackInMinutes);
+        var rightnow = moment.utc().subtract('minutes', 1);
+        //self.log.debug('targetDate:', targetDate.toDate());
+        var stageAry = [];
+        var match = {
+            $match:{
+                accountId:accountId,
+                server_time_dt:{
+                    $gte:targetDate.toDate()
+                }
+            }
+        };
+        if(isAggregate === true) {
+            delete match.$match.accountId;
+        }
+        if(orgId !== null) {
+            match.$match.orgId = orgId;
+        }
+        stageAry.push(match);
+
+        dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
+            if(err) {
+                self.log.error('Error getting analytics:', err);
+                fn(err);
+            } else {
+                var _resultDetails = [];
+
+                async.eachLimit(results, 10, function(sessionEvent, cb){
+                    var query = {session_id:sessionEvent.session_id};
+                    var skip = 0;
+                    var limit = 1;
+                    var sort = {server_time:-1};
+                    var fields = null;
+                    var type = $$.m.PageEvent;
+                    dao.findAllWithFieldsSortAndLimit(query, skip, limit, sort, fields, type, function(err, pageEvent){
+                        if(err) {
+                            self.log.error('Error getting page event:', err);
+                            cb();
+                        } else if(pageEvent) {
+                            var pEvent = pageEvent[0];
+                            _resultDetails.push({
+                                "_id": sessionEvent._id,
+                                "session_id": sessionEvent.session_id,
+                                "ip_address": sessionEvent.ip_address,
+                                "maxmind": sessionEvent.maxmind,
+                                "user_agent": sessionEvent.user_agent,
+                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss'),
+                                lastSeen: moment.utc(pEvent.get('server_time_dt')).local().format('YYYY-MM-DD HH:mm:ss'),
+                                pageRequested:pEvent.get('url').source
+                            });
+                            cb();
+                        } else {
+                            _resultDetails.push({
+                                "_id": sessionEvent._id,
+                                "session_id": sessionEvent.session_id,
+                                "ip_address": sessionEvent.ip_address,
+                                "maxmind": sessionEvent.maxmind,
+                                "user_agent": sessionEvent.user_agent,
+                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss')
+                            });
+                            cb();
+                        }
+                    });
+                }, function(err){
+                    self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                    fn(err, _resultDetails);
+                });
+            }
+        });
     },
 
     getVisitorCount: function(accountId, userId, startDate, endDate, previousStart, previousEnd, isAggregate, fn) {
