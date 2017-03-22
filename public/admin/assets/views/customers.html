@@ -4,6 +4,9 @@
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.customers.MAIN"></h1>
                 <span ng-if="customers" class="mainDescription">There are currently {{customers.length || 0}} customers. ({{displayedCustomers.length || 0}} in filtered view)</span>
+                <span ng-if="!customers" class="mainDescription">
+                Loading customers...
+                </span>
             </div>
         </div>
     </section>

@@ -5,6 +5,9 @@
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.contacts.MAIN"></h1>
                 <span ng-if="contacts" class="mainDescription">There are currently {{contacts.length}} contacts. ({{displayedContacts.length || 0}} in filtered view)</span>
+                <span ng-if="!contacts" class="mainDescription">
+                Loading contacts...
+                </span>
             </div>
         </div>
     </section>
