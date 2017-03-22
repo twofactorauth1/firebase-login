@@ -86,7 +86,7 @@
 
                                         <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails track by $index"  ng-click ="vm.setActiveVisitorIndex($index)">
                                             <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>
-                                            <div class="col-xs-8 visitor-timestamp">{{visitorDetail.timestamp}}</div>
+                                            <div class="col-xs-8 visitor-timestamp">{{vm.convertUtcToLocal(visitorDetail.timestamp)}}</div>
                                         </li>
                                     </ul>
                                 </div>
@@ -129,7 +129,7 @@
                                             <hr>
                                             <ul class="page-events">
                                                 <li ng-repeat="pageEvent in vm.activeVisitorDetail.pageEvents | orderBy:'-pageTime'">
-                                                   <div class="col-xs-4">{{pageEvent.pageTime}}</div>
+                                                   <div class="col-xs-4">{{vm.convertUtcToLocal(pageEvent.pageTime)}}</div>
                                                     <div class="col-xs-8">{{pageEvent.pageRequested}}</div>
                                                 </li> 
                                             </ul>

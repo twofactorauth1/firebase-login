@@ -444,7 +444,7 @@ module.exports = {
                             var _pageEvents = [];
                             _.each(pageEvents, function(pEvent){
                                 _pageEvents.push({
-                                    pageTime : moment.utc(pEvent.get('server_time_dt')).local().format('YYYY-MM-DD HH:mm:ss'),
+                                    pageTime : pEvent.get('server_time_dt'),
                                     pageRequested : pEvent.get('url').source
                                 }) 
                             });
@@ -454,7 +454,7 @@ module.exports = {
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
-                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss'),
+                                "timestamp": sessionEvent.server_time_dt,
                                 "server_time": sessionEvent.server_time,
                                 pageEvents : _pageEvents
                             });
@@ -466,7 +466,7 @@ module.exports = {
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
-                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss'),
+                                "timestamp": sessionEvent.server_time_dt,
                                 "server_time": sessionEvent.server_time,
                             });
                             cb();
