@@ -84,7 +84,7 @@
                                 <div class="col-sm-5 visitor-left-pane">
                                     <ul class="">
 
-                                        <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails | orderBy:'-timestamp'"  ng-click ="vm.setActiveVisitorIndex($index)">
+                                        <li ng-class="{'active-visitor-detail': vm.selectedVisitorIndex === $index}" ng-repeat="visitorDetail in vm.state.liveVisitorDetails track by $index"  ng-click ="vm.setActiveVisitorIndex($index)">
                                             <div class="col-xs-4 visitor-address">{{visitorDetail.ip_address}}</div>
                                             <div class="col-xs-8 visitor-timestamp">{{visitorDetail.timestamp}}</div>
                                         </li>

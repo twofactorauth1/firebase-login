@@ -418,6 +418,8 @@ module.exports = {
         if(orgId !== null) {
             match.$match.orgId = orgId;
         }
+        
+
         stageAry.push(match);
 
         dao.aggregateWithCustomStages(stageAry, $$.m.SessionEvent, function(err, results) {
@@ -453,6 +455,7 @@ module.exports = {
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
                                 "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss'),
+                                "server_time": sessionEvent.server_time,
                                 pageEvents : _pageEvents
                             });
                             cb();
@@ -463,13 +466,15 @@ module.exports = {
                                 "ip_address": sessionEvent.ip_address,
                                 "maxmind": sessionEvent.maxmind,
                                 "user_agent": sessionEvent.user_agent,
-                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss')
+                                "timestamp": moment.utc(sessionEvent.server_time_dt).local().format('YYYY-MM-DD HH:mm:ss'),
+                                "server_time": sessionEvent.server_time,
                             });
                             cb();
                         }
                     });
                 }, function(err){
                     self.log.trace(accountId, userId, '<< getLiveVisitorDetails');
+                    _resultDetails = _.sortBy(_resultDetails, function(result){return -result.server_time;});
                     fn(err, _resultDetails);
                 });
             }
