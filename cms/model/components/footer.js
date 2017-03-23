@@ -51,7 +51,7 @@ var component = $$.m.ModelBase.extend({
 
             // Default text on footer
 
-            text: "Copyright © 2016. All Rights reserved.",
+            text: "Copyright © 2017. All Rights reserved.",
 
             /**
              *
