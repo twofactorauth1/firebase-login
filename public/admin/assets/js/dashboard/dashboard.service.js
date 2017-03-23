@@ -250,7 +250,7 @@
             dashboardService.awayFromDashboard = away;
             //dashboardService.polls = 0;
             //dashboardService.numberPolling++;
-            //dashboardService.getAnalytics();
+            dashboardService.getAnalytics();
             //dashboardService.getWorkstreams();
             //dashboardService.getAccount();
             //dashboardService.getActiveMessages();
