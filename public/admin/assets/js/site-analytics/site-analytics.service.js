@@ -56,8 +56,8 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
