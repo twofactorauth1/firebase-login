@@ -1165,6 +1165,9 @@ body[ng-controller] .fr-overlay {
 
 .fr-view table{
   min-width: 100%;
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+     table-layout: fixed;
+  }
 }
 .fr-view span{
   a.btn.ssb-theme-btn.ssb-element.ssb-element-button{
