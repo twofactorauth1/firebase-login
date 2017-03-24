@@ -7,14 +7,7 @@
             "name": "Head Menu",
             "handle": "head-menu",
             "links": [
-                {
-                    "label": "Home",
-                    "type": "link",
-                    "linkTo": {
-                        "type": "home",
-                        "data": "index"
-                    }
-                }
+                
             ]
         },
 
