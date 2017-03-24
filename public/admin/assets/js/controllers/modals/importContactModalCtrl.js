@@ -735,7 +735,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     var numColumnsArray = [];
     var filteredNumColumnsArray = [];
     var parsedLikeCSV = false;
-
+    $scope.errorRows = [];
     $scope.incorrectFileType = false;
 
     console.log('file type >>> ', files);
