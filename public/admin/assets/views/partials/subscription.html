@@ -5,7 +5,7 @@
             <ul class="panel-heading-tabs border-light">
                 <li>
                     <div class="pull-right">
-                        <button type="button" class="btn btn-wide btn-o btn-info" ng-click="openModal('add-subscription-modal')">Add Subscription</button>
+                        <button type="button" class="btn btn-wide btn-o btn-info" ng-disabled="plans.length>0"  ng-click="openModal('add-subscription-modal')">Add Subscription</button>
                     </div>
                 </li>
             </ul>
