@@ -569,7 +569,7 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     var contactsToAdd = [];
     var partAddress = ['address', 'address2', 'city', 'state', 'zip', 'country', 'lat', 'lon'];
     var nameParts = ['first', 'middle', 'last'];
-    var topLevelParts = ['company', 'gender', 'birthday'];
+    var topLevelParts = ['gender', 'birthday'];
     var _formattedContact = angular.copy(blankFormattedContact);
     _.each($scope.csvResults, function (_result, i) {
       if (i !== 0) {
@@ -608,6 +608,10 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
                 website: _csvResult
               };
               _details.websites.push(_website);
+            }
+
+            if (_formatVal === 'company') {             
+              _details.company = _csvResult;
             }
 
             if (topLevelParts.indexOf(_colVal) > -1) {
