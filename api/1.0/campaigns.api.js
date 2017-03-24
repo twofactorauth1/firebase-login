@@ -579,6 +579,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 campaignManager.activateCampaign(accountId, userId, campaignId, function(err, campaign){
                     self.log.debug(accountId, userId, '<< activateCampaign');
+                    self.createUserActivity(req, 'ACTIVATE_CAMPAIGN', null, null, function(){});
                     self.sendResultOrError(resp, err, campaign, 'Error activating campaign');
                 });
             }
