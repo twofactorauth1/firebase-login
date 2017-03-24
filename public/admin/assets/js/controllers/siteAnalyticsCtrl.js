@@ -21,7 +21,7 @@
         $scope.customerOverviewConfig.loading = true;
         $scope.displayVisitors = true;
         $scope.visitors = null;
-        
+        var localTimezoneOffset = new Date().getTimezoneOffset()*-60000;
         function setFilterDates(){
             if($location.search().date_filter === 'today'){
                 $scope.date = {
@@ -232,7 +232,8 @@
                 var subArr = [];
                 var value = visitor.value || 0;
                 currentTotalVisitors += value;
-                subArr.push(new Date(visitor.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(new Date(visitor.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                /*subArr.push(new Date(visitor.timeframe.start.replace(" ", "T")).getTime());*/
                 subArr.push(value);
                 visitorsData.push(subArr);
             });
@@ -310,7 +311,8 @@
             _.each(result8, function (session) {
                 var subArr = [];
                 var value = session.count || session.value || 0;
-                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+                /*subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());*/
                 subArr.push(value);
                 avgSessionData.push(subArr);
             });
@@ -327,7 +329,9 @@
                 var subArr = [];
                 var value = bounce.count || bounce.value || 0;
                 _totalBounces += value;
-                subArr.push(new Date(bounce.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(new Date(bounce.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+
+                /*subArr.push(new Date(bounce.timeframe.start.replace(" ", "T")).getTime());*/
                 subArr.push(value);
                 _bouncesData.push(subArr);
             });
@@ -387,7 +391,9 @@
                 var subArr = [];
                 var value = pageView.value || 0;
                 currentTotalPageviews += value;
-                subArr.push(new Date(pageView.timeframe.start.replace(" ", "T")).getTime());
+                /*subArr.push(new Date(pageView.timeframe.start.replace(" ", "T")).getTime());*/
+                subArr.push(new Date(pageView.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+
                 subArr.push(value);
                 pageviewsData.push(subArr);
             });
@@ -417,7 +423,9 @@
                 var subArr = [];
                 var value = session.total || session.value || 0;
                 _totalSessions += value;
-                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());
+                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+
+               /* subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());*/
                 subArr.push(value);
                 _sessionsData.push(subArr);
             });
@@ -621,7 +629,7 @@
             var currentTotalRevenue = 0;
             var currentTotalCount = 0;
             _.each(results.revenueReport.currentMonth, function(rev){
-                revenueChartData.xData.push(new Date(rev.timeframe.start.replace(" ", "T")).getTime());
+               revenueChartData.xData.push(new Date(rev.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
                 var amt = rev.total || 0;
                 var cnt = rev.count || 0;
                 revenueChartData.amountData.push(amt);
@@ -759,7 +767,9 @@
                 var subArr = [];
                 var value = session.value || 0;
                 _totalSessions += value;
-                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());
+                /*subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime());*/
+                subArr.push(new Date(session.timeframe.start.replace(" ", "T")).getTime()+localTimezoneOffset);
+
                 subArr.push(value);
                 _sessionsData.push(subArr);
             });

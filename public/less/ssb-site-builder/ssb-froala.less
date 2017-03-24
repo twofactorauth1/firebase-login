@@ -914,7 +914,7 @@ body[ng-controller] .fr-image-resizer .fr-handler.fr-hse {
     bottom: -5px;
   }
 }
-body[ng-controller] .fr-image-upload-layer {
+body[ng-controller] .fr-image-upload-layer, body[ng-controller] .fr-video-upload-layer {
   border: dashed 2px #ffffff;
   background: #1c2b36;
 }
@@ -932,7 +932,7 @@ body[ng-controller] .fr-image-upload-media-layer, body[ng-controller] .fr-video-
 body[ng-controller] .fr-image-upload-layer:hover, body[ng-controller] .fr-video-upload-media-layer:hover {
   background: #243948;
 }
-body[ng-controller] .fr-image-upload-layer.fr-drop {
+body[ng-controller] .fr-image-upload-layer.fr-drop,body[ng-controller] .fr-video-upload-layer.fr-drop {
   background: #243948;
   border-color: #ffffff;
 }
@@ -1165,6 +1165,9 @@ body[ng-controller] .fr-overlay {
 
 .fr-view table{
   min-width: 100%;
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+     table-layout: fixed;
+  }
 }
 .fr-view span{
   a.btn.ssb-theme-btn.ssb-element.ssb-element-button{

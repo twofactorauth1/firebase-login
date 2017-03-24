@@ -556,7 +556,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var topbarHeight = 125;
         var sidebarWidth = 140;
 
-        var scrollTop = container.scrollTop;
+        var scrollTop = container ? container.scrollTop : 0;
         var topOffset = 35;
         var leftOffset = 35;
         if (windowWidth < 768) {

@@ -573,6 +573,9 @@
 
       if (video) {
         insert(video);
+        setTimeout(function(){
+          editor.events.trigger("contentChanged");
+        }, 200)
       }
       else {
         editor.events.trigger('video.linkError', [link]);

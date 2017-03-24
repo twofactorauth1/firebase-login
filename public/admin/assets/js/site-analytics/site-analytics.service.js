@@ -56,8 +56,8 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             return saRequest($http.get(baseAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
@@ -70,8 +70,8 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             return saRequest($http.get(customerAnalyticsAPIUrl + '/all?accountId='+ accountId +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
@@ -85,8 +85,8 @@
             function error(error) {
                 console.error('SiteAnalyticsService runReports error:', JSON.stringify(error));
             }
-            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             return saRequest($http.get(adminAnalyticsAPIUrl + '/all?start=' + startDateString + '&end=' + endDateString).success(success).error(error));
         }
 
@@ -99,8 +99,8 @@
             function error(error) {
                 console.error('SiteAnalyticsService getFrontrunnerSitesPageviews error:', JSON.stringify(error));
             }
-            var startDateString = moment(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
-            var endDateString = moment(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var startDateString = moment.utc(startDate).format('YYYY-MM-DD[T]HH:mm:ss');
+            var endDateString = moment.utc(endDate).format('YYYY-MM-DD[T]HH:mm:ss');
             var accountIdsString = accountIdArray.join(",");
             return saRequest($http.get(frontrunnerSitesPageviewsAPIUrl + '?accountIds='+ accountIdsString +'&start=' + startDateString + '&end=' + endDateString).success(success).error(error));
             
