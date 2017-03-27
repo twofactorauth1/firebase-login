@@ -253,6 +253,12 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                      }
                        
 
+                    }).on('froalaEditor.image.inserted', function (e, editor, $img, response) {
+                        // Removing any protocol used for image
+                        if($img && $img.attr("src")){
+                            var _src = $img.attr("src").replace(/^(http|https):/i, "");
+                            $img.attr("src" , _src);
+                        }
                     }).on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
 
                         if (editor.popups.areVisible()) {

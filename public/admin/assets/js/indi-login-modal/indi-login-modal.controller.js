@@ -2,9 +2,9 @@
 
 app.controller('IndiLoginModalController', indiLoginModalController);
 
-indiLoginModalController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'IndiLoginModalService', 'authService'];
+indiLoginModalController.$inject = ['$scope', '$state', '$attrs', '$filter', '$document', '$timeout', 'toaster', 'IndiLoginModalService', 'authService'];
 /* @ngInject */
-function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, toaster, IndiLoginModalService, authService) {
+function indiLoginModalController($scope, $state, $attrs, $filter, $document, $timeout, toaster, IndiLoginModalService, authService) {
 
     console.info('indi-login-modal directive init...')
 
@@ -54,6 +54,10 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
 
     }
 
+    function reloadRoute(){
+        $state.reload();
+    }
+
     function onload(e) {
 
         vm.loginIframeContentWindow = vm.loginIframe.get(0).contentWindow;
@@ -73,6 +77,8 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
                 authService.loginConfirmed();
 
                 vm.closeModal();
+
+                reloadRoute();
 
                 toaster.pop('success', 'Signed in', 'Sign in successful.');
 

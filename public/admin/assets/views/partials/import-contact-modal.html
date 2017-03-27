@@ -10,9 +10,9 @@
         <div class="modal-body bg-white" stop-event="touchend" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}">
             <div ng-if="!uploadingCsv && csvResults.length <= 0">
                 <p class="help-block">Import your contacts from one of the options below.</p>
-                <div class="row">
+                <div class="row import-contact-modal-options" >
                     <div class="col-xs-6">
-                        <div class="list-group-item center list-group-item-warning" ng-if="!googlePlusActive">
+                        <div class="list-group-item center list-group-item-warning " ng-if="!googlePlusActive">
                             <span class="fa-stack fa-2x">
                                     <i class="fa fa-square fa-stack-2x google-plus"></i>
                                     <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>

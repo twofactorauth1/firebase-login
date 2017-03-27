@@ -603,6 +603,7 @@ module.exports = {
 
                 if (savedOrder.get('line_items').length && savedOrder.get('line_items')[0].type == 'DONATION') {
                     savedOrder.set('status', 'completed');
+                    savedOrder.set('completed_at', new Date());
                 } else {
                     savedOrder.set('status', 'paid');
                 }
@@ -1280,6 +1281,7 @@ module.exports = {
 
                 if (savedOrder.get('line_items').length && savedOrder.get('line_items')[0].type == 'DONATION') {
                     savedOrder.set('status', 'completed');
+                    savedOrder.set('completed_at', new Date());
                 } else {
                     savedOrder.set('status', 'paid');
                 }
@@ -2447,6 +2449,7 @@ module.exports = {
             function (callback) {
                 if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
                     order.set('status', 'completed');
+                    order.set('completed_at', new Date());
                 } else {
                     order.set('status', 'paid');
                 }
