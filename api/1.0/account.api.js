@@ -67,6 +67,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('user'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
         app.delete(this.url('user/:userId'), this.isAuthApi.bind(this), this.removeUserFromAccount.bind(this));
         app.post(this.url('user/:id/password'), this.isAuthApi.bind(this), this.setUserPassword.bind(this));
+        app.post(this.url('copyUser/:userId'), this.isAuthApi.bind(this), this.addUserToAccount.bind(this));
+
     },
 
     listUsersForAccount: function(req, resp) {
@@ -767,8 +769,32 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< listAccountTemplates');
             return self.sendResultOrError(resp, err, templates, "Error listing Account Templates");
         });
-    }
+    },
+    addUserToAccount: function(req, resp) {
+            var self = this;
+            self.log.debug('>> addUserToAccount');
+            var accountId = req.session.accountId;
+            var userId = parseInt(req.params.userId);
+            var roleAry = [];
+            var callingUser = parseInt(self.userId(req));
+            self.log.debug(callingUser);
+            /*if(req.body.roleAry) {
+                roleAry = req.body.roleAry.split(',');
+            }*
+            var callingUser = parseInt(self.userId(req));
 
+           /*S self._isAdmin(req, function(err, value) {
+                if (value !== true) {
+                    return self.send403(resp);
+                } else {*/
+            userManager.addUserToAccount(accountId, userId, roleAry, callingUser, function(err, user){
+                self.log.debug('<< addUserToAccount');
+                return self.sendResultOrError(resp, err, user, 'Error adding user to account', null);
+            });
+                /*}
+            });*/
+
+    }
 });
 
 module.exports = new api();

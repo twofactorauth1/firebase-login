@@ -4,7 +4,6 @@
 (function (angular) {
   app.service('AccountService', ['$http', '$q', function ($http, $q) {
     var baseUrl = '/api/1.0/account/';
-
     this.mainAccount = null;
     this.getMainAccount = function () {
       return this.mainAccount;
@@ -70,7 +69,15 @@
       });
     };
 
-
+    this.copyExitingUser=function(exitingUserId,fn){
+        var apiUrl = baseUrl + ['copyUser',exitingUserId].join('/');
+        console.log("copy this user",exitingUserId)
+        $http.post(apiUrl).success(function(data){
+            fn(null, data);
+        }).error(function(err){
+            fn(err);
+        });
+    };
     this.addNewUser = function(id, username, password, fn) {
         var apiUrl = baseUrl + ['user'].join('/');
         var body = {
