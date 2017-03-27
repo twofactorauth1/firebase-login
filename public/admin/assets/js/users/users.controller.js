@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService", "userConstant", "SweetAlert", function ($scope, toaster, $filter, $modal, $timeout, AccountService, userConstant, SweetAlert) {
+    app.controller('usersCtrl', ['$scope', "toaster", "$filter", "$modal", "$timeout", "AccountService","UserService", "userConstant", "SweetAlert", function ($scope, toaster, $filter, $modal, $timeout, AccountService,UserService, userConstant, SweetAlert) {
 
         var vm = this;
 
@@ -58,14 +58,35 @@
 
         $scope.addNewUser = function() {
             console.log('Adding the following:', $scope.newuser);
-            AccountService.addNewUser(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
-                if(err) {
-                    toaster.pop('warning', err.message);
-                } else {
-                    $timeout(function() {
-                        vm.state.users.push(newuser);
-                    }, 0);
-                    $scope.closeModal();
+            //find by username
+            UserService.findUserByUsername($scope.newuser.username,
+            function(err,exitinguser){
+                if(err){
+                   toaster.pop('warning', err.message);
+                }else if(exitinguser){
+                    //copy exiting
+                    AccountService.copyExitingUser(exitinguser._id, function(err, user){
+                        if(err) {
+                            toaster.pop('warning', err.message);
+                        } else {
+                            $timeout(function() {
+                                vm.state.users.push(user);
+                            }, 0);
+                            $scope.closeModal();
+                        }
+                    });
+                }else{
+                    //add new
+                    AccountService.addNewUser(vm.state.account._id, $scope.newuser.username, $scope.newuser.password, function(err, newuser){
+                        if(err) {
+                            toaster.pop('warning', err.message);
+                        } else {
+                            $timeout(function() {
+                                vm.state.users.push(newuser);
+                            }, 0);
+                            $scope.closeModal();
+                        }
+                    });
                 }
             });
         };

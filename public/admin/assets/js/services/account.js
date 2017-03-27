@@ -4,10 +4,6 @@
 (function (angular) {
   app.service('AccountService', ['$http', '$q', function ($http, $q) {
     var baseUrl = '/api/1.0/account/';
-      /**
-      * For search user by username/email
-      */
-    var baseSearchUrl = '/api/1.0/user/';
     this.mainAccount = null;
     this.getMainAccount = function () {
       return this.mainAccount;
@@ -72,38 +68,17 @@
         fn(data);
       });
     };
-    this.findUserByUsername=function(id, username, password,fn){
-        var findUserUrl=baseSearchUrl+['email',username].join('/');
-        var that=this;
-        $http.get(findUserUrl).success(function(data){
-            if(data && false){// stoping user by hard code for as method is not complete
-                that.copyExitingUser(data,fn);
-            }else{
-                that.createUser(id, username, password, fn);
-            }
-        }).error(function(err){
-            fn(err);
-        });
-    }
-    this.createUser=function(id, username, password, fn){
-        var apiUrl = baseUrl + ['user'].join('/');
-        var body = {
-            username:username,
-            password:password
-        };
-        $http.post(apiUrl, body).success(function(data){
-            fn(null, data);
-        }).error(function(err){
-            fn(err);
-        });
-    }
-    this.copyExitingUser=function(exitingUserData,fn){
-        console.log("copy this user",exitingUserData)
-    }
-    this.addNewUser = function(id, username, password, fn) {
-        this.findUserByUsername(id, username, password, fn);
-        /*var userFound;
 
+    this.copyExitingUser=function(exitingUserId,fn){
+        var apiUrl = baseUrl + ['copyUser',exitingUserId].join('/');
+        console.log("copy this user",exitingUserId)
+        $http.post(apiUrl).success(function(data){
+            fn(null, data);
+        }).error(function(err){
+            fn(err);
+        });
+    };
+    this.addNewUser = function(id, username, password, fn) {
         var apiUrl = baseUrl + ['user'].join('/');
         var body = {
             username:username,
@@ -113,7 +88,7 @@
             fn(null, data);
         }).error(function(err){
             fn(err);
-        });*/
+        });
     };
 
     this.removeUserFromAccount = function(userId, fn) {
