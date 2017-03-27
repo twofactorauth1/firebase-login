@@ -73,6 +73,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('exists/:username'), this.setup.bind(this), this.userExists.bind(this));
         app.get(this.url(':accountId/user/exists/:username', "account"), this.setup.bind(this), this.userExistsForAccount.bind(this));
+        app.get(this.url('email/:email'), this.isAuthApi.bind(this), this.findByEmail.bind(this));
     },
 
     /**
@@ -230,6 +231,32 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.wrapError(resp, 404, null, "No User found with ID: [" + userId + "]");
                 }
                 //return resp.send(value.toJSON("public", {accountId:self.accountId(req)}));
+            } else {
+                self.log.debug('<< getUserById(401)');
+                return self.wrapError(resp, 401, null, err, value);
+            }
+        });
+    },
+    /**
+      find by email
+      @params:eamil of user
+    */
+    findByEmail: function(req,resp) {
+        var self = this;
+        var userEmail = req.params.email;
+        self.log.debug('>> findByEmail');
+
+        if (!userEmail) {
+            return this.wrapError(resp, 400, null, "Invalid parameter for ID");
+        }
+        userDao.getUserByUsername(userEmail, function(err, value) {
+            if (!err) {
+                var responseObj// if value is not set it null
+                if (value != null) {
+                    var responseObj =  value.toJSON("public", {accountId:self.accountId(req)});
+                    self.log.debug('<< getUserById');
+                }
+                self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, resp, responseObj);
             } else {
                 self.log.debug('<< getUserById(401)');
                 return self.wrapError(resp, 401, null, err, value);
