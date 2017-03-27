@@ -306,17 +306,14 @@
                 if (_firstAddress.lat && _firstAddress.lon && checkIfAddressExists(_firstAddress)) {
                     $scope.originalContact = angular.copy($scope.contact);
                     $scope.showMap(_firstAddress.lat, _firstAddress.lon);
-                } else {
+                } else if(checkIfAddressExists(_firstAddress) && (!_firstAddress.lat || !_firstAddress.lon) ) {
                     //contact has address but no lat/lon
                     //if contact has a session id get data from Analytics
                     _firstAddress.address2 = '';
                     $scope.convertAddressToLatLon(_firstAddress, function (data) {
-                        if (data) {
-                            //save updated lat/lon
+                        if (data) {                           
                             _firstAddress.lat = parseFloat(data.lat);
                             _firstAddress.lon = parseFloat(data.lon);
-                            $scope.contactSaveFn(true);
-
                             $scope.showMap(data.lat, data.lon);
                         }
                         $scope.originalContact = angular.copy($scope.contact);
@@ -325,12 +322,15 @@
                     $scope.originalContact = angular.copy($scope.contact);
 
                 }
+                else{
+                    $scope.originalContact = angular.copy($scope.contact);
+                }
             }
         };
 
         $scope.convertAddressToLatLon = function (_address, fn) {
             if ($scope.displayAddressFormat(_address)) {
-                ContactService.getGeoSearchAddress($scope.queryAddressFormat(_address), function (data) {
+                ContactService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
                     if (data.error === undefined) {
                         fn(data);
                     } else {
