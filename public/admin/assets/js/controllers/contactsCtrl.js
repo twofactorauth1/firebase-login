@@ -645,12 +645,33 @@
         $scope.exportText = exportContacts.length ? "Export Selected " + exportContacts.length : "Export";
         return exportContacts;
     };
-
     $scope.tagsBulkActionClickFn = function (operation) {
-        var selectedContacts = $scope.selectedContactsFn();
         var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
-        var contactPromises = [];
+        if(operation == 'add' && tags.length<1 && $scope.tagsBulkAction.toReplace){
+             SweetAlert.swal({
+                title: "Are you sure?",
+                text: "This will remove all tags from selected contacts. Do you want to continue ? ",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                closeOnConfirm: true,
+                closeOnCancel: true
+              },
+              function (isConfirm) {
+                if (isConfirm) {
+                    $scope.bulkUpdate(operation,tags)
+                 }
+             })
+        }else{
+            $scope.bulkUpdate(operation,tags)
+        }
 
+    };
+    $scope.bulkUpdate= function(operation,tags){
+        var contactPromises = [];
+        var selectedContacts = $scope.selectedContactsFn();
         selectedContacts.forEach(function(contact, index) {
             if (operation == 'add') {
                 if ($scope.tagsBulkAction.toReplace) {
@@ -683,7 +704,6 @@
             toaster.pop('success', 'Contacts tags updated.');
           });
     };
-
     $scope.exportContactsFn = function () {
       if (_.pluck($scope.selectedContactsFn().length)) {
         ContactService.exportCsvContacts(_.pluck($scope.selectedContactsFn(), '_id'));
