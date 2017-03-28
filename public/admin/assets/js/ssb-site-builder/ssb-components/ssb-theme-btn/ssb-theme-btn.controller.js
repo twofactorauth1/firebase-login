@@ -285,7 +285,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
 
     function checkIfLayoutStylesExists(){
-        if(vm.element && vm.element.attr("class") && vm.element.attr("class").indexOf("ssb-theme-btn-style-") > -1){
+        if(vm.element.attr("class") && vm.element.attr("class").indexOf("ssb-theme-btn-style-") > -1){
             return true
         }
         else{
@@ -362,7 +362,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
                 styleString += 'background-color: ' + component.bg.color + ';';
                 styleString += 'border-color: transparent;';
             }
-            else if(vm.defaultBtnStyles.primaryBtnBackgroundColor && !checkIfLayoutStylesExists()){
+            else if(vm.defaultBtnStyles.primaryBtnBackgroundColor && vm.element && !checkIfLayoutStylesExists()){
                 styleString += 'background-color: ' + vm.defaultBtnStyles.primaryBtnBackgroundColor + ';';
                 styleString += 'border-color: transparent;';
             }            
