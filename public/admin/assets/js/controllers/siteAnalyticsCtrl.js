@@ -21,7 +21,15 @@
         $scope.customerOverviewConfig.loading = true;
         $scope.displayVisitors = true;
         $scope.visitors = null;
-        var localTimezoneOffset = new Date().getTimezoneOffset()*-60000;
+        var localTimezoneOffset=0;
+        //highchar datetime behaving diffent on differnetbrowser so nee to set this check
+       if((!!window.chrome && !!window.chrome.webstore) ||
+           (/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)
+          )){
+           localTimezoneOffset=0;
+        }else{
+            localTimezoneOffset = new Date().getTimezoneOffset()*-60000;
+        }
         function setFilterDates(){
             if($location.search().date_filter === 'today'){
                 $scope.date = {
