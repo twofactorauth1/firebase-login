@@ -27,6 +27,8 @@
                     vendor: "Pulse Secure" + _rand,
                     sku: 'PSA50' + _rand,
                     description: "Pulse Secure appliance 50" + _rand + "Base System",
+                    dimention: Math.floor((Math.random() * 50) + 1) + "X" + Math.floor((Math.random() * 50) + 1) + "X" + Math.floor((Math.random() * 50) + 1),
+                    weight: Math.floor((Math.random() * 50) + 1),
                     qty: Math.floor((Math.random() * 100) + 1)  
                 }
                 inventory.push(_d);
