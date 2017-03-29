@@ -60,6 +60,7 @@ var dashboard2Api = require('./2.0/dashboard.api');
 var componentdata2Api = require('./2.0/componentdata.api');
 var customers2Api = require('./2.0/customers.api');
 var insights2Api = require('./2.0/insights.api');
+var purchaseorders2Api = require('./2.0/purchaseorders.api');
 
 module.exports = {
 
