@@ -265,6 +265,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Single Inventory',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('InventoryDetailsController', 'InventoryService', 'highcharts', 'chartAnalyticsService')
+    }).state('app.purchaseorders', {
+        url: '/purchase-orders',
+        templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order.html",
+        title: 'Purchase Order',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService')
     }).state('app.account.users', {
         url: '/users',
         templateUrl: "/admin/assets/js/users/users.html",

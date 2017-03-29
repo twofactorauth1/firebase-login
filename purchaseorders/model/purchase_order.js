@@ -12,8 +12,8 @@ var purchaseOrder = $$.m.ModelBase.extend({
     defaults: function() {
         return {
             _id: null,
-            Title: null,
-            Text: null,
+            title: null,
+            text: null,
             accountId: null,
             userId : null,
             attachment: null,
@@ -43,6 +43,6 @@ var purchaseOrder = $$.m.ModelBase.extend({
     }
 });
 
-$$.m.purchaseOrder = purchaseOrder;
+$$.m.PurchaseOrder = purchaseOrder;
 
 module.exports = purchaseOrder;

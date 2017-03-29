@@ -15,7 +15,26 @@ require('./model/purchase_order');
 var accountDao = require('../dao/account.dao');
 
 
+
+
 module.exports = {
 
+	listPurchaseOrders: function (accountId, userId, fn) {
+        
+        log.debug(accountId, userId, '>> listPurchaseOrders');
+        var query = {
+            account_id: accountId
+        };
+
+        dao.findMany(query, $$.m.PurchaseOrder, function (err, orders) {
+            if (err) {
+                log.error(accountId, userId, 'Error listing orders: ', err);
+                return fn(err, null);
+            } else {
+        		log.debug(accountId, userId, '<< listPurchaseOrders');
+                return fn(null, orders);
+            }
+        });
+    }
     
 };

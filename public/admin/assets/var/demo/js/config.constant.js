@@ -650,6 +650,12 @@ app.constant('JS_REQUIRES', {
     'InventoryDetailsComponent': 'assets/var/demo/js/inventory/inventory-details/inventory-details.component.js',
     'InventoryDetailsController': 'assets/var/demo/js/inventory/inventory-details/inventory-details.controller.js',    
 
+    // Purchase Orders
+
+    'PurchaseOrderComponent': 'assets/var/demo/js/purchase-order/purchase-order.component.js',
+    'PurchaseOrderComponentController': 'assets/var/demo/js/purchase-order/purchase-order.controller.js',
+    'PurchaseOrderService': 'assets/var/demo/js/purchase-order/purchase-order.service.js',
+
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
