@@ -100,12 +100,12 @@
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th st-sort="name" class="name-col">List</th>
+	                <th st-sort="name" class="name-col">Product</th>
 	                <th st-sort="vendor" class="vendor-col">Vendor</th>
 	                <th st-sort="sku" class="sku-col">Sku</th>
-	                <th class="hidden-xs desc-col" st-sort="description">Description</th>
-	                <th class="hidden-xs dim-col" st-sort="description">Dimention</th>
-	                <th class="hidden-xs weight-col" st-sort="description">Weight</th>
+	                <th class="hidden-xs desc-col">Description</th>
+	                <th class="hidden-xs dim-col">Dimension</th>
+	                <th class="hidden-xs weight-col">Weight</th>
 	                <th st-sort="qty" class="qty-col">Qty on hand</th>
 	            </tr>
 	            <tr ng-if="showFilter">
@@ -129,12 +129,12 @@
 	        <tbody>
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="vm.viewSingleInventory(product)">
 
-	                <td><strong>List: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
+	                <td><strong>Product: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 
 	                <td class="vendorCoulmn"><strong>Vendor: </strong><span ng-text-truncate="product.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                <td><strong>Sku: </strong>{{product.sku}}</td>
 	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.description" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></td>
-	                <td class="dimColumn hidden-xs"><strong>Dimention: </strong>{{product.dimention}}</td>
+	                <td class="dimColumn hidden-xs"><strong>Dimension: </strong>{{product.dimention}}</td>
 	                <td class="weightColumn hidden-xs"><strong>Weight: </strong>{{product.weight}}</td>
 	                <td class="qtyColumn"><strong>Qty: </strong>{{product.qty}}</td>
 	            </tr>
