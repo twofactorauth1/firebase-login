@@ -893,7 +893,7 @@
            if($scope.product.emailSettings.emailId){
               $scope.emailToSend.fromEmail= $scope.product.emailSettings.fromEmail;
               $scope.emailToSend.fromName= $scope.product.emailSettings.fromName;
-              $scope.emailToSend.fromName= $scope.product.emailSettings.fromName;
+              $scope.emailToSend.bcc= $scope.product.emailSettings.bcc;
               $scope.emailToSend.replyTo= $scope.product.emailSettings.replyTo;
               $scope.emailToSend.subject= $scope.product.emailSettings.subject;
            }
