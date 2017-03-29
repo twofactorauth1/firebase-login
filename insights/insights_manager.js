@@ -253,6 +253,10 @@ var insightsManager = {
                     content:moment(endDate).format('MM/DD/YYYY')
                 });
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                if(account.get("orgId") == 1){
+                    siteUrl = account.get('subdomain') + '.' + "gorvlvr.com";
+                }
+
                 vars.push({
                     name:'SITEURL',
                     content:siteUrl
