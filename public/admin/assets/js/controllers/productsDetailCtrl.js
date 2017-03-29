@@ -815,7 +815,6 @@
      * - set any filled out info from business data
      */
     $scope.setBusinessDetails = function(update) {
-        debugger
       var account = $scope.account;
       var logo = account.business.logo || '<h2>Logo Here</h2>';
       var businessName = account.business.name || 'Edit name';
@@ -867,7 +866,6 @@
 
 
     $scope.getEmails = function() {
-        debugger;
       if(!$scope.product.emailSettings){
         setProductEmailSettings($scope.product);
       }
@@ -877,7 +875,6 @@
         };
 
       var promise = WebsiteService.getEmails(false, function (_emails) {
-        debugger;
         var emailId = $scope.product.emailSettings.emailId;
         var matchedEmail = null;
         var emailMatch = function(email) {
