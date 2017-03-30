@@ -888,8 +888,16 @@
 
         matchedEmail = $scope.emails.filter(emailMatch)[0];
         if (emailId && matchedEmail) {
-          $scope.emailToSend = matchedEmail;
-          $scope.originalEmailToSend = angular.copy($scope.emailToSend);
+           $scope.emailToSend = matchedEmail;
+            //seeting data back to template
+           if($scope.product.emailSettings.emailId){
+              $scope.emailToSend.fromEmail= $scope.product.emailSettings.fromEmail;
+              $scope.emailToSend.fromName= $scope.product.emailSettings.fromName;
+              $scope.emailToSend.bcc= $scope.product.emailSettings.bcc;
+              $scope.emailToSend.replyTo= $scope.product.emailSettings.replyTo;
+              $scope.emailToSend.subject= $scope.product.emailSettings.subject;
+           }
+           $scope.originalEmailToSend = angular.copy($scope.emailToSend);
 
         } else {
           console.log('email not found');

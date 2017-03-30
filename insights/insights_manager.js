@@ -253,6 +253,10 @@ var insightsManager = {
                     content:moment(endDate).format('MM/DD/YYYY')
                 });
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                if(account.get("orgId") == 1){
+                    siteUrl = account.get('subdomain') + '.gorvlvr.com';
+                }
+
                 vars.push({
                     name:'SITEURL',
                     content:siteUrl
@@ -389,6 +393,10 @@ var insightsManager = {
             },
             function(account, sectionDataMap, html, contact, vars, cb) {
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                if(account.get("orgId") == 1){
+                    siteUrl = account.get('subdomain') + '.gorvlvr.com';
+                }
+                console.log(siteUrl);
                 app.render('insights/footer', {siteUrl:siteUrl}, function(err, jadeHtml){
                     if(jadeHtml) {
                         vars.push({

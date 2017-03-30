@@ -1457,6 +1457,7 @@
                 "'Shadows Into Light Two', cursive": 'Shadows Into Light Two',
                 "'Tahoma',Geneva,sans-serif": "Tahoma",
                 "'Times New Roman',Times,serif": "Times New Roman",
+                "'Trebuchet MS'":"Trebuchet MS",
                 "'Ubuntu',sans-serif": 'Ubuntu',
                 "'Verdana',Geneva,sans-serif": "Verdana"
             }

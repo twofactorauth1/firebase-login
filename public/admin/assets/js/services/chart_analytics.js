@@ -15,7 +15,11 @@
 
             return minutes + ":" + seconds;
         };
-
+        Highcharts.setOptions({
+            global: {
+                useUTC: false
+            }
+        });
         this.getHostName = function (account) {
             var hostname = '';
             var windowHostname = window.location.hostname;

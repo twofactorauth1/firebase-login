@@ -30,7 +30,15 @@
 
         var dateSwitch = false;
 
-        var localTimezoneOffset = new Date().getTimezoneOffset()*-60000;
+        var localTimezoneOffset=0;
+        //highchar datetime behaving diffent on differnetbrowser so nee to set this check, may be a bugb in highcart
+        if((!!window.chrome && !!window.chrome.webstore) ||
+           (/constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification)
+          )){
+            localTimezoneOffset=0;
+        }else{
+            localTimezoneOffset = new Date().getTimezoneOffset()*-60000;
+        }
         $scope.$watch('selectedDate', function () {
             $scope.date.startDate = moment($scope.selectedDate.startDate).format();
             $scope.date.endDate = moment($scope.selectedDate.endDate).format();

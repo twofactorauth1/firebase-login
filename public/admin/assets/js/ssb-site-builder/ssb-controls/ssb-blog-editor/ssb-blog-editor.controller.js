@@ -62,21 +62,21 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
 
     $scope.$watch("vm.state.post.post_author", function(value, oldValue){
         if(value && value !== oldValue){
-            vm.state.post.post_author = value.replace(/#/g, "");
+            vm.state.post.post_author = value.replace(/#|\//g, "");
         }
     })
 
     function tagsAdded(tag){
         if(tag && tag.text)
-            tag.text = tag.text.replace(/#/g, "");
+            tag.text = tag.text.replace(/#|\//g, "");
     }
 
-    
+
     $scope.$watchGroup(['vm.uiState.openSidebarPanel.id', 'vm.uiState.openBlogPanel.id'], _.debounce(function(id) {
         $timeout(function() {
-           vm.ssbBlogLoaded = true; 
+           vm.ssbBlogLoaded = true;
         }, 0);
-        
+
         if (vm.state.post && vm.state.pendingBlogChanges && id[1] !== "edit") {
             vm.savePost(null, null , true);
         }
@@ -242,7 +242,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
             return SimpleSiteBuilderService.returnInvalidPost();
         }
 
-        
+
         if(!post.publish_date && post.post_status === 'PUBLISHED'){
            post.publish_date = Date.parse($filter('date')(new Date(), "MM/dd/yyyy"));
         }
@@ -363,7 +363,7 @@ function ssbSiteBuilderBlogEditorController($scope, $rootScope, $timeout, Simple
                         vm.state.pendingBlogChanges = false;
                     }
                 }
-                
+
             }
         }
 

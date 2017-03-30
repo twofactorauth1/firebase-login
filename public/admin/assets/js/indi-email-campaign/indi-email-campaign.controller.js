@@ -108,7 +108,7 @@
         vm.contactTagsFn = contactTagsFn;
         vm.formValidations = formValidations;
         vm.backToCampaigns = backToCampaigns;
-
+        vm.customTagFilter=customTagFilter;
         $scope.$watch('vm.state.campaign.type', function () {
             console.debug('vm.state.campaign.type', vm.state.campaign.type);
             if(vm.state.campaign.emailSettings && vm.state.campaign.status !== 'COMPLETED') {
@@ -807,6 +807,19 @@
 
         function backToCampaigns(){
             $location.url('/marketing/campaigns');
+        }
+
+        function customTagFilter(checkTag){
+            if(vm.state.campaign.searchTags && vm.state.campaign.searchTags.tags) {
+              var valid = true;
+              angular.forEach(vm.state.campaign.searchTags.tags, function(tg){
+                if(tg.label.toLowerCase() === checkTag.label.toLowerCase()){
+                  valid = false;
+                }
+              });
+              return valid;
+            }
+            return true;
         }
 
         function init(element) {
