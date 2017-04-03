@@ -226,9 +226,9 @@ module.exports = {
        var sourceKey = destUrl.replace(/.*indigenous-digital-assets\//gi, '');
         s3dao.getObject(sourceBucket, sourceKey, function(fileExits){
             if(fileExits) {
-                fn(destUrl+new Date().getTime())
+                fn(destUrl+"_"+new Date().getTime())
             } else {
-               fn(newDestUrl);
+               fn(destUrl);
             }
         })
     },
