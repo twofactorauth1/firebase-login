@@ -159,7 +159,7 @@ var dao = {
         s3.headObject(params).on('success', function(response) {
            fn(true);
         }).on('error',function(error){
-           fun(false);// not found
+           fn(false);// not found
         }).send();
     }
 };
