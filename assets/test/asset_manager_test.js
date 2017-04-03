@@ -122,7 +122,7 @@ exports.subscription_dao_test = {
         test.expect(1);
         var asset = testContext.asset;
         asset.set('size', 100);
-        manager.updateAsset(asset, function(err, value){
+        manager.updateAsset(asset, null, function(err, value){
             if(err) {
                 test.ok(false, 'error updating asset');
                 test.done();
