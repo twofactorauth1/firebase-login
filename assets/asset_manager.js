@@ -181,10 +181,34 @@ module.exports = {
         });
     },
 
-    updateAsset: function(asset, fn) {
+   updateAsset: function(asset, userId, fn) {
         var self = this;
         self.log = log;
-
+        self.log.debug('>> updateAsset');
+        var subdir = 'account_' + asset.get('accountId');
+        if(appConfig.nonProduction === true) {
+            subdir = 'test_' + subdir;
+        }
+       var oldUrl= asset.get("url")
+       var newDestUrl= oldUrl.substring( 0,
+            oldUrl.indexOf(subdir)+ subdir.length+1) + asset.get("filename");
+      self.checkResourceonS3(newDestUrl,function(newUpdatedDestUrl){
+          self.copyS3Asset( asset.get('accountId'), userId,oldUrl, newUpdatedDestUrl, asset.get('mimeType'),
+            function(err, value){
+                if(err) {
+                    self.log.error('Exception in updateAsset:copyS3Asset ' + err);
+                    fn(err, null);
+                } else {
+                    self.log.debug('<< copyS3Asset',value);
+                    asset.set('url',newUpdatedDestUrl);
+                    self.updateAssetObject(asset,userId ,fn);
+                }
+        });
+      });
+    },
+    updateAssetObject: function(asset, userId, fn) {
+        var self = this;
+        self.log = log;
         self.log.debug('>> updateAsset');
         assetDao.saveOrUpdate(asset, function(err, value){
             if(err) {
@@ -194,9 +218,20 @@ module.exports = {
                 self.log.debug('<< updateAsset');
                 fn(null, value);
             }
-        });
+        })
     },
-
+    checkResourceonS3:function(destUrl, fn){
+       var self = this;
+       var sourceBucket = 'indigenous-digital-assets';
+       var sourceKey = destUrl.replace(/.*indigenous-digital-assets\//gi, '');
+        s3dao.getObject(sourceBucket, sourceKey, function(fileExits){
+            if(fileExits) {
+                fn(destUrl+new Date().getTime())
+            } else {
+               fn(newDestUrl);
+            }
+        })
+    },
     deleteAsset: function(assetId, fn) {
         //TODO: delete from the source as well
         var self = this;

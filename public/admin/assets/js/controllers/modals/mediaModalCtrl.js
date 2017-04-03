@@ -443,6 +443,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     originalAsset.accountId = $scope.account._id;
     AssetsService.updateAsset(originalAsset, function (data, status) {
       if (status == 200) {
+        asset.url=data.url;
         ToasterService.show('success', 'Asset updated.');
       }
     });
