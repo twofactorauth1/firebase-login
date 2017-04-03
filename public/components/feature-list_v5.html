@@ -4,13 +4,23 @@
     </div>
     <div class="features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
         <ul class="list-features">
-            <li ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)">
-                <div class="fetaure-tabs-icon"> 
-                    <div elem ng-model="feature.top"></div>    
-                </div>
-                <div class="features-tabs-heading">
-                    <div elem ng-model="feature.heading"></div>
-                </div>                
+            <li class="feature" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)">
+                <a class="feature-heading">
+                    <div class="fetaure-tabs-icon"> 
+                        <div elem ng-model="feature.top"></div>    
+                    </div>
+                    <div class="features-tabs-heading">
+                        <div elem ng-model="feature.heading"></div>
+                    </div>
+                    <div ng-if="isEditing">
+                        <div class="delete-feature center" ng-click="deleteFeatureList($index)" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this feature.">
+                            <i class='fa fa-trash'></i>
+                        </div>
+                        <div class="add-addtional center" ng-click="addFeatureService($index)" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another feature.">
+                            <i class='fa fa-plus'></i>
+                        </div>
+                    </div>
+                </a>                
             </li>
         </ul>
 
