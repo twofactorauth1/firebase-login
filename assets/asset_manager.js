@@ -190,20 +190,17 @@ module.exports = {
             subdir = 'test_' + subdir;
         }
        var oldUrl= asset.get("url")
-       var newDestUrl= oldUrl.substring( 0,
-            oldUrl.indexOf(subdir)+ subdir.length+1) + asset.get("filename");
-      self.checkResourceonS3(newDestUrl,function(newUpdatedDestUrl,fn){
-          self.copyS3Asset( asset.get('accountId'), userId,oldUrl, newUpdatedDestUrl, asset.get('mimeType'),
-            function(err, value){
-                if(err) {
-                    self.log.error('Exception in updateAsset:copyS3Asset ' + err);
-                    fn(err, null);
-                } else {
-                    self.log.debug('<< copyS3Asset',value);
-                    asset.set('url',newUpdatedDestUrl);
-                    self.updateAssetObject(asset,userId ,fn);
-                }
-        });
+       var newDestUrl= oldUrl
+              .substring( 0, oldUrl.indexOf(subdir) + subdir.length+1) + asset.get("filename")+"_"+new Date().getTime();
+      self.copyS3Asset( asset.get('accountId'), userId,oldUrl, newDestUrl, asset.get('mimeType'), function(err, value){
+        if(err) {
+            self.log.error('Exception in updateAsset:copyS3Asset ' + err);
+            fn(err, null);
+        } else {
+            self.log.debug('<< copyS3Asset',value);
+            asset.set('url',newDestUrl);
+            self.updateAssetObject(asset,userId ,fn);
+        }
       });
     },
     updateAssetObject: function(asset, userId, fn) {
