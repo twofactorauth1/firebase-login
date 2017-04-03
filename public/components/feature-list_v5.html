@@ -1,0 +1,26 @@
+<div ng-class="component.type+'-v'+component.version">
+    <div class="title mb30">
+        <div elem ng-model="component.title"></div>
+    </div>
+    <div class="features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
+        <ul class="list-features">
+            <li ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)">
+                <div class="fetaure-tabs-icon"> 
+                    <div elem ng-model="feature.top"></div>    
+                </div>
+                <div class="features-tabs-heading">
+                    <div elem ng-model="feature.heading"></div>
+                </div>                
+            </li>
+        </ul>
+
+        <div class="feature-tab-content" ng-if="!loading">
+            <div class="col-md-5">
+                <div elem ng-model="component.features[features.featureIndex].media"></div>
+            </div>
+            <div class="col-md-7">
+                <div elem ng-model="component.features[features.featureIndex].content"></div> 
+            </div>
+        </div>
+    </div>
+</div>

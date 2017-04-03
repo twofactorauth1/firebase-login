@@ -11,6 +11,10 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
     link: function (scope, element, attrs, ctrl) {
 
         scope.isEditing = true;
+        scope.features= {
+            featureIndex: 0
+        }
+        scope.loading = true;
         scope.addFeatureList = function (index) {
             if (!index) {
                 index = 0;
@@ -55,6 +59,14 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
             else{
                 return "";
             }
+        }
+
+        scope.setSelectedFeatureIndex = function(index){
+            scope.loading = true;
+            scope.features.featureIndex = index;
+            $timeout(function() {                
+                scope.loading = false;
+            }, 0);
         }
     }
   };
