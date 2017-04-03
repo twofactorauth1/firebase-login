@@ -183,6 +183,7 @@ module.exports = {
     updateAssetChangeUrl: function(asset, userId, fn) {
      var self = this;
      self.log = log;
+     var callBackfunction=fn;
      var subdir = 'account_' + asset.get('accountId');
      if (appConfig.nonProduction === true) {
          subdir = 'test_' + subdir;
@@ -194,17 +195,17 @@ module.exports = {
      self.copyS3Asset(asset.get('accountId'), userId, oldUrl, newDestUrl, asset.get('mimeType'), function(err, value) {
          if (err) {
              self.log.error('Exception in updateAsset:copyS3Asset ' + err);
-             fn(err, null);
+             callBackfunction(err, null);
          } else {
              self.log.debug('<< copyS3Asset');
              asset.set('url', newDestUrl);
              assetDao.saveOrUpdate(asset, function(err, value) {
                  if (err) {
                      self.log.error('Exception in updateAsset: ' + err);
-                     fn(err, null);
+                     callBackfunction(err, null);
                  } else {
                      self.log.debug('<<< updateAsset');
-                     fn(null, value);
+                     callBackfunction(null, value);
                  }
              });
          }
