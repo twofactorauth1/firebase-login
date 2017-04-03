@@ -26,6 +26,19 @@ app.directive('featureListComponent',["$window", "$timeout", function ($window, 
             scope.component.features.splice(index + 1, 0, newFeature);
         };
 
+        scope.addFeatureService = function (index) {
+            if (!index) {
+                index = 0;
+            }
+            var newFeature = {
+                "top" : "<div style='text-align:center'><span class=\"fa fa-desktop\" style=\"font-size:48px;\">&zwnj;</span></div>",
+                "heading" : "<div style='text-align:center'><span style=\"font-size:20px;\">TITLE</span></div>",
+                "content" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.",
+                "media" : ""
+            }
+            scope.component.features.splice(index + 1, 0, newFeature);
+        };
+
         scope.deleteFeatureList = function (index) {
             scope.component.features.splice(index, 1);
         };
