@@ -192,7 +192,7 @@ module.exports = {
        var oldUrl= asset.get("url")
        var newDestUrl= oldUrl.substring( 0,
             oldUrl.indexOf(subdir)+ subdir.length+1) + asset.get("filename");
-      self.checkResourceonS3(newDestUrl,function(newUpdatedDestUrl){
+      self.checkResourceonS3(newDestUrl,fn,function(newUpdatedDestUrl,fn){
           self.copyS3Asset( asset.get('accountId'), userId,oldUrl, newUpdatedDestUrl, asset.get('mimeType'),
             function(err, value){
                 if(err) {
@@ -228,7 +228,7 @@ module.exports = {
             if(fileExits) {
                 fn(destUrl+"_"+new Date().getTime())
             } else {
-               fn(destUrl);
+               fn(destUrl,fn);
             }
         })
     },
