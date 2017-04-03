@@ -284,7 +284,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     var asset = new $$.m.Asset(req.body);
                     asset.set('_id', assetId);
-                   assetManager.updateAsset(asset, userId, function(err, value) {
+                   assetManager.updateAssetChangeUrl(asset, userId, function(err, value) {
                         self.log.debug('<< updateAsset');
                         self.sendResultOrError(res, err, value, "Error updating Asset");
                         self.createUserActivity(req, 'UPDATE_ASSET', null, null, function(){});

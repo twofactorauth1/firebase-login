@@ -180,30 +180,37 @@ module.exports = {
             }
         });
     },
-
-   updateAsset: function(asset, userId, fn) {
-        var self = this;
-        self.log = log;
-        self.log.debug('>> updateAsset');
-        var subdir = 'account_' + asset.get('accountId');
-        if(appConfig.nonProduction === true) {
-            subdir = 'test_' + subdir;
-        }
-       var oldUrl= asset.get("url")
-       var newDestUrl= oldUrl
-              .substring( 0, oldUrl.indexOf(subdir) + subdir.length+1) + asset.get("filename")+"_"+new Date().getTime();
-      self.copyS3Asset( asset.get('accountId'), userId,oldUrl, newDestUrl, asset.get('mimeType'), function(err, value){
-        if(err) {
-            self.log.error('Exception in updateAsset:copyS3Asset ' + err);
-            fn(err, null);
-        } else {
-            self.log.debug('<< copyS3Asset',value);
-            asset.set('url',newDestUrl);
-            self.updateAssetObject(asset,userId ,fn);
-        }
-      });
+    updateAssetChangeUrl: function(asset, userId, fn) {
+     var self = this;
+     self.log = log;
+     var subdir = 'account_' + asset.get('accountId');
+     if (appConfig.nonProduction === true) {
+         subdir = 'test_' + subdir;
+     }
+     var oldUrl = asset.get("url");
+        //append time in the end to avoid duplicate files.
+     var newDestUrl = oldUrl
+         .substring(0, oldUrl.indexOf(subdir) + subdir.length + 1) + asset.get("filename") + "_" + new Date().getTime();
+     self.copyS3Asset(asset.get('accountId'), userId, oldUrl, newDestUrl, asset.get('mimeType'), function(err, value) {
+         if (err) {
+             self.log.error('Exception in updateAsset:copyS3Asset ' + err);
+             fn(err, null);
+         } else {
+             self.log.debug('<< copyS3Asset');
+             asset.set('url', newDestUrl);
+             assetDao.saveOrUpdate(asset, function(err, value) {
+                 if (err) {
+                     self.log.error('Exception in updateAsset: ' + err);
+                     fn(err, null);
+                 } else {
+                     self.log.debug('<<< updateAsset');
+                     fn(null, value);
+                 }
+             });
+         }
+     });
     },
-    updateAssetObject: function(asset, userId, fn) {
+    updateAsset: function(asset, userId, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> updateAsset');
