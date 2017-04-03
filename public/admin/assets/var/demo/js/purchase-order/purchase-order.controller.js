@@ -15,6 +15,8 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         loading: true
     }
 
+    vm.openModal = openModal;
+
     vm.init = init;
 
 
@@ -24,6 +26,18 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             vm.state.orders = data;    
         }        
     }, true);
+
+
+    function openModal(size){
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'new-purchase-order-modal',
+            size: size,
+            keyboard: false,
+            backdrop: 'static',
+            scope: $scope
+        });
+    }
+
 
     function init(element) {
         vm.element = element;

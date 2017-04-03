@@ -52,7 +52,7 @@
 	                                    </div>
 	                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
 	                                    <div class="col-xs-6 col-xs-offset-6 col-sm-4 center">
-	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openProductModal()">
+	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="vm.openModal()">
 	                                            <span>New</span>
 	                                        </button>
 	                                    </div>
@@ -135,5 +135,4 @@
 	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
 	</div>
 </div>
-
-
+<div data-ng-include=" 'assets/var/demo/views/partials/new-purchase-order.html' "></div>
