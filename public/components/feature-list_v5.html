@@ -4,7 +4,7 @@
     </div>
     <div class="features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
         <ul class="list-features">
-            <li class="feature" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)">
+            <li class="feature" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)" ng-class="{'feature-col-5-layout':component.features.length >= 5, 'feature-col-4-layout':component.features.length == 4, 'feature-col-3-layout':component.features.length == 3, 'feature-col-2-layout':component.features.length == 2, 'feature-col-1-layout':component.features.length == 1}">
                 <a class="feature-heading">
                     <div class="fetaure-tabs-icon"> 
                         <div elem ng-model="feature.top"></div>    
