@@ -13,7 +13,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     if ($injector.has("geocodeService")) {
         geocodeService = $injector.get('geocodeService');
     }
-   
+
     if ($injector.has("GeocodeService")) {
         geocodeService = $injector.get('GeocodeService');
     }
@@ -26,7 +26,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.searchAddress = '';
     vm.searchLat = '';
     vm.searchLong = '';
-    
+
     vm.searchResults = {}; // { count: 10, results: [] }
     vm.loading = false;
     vm.markers = [];
@@ -36,6 +36,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.locationMarkerIcon = {};
     vm.clusterOptions = {};
     vm.geolocationEnabled = false;
+    vm.showLocations = true;
     vm.helmsMarker = {};
     vm.searchBasisMarker = {};
 
@@ -59,7 +60,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.searchRadius = 5;
     if(vm.component.settings && vm.component.settings.locationFinderRange)
         vm.searchRadius = angular.copy(vm.component.settings.locationFinderRange);
-           
+
 
     // Chris - my bad..
     if(vm.component.isHelm === false){
@@ -90,19 +91,19 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
     vm.locationFinderOptions = [
         {
             "description": "5 miles",
-            "value": 5 
+            "value": 5
         },
         {
             "description": "10 miles",
-            "value": 10 
+            "value": 10
         },
         {
             "description": "25 miles",
-            "value": 25 
+            "value": 25
         },
         {
             "description": "50 miles",
-            "value": 50 
+            "value": 50
         },
         {
             "description": "100 miles",
@@ -193,11 +194,11 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             google.maps.event.trigger(vm.map, "resize");
             vm.map.setCenter(center);
         });
-        
+
         if(vm.component.isHelm === false && geocodeService){
             $timeout(function() {
                 loadAllLocations();
-            }, 0);            
+            }, 0);
         }
 
     }
@@ -209,6 +210,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
             vm.searchResults = data.data;
             vm.setMapCenter(41.8853195, -87.6285088); // rowdydow
             vm.displayMarkers();
+            vm.showLocations = false;
         }).catch(function(err) {
             console.error(JSON.stringify(err));
         }).finally(function() {
@@ -282,6 +284,7 @@ function ssbLocationFinderComponentController($scope, $q, $timeout, $injector) {
 
                     vm.setMapCenter(results[0].geometry.location.lat(), results[0].geometry.location.lng());
                     vm.getLocations();
+                    vm.showLocations = true;
 
                 } else {
                     console.debug("Geocode was not successful for the following reason: " + status);
