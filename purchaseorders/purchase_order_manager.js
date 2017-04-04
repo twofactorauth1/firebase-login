@@ -11,6 +11,7 @@ var async = require('async');
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
 var appConfig = require('../configs/app.config');
+var userDao = require('../dao/user.dao');
 
 require('./model/purchase_order');
 
@@ -21,9 +22,9 @@ var accountDao = require('../dao/account.dao');
 
 
 module.exports = {
-
-	listPurchaseOrders: function (accountId, userId, fn) {
-        
+	
+    listPurchaseOrders: function (accountId, userId, fn) {
+        var userId = null;
         log.debug(accountId, userId, '>> listPurchaseOrders');
         var query = {
             accountId: accountId
@@ -34,8 +35,32 @@ module.exports = {
                 log.error(accountId, userId, 'Error listing orders: ', err);
                 return fn(err, null);
             } else {
-        		log.debug(accountId, userId, '<< listPurchaseOrders');
-                return fn(null, orders);
+                async.each(orders, function (order, cb) {
+                    userDao.getById(order.get('userId'), function (err, user) {
+                        if (err) {
+                            log.error(accountId, userId, 'Error getting user: ' + err);
+                            cb(err);
+                        } else {
+                            var _user = {
+                                _id: user.get("_id"),
+                                username: user.get("username"),
+                                first: user.get("first"),
+                                last: user.get("last")
+                            }
+                            order.set("submitter", _user);
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    if (err) {
+                        log.error(accountId, userId, 'Error fetching users for orders: ' + err);
+                        return fn(err, orders);
+                    } else {
+                        log.debug(accountId, userId, '<< listPurchaseOrders');
+                        return fn(null, orders);
+                    }
+                });
+
             }
         });
     },
@@ -87,13 +112,27 @@ module.exports = {
         }
         //create record
         $.when(uploadPromise).done(function(file){
-            purchaseOrderdao.saveOrUpdate(po, function(err, value){
+            purchaseOrderdao.saveOrUpdate(po, function(err, order){
                 if(err) {
                     self.log.error('Exception during po creation: ' + err);
                     fn(err, null);
                 } else {
                     self.log.debug('<< createPO');
-                    fn(null, value, file);
+                    userDao.getById(order.get('userId'), function (err, user) {
+                        if (err) {
+                            log.error(accountId, userId, 'Error getting user: ' + err);
+                            fn(err, null);
+                        } else {
+                            var _user = {
+                                _id: user.get("_id"),
+                                username: user.get("username"),
+                                first: user.get("first"),
+                                last: user.get("last")
+                            }
+                            order.set("submitter", _user);
+                            fn(null, order, file);
+                        }
+                    });
                 }
             });
         });

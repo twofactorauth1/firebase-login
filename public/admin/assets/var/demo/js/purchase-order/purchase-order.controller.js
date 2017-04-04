@@ -20,6 +20,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.checkIfInValid = checkIfInValid;
+    
     vm.init = init;
 
 
@@ -52,6 +53,13 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             vm.closeModal();
         })
     }
+
+
+    vm.getters = {
+        created: function (value) {
+            return value.created.date;
+        }
+    };
 
 
     function checkIfInValid(po){
