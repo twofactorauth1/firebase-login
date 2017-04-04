@@ -15,8 +15,10 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         loading: true
     }
 
+    
+    vm.createPurchaseOrder = createPurchaseOrder;
     vm.openModal = openModal;
-
+    vm.closeModal = closeModal;
     vm.init = init;
 
 
@@ -38,6 +40,15 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         });
     }
 
+
+    function closeModal() {
+        $scope.modalInstance.close();
+    }
+
+
+    function createPurchaseOrder(po, form){
+        PurchaseOrderService.createPurchaseOrder(po);
+    }
 
     function init(element) {
         vm.element = element;

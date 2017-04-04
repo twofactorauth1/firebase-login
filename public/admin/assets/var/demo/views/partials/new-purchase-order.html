@@ -1,14 +1,14 @@
 <script type="text/ng-template" id="new-purchase-order-modal">
     <div class="modal-header">
-        <button type="button" class="close" ng-click="cancel()">
+        <button type="button" class="close" ng-click="vm.closeModal()">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
         <h3 class="modal-title">New Purchase Order</h3>
     </div>
-    <div class="modal-body bg-white" stop-event="touchend">
-        <form role="form" class="ng-pristine ng-valid">
-            <div class="form-group">
+    <div class="modal-body bg-white new-purchase-order-modal" stop-event="touchend">
+        <form name="form" role="form" id="form">
+            <div class="form-group" >
                 <label>
                     Title
                 </label>
@@ -17,18 +17,20 @@
             <div class="form-group">
                 <label>
                     Text
+                    <span class="required">*</span>
                 </label>
-                <textarea placeholder="Text" class="form-control" ng-model="newPurchaseOrder.text"></textarea>
+                <textarea required placeholder="Text" class="form-control" ng-model="newPurchaseOrder.text"></textarea>
             </div>
             <div class="form-group">
                 <label>
                     Attachment
+                    <span class="required">*</span>
                 </label>
-                <input ng-model='newPurchaseOrder.attachment' type="file" />
+                <input required file-model='newPurchaseOrder.attachment' type="file" />
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled='saveLoading' ng-click="createPurchaseOrder(newPurchaseOrder)">Submit</button>
+        <button class="btn btn-primary" ng-disabled='form.$invalid' ng-click="vm.createPurchaseOrder(newPurchaseOrder, form)">Submit</button>
     </div>
 </script>
