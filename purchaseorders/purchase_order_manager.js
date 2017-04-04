@@ -75,7 +75,7 @@ module.exports = {
         var attachment = {
             name: file.name,
             size: file.size,
-            mimeType: file.type
+            mimeType: file.mimeType
         }
         
 
