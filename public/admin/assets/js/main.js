@@ -1,7 +1,7 @@
 var app = angular.module('indigenousApp', ['indigenous']);
 app.run(['$rootScope', '$state', '$stateParams', '$injector',
 function ($rootScope, $state, $stateParams, $injector) {
-
+    
     var $modal;
     var modalInstance;
     var IndiLoginModalService;
