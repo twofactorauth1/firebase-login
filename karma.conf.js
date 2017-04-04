@@ -69,7 +69,6 @@ module.exports = function (config) {
         'public/admin/assets/js/controllers/toasterCtrl.js',
         'public/admin/assets/js/controllers/sweetAlertCtrl.js',
         'public/admin/assets/js/services/toaster.js',
-
         'public/admin/assets/js/services/product.js',
         'public/admin/assets/js/services/payment.js',
         'public/admin/assets/js/services/user.js',
