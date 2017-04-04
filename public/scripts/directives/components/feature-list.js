@@ -47,6 +47,19 @@ app.directive('featureListComponent',['$window', function ($window) {
             scope.loading = false;
             scope.features.featureIndex = index;
         }
+
+        scope.setStyles = function(field){
+            var styleString = ' ';
+            if (field) {
+                if (field.align === 'left' || field.align === 'right')
+                    styleString += 'float: ' + field.align + " !important;";
+
+                if (field.align === 'center') {
+                    styleString += 'margin: 0 auto !important; float:none !important;';
+                }
+            }
+            return styleString;
+        }
     }
   };
 }]);
