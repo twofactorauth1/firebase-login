@@ -1,8 +1,8 @@
-<div ng-class="component.type+'-v'+component.version">
+<div data-edit ng-class="component.type+'-v'+component.version">
     <div class="title mb30">
         <div elem ng-model="component.title"></div>
     </div>
-    <div class="features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
+    <div class="row features-wrap feature-list-container" ng-init="setSelectedFeatureIndex(0)">
         <ul class="list-features">
             <li class="feature" ng-repeat="feature in component.features" ng-click="setSelectedFeatureIndex($index)" ng-class="{'feature-col-5-layout':component.features.length >= 5, 'feature-col-4-layout':component.features.length == 4, 'feature-col-3-layout':component.features.length == 3, 'feature-col-2-layout':component.features.length == 2, 'feature-col-1-layout':component.features.length == 1, 'active': $index == features.featureIndex}">
                 <a class="feature-heading">
@@ -13,7 +13,7 @@
                         <div elem ng-model="feature.heading"></div>
                     </div>
                     <div ng-if="isEditing">
-                        <div class="delete-feature center" ng-click="deleteFeatureList($index)" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Delete this feature.">
+                        <div class="delete-feature center" ng-click="deleteFeatureList($index)" tooltip-placement="top" tooltip-append-to-body="true" tooltip-append-to-body="true" tooltip="Delete this feature.">
                             <i class='fa fa-trash'></i>
                         </div>
                         <div class="add-addtional center" ng-click="addFeatureService($index)" tooltip-placement="top" tooltip-append-to-body="true"  tooltip-append-to-body="true" tooltip="Add another feature.">
@@ -24,7 +24,7 @@
             </li>
         </ul>
 
-        <div class="feature-tab-content" ng-if="!loading">
+        <div class="feature-tab-content">
             <div class="col-md-5">
                 <div elem ng-model="component.features[features.featureIndex].media"></div>
             </div>
