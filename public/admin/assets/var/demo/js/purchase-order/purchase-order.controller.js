@@ -19,6 +19,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.createPurchaseOrder = createPurchaseOrder;
     vm.openModal = openModal;
     vm.closeModal = closeModal;
+    vm.checkIfInValid = checkIfInValid;
     vm.init = init;
 
 
@@ -47,7 +48,19 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function createPurchaseOrder(po, form){
-        PurchaseOrderService.createPurchaseOrder(po);
+        PurchaseOrderService.createPurchaseOrder(po).then(function(response){
+            vm.closeModal();
+        })
+    }
+
+
+    function checkIfInValid(po){
+        if(po && po.attachment){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 
     function init(element) {
