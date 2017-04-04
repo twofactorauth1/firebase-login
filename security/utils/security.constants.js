@@ -43,7 +43,9 @@ var securityconstants = {
         'VIEW_SOCIALCONFIG':'VIEW_SOCIALCONFIG',
         'MODIFY_SOCIALCONFIG':'MODIFY_SOCIALCONFIG',
         'VIEW_ORDER':'VIEW_ORDER',
-        'MODIFY_ORDER':'MODIFY_ORDER'
+        'MODIFY_ORDER':'MODIFY_ORDER',
+        'MODIFY_PO' : 'MODIFY_PO',
+        'VIEW_PO': 'VIEW_PO'
     }
 
 };

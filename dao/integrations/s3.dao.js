@@ -148,6 +148,19 @@ var dao = {
                 fn(null, value);
             }
         });
+    },
+    getObject: function(sourceBucket, sourceKey, fn) {
+        var self = this;
+        var AWS = require('aws-sdk');
+
+        AWS.config.region = "";
+        var s3 = new AWS.S3();
+        var params = {Bucket: sourceBucket, Key: sourceKey };
+        s3.headObject(params).on('success', function(response) {
+           fn(true);
+        }).on('error',function(error){
+           fn(false);// not found
+        }).send();
     }
 };
 

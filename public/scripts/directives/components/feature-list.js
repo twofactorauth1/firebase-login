@@ -7,6 +7,10 @@ app.directive('featureListComponent',['$window', function ($window) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
+        scope.features= {
+            featureIndex: 0
+        }
+        scope.loading = true;
 		scope.featureClass = function(){
             var parent_id = scope.component.anchor || scope.component._id;
             var element = angular.element("#"+parent_id + " div.features-wrap")
@@ -35,6 +39,25 @@ app.directive('featureListComponent',['$window', function ($window) {
                 styleString += 'background: ' + component.blockbgcolor;   
             }
 
+            return styleString;
+        }
+
+
+        scope.setSelectedFeatureIndex = function(index){
+            scope.loading = false;
+            scope.features.featureIndex = index;
+        }
+
+        scope.setStyles = function(field){
+            var styleString = ' ';
+            if (field) {
+                if (field.align === 'left' || field.align === 'right')
+                    styleString += 'float: ' + field.align + " !important;";
+
+                if (field.align === 'center') {
+                    styleString += 'margin: 0 auto !important; float:none !important;';
+                }
+            }
             return styleString;
         }
     }

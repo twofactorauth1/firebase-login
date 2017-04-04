@@ -15,6 +15,12 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         loading: true
     }
 
+    
+    vm.createPurchaseOrder = createPurchaseOrder;
+    vm.openModal = openModal;
+    vm.closeModal = closeModal;
+    vm.checkIfInValid = checkIfInValid;
+    
     vm.init = init;
 
 
@@ -24,6 +30,46 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
             vm.state.orders = data;    
         }        
     }, true);
+
+
+    function openModal(size){
+        $scope.modalInstance = $modal.open({
+            templateUrl: 'new-purchase-order-modal',
+            size: size,
+            keyboard: false,
+            backdrop: 'static',
+            scope: $scope
+        });
+    }
+
+
+    function closeModal() {
+        $scope.modalInstance.close();
+    }
+
+
+    function createPurchaseOrder(po, form){
+        PurchaseOrderService.createPurchaseOrder(po).then(function(response){
+            vm.closeModal();
+        })
+    }
+
+
+    vm.getters = {
+        created: function (value) {
+            return value.created.date;
+        }
+    };
+
+
+    function checkIfInValid(po){
+        if(po && po.attachment && po.attachment.type == 'application/pdf'){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 
     function init(element) {
         vm.element = element;

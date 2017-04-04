@@ -24,6 +24,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
+        app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
+        app.get(this.url('aging'), this.isAuthAndSubscribedApi.bind(this), this.aging.bind(this));
     },
 
     demo: function(req, resp) {
@@ -35,6 +37,33 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< demo');
             return self.sendResultOrError(resp, err, value, "Error calling demo");
         });
+    },
+
+    inventory: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventory');
+        manager.inventory(accountId, userId, function(err, value){
+            self.log.debug('<< inventory');
+            return self.sendResultOrError(resp, err, value, "Error calling inventory");
+        });
+    },
+
+    aging: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> aging');
+
+        var dateString = req.query.date || '3/27/17';
+        var cardCodeFrom = req.query.cardCodeFrom || 'C101291';
+        var cardCodeTo = req.query.cardCodeTo || 'C101291';
+        manager.aging(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+            self.log.debug('<< aging');
+            return self.sendResultOrError(resp, err, value, "Error calling aging");
+        });
+
     }
 });
 

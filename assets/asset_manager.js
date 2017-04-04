@@ -180,11 +180,39 @@ module.exports = {
             }
         });
     },
-
-    updateAsset: function(asset, fn) {
+    updateAssetChangeUrl: function(asset, userId, fn) {
+     var self = this;
+     self.log = log;
+     var subdir = 'account_' + asset.get('accountId');
+     if (appConfig.nonProduction === true) {
+         subdir = 'test_' + subdir;
+     }
+     var oldUrl = asset.get("url");
+        //append time in the end to avoid duplicate files.
+     var newDestUrl = oldUrl
+         .substring(0, oldUrl.indexOf(subdir) + subdir.length + 1) + asset.get("filename") + "_" + new Date().getTime();
+     self.copyS3Asset(asset.get('accountId'), userId, oldUrl, newDestUrl, asset.get('mimeType'), function(err, value) {
+         if (err) {
+             self.log.error('Exception in updateAsset:copyS3Asset ' + err);
+             fn(err, null);
+         } else {
+             self.log.debug('<< copyS3Asset');
+             asset.set('url', newDestUrl);
+             assetDao.saveOrUpdate(asset, function(err, value) {
+                 if (err) {
+                     self.log.error('Exception in updateAsset: ' + err);
+                     fn(err, null);
+                 } else {
+                     self.log.debug('<<< updateAsset');
+                     fn(null, value);
+                 }
+             });
+         }
+     });
+    },
+    updateAsset: function(asset, userId, fn) {
         var self = this;
         self.log = log;
-
         self.log.debug('>> updateAsset');
         assetDao.saveOrUpdate(asset, function(err, value){
             if(err) {
@@ -194,9 +222,20 @@ module.exports = {
                 self.log.debug('<< updateAsset');
                 fn(null, value);
             }
-        });
+        })
     },
-
+    checkResourceonS3:function(destUrl, fn){
+       var self = this;
+       var sourceBucket = 'indigenous-digital-assets';
+       var sourceKey = destUrl.replace(/.*indigenous-digital-assets\//gi, '');
+        s3dao.getObject(sourceBucket, sourceKey, function(fileExits){
+            if(fileExits) {
+                fn(destUrl+"_"+new Date().getTime())
+            } else {
+               fn(destUrl,fn);
+            }
+        })
+    },
     deleteAsset: function(assetId, fn) {
         //TODO: delete from the source as well
         var self = this;

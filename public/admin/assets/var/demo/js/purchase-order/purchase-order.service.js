@@ -21,7 +21,7 @@
 
     
         poService.getPurchaseOrders = getPurchaseOrders;
-
+        poService.createPurchaseOrder = createPurchaseOrder;
 
         function poRequest(fn) {
             poService.loading.value = poService.loading.value + 1;
@@ -48,6 +48,31 @@
           }
 
           return poRequest($http.get([basePoAPIUrlv2].join('/')).success(success).error(error));
+        }
+
+
+
+        /**
+            * Create new PO
+        */
+        function createPurchaseOrder(po) {
+
+            function success(data) {                
+                poService.purchaseOrders.splice(0, 0, data);
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService getPurchaseOrders error: ', JSON.stringify(error));
+            }
+
+            var _formData = new FormData();
+            _formData.append('file', po.attachment);
+            _formData.append('po', angular.toJson(po));
+
+            return poRequest($http.post(basePoAPIUrlv2, _formData, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            }).success(success).error(error));
         }
 
 		(function init() {

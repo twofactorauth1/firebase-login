@@ -273,6 +273,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var assetId = req.params.id;
         var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
         assetManager.getAsset(assetId, function(err, savedAsset){
             if(err) {
                 return self.wrapError(res, 404, 'Asset not found', 'Could not find asset with id [' + assetId + '].');
@@ -283,7 +284,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     var asset = new $$.m.Asset(req.body);
                     asset.set('_id', assetId);
-                    assetManager.updateAsset(asset, function(err, value) {
+                   assetManager.updateAssetChangeUrl(asset, userId, function(err, value) {
                         self.log.debug('<< updateAsset');
                         self.sendResultOrError(res, err, value, "Error updating Asset");
                         self.createUserActivity(req, 'UPDATE_ASSET', null, null, function(){});

@@ -37,6 +37,38 @@ module.exports = {
         });
     },
 
+    inventory: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> inventory');
+        var path = 'query/Indigenous/InventoryAvailability.aspx?accept=application/json';
+
+        self._ziRequest(path, function(err, value) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error calling zed', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< inventory');
+                fn(null, value);
+            }
+        });
+    },
+
+    aging: function(accountId, userId, cardCodeFrom, cardCodeTo, dateString, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> aging');
+        var path = 'query/Indigenous/CustomerAging2.aspx?0=' + cardCodeFrom + '&1=' + cardCodeTo + '&2=' + dateString + '&accept=application/json';
+
+        self._ziRequest(path, function(err, value) {
+            if (err) {
+                self.log.error(accountId, userId, 'Error calling zed', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< aging');
+                fn(null, value);
+            }
+        });
+    },
+
 
 
     _ziRequest: function(path, fn) {

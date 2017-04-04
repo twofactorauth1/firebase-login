@@ -8,7 +8,7 @@
 </section>
 
 
-<div class="" ng-init="tableView='list'">
+<div class="purchase-orders-list" ng-init="tableView='list'">
 	<div st-table="vm.displayedOrders" st-safe-src="vm.state.orders" >
 	    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
 	        <div class="row">
@@ -52,7 +52,7 @@
 	                                    </div>
 	                                    <div class="visible-xs margin-bottom-15 clearfix"></div>
 	                                    <div class="col-xs-6 col-xs-offset-6 col-sm-4 center">
-	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openProductModal()">
+	                                        <button type="button" class="btn btn-o btn-wide btn-info btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="vm.openModal()">
 	                                            <span>New</span>
 	                                        </button>
 	                                    </div>
@@ -102,27 +102,23 @@
 	            <tr>
 	                <th st-sort="title">Name</th>
 	                <th st-sort="submitter">Submitter</th>
-	                <th st-sort="date">Date</th>
+	                <th st-sort="vm.getters.created">Date</th>
 	                <th class="hidden-xs">Attachment</th>
 	            </tr>
 	            <tr ng-if="showFilter">
 	                <th>
-	                    <input st-search="name" placeholder="Name" class="form-control" type="search" />
+	                    <input st-search="title" placeholder="Name" class="form-control" type="search" />
 	                </th>
-	                <th>
-	                    <input st-search="submitter" placeholder="Submitter" class="form-control" type="search" />
-	                </th>
-	                
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat="product in vm.displayedOrders" class="product-item">
+	            <tr ng-repeat="order in vm.displayedOrders" class="product-item">
 
 	                <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 
-	                <td class=""><strong>Submitter: </strong><span ng-text-truncate="order.submitter" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-	                <td><strong>Date: </strong>{{order.date}}</td>	                
-	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment}}</td>
+	                <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
+	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy'}}</td>	                
+	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot ng-if="vm.state.orders.length">
@@ -135,5 +131,4 @@
 	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
 	</div>
 </div>
-
-
+<div data-ng-include=" 'assets/var/demo/views/partials/new-purchase-order.html' "></div>
