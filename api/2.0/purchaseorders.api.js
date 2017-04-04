@@ -48,8 +48,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createPurchaseOrder');
         var form = new formidable.IncomingForm();
         var accountId = parseInt(self.accountId(req));
-        var _data = req.body;
-        console.log(_data);
+        
         self.checkPermission(req, self.sc.privs.MODIFY_ORDER, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(res);

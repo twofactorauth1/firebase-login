@@ -26,7 +26,7 @@ module.exports = {
         
         log.debug(accountId, userId, '>> listPurchaseOrders');
         var query = {
-            account_id: accountId
+            accountId: accountId
         };
 
         purchaseOrderdao.findMany(query, $$.m.PurchaseOrder, function (err, orders) {

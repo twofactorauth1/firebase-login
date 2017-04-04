@@ -102,7 +102,7 @@
 	            <tr>
 	                <th st-sort="title">Name</th>
 	                <th st-sort="submitter">Submitter</th>
-	                <th st-sort="date">Date</th>
+	                <th st-sort="created.date">Date</th>
 	                <th class="hidden-xs">Attachment</th>
 	            </tr>
 	            <tr ng-if="showFilter">
@@ -116,13 +116,13 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat="product in vm.displayedOrders" class="product-item">
+	            <tr ng-repeat="order in vm.displayedOrders" class="product-item">
 
 	                <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 
 	                <td class=""><strong>Submitter: </strong><span ng-text-truncate="order.submitter" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-	                <td><strong>Date: </strong>{{order.date}}</td>	                
-	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment}}</td>
+	                <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy'}}</td>	                
+	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot ng-if="vm.state.orders.length">

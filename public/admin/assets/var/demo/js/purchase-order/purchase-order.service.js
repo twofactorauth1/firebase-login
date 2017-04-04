@@ -51,6 +51,7 @@
         }
 
 
+
         /**
             * Create new PO
         */
@@ -72,6 +73,11 @@
                 headers: {'Content-Type': undefined}
             })
         }
+
+		(function init() {
+            getPurchaseOrders();
+		})();
+
 
 		return poService;
 	}
