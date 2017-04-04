@@ -63,7 +63,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function checkIfInValid(po){
-        if(po && po.attachment){
+        if(po && po.attachment && po.attachment.type == 'application/pdf'){
             return false;
         }
         else{
