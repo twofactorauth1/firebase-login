@@ -885,7 +885,7 @@
                 $timeout(function() {
                     if(angular.isDefined(chart) && Object.keys(chart).length)
                         chart.reflow();
-                }, 1000);
+                }, 0);
             })
         };
 

@@ -50,6 +50,8 @@ var defaultPrivileges = [
     'MODIFY_SOCIALCONFIG',
     'VIEW_ORDER',
     'MODIFY_ORDER',
+    'MODIFY_PO',
+    'VIEW_PO',
     'ALL'
 
 ];

@@ -1123,6 +1123,72 @@
             }
         };
 
+        this.visitorLocationsPlatform = function (locationData, highchartsData, countryData, countryMap) {
+            var usSeries = {
+                animation: {
+                    duration: 0
+                },
+                data: locationData,
+                mapData: highchartsData,
+                joinBy: ['postal-code', 'code'],
+                dataLabels: {
+                    enabled: false
+                },
+                name: '# of Visitors',
+                tooltip: {
+                    pointFormat: '{point.code}: {point.value}'
+                }
+            };
+            console.log('"BEFORE #live-platform-visitor-locations');
+
+            if ($("#live-platform-visitor-locations").length) {
+                console.log('"AFTER #live-platform-visitor-locations');
+                var chart1 = new Highcharts.Map({
+                    chart: {
+                        renderTo: 'live-platform-visitor-locations',
+                        height: 240,
+                        zoomType : false,
+                        backgroundColor:'rgba(255, 255, 255, 0.1)'
+                    },
+
+                    title: {
+                        text: ''
+                    },
+
+                    exporting: {
+                        enabled: false
+                    },
+
+                    legend: {
+                        enabled: false
+                    },
+
+                    mapNavigation: {
+                        enableButtons: false,
+                        enableDoubleClickZoom: false,
+                        enableTouchZoom: false
+                    },
+
+                    colorAxis: {
+                        min: 1,
+                        type: 'logarithmic',
+                        minColor: '#7cb5ec',
+                        maxColor: '#224f5b'
+                    },
+
+                    series: [
+                        usSeries
+                    ],
+                    xAxis:{
+
+                    },
+                    credits: {
+                        enabled: false
+                    }
+                });
+            }
+        };
+
         this.visitorLocationsDOHY = function (locationData, highchartsData, countryData, countryMap) {
             var usSeries = {
                 animation: {

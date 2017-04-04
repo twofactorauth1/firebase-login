@@ -268,7 +268,7 @@
                 $timeout(function() {
                     if(angular.isDefined(chart) && Object.keys(chart).length)
                         chart.reflow();
-                }, 1000);
+                }, 0);
             })
         };
 
@@ -288,7 +288,7 @@
         (function init() {
             $timeout(function() {
                 reflowCharts();
-            }, 1000);
+            }, 0);
 
         })();
 

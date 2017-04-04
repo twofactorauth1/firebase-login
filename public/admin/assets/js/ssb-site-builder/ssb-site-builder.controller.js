@@ -47,7 +47,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.toggleSidebarPanel = toggleSidebarPanel;
     vm.resizeWindow = resizeWindow;
     vm.isTextColumnNum = isTextColumnNum;
-
+  
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -768,7 +768,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function insertMedia(asset) {
         vm.addFroalaImage(asset);
-    };
+    }
+
+    
 
     function addFroalaImage(asset) {
 
@@ -1376,8 +1378,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
 
     function toggleSidebarPanel(type){
+       
         if(!vm.state.saveAndLoading)
             vm.uiState.openSidebarPanel = type;
+    }
+
+    function hideme(){
+        console.log('click 2');
     }
 
 
@@ -1391,6 +1398,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function isTextColumnNum(component){
         return component && component.layoutModifiers && component.layoutModifiers.columns && angular.isDefined(component.layoutModifiers.columns.columnsNum);        
     }
+    
 
     function init(element) {
 
@@ -1414,6 +1422,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.permissions = SimpleSiteBuilderService.permissions;
 
     }
+   
 
 
 }

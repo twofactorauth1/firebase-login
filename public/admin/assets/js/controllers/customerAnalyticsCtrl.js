@@ -92,11 +92,55 @@
             $scope.platformTraffic();
         });
 
+        function loadLivePlatformLocationChart(data){
+            var livePlatformLocationsData = [];
+            if (data) {
+                var _formattedLocations = [];
+                _.each(data, function (loc) {
+                    if (loc['ip_geo_info.province']) {
+                        _formattedLocations.push(loc);
+                    }
+                });
+                // $scope.mostPopularState = _.max(_formattedLocations, function (o) {
+                //     return o.result;
+                // });
+                _.each(data, function (location) {
+                    var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
+                    if (_geo_info) {
+                        var subObj = {};
+                        subObj.code = _geo_info;
+                        subObj.value = location.result;
+                        var locationExists = _.find(livePlatformLocationsData, function (loc) {
+                            return loc.code === location.code;
+                        });
+                        if (!locationExists && subObj.value) {
+                            livePlatformLocationsData.push(subObj);
+                        }
+                    }
+                });
+            }
+            $scope.livePlatformLocationsData = livePlatformLocationsData;
+        }
+
+        $scope.$watch('livePlatformLocationsData',  function (livePlatformLocationData, oldData) {
+            if(angular.isDefined(livePlatformLocationData) && !angular.equals(livePlatformLocationData, oldData)){
+                $timeout(function () {
+                    var _data = angular.copy(livePlatformLocationData);
+                    ChartAnalyticsService.visitorLocationsPlatform(_data, Highcharts.maps['countries/us/us-all'], [], Highcharts.maps['custom/world']);
+                }, 200);
+            }
+        });
+
         $scope.platformTraffic = function() {
             ChartAnalyticsService.getPlatformTraffic(function(platformData){
                 var platformTrafficData = _.pluck(platformData, 'count');
+
+                var livePlatformLocationsData = platformData[0].locations;
                 var livePlatformTrafficConfig = ChartAnalyticsService.liveTraffic(platformTrafficData);
+                loadLivePlatformLocationChart(livePlatformLocationsData);
+
                 $scope.livePlatformTraffic = platformData;
+                //$scope.livePlatformLocationsData = livePlatformLocationsData;
                 $scope.livePlatformTrafficConfig = livePlatformTrafficConfig;
 
                 $timeout($scope.updatePlatformTraffic, 15000);
@@ -109,7 +153,12 @@
                 if(chart)
                     chart.series[0].setData(_.pluck(platformData, 'count'), true);
 
+                var livePlatformLocationsData = platformData[0].locations;
+                loadLivePlatformLocationChart(livePlatformLocationsData);
+
                 $scope.livePlatformTraffic = platformData;
+                //$scope.livePlatformLocationsData = livePlatformLocationsData;
+
                 $timeout($scope.updatePlatformTraffic, 15000);
             });
         };
@@ -942,11 +991,11 @@
         };
 
         function reflowCharts(){
-            window.Highcharts.charts.forEach(function(chart){                
+            window.Highcharts.charts.forEach(function(chart){
                 $timeout(function() {
                     if(angular.isDefined(chart) && Object.keys(chart).length)
                         chart.reflow();
-                }, 1000);
+                }, 0);
             })
         };
 
