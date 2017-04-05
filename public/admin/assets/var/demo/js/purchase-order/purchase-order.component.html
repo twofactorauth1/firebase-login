@@ -112,7 +112,7 @@
 	            </tr>
 	        </thead>
 	        <tbody>
-	            <tr ng-repeat="order in vm.displayedOrders" class="product-item">
+	            <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
 
 	                <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 
