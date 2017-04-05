@@ -54,7 +54,7 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     function setPosition() {
 
         var isActiveElement = vm.uiState.activeElement && angular.isDefined(vm.uiState.activeElement.type);
-
+        vm.uiState.openSidebarPanel='';
         if (vm.uiState.hoveredSectionIndex === vm.sectionIndex &&
             vm.uiState.hoveredComponentIndex === vm.componentIndex ||
             isActiveElement &&

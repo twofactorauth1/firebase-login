@@ -271,6 +271,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Purchase Order',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('PurchaseOrderComponent', 'PurchaseOrderComponentController', 'PurchaseOrderService')
+    }).state('app.purchaseOrderDetails', {
+        url: '/purchase-orders/:purchaseOrderId',
+        templateUrl: "/admin/assets/var/demo/js/purchase-order/purchase-order-details/purchase-order-details.html",
+        title: 'Purchase Order',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('PurchaseOrderDetailsComponent', 'PurchaseOrderDetailsController', 'PurchaseOrderService')
     }).state('app.account.users', {
         url: '/users',
         templateUrl: "/admin/assets/js/users/users.html",

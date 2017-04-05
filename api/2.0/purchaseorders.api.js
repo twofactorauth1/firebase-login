@@ -27,7 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listPurchaseOrders.bind(this));       
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
-
+        app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
     },
 
     listPurchaseOrders: function(req, resp) {
@@ -93,6 +93,18 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
+    getPurchaseOrder: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '<< getPurchaseOrder');
+        var purchaseOrderId = req.params.id;
+        poManager.getPurchaseOrderById(purchaseOrderId, function(err, order){
+            self.log.debug(accountId, userId, '<< getPurchaseOrder');
+            return self.sendResultOrError(resp, err, order, "Error getting Purchase Order");
+        });
+    }
 
 });
 
