@@ -133,7 +133,7 @@
 
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
-<div class="ssb-edit-mode" ng-class="{ 'ssb-page-blog-list': vm.state.page.handle === 'blog-list', 'ssb-page-blog-post': vm.state.page.handle === 'blog-post', 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode, 'ssb-blog-edit-writing-mode': vm.uiState.isBlogEditWritingMode }" >
+<div class="ssb-edit-mode" ng-class="{ 'ssb-page-blog-list': vm.state.page.handle === 'blog-list', 'ssb-page-blog-post': vm.state.page.handle === 'blog-post', 'ssb-blog-edit-mode': vm.uiState.isBlogEditMode, 'ssb-blog-edit-writing-mode': vm.uiState.isBlogEditWritingMode }"   >
     <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
@@ -146,7 +146,7 @@
     <div id="ssb-main" class="ssb-main custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar, 'ssb-blog-hide-social-share': vm.uiState.hideSocialShare }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded" >
 
 
-        <div id="componentloader" ng-click="vm.uiState.closeSidePanel($event)"  >
+        <div id="componentloader" ng-click="vm.uiState.closeSidePanel($event)"   >
 
 
             <ul ng-if="vm.state.page && !vm.state.page.sections.length && vm.uiState.loaded" class="list-unstyled margin-bottom-0">
@@ -268,7 +268,7 @@
         ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer', 'ssb-blog-page': vm.uiState.isBlogPage }">
     </ssb-sidebar>
 
-    <ssb-topbar ng-if="vm.state.page" class="ssb-topbar fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
+    <ssb-topbar ng-if="vm.state.page" class="ssb-topbar fade-in-down" state="vm.state" ui-state="vm.uiState"  ng-click="vm.uiState.closeSidePanel($event)"   ></ssb-topbar>
 
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-page-settings-modal/ssb-page-settings-modal.component.html' " ></div>
