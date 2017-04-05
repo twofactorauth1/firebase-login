@@ -47,6 +47,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.toggleSidebarPanel = toggleSidebarPanel;
     vm.resizeWindow = resizeWindow;
     vm.isTextColumnNum = isTextColumnNum;
+    vm.closeSidePanel = closeSidePanel;
   
     vm.uiState = {
         loading: 0,
@@ -171,7 +172,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         locationFinderOptions: SimpleSiteBuilderService.getLocationFinderRanges(),
 
-        alignmentOptions : ['left', 'center', 'right']
+        alignmentOptions : ['left', 'center', 'right'],
+
+        closeSidePanel: vm.closeSidePanel
 
     };
 
@@ -1383,10 +1386,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.openSidebarPanel = type;
     }
 
-    function hideme(){
-        console.log('click 2');
+    function closeSidePanel($event){
+        if($event.target.nodeName != "BUTTON")
+            vm.uiState.openSidebarPanel=''
     }
-
 
     function resizeWindow(){
         $timeout(function() {
