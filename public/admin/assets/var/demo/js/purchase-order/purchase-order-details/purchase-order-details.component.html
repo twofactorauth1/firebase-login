@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">PURCHASE ORDER DETAILS</h1>
-            <span ng-if="vm.state.order" class="mainDescription">{{vm.state.order.title}}</span>
+            <span class="mainDescription">{{vm.state.purchaseOrder.title}}</span>
         </div>
     </div>
 </section>
@@ -15,30 +15,34 @@
 </div>
 
 <div class="clearfix"></div>
-<div class="purchase-order-details-container">
-    <div class="col-sm-5 col-xs-12 purchase-order-details-left-panel">
-        <div class="form-group">
-            <h4>Title</h4>            
-            <div class="description">
-                {{vm.state.purchaseOrder.title}}
+
+<div class="purchase-order-details-container col-xs-12" ng-if="vm.state.purchaseOrder">
+    <div class="inner-order-details bg-white col-xs-12">
+        <div class="col-sm-5 col-xs-12 purchase-order-details-left-panel">
+            <div class="form-group">
+                <h4>Title</h4>            
+                <div class="description">
+                    {{vm.state.purchaseOrder.title}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-        <div class="form-group">
-            <h4>Text</h4>            
-            <div class="description">
-                {{vm.state.purchaseOrder.text}}
+            <div class="form-group">
+                <h4>Text</h4>            
+                <div class="description">
+                    {{vm.state.purchaseOrder.text}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-        <div class="form-group">
-            <a ng-if="vm.state.purchaseOrder" class="btn btn-primary btn-success pull-left btn btn-primary btn-wide margin-top-5 margin-bottom-5 margin-left-5" href="{{vm.state.purchaseOrder.attachment.url}}" target="_blank" download="">
-                PDF <span class="download-pdf fa fa-file-pdf-o"></span>
-            </a>
-        </div>
+            <div class="form-group">
+                <a class="btn btn-primary btn-success pull-left btn btn-primary btn-wide margin-top-5 margin-bottom-5 margin-left-5" href="{{vm.state.purchaseOrder.attachment.url}}" target="_blank" download="">
+                    PDF <span class="download-pdf fa fa-file-pdf-o"></span>
+                </a>
+            </div>
         
-    </div>    
-    <div class="col-sm-7 col-xs-12">
-        
+        </div>
+        <div class="col-sm-7 col-xs-12">
+            
+        </div>
     </div>
+    
 </div>
