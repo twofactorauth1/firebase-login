@@ -48,6 +48,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.resizeWindow = resizeWindow;
     vm.isTextColumnNum = isTextColumnNum;
     vm.closeSidePanel = closeSidePanel;
+    vm.showPageSection = showPageSection;
   
     vm.uiState = {
         loading: 0,
@@ -174,7 +175,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         alignmentOptions : ['left', 'center', 'right'],
 
-        closeSidePanel: vm.closeSidePanel
+        closeSidePanel: vm.closeSidePanel,
+
+        showPageSection: vm.showPageSection
 
     };
 
@@ -1400,6 +1403,26 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function isTextColumnNum(component){
         return component && component.layoutModifiers && component.layoutModifiers.columns && angular.isDefined(component.layoutModifiers.columns.columnsNum);        
+    }
+
+    function showPageSection(section){
+        var _showSection = false;
+        if(section)
+        {
+            _showSection = section.visibility !== false;
+            if(section.global && section.hiddenOnPages){
+                var _pageHandle;
+                if(vm.state){
+                    _pageHandle = vm.state.page.handle;
+                }
+                else{
+                    _pageHandle = $scope.$root.pageHandle;
+                }
+                _showSection = !section.hiddenOnPages[_pageHandle];
+                section.visibility =  _showSection;
+            }
+        }
+        return _showSection;
     }
     
 

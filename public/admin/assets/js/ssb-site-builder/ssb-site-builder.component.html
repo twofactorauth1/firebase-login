@@ -175,7 +175,7 @@
                     class="ssb-page-section"
                     state="vm.state"
                     ui-state="vm.uiState"
-                    ng-if="section.visibility !== false">
+                    ng-if="vm.uiState.showPageSection(section)">
                 </ssb-page-section>
 
             </div>
