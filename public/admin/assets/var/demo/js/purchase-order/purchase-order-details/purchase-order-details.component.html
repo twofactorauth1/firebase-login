@@ -57,11 +57,15 @@
                 </ul> 
                 <label><strong>New Note</strong></label>
                 <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
-                <button type="button" ng-disabled="!(vm.newNote.text)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
+                <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
                     <span>Add</span>
                 </button>
             </div>
         </div>
     </div>
     
+</div>
+
+<div class="loading-po-details center" ng-if="!vm.state.purchaseOrder">
+    <h2>Loading PO.Please wait....</h2>
 </div>

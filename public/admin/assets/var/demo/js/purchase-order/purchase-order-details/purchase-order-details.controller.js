@@ -42,6 +42,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
      */
     
     function addNote(_note) {
+        vm.uiState.saveLoading = true;
         var date = moment();
         var _noteToPush = {
             note: _note,            
@@ -55,6 +56,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
                 vm.state.purchaseOrder.notes = [];
             vm.state.purchaseOrder.notes.push(response.data);
             vm.newNote.text = '';
+            vm.uiState.saveLoading = true;
         })
         
     };
