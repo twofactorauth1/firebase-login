@@ -2,24 +2,19 @@
 /*jslint unparam: true*/
 'use strict';
 (function (angular) {
-  app.service('UtilService', ['$http', function ($http) {
+  app.service('UtilService', [function () {
   
 
     this.flyoverout = '';
     
-    this.flyoverhide = function (util) {
-    
-
+    this.flyoverhide = function (util) { 
        this.flyoverout = util;
-      
-
     };
-     this.flyoverhideonclick = function () {
-     
-
-      
-       this.flyoverout.openSidebarPanel = '';
-
+    
+    this.flyoverhideonclick = function () {    	
+        if(this.flyoverout)		
+       		this.flyoverout.openSidebarPanel = '';
     };
+
   }]);
 }(angular));

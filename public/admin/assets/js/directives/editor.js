@@ -1,7 +1,7 @@
 
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window,UtilService) {
+app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window, UtilService) {
   return {
     require: '?ngModel',
     replace: true,
@@ -209,7 +209,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         scope.updateFroalaContent(editor);
                         // $(elem).froalaEditor('html.cleanEmptyTags');
                     }).on('froalaEditor.click', function(e, editor, clickEvent) {
-                         UtilService.flyoverhideonclick();
+                        UtilService.flyoverhideonclick();
                         if(attrs.placeholder && editor.$placeholder){
                             editor.$placeholder.text(attrs.placeholder);
                         }
@@ -220,7 +220,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.toolbar.show', function(e, editor) {
 
                         console.log('toolbar show')
-                        UtilService.flyoverhideonclick();
+                        
 
                         //close sidebar
                         $rootScope.app.layout.isSidebarClosed = true;
@@ -237,7 +237,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
                         console.log('toolbar hide');
-                          UtilService.flyoverhideonclick();
+                        
                         // hide any image overlay if toolbar is hidden
                         if(editor.shared && editor.shared.$img_overlay)
                             editor.shared.$img_overlay.hide();
@@ -337,7 +337,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                     }).on('froalaEditor.focus', function (e, editor) {
                         
-                        UtilService.flyoverhideonclick();
+                       
                        editor.selection.save();
                     })
                     .on('froalaEditor.paste.before', function (e, editor) {
