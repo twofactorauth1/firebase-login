@@ -25,6 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
+        app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('aging'), this.isAuthAndSubscribedApi.bind(this), this.aging.bind(this));
     },
 
@@ -48,6 +49,17 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
+    },
+
+    loadinventory: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> loadinventory');
+        manager.loadInventoryCollection(function(err, value){
+            self.log.debug('<< loadinventory');
+        });
+        return self.send200(resp);
     },
 
     aging: function(req, resp) {

@@ -656,6 +656,12 @@ app.constant('JS_REQUIRES', {
     'PurchaseOrderComponentController': 'assets/var/demo/js/purchase-order/purchase-order.controller.js',
     'PurchaseOrderService': 'assets/var/demo/js/purchase-order/purchase-order.service.js',
 
+    // Purchase Orders Details
+
+    
+    'PurchaseOrderDetailsComponent': 'assets/var/demo/js/purchase-order/purchase-order-details/purchase-order-details.component.js',
+    'PurchaseOrderDetailsController': 'assets/var/demo/js/purchase-order/purchase-order-details/purchase-order-details.controller.js',    
+
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',

@@ -432,6 +432,18 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    bulkInsert: function(list, collectionName, fn) {
+        this._bulkInsertMongo(list, collectionName, fn);
+    },
+
+    renameCollection: function(oldName, newName, fn) {
+        this._renameCollectionMongo(oldName, newName, fn);
+    },
+
+    dropCollection: function(collectionName, fn) {
+        this._dropCollectionMongo(collectionName, fn);
+    },
+
     update: function(query, update, type, fn) {
         if(this.getStorage(type) === 'mongo') {
             this._updateMongo(query, update, type, fn);

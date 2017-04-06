@@ -20,7 +20,8 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.checkIfInValid = checkIfInValid;
-    
+    vm.viewPurchaseOrderDetails = viewPurchaseOrderDetails;
+
     vm.init = init;
 
 
@@ -69,6 +70,11 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
         else{
             return true;
         }
+    }
+
+
+    function viewPurchaseOrderDetails(order){
+        $location.path('/purchase-orders/' + order._id);
     }
 
     function init(element) {
