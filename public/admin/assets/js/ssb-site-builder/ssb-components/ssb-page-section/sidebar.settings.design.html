@@ -258,6 +258,27 @@
     </div>
 </div>
 
+
+<div>
+    <h4 class="ssb-sidebar-sub-heading-separator">Tile settings</h4>
+
+    <div class="row padding-10">
+        <div>
+            <div class="form-group">
+                <label for="bg_blur">
+                    Grid layout
+                    <span tooltip-placement="top" tooltip-append-to-body="true" tooltip="Enable Grid layout.">
+                        <i class="fa fa-info-circle" />
+                    </span>
+                </label>
+                <switch ng-model="component.layoutModifiers.grid" class="pull-right"></switch>
+            </div>    
+        </div>
+    </div>
+</div>
+
+
+
 <div ng-if="(vm.component.components[0] && vm.component.components[0].src) || (component.bg.img.show && component.bg.img.url) || (component.bg.video.show && component.bg.video.url)">
 
     <h4 class="ssb-sidebar-sub-heading-separator">Effects</h4>
