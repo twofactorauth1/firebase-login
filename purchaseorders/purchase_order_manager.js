@@ -234,7 +234,7 @@ module.exports = {
             text.push("<b>Title</b>: "+ po.get("title"));
         }
         if(po.get("text")){
-            text.push("<b>Title</b>: "+ po.get("text"));
+            text.push("<b>Text</b>: "+ po.get("text"));
         }
         
         
