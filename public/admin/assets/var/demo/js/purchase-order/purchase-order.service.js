@@ -23,6 +23,7 @@
         poService.getPurchaseOrders = getPurchaseOrders;
         poService.createPurchaseOrder = createPurchaseOrder;
         poService.getPurchaseOrderDetails = getPurchaseOrderDetails;
+        poService.addPurchaseOrderNote = addPurchaseOrderNote;
 
         function poRequest(fn) {
             poService.loading.value = poService.loading.value + 1;
@@ -77,7 +78,7 @@
         }
 
         /**
-            * Create PO details
+            * Get PO details
         */
 
 
@@ -93,6 +94,29 @@
 
             return poRequest($http.get([basePoAPIUrlv2, 'po', orderId].join('/')).success(success).error(error));
         }
+
+        /**
+            * Create PO notes
+        */
+
+        function addPurchaseOrderNote(orderId, note) {
+
+            function success(data) {                
+                console.log("note added");
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService getPurchaseOrders error: ', JSON.stringify(error));
+            }
+
+            return (
+                poRequest($http({
+                  url: [basePoAPIUrlv2, 'po', orderId, "notes"].join('/'),
+                  method: 'POST',
+                  data: angular.toJson(note)
+                }).success(success).error(error))
+            );
+        }      
 
 		(function init() {
             getPurchaseOrders();

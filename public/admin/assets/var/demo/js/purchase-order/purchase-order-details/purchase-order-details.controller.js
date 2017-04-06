@@ -12,20 +12,52 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
 
     vm.state = {};
 
+    vm.uiState = {
+        loading: true
+    };
+
+    vm.newNote = {};
+
     console.log($stateParams.purchaseOrderId);
 
     vm.backToPurchaseOrders = backToPurchaseOrders;
     vm.getPurchaseOrderDetails = getPurchaseOrderDetails;
+    vm.addNote = addNote;
 
     function backToPurchaseOrders(){
         $state.go("app.purchaseorders");
     }
 
-    function getPurchaseOrderDetails(orderId){
+    function getPurchaseOrderDetails(orderId){ 
         PurchaseOrderService.getPurchaseOrderDetails(orderId).then(function(response){
             vm.state.purchaseOrder = response.data;
+            vm.uiState.loading = false;
         })
     }
+
+
+    /*
+     * @addNote
+     * add a note to an order
+     */
+    
+    function addNote(_note) {
+        var date = moment();
+        var _noteToPush = {
+            note: _note,            
+            date: date.toISOString()
+        };
+        
+
+        PurchaseOrderService.addPurchaseOrderNote($stateParams.purchaseOrderId, _noteToPush).then(function(response){
+            console.log("Notes added");
+            if (!vm.state.purchaseOrder.notes)
+                vm.state.purchaseOrder.notes = [];
+            vm.state.purchaseOrder.notes.push(response.data);
+            vm.newNote.text = '';
+        })
+        
+    };
 
 
     function init(element) {

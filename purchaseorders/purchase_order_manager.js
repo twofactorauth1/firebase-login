@@ -81,8 +81,8 @@ module.exports = {
 
         if(file.path) {
             // to do-  need to change bucket
-            //var bucket = awsConfig.BUCKETS.PURCHASE_ORDERS;
-            var bucket = awsConfig.BUCKETS.ASSETS;
+            var bucket = awsConfig.BUCKETS.PURCHASE_ORDERS;
+            //var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + po.get('accountId');
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
@@ -149,9 +149,72 @@ module.exports = {
                 return fn(err, null);
             } else {
                 log.debug('<< getPurchaseOrderById');
-                return fn(null, order);
+                async.each(order.get("notes"), function (note, cb) {
+                    console.log(note);
+                    userDao.getById(note.userId, function (err, user) {
+                        if (err) {
+                            log.error(accountId, userId, 'Error getting user: ' + err);
+                            cb(err);
+                        } else {
+                            var _user = {
+                                _id: user.get("_id"),
+                                username: user.get("username"),
+                                first: user.get("first"),
+                                last: user.get("last"),
+                                profilePhotos: user.get("profilePhotos")
+                            }
+                            note.user = _user;
+                            cb();
+                        }
+                    });
+                }, function (err) {
+                    if (err) {
+                        log.error('Error getting purchase order: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< getPurchaseOrderById');
+                        return fn(null, order);
+                    }
+                });
             }
         });
     },
+
+    addNotesToPurchaseOrder: function(accountId, userId, purchaseOrderId, note, fn){
+        var self = this;
+        log.debug('>> addNotesToPurchaseOrder');
+        purchaseOrderdao.getById(purchaseOrderId, $$.m.PurchaseOrder, function (err, po) {
+            if (err) {
+                log.error('Error getting purchase order: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< addNotesToPurchaseOrder');
+                po.get("notes").push(note);
+                purchaseOrderdao.saveOrUpdate(po, function(err, order){
+                if(err) {
+                    self.log.error('Exception during po creation: ' + err);
+                    fn(err, null);
+                } else {
+                    userDao.getById(userId, function (err, user) {
+                        if (err) {
+                            log.error(accountId, userId, 'Error getting user: ' + err);
+                            fn(err, null);
+                        } else {
+                            var _user = {
+                                _id: user.get("_id"),
+                                username: user.get("username"),
+                                first: user.get("first"),
+                                last: user.get("last"),
+                                profilePhotos: user.get("profilePhotos")
+                            }
+                            note.user = _user;
+                            return fn(null, note);
+                        }
+                    });
+                }
+            });
+            }
+        });
+    }
     
 };
