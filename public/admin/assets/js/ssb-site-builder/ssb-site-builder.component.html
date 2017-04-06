@@ -146,7 +146,7 @@
     <div id="ssb-main" class="ssb-main custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar, 'ssb-blog-hide-social-share': vm.uiState.hideSocialShare }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded" >
 
 
-        <div id="componentloader" ng-click="vm.uiState.closeSidePanel($event)"   >
+        <div id="componentloader"  ng-click="UtilService.flyoverhideonclick()"  >
 
 
             <ul ng-if="vm.state.page && !vm.state.page.sections.length && vm.uiState.loaded" class="list-unstyled margin-bottom-0">
@@ -268,7 +268,7 @@
         ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-layout__header_2-col_footer': vm.state.page.layout === 'ssb-layout__header_2-col_footer', 'ssb-blog-page': vm.uiState.isBlogPage }">
     </ssb-sidebar>
 
-    <ssb-topbar ng-if="vm.state.page" class="ssb-topbar fade-in-down" state="vm.state" ui-state="vm.uiState"  ng-click="vm.uiState.closeSidePanel($event)"   ></ssb-topbar>
+    <ssb-topbar ng-if="vm.state.page" class="ssb-topbar fade-in-down" state="vm.state" ui-state="vm.uiState"  ng-click="UtilService.flyoverhideonclick()" ></ssb-topbar>
 
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-page-settings-modal/ssb-page-settings-modal.component.html' " ></div>

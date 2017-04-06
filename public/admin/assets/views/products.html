@@ -135,7 +135,7 @@
                                     <small ng-bind-html="$select.selected.label"></small>
                                     <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchStatus', 'status')" ng-show='$select.selected.label'></span>
                                 </ui-select-match>
-                                <ui-select-choices repeat="status in productStatusTypes">
+                                <ui-select-choices repeat="status in productStatusTypes | filter: $select.search">
                                     <small ng-bind-html="status.label | highlight: $select.search"></small>
                                 </ui-select-choices>
                             </ui-select>
@@ -150,7 +150,7 @@
                                     <small ng-bind-html="$select.selected.label"></small>
                                     <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')" ng-show='$select.selected.label'></span>
                                 </ui-select-match>
-                                <ui-select-choices repeat="status in productTypeOptions">
+                                <ui-select-choices repeat="status in productTypeOptions | filter: $select.search">
                                     <small ng-bind-html="status.label | highlight: $select.search"></small>
                                 </ui-select-choices>
                             </ui-select>

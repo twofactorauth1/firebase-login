@@ -693,6 +693,8 @@ app.constant('JS_REQUIRES', {
     'siteAnalyticsService': 'assets/js/site-analytics/site-analytics.service.js',
     'analyticsWidgetStateService': 'assets/js/site-analytics/analytics-widget-state-service.js',
     'broadcastMessagesService': 'assets/js/messages/messages.service.js',
+    'utilService': 'assets/js/services/util.js',
+    
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

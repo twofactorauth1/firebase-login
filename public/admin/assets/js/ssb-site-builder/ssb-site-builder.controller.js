@@ -2,10 +2,10 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', 'SimpleSiteBuilderBlogService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster','UtilService'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster) {
-
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, SimpleSiteBuilderBlogService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster,UtilService) {
+     
     console.info('site-builder directive init...');
 
     var vm = this;
@@ -180,8 +180,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         showPageSection: vm.showPageSection
 
     };
-
-
+    UtilService.flyoverhide(vm.uiState);
+    
     vm.uiState.navigation = {
         back: function() {
             vm.uiState.navigation.index = 0;
@@ -1385,6 +1385,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function toggleSidebarPanel(type){
        
+    
         if(!vm.state.saveAndLoading)
             vm.uiState.openSidebarPanel = type;
     }
@@ -1448,6 +1449,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.permissions = SimpleSiteBuilderService.permissions;
 
     }
+
    
 
 

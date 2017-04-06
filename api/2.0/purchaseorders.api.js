@@ -28,6 +28,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.listPurchaseOrders.bind(this));       
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
         app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
+        app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
     },
 
     listPurchaseOrders: function(req, resp) {
@@ -63,9 +64,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     } else {
 
                         var file = files['file'];
-                        var source = fields['source'] || 'S3';
                         
-
                         var body = JSON.parse(fields['po']);
 
                         var po = new $$.m.PurchaseOrder(body);
@@ -104,7 +103,29 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug(accountId, userId, '<< getPurchaseOrder');
             return self.sendResultOrError(resp, err, order, "Error getting Purchase Order");
         });
-    }
+    },
+
+
+    addPurchaseOrderNotes: function(req, res) {
+        var self = this;
+        self.log.debug('>> addPurchaseOrderNotes');
+        
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.checkPermission(req, self.sc.privs.MODIFY_ORDER, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(res);
+            } else {              
+                var notes = req.body;
+                notes.userId = userId;
+                var purchaseOrderId = req.params.id;
+                poManager.addNotesToPurchaseOrder(accountId, userId, purchaseOrderId, notes, function(err, value){                                                       
+                    self.sendResultOrError(res, err, value, 'Could not add notes to PO');                    
+                }); 
+            }
+        });
+
+    },
 
 });
 

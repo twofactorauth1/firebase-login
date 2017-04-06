@@ -193,7 +193,6 @@ module.exports = {
                                             });
                                             log.debug(accountId, null, '<< createOrderFromStripeInvoice');
                                             return fn(null, savedOrder);
-
                                         });
                                     });
 
@@ -1369,7 +1368,7 @@ module.exports = {
                                 }
                                 callback(null, account, updatedOrder);
                             } else {
-                                var component = email.get('components')[0];                                
+                                var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
                                 email.set("order", component.order);
                                 log.debug(accountId, userId, 'Using this for data', component);
@@ -1640,7 +1639,7 @@ module.exports = {
                  * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
                  * side to avoid shenanigans.
                  */
-                
+
                 order.set('total_shipping', shippingCharge.toFixed(2));
                 // For Donation
                 if (order.get('line_items').length && order.get('line_items')[0].type == 'DONATION') {
@@ -1778,7 +1777,6 @@ module.exports = {
                     }
                 });
             }
-
         ], function done(err, result) {
             if (err) {
                 log.error(accountId, userId, 'Error creating order: ' + err);
@@ -2252,7 +2250,7 @@ module.exports = {
                         // log.debug(accountId, userId, 'total is now: ' + order.get('total'));
                         // order.set('total_line_items_quantity', totalLineItemsQuantity);
 
-                        log.debug(order, 'order');                        
+                        log.debug(order, 'order');
                         callback(null, account, order);
 
                     },
@@ -2481,10 +2479,45 @@ module.exports = {
                     });
                 }, function done(err) {
                     log.debug(accountId, userId, 'productAry', productAry);
-                    callback(err, order, productAry);
+                    callback(err, order, productAry,accountId,userId);
                 });
             },
-            function (order, fulfillmentProductArr, callback) {
+            function (order,productAry,accountId,userId, callback) {
+                log.debug(accountId, userId, 'getting contact');
+                contactDao.getById(order.get('customer_id'), $$.m.Contact, function (err, contact) {
+                    if (err) {
+                        log.error(accountId, userId, 'Error getting contact: ' + err);
+                        callback(err);
+                    } else if (contact === null) {
+                        log.error(accountId, null, 'Could not find contact for id: ' + order.get('customer_id'));
+                        callback('contact not found');
+                    } else {
+
+                        //set order_id based on orders length for the account
+                        var query = {
+                            account_id: order.get('account_id')
+                        };
+                        dao.getMaxValue(query, 'order_id', $$.m.Order, function (err, value) {
+                            if (err) {
+                                log.warn('Could not find order_id:', err);
+                                callback(err);
+                            } else {
+                                var max = 1;
+                                if (value) {
+                                    max = parseInt(value) + 1;
+                                }
+
+                                order.set('order_id', max);
+                                dao.saveOrUpdate(order, function (err, updatedOrder) {
+                                    callback(err, order,productAry, accountId, contact);
+                                });
+                            }
+                        });
+
+                    }
+                });
+            },
+            function (order, fulfillmentProductArr, accountId,contact,callback) {
                 if (fulfillmentProductArr && fulfillmentProductArr.length) {
                     if (!order || !order.get('billing_address') || !order.get('billing_address').email) {
                         log.warn('No order email address.  No Fulfillment email sent.');
@@ -2513,7 +2546,7 @@ module.exports = {
                             var fromAddress = settings.fromEmail;
                             var subject = settings.subject;
                             var orderId = order.get("_id");
-                            var accountId = order.get('accountId');
+                            var accountId = order.get('account_id');
                             var vars = settings.vars || [];
                             var fromName = settings.fromName;
                             var emailId = settings.emailId;
@@ -2531,7 +2564,10 @@ module.exports = {
                                         log.warn('email will not be sent.');
                                         cb();
                                     } else {
-                                        emailMessageManager.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, bcc, function () {
+
+
+
+                                        emailMessageManager.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email.attributes._id, bcc, function () {
                                             if (err) {
                                                 log.warn('Error sending email');
                                                 order.get("notes").push({
@@ -2561,7 +2597,120 @@ module.exports = {
                     }
                 }
                 else {
-                    callback(null, order);
+
+
+                    var toAddress = "";
+                    if (contact.getEmails()[0])
+                        toAddress = contact.getEmails()[0].email;
+                    var toName = contact.get('first') + ' ' + contact.get('last');
+
+                    var _sa = order.get('shipping_address');
+                    if(_sa){
+                        toName = (_sa.first_name || '') + ' ' + (_sa.last_name || '');
+                        toAddress = _sa.email;
+                    }
+
+
+                    var vars = [];
+                    var isDonation = order.attributes.line_items[0].type == 'DONATION' ? true : false;
+
+                    accountDao.getAccountByID(accountId, function (err, account) {
+                        if (err) {
+                            callback(err);
+                        } else {
+
+
+
+
+                            var business = account.get('business');
+                            var emailPreferences = account.get('email_preferences');
+                            if (!business || !business.emails || !business.emails[0].email) {
+                                if (isDonation) {
+                                    log.warn('No account email.  No NEW_DONATION email sent');
+                                } else {
+                                    log.warn('No account email.  No NEW_ORDER email sent');
+                                }
+                                callback(null, account, order);
+                            }
+
+                            var subject = isDonation ? ('Your ' + business.name + ' donation receipt from ' + moment().format('MMM Do, YYYY')) : ('Your ' + business.name + ' order receipt from ' + moment().format('MMM Do, YYYY'));
+                            var fromAddress = business.emails[0].email;
+                            var fromName = business.name;
+                            var emailPageHandle = isDonation ? 'new-donation' : 'new-order';
+                            //TODO: add cc emails here
+                            var ccAry = [];
+
+                            if (business.emails.length > 1) {
+                                for (var i = 1; i < business.emails.length; i++) {
+                                    ccAry.push(business.emails[i].email);
+                                }
+                            }
+                            cmsManager.getEmailPage(accountId, emailPageHandle, function (err, email) {
+                                if (err || !email) {
+                                    log.warn('No ' + (isDonation ? 'NEW_DONATION' : 'NEW_ORDER') + ' email receipt sent: ' + err);
+                                    if (emailPreferences.new_orders === true) {
+                                        //Send additional details
+                                        subject = isDonation ? "New donation received!" : "New order created!";
+                                        var component = {};
+                                        component.order = order.attributes;
+                                        component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                        component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + order.attributes._id;
+                                        var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification_default' : 'emails/base_email_order_admin_notification_default';
+
+                                        app.render(adminNotificationEmailTemplate, component, function (err, html) {
+                                            //juice.juiceResources(html, {}, function(err, _html) {
+
+                                            html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', ccAry, function () {
+                                                log.debug(accountId, userId, 'Admin Notification Sent');
+                                            });
+                                            //});
+                                        });
+                                    }
+                                    callback(null, account, order);
+                                } else {
+                                    var component = email.get('components')[0];
+                                    component.order = order.attributes;
+                                    email.set('order', component.order);
+                                    log.debug(accountId, userId, 'Using this for data', component);
+                                    var baseEmailTemplate = isDonation ? 'emails/base_email_donation' : 'emails/base_email_order';
+
+                                    app.render(baseEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
+                                        //juice.juiceResources(html, {}, function(err, _html) {
+
+                                        //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                        emailMessageManager.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, null, function () {
+                                            callback(null, account, order);
+                                        });
+                                        //});
+
+
+                                        if (emailPreferences.new_orders === true) {
+                                            //Send additional details
+                                            subject = isDonation ? "New donation received!" : "New order created!";
+                                            //component.text = isDonation ? "The following donation was created:" : "The following order was created:";
+                                            //email.set("ordertext", component.text);
+                                            component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + order.attributes._id;
+                                            email.set("orderurl", component.orderurl);
+                                            var adminNotificationEmailTemplate = isDonation ? 'emails/base_email_donation_admin_notification' : 'emails/base_email_order_admin_notification';
+
+                                            app.render(adminNotificationEmailTemplate, emailMessageManager.contentTransformations(email.toJSON()), function (err, html) {
+                                                //juice.juiceResources(html, {}, function(err, _html) {
+
+                                                //html = html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                emailMessageManager.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, ccAry, function () {
+                                                    log.debug(accountId, userId, 'Admin Notification Sent');
+                                                });
+                                                //});
+                                            });
+                                        }
+                                    });
+
+                                }
+                            });
+
+                        }
+                    });
                 }
             }
         ], function (err, order) {

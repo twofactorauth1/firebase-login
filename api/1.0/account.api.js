@@ -59,7 +59,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/copy'), this.isAuthApi.bind(this), this.testCopyTemplateAccount.bind(this));
 
 
-        
+
 
         app.delete(this.url(':id'), this.isAuthApi.bind(this), this.deleteAccount.bind(this));
 
@@ -212,25 +212,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 //return res.send(account.get('billing'));
             }
         });
-    },
-
-
-    updateLead: function(account, fn) {
-        var self = this;
-        //update category
-        var updatedLead = {
-            "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
-            "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
-        };
-        if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
-            closeio.lead.update(updatedLead).then(function(lead){
-                fn();
-            });
-        } else {
-            self.log.debug('Skipping call to close.io');
-            return fn();
-        }
-
     },
 
 
