@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderEditControlController', ssbSiteBuilderEditControlController);
 
-ssbSiteBuilderEditControlController.$inject = ['$scope', '$rootScope', '$interval', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
+ssbSiteBuilderEditControlController.$inject = ['$scope', '$rootScope', '$interval', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert','UtilService'];
 /* @ngInject */
-function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
+function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert,UtilService) {
 
     var vm = this;
 
@@ -54,7 +54,8 @@ function ssbSiteBuilderEditControlController($scope, $rootScope, $interval, $att
     function setPosition() {
 
         var isActiveElement = vm.uiState.activeElement && angular.isDefined(vm.uiState.activeElement.type);
-        vm.uiState.openSidebarPanel='';
+        UtilService.flyoverhideonclick();
+        //vm.uiState.openSidebarPanel='';
         if (vm.uiState.hoveredSectionIndex === vm.sectionIndex &&
             vm.uiState.hoveredComponentIndex === vm.componentIndex ||
             isActiveElement &&

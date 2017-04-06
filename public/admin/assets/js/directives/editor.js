@@ -1,7 +1,7 @@
 
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window) {
+app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilderService, $window,UtilService) {
   return {
     require: '?ngModel',
     replace: true,
@@ -73,7 +73,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
     },
     link: function(scope, element, attrs, ngModel) {
-
+      
+    
         scope.update = function(e) {
             $timeout(function() {
                 scope.$apply(function() {
@@ -208,6 +209,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         scope.updateFroalaContent(editor);
                         // $(elem).froalaEditor('html.cleanEmptyTags');
                     }).on('froalaEditor.click', function(e, editor, clickEvent) {
+                         UtilService.flyoverhideonclick();
                         if(attrs.placeholder && editor.$placeholder){
                             editor.$placeholder.text(attrs.placeholder);
                         }
@@ -218,6 +220,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.toolbar.show', function(e, editor) {
 
                         console.log('toolbar show')
+                        UtilService.flyoverhideonclick();
 
                         //close sidebar
                         $rootScope.app.layout.isSidebarClosed = true;
@@ -234,6 +237,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
                         console.log('toolbar hide');
+                          UtilService.flyoverhideonclick();
                         // hide any image overlay if toolbar is hidden
                         if(editor.shared && editor.shared.$img_overlay)
                             editor.shared.$img_overlay.hide();
@@ -332,12 +336,15 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
 
                     }).on('froalaEditor.focus', function (e, editor) {
+                        
+                        UtilService.flyoverhideonclick();
                        editor.selection.save();
                     })
                     .on('froalaEditor.paste.before', function (e, editor) {
                         editor.selection.restore();                        
                     })
-                    .on('froalaEditor.blur', function (e, editor) {
+                    .on('froalaEditor.blur', function (e, editor) {                    
+                          
                         if(attrs.placeholder && editor.$placeholder){
                             editor.$placeholder.text(attrs.placeholder);
                         }
@@ -383,7 +390,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     //       $video.html('<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="' + videoSource +'" frameborder="0" allowfullscreen></iframe></div>');
                     // })
                     $(elem).froalaEditor('events.on', 'keydown', function (e) {
-
+                        console.log('keydown');
+                        UtilService.flyoverhideonclick();
                         // if enter key is pressed inside of button
                         if (e.which === 13 && $($window.getSelection().focusNode).parents('.ssb-theme-btn').length) {
                             // prevent it if cursor is in the middle of the button
