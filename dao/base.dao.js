@@ -468,6 +468,11 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findRawWithFieldsLimitAndOrder: function(query, skip, limit, sort, fields, collection, order_dir, fn) {
+        //direct to mongo
+        this._findRawWithFieldsLimitAndOrderMongo(query, skip, limit, sort, fields, collection, order_dir, fn);
+    },
+
 
     _isAuthenticationError: function (obj, fn) {
         var error;
