@@ -14,7 +14,8 @@ var welcomeHTML = process.env.WELCOME_HTML || 'public/templates/emails/welcome-a
 var thanksForInterest = process.env.INTEREST_HTML || 'public/templates/emails/thanks-for-interest.html';
 var welcomeEmailSubject = process.env.WELCOME_EMAIL_SUBJECT || 'Welcome to Indigenous!';
 var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New contact created';
-
+var newPurchaseOrderEmailSubject = process.env.NEW_PURCHASE_ORDER_EMAIL_SUBJECT || 'New purchase order created';
+var notificationPurchaseOrderToEmail = process.env.NEW_PURCHASE_ORDER_EMAIL_TO || 'smaticsdemo-portal@indigenous.io';
 /*
  * Override the connection string with an environment variable
  */
@@ -38,6 +39,8 @@ module.exports = {
     WELCOME_FROM_NAME: welcomeFromName,
     WELCOME_HTML: welcomeHTML,
     WELCOME_EMAIL_SUBJECT: welcomeEmailSubject,
-    NEW_CUSTOMER_EMAIL_SUBJECT: newCustomerEmailSubject,
+    NEW_CUSTOMER_EMAIL_SUBJECT: newPurchaseOrderEmailSubject,
+    NEW_PURCHASE_ORDER_EMAIL_SUBJECT: newPurchaseOrderEmailSubject,
+    NEW_PURCHASE_ORDER_EMAIL_TO : notificationPurchaseOrderToEmail,
     THANKS_HTML: thanksForInterest
 };
