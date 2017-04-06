@@ -11,7 +11,9 @@ var async = require('async');
 var s3dao = require('../dao/integrations/s3.dao.js');
 var awsConfig = require('../configs/aws.config');
 var appConfig = require('../configs/app.config');
+var notificationConfig = require('../configs/notification.config');
 var userDao = require('../dao/user.dao');
+var emailMessageManager = require('../emailmessages/emailMessageManager');
 
 require('./model/purchase_order');
 
@@ -134,6 +136,7 @@ module.exports = {
                                 last: user.get("last")
                             }
                             order.set("submitter", _user);
+                            self._sendEmailOnPOCreation(order);
                             fn(null, order, file);
                         }
                     });
@@ -216,6 +219,45 @@ module.exports = {
                     });
                 }
             });
+            }
+        });
+    },
+
+
+    _sendEmailOnPOCreation: function(po, accountId) {
+        var self = this;
+        var component = {};
+        
+        var text = [];
+        
+        if(po.get("title")){
+            text.push("<b>Title</b>: "+ po.get("title"));
+        }
+        if(po.get("text")){
+            text.push("<b>Title</b>: "+ po.get("text"));
+        }
+        
+        
+        component.title = "You have a new purchase order!";
+        component.text = text;
+        
+        component.attachment = po.get("attachment");
+
+        var fromEmail = notificationConfig.FROM_EMAIL;
+        var fromName =  notificationConfig.WELCOME_FROM_NAME;
+        var emailSubject = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_SUBJECT;
+        var emailTo = notificationConfig.NEW_PURCHASE_ORDER_EMAIL_TO;
+
+        app.render('purchaseorders/new_purchase_order', component, function(err, html){
+            if(err) {
+                self.log.error('error rendering html: ' + err);
+                self.log.warn('email will not be sent to configured email.');
+            } else {
+                self.log.debug('sending email to: ', emailTo);
+                console.log(html);
+                emailMessageManager.sendNewPurchaseOrderEmail(fromEmail, fromName, emailTo, null, emailSubject, html, accountId, [], '', null, function(err, result){
+                    self.log.debug('result: ', result);
+                });
             }
         });
     }
