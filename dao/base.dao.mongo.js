@@ -850,6 +850,35 @@ var mongodao = {
         */
     },
 
+    _bulkInsertMongo: function(list, collectionName, fn) {
+        var self = this;
+        self.mongo(collectionName).insertMany(list, function(err, value){
+            if(err) {
+                fn(err);
+            } else {
+                //get rid of really big {value}
+                fn(null, {success:true});
+            }
+        });
+    },
+
+    _renameCollectionMongo: function(oldName, newName, fn) {
+        var self = this;
+        self.mongo(oldName).rename(newName, {dropTarget:true},function(err, value){
+            if(err) {
+                console.log('error renaming collection:', err);
+                fn(err);
+            } else {
+                fn(null, value);
+            }
+        });
+    },
+
+    _dropCollectionMongo: function(collectionName, fn) {
+        var self = this;
+        self.mongo(collectionName).drop(fn);
+    },
+
     _distinctMongo: function(key, query, type, fn) {
         var self = this;
 

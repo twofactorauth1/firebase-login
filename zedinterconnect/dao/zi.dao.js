@@ -9,8 +9,6 @@ var baseDao = require('./../../dao/base.dao.js');
 
 var dao = {
 
-
-
     options: {
         name: "zi.dao"
     }
