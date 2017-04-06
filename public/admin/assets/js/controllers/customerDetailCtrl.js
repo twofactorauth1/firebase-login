@@ -176,6 +176,8 @@
                 if(err) {
                     toaster.pop('warning', err.message);
                 } else {
+                    data.data.weeklyreport.revenueReport.currentRevenue=parseInt(data.data.weeklyreport.revenueReport.currentRevenue).toFixed(2);
+                    data.data.weeklyreport.revenueReport.previousRevenue=parseInt(data.data.weeklyreport.revenueReport.previousRevenue).toFixed(2);
                     toaster.pop('info', 'Report Sent');
                 }
             });
