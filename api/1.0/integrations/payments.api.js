@@ -20,10 +20,6 @@ var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
 
-var Closeio = require('close.io');
-var closeioConfig = require('../../../configs/closeio.config');
-var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
-
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -153,37 +149,6 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getIndigenousPlan');
             return self.sendResultOrError(resp, err, value, "Error getting Indigenous Plan");
         });
-    },
-
-    updateLead: function(account, fn) {
-        var self = this;
-        self.log.debug('updating lead');
-        //update category
-        var updatedLead = {
-            "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
-            "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
-        };
-        if(closeioConfig.CLOSEIO_ENABLED) {
-            try {
-                var leadId = account.get('billing').closeLeadID;
-                if(leadId) {
-                    closeio.lead.update(leadId, updatedLead).then(function (lead) {
-                        fn();
-                    });
-                } else {
-                    self.log.debug('No leadId. Skipping close.');
-                    fn();
-                }
-
-            } catch(exception) {
-                self.log.error('Exception updating close:', exception);
-                fn();
-            }
-        } else {
-            self.log.debug('Skipping call to close.io');
-            return fn();
-        }
-
     },
 
     /**
@@ -355,12 +320,6 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function sendConversionEmail(account, cb){
                 //TODO: if we need a conversion email, add it here
-                //update close.io
-                self.log.debug(accountId, userId, 'About to call close');
-                self.updateLead(account, function() {
-                    self.log.debug(accountId, userId, 'Back from call');
-                    cb(null, account);
-                });
             },
             function findContactForUser(account, cb){
                 var email = null;
