@@ -50,8 +50,10 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
 
 
     function createPurchaseOrder(po, form){
+        vm.uiState.saveLoading = true;
         PurchaseOrderService.createPurchaseOrder(po).then(function(response){
             vm.closeModal();
+            vm.uiState.saveLoading = false;
         })
     }
 

@@ -82,7 +82,6 @@ module.exports = {
         if(file.path) {
             // to do-  need to change bucket
             var bucket = awsConfig.BUCKETS.PURCHASE_ORDERS;
-            //var bucket = awsConfig.BUCKETS.ASSETS;
             var subdir = 'account_' + po.get('accountId');
             if(appConfig.nonProduction === true) {
                 subdir = 'test_' + subdir;
@@ -96,11 +95,16 @@ module.exports = {
                 } else {
                     self.log.debug('S3 upload complete');
                     console.dir(value);
+            
+            if(value && value.url)
+                value.url = value.url.replace("s3.amazonaws.com", "s3-us-west-1.amazonaws.com");
+
             if (value.url.substring(0, 5) == 'http:') {
               attachment.url = value.url.substring(5, value.url.length);
             } else {
               attachment.url = value.url;
             }
+
             po.set("attachment", attachment);
             console.log(po);
                     uploadPromise.resolve(value);
@@ -150,7 +154,6 @@ module.exports = {
             } else {
                 log.debug('<< getPurchaseOrderById');
                 async.each(order.get("notes"), function (note, cb) {
-                    console.log(note);
                     userDao.getById(note.userId, function (err, user) {
                         if (err) {
                             log.error(accountId, userId, 'Error getting user: ' + err);

@@ -64,9 +64,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     } else {
 
                         var file = files['file'];
-                        var source = fields['source'] || 'S3';
                         
-
                         var body = JSON.parse(fields['po']);
 
                         var po = new $$.m.PurchaseOrder(body);
