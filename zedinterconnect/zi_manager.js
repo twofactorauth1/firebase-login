@@ -69,6 +69,40 @@ module.exports = {
         });
     },
 
+    loadInventoryCollection: function(fn) {
+        var self = this;
+        self.log.debug(0, 0, '>> loadInventoryCollection');
+        var path = 'query/Indigenous/InventoryAvailability.aspx?accept=application/json';
+
+        self._ziRequest(path, function(err, value) {
+            if(err) {
+                self.log.error(0,0, 'Error loading inventory:', err);
+                fn();
+            } else {
+                value = JSON.parse(value);
+
+                var data = value.response.payload.querydata.data.row;
+                self.log.debug(0,0, 'Bulk inserting [' + data.length + '] records');
+                ziDao.dropCollection('new_inventory', function(){
+                    ziDao.bulkInsert(data, 'new_inventory', function(err, value){
+                        if(!err) {
+                            ziDao.renameCollection('new_inventory', 'inventory', function(err, value){
+                                self.log.debug(0, 0, '<< loadInventoryCollection');
+                                fn(err, value);
+                            });
+                        } else {
+                            self.log.error('Error during bulk insert:', err);
+                            fn(err);
+                        }
+
+                    });
+                });
+
+            }
+        });
+        //response.payload.data.row
+    },
+
 
 
     _ziRequest: function(path, fn) {

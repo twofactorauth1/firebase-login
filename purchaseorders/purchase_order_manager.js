@@ -137,6 +137,21 @@ module.exports = {
             });
         });
 
-    }
+    },
+
+
+    getPurchaseOrderById: function (orderId, fn) {
+        var self = this;
+        log.debug('>> getPurchaseOrderById');
+        purchaseOrderdao.getById(orderId, $$.m.PurchaseOrder, function (err, order) {
+            if (err) {
+                log.error('Error getting purchase order: ' + err);
+                return fn(err, null);
+            } else {
+                log.debug('<< getPurchaseOrderById');
+                return fn(null, order);
+            }
+        });
+    },
     
 };
