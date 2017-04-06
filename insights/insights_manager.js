@@ -5,7 +5,7 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-console.log('insight1');
+
 var dao = require('./dao/insights.dao');
 var log = $$.g.getLogger("insights_manager");
 var constants = require('./insights_constants');
