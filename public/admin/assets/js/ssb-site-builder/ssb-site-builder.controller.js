@@ -181,7 +181,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     };
 
-
+    
     vm.uiState.navigation = {
         back: function() {
             vm.uiState.navigation.index = 0;

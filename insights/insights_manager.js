@@ -5,7 +5,7 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-
+console.log('insight1');
 var dao = require('./dao/insights.dao');
 var log = $$.g.getLogger("insights_manager");
 var constants = require('./insights_constants');
@@ -262,6 +262,7 @@ var insightsManager = {
                     content:siteUrl
                 });
                 var data = sectionDataMap.weeklyreport;
+             
                 /*
                  * Need to build rows like:
                  * {
@@ -306,9 +307,19 @@ var insightsManager = {
                     //self.log.debug('row.trend = ' + row.trend + ' and row.class = ' + row.class);
                     row.absTrend = Math.abs(trend);
                     row.lastWeekRaw = row.lastWeek;
-                    row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
-                    row.previousWeekRaw = row.previousWeek;
-                    row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
+                     row.previousWeekRaw = row.previousWeek;
+                     if(name=='Revenue')
+                        {
+                         row.lastWeek = prefix + numeral(row.lastWeek).format('0,0.00') + suffix;
+                        row.previousWeek = prefix + numeral(row.previousWeek).format('0,0.00') + suffix;
+                        }else{
+                        row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
+                        row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
+                     }
+                    
+                   
+                    
+                 
                     return row;
                 };
 
@@ -317,6 +328,7 @@ var insightsManager = {
                 rows.push(buildRow('bounceRate', 'Bounce Rate', 'currentBounceRate', 'previousBounceRate', data, '', '%'));
                 rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data, '', ''));
+               
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
                 self.log.debug('data:', JSON.stringify(data));
                 rows.push(buildRow('sentCount', 'Emails Sent', 'current', 'previous', data.emailReports, '', ''));
@@ -353,6 +365,7 @@ var insightsManager = {
                             content:jadeHtml
                         });
                     }
+                    //console.log();
                     //self.log.debug('jade html:', jadeHtml);
                     //self.log.debug('base html:', html);
                     cb(err, account, sectionDataMap, html, contact, vars);
