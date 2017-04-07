@@ -29,6 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
         app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
         app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
+        app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
     },
 
     listPurchaseOrders: function(req, resp) {
@@ -128,6 +129,30 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
+    deletePurchaseOrder: function (req, res) {
+
+        var self = this;
+        var purchaseOrderId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                if (!purchaseOrderId) {
+                    self.wrapError(res, 400, null, "Invalid paramater for ID");
+                }
+                purchaseOrderId = parseInt(purchaseOrderId);
+                poManager.deletePurchaseOrder(accountId, purchaseOrderId, function(err, value){                                                       
+                    self.log.debug('<< deletePurchaseOrder');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO");
+                    self.createUserActivity(req, 'DELETE_PO', null, null, function(){});
+                }); 
+            }
+        });
+    }
+
 
 });
 

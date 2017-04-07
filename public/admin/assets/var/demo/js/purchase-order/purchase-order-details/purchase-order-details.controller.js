@@ -23,6 +23,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
     vm.backToPurchaseOrders = backToPurchaseOrders;
     vm.getPurchaseOrderDetails = getPurchaseOrderDetails;
     vm.addNote = addNote;
+    vm.deletePurchaseOrder = deletePurchaseOrder;
 
     function backToPurchaseOrders(){
         $state.go("app.purchaseorders");
@@ -60,6 +61,16 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
         })
         
     };
+
+
+    function deletePurchaseOrder(po){
+        vm.uiState.saveLoading = true;
+        PurchaseOrderService.deletePurchaseOrder(po._id).then(function(response){
+            console.log("PO deleted");
+            vm.uiState.saveLoading = false;
+            backToPurchaseOrders();
+        })
+    }
 
 
     function init(element) {

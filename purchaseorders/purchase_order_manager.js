@@ -223,6 +223,19 @@ module.exports = {
         });
     },
 
+    deletePurchaseOrder: function(accountId, purchaseOrderId, fn){
+        var self = this;
+        log.debug('>> addNotesToPurchaseOrder');
+        purchaseOrderdao.removeById(purchaseOrderId, $$.m.PurchaseOrder, function(err, value){
+            if(err) {
+                self.log.error('Error deleting po: ' + err);
+                return fn(err, null);
+            } else {
+                fn(null, value);
+            }
+        });
+    },
+
 
     _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
         var self = this;

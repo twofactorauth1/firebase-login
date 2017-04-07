@@ -24,6 +24,7 @@
         poService.createPurchaseOrder = createPurchaseOrder;
         poService.getPurchaseOrderDetails = getPurchaseOrderDetails;
         poService.addPurchaseOrderNote = addPurchaseOrderNote;
+        poService.deletePurchaseOrder = deletePurchaseOrder;
 
         function poRequest(fn) {
             poService.loading.value = poService.loading.value + 1;
@@ -116,7 +117,29 @@
                   data: angular.toJson(note)
                 }).success(success).error(error))
             );
-        }      
+        }
+
+        /**
+            * Get PO details
+        */
+
+
+        function deletePurchaseOrder(orderId) {
+
+            function success(data) {
+                console.log("purchase order deleted");
+                poService.purchaseOrders = null;
+                getPurchaseOrders();
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService deletePurchaseOrder error: ', JSON.stringify(error));
+            }
+
+            return poRequest($http.delete([basePoAPIUrlv2, 'po', orderId].join('/')).success(success).error(error));
+        }
+
+
 
 		(function init() {
             getPurchaseOrders();
