@@ -144,7 +144,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 if (!purchaseOrderId) {
                     self.wrapError(res, 400, null, "Invalid paramater for ID");
                 }
-                purchaseOrderId = parseInt(purchaseOrderId);
+                
                 poManager.deletePurchaseOrder(accountId, purchaseOrderId, function(err, value){                                                       
                     self.log.debug('<< deletePurchaseOrder');
                     self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO");

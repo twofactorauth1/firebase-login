@@ -226,6 +226,7 @@ module.exports = {
     deletePurchaseOrder: function(accountId, purchaseOrderId, fn){
         var self = this;
         log.debug('>> addNotesToPurchaseOrder');
+        console.log(purchaseOrderId);
         purchaseOrderdao.removeById(purchaseOrderId, $$.m.PurchaseOrder, function(err, value){
             if(err) {
                 self.log.error('Error deleting po: ' + err);
