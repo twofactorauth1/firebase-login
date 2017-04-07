@@ -67,7 +67,7 @@ module.exports = {
         });
     },
 
-    createPO: function(file, po, accountId, userId, fn) {
+    createPO: function(file, adminUrl, po, accountId, userId, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> createPO');
@@ -136,7 +136,7 @@ module.exports = {
                                 last: user.get("last")
                             }
                             order.set("submitter", _user);
-                            self._sendEmailOnPOCreation(order);
+                            self._sendEmailOnPOCreation(order, accountId, adminUrl);
                             fn(null, order, file);
                         }
                     });
@@ -224,11 +224,13 @@ module.exports = {
     },
 
 
-    _sendEmailOnPOCreation: function(po, accountId) {
+    _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
         var self = this;
         var component = {};
         
         var text = [];
+
+        var poUrl = adminUrl + "#/purchase-orders/" + po.id();
         
         if(po.get("title")){
             text.push("<b>Title</b>: "+ po.get("title"));
@@ -242,6 +244,7 @@ module.exports = {
         component.text = text;
         
         component.attachment = po.get("attachment");
+        component.poUrl = poUrl;
 
         var fromEmail = notificationConfig.FROM_EMAIL;
         var fromName =  notificationConfig.WELCOME_FROM_NAME;

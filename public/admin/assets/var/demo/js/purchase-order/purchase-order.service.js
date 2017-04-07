@@ -5,9 +5,9 @@
 
 	app.factory('PurchaseOrderService', PurchaseOrderService);
 
-	PurchaseOrderService.$inject = ['$http', '$q', '$timeout'];
+	PurchaseOrderService.$inject = ['$http', '$q', '$timeout', '$location'];
 	/* @ngInject */
-	function PurchaseOrderService($http, $q, $timeout) {
+	function PurchaseOrderService($http, $q, $timeout, $location) {
 
 
         var poService = {
@@ -70,7 +70,7 @@
             var _formData = new FormData();
             _formData.append('file', po.attachment);
             _formData.append('po', angular.toJson(po));
-
+            _formData.append('adminUrl', $location.$$absUrl.split("#")[0]);
             return poRequest($http.post(basePoAPIUrlv2, _formData, {
                 transformRequest: angular.identity,
                 headers: {'Content-Type': undefined}

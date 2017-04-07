@@ -68,7 +68,9 @@ _.extend(api.prototype, baseApi.prototype, {
                         var body = JSON.parse(fields['po']);
 
                         var po = new $$.m.PurchaseOrder(body);
+                        var adminUrl = fields['adminUrl'];
 
+                        
                         var fileToUpload = {};
                         fileToUpload.mimeType = file.type;
                         fileToUpload.size = file.size;
@@ -80,7 +82,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                         console.log(file);
 
-                        poManager.createPO(fileToUpload, po, accountId, userId, function(err, value, file){                                                       
+                        poManager.createPO(fileToUpload, adminUrl, po, accountId, userId, function(err, value, file){                                                       
                             self.sendResultOrError(res, err, value, 'Could not save PO');
                             self.createUserActivity(req, 'CREATE_PO', null, null, function(){});
                         });
