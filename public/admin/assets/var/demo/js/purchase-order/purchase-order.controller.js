@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'PurchaseOrderService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'toaster', 'PurchaseOrderService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, PurchaseOrderService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, toaster, PurchaseOrderService) {
 
     var vm = this;
 
@@ -139,6 +139,7 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
                     PurchaseOrderService.deleteBulkPurchaseOrders(_selectedOrdersId).then(function(response){
                         vm.bulkActionChoice = null;
                         vm.bulkActionChoice = {};
+                        toaster.pop('success', 'Purchase orders Successfully Deleted');
                     });
                 } else {
                     vm.bulkActionChoice = null;

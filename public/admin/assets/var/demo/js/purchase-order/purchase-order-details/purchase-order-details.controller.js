@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderDetailsController', purchaseOrderDetailsController);
 
-purchaseOrderDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'SweetAlert', 'PurchaseOrderService'];
+purchaseOrderDetailsController.$inject = ['$scope', '$state', '$attrs', '$filter', '$modal', '$timeout', '$stateParams', '$location', 'SweetAlert', 'toaster', 'PurchaseOrderService'];
 /* @ngInject */
-function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, SweetAlert, PurchaseOrderService) {
+function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal, $timeout, $stateParams, $location, SweetAlert, toaster, PurchaseOrderService) {
 
     var vm = this;
 
@@ -82,6 +82,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
                 PurchaseOrderService.deletePurchaseOrder(po._id).then(function(response){
                     console.log("PO deleted");
                     vm.uiState.saveLoading = false;
+                    toaster.pop('success', 'Purchase order Successfully Deleted');
                     backToPurchaseOrders();
                 })
             }
