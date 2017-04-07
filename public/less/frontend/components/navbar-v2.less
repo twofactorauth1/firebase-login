@@ -104,6 +104,22 @@
           width: 90%;
         }
     }
+
+    @media (min-width: 768px){
+        .skinny-nav.navbar.navbar-default{
+            min-height: 0 !important;
+            .navbar-header{
+                padding: 0;
+            }
+            ul.navbar-nav li{
+                min-height: 0 !important;
+            }
+            ul.navbar-nav li > a{
+                min-height: 30px !important;
+                line-height: 20px;
+            }
+        }
+    }
 }
 
 .navigation1 {
