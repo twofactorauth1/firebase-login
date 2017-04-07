@@ -23,7 +23,9 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
 
         app.post(this.url(':id/password'), this.isAuthApi.bind(this), this.setUserPassword.bind(this));
+        app.get(this.url('search'), this.isAuthApi.bind(this), this.searchForUser.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUser.bind(this));
+
         app.post(this.url('account/:id'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
         app.post(this.url('account/:id/evergreen'), this.isAuthApi.bind(this), this.convertAccountToInternal.bind(this));
         app.get(this.url('account/:id/users'), this.isAuthApi.bind(this), this.listUsersForAccount.bind(this));
@@ -45,6 +47,21 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    searchForUser: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug(accountId, userId, '>> searchForUser');
+        var term = req.query.term;
+        self.getOrgAdminId(accountId, userId, req, function(err, orgId){
+            userManager.searchForUser(accountId, userId, orgId, term, function(err, users) {
+                self.log.debug(accountId, userId, '<< searchForUser');
+                return self.sendResultOrError(resp, err, users, 'Error searching for users', null);
+            });
+        });
+
     },
 
     setUserPassword: function(req, resp) {

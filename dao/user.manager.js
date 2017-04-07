@@ -186,7 +186,7 @@ module.exports = {
 
     addUserToAccount: function(accountId, userId, roleAry, callingUser, fn) {
         var self = this;
-        log.debug('>> addUserToAccount');
+        log.debug(accountId, callingUser, '>> addUserToAccount');
 
         async.waterfall([
             function stepZero(callback) {
@@ -230,7 +230,7 @@ module.exports = {
             if(err) {
                 return fn(err, null);
             } else {
-                log.debug('<< addUserToAccount');
+                log.debug(accountId, callingUser, '<< addUserToAccount');
                 return fn(null, user);
             }
         });
@@ -756,6 +756,34 @@ module.exports = {
                 return fn(null, user.getPermissionsForAccount(accountId));
             }
 
+        });
+    },
+
+    searchForUser: function(accountId, userId, orgId, term, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> searchForUser');
+
+        var regex = new RegExp('\.*'+term+'\.', 'i');
+        var query = {
+            $or:[
+                {username:regex},
+                {first:regex},
+                {last:regex}
+            ]
+        };
+
+        if(orgId && orgId !== 0) {
+            //TODO: need to add an account filter
+        }
+        dao.findMany(query, $$.m.User, function(err, list){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding users:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< searchForUser');
+                fn(null, list);
+            }
         });
     }
 };

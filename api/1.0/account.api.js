@@ -752,29 +752,20 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
     addUserToAccount: function(req, resp) {
-            var self = this;
-            self.log.debug('>> addUserToAccount');
-            var accountId = req.session.accountId;
-            var userId = parseInt(req.params.userId);
-            var roleAry = [];
-            var callingUser = parseInt(self.userId(req));
-            self.log.debug(callingUser);
-            /*if(req.body.roleAry) {
-                roleAry = req.body.roleAry.split(',');
-            }*
-            var callingUser = parseInt(self.userId(req));
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var callingUser = parseInt(self.userId(req));
+        self.log.debug(accountId, callingUser, '>> addUserToAccount');
 
-           /*S self._isAdmin(req, function(err, value) {
-                if (value !== true) {
-                    return self.send403(resp);
-                } else {*/
-            userManager.addUserToAccount(accountId, userId, roleAry, callingUser, function(err, user){
-                self.log.debug('<< addUserToAccount');
-                return self.sendResultOrError(resp, err, user, 'Error adding user to account', null);
-            });
-                /*}
-            });*/
+        var userId = parseInt(req.params.userId);
+        var roleAry = ['super','admin','member'];
 
+        self.log.debug(callingUser);
+
+        userManager.addUserToAccount(accountId, userId, roleAry, callingUser, function(err, user){
+            self.log.debug('<< addUserToAccount');
+            return self.sendResultOrError(resp, err, user, 'Error adding user to account', null);
+        });
     }
 });
 
