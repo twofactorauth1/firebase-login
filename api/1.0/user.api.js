@@ -373,6 +373,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     newuser.contacts[0].phones = [];
                     newuser.contacts[0].phones.push({type:'mobile', phone:phone});
                 }
+                
+                return fn(null, null);
             }
         );
 
