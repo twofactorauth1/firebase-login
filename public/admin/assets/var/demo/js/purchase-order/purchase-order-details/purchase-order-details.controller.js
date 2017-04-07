@@ -56,7 +56,7 @@ function purchaseOrderDetailsController($scope, $state, $attrs, $filter, $modal,
                 vm.state.purchaseOrder.notes = [];
             vm.state.purchaseOrder.notes.push(response.data);
             vm.newNote.text = '';
-            vm.uiState.saveLoading = true;
+            vm.uiState.saveLoading = false;
         })
         
     };
