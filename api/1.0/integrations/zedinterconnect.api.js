@@ -45,10 +45,16 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> inventory');
-        manager.inventory(accountId, userId, function(err, value){
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+
+        manager.cachedInventory(accountId, userId, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug('<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
+
     },
 
     loadinventory: function(req, resp) {
