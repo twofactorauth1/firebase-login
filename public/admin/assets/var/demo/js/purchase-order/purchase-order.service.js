@@ -25,6 +25,7 @@
         poService.getPurchaseOrderDetails = getPurchaseOrderDetails;
         poService.addPurchaseOrderNote = addPurchaseOrderNote;
         poService.deletePurchaseOrder = deletePurchaseOrder;
+        poService.deleteBulkPurchaseOrders = deleteBulkPurchaseOrders;
 
         function poRequest(fn) {
             poService.loading.value = poService.loading.value + 1;
@@ -128,8 +129,7 @@
 
             function success(data) {
                 console.log("purchase order deleted");
-                poService.purchaseOrders = null;
-                getPurchaseOrders();
+                poService.purchaseOrders = _.reject(poService.purchaseOrders, function(c){ return c._id == orderId });                   
             }
 
             function error(error) {
@@ -137,6 +137,29 @@
             }
 
             return poRequest($http.delete([basePoAPIUrlv2, 'po', orderId].join('/')).success(success).error(error));
+        }
+
+
+
+        function deleteBulkPurchaseOrders(orderArray) {
+
+            function success(data) {
+                console.log("purchase order deleted");                
+                _.each(orderArray, function(orderId){
+                    poService.purchaseOrders = _.reject(poService.purchaseOrders, function(c){ return c._id == orderId });
+                }) 
+            }
+
+            function error(error) {
+                console.error('PurchaseOrderService deletePurchaseOrder error: ', JSON.stringify(error));
+            }
+            return (
+                poRequest($http({
+                    url: [basePoAPIUrlv2, 'po', 'deletepurchaseorders'].join('/'),
+                    method: 'POST',
+                    data: orderArray
+                }).success(success).error(error))
+            );
         }
 
 

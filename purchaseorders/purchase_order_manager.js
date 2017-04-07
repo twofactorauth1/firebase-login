@@ -237,6 +237,25 @@ module.exports = {
     },
 
 
+
+    deleteBulkPurchaseOrders: function(accountId, orderIds, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> deleteBulkPurchaseOrders');
+        var query = {
+            _id: {'$in': orderIds}
+        };
+        purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
+            if(err) {
+                self.log.error('Error deleting po: ' + err);
+                return fn(err, null);
+            } else {
+                fn(null, value);
+            }
+        });
+    },
+
+
     _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
         var self = this;
         var component = {};

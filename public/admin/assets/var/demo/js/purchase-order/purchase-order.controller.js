@@ -2,9 +2,9 @@
 
 app.controller('PurchaseOrderComponentController', purchaseOrderComponentController);
 
-purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'PurchaseOrderService'];
+purchaseOrderComponentController.$inject = ['$scope', '$attrs', '$filter', '$modal', '$timeout', '$location', 'SweetAlert', 'PurchaseOrderService'];
 /* @ngInject */
-function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, PurchaseOrderService) {
+function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $timeout, $location, SweetAlert, PurchaseOrderService) {
 
     var vm = this;
 
@@ -21,6 +21,14 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     vm.closeModal = closeModal;
     vm.checkIfInValid = checkIfInValid;
     vm.viewPurchaseOrderDetails = viewPurchaseOrderDetails;
+    vm.selectAllClickFn = selectAllClickFn;
+    vm.orderSelectClickFn = orderSelectClickFn;
+    vm.bulkActionSelectFn = bulkActionSelectFn;
+    vm.selectedOrdersFn = selectedOrdersFn;
+
+    vm.bulkActionChoice = {};
+
+    vm.bulkActionChoices = [{data: 'delete', label: 'Delete'}];
 
     vm.init = init;
 
@@ -78,6 +86,67 @@ function purchaseOrderComponentController($scope, $attrs, $filter, $modal, $time
     function viewPurchaseOrderDetails(order){
         $location.path('/purchase-orders/' + order._id);
     }
+
+
+    function selectAllClickFn($event) {
+        $event.stopPropagation();
+        vm.selectAllChecked = !vm.selectAllChecked;
+        vm.displayedOrders.forEach(function(order, index) {
+            order.isSelected = vm.selectAllChecked
+        });
+    };
+
+
+    function orderSelectClickFn($event, order) {
+        $event.stopPropagation();
+        if (order.isSelected) {
+            order.isSelected = false;
+        } else {
+            order.isSelected = true;
+        }
+    };
+
+
+    function selectedOrdersFn() {
+        var exportOrders = _.filter(vm.displayedOrders, function(order) { return order.isSelected; });
+        return exportOrders;
+    };
+
+
+    function bulkActionSelectFn() {
+        var selectedOrders = vm.selectedOrdersFn();
+        var deleteMessage = "Do you want to delete the "+ selectedOrders.length + " purchase order?";
+        if(selectedOrders.length > 1)
+          deleteMessage = "Do you want to delete the "+ selectedOrders.length + " purchase orders?";
+        if (vm.bulkActionChoice.action.data == 'delete') {
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: deleteMessage,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, do not delete it!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+              },
+              function (isConfirm) {
+                if (isConfirm) {
+                    var _selectedOrdersId = [];
+                    _.each(selectedOrders, function(order){
+                        _selectedOrdersId.push(order._id);
+                    })
+                    PurchaseOrderService.deleteBulkPurchaseOrders(_selectedOrdersId).then(function(response){
+                        vm.bulkActionChoice = null;
+                        vm.bulkActionChoice = {};
+                    });
+                } else {
+                    vm.bulkActionChoice = null;
+                    vm.bulkActionChoice = {};
+                }
+              });
+        }
+    };
 
     function init(element) {
         vm.element = element;

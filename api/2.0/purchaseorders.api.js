@@ -29,6 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
         app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
         app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
+        app.post(this.url('po/deletepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.deleteBulkPurchaseOrders.bind(this));
         app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
     },
 
@@ -151,7 +152,28 @@ _.extend(api.prototype, baseApi.prototype, {
                 }); 
             }
         });
+    },
+
+    deleteBulkPurchaseOrders: function (req, res) {
+
+        var self = this;
+        var purchaseOrders = req.body;
+        console.log(purchaseOrders);
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                
+                poManager.deleteBulkPurchaseOrders(accountId, purchaseOrders, function(err, value){                                                       
+                    self.log.debug('<< deleteBulkPurchaseOrders');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO's");
+                }); 
+            }
+        });
     }
+    
 
 
 });
