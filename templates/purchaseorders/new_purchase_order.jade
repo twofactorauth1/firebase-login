@@ -201,8 +201,12 @@ html
                               div(mc:edit='std_content00')
                                 h4 !{title}
                                 br
+                                div
+                                    a(href='#{poUrl}') !{poUrl}
+                                br    
                                 ul
                                     each data in text
                                         li!= data
                                 div.pdfLink
-                                    a(href='#{attachment.url}') !{attachment.name}        
+                                    a(href='#{attachment.url}') !{attachment.name}
+                                            

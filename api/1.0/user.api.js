@@ -25,10 +25,6 @@ var campaignManager = require('../../campaign/campaign_manager');
 var moment = require('moment');
 var CryptoJS = require('crypto-js');
 
-var Closeio = require('close.io');
-var closeioConfig = require('../../configs/closeio.config');
-var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
-
 var Intercom = require('intercom.io');
 var intercomConfig = require('../../configs/intercom.config');
 var intercom = new Intercom(intercomConfig.INTERCOM_APP_ID, intercomConfig.INTERCOM_API_KEY);
@@ -377,54 +373,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     newuser.contacts[0].phones = [];
                     newuser.contacts[0].phones.push({type:'mobile', phone:phone});
                 }
-
-                if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
-                    self.log.debug('calling close');
-                    closeio.lead.create(newuser).then(function(lead){
-                        self.log.debug('returned from close:', lead);
-                        var leadId = lead.id;
-                        self.log.debug('leadId:', leadId);
-                        var billingDays = account.get('billing').trialLength;
-                        self.log.debug('billingDays:', billingDays);
-                        var date_won = moment(new Date()).add(billingDays, 'days').toISOString();
-                        self.log.debug('date_won:', date_won);
-                        var newop = {
-                            "note": "",
-                            "confidence": 50,
-                            "lead_id": lead.id,
-                            "status_id": closeioConfig.CLOSEIO_ACTIVE_STATUS_ID,
-                            "value": 4995,
-                            "date_won": date_won,
-                            "value_period": "monthly"
-                        };
-                        try {
-                            closeio.opportunity.create(newop).then(function(opp){
-                                self.log.debug('created opportunity', opp);
-                                intercom.updateUser({
-                                    "email" : user.attributes.email,
-                                    "custom_attributes" : {
-                                        "close_lead_id" : lead.id
-                                    }
-                                }, function(err, res) {
-                                    if(err) {
-                                        self.log.error('Error updating close.io:', err);
-                                    }
-                                    fn(null, lead.id);
-                                });
-                            });
-                        } catch(exception) {
-                            self.log.error('Exception calling close:', exception);
-                            fn(null, lead.id);
-                        }
-
-                    }), function(err){
-                        self.log.error('Exception creating lead in close:', err);
-                        fn(null, null);
-                    };
-                } else {
-                    self.log.debug('skipping call to closeio');
-                    return fn(null, null);
-                }
+                
+                return fn(null, null);
             }
         );
 

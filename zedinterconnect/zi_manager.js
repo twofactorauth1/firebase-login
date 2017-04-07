@@ -53,6 +53,24 @@ module.exports = {
         });
     },
 
+    cachedInventory: function(accountId, userId, skip, limit, sortBy, sortDir, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> cachedInventory');
+        var query = {};
+        var fields = null;
+        var collection = 'inventory';
+        ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting cached inventory:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< cachedInventory');
+                fn(null, value);
+            }
+        });
+
+    },
+
     aging: function(accountId, userId, cardCodeFrom, cardCodeTo, dateString, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> aging');
