@@ -773,16 +773,47 @@ module.exports = {
             ]
         };
 
-        if(orgId && orgId !== 0) {
-            //TODO: need to add an account filter
-        }
+
         dao.findMany(query, $$.m.User, function(err, list){
             if(err) {
                 self.log.error(accountId, userId, 'Error finding users:', err);
                 fn(err);
             } else {
-                self.log.debug(accountId, userId, '<< searchForUser');
-                fn(null, list);
+                if(orgId && orgId !== 0) {
+                    //TODO: need to add an account filter
+                    self.log.debug('searching for accounts');
+                    accountDao.getAccountsByOrg(orgId, function(err, accounts){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding accounts by org:', err);
+                            fn(err);
+                        } else {
+                            var accountIds = [];
+                            _.each(accounts, function(account){accountIds.push(account.id())});
+                            var filteredUsers = [];
+                            _.each(list, function(user){
+                                var userAccountIds = user.getAllAccountIds();
+                                /*
+                                 * If any of a user's accountIds are in the list for this org, they are added to the output
+                                 */
+                                var add = false;
+                                _.each(userAccountIds, function(uAccountId){
+                                    if(_.contains(accountIds, uAccountId)) {
+                                        add = true;
+                                    }
+                                });
+                                if(add === true) {
+                                    filteredUsers.push(user);
+                                }
+                            });
+                            self.log.debug(accountId, userId, '<< searchForUser');
+                            fn(null, filteredUsers);
+                        }
+                    });
+                } else {
+                    self.log.debug(accountId, userId, '<< searchForUser');
+                    fn(null, list);
+                }
+
             }
         });
     }
