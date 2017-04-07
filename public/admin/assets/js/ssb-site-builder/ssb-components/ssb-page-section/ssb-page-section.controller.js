@@ -82,6 +82,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     
 
                 }
+                if (section.layoutModifiers.grid) {
+                    classString += ' ssb-page-section-layout-' + section.layout + '-grid';
+                }
                 if(section.layoutModifiers.columns && angular.isDefined(section.layoutModifiers.columns.columnsNum)){
                     var _col = section.layoutModifiers.columns.columnsNum || 1;
                     classString += ' ssb-text-column-layout ssb-text-column-' + _col;
