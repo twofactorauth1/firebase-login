@@ -10,7 +10,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             scope.newAccount = {
                 email: ''
             };
-
+                scope.buttonDisabled=true;
             if (scope.component.version === 2) {
                 //TODO: set true plan _id's
                 scope.newAccount.plan = scope.component.productIds['ALLINONE'];
@@ -391,7 +391,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     scope.requiredFieldsFilled = false;
                     return;
                 }
-                
+                  scope.buttonDisabled=false;
                 var tmpAccount = scope.tmpAccount;
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
                 tmpAccount.business = tmpAccount.business || {};
@@ -422,6 +422,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                             PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
                                 if (error) {
+                                      scope.buttonDisabled=true;
                                     console.info(error);
                                     scope.$apply(function() {
                                         scope.isFormValid = false;
