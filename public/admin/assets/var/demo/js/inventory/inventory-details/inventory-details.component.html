@@ -1,8 +1,8 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-8">
-            <h1 class="mainTitle">{{ vm.inventory.name || 'No Product Name'}} </h1>
-            <span class="mainDescription">{{vm.inventory.description}}</span>
+            <h1 class="mainTitle">{{ vm.inventory.OITM_ItemName || 'No Product Name'}} </h1>
+            <span class="mainDescription">{{vm.inventory.OITM_U_dscription}}</span>
         </div>
     </div>
 </section>
@@ -16,13 +16,13 @@
     </button>
 </div>
 <div class="clearfix"></div>
-<div class="inventory-details-container">
+<div class="inventory-details-container" ng-if="!vm.uiState.loading">
     <div class="col-sm-5 col-xs-12 inventory-details-left-panel">
         <div class="form-group">
             <h4>Vendor</h4>
             <span class="required">*</span>
             <div class="description">
-                {{vm.inventory.vendor}}
+                {{vm.inventory.OMRC_FirmName}}
             </div>
             <hr>
         </div>
@@ -30,7 +30,7 @@
             <h4>SKU</h4>
             <span class="required">*</span>
             <div class="description">
-                {{vm.inventory.sku}}
+                {{vm.inventory.OITM_ItemCode}}
             </div>
             <hr>
         </div>
@@ -38,7 +38,7 @@
             <h4>Description</h4>
             <span class="required">*</span>
             <div class="description">
-                {{vm.inventory.description}}
+                {{vm.inventory.OITM_U_dscription}}
             </div>
             <hr>
         </div>
@@ -46,7 +46,7 @@
             <h4>Quantity on Hand</h4>
             <span class="required">*</span>
             <div class="description">
-                {{vm.inventory.qty}}
+                {{vm.inventory.In_Stock}}
             </div>
             <hr>
         </div>
@@ -105,4 +105,7 @@
             </div>
         </div>
     </div>
+</div>
+<div class="loading-inventory-details center" ng-if="vm.uiState.loading">
+    <h2>Loading inventory details.Please wait....</h2>
 </div>

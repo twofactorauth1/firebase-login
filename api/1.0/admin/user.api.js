@@ -23,7 +23,9 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function() {
 
         app.post(this.url(':id/password'), this.isAuthApi.bind(this), this.setUserPassword.bind(this));
+        app.get(this.url('search'), this.isAuthApi.bind(this), this.searchForUser.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUser.bind(this));
+
         app.post(this.url('account/:id'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
         app.post(this.url('account/:id/evergreen'), this.isAuthApi.bind(this), this.convertAccountToInternal.bind(this));
         app.get(this.url('account/:id/users'), this.isAuthApi.bind(this), this.listUsersForAccount.bind(this));
@@ -45,6 +47,28 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    searchForUser: function(req, resp) {
+        var self = this;
+        var userId = self.userId(req);
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug(accountId, userId, '>> searchForUser');
+        var term = req.query.term;
+        self._isAdminOrOrgAdmin(req, function(err, value){
+            if(value !== true) {
+                return self.send403(resp);
+            } else {
+                self.getOrgAdminId(accountId, userId, req, function(err, orgId){
+                    userManager.searchForUser(accountId, userId, orgId, term, function(err, users) {
+                        self.log.debug(accountId, userId, '<< searchForUser');
+                        return self.sendResultOrError(resp, err, users, 'Error searching for users', null);
+                    });
+                });
+            }
+        });
+
+
     },
 
     setUserPassword: function(req, resp) {
@@ -105,7 +129,7 @@ _.extend(api.prototype, baseApi.prototype, {
             roleAry = req.body.roleAry.split(',');
         }
         var callingUser = parseInt(self.userId(req));
-        self._isAdmin(req, function(err, value) {
+        self._isAdminOrOrgAdmin(req, function(err, value) {
             if (value !== true) {
                 return self.send403(resp);
             } else {
@@ -124,7 +148,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var accountId = parseInt(req.params.id);
 
-        self._isAdmin(req, function(err, value) {
+        self._isAdminOrOrgAdmin(req, function(err, value) {
             if (value !== true) {
                 return self.send403(resp);
             } else {
@@ -148,7 +172,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         var callingUser = parseInt(self.userId(req));
 
-        self._isAdmin(req, function(err, value) {
+        self._isAdminOrOrgAdmin(req, function(err, value) {
             if (value !== true) {
                 return self.send403(resp);
             } else {
@@ -188,7 +212,7 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     _isAdmin: function(req, fn) {
         var self = this;
-        console.log(req)
+        //console.log(req);
         
         if(self.userId(req) === 1 || self.userId(req)===4) {
             fn(null, true);
@@ -196,6 +220,19 @@ _.extend(api.prototype, baseApi.prototype, {
             fn(null, true);
         } else {
             fn(null, false);
+        }
+    },
+
+    _isAdminOrOrgAdmin: function(req, fn) {
+        var self = this;
+        if(self.userId(req) === 1 || self.userId(req)===4) {
+            fn(null, true);
+        } else if(_.contains(req.session.permissions, 'manager')){
+            fn(null, true);
+        } else {
+            var accountId = parseInt(self.accountId(req));
+            var userId = self.userId(req);
+            return self.isOrgAdmin(accountId, userId, req, fn);
         }
     }
 

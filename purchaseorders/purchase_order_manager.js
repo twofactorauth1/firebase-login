@@ -67,7 +67,7 @@ module.exports = {
         });
     },
 
-    createPO: function(file, po, accountId, userId, fn) {
+    createPO: function(file, adminUrl, po, accountId, userId, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> createPO');
@@ -136,7 +136,7 @@ module.exports = {
                                 last: user.get("last")
                             }
                             order.set("submitter", _user);
-                            self._sendEmailOnPOCreation(order);
+                            self._sendEmailOnPOCreation(order, accountId, adminUrl);
                             fn(null, order, file);
                         }
                     });
@@ -223,12 +223,47 @@ module.exports = {
         });
     },
 
+    deletePurchaseOrder: function(accountId, purchaseOrderId, fn){
+        var self = this;
+        log.debug('>> addNotesToPurchaseOrder');
+        console.log(purchaseOrderId);
+        purchaseOrderdao.removeById(purchaseOrderId, $$.m.PurchaseOrder, function(err, value){
+            if(err) {
+                self.log.error('Error deleting po: ' + err);
+                return fn(err, null);
+            } else {
+                fn(null, value);
+            }
+        });
+    },
 
-    _sendEmailOnPOCreation: function(po, accountId) {
+
+
+    deleteBulkPurchaseOrders: function(accountId, orderIds, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> deleteBulkPurchaseOrders');
+        var query = {
+            _id: {'$in': orderIds}
+        };
+        purchaseOrderdao.removeByQuery(query, $$.m.PurchaseOrder, function(err, value){
+            if(err) {
+                self.log.error('Error deleting po: ' + err);
+                return fn(err, null);
+            } else {
+                fn(null, value);
+            }
+        });
+    },
+
+
+    _sendEmailOnPOCreation: function(po, accountId, adminUrl) {
         var self = this;
         var component = {};
         
         var text = [];
+
+        var poUrl = adminUrl + "#/purchase-orders/" + po.id();
         
         if(po.get("title")){
             text.push("<b>Title</b>: "+ po.get("title"));
@@ -242,6 +277,7 @@ module.exports = {
         component.text = text;
         
         component.attachment = po.get("attachment");
+        component.poUrl = poUrl;
 
         var fromEmail = notificationConfig.FROM_EMAIL;
         var fromName =  notificationConfig.WELCOME_FROM_NAME;

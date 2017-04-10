@@ -29,6 +29,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createPurchaseOrder.bind(this));
         app.get(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPurchaseOrder.bind(this));
         app.post(this.url('po/:id/notes'), this.isAuthAndSubscribedApi.bind(this), this.addPurchaseOrderNotes.bind(this));
+        app.post(this.url('po/deletepurchaseorders'), this.isAuthAndSubscribedApi.bind(this), this.deleteBulkPurchaseOrders.bind(this));
+        app.delete(this.url('po/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePurchaseOrder.bind(this));
     },
 
     listPurchaseOrders: function(req, resp) {
@@ -68,7 +70,9 @@ _.extend(api.prototype, baseApi.prototype, {
                         var body = JSON.parse(fields['po']);
 
                         var po = new $$.m.PurchaseOrder(body);
+                        var adminUrl = fields['adminUrl'];
 
+                        
                         var fileToUpload = {};
                         fileToUpload.mimeType = file.type;
                         fileToUpload.size = file.size;
@@ -80,7 +84,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                         console.log(file);
 
-                        poManager.createPO(fileToUpload, po, accountId, userId, function(err, value, file){                                                       
+                        poManager.createPO(fileToUpload, adminUrl, po, accountId, userId, function(err, value, file){                                                       
                             self.sendResultOrError(res, err, value, 'Could not save PO');
                             self.createUserActivity(req, 'CREATE_PO', null, null, function(){});
                         });
@@ -126,6 +130,51 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
+
+    deletePurchaseOrder: function (req, res) {
+
+        var self = this;
+        var purchaseOrderId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                if (!purchaseOrderId) {
+                    self.wrapError(res, 400, null, "Invalid paramater for ID");
+                }
+                
+                poManager.deletePurchaseOrder(accountId, purchaseOrderId, function(err, value){                                                       
+                    self.log.debug('<< deletePurchaseOrder');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO");
+                    self.createUserActivity(req, 'DELETE_PO', null, null, function(){});
+                }); 
+            }
+        });
+    },
+
+    deleteBulkPurchaseOrders: function (req, res) {
+
+        var self = this;
+        var purchaseOrders = req.body;
+        console.log(purchaseOrders);
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ORDER, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                
+                poManager.deleteBulkPurchaseOrders(accountId, purchaseOrders, function(err, value){                                                       
+                    self.log.debug('<< deleteBulkPurchaseOrders');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting PO's");
+                }); 
+            }
+        });
+    }
+    
+
 
 });
 

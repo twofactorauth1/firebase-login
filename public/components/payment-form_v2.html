@@ -293,7 +293,7 @@
                         </div>
                         <!-- BUY -->
                         <div class="submit-signup center padding-bottom-20">
-                            <a type="button" class="signup-btn-v2" ng-click="createAccount(newAccount)">SIGN UP</a>
+                            <a type="button" class="signup-btn-v2"  ng-show="buttonDisabled" ng-click="createAccount(newAccount)">SIGN UP</a>
                             <span class="help-block" ng-show='havingNetworkIssue'>Something went wrong during the creation of your account. Please try again.</span>
                             <span class="error text-red help-block" ng-if='requiredFieldsFilled === false'>Please fill in all required fields.</span>
                         </div>

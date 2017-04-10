@@ -36,7 +36,9 @@ _.extend(router.prototype, baseRouter.prototype, {
     handleStripeCallback: function(req, res) {
         var self = this;
         self.log.debug('>> handleStripeCallback ', req.headers.referer); //.sessionStore.session.state.redirectUrl
-        var accountId = self.accountId(req);
+        //self.log.debug('authenticated accountId:', self.authenticatedAccountId(req));
+        //var accountId = self.accountId(req);
+        var accountId = self.authenticatedAccountId(req);
         var path = "admin/#/account/integrations";
         // if (req.headers.referer) {
         //     var _str1 = req.headers.referer.split("?next=")[1];
