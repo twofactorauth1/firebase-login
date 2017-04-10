@@ -406,9 +406,10 @@ var insightsManager = {
             },
             function(account, sectionDataMap, html, contact, vars, cb) {
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+                //TODO: put these is org settings
                 if(account.get("orgId") == 1){
                     siteUrl = account.get('subdomain') + '.gorvlvr.com';
-                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/RVLVR_black_2_1488830283708.png'});
+                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr_logo_350.png'});
                 } else {
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Logo_Blog_Template_1455919441097.jpg'});
                 }
@@ -431,6 +432,7 @@ var insightsManager = {
                 var toAddress = destinationAddress;
                 var toName = null;
                 var subject = self.config.subject;
+                //TODO: put these in org settings
                 if(account.get('orgId') == 1) {
                     fromAddress = 'insights@gorvlvr.com';
                     fromName = 'RVLVR Insights';
