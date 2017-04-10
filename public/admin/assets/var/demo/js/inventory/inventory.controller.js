@@ -9,6 +9,9 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     var vm = this;
 
     vm.init = init;
+
+    vm.state = {};
+    vm.uiState = {loading: true};
     
     vm.viewSingleInventory = viewSingleInventory;
     vm.getDimentions = getDimentions;
@@ -16,7 +19,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
-            vm.inventory = inventory;
+            vm.state.inventory = inventory;
+            vm.uiState.loading = false;
         }
     }, true);
 
