@@ -16,7 +16,7 @@
 
 <div class="clearfix"></div>
 
-<div class="purchase-order-details-container col-xs-12" ng-if="vm.state.purchaseOrder">
+<div class="purchase-order-details-container col-xs-12" ng-if="!vm.uiState.loading">
     <div class="inner-order-details bg-white col-xs-12">
         <div class="col-sm-5 col-xs-12 purchase-order-details-left-panel">
             <div class="form-group">
@@ -70,6 +70,6 @@
     
 </div>
 
-<div class="loading-po-details center" ng-if="!vm.state.purchaseOrder">
+<div class="loading-po-details center" ng-if="vm.uiState.loading">
     <h2>Loading PO.Please wait....</h2>
 </div>
