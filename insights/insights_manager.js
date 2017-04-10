@@ -408,6 +408,9 @@ var insightsManager = {
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
                 if(account.get("orgId") == 1){
                     siteUrl = account.get('subdomain') + '.gorvlvr.com';
+                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/RVLVR_black_2_1488830283708.png'});
+                } else {
+                    vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Logo_Blog_Template_1455919441097.jpg'});
                 }
                 console.log(siteUrl);
                 app.render('insights/footer', {siteUrl:siteUrl}, function(err, jadeHtml){
@@ -428,6 +431,11 @@ var insightsManager = {
                 var toAddress = destinationAddress;
                 var toName = null;
                 var subject = self.config.subject;
+                if(account.get('orgId') == 1) {
+                    fromAddress = 'insights@gorvlvr.com';
+                    fromName = 'RVLVR Insights';
+                    subject = 'RVLVR Insights Report';
+                }
                 var htmlContent = html;
                 var _accountId = customerAccountId;
                 var contactId = null;
