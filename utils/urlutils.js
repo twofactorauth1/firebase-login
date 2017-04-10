@@ -65,7 +65,7 @@ var urlutils = {
                     //_log.debug('environment: ' + matchedEnvironment);
                     var regexp = new RegExp('\.?' + matchedEnvironment[0] + '\$', 'i');
                     subdomain = subdomain.replace(regexp, '');
-                    environment = matchedEnvironment;
+                    environment = matchedEnvironment[0];
                 }
                 /*
                  * After checking for environment... check for empty subdomain again.
