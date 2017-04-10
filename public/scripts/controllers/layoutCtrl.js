@@ -1,6 +1,6 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('LayoutCtrl', ['$scope', '$rootScope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, $rootScope, pagesService, $window, $location, $document, $timeout) {
+mainApp.controller('LayoutCtrl', ['$scope', '$rootScope', 'pagesService', 'SsbPageSectionService', '$window', '$location', '$document', '$timeout', function ($scope, $rootScope, pagesService, SsbPageSectionService, $window, $location, $document, $timeout) {
     $scope.isEditing = false;
     $scope.blog_post = null;
     console.log('layout crtl');
@@ -52,6 +52,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$rootScope', 'pagesService', '$wind
             }
 
         } else {
+            SsbPageSectionService.setSectionOffset(0);
             $scope.page = data;
             $rootScope.title = $scope.page.title;
             $rootScope.pageHandle = $scope.page.handle;

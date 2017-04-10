@@ -4,7 +4,7 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
             component: '='
         },
         templateUrl: '/components/component-wrap.html',
-        controller: function ($scope, websiteService, accountService, $compile) {
+        controller: function ($scope, websiteService, accountService, SsbPageSectionService, $compile) {
             $scope.navbarId = _.random(0, 1000);
             $scope.website = {};
             if(window.indigenous && window.indigenous.precache && window.indigenous.precache.siteData && window.indigenous.precache.siteData.linkList){
@@ -31,6 +31,10 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                     $scope.currentpage.handle = 'blog';
                 }
             });
+
+            $scope.$watch(function() { return SsbPageSectionService.offset }, function(offset) {
+                $scope.scrollOffsetTop = offset;
+            }, true);
 
         }
     }
