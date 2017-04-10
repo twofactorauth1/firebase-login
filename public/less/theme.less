@@ -30,7 +30,7 @@
 @navBorder-color: @nav-color;
 @navText-color: #48b1cc;
 @navActive-color: #48b1cc;
-@navInactive-color: #8A9DB7;
+@navInactive-color: #ACBFD9;
 @navHover-color: lighten(#48b1cc, 50%);
 @navElements-color: #48b1cc;
 //SCROLLBAR COLORS
@@ -173,6 +173,13 @@ header {
                             }
                         }
                     }
+                    .item-media-inactive {
+                        color: @navInactive-color !important;
+                        .fa-stack {
+                            .fa-square {
+                                color: @navInactive-color !important;
+                            }
+                        }                    }
                     .item-inner {
                         color: @headerElements-color !important;
                         border-bottom-color: @navBorder-color;
