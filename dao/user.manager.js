@@ -186,7 +186,7 @@ module.exports = {
 
     addUserToAccount: function(accountId, userId, roleAry, callingUser, fn) {
         var self = this;
-        log.debug('>> addUserToAccount');
+        log.debug(accountId, callingUser, '>> addUserToAccount');
 
         async.waterfall([
             function stepZero(callback) {
@@ -230,7 +230,7 @@ module.exports = {
             if(err) {
                 return fn(err, null);
             } else {
-                log.debug('<< addUserToAccount');
+                log.debug(accountId, callingUser, '<< addUserToAccount');
                 return fn(null, user);
             }
         });
@@ -756,6 +756,65 @@ module.exports = {
                 return fn(null, user.getPermissionsForAccount(accountId));
             }
 
+        });
+    },
+
+    searchForUser: function(accountId, userId, orgId, term, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug(accountId, userId, '>> searchForUser');
+
+        var regex = new RegExp('\.*'+term+'\.', 'i');
+        var query = {
+            $or:[
+                {username:regex},
+                {first:regex},
+                {last:regex}
+            ]
+        };
+
+
+        dao.findMany(query, $$.m.User, function(err, list){
+            if(err) {
+                self.log.error(accountId, userId, 'Error finding users:', err);
+                fn(err);
+            } else {
+                if(orgId && orgId !== 0) {
+                    //TODO: need to add an account filter
+                    self.log.debug('searching for accounts');
+                    accountDao.getAccountsByOrg(orgId, function(err, accounts){
+                        if(err) {
+                            self.log.error(accountId, userId, 'Error finding accounts by org:', err);
+                            fn(err);
+                        } else {
+                            var accountIds = [];
+                            _.each(accounts, function(account){accountIds.push(account.id())});
+                            var filteredUsers = [];
+                            _.each(list, function(user){
+                                var userAccountIds = user.getAllAccountIds();
+                                /*
+                                 * If any of a user's accountIds are in the list for this org, they are added to the output
+                                 */
+                                var add = false;
+                                _.each(userAccountIds, function(uAccountId){
+                                    if(_.contains(accountIds, uAccountId)) {
+                                        add = true;
+                                    }
+                                });
+                                if(add === true) {
+                                    filteredUsers.push(user);
+                                }
+                            });
+                            self.log.debug(accountId, userId, '<< searchForUser');
+                            fn(null, filteredUsers);
+                        }
+                    });
+                } else {
+                    self.log.debug(accountId, userId, '<< searchForUser');
+                    fn(null, list);
+                }
+
+            }
         });
     }
 };

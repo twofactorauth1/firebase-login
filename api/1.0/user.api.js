@@ -254,8 +254,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, resp, responseObj);
             } else {
-                self.log.debug('<< getUserById(401)');
-                return self.wrapError(resp, 401, null, err, value);
+                self.log.debug('<< getUserById(400)');
+                return self.wrapError(resp, 400, null, err, value);
             }
         });
     },
@@ -373,7 +373,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     newuser.contacts[0].phones = [];
                     newuser.contacts[0].phones.push({type:'mobile', phone:phone});
                 }
-                
+
                 return fn(null, null);
             }
         );

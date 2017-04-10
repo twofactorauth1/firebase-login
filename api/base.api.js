@@ -535,6 +535,28 @@ _.extend(apiBase.prototype, {
                 fn(null, false);
             }
         });
+    },
+
+    getOrgAdminId: function(accountId, userId, req, fn) {
+        var parsedUrl = urlUtils.getSubdomainFromRequest(req);
+        orgDao.getByOrgDomain(parsedUrl.orgDomain, function(err, organization){
+            if(organization && organization.get('adminAccount') === accountId) {
+                fn(null, organization.id());
+            } else {
+                fn(null, null);
+            }
+        });
+    },
+
+    getOrgId: function(accountId, userId, req, fn) {
+        var parsedUrl = urlUtils.getSubdomainFromRequest(req);
+        orgDao.getByOrgDomain(parsedUrl.orgDomain, function(err, organization){
+            if(err || !organization) {
+                fn(null);
+            } else {
+                fn(null, organization.id())
+            }
+        });
     }
 
 });

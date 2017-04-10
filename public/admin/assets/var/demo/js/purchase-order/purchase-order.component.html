@@ -107,7 +107,7 @@
 	            </div>
 	        </div>
 	    </div>
-	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}">
+	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
 	            	<th ng-click='vm.selectAllClickFn($event)' ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-class='{"fa-check-circle": vm.selectAllChecked, "fa-circle-o": !vm.selectAllChecked}'></i></th>
@@ -132,7 +132,7 @@
 	                <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
 	            </tr>
 	        </tbody>
-	        <tfoot ng-if="vm.state.orders.length">
+	        <tfoot>
 	            <tr>
 	                <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage || 100" colspan="6">
 	                </td>

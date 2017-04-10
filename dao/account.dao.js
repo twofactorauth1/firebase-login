@@ -737,6 +737,12 @@ var dao = {
         };
 
         self.findMany(query, fn);
+    },
+
+    getAccountsByOrg: function(orgId, fn) {
+        var self = this;
+        var query = {orgId:orgId};
+        self.findMany(query, fn);
     }
 };
 

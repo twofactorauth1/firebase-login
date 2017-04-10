@@ -1,7 +1,7 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService', '$window', '$location', '$document', '$timeout',
-    function ($scope, $rootScope, previewPagesService, $window, $location, $document, $timeout) {
+mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService', 'SsbPageSectionService', '$window', '$location', '$document', '$timeout',
+    function ($scope, $rootScope, previewPagesService, SsbPageSectionService, $window, $location, $document, $timeout) {
         $scope.isEditing = false;
 
         console.log('preview ctrl');
@@ -76,6 +76,7 @@ mainApp.controller('PreviewCtrl', ['$scope', '$rootScope', 'previewPagesService'
 
             } else {
                 $timeout(function() {
+                    SsbPageSectionService.setSectionOffset(0);
                     $scope.page = data;
                     $rootScope.title = $scope.page.title;
                     $rootScope.pageHandle = $scope.page.handle;

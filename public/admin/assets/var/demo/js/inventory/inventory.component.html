@@ -2,14 +2,14 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">INVENTORY</h1>
-            <span ng-if="vm.inventory" class="mainDescription">There are currently {{vm.inventory.length}} products.</span>
+            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.inventory.length}} products.</span>
         </div>
     </div>
 </section>
 
 
 <div class="inventory inventory-container" ng-init="tableView='list'">
-	<div st-table="vm.displayedProducts" st-safe-src="vm.inventory" >
+	<div st-table="vm.displayedProducts" st-safe-src="vm.state.inventory" >
 	    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 margin-bottom-15">
 	        <div class="row">
 	            <div class="col-sm-12">
@@ -97,26 +97,26 @@
 	            </div>
 	        </div>
 	    </div>
-	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}">
+	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th st-sort="name" class="name-col">Product</th>
-	                <th st-sort="vendor" class="vendor-col">Vendor</th>
-	                <th st-sort="sku" class="sku-col">Sku</th>
+	                <th st-sort="OITM_ItemName" class="name-col">Product</th>
+	                <th st-sort="OMRC_FirmName" class="vendor-col">Vendor</th>
+	                <th st-sort="OITM_ItemCode" class="sku-col">Sku</th>
 	                <th class="hidden-xs desc-col">Description</th>
 	                <th class="hidden-xs dim-col">Dimension</th>
 	                <th class="hidden-xs weight-col">Weight</th>
-	                <th st-sort="qty" class="qty-col">Qty on hand</th>
+	                <th st-sort="In_Stock" class="qty-col">Qty on hand</th>
 	            </tr>
 	            <tr ng-if="showFilter">
 	                <th>
-	                    <input st-search="name" placeholder="List" class="form-control" type="search" />
+	                    <input st-search="OITM_ItemName" placeholder="List" class="form-control" type="search" />
 	                </th>
 	                <th>
-	                    <input st-search="vendor" placeholder="Vendor" class="form-control" type="search" />
+	                    <input st-search="OMRC_FirmName" placeholder="Vendor" class="form-control" type="search" />
 	                </th>
 	                <th>
-	                    <input st-search="sku" placeholder="SKU" class="form-control" type="search" />
+	                    <input st-search="OITM_ItemCode" placeholder="SKU" class="form-control" type="search" />
 	                </th>
 	                <th class="hidden-xs">
 	                    <input st-search="description" placeholder="Description" class="form-control" type="search" />
@@ -129,14 +129,14 @@
 	        <tbody>
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="vm.viewSingleInventory(product)">
 
-	                <td><strong>Product: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
+	                <td><strong>Product: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="product.OITM_ItemName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 
-	                <td class="vendorCoulmn"><strong>Vendor: </strong><span ng-text-truncate="product.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-	                <td><strong>Sku: </strong>{{product.sku}}</td>
-	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.description" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></td>
-	                <td class="dimColumn hidden-xs"><strong>Dimension: </strong>{{product.dimention}}</td>
-	                <td class="weightColumn hidden-xs"><strong>Weight: </strong>{{product.weight}}</td>
-	                <td class="qtyColumn"><strong>Qty: </strong>{{product.qty}}</td>
+	                <td class="vendorCoulmn"><strong>Vendor: </strong><span ng-text-truncate="product.OMRC_FirmName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td><strong>Sku: </strong>{{product.OITM_ItemCode}}</td>
+	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td class="dimColumn hidden-xs"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
+	                <td class="weightColumn hidden-xs"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
+	                <td class="qtyColumn"><strong>Qty: </strong>{{product.In_Stock}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot>
@@ -146,7 +146,7 @@
 	            </tr>
 	        </tfoot>
 	    </table>
-	    <div class="load1 csspinner height-400" ng-show="!vm.inventory"></div>
+	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
 	</div>
 </div>
 

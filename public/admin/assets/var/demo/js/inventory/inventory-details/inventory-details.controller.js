@@ -12,6 +12,8 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     console.log($stateParams.inventoryId);
 
+    vm.uiState = {loading: true};
+
     vm.backToInventory = backToInventory;
 
     function backToInventory(){
@@ -52,10 +54,16 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         }
     ]
 
+    $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
+        if(angular.isDefined(inventory)){
+            InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
+                vm.inventory = response;
+                vm.uiState.loading = false;
+            })   
+        }        
+    }, true);
 
-    InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
-        vm.inventory = response;
-    })
+    
     ChartAnalyticsService.salesDemoChart(function(data){
         vm.salesConfig = data;
     });

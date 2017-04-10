@@ -19,4 +19,4 @@ module.exports = {
     CALLBACK_URL_LOGIN: appConfig.www_url + "/stripe/connect/callback",
     //adding test key just to ensure its there if we need it.
     STRIPE_TEST_SECRET_KEY: 'sk_test_iXKiJJ80BnXlAXnOqCX4FxjQ'
-}
+};
