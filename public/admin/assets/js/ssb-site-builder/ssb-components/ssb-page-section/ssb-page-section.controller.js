@@ -213,6 +213,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                section.components[index].overlayBackground=
                    section.layoutModifiers.grid.overlay.overlayColor;
                section.components[index].overlayOpacity= section.layoutModifiers.grid.overlay.overlayOpacity ;
+               section.components[index].gridHeight= section.layoutModifiers.grid.height
             });
 
         }else{
