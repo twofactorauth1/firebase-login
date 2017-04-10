@@ -129,14 +129,14 @@
 	        <tbody>
 	            <tr ng-repeat="product in vm.displayedProducts" class="product-item" ng-click="vm.viewSingleInventory(product)">
 
-	                <td><strong>Product: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
+	                <td><strong>Product: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="product.OITM_ItemName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 
-	                <td class="vendorCoulmn"><strong>Vendor: </strong><span ng-text-truncate="product.vendor" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-	                <td><strong>Sku: </strong>{{product.sku}}</td>
-	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.description" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></td>
-	                <td class="dimColumn hidden-xs"><strong>Dimension: </strong>{{product.dimention}}</td>
-	                <td class="weightColumn hidden-xs"><strong>Weight: </strong>{{product.weight}}</td>
-	                <td class="qtyColumn"><strong>Qty: </strong>{{product.qty}}</td>
+	                <td class="vendorCoulmn"><strong>Vendor: </strong><span ng-text-truncate="product.OMRC_FirmName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td><strong>Sku: </strong>{{product.OITM_ItemCode}}</td>
+	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+	                <td class="dimColumn hidden-xs"><strong>Dimension: </strong>{{product.OITM_SLength1}} X {{product.OITM_SWidth1}} X {{product.OITM_BHeight1}} </td>
+	                <td class="weightColumn hidden-xs"><strong>Weight: </strong>{{product.OITM_SWeight1}}</td>
+	                <td class="qtyColumn"><strong>Qty: </strong>{{product.In_Stock}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot>

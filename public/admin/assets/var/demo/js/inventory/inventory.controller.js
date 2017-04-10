@@ -14,7 +14,9 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.viewSingleInventory = viewSingleInventory;
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
-      vm.inventory = inventory;
+        if(angular.isDefined(inventory)){
+            vm.inventory = inventory;
+        }
     }, true);
 
     function viewSingleInventory(product){

@@ -10,30 +10,45 @@
 	function InventoryService($http, $q, $timeout) {
 
         var inventoryService = {
+            limit: 50,
+            skip: 0
         };
+
+        var basePoAPIUrlv2 = '/api/1.0/integrations/zi/inventory';
+
+        inventoryService.loading = {value: 0};
         
         inventoryService.getInventory = getInventory;
         inventoryService.getSingleInventory = getSingleInventory;
 
+
+
+        function inventoryRequest(fn) {
+            inventoryService.loading.value = inventoryService.loading.value + 1;
+            console.info('service | loading +1 : ' + inventoryService.loading.value);
+            fn.finally(function () {
+                inventoryService.loading.value = inventoryService.loading.value - 1;
+                console.info('service | loading -1 : ' + inventoryService.loading.value);
+            })
+            return fn;
+        }
+
+        /**
+            * Get list of all inventories
+        */
         function getInventory() {
-            var inventory = [];
-            var _d = null;
-            var _rand = null;
-            for (var i = 0; i < 50; i++) { 
-                _rand = Math.floor((Math.random() * 100) + 1);
-                _d = {
-                    _id: i + 1,
-                    name: 'Pulse Secure PSA50' + _rand,
-                    vendor: "Pulse Secure" + _rand,
-                    sku: 'PSA50' + _rand,
-                    description: "Pulse Secure appliance 50" + _rand + "Base System",
-                    dimention: Math.floor((Math.random() * 50) + 1) + "X" + Math.floor((Math.random() * 50) + 1) + "X" + Math.floor((Math.random() * 50) + 1),
-                    weight: Math.floor((Math.random() * 50) + 1),
-                    qty: Math.floor((Math.random() * 100) + 1)  
-                }
-                inventory.push(_d);
+
+            function success(data) {
+                inventoryService.inventory = data;
             }
-            inventoryService.inventory = inventory;
+
+            function error(error) {
+                console.error('inventoryService getInventory error: ', JSON.stringify(error));
+            }
+
+            var _qString = "?limit="+inventoryService.limit+"&skip="+ inventoryService.skip;
+
+            return inventoryRequest($http.get([basePoAPIUrlv2].join('/') + _qString).success(success).error(error));
         }
 
         function getSingleInventory(productId){
