@@ -419,34 +419,48 @@ var mongodao = {
         var _skip = skip || 0;
         var _limit = limit || 0;
         var sort_order = order_dir || -1;
+        mongoColl.count(query, function(err, count){
+            var fxn = function (err, value) {
+                if (!err) {
+                    //return self._wrapArrayAndCountMongo(value, fields, type, count, _skip, fn);
+                    self._wrapRawArrayMongo(value, fields, function(err, ary){
+                        if(ary) {
+                            var resp = {
+                                skip:skip,
+                                limit:limit,
+                                total:count,
+                                results:ary
+                            };
+                            fn(err, resp);
+                        } else {
+                            fn(err);
+                        }
+                    });
+                } else {
+                    self.log.error("An error occurred: #_findRawWithFieldsLimitAndOrderMongo() with query: " + JSON.stringify(query), err);
+                    fn(err, value);
+                }
+            };
 
-        var fxn = function (err, value) {
-            if (!err) {
-                //return self._wrapArrayAndCountMongo(value, fields, type, count, _skip, fn);
-                return self._wrapRawArrayMongo(value, fields, fn);
+            if (fields) {
+                if (sort) {
+                    mongoColl.find(query, fields, {sort: [
+                        [sort, sort_order]
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
+                }
             } else {
-                self.log.error("An error occurred: #_findRawWithFieldsLimitAndOrderMongo() with query: " + JSON.stringify(query), err);
-                fn(err, value);
+                if (sort) {
+                    mongoColl.find(query, {sort: [
+                        [sort, sort_order]
+                    ]}).skip(skip).limit(limit).toArray(fxn);
+                } else {
+                    mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
+                }
             }
-        };
+        });
 
-        if (fields) {
-            if (sort) {
-                mongoColl.find(query, fields, {sort: [
-                    [sort, sort_order]
-                ]}).skip(skip).limit(limit).toArray(fxn);
-            } else {
-                mongoColl.find(_query, fields).skip(_skip).limit(_limit).toArray(fxn);
-            }
-        } else {
-            if (sort) {
-                mongoColl.find(query, {sort: [
-                    [sort, sort_order]
-                ]}).skip(skip).limit(limit).toArray(fxn);
-            } else {
-                mongoColl.find(_query).skip(_skip).limit(_limit).toArray(fxn);
-            }
-        }
     },
 
     _aggregateMongoWithCustomStages: function (stageAry, type, fn) {
