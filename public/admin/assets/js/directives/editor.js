@@ -123,6 +123,17 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             }
         }
 
+
+        function checkIfPageEditor(attrs){
+            if (attrs.ssbBlogEditor || attrs.broadcastMessageEditor || attrs.helpTopics || attrs.ssbEmailEditor) {
+                return false;
+            }
+            else{
+                return true;
+            }
+
+        }
+
         $rootScope.$on('$destroyFroalaInstances', function (event) {
             var elem = angular.element(element[0].querySelector('.editable'))[0];
             //$(elem).froalaEditor($.FroalaEditor.build());
@@ -209,7 +220,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         scope.updateFroalaContent(editor);
                         // $(elem).froalaEditor('html.cleanEmptyTags');
                     }).on('froalaEditor.click', function(e, editor, clickEvent) {
-                        //UtilService.flyoverhideonclick();
+                        if(checkIfPageEditor(attrs))
+                            UtilService.flyoverhideonclick();
                         if(attrs.placeholder && editor.$placeholder){
                             editor.$placeholder.text(attrs.placeholder);
                         }
@@ -391,7 +403,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     // })
                     $(elem).froalaEditor('events.on', 'keydown', function (e) {
                         console.log('keydown');
-                        //UtilService.flyoverhideonclick();
+                        if(checkIfPageEditor(attrs))
+                            UtilService.flyoverhideonclick();
                         // if enter key is pressed inside of button
                         if (e.which === 13 && $($window.getSelection().focusNode).parents('.ssb-theme-btn').length) {
                             // prevent it if cursor is in the middle of the button
