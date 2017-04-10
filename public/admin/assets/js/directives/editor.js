@@ -209,7 +209,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         scope.updateFroalaContent(editor);
                         // $(elem).froalaEditor('html.cleanEmptyTags');
                     }).on('froalaEditor.click', function(e, editor, clickEvent) {
-                        UtilService.flyoverhideonclick();
+                        //UtilService.flyoverhideonclick();
                         if(attrs.placeholder && editor.$placeholder){
                             editor.$placeholder.text(attrs.placeholder);
                         }
@@ -391,7 +391,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     // })
                     $(elem).froalaEditor('events.on', 'keydown', function (e) {
                         console.log('keydown');
-                        UtilService.flyoverhideonclick();
+                        //UtilService.flyoverhideonclick();
                         // if enter key is pressed inside of button
                         if (e.which === 13 && $($window.getSelection().focusNode).parents('.ssb-theme-btn').length) {
                             // prevent it if cursor is in the middle of the button
