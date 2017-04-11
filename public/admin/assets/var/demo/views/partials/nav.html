@@ -43,14 +43,14 @@
             </div>
         </a>
     </li>
-    
-    <li ng-class="{'active open':$state.includes('app.quotes')}">
+
+    <li ng-class="{'active open':$state.includes('app.quotes')}" class="hidden">
         <a href="javascript:void(0)">
-            <div class="item-content">
+            <div class="item-content inactive">
                 <div class="item-media">
                     <i class="ti-quote-right"></i>
                 </div>
-                <div class="item-inner">
+                <div class="item-inner-inactive">
                     <span class="title"> Quotes </span><i class="icon-desktop"></i>
                 </div>
             </div>
@@ -80,7 +80,7 @@
             </div>
         </a>
     </li>
-    <li ng-class="{'active open':$state.includes('app.renewals')}">
+    <li ng-class="{'active open':$state.includes('app.renewals')}" class="hidden">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
@@ -92,7 +92,7 @@
             </div>
         </a>
     </li>
-    <li ng-class="{'active open':$state.includes('app.promotions')}">
+    <li ng-class="{'active open':$state.includes('app.promotions')}" class="hidden">
         <a href="javascript:void(0)">
             <div class="item-content">
                 <div class="item-media">
@@ -163,7 +163,7 @@
 		</ul>
 	</li>
 </ul>
-<div class="wrapper ng-scope" ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
+<div class="wrapper ng-scope" ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'" class="hidden">
     <!--accountConstant.plan_types.TRIAL-->
     <a class="button-o" href="#/account/billing" style="text-overflow: initial!important;">
         <i class="ti-alarm-clock" ng-if="!app.layout.isSidebarClosed"></i>
