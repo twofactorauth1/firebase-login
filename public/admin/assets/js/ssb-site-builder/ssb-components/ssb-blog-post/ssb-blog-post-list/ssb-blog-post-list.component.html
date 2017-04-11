@@ -30,7 +30,9 @@
     </div>
     <section class="ssb-media-stacked ssb-blog-post-list list-unstyled">
         <article
+
             ssb-blog-post-card-component
+                 component="vm.component"
             post="post"
             filtered-post-view="vm.filteredPostView" 
             ng-repeat="post in vm.blog.posts | orderBy:vm.sortBlogPosts:true track by $index">

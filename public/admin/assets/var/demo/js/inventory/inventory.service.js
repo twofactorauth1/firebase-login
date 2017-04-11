@@ -11,7 +11,8 @@
 
         var inventoryService = {
             limit: 50,
-            skip: 0
+            skip: 0,
+            page: 0
         };
 
         var basePoAPIUrlv2 = '/api/1.0/integrations/zi/inventory';
@@ -47,13 +48,16 @@
             }
 
             var _qString = "?limit="+inventoryService.limit+"&skip="+ inventoryService.skip;
-
+            
+            if(inventoryService.sortBy){
+                _qString += "&sortBy=" + inventoryService.sortBy + "&sortDir=" + inventoryService.sortDir;
+            }
             return inventoryRequest($http.get([basePoAPIUrlv2].join('/') + _qString).success(success).error(error));
         }
 
         function getSingleInventory(productId){
             var deferred = $q.defer();
-            var inventory = _.find(inventoryService.inventory, function (data) {
+            var inventory = _.find(inventoryService.inventory.results, function (data) {
                 return data._id == productId;
             });            
             deferred.resolve(inventory);            
