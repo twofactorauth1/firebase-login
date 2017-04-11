@@ -11,7 +11,13 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.init = init;
 
     vm.state = {};
-    vm.uiState = {loading: true};
+    vm.uiState = {
+        loading: true,
+        sortData: {
+            column: '',
+            details: {}
+        }
+    };
     
     vm.viewSingleInventory = viewSingleInventory;
     vm.getDimentions = getDimentions;
@@ -19,6 +25,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.numberOfPages = numberOfPages;
     vm.nextPage = nextPage;
     vm.previousPage = previousPage;
+    vm.sortInventory = sortInventory;
     
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
@@ -26,7 +33,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             vm.state.inventory = inventory.results;
             vm.state.totalInventory = inventory.total;
             vm.uiState.loading = false;
-            vm.uiState.pageLoading = false;
+            
         }
     }, true);
 
@@ -86,7 +93,12 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     }
 
     function loadInventory(){
-        InventoryService.getInventory();
+        vm.uiState.pageLoading = true;
+        InventoryService.getInventory().then(function(response){
+            vm.state.inventory = response.data.results;
+            vm.state.totalInventory = response.data.total;
+            vm.uiState.pageLoading = false;
+        });
     }
 
 
@@ -97,6 +109,35 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         InventoryService.skip = InventoryService.skip - InventoryService.limit;
         loadInventory();
     }
+
+
+    function sortInventory(col, name){
+        if(vm.uiState.sortData.column !== name){
+            vm.uiState.sortData.details = {};
+        }
+        vm.uiState.sortData.column = name;
+        if(vm.uiState.sortData.details[name]){
+            if(vm.uiState.sortData.details[name].direction === 1){
+                vm.uiState.sortData.details[name].direction = -1;
+            }
+            else{
+                vm.uiState.sortData.details[name].direction = 1;   
+            }
+        }
+        else{
+            vm.uiState.sortData.details[name] = {
+                direction: 1,
+                sortColum: col
+            }
+        }
+        InventoryService.sortBy = col;
+        InventoryService.sortDir = vm.uiState.sortData.details[name].direction;
+        InventoryService.page = 0;
+        InventoryService.skip = 0;
+        loadInventory();
+    }
+
+    
 
     function init(element) {
         vm.element = element;
