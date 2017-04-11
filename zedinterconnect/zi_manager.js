@@ -71,6 +71,26 @@ module.exports = {
 
     },
 
+    getInventoryItem: function(accountId, userId, itemId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getInventoryItem');
+        var query = {'@id':itemId};
+        var collection = 'inventory';
+        ziDao.findRawWithFieldsLimitAndOrder(query, 0, 1, null, null, collection, null, function(err, resp) {
+            if(err) {
+                self.log.error(accountId, userId, 'Error getting inventory item:', err);
+                fn(err);
+            } else {
+                if(resp && resp.results) {
+                    self.log.debug(accountId, userId, '<< getInventoryItem');
+                    fn(null, resp.results[0]);
+                } else {
+                    fn();
+                }
+            }
+        });
+    },
+
     aging: function(accountId, userId, cardCodeFrom, cardCodeTo, dateString, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> aging');

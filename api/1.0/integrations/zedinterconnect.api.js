@@ -25,6 +25,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
+        app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('aging'), this.isAuthAndSubscribedApi.bind(this), this.aging.bind(this));
     },
@@ -49,12 +50,25 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
-
+        //TODO: security
         manager.cachedInventory(accountId, userId, skip, limit, sortBy, sortDir, function(err, value){
-            self.log.debug('<< inventory');
+            self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
 
+    },
+
+    inventoryItem: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventoryItem');
+        var itemId = req.params.id;
+        //TODO: security
+        manager.getInventoryItem(accountId, userId, itemId, function(err, value){
+            self.log.debug(accountId, userId, '<< inventory');
+            return self.sendResultOrError(resp, err, value, "Error calling inventory");
+        });
     },
 
     loadinventory: function(req, resp) {
@@ -62,6 +76,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> loadinventory');
+        //TODO: security
         manager.loadInventoryCollection(function(err, value){
             self.log.debug('<< loadinventory');
         });
@@ -77,6 +92,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var dateString = req.query.date || '3/27/17';
         var cardCodeFrom = req.query.cardCodeFrom || 'C101291';
         var cardCodeTo = req.query.cardCodeTo || 'C101291';
+        //TODO: security
         manager.aging(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
             self.log.debug('<< aging');
             return self.sendResultOrError(resp, err, value, "Error calling aging");
