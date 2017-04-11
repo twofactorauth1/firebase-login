@@ -303,7 +303,14 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     match: '',
     known: ['address 1 - postal code', 'zip', 'zip code', 'postal code', 'business postal code'],
     errorRows: []
-  }];
+  },{
+    name: 'Custom',
+    value: 'custom',
+    match: '',
+    known: ['custom', 'extra', 'additional'],
+    errorRows: []
+  }
+  ];
 
   /*
    * @guessHeaders
@@ -554,7 +561,8 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
         lon: "",
         defaultShipping: false,
         defaultBilling: false
-      }]
+      }],
+      custom: ''
     }]
   };
 
@@ -601,6 +609,9 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
               };
               _details.phones.push(_phone);
             }
+            if (_formatVal === 'custom') {
+              _details.custom = _csvResult;
+            };
 
             if (_formatVal === 'website') {
               var _website = {
@@ -661,6 +672,9 @@ app.controller('importContactModalCtrl', ['$scope', '$location', '$timeout', '$m
     ContactService.importCsvContacts(contactsToAdd, function () {
       console.log('upload started ...', $scope.uploadingServerCsv);
     });
+
+
+
   };
 
   /*
