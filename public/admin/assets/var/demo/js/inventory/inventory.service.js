@@ -57,7 +57,7 @@
 
         function getSingleInventory(productId){
             var deferred = $q.defer();
-            var inventory = _.find(inventoryService.inventory, function (data) {
+            var inventory = _.find(inventoryService.inventory.results, function (data) {
                 return data._id == productId;
             });            
             deferred.resolve(inventory);            
