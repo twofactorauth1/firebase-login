@@ -16,123 +16,125 @@
     </button>
 </div>
 <div class="clearfix"></div>
-<div class="inventory-details-container" ng-if="!vm.uiState.loading">
-    <div class="col-sm-5 col-xs-12 inventory-details-left-panel">
-        <div class="form-group">
-            <h4>Name</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_ItemName}}
+<div class="inventory-details-container col-xs-12" ng-if="!vm.uiState.loading">
+    <div class="inner-inventory-details bg-white col-xs-12">
+        <div class="col-sm-5 col-xs-12 inventory-details-panel inventory-details-left-panel">
+            <div class="form-group">
+                <h4>Name</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_ItemName}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-        <div class="form-group">
-            <h4>Vendor</h4>
-            
-            <div class="description">
-                {{vm.inventory.OMRC_FirmName}}
+            <div class="form-group">
+                <h4>Vendor</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OMRC_FirmName}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-        <div class="form-group">
-            <h4>Code</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_ItemCode}}
+            <div class="form-group">
+                <h4>Code</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_ItemCode}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
-        <div class="form-group">
-            <h4>Description</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_U_dscription}}
+            <div class="form-group">
+                <h4>Description</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_U_dscription}}
+                </div>
+                <hr>
             </div>
-            <hr>
+
+            <div class="form-group">
+                <h4>Length</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_SLength1}} {{vm.inventory.OLGT_UnitName_10}}
+                </div>
+                <hr>
+            </div>
+
+            <div class="form-group">
+                <h4>Group</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITB_ItmsGrpNam}}
+                </div>
+                <hr>
+            </div>
+
+            <div class="form-group">
+                <h4>In Stock</h4>
+                
+                <div class="description">
+                    {{vm.inventory.In_Stock}}
+                </div>
+                <hr>
+            </div>
+
         </div>
 
-        <div class="form-group">
-            <h4>Length</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_SLength1}} {{vm.inventory.OLGT_UnitName_10}}
+        <div class="col-sm-5 col-xs-12 inventory-details-panel inventory-details-right-panel">
+            <div class="form-group">
+                <h4>Commited</h4>
+                
+                <div class="description">
+                    {{vm.inventory.Committed}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
+            <div class="form-group">
+                <h4>Available</h4>
+                
+                <div class="description">
+                    {{vm.inventory.Available}}
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Width</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_SWidth1}} {{vm.inventory.OLGT_UnitName_10}}
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Height</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_BHeight1}} {{vm.inventory.OLGT_UnitName_10}}
+                </div>
+                <hr>
+            </div>
 
-        <div class="form-group">
-            <h4>Group</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITB_ItmsGrpNam}}
+            <div class="form-group">
+                <h4>Weight</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_SWeight1}} {{vm.inventory.OWGT_UnitName}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
 
-        <div class="form-group">
-            <h4>In Stock</h4>
-            
-            <div class="description">
-                {{vm.inventory.In_Stock}}
+            <div class="form-group">
+                <h4>Volume</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_SVolume}}
+                </div>
+                <hr>
             </div>
-            <hr>
-        </div>
 
-    </div>
-
-    <div class="col-sm-5 col-xs-12 inventory-details-left-panel">
-        <div class="form-group">
-            <h4>Commited</h4>
-            
-            <div class="description">
-                {{vm.inventory.Committed}}
-            </div>
-            <hr>
         </div>
-        <div class="form-group">
-            <h4>Available</h4>
-            
-            <div class="description">
-                {{vm.inventory.Available}}
-            </div>
-            <hr>
-        </div>
-        <div class="form-group">
-            <h4>Width</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_SWidth1}} {{vm.inventory.OLGT_UnitName_10}}
-            </div>
-            <hr>
-        </div>
-        <div class="form-group">
-            <h4>Height</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_BHeight1}} {{vm.inventory.OLGT_UnitName_10}}
-            </div>
-            <hr>
-        </div>
-
-        <div class="form-group">
-            <h4>Weight</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_SWeight1}} {{vm.inventory.OWGT_UnitName}}
-            </div>
-            <hr>
-        </div>
-
-        <div class="form-group">
-            <h4>Volume</h4>
-            
-            <div class="description">
-                {{vm.inventory.OITM_SVolume}}
-            </div>
-            <hr>
-        </div>
-
-    </div>    
+    </div>        
     <div class="col-sm-7 col-xs-12 hidden" >
         <div class="row">
             <div class="col-sm-12">
