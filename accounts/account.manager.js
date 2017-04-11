@@ -490,7 +490,7 @@ var accountManager = {
                             self.log.error('Error copying asset:', err);
                             cb(err);
                         } else {
-                            assetManager.updateAsset(asset, function(err, value){
+                            assetManager.updateAsset(asset, userId, function(err, value){
                                 if(err) {
                                     self.log.error('Error saving asset:', err);
                                     cb();

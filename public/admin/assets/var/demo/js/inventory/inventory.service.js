@@ -11,7 +11,8 @@
 
         var inventoryService = {
             limit: 50,
-            skip: 0
+            skip: 0,
+            page: 0
         };
 
         var basePoAPIUrlv2 = '/api/1.0/integrations/zi/inventory';

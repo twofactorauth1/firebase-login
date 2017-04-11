@@ -1,6 +1,6 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataService', '$window', '$location', '$document', '$timeout', function ($scope, $rootScope, embeddedSiteDataService, $window, $location, $document, $timeout) {
+mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataService', 'SsbPageSectionService', '$window', '$location', '$document', '$timeout', function ($scope, $rootScope, embeddedSiteDataService, SsbPageSectionService, $window, $location, $document, $timeout) {
     $scope.isEditing = false;
     $scope.blog_post = null;
     console.log('cache ctrl');
@@ -79,6 +79,7 @@ mainApp.controller('CacheCtrl', ['$scope', '$rootScope', 'embeddedSiteDataServic
             }
 
         } else {
+            SsbPageSectionService.setSectionOffset(0);
             $scope.page = data;
             $rootScope.title = $scope.page.title;
             $rootScope.pageHandle = $scope.page.handle;

@@ -16,11 +16,24 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.viewSingleInventory = viewSingleInventory;
     vm.getDimentions = getDimentions;
     vm.getWeight = getWeight;
+    vm.numberOfPages = numberOfPages;
+    vm.nextPage = nextPage;
+    vm.previousPage = previousPage;
+    
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
-            vm.state.inventory = inventory;
+            vm.state.inventory = inventory.results;
+            vm.state.totalInventory = inventory.total;
             vm.uiState.loading = false;
+            vm.uiState.pageLoading = false;
+        }
+    }, true);
+
+
+    $scope.$watch(function() { return InventoryService.page }, function(page) {
+        if(angular.isDefined(page)){
+            vm.uiState.curPage = InventoryService.page;
         }
     }, true);
 
@@ -49,6 +62,40 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             }
         }
         return weight;
+    }
+
+
+    /********** PAGINATION RELATED **********/
+    
+    vm.uiState.pageSize = InventoryService.limit;
+    vm.uiState.skip = InventoryService.skip;
+
+
+    function numberOfPages() {
+        if (vm.state.inventory) {
+            return Math.ceil(vm.state.totalInventory / vm.uiState.pageSize);
+        }
+        return 0;
+    }
+
+    function nextPage() {
+        vm.uiState.pageLoading = true;
+        InventoryService.page = InventoryService.page + 1;
+        InventoryService.skip = InventoryService.skip + InventoryService.limit;
+        loadInventory();
+    }
+
+    function loadInventory(){
+        InventoryService.getInventory();
+    }
+
+
+    function previousPage() {
+        vm.uiState.pageLoading = true;
+        InventoryService.page = InventoryService.page - 1;
+        
+        InventoryService.skip = InventoryService.skip - InventoryService.limit;
+        loadInventory();
     }
 
     function init(element) {

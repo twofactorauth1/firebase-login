@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderPageSectionController', ssbPageSectionController);
 
-ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$window', '$location'];
+ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout', '$window', '$location', '$injector'];
 /* @ngInject */
-function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window, $location) {
+function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout, $window, $location, $injector) {
 
     console.info('page-section directive init...');
 
@@ -26,8 +26,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.player = {};
     vm.sectionInitDelayDone = false;
     vm.setFixedPosition = setFixedPosition;
-
-
+    
 
     $scope.$watch('vm.section.bg.video.id', function (_id) {
         if (_id && vm.section.bg.video.show) {
@@ -398,7 +397,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     classString += ' ssb-component-layout-columns-spacing-' + component.layoutModifiers.columnsSpacing + ' ';
                 }
             }
-
         }
 
         if(component.slider && component.slider.stretchImage){
@@ -511,6 +509,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     function setFixedPosition(_isVerticalNav) {
         if(!_isVerticalNav){
             var elementIsFirstPosition = vm.index === 0;
+            if ($injector.has("SsbPageSectionService"))
+                ssbPageSectionService = $injector.get("SsbPageSectionService");
             if (elementIsFirstPosition) {
                 // Preview page
                 if($location.$$path.indexOf("/preview/") == 0){                  
@@ -525,6 +525,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                         function (value) {                                
                             if(dup)
                                 dup.css("min-height", value + "px");
+                            if(ssbPageSectionService)
+                                ssbPageSectionService.setSectionOffset(value);
                         }
                     ) 
                 }
@@ -533,6 +535,17 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                     dup.addClass('ssb-fixed-clone-element');
                     dup.attr('id', 'clone_of_' + vm.section._id);
                     dup.insertAfter(vm.element);
+                    if(ssbPageSectionService){
+                        $scope.$watch(
+                            function () {
+                                return angular.element(".ssb-fixed-first-element").height();
+                            },
+                            function (value) {   
+                                ssbPageSectionService.setSectionOffset(value);
+                            }
+                        )
+                    }
+                    
                 }
                 
             } else {
