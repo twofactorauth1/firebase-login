@@ -375,7 +375,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
         vm.parentTextElementClassNameAttribute = vm.parentTextElement.attr('class-name');
 
-        vm.elementModelName = vm.parentTextElementModelAttribute.replace('component.', '').replace('vm.', '').replace('.', '/');
+        vm.elementModelName = vm.parentTextElementModelAttribute.replace('component.', '').replace('vm.', '').replace(/\./g,'/');
 
         vm.isNestedModelProp = vm.applyStylesToSiblingTextElements ? false : vm.elementModelName.indexOf('/') !== -1;
 
