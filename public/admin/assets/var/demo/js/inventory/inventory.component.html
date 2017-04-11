@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">INVENTORY</h1>
-            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.inventory.length}} products.</span>
+            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.totalInventory}} products.</span>
         </div>
     </div>
 </section>
@@ -141,13 +141,26 @@
 	        </tbody>
 	        <tfoot>
 	            <tr>
-	            	<td>
-		                
+	            	<td colspan="10" class="center">	
+		                <div class="pagination pagination-centered" ng-show="vm.state.inventory.length > vm.uiState.curPage">
+	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage == 0" ng-click="vm.previousPage()">
+	                            <span class="fa fa-arrow-left"></span>
+	                            <span class="hidden-xs">PREV</span>
+	                        </button>
+	                        <span>Page {{vm.uiState.curPage + 1}} of {{ vm.numberOfPages() }}</span>
+	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage >= vm.state.inventory.length/vm.uiState.curPage - 1" ng-click="vm.nextPage()">
+	                            <span class="hidden-xs">Next</span>
+	                            <span class="fa fa-arrow-right"></span>
+	                        </button>
+	                    </div>
 	                </td>    
 	            </tr>
 	        </tfoot>
 	    </table>
 	    <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
+	</div>
+	<div class="inventory-paging-overlay" ng-if="vm.uiState.pageLoading">
+		
 	</div>
 </div>
 
