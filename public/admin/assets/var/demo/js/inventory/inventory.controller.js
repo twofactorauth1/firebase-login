@@ -16,10 +16,14 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.viewSingleInventory = viewSingleInventory;
     vm.getDimentions = getDimentions;
     vm.getWeight = getWeight;
+    vm.numberOfPages = numberOfPages;
+    vm.nextPage = nextPage;
+    vm.previousPage = previousPage;
+    
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
         if(angular.isDefined(inventory)){
-            vm.state.inventory = inventory;
+            vm.state.inventory = inventory.results;
             vm.uiState.loading = false;
         }
     }, true);
@@ -49,6 +53,28 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
             }
         }
         return weight;
+    }
+
+
+    /********** PAGINATION RELATED **********/
+    vm.uiState.curPage = 0;
+    vm.uiState.pageSize = 10;
+
+
+    function numberOfPages() {
+        if (vm.state.inventory) {
+            return Math.ceil(vm.state.inventory.length / vm.uiState.pageSize);
+        }
+        return 0;
+    }
+
+    function nextPage() {
+        vm.uiState.curPage = vm.uiState.curPage + 1;
+    }
+
+
+    function previousPage() {
+        vm.uiState.curPage = vm.uiState.curPage - 1;
     }
 
     function init(element) {
