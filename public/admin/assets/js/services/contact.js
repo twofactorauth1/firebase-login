@@ -421,8 +421,9 @@
               });
               if (!type) {
                 extraContactTags.push({
-                  label : tag,
-                  data : tag
+                  label : tag.replace(/^\s+|\s+$|\s+(?=\s)/g, ""),
+                  data : tag.replace(/^\s+|\s+$|\s+(?=\s)/g, ""),
+
                 })
               }
             });
