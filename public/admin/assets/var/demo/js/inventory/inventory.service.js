@@ -48,7 +48,10 @@
             }
 
             var _qString = "?limit="+inventoryService.limit+"&skip="+ inventoryService.skip;
-
+            
+            if(inventoryService.sortBy){
+                _qString += "&sortBy=" + inventoryService.sortBy + "&sortDir=" + inventoryService.sortDir;
+            }
             return inventoryRequest($http.get([basePoAPIUrlv2].join('/') + _qString).success(success).error(error));
         }
 

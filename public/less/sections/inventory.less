@@ -52,6 +52,33 @@
 		
 	}
 
+
+	.table > thead > tr > th.sort:before {
+	    font-family: FontAwesome;
+	    content: "\f0dc";
+	    display: inline-block;
+	    padding-right: 3px;
+	    vertical-align: middle;
+	}
+
+
+	.table > thead > tr > th.sort {
+		cursor: pointer;
+	    &:before{
+	    	font-family: FontAwesome;
+		    content: "\f0dc";
+		    display: inline-block;
+		    padding-right: 3px;
+		    vertical-align: middle;
+	    }
+	    &.st-sort-descent:before {
+    		content: "\f0dd" !important;
+		}
+		&.st-sort-ascent:before {
+    		content: "\f0de" !important;
+		}    
+	}
+
 	.inventory-paging-overlay{
 		height: 100%;
 	    width: 100%;
@@ -62,6 +89,13 @@
 	    padding: 0;
 	    background: #000000;
 	    z-index: 2;
+	    h1{
+	    	position: fixed;
+		    display: inline-block;
+		    text-align: center;
+		    color: white;
+		    top: 50%;
+	    }
 	}
 
 }
