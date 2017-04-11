@@ -15,6 +15,7 @@ var appConfig = require('../configs/app.config');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var middleware = require('../common/sharedMiddleware');
 
+
 var baseRouter = function(options) {
     this.init.apply(this, arguments);
 };
@@ -147,7 +148,7 @@ _.extend(baseRouter.prototype, {
          * If we have a session but no session accountId OR the session host doesn't match current host, do the following
          */
         if (req["session"] != null && (req.session["accountId"] == null )) {
-            var accountDao = require("../dao/account.dao");
+
             accountDao.getAccountByHost(req.get("host"), function(err, value) {
                 if (!err && value != null) {
                     if (value === true) {
@@ -155,7 +156,6 @@ _.extend(baseRouter.prototype, {
                         logger.debug("host: " + req.get("host") + " -> accountId:0");
                         req.session.accountId = 0;
                     } else {
-                        //TODO: fix this
                         logger.trace("host: " + req.get("host") + " -> accountId:" + value.id());
                         /*
                          * This is causing problems with /signup
@@ -174,12 +174,23 @@ _.extend(baseRouter.prototype, {
                 return next();
             });
         } else {
-            logger.trace('setting session account and subdomain to new');
+            //logger.debug('setting session account and subdomain to new');
             //req.session.accountId = 'new';
             //req.session.subdomain = 'new';
-            req.session.unAuthAccountId = 'new';
-            req.session.unAuthSubdomain = 'new';
-            return next();
+            accountDao.getAccountByHost(req.get("host"), function(err, value) {
+                if(value) {
+                    req.session.unAuthAccountId = value.id();
+                    req.session.unAuthSubdomain = value.get('subdomain');
+                    req.session.unAuthDomain = value.get('domain');
+                    return next();
+                } else {
+                    logger.debug('could not find account.  setting to new');
+                    req.session.unAuthAccountId = 'new';
+                    req.session.unAuthSubdomain = 'new';
+                    return next();
+                }
+            });
+
         }
     },
 
