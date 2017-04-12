@@ -16,7 +16,8 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         sortData: {
             column: '',
             details: {}
-        }
+        },
+        globalSearch: InventoryService.globalSearch
     };
     
     vm.viewSingleInventory = viewSingleInventory;
@@ -110,6 +111,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         loadInventory();
     }
 
+    /********** SORTING RELATED **********/
 
     function sortInventory(col, name){
         if(vm.uiState.sortData.column !== name){
@@ -132,11 +134,29 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         }
         InventoryService.sortBy = col;
         InventoryService.sortDir = vm.uiState.sortData.details[name].direction;
-        InventoryService.page = 0;
-        InventoryService.skip = 0;
+        loadDefaults();
         loadInventory();
     }
 
+
+    function loadDefaults(){
+        InventoryService.page = 0;
+        InventoryService.skip = 0;
+    }
+
+
+    /********** SEARCH RELATED **********/
+
+    $scope.$watch('vm.uiState.globalSearch', function (term) {
+        if(angular.isDefined(term)){
+            if(!angular.equals(term, InventoryService.globalSearch)){
+                loadDefaults();
+                InventoryService.globalSearch = term;
+                loadInventory();
+            }
+            
+        }
+    });
     
 
     function init(element) {
