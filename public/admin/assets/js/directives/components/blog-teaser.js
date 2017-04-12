@@ -9,7 +9,6 @@ app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (Web
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-        debugger
       scope.isEditing = true;
     },
     controller: function ($scope, WebsiteService, $compile) {
