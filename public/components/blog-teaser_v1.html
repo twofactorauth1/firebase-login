@@ -16,7 +16,7 @@
                 <div class="col-xs-12">
                     <h4>
                         <strong>
-                            <a class="btn-link ssb-theme-btn blog-header-title" data-ng-href="/blog/{{post['post_url']}}" target="_self">
+                            <a class="btn-link ssb-theme-btn blog-header-title" data-ng-href="/blog/{{post['post_url']}}" target="_self" ng-attr-style="{{titleStyle(component)}}">
                                 <div class="editable" data-class="post_title" ng-bind-html="post.post_title | unsafe">
                                 </div>
                             </a>
@@ -34,7 +34,7 @@
                 <div ng-class="{'col-xs-8':post.featured_image, 'col-xs-12':!post.featured_image}" class="col-lg-8 col-md-8 col-sm-8">
                     <p>
                         <div class="excerpt">
-                            <div class="editable" data-class="post_excerpt">
+                            <div class="editable" data-class="post_excerpt" ng-attr-style="{{descriptionStyle(component)}}" >
                                 {{post.post_excerpt}}
                             </div>
                         </div>

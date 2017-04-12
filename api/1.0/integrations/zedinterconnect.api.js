@@ -52,8 +52,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
+        var term = req.query.term || null;
         //TODO: security
-        manager.cachedInventory(accountId, userId, skip, limit, sortBy, sortDir, function(err, value){
+        manager.cachedInventory(accountId, userId, term, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });

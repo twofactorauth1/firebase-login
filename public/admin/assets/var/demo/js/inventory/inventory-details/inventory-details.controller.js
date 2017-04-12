@@ -16,21 +16,26 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.backToInventory = backToInventory;
 
+    vm.parseValueToFloat = parseValueToFloat;
+
     function backToInventory(){
         $state.go("app.inventory");
     }
 
-    $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
-        if(angular.isDefined(inventory)){
-            InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
-                vm.inventory = response;
-                vm.uiState.loading = false;
-            })   
-        }        
-    }, true);
+            
+
+    function parseValueToFloat(value){
+        if(value){
+            return parseFloat(value);
+        }
+    }
 
     function init(element) {
         vm.element = element;
+        InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
+            vm.inventory = response.data;
+            vm.uiState.loading = false;
+        }) 
     }
 
 }
