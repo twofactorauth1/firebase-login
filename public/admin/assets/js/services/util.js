@@ -12,7 +12,7 @@
     };
     
     this.flyoverhideonclick = function () {    	
-        if(this.flyoverout)		
+      //if(this.flyoverout)		
        		this.flyoverout.openSidebarPanel = '';
     };
 

@@ -67,7 +67,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('customers/:id/cards/:cardId'), this.isAuthApi.bind(this), this.deleteCard.bind(this));
 
         //Charges - CRUL & Capture
-        app.get(this.url('charges'), this.isAuthApi.bind(this), this.listCharges.bind(this));
+        app.get(this.url('charges'), this.isAuthApi.bind(this), this.listCharges.bind(this) ,this.listChargesForAccount.bind(this));
         app.get(this.url('charges/:chargeId'), this.isAuthApi.bind(this), this.getCharge.bind(this));
         app.post(this.url('charges'), this.isAuthApi.bind(this), this.createCharge.bind(this));
         app.post(this.url('charges/:chargeId'), this.isAuthApi.bind(this), this.updateCharge.bind(this));
@@ -127,6 +127,33 @@ _.extend(api.prototype, baseApi.prototype, {
         // ------------------------------------------------
         app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
 
+       
+    },
+
+
+      listChargesForAccount: function(account, created, endingBefore, limit, startingAfter, userId, fn) {
+        var self = this;
+        self.log = log;
+        var accountId = account.id();
+        self.log.debug(accountId, userId, '>> listChargesForAccount');
+
+        var customerId = account.get('billing').stripeCustomerId;
+        if(!customerId || customerId === '') {
+            self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
+            return fn('No stripe customerId found');
+        }
+        //if no limit is passed, assume 0
+        var _limit = limit || 0;
+
+        stripeDao.listStripeCharges(created, customerId, endingBefore, _limit, startingAfter, null, function(err, charges){
+            if(err) {
+                self.log.error(accountId, userId, 'Error listing charges:', err);
+                return fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< listChargesForAccount');
+                return fn(null, charges);
+            }
+        });
     },
 
     listIndigenousPlans: function(req, resp) {
