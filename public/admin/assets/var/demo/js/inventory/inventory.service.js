@@ -31,7 +31,7 @@
             fn.finally(function () {
                 inventoryService.loading.value = inventoryService.loading.value - 1;
                 console.info('service | loading -1 : ' + inventoryService.loading.value);
-            })
+            });
             return fn;
         }
 
@@ -39,7 +39,7 @@
             * Get list of all inventories
         */
         function getInventory() {
-
+            var urlParts = [baseInventoryAPIUrl];
             function success(data) {
                 inventoryService.inventory = data;
             }
@@ -56,12 +56,15 @@
 
             if(inventoryService.globalSearch){
                 _qString += "&term=" + inventoryService.globalSearch;
+                _qString += "&fieldNames=OITM_ItemName,OMRC_FirmName,OITM_ItemCode";
+                urlParts.push('search');
             }
 
             return (
+
                 inventoryRequest($http({
-                  url: [baseInventoryAPIUrl].join('/') + _qString,
-                  method: 'POST',
+                  url: urlParts.join('/') + _qString,
+                  method: 'GET',
                   data: angular.toJson(inventoryService.fieldSearch)
                 }).success(success).error(error))
             );
