@@ -52,6 +52,10 @@
             if(inventoryService.sortBy){
                 _qString += "&sortBy=" + inventoryService.sortBy + "&sortDir=" + inventoryService.sortDir;
             }
+
+            if(inventoryService.globalSearch){
+                _qString += "&term=" + inventoryService.globalSearch;
+            }
             return inventoryRequest($http.get([basePoAPIUrlv2].join('/') + _qString).success(success).error(error));
         }
 

@@ -21,9 +21,9 @@
 	                                    <div class="form-group">
 	                                        <div class="col-xs-8 col-sm-9">
 	                                            <span class="input-icon">
-	                                        <input type="text" st-search placeholder="Search by name, vendor, sku..." id="form-field-14" class="form-control">
-	                                        <i class="ti-search"></i>
-	                                    </span>
+			                                        <input type="text" ng-model="vm.uiState.globalSearch" ng-model-options="{ debounce: 800 }" placeholder="Search by name, vendor, sku..." id="form-field-14" class="form-control">
+			                                        <i class="ti-search"></i>
+	                                    		</span>
 	                                        </div>
 	                                        <div class="col-xs-4 col-sm-3 padding-right-0">
 	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
@@ -150,8 +150,9 @@
 	                            <span class="fa fa-arrow-left"></span>
 	                            <span class="hidden-xs">PREV</span>
 	                        </button>
+	                        
 	                        <span>Page {{vm.uiState.curPage + 1}} of {{ vm.numberOfPages() }}</span>
-	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage >= vm.state.inventory.length/vm.uiState.curPage - 1" ng-click="vm.nextPage()">
+	                        <button type="button" class="btn btn-primary" ng-disabled="vm.uiState.curPage >= vm.numberOfPages() - 1" ng-click="vm.nextPage()">
 	                            <span class="hidden-xs">Next</span>
 	                            <span class="fa fa-arrow-right"></span>
 	                        </button>
