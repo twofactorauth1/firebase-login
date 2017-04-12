@@ -39,7 +39,7 @@ module.exports = {
     WELCOME_FROM_NAME: welcomeFromName,
     WELCOME_HTML: welcomeHTML,
     WELCOME_EMAIL_SUBJECT: welcomeEmailSubject,
-    NEW_CUSTOMER_EMAIL_SUBJECT: newPurchaseOrderEmailSubject,
+    NEW_CUSTOMER_EMAIL_SUBJECT: newCustomerEmailSubject,
     NEW_PURCHASE_ORDER_EMAIL_SUBJECT: newPurchaseOrderEmailSubject,
     NEW_PURCHASE_ORDER_EMAIL_TO : notificationPurchaseOrderToEmail,
     THANKS_HTML: thanksForInterest

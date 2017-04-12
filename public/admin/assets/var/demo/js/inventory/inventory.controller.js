@@ -45,7 +45,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     }, true);
 
     function viewSingleInventory(product){
-        $location.path('/inventory/' + product._id);
+        $location.path('/inventory/' + product["@id"]);
     }
 
 

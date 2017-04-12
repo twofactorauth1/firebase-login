@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-sm-8">
             <h1 class="mainTitle">INVENTORY</h1>
-            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.totalInventory}} products.</span>
+            <span ng-if="vm.state.inventory" class="mainDescription">There are currently {{vm.state.totalInventory | number : fractionSize}} products.</span>
         </div>
     </div>
 </section>
@@ -139,7 +139,7 @@
 	                <td class="hidden-xs"><strong>Description: </strong><span ng-text-truncate="product.OITM_U_dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
 	                <td class="dimColumn hidden-xs"><strong>Dimension: </strong>{{vm.getDimentions(product)}}</td>
 	                <td class="weightColumn hidden-xs"><strong>Weight: </strong>{{vm.getWeight(product)}}</td>
-	                <td class="qtyColumn"><strong>Qty: </strong>{{product.In_Stock}}</td>
+	                <td class="qtyColumn"><strong>Qty: </strong>{{product.In_Stock <= 0 ? '' : product.In_Stock}}</td>
 	            </tr>
 	        </tbody>
 	        <tfoot>

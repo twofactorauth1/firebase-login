@@ -22,6 +22,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
     vm.elementModelName = null;
     vm.elementModelIndex = null;
     vm.parentNgRepeat = null;
+    vm.parentRepeatIndex = null;
     vm.applyStylesToSiblingTextElements = false;
     vm.elementClass = elementClass;
     vm.elementStyle = elementStyle;
@@ -120,9 +121,11 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         vm.elementId = 'text-element_' + vm.parentSectionId + "-" + vm.parentComponentId + "-" + vm.elementModelName;
 
         if (vm.isNestedModelProp) {
-
             if (vm.parentNgRepeat.length) {
-                if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
+                if(vm.parentRepeatIndex.length){
+                    vm.elementModelIndex = vm.parentRepeatIndex.attr("data-repeat-index-id");
+                }
+                else if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
                     var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
                     var index = vm.parentNgRepeat.scope().$index;
 
@@ -183,7 +186,11 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
                 if (vm.parentNgRepeat.length) {
 
-                    if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
+                    if(vm.parentRepeatIndex.length){
+                        vm.elementModelIndex = vm.parentRepeatIndex.attr("data-repeat-index-id");
+                    }
+
+                    else if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
                         var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
                         var index = vm.parentNgRepeat.scope().$index;
 
@@ -222,7 +229,12 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
             pvm.component.elementStyles[vm.elementModelName] = pvm.component.elementStyles[vm.elementModelName] || {};
 
             if (vm.parentNgRepeat.length) {
-                if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
+
+                if(vm.parentRepeatIndex.length){
+                    vm.elementModelIndex = vm.parentRepeatIndex.attr("data-repeat-index-id");
+                }
+
+                else if(vm.parentNgRepeat.hasClass('thumbnail-image-slider-collection')){
                     var parentIndex = vm.parentNgRepeat.scope().$parent.$index;
                     var index = vm.parentNgRepeat.scope().$index;
 
@@ -251,10 +263,18 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         var parentNgRepeat = vm.element.parents('[data-ng-repeat]:first');
 
         if (!parentNgRepeat.length) {
-            parentNgRepeat = vm.element.parents('[ng-repeat]:first');
+            //if(!vm.element.parents('[ng-repeat]:first').hasClass("ssb-page-section"))
+                parentNgRepeat = vm.element.parents('[ng-repeat]:first');
         }
 
         return parentNgRepeat;
+    }
+
+
+    function getParentRepeatIndex () {
+        var parentRepeatIndex = vm.element.closest("[data-repeat-index-id]");
+
+        return parentRepeatIndex;
     }
 
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
@@ -375,13 +395,15 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
         vm.parentTextElementClassNameAttribute = vm.parentTextElement.attr('class-name');
 
-        vm.elementModelName = vm.parentTextElementModelAttribute.replace('component.', '').replace('vm.', '').replace('.', '/');
+        vm.elementModelName = vm.parentTextElementModelAttribute.replace('component.', '').replace('vm.', '').replace(/\./g,'/');
 
         vm.isNestedModelProp = vm.applyStylesToSiblingTextElements ? false : vm.elementModelName.indexOf('/') !== -1;
 
         vm.parentComponent = vm.element.closest('.ssb-component');
 
         vm.parentNgRepeat = getParentNgRepeat();
+
+        vm.parentRepeatIndex = getParentRepeatIndex();
 
         if ($attrs.isEdit) {
 
@@ -404,7 +426,11 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         } else {
 
             //just set the style props on the frontend
-            applyStyles();
+            $timeout(function(){
+                vm.parentRepeatIndex = getParentRepeatIndex();
+                applyStyles();
+            }, 0)
+            
 
         }
 

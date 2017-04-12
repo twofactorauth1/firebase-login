@@ -6,25 +6,41 @@ inventory-details-component{
 	.inventory-details-container{
 		margin-top: 20px;
 		margin-bottom: 20px;
-		.inventory-details-left-panel{
-			color: #8ea5b8 !important;
-			h4{
-				color:inherit;
+		.inner-inventory-details{
+			padding:20px;
+			border: 1px solid #eee;
+			.inventory-details-panel{
+				.form-group{
+					padding-top: 5px;
+				}
+				color: #777 !important;
+				h4{
+				    font-family: "Lato", sans-serif;
+				    color: inherit;
+				    display: block;
+				    font-size: 18px;
+				    font-weight: 300;
+				}
+				hr{
+					margin-top: 5px;
+				}
+				.required{
+					position: absolute;
+				    right: 0;
+				    color: red;
+				    font-weight: bolder;
+				    font-size: large;
+				}
+				div.description{
+					padding-right: 10px;
+				}
 			}
-			hr{
-				margin-top: 5px;
+			.inventory-details-right-panel{
+				@media (min-width: 768px) {
+					margin-left: 20px;
+				}
 			}
-			.required{
-				position: absolute;
-			    right: 0;
-			    color: red;
-			    font-weight: bolder;
-			    font-size: large;
-			}
-			div.description{
-				padding-right: 10px;
-			}
-		}
+		}	
 	}
 	ul.sales-timeline-container{
 		list-style: none;
