@@ -675,7 +675,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         var _isVerticalNav = false;
         var elementIsFirstPosition = vm.index === 0;
         var isBlogPage = angular.element(".ssb-layout__header_2-col_footer").length;
-        if (!vm.uiState && vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition) {
+
+        if (!vm.uiState && vm.section && vm.section.fixedLeftNavigation && elementIsFirstPosition && vm.showSection(vm.section)) {
             _isVerticalNav = true;
 
             if(!isBlogPage){
