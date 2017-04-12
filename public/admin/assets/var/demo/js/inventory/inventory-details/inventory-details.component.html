@@ -11,9 +11,7 @@
     <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.backToInventory()">
         Back to Inventory
     </button>
-    <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 btn-wide" ng-click="backToOrder()">
-        Edit
-    </button>
+    
 </div>
 <div class="clearfix"></div>
 <div class="inventory-details-container col-xs-12" ng-if="!vm.uiState.loading">
@@ -56,7 +54,7 @@
                 <h4>Length</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_SLength1}} {{vm.inventory.OLGT_UnitName_10}}
+                    {{vm.parseValueToFloat(vm.inventory.OITM_SLength1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                 </div>
                 <hr>
             </div>
@@ -74,7 +72,7 @@
                 <h4>In Stock</h4>
                 
                 <div class="description">
-                    {{vm.inventory.In_Stock}}
+                    {{vm.inventory.In_Stock <= 0 ? 'Call to Inquire' : vm.inventory.In_Stock}}
                 </div>
                 <hr>
             </div>
@@ -102,7 +100,7 @@
                 <h4>Width</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_SWidth1}} {{vm.inventory.OLGT_UnitName_10}}
+                    {{vm.parseValueToFloat(vm.inventory.OITM_SWidth1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                 </div>
                 <hr>
             </div>
@@ -110,7 +108,7 @@
                 <h4>Height</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_BHeight1}} {{vm.inventory.OLGT_UnitName_10}}
+                    {{vm.parseValueToFloat(vm.inventory.OITM_BHeight1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
                 </div>
                 <hr>
             </div>
@@ -119,7 +117,7 @@
                 <h4>Weight</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_SWeight1}} {{vm.inventory.OWGT_UnitName}}
+                    {{vm.parseValueToFloat(vm.inventory.OITM_SWeight1) | number : fractionSize}} {{vm.inventory.OWGT_UnitName}}
                 </div>
                 <hr>
             </div>
@@ -128,7 +126,7 @@
                 <h4>Volume</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_SVolume}}
+                {{vm.parseValueToFloat(vm.inventory.OITM_SVolume) | number : fractionSize}}
                 </div>
                 <hr>
             </div>

@@ -25,6 +25,9 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
+        app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
+        app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
+        app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('aging'), this.isAuthAndSubscribedApi.bind(this), this.aging.bind(this));
     },
@@ -49,12 +52,53 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query.limit) || 0;
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
-
-        manager.cachedInventory(accountId, userId, skip, limit, sortBy, sortDir, function(err, value){
-            self.log.debug('<< inventory');
+        var term = req.query.term || null;
+        //TODO: security
+        manager.cachedInventory(accountId, userId, term, skip, limit, sortBy, sortDir, function(err, value){
+            self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });
 
+    },
+
+    inventoryItem: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventoryItem');
+        var itemId = req.params.id;
+        //TODO: security
+        manager.getInventoryItem(accountId, userId, itemId, function(err, value){
+            self.log.debug(accountId, userId, '<< inventory');
+            return self.sendResultOrError(resp, err, value, "Error calling inventory");
+        });
+    },
+
+    inventorySearch: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventorySearch');
+        var term = req.query.term;
+        //TODO: security
+        manager.inventorySearch(accountId, userId, term, function(err, value){
+            self.log.debug(accountId, userId, '<< inventorySearch');
+            return self.sendResultOrError(resp, err, value, "Error searching inventory");
+        });
+    },
+
+    inventoryFieldSearch: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventoryFieldSearch');
+        var field = req.params.field;
+        var value = req.params.value;
+        //TODO: security
+        manager.inventoryFieldSearch(accountId, userId, field, value, function(err, list){
+            self.log.debug(accountId, userId, '<< inventorySearch');
+            return self.sendResultOrError(resp, err, list, "Error searching inventory");
+        });
     },
 
     loadinventory: function(req, resp) {
@@ -62,6 +106,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> loadinventory');
+        //TODO: security
         manager.loadInventoryCollection(function(err, value){
             self.log.debug('<< loadinventory');
         });
@@ -77,6 +122,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var dateString = req.query.date || '3/27/17';
         var cardCodeFrom = req.query.cardCodeFrom || 'C101291';
         var cardCodeTo = req.query.cardCodeTo || 'C101291';
+        //TODO: security
         manager.aging(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
             self.log.debug('<< aging');
             return self.sendResultOrError(resp, err, value, "Error calling aging");

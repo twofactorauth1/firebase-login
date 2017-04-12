@@ -1,6 +1,6 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('featureListComponent',['$window', function ($window) {
+app.directive('featureListComponent',['$window', '$timeout', function ($window, $timeout) {
   return {
     scope: {
       component: '='
@@ -44,8 +44,11 @@ app.directive('featureListComponent',['$window', function ($window) {
 
 
         scope.setSelectedFeatureIndex = function(index){
-            scope.loading = false;
+            scope.loading = true;
             scope.features.featureIndex = index;
+            $timeout(function() {                
+                scope.loading = false;
+            }, 0);
         }
 
         scope.setStyles = function(field){
