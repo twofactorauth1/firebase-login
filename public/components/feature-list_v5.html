@@ -23,22 +23,24 @@
                 </a>                
             </li>
         </ul>
-
-        <div class="feature-tab-content" ng-if="!loading && isEditing">
-            <div class="col-md-5">
-                <div elem ng-model="component.features[features.featureIndex].media"></div>
+        <div data-repeat-index-id="{{features.featureIndex}}">
+            <div class="feature-tab-content" ng-if="!loading && isEditing" >
+                <div class="col-md-5">
+                    <div elem ng-model="component.features[features.featureIndex].media"></div>
+                </div>
+                <div class="col-md-7">
+                    <div elem ng-model="component.features[features.featureIndex].content"></div> 
+                </div>
             </div>
-            <div class="col-md-7">
-                <div elem ng-model="component.features[features.featureIndex].content"></div> 
+            <div class="feature-tab-content" ng-show="!isEditing">
+                <div class="col-md-5">
+                    <div elem ng-model="component.features[features.featureIndex].media"></div>
+                </div>
+                <div class="col-md-7" ng-if="!loading">
+                    <div elem ng-model="component.features[features.featureIndex].content"></div> 
+                </div>
             </div>
         </div>
-        <div class="feature-tab-content" ng-show="!isEditing">
-            <div class="col-md-5">
-                <div elem ng-model="component.features[features.featureIndex].media"></div>
-            </div>
-            <div class="col-md-7">
-                <div elem ng-model="component.features[features.featureIndex].content"></div> 
-            </div>
-        </div>
+        
     </div>
 </div>
