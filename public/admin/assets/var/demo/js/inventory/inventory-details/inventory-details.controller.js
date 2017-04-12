@@ -16,6 +16,8 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     vm.backToInventory = backToInventory;
 
+    vm.parseValueToFloat = parseValueToFloat;
+
     function backToInventory(){
         $state.go("app.inventory");
     }
@@ -28,6 +30,12 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
             })   
         }        
     }, true);
+
+    function parseValueToFloat(value){
+        if(value){
+            return parseFloat(parseFloat(value).toFixed(2));
+        }
+    }
 
     function init(element) {
         vm.element = element;
