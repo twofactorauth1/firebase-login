@@ -25,6 +25,8 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
+        app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
+        app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('aging'), this.isAuthAndSubscribedApi.bind(this), this.aging.bind(this));
@@ -68,6 +70,33 @@ _.extend(api.prototype, baseApi.prototype, {
         manager.getInventoryItem(accountId, userId, itemId, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
+        });
+    },
+
+    inventorySearch: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventorySearch');
+        var term = req.query.term;
+        //TODO: security
+        manager.inventorySearch(accountId, userId, term, function(err, value){
+            self.log.debug(accountId, userId, '<< inventorySearch');
+            return self.sendResultOrError(resp, err, value, "Error searching inventory");
+        });
+    },
+
+    inventoryFieldSearch: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventoryFieldSearch');
+        var field = req.params.field;
+        var value = req.params.value;
+        //TODO: security
+        manager.inventoryFieldSearch(accountId, userId, field, value, function(err, list){
+            self.log.debug(accountId, userId, '<< inventorySearch');
+            return self.sendResultOrError(resp, err, list, "Error searching inventory");
         });
     },
 
