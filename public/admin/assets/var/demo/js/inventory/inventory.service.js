@@ -55,13 +55,17 @@
             return inventoryRequest($http.get([basePoAPIUrlv2].join('/') + _qString).success(success).error(error));
         }
 
-        function getSingleInventory(productId){
-            var deferred = $q.defer();
-            var inventory = _.find(inventoryService.inventory.results, function (data) {
-                return data._id == productId;
-            });            
-            deferred.resolve(inventory);            
-            return deferred.promise;
+        function getSingleInventory(productId){           
+            function success(data) {
+                console.log(data);
+            }
+
+            function error(error) {
+                console.error('inventoryService getSingleInventory error: ', JSON.stringify(error));
+            }
+           
+            return inventoryRequest($http.get([basePoAPIUrlv2, productId].join('/')).success(success).error(error));                       
+            
         }
 
 		(function init() {

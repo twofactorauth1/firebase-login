@@ -22,14 +22,7 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
         $state.go("app.inventory");
     }
 
-    $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
-        if(angular.isDefined(inventory)){
-            InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
-                vm.inventory = response;
-                vm.uiState.loading = false;
-            })   
-        }        
-    }, true);
+            
 
     function parseValueToFloat(value){
         if(value){
@@ -39,6 +32,10 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     function init(element) {
         vm.element = element;
+        InventoryService.getSingleInventory($stateParams.inventoryId).then(function(response){
+            vm.inventory = response.data;
+            vm.uiState.loading = false;
+        }) 
     }
 
 }
