@@ -33,7 +33,7 @@ function inventoryDetailsController($scope, $state, $attrs, $filter, $modal, $ti
 
     function parseValueToFloat(value){
         if(value){
-            return parseFloat(parseFloat(value).toFixed(2));
+            return parseFloat(value);
         }
     }
 
