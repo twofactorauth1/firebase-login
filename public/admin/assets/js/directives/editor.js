@@ -231,7 +231,13 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         scope.updateFroalaContent(editor);
                     }).on('froalaEditor.toolbar.show', function(e, editor) {
 
-                        console.log('toolbar show')
+                            console.log('toolbar show');
+                            if(checkIfPageEditor(attrs))
+                           {
+                            UtilService.flyoverhideonclick();
+                        
+                           }
+                        
                         
 
                         //close sidebar
@@ -249,6 +255,11 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
                         console.log('toolbar hide');
+                         if(checkIfPageEditor(attrs))
+                         {
+                            UtilService.flyoverhideonclick();
+                        
+                         }
                         
                         // hide any image overlay if toolbar is hidden
                         if(editor.shared && editor.shared.$img_overlay)
