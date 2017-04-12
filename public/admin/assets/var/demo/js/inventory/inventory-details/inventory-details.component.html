@@ -74,7 +74,7 @@
                 <h4>In Stock</h4>
                 
                 <div class="description">
-                    {{vm.inventory.In_Stock}}
+                    {{vm.inventory.In_Stock <= 0 ? 'Call to Inquire' : vm.inventory.In_Stock}}
                 </div>
                 <hr>
             </div>
