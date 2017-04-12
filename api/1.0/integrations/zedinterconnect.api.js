@@ -24,7 +24,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
-        app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
+        app.post(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
         app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
         app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
@@ -53,8 +53,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
         var term = req.query.term || null;
+        var fieldSearch = req.body || null;
+
         //TODO: security
-        manager.cachedInventory(accountId, userId, term, skip, limit, sortBy, sortDir, function(err, value){
+        manager.cachedInventory(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
         });

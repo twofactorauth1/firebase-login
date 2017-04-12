@@ -53,7 +53,7 @@ module.exports = {
         });
     },
 
-    cachedInventory: function(accountId, userId, term, skip, limit, sortBy, sortDir, fn) {
+    cachedInventory: function(accountId, userId, term, fieldSearch, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> cachedInventory');
         var query = {};
@@ -83,7 +83,23 @@ module.exports = {
                 ]
             };
         }
-        
+
+        var fieldSearchArr = [];
+        if(!_.isEmpty(fieldSearch)){
+            for(var i=0; i <= Object.keys(fieldSearch).length - 1; i++){
+                var key = Object.keys(fieldSearch)[i];
+                var value = fieldSearch[key];
+                
+                if(value){
+                    fieldSearchArr.push({
+                        [key]: new RegExp('\.*'+value+'\.', 'i')
+                    })
+                }
+            }
+            if(fieldSearchArr.length)
+                query["$and"] = fieldSearchArr;    
+        }
+
         ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
             if(err) {
                 self.log.error(accountId, userId, 'Error getting cached inventory:', err);
@@ -231,8 +247,6 @@ module.exports = {
         });
         //response.payload.data.row
     },
-
-
 
     _ziRequest: function(path, fn) {
         var self = this;

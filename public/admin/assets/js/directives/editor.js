@@ -33,10 +33,10 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     '</div>';
 
         var topicTemplate =
-                    '<div ' +                        
+                    '<div ' +
                         'class="edit-wrap"> ' +
                         '<span class="editable-title">{{title | formatText}}</span>' +
-                        '<div ' +                                                      
+                        '<div ' +
                             'class="editable element-wrap' +
                             'ng-bind-html="ngModel | unsafe">' +
                         '</div>' +
@@ -45,14 +45,14 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     '<div ' +
                         'class="editable {{className}}" ' +
                         'ng-bind-html="ngModel | unsafe">' +
-                    '</div>';            
+                    '</div>';
 
-        var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";                    
+        var helpTopics = $rootScope.$state && $rootScope.$state.current && $rootScope.$state.current.name === "app.support.singletopic";
 
         if(helpTopics){
             attrs.helpTopics = helpTopics;
         }
-        
+
         if (attrs.ssbBlogEditor || attrs.broadcastMessageEditor) {
             return blogTemplate
         }
@@ -73,8 +73,8 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
     },
     link: function(scope, element, attrs, ngModel) {
-      
-    
+
+
         scope.update = function(e) {
             $timeout(function() {
                 scope.$apply(function() {
@@ -95,7 +95,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             $timeout(function() {
 
                 var html = codeViewHtml || editor.html.get().replace(/\u2028|\u2029/g, '');
-                               
+
                 ngModel.$setViewValue(html);
                 scope.compileEditorElements(editor);
             });
@@ -151,7 +151,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             elem = element[0];
         }
 
-        
+
 
         if (scope.$parent.ssbEditor || (angular.element(elem).scope() && angular.element(elem).scope().pvm) || (scope.$parent.vm && scope.$parent.vm.ssbEditor) || attrs.helpTopics || attrs.broadcastMessageEditor) {
             $(function() {
@@ -213,7 +213,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     //$.merge(editor.opts.htmlAllowedTags, ["healcode-widget"]);
                     //$.merge(editor.opts.htmlAllowedAttrs, ["data-version", "data-link-class", "data-site-id", "data-mb-site-id", "data-type","data-inner-html", "data-service-id"]);
                     //$.merge(editor.opts.htmlAllowedEmptyTags, ["healcode-widget"]);
-                    
+
                 }).froalaEditor(froalaConfig)
 
                     .on('froalaEditor.contentChanged', function(e, editor) {
@@ -231,14 +231,14 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         scope.updateFroalaContent(editor);
                     }).on('froalaEditor.toolbar.show', function(e, editor) {
 
-                            console.log('toolbar show');
-                            if(checkIfPageEditor(attrs))
-                           {
-                            UtilService.flyoverhideonclick();
-                        
-                           }
-                        
-                        
+                    //        console.log('toolbar show');
+                    //        if(checkIfPageEditor(attrs))
+                    //       {
+                    //        UtilService.flyoverhideonclick();
+                    //
+                    //       }
+
+
 
                         //close sidebar
                         $rootScope.app.layout.isSidebarClosed = true;
@@ -254,13 +254,12 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                     }).on('froalaEditor.toolbar.hide', function(e, editor) {
 
-                        console.log('toolbar hide');
-                         if(checkIfPageEditor(attrs))
-                         {
-                            UtilService.flyoverhideonclick();
-                        
-                         }
-                        
+                    //   console.log('toolbar hide');
+                    //     if(checkIfPageEditor(attrs))
+                    //     {
+                    //        UtilService.flyoverhideonclick();
+                    //     }
+
                         // hide any image overlay if toolbar is hidden
                         if(editor.shared && editor.shared.$img_overlay)
                             editor.shared.$img_overlay.hide();
@@ -276,9 +275,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }).on('froalaEditor.commands.before', function (e, editor, cmd, param1, param2) {
                      if(cmd === 'videoInsertEmbed'){
                         if($.FE)
-                            $.FE.VIDEO_EMBED_REGEX = froalaConfig.VIDEO_EMBED_REGEX; 
+                            $.FE.VIDEO_EMBED_REGEX = froalaConfig.VIDEO_EMBED_REGEX;
                      }
-                       
+
 
                     }).on('froalaEditor.image.inserted', function (e, editor, $img, response) {
                         // Removing any protocol used for image
@@ -296,7 +295,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         if (cmd === 'undo') {
                             scope.compileEditorElements(editor, true);
                         }
-                        
+
 
                         if(cmd === 'imageStyle' || cmd === 'imageDisplay' || cmd === 'linkInsert' || cmd === 'imageAlign' || cmd === 'imageSetSize' || cmd === 'linkRemove' || cmd === 'imageRemove' || cmd === 'imageSetAlt'){
                             scope.updateFroalaContent(editor);
@@ -327,12 +326,12 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 var $btn = $popup.find('.fr-command[data-cmd="tableHeader"]');
                                 if ($btn && $btn.hasClass('fr-active')) {
                                     $btn.removeClass("fr-active");
-                                }  
+                                }
                             }
-                            
+
                         }
                         if(cmd === 'clearFormatting'){
-                            
+
                                 var _selection = editor.$el;
                                 var videoElems = _selection.find("video");
                                 if(videoElems.length){
@@ -343,7 +342,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                         }
                                     })
                                 }
-                            
+
                         }
                         if(cmd == 'linkStyle' && param1 === 'ssb-theme-btn'){
                             if(editor.selection && editor.selection.element)
@@ -359,15 +358,15 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                         }
 
                     }).on('froalaEditor.focus', function (e, editor) {
-                        
-                       
+
+
                        editor.selection.save();
                     })
                     .on('froalaEditor.paste.before', function (e, editor) {
-                        editor.selection.restore();                        
+                        editor.selection.restore();
                     })
-                    .on('froalaEditor.blur', function (e, editor) {                    
-                          
+                    .on('froalaEditor.blur', function (e, editor) {
+
                         if(attrs.placeholder && editor.$placeholder){
                             editor.$placeholder.text(attrs.placeholder);
                         }
@@ -397,7 +396,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                                 }
                                 editor.opts.button.scope().vm.elementData.bg.color = val;
                             }
-                            
+
                         }
                     })
                     .on('froalaEditor.txtColorChange', function(e, editor, val) {

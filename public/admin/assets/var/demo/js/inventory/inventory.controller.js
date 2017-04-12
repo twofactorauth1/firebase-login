@@ -11,13 +11,20 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.init = init;
 
     vm.state = {};
+
     vm.uiState = {
         loading: true,
         sortData: {
             column: '',
             details: {}
         },
-        globalSearch: InventoryService.globalSearch
+        globalSearch: InventoryService.globalSearch,
+        fieldSearch: {
+            OITM_ItemName: InventoryService.fieldSearch.OITM_ItemName,
+            OMRC_FirmName: InventoryService.fieldSearch.OMRC_FirmName,
+            OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode,
+        },
+        showFilter: InventoryService.showFilter
     };
     
     vm.viewSingleInventory = viewSingleInventory;
@@ -27,6 +34,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     vm.nextPage = nextPage;
     vm.previousPage = previousPage;
     vm.sortInventory = sortInventory;
+    vm.showFilter = showFilter;
     
 
     $scope.$watch(function() { return InventoryService.inventory }, function(inventory) {
@@ -145,19 +153,48 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
     }
 
 
-    /********** SEARCH RELATED **********/
+    /********** GLOBAL SEARCH RELATED **********/
 
     $scope.$watch('vm.uiState.globalSearch', function (term) {
         if(angular.isDefined(term)){
             if(!angular.equals(term, InventoryService.globalSearch)){
                 loadDefaults();
-                InventoryService.globalSearch = term;
+                InventoryService.globalSearch = angular.copy(term);
                 loadInventory();
             }
-            
         }
-    });
-    
+    }, true);
+
+
+    /********** FIELD SEARCH RELATED **********/
+
+    $scope.$watch('vm.uiState.fieldSearch', function (search) {
+        if(angular.isDefined(search)){
+            if(!angular.equals(search, InventoryService.fieldSearch)){
+                loadDefaults();
+                InventoryService.fieldSearch = angular.copy(search);
+                loadInventory();
+            }
+        }
+    }, true);
+
+
+
+    function showFilter(){
+        vm.uiState.showFilter = !vm.uiState.showFilter;
+        if(!vm.uiState.showFilter)
+            clearFilter();
+    }
+
+
+    function clearFilter(){
+        InventoryService.fieldSearch = {};
+        vm.uiState.fieldSearch = {
+            OITM_ItemName: null,
+            OMRC_FirmName: null,
+            OITM_ItemCode: null
+        }
+    }
 
     function init(element) {
         vm.element = element;
