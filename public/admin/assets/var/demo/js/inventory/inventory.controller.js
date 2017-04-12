@@ -22,7 +22,7 @@ function inventoryComponentController($scope, $attrs, $filter, $modal, $timeout,
         fieldSearch: {
             OITM_ItemName: InventoryService.fieldSearch.OITM_ItemName,
             OMRC_FirmName: InventoryService.fieldSearch.OMRC_FirmName,
-            OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode,
+            OITM_ItemCode: InventoryService.fieldSearch.OITM_ItemCode
         },
         showFilter: InventoryService.showFilter
     };
