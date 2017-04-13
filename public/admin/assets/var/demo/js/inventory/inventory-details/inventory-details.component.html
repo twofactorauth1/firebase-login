@@ -26,6 +26,14 @@
                 <hr>
             </div>
             <div class="form-group">
+                <h4>Description</h4>
+                
+                <div class="description">
+                    {{vm.inventory.OITM_U_dscription}}
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
                 <h4>Vendor</h4>
                 
                 <div class="description">
@@ -34,30 +42,14 @@
                 <hr>
             </div>
             <div class="form-group">
-                <h4>Code</h4>
+                <h4>SKU</h4>
                 
                 <div class="description">
                     {{vm.inventory.OITM_ItemCode}}
                 </div>
                 <hr>
             </div>
-            <div class="form-group">
-                <h4>Description</h4>
-                
-                <div class="description">
-                    {{vm.inventory.OITM_U_dscription}}
-                </div>
-                <hr>
-            </div>
-
-            <div class="form-group">
-                <h4>Length</h4>
-                
-                <div class="description">
-                    {{vm.parseValueToFloat(vm.inventory.OITM_SLength1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
-                </div>
-                <hr>
-            </div>
+            
 
             <div class="form-group">
                 <h4>Group</h4>
@@ -81,14 +73,6 @@
 
         <div class="col-sm-5 col-xs-12 inventory-details-panel inventory-details-right-panel">
             <div class="form-group">
-                <h4>Commited</h4>
-                
-                <div class="description">
-                    {{vm.inventory.Committed}}
-                </div>
-                <hr>
-            </div>
-            <div class="form-group">
                 <h4>Available</h4>
                 
                 <div class="description">
@@ -96,6 +80,24 @@
                 </div>
                 <hr>
             </div>
+
+            <div class="form-group">
+                <h4>Committed</h4>
+                
+                <div class="description">
+                    {{vm.inventory.Committed}}
+                </div>
+                <hr>
+            </div>
+            <div class="form-group">
+                <h4>Length</h4>
+                
+                <div class="description">
+                    {{vm.parseValueToFloat(vm.inventory.OITM_SLength1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
+                </div>
+                <hr>
+            </div>
+            
             <div class="form-group">
                 <h4>Width</h4>
                 
