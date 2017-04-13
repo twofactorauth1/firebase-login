@@ -1,0 +1,67 @@
+invoice-details-component{
+	
+	.invoice-top-buttons{
+	    padding: 10px !important;
+	}
+	.invoice-details-container{
+		margin-top: 20px;
+		margin-bottom: 20px;
+		.inner-invoice-details{
+			padding:20px;
+			border: 1px solid #eee;
+			.invoice-details-panel{
+				.form-group{
+					padding-top: 5px;
+				}
+				color: #777 !important;
+				h4{
+				    font-family: "Lato", sans-serif;
+				    color: inherit;
+				    display: block;
+				    font-size: 18px;
+				    font-weight: 300;
+				}
+				hr{
+					margin-top: 5px;
+				}
+				.required{
+					position: absolute;
+				    right: 0;
+				    color: red;
+				    font-weight: bolder;
+				    font-size: large;
+				}
+				div.description{
+					padding-right: 10px;
+				}
+			}
+			.invoice-details-middle-panel{
+				@media (min-width: 768px) {
+					padding-left: 20px;
+				}
+			}
+			.invoice-details-right-panel{
+				@media (min-width: 768px) {
+					padding-left: 20px;
+				}
+			}
+			&.purchase-orders-list{
+				padding: 0;
+				table{
+					th{
+						text-transform: uppercase;
+						font-weight: normal;
+						color: #398da3 !important;
+					}
+				}
+			}
+
+		}	
+	}
+	.loading-invoice-details{
+		height: 200px;
+		h2{
+			margin-top: 100px;
+		}
+	}
+}

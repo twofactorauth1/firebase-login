@@ -67,7 +67,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('customers/:id/cards/:cardId'), this.isAuthApi.bind(this), this.deleteCard.bind(this));
 
         //Charges - CRUL & Capture
-        app.get(this.url('charges'), this.isAuthApi.bind(this), this.listCharges.bind(this) ,this.listChargesForAccount.bind(this));
+        app.get(this.url('charges'), this.isAuthApi.bind(this), this.listCharges.bind(this));
         app.get(this.url('charges/:chargeId'), this.isAuthApi.bind(this), this.getCharge.bind(this));
         app.post(this.url('charges'), this.isAuthApi.bind(this), this.createCharge.bind(this));
         app.post(this.url('charges/:chargeId'), this.isAuthApi.bind(this), this.updateCharge.bind(this));
@@ -126,35 +126,70 @@ _.extend(api.prototype, baseApi.prototype, {
         //  Webhook
         // ------------------------------------------------
         app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
+        app.get(this.url('revenue'),  this.isAuthApi.bind(this), this.listChargesForAccount.bind(this));      
 
        
     },
 
-
-      listChargesForAccount: function(account, created, endingBefore, limit, startingAfter, userId, fn) {
+     listChargesForAccount: function(req, resp) {
+console.log('==============revenue function starts=========================');
+        var pre_query_time = new Date().getTime();
         var self = this;
-        self.log = log;
-        var accountId = account.id();
-        self.log.debug(accountId, userId, '>> listChargesForAccount');
-
-        var customerId = account.get('billing').stripeCustomerId;
-        if(!customerId || customerId === '') {
-            self.log.error(accountId, userId, 'No stripe customerId found for account: ' + accountId);
-            return fn('No stripe customerId found');
-        }
-        //if no limit is passed, assume 0
-        var _limit = limit || 0;
-
-        stripeDao.listStripeCharges(created, customerId, endingBefore, _limit, startingAfter, null, function(err, charges){
-            if(err) {
-                self.log.error(accountId, userId, 'Error listing charges:', err);
-                return fn(err);
+        self.log.debug('>> listCharges');
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
             } else {
-                self.log.debug(accountId, userId, '<< listChargesForAccount');
-                return fn(null, charges);
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    var accountId = parseInt(self.accountId(req));
+                    if(accessToken === null && accountId != appConfig.mainAccountID) {
+            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                    }
+
+                        var dateobj = new Date();
+                        if(!req.query.from){
+                        var revenueFromDate  = dateobj; 
+                        }
+                        else{
+                        var revenueFromDate  = req.query.from;    
+                        }
+                        if(!req.query.to){
+                        var revenueToDate  =  dateobj.setDate(dateobj.getDate() - 30);   
+                        }else{
+                            var revenueToDate  = req.query.to;
+                        }
+                        // var created = req.body.created;
+                        // var customerId = req.body.customerId;
+                        // var ending_before = req.body.ending_before;
+                        // var limit = req.body.limit;
+                        // var starting_after = req.body.starting_after;
+
+                        var created = req.query.created;
+                        var customerId = req.query.customerId;
+                        var ending_before =revenueFromDate;
+                        var limit = req.query.limit;
+                        var starting_after = revenueToDate;
+
+                        stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken,
+                        function(err, value){
+                            self.log.debug('<< listCharges');
+                            var post_query_time = new Date().getTime();
+                            var duration = (post_query - pre_query)/1000 ;
+                            consle.log('total time taken by query in seconds is'+duration);
+
+                            return self.sendResultOrError(resp, err, value, "Error listing charges");
+                    });
+                     
+                });
+
             }
         });
+console.log('==============revenue function ends ==========================');
     },
+
+
+
+      
 
     listIndigenousPlans: function(req, resp) {
         var self = this;

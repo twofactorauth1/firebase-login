@@ -1,53 +1,33 @@
-.inventory.inventory-container{
+.invoices.invoices-container{
 	table{
 		th{
 			text-transform: uppercase;
 			font-weight: normal;
 			color: #398da3 !important;
 		}
-		td.vendorCoulmn span{
-			color:#70c2d7 !important;
-		}
 	}
 
 	table.bg-white{
-		th.name-col{
-			width:20%;
-		}
-		th.vendor-col{
+		th.invoice-number-col{
 			width:15%;
 		}
-		th.sku-col{
+		th.po-number-col{
+			width:15%;
+		}
+		th.invoice-date-col{
+			width: 15%;
+		}
+		th.due-date-col{
+			width: 15%;
+		}
+		th.invoice-total-col{
+			width: 15%;
+		}
+		th.invoice-balance-col{
+			width: 15%;
+		}
+		th.status-col{
 			width: 10%;
-		}
-		th.desc-col{
-			width: 20%;
-		}
-		th.qty-col{
-			width: 21%;
-		}
-		th.dim-col{
-			width: 14%;
-		}
-		th.weight-col{
-			width: 10%;
-		}
-		td.qtyColumn{
-			text-align: right;
-			padding-right: 4%;
-		}
-		
-		.name-block-container{
-			line-height: 2em;
-			display: inline-block;
-			.list-name{
-				width: 27px;
-			    height: 27px;
-			    background: #48b1cc !important;
-			    border-radius: 30%;
-			    margin-right: 10px;
-			    float:left;
-			}
 		}
 		
 	}
@@ -79,7 +59,7 @@
 		}    
 	}
 
-	.inventory-paging-overlay{
+	.invoices-paging-overlay{
 		height: 100%;
 	    width: 100%;
 	    opacity: 0.6;

@@ -104,7 +104,7 @@ angular.module('angular-parallax', [
       $(document).ready(function() {
         setTimeout(function() {
             setPosition();
-        }, 500)
+        }, 0)
         var unbindWatcher = $scope.$watch(function() {
                 return angular.element(".sortable-page-content").length
             }, function(newValue, oldValue) {
@@ -119,7 +119,7 @@ angular.module('angular-parallax', [
                 });
                 setTimeout(function() {
                     setPosition();
-                }, 3000)
+                }, 0)
                 unbindWatcher();
             }
         });

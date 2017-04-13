@@ -1083,7 +1083,7 @@ var emailMessageManager = {
     sendNewPurchaseOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, ccAry, fn) {
         var self = this;
         self.log.debug('>> sendNewPurchaseOrderEmail');
-        
+
         htmlContent = self._replaceMandrillStyleVars(vars, htmlContent);
         juice.juiceResources(htmlContent, {}, function(err, html) {
             if (err) {
@@ -1861,19 +1861,35 @@ var emailMessageManager = {
                             callback();
                         });
                 }, function(err){
-                    _.each(results, function(message){
+                    async.each(results, function(message, callback){
                         var isUnsubscribed = false;
+                        var contactName = '';
                         if(unsubscriptions[message.receiver]) {
                             isUnsubscribed = true;
                         }
-                        csv += message.receiver + ',';
-                        csv += (message.deliveredDate || false) + ',';
-                        csv += (message.openedDate || false) + ',';
-                        csv += (message.clickedDate || false) + ',';
-                        csv += isUnsubscribed;
-                        csv += '\n';
+
+                        contactDao.getContactByEmailAndAccount(message.receiver, accountId, function(err, contact){
+                            if(err || !contact) {
+                                self.log.debug('Error getting contact for email:' + message.receiver, err);
+                                contactName = '';
+                            } else {
+                                self.log.debug('Found contact');
+                                contactName = (contact.get('first') + ' ' + contact.get('last')).trim() + ' ';
+                            }
+
+                            csv += contactName + '<' + message.receiver + '>,';
+                            csv += (message.deliveredDate || false) + ',';
+                            csv += (message.openedDate || false) + ',';
+                            csv += (message.clickedDate || false) + ',';
+                            csv += isUnsubscribed;
+                            csv += '\n';
+
+                            callback();
+                        });
+
+                    }, function(err) {
+                        cb(err, csv);
                     });
-                    cb(err, csv);
                 });
 
             }
@@ -1971,8 +1987,8 @@ var emailMessageManager = {
                                     callback();
                                 }
                             });
-                            
-                            
+
+
                         }
                     });
                 }, function(err){
