@@ -6,104 +6,153 @@
         </div>
     </div>
 </section>
-<div class="invoice-top-buttons container-fluid container-fullw bg-white">
-    
-    <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5 margin-left-5" ng-click="vm.backToInvoices()">
-        Back to Ledger
-    </button>
-    
-</div>
-<div class="clearfix"></div>
-<div class="invoice-details-container col-xs-12" ng-if="!vm.uiState.loading">
-    <div class="inner-invoice-details bg-white col-xs-12">
-        <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-left-panel">
-            <div class="form-group">
-                <h4>Customer</h4>
-                
-                <div class="description">
-                    <span>
-                        {{vm.invoice.customer}}    
-                    </span>                    
-                </div>
-                <hr>
-            </div>
-            <div class="form-group">
-                <h4>Name</h4>
-                
-                <div class="description">
-                    <span>
-                        {{vm.invoice.title}}    
-                    </span>                    
-                </div>
-                <hr>
-            </div>
-            <div class="form-group">
-                <h4>No.</h4>
-                
-                <div class="description">
-                    <span>
-                        {{vm.invoice.invoiceNumber}}
-                    </span>                    
-                </div>
-                <hr>
-            </div>
-
+<div st-table="vm.displayedOrders" st-safe-src="vm.state.orders">
+    <div class="invoice-top-buttons container-fluid container-fullw bg-white">
+        <div class="col-xs-6 col-md-4 margin-top-5">
+            <span class="input-icon">
+                <input type="text" st-search placeholder="Search by name, vendor, sku..." id="form-field-14" class="form-control">
+                <i class="ti-search"></i>
+            </span>
         </div>
-
-        <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-middle-panel">
-            <div class="form-group">
-                <h4>Status</h4>
-                
-                <div class="description">
-                    <span>
-                        {{vm.invoice.invoiceStatus}}
-                    </span>                    
+        <div class="col-xs-6 col-md-8 padding-right-0 margin-top-5">
+            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active" ng-click="showFilter = !showFilter">
+                <span>Filter</span>
+            </button>
+            <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToInvoices()">
+            Back to Ledger
+            </button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="invoice-details-container col-xs-12" ng-if="!vm.uiState.loading">
+        <div class="inner-invoice-details bg-white col-xs-12">
+            <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-left-panel">
+                <div class="form-group">
+                    <h4>Customer</h4>
+                    
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.customer}}    
+                        </span>                    
+                    </div>
+                    <hr>
                 </div>
-                <hr>
+                <div class="form-group">
+                    <h4>Name</h4>
+                    
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.title}}    
+                        </span>                    
+                    </div>
+                    <hr>
+                </div>
+                <div class="form-group">
+                    <h4>No.</h4>
+                    
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.invoiceNumber}}
+                        </span>                    
+                    </div>
+                    <hr>
+                </div>
+
             </div>
 
-            <div class="form-group">
-                <h4>Posting Date</h4>
-                
-                <div class="description">
-                    <span>
-                        {{vm.invoice.invoiceDate | date:'M/dd/yyyy'}}
-                    </span>                    
+            <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-middle-panel">
+                <div class="form-group">
+                    <h4>Status</h4>
+                    
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.invoiceStatus}}
+                        </span>                    
+                    </div>
+                    <hr>
                 </div>
-                <hr>
+
+                <div class="form-group">
+                    <h4>Posting Date</h4>
+                    
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.invoiceDate | date:'M/dd/yyyy'}}
+                        </span>                    
+                    </div>
+                    <hr>
+                </div>
+                <div class="form-group">
+                    <h4>Due Date</h4>
+                    
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.dueDate | date:'M/dd/yyyy'}}
+                        </span>                    
+                    </div>
+                    <hr>
+                </div>
             </div>
-            <div class="form-group">
-                <h4>Due Date</h4>
-                
-                <div class="description">
-                    <span>
-                        {{vm.invoice.dueDate | date:'M/dd/yyyy'}}
-                    </span>                    
+
+            <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-right-panel">
+                <div class="form-group">
+                    <h4>Memo</h4>
+                    <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                        <li ng-repeat="note in vm.state.purchaseOrder.notes">
+                            <div class="col-xs-2">
+                                <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
+                            </div>
+                            <div class="col-xs-10">
+                                <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
+                                <span class="user-notes" ng-bind-html="note.note"></span>
+                            </div>
+                            <div class="clearfix"></div>
+                        </li>
+                    </ul> 
+                    
+                    <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
+                    <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
+                        <span>Add</span>
+                    </button>
                 </div>
-                <hr>
             </div>
         </div>
+        <div class="inner-invoice-details bg-white col-xs-12 margin-top-30 purchase-orders-list">
+            <div ng-init="tableView='list'">        
+                <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
+                    <thead ng-class="{'bg-white': tableView == 'grid'}">
+                        <tr>
+                            <th>Item Code</th>
+                            <th>Description</th>
+                            <th>Item Description</th>
+                            <th>Qty</th>
+                            <th>Unit Price</th>
+                            <th class="hidden-xs">Line Total</th>
+                        </tr>
+                        <tr ng-if="showFilter">
+                            <th>
+                                <input st-search="title" placeholder="Name" class="form-control" type="search" />
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
+                        <td ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
+                            <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
 
-        <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-right-panel">
-            <div class="form-group">
-                <h4>Memo</h4>
-                <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                    <li ng-repeat="note in vm.state.purchaseOrder.notes">
-                        <div class="col-xs-2">
-                            <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
-                        </div>
-                        <div class="col-xs-10">
-                            <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
-                            <span class="user-notes" ng-bind-html="note.note"></span>
-                        </div>
-                        <div class="clearfix"></div>
-                    </li>
-                </ul> 
-                
-                <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
-                <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
-                    <span>Add</span>
-                </button>
+                            <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
+                            <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy'}}</td>                    
+                            <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage || 100" colspan="6">
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>        
             </div>
         </div>
     </div>
