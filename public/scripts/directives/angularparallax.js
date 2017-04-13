@@ -76,7 +76,7 @@ angular.module('angular-parallax', [
                 if (initialRun) {
                     $timeout(function() {
                         elem.removeClass('opacity-0');
-                    }, 300);
+                    }, 0);
                     initialRun = false;
                 }
 
@@ -98,7 +98,7 @@ angular.module('angular-parallax', [
             $(document).ready(function() {
                 $timeout(function() {
                     setPosition();
-                }, 1000);
+                }, 0);
             })
 
             angular.element($window).bind("scroll", setPosition);

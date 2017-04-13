@@ -53,37 +53,14 @@ module.exports = {
         });
     },
 
-    cachedInventory: function(accountId, userId, term, skip, limit, sortBy, sortDir, fn) {
+    cachedInventory: function(accountId, userId, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> cachedInventory');
         var query = {};
         var fields = null;
         var collection = 'inventory';
-        if(term){
-            var regex = new RegExp('\.*'+term+'\.', 'i');
-            query = {
-                $or:[
-                    {'@id':regex},
-                    {OITM_ItemCode:regex},
-                    {OITM_ItemName:regex},
-                    {OITM_U_dscription:regex},
-                    {OITB_ItmsGrpNam:regex},
-                    {In_Stock:regex},
-                    {Committed:regex},
-                    {Available:regex},
-                    {OMRC_FirmName:regex},
-                    {OLGT_UnitName:regex},
-                    {OITM_SLength1:regex},
-                    {OLGT_UnitName_10:regex},
-                    {OITM_SWidth1:regex},
-                    {OITM_BHeight1:regex},
-                    {OWGT_UnitName:regex},
-                    {OITM_SWeight1:regex},
-                    {OITM_SVolume:regex}
-                ]
-            };
-        }
-        
+
+
         ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
             if(err) {
                 self.log.error(accountId, userId, 'Error getting cached inventory:', err);
@@ -115,40 +92,77 @@ module.exports = {
         });
     },
 
-    inventorySearch: function(accountId, userId, term, fn) {
+    inventoryFilter: function(accountId, userId, query, skip, limit, sortBy, sortDir, fn) {
         var self = this;
-        self.log.debug(accountId, userId, '>> inventorySearch');
-        var regex = new RegExp('\.*'+term+'\.', 'i');
-
-        var query = {
-            $or:[
-                {'@id':regex},
-                {OITM_ItemCode:regex},
-                {OITM_ItemName:regex},
-                {OITM_U_dscription:regex},
-                {OITB_ItmsGrpNam:regex},
-                {In_Stock:regex},
-                {Committed:regex},
-                {Available:regex},
-                {OMRC_FirmName:regex},
-                {OLGT_UnitName:regex},
-                {OITM_SLength1:regex},
-                {OLGT_UnitName_10:regex},
-                {OITM_SWidth1:regex},
-                {OITM_BHeight1:regex},
-                {OWGT_UnitName:regex},
-                {OITM_SWeight1:regex},
-                {OITM_SVolume:regex}
-            ]
-        };
+        self.log.debug(accountId, userId, '>> inventoryFilter');
+        query = _.mapObject(query, function(val, key) {
+            return new RegExp('\.*' + val + '\.*', 'i');
+        });
+        self.log.debug('query:', query);
         var fields = null;
         var collection = 'inventory';
-        var skip = 0;
-        var limit = 0;
-        var sortBy = null;
-        var sortDir = null;
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error searching cached inventory:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< inventoryFilter');
+                fn(null, value);
+            }
+        });
+    },
 
-        ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
+    inventorySearch: function(accountId, userId, term, fieldNames, skip, limit, sortBy, sortDir, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> inventorySearch');
+        var regex = new RegExp('\.*'+term+'\.*', 'i');
+        var query = {};
+
+        if(fieldNames && fieldNames.length > 0) {
+            if(fieldNames > 1) {
+                query.$or = [];
+                _.each(fieldNames, function(fieldName){
+                    var obj = {};
+                    obj[fieldName] = regex;
+                    query.$or.push(obj);
+                });
+            } else {
+                query[fieldNames[0]] = regex;
+            }
+        } else {
+            query = {
+                $or:[
+                    {'@id':regex},
+                    {OITM_ItemCode:regex},
+                    {OITM_ItemName:regex},
+                    {OITM_U_dscription:regex},
+                    {OITB_ItmsGrpNam:regex},
+                    {In_Stock:regex},
+                    {Committed:regex},
+                    {Available:regex},
+                    {OMRC_FirmName:regex},
+                    {OLGT_UnitName:regex},
+                    {OITM_SLength1:regex},
+                    {OLGT_UnitName_10:regex},
+                    {OITM_SWidth1:regex},
+                    {OITM_BHeight1:regex},
+                    {OWGT_UnitName:regex},
+                    {OITM_SWeight1:regex},
+                    {OITM_SVolume:regex}
+                ]
+            };
+        }
+
+
+        var fields = null;
+        var collection = 'inventory';
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+
+
+        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached inventory:', err);
                 fn(err);
@@ -159,19 +173,17 @@ module.exports = {
         });
     },
 
-    inventoryFieldSearch: function(accountId, userId, field, value, fn) {
+    inventoryFieldSearch: function(accountId, userId, field, value, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> inventoryFieldSearch');
         var query = {};
         query[field] = value;
         var fields = null;
         var collection = 'inventory';
-        var skip = 0;
-        var limit = 0;
-        var sortBy = null;
-        var sortDir = null;
+        var _skip = skip || 0;
+        var _limit = limit || 0;
         self.log.debug('Using query:', query);
-        ziDao.findRawWithFieldsLimitAndOrder(query, skip, limit, sortBy, fields, collection, sortDir, function(err, value){
+        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
             if(err) {
                 self.log.error(accountId, userId, 'Error searching cached inventory:', err);
                 fn(err);
@@ -231,8 +243,6 @@ module.exports = {
         });
         //response.payload.data.row
     },
-
-
 
     _ziRequest: function(path, fn) {
         var self = this;

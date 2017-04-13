@@ -277,6 +277,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Purchase Order',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('PurchaseOrderDetailsComponent', 'PurchaseOrderDetailsController', 'PurchaseOrderService')
+    }).state('app.invoices', {
+        url: '/invoices',
+        templateUrl: "/admin/assets/var/demo/js/invoices/invoice.html",
+        title: 'Invoice',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('InvoiceComponent', 'InvoiceComponentController', 'InvoiceService')
     }).state('app.account.users', {
         url: '/users',
         templateUrl: "/admin/assets/js/users/users.html",

@@ -26,7 +26,7 @@
 	                                    		</span>
 	                                        </div>
 	                                        <div class="col-xs-4 col-sm-3 padding-right-0">
-	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+	                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="vm.showFilter()">
 	                                                <span>Filter</span>
 	                                            </button>
 	                                        </div>
@@ -111,21 +111,15 @@
 	                <th class="hidden-xs weight-col">Weight</th>
 	                <th class="qty-col sort" ng-class="{'st-sort-ascent': vm.uiState.sortData.details['totalQuantity'].direction === 1, 'st-sort-descent': vm.uiState.sortData.details['totalQuantity'].direction === -1}" ng-click="vm.sortInventory('In_Stock', 'totalQuantity')">On-hand</th>
 	            </tr>
-	            <tr ng-if="showFilter">
+	            <tr ng-if="vm.uiState.showFilter">
 	                <th>
-	                    <input st-search="OITM_ItemName" placeholder="List" class="form-control" type="search" />
+	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemName" ng-model-options="{ debounce: 800 }" placeholder="List" class="form-control" type="search" />
 	                </th>
 	                <th>
-	                    <input st-search="OMRC_FirmName" placeholder="Vendor" class="form-control" type="search" />
+	                    <input ng-model="vm.uiState.fieldSearch.OMRC_FirmName" ng-model-options="{ debounce: 800 }" placeholder="Vendor" class="form-control" type="search" />
 	                </th>
 	                <th>
-	                    <input st-search="OITM_ItemCode" placeholder="SKU" class="form-control" type="search" />
-	                </th>
-	                <th class="hidden-xs">
-	                    <input st-search="description" placeholder="Description" class="form-control" type="search" />
-	                </th>
-	                <th>
-	                    <input st-search="qty" placeholder="Quantity" class="form-control" type="search" />
+	                    <input ng-model="vm.uiState.fieldSearch.OITM_ItemCode" ng-model-options="{ debounce: 800 }" placeholder="SKU" class="form-control" type="search" />
 	                </th>
 	            </tr>
 	        </thead>

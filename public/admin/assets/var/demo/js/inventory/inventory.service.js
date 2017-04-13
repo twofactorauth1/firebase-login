@@ -12,10 +12,11 @@
         var inventoryService = {
             limit: 50,
             skip: 0,
-            page: 0
+            page: 0,
+            fieldSearch:{}
         };
 
-        var basePoAPIUrlv2 = '/api/1.0/integrations/zi/inventory';
+        var baseInventoryAPIUrl = '/api/1.0/integrations/zi/inventory';
 
         inventoryService.loading = {value: 0};
         
@@ -30,7 +31,7 @@
             fn.finally(function () {
                 inventoryService.loading.value = inventoryService.loading.value - 1;
                 console.info('service | loading -1 : ' + inventoryService.loading.value);
-            })
+            });
             return fn;
         }
 
@@ -38,7 +39,7 @@
             * Get list of all inventories
         */
         function getInventory() {
-
+            var urlParts = [baseInventoryAPIUrl];
             function success(data) {
                 inventoryService.inventory = data;
             }
@@ -55,8 +56,19 @@
 
             if(inventoryService.globalSearch){
                 _qString += "&term=" + inventoryService.globalSearch;
+                _qString += "&fieldNames=OITM_ItemName,OMRC_FirmName,OITM_ItemCode";
+                urlParts.push('search');
             }
-            return inventoryRequest($http.get([basePoAPIUrlv2].join('/') + _qString).success(success).error(error));
+
+            return (
+
+                inventoryRequest($http({
+                  url: urlParts.join('/') + _qString,
+                  method: 'GET',
+                  data: angular.toJson(inventoryService.fieldSearch)
+                }).success(success).error(error))
+            );
+            
         }
 
         function getSingleInventory(productId){           
@@ -68,7 +80,7 @@
                 console.error('inventoryService getSingleInventory error: ', JSON.stringify(error));
             }
            
-            return inventoryRequest($http.get([basePoAPIUrlv2, productId].join('/')).success(success).error(error));                       
+            return inventoryRequest($http.get([baseInventoryAPIUrl, productId].join('/')).success(success).error(error));                       
             
         }
 
