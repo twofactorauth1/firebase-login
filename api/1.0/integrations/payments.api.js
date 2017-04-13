@@ -126,7 +126,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //  Webhook
         // ------------------------------------------------
         app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
-        app.get(this.url('revenue'),  this.listChargesForAccount.bind(this));      
+        app.get(this.url('revenue'),  this.isAuthApi.bind(this), this.listChargesForAccount.bind(this));      
 
        
     },
