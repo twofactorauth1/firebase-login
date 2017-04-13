@@ -176,13 +176,21 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug(accountId, userId, '>> ledger');
 
         var dateString = req.query.date || '3/27/17';
-        var cardCodeFrom = req.query.cardCodeFrom || 'C101291';
-        var cardCodeTo = req.query.cardCodeTo || 'C101291';
-        //TODO: security
-        manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
-            self.log.debug('<< ledger');
-            return self.sendResultOrError(resp, err, value, "Error calling aging");
+        var cardCodeFrom = req.query.cardCodeFrom || 'C101290';
+        var cardCodeTo = req.query.cardCodeTo || 'C101290';
+        self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+            if(cardCodes) {
+                cardCodeFrom = cardCodes[0];
+                cardCodeTo = cardCodes[0];
+            }
+            //TODO: security
+            manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+                self.log.debug('<< ledger');
+                return self.sendResultOrError(resp, err, value, "Error calling aging");
+            });
         });
+
+
 
     }
 });
