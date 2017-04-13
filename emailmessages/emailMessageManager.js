@@ -1863,7 +1863,7 @@ var emailMessageManager = {
                 }, function(err){
                     async.each(results, function(message, callback){
                         var isUnsubscribed = false;
-                        var contactName = 'placeholder ';
+                        var contactName = '';
                         if(unsubscriptions[message.receiver]) {
                             isUnsubscribed = true;
                         }
