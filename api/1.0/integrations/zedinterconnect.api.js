@@ -26,6 +26,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
         app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
+        app.get(this.url('inventory/filter'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFilter.bind(this));
         app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
@@ -72,6 +73,24 @@ _.extend(api.prototype, baseApi.prototype, {
         manager.getInventoryItem(accountId, userId, itemId, function(err, value){
             self.log.debug(accountId, userId, '<< inventory');
             return self.sendResultOrError(resp, err, value, "Error calling inventory");
+        });
+    },
+
+    inventoryFilter: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> inventoryFilter');
+        var skip = parseInt(req.query.skip) || 0;
+        var limit = parseInt(req.query.limit) || 0;
+        var sortBy = req.query.sortBy || null;
+        var sortDir = parseInt(req.query.sortDir) || null;
+        var query = req.query;
+        self.log.debug('query:', query);
+        //TODO: security
+        manager.inventoryFilter(accountId, userId, query, skip, limit, sortBy, sortDir, function(err, value){
+            self.log.debug(accountId, userId, '<< inventoryFilter');
+            return self.sendResultOrError(resp, err, value, "Error searching inventory");
         });
     },
 
