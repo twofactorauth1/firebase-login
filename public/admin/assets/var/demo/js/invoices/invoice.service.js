@@ -67,6 +67,21 @@
 
             invoice.customer = "C2001175";
             invoice.title = "Analytics Computer Information Systems";
+            invoice.orders = [{            
+                itemCode: '212147',
+                description: 'S-01-SSC-8630-A',
+                itemDescription: 'Firewall SSL VPN 5 user License',
+                qty: 5,
+                unitPrice: 161.25,
+                lineTotal: 161.25
+            },{
+                itemCode: '212451',
+                description: 'S-01-SSC-8629-A',
+                itemDescription: 'Firewall SSL VPN 1 user License',
+                qty: 2,
+                unitPrice: 37.50,
+                lineTotal: 75.00
+            }]
 
             deferred.resolve(invoice);
             return deferred.promise;

@@ -6,7 +6,7 @@
         </div>
     </div>
 </section>
-<div st-table="vm.displayedOrders" st-safe-src="vm.state.orders">
+<div st-table="vm.displayedOrders" st-safe-src="vm.invoice.orders">
     <div class="invoice-top-buttons container-fluid container-fullw bg-white">
         <div class="col-xs-6 col-md-4 margin-top-5">
             <span class="input-icon">
@@ -131,23 +131,24 @@
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
-                                <input st-search="title" placeholder="Name" class="form-control" type="search" />
+                                <input st-search="itemCode" placeholder="Item Code" class="form-control" type="search" />
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="order in vm.displayedOrders" class="product-item" ng-click="vm.viewPurchaseOrderDetails(order)">
-                        <td ng-show='vm.displayedOrders.length'><i class="fa fa-2x" ng-click='vm.orderSelectClickFn($event, order)' ng-class='{"fa-check-circle": order.isSelected, "fa-circle-o": !order.isSelected}'></i></td>
-                            <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="order.title" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></div></td>
-
-                            <td class=""><strong>Submitter: </strong>{{order.submitter.first}} {{order.submitter.last}}</td>
-                            <td><strong>Date: </strong>{{order.created.date | date:'MMM d yy'}}</td>                    
-                            <td class="hidden-xs"><strong>Attachment: </strong>{{order.attachment.name}}</td>
+                        <tr ng-repeat="order in vm.displayedOrders" class="product-item">
+                            <td><strong>Item Code: </strong>{{order.itemCode}}</td>
+                            <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.description" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                            <td><strong>Item Description: </strong><span class="list-name"></span><span ng-text-truncate="order.itemDescription" ng-tt-chars-threshold="40" ng-tt-no-toggling></span></td>
+                            <td><strong>Qty: </strong>{{order.qty}}</td>
+                            <td><strong>Unit Price: </strong>{{order.unitPrice}}</td>
+                            <td><strong>Line Total: </strong>{{order.lineTotal}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td class="text-center" st-custom-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage || 100" colspan="6">
+                            <td class="text-right padding-right-20" colspan="10">
+                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder}}</span>
                             </td>
                         </tr>
                     </tfoot>
