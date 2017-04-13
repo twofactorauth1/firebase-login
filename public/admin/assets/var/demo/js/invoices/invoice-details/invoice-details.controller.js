@@ -24,10 +24,10 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
 
     function init(element) {
         vm.element = element;
-        // InvoiceService.getSingleInvoice($stateParams.invoiceId).then(function(response){
-        //     vm.invoice = response.data;
-        //     vm.uiState.loading = false;
-        // }) 
+        InvoiceService.getSingleInvoice($stateParams.invoiceId).then(function(response){
+            vm.invoice = response;
+            vm.uiState.loading = false;
+        }) 
     }
 
 }

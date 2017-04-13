@@ -1,0 +1,91 @@
+invoice-details-component{
+	
+	.invoice-top-buttons{
+	    padding: 10px !important;
+	}
+	.invoice-details-container{
+		margin-top: 20px;
+		margin-bottom: 20px;
+		.inner-invoice-details{
+			padding:20px;
+			border: 1px solid #eee;
+			.invoice-details-panel{
+				.form-group{
+					padding-top: 5px;
+				}
+				color: #777 !important;
+				h4{
+				    font-family: "Lato", sans-serif;
+				    color: inherit;
+				    display: block;
+				    font-size: 18px;
+				    font-weight: 300;
+				}
+				hr{
+					margin-top: 5px;
+				}
+				.required{
+					position: absolute;
+				    right: 0;
+				    color: red;
+				    font-weight: bolder;
+				    font-size: large;
+				}
+				div.description{
+					padding-right: 10px;
+				}
+			}
+			.invoice-details-middle-panel{
+				@media (min-width: 768px) {
+					padding-left: 20px;
+				}
+			}
+			.invoice-details-right-panel{
+				@media (min-width: 768px) {
+					padding-left: 20px;
+				}
+			}
+		}	
+	}
+	ul.sales-timeline-container{
+		list-style: none;
+		padding:0;
+		margin-right: -10px;
+		li{
+			padding: 10px;			
+			line-height: 2.5em;
+			border-bottom: rgba(0, 0, 0, 0.07) 1px solid;
+			.timeline-user{	
+				img{
+					width: 32px;
+				    height: 32px;
+				    border-radius: 30%;
+				    float: left;
+				    padding: 0;
+				    margin: 0;
+				    margin-right: 5px;
+				}
+			}
+			.timeline-text-green{
+				color: #32CD32;
+			}
+			.timeline-text-blue{
+				color: #30D1E1;
+			}
+		}
+		li:last-child {
+    		border-bottom: none;
+		}
+		span.time-line-time{
+			color: #8ea5b8;
+			opacity: 0.7;
+		}
+	}
+
+	.loading-invoice-details{
+		height: 200px;
+		h2{
+			margin-top: 100px;
+		}
+	}
+}

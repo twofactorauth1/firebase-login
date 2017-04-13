@@ -16,6 +16,7 @@
         var baseInvoiceAPIUrl = '/api/1.0/integrations/zi/inventory';
 
         invoiceService.getInvoices = getInvoices;
+        invoiceService.getSingleInvoice = getSingleInvoice;
 
         invoiceService.loading = {value: 0};
 
@@ -52,6 +53,23 @@
             }
             
             invoiceService.invoices = invoices;
+        }
+
+
+        /**
+            * Get invoice details
+        */
+        function getSingleInvoice(invoiceId) {
+            var deferred = $q.defer();
+            var invoice = _.findWhere(invoiceService.invoices, function(_invoice){
+                return _invoice._id == invoiceId
+            })
+
+            invoice.customer = "C2001175";
+            invoice.title = "Analytics Computer Information Systems";
+
+            deferred.resolve(invoice);
+            return deferred.promise;
         }
 
 
