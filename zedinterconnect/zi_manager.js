@@ -92,10 +92,32 @@ module.exports = {
         });
     },
 
+    inventoryFilter: function(accountId, userId, query, skip, limit, sortBy, sortDir, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> inventoryFilter');
+        query = _.mapObject(query, function(val, key) {
+            return new RegExp('\.*' + val + '\.*', 'i');
+        });
+        self.log.debug('query:', query);
+        var fields = null;
+        var collection = 'inventory';
+        var _skip = skip || 0;
+        var _limit = limit || 0;
+        ziDao.findRawWithFieldsLimitAndOrder(query, _skip, _limit, sortBy, fields, collection, sortDir, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error searching cached inventory:', err);
+                fn(err);
+            } else {
+                self.log.debug(accountId, userId, '<< inventoryFilter');
+                fn(null, value);
+            }
+        });
+    },
+
     inventorySearch: function(accountId, userId, term, fieldNames, skip, limit, sortBy, sortDir, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> inventorySearch');
-        var regex = new RegExp('\.*'+term+'\.', 'i');
+        var regex = new RegExp('\.*'+term+'\.*', 'i');
         var query = {};
 
         if(fieldNames && fieldNames.length > 0) {
