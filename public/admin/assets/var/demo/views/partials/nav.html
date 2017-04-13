@@ -68,7 +68,7 @@
             </div>
         </a>
     </li>
-    <li ng-class="{'active open':$state.includes('app.invoices')}">
+    <li ng-class="{'active open':$state.includes('app.invoices') || $state.includes('app.invoiceDetails')}">
         <a ui-sref="app.invoices">
             <div class="item-content">
                 <div class="item-media">

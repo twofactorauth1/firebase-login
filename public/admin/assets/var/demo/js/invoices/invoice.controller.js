@@ -17,6 +17,12 @@ function invoiceComponentController($scope, $attrs, $filter, $modal, $timeout, $
         loading: true
     };
 
+    vm.viewSingleInvoice = viewSingleInvoice;
+
+
+    function viewSingleInvoice(invoice){
+        $location.path('/invoices/' + invoice._id);
+    }
 
     $scope.$watch(function() { return InvoiceService.invoices }, function(invoices) {
         if(angular.isDefined(invoices)){

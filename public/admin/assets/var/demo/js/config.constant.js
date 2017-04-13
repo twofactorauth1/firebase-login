@@ -644,6 +644,7 @@ app.constant('JS_REQUIRES', {
     'InventoryComponent': 'assets/var/demo/js/inventory/inventory.component.js',
     'InventoryComponentController': 'assets/var/demo/js/inventory/inventory.controller.js',
     'InventoryService': 'assets/var/demo/js/inventory/inventory.service.js',
+    
     // Inventory Details
 
     
@@ -669,6 +670,12 @@ app.constant('JS_REQUIRES', {
     'InvoiceComponent': 'assets/var/demo/js/invoices/invoice.component.js',
     'InvoiceComponentController': 'assets/var/demo/js/invoices/invoice.controller.js',
     'InvoiceService': 'assets/var/demo/js/invoices/invoice.service.js',
+
+    // Invoices Details
+
+    
+    'InvoiceDetailsComponent': 'assets/var/demo/js/invoices/invoice-details/invoice-details.component.js',
+    'InvoiceDetailsController': 'assets/var/demo/js/invoices/invoice-details/invoice-details.controller.js',    
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',

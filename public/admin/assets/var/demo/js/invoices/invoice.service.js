@@ -39,7 +39,7 @@
             for (var i = 0; i < 30; i++) { 
                 _rand = (Math.random() * 1000000).toFixed(2);
                 _d = {
-
+                    _id: i + 1,
                     invoiceNumber: Math.floor((Math.random() * 1000000) + 1),
                     poNumber: Math.floor((Math.random() * 100000) + 1),
                     invoiceDate: new Date(new Date().setDate(new Date().getDate() - 1)),
