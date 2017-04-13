@@ -1,0 +1,81 @@
+.invoices.invoices-container{
+	table{
+		th{
+			text-transform: uppercase;
+			font-weight: normal;
+		}
+	}
+
+	table.bg-white{
+		th.invoice-number-col{
+			width:15%;
+		}
+		th.po-number-col{
+			width:15%;
+		}
+		th.invoice-date-col{
+			width: 15%;
+		}
+		th.due-date-col{
+			width: 15%;
+		}
+		th.invoice-total-col{
+			width: 15%;
+		}
+		th.invoice-balance-col{
+			width: 15%;
+		}
+		th.status-col{
+			width: 10%;
+		}
+		
+	}
+
+
+	.table > thead > tr > th.sort:before {
+	    font-family: FontAwesome;
+	    content: "\f0dc";
+	    display: inline-block;
+	    padding-right: 3px;
+	    vertical-align: middle;
+	}
+
+
+	.table > thead > tr > th.sort {
+		cursor: pointer;
+	    &:before{
+	    	font-family: FontAwesome;
+		    content: "\f0dc";
+		    display: inline-block;
+		    padding-right: 3px;
+		    vertical-align: middle;
+	    }
+	    &.st-sort-descent:before {
+    		content: "\f0dd" !important;
+		}
+		&.st-sort-ascent:before {
+    		content: "\f0de" !important;
+		}    
+	}
+
+	.invoices-paging-overlay{
+		height: 100%;
+	    width: 100%;
+	    opacity: 0.6;
+	    top: 0;
+	    left: 0;
+	    position: absolute;
+	    padding: 0;
+	    background: #000000;
+	    z-index: 2;
+	    h1{
+	    	position: fixed;
+		    display: inline-block;
+		    text-align: center;
+		    color: white;
+		    top: 50%;
+		    margin-top: 15px;
+	    }
+	}
+
+}
