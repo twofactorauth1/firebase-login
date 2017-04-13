@@ -21,7 +21,9 @@
                 <h4>Name</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_ItemName}}
+                    <span>
+                        {{vm.inventory.OITM_ItemName}}    
+                    </span>                    
                 </div>
                 <hr>
             </div>
@@ -29,7 +31,9 @@
                 <h4>Description</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_U_dscription}}
+                    <span>
+                        {{vm.inventory.OITM_U_dscription}}    
+                    </span>                    
                 </div>
                 <hr>
             </div>
@@ -37,7 +41,9 @@
                 <h4>Vendor</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OMRC_FirmName}}
+                    <span>
+                        {{vm.inventory.OMRC_FirmName}}
+                    </span>                    
                 </div>
                 <hr>
             </div>
@@ -45,7 +51,9 @@
                 <h4>SKU</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITM_ItemCode}}
+                    <span>
+                        {{vm.inventory.OITM_ItemCode}}
+                    </span>                    
                 </div>
                 <hr>
             </div>
@@ -55,7 +63,9 @@
                 <h4>Group</h4>
                 
                 <div class="description">
-                    {{vm.inventory.OITB_ItmsGrpNam}}
+                    <span>
+                        {{vm.inventory.OITB_ItmsGrpNam}}
+                    </span>                    
                 </div>
                 <hr>
             </div>
@@ -76,7 +86,12 @@
                 <h4>Available</h4>
                 
                 <div class="description">
-                    {{vm.inventory.Available}}
+                    <span ng-if="vm.inventory.Available > 0">
+                        {{vm.inventory.Available}}
+                    </span>
+                    <span ng-if="vm.inventory.Available <= 0">
+                        &nbsp;
+                    </span>
                 </div>
                 <hr>
             </div>
@@ -84,8 +99,13 @@
             <div class="form-group">
                 <h4>Committed</h4>
                 
-                <div class="description">
-                    {{vm.inventory.Committed}}
+                <div class="description">                    
+                    <span ng-if="vm.inventory.Committed > 0">
+                        {{vm.inventory.Available}}
+                    </span>
+                    <span ng-if="vm.inventory.Committed <= 0">
+                        &nbsp;
+                    </span>
                 </div>
                 <hr>
             </div>
@@ -93,7 +113,12 @@
                 <h4>Length</h4>
                 
                 <div class="description">
-                    {{vm.parseValueToFloat(vm.inventory.OITM_SLength1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
+                    <span ng-if="vm.inventory.OITM_SLength1 > 0">
+                        {{vm.parseValueToFloat(vm.inventory.OITM_SLength1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
+                    </span>
+                    <span ng-if="vm.inventory.OITM_SLength1 <= 0">
+                        &nbsp;
+                    </span>
                 </div>
                 <hr>
             </div>
@@ -102,7 +127,12 @@
                 <h4>Width</h4>
                 
                 <div class="description">
-                    {{vm.parseValueToFloat(vm.inventory.OITM_SWidth1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
+                    <span ng-if="vm.inventory.OITM_SWidth1 > 0">
+                        {{vm.parseValueToFloat(vm.inventory.OITM_SWidth1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
+                    </span>
+                    <span ng-if="vm.inventory.OITM_SWidth1 <= 0">
+                        &nbsp;
+                    </span>
                 </div>
                 <hr>
             </div>
@@ -110,7 +140,12 @@
                 <h4>Height</h4>
                 
                 <div class="description">
-                    {{vm.parseValueToFloat(vm.inventory.OITM_BHeight1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
+                    <span ng-if="vm.inventory.OITM_BHeight1 > 0">
+                        {{vm.parseValueToFloat(vm.inventory.OITM_BHeight1) | number : fractionSize}} {{vm.inventory.OLGT_UnitName_10}}
+                    </span>
+                    <span ng-if="vm.inventory.OITM_BHeight1 <= 0">
+                        &nbsp;
+                    </span>
                 </div>
                 <hr>
             </div>
@@ -119,7 +154,13 @@
                 <h4>Weight</h4>
                 
                 <div class="description">
-                    {{vm.parseValueToFloat(vm.inventory.OITM_SWeight1) | number : fractionSize}} {{vm.inventory.OWGT_UnitName}}
+                    
+                    <span ng-if="vm.inventory.OITM_SWeight1 > 0">
+                        {{vm.parseValueToFloat(vm.inventory.OITM_SWeight1) | number : fractionSize}} {{vm.inventory.OWGT_UnitName}}
+                    </span>
+                    <span ng-if="vm.inventory.OITM_SWeight1 <= 0">
+                        &nbsp;
+                    </span>
                 </div>
                 <hr>
             </div>
@@ -128,7 +169,12 @@
                 <h4>Volume</h4>
                 
                 <div class="description">
-                {{vm.parseValueToFloat(vm.inventory.OITM_SVolume) | number : fractionSize}}
+                     <span ng-if="vm.inventory.OITM_SVolume > 0">
+                        {{vm.parseValueToFloat(vm.inventory.OITM_SVolume) | number : fractionSize}}
+                    </span>
+                    <span ng-if="vm.inventory.OITM_SVolume <= 0">
+                        &nbsp;
+                    </span>
                 </div>
                 <hr>
             </div>
