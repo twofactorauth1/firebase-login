@@ -1,0 +1,15 @@
+<div ng-class="component.type+'-v'+component.version">
+    <div class="col-xs-12" >
+        <h3>
+            <div elem ng-model="vm.component.title"></div>
+        </h3>
+        <div class="ssb-ssb-blog-post-detail ssb-blog-recent-tags">
+        	<ul class="ssb-post_tags" >
+	            <li ng-repeat="tag in vm.blog_tags track by $index">
+	                <a href="/tag/{{tag.text ? vm.encodeUrlText(tag.text): vm.encodeUrlText(tag)}}" class="btn ssb-theme-btn" target="_self" itemprop="url" rel="tag">{{tag.text ? tag.text: tag}}</a>
+	            </li>
+        	</ul> 
+        </div>
+        
+    </div>
+</div>

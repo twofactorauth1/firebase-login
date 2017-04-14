@@ -17,6 +17,7 @@ var userActivityManager = require('../useractivities/useractivity_manager');
 var accountDao = require("../dao/account.dao");
 var middleware = require('../common/sharedMiddleware');
 var orgDao = require('../organizations/dao/organization.dao');
+var userDao = require('../dao/user.dao');
 
 //this flag instructs the securitymanager to verify the subscription.
 var verifySubscription = true;
@@ -555,6 +556,16 @@ _.extend(apiBase.prototype, {
                 fn(null);
             } else {
                 fn(null, organization.id())
+            }
+        });
+    },
+
+    getUserProperty: function(userId, property, fn) {
+        userDao.getById(userId, $$.m.User, function(err, user){
+            if(err || !user) {
+                fn(err);
+            } else {
+                fn(null, user.get(property));
             }
         });
     }

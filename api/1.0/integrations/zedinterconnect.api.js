@@ -25,14 +25,17 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
         app.get(this.url('demo'), this.isAuthAndSubscribedApi.bind(this), this.demo.bind(this));
         app.get(this.url('inventory'), this.isAuthAndSubscribedApi.bind(this), this.inventory.bind(this));
-        app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
         app.get(this.url('inventory/filter'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFilter.bind(this));
 
-        //TODO: remove this one.  Subsumed by filter
+        //TODO: remove these two.  Subsumed by filter
+        app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
         app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
+
+
+
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
-        app.get(this.url('aging'), this.isAuthAndSubscribedApi.bind(this), this.aging.bind(this));
+        app.get(this.url('ledger'), this.isAuthAndSubscribedApi.bind(this), this.ledger.bind(this));
     },
 
     demo: function(req, resp) {
@@ -88,12 +91,31 @@ _.extend(api.prototype, baseApi.prototype, {
         var sortBy = req.query.sortBy || null;
         var sortDir = parseInt(req.query.sortDir) || null;
         var query = req.query;
-        self.log.debug('query:', query);
-        //TODO: security
-        manager.inventoryFilter(accountId, userId, query, skip, limit, sortBy, sortDir, function(err, value){
-            self.log.debug(accountId, userId, '<< inventoryFilter');
-            return self.sendResultOrError(resp, err, value, "Error searching inventory");
-        });
+
+        /*
+         * Search across all (or a subset) of fields for the same value if "term" is a query param.  Otherwise, use filter
+         */
+        if(req.query.term) {
+            var term = req.query.term;
+            var fieldNames = null;
+            if(req.query.fieldNames) {
+                fieldNames = req.query.fieldNames.split(',');
+            }
+            //TODO: security
+            manager.inventorySearch(accountId, userId, term, fieldNames, skip, limit, sortBy, sortDir, function(err, value){
+                self.log.debug(accountId, userId, '<< inventorySearch');
+                return self.sendResultOrError(resp, err, value, "Error searching inventory");
+            });
+        } else {
+            //TODO: security
+            manager.inventoryFilter(accountId, userId, query, skip, limit, sortBy, sortDir, function(err, value){
+                self.log.debug(accountId, userId, '<< inventoryFilter');
+                return self.sendResultOrError(resp, err, value, "Error searching inventory");
+            });
+        }
+
+
+
     },
 
     inventorySearch: function(req, resp) {
@@ -147,20 +169,28 @@ _.extend(api.prototype, baseApi.prototype, {
         return self.send200(resp);
     },
 
-    aging: function(req, resp) {
+    ledger: function(req, resp) {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        self.log.debug(accountId, userId, '>> aging');
+        self.log.debug(accountId, userId, '>> ledger');
 
         var dateString = req.query.date || '3/27/17';
-        var cardCodeFrom = req.query.cardCodeFrom || 'C101291';
-        var cardCodeTo = req.query.cardCodeTo || 'C101291';
-        //TODO: security
-        manager.aging(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
-            self.log.debug('<< aging');
-            return self.sendResultOrError(resp, err, value, "Error calling aging");
+        var cardCodeFrom = req.query.cardCodeFrom || 'C101290';
+        var cardCodeTo = req.query.cardCodeTo || 'C101290';
+        self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
+            if(cardCodes) {
+                cardCodeFrom = cardCodes[0];
+                cardCodeTo = cardCodes[0];
+            }
+            //TODO: security
+            manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
+                self.log.debug('<< ledger');
+                return self.sendResultOrError(resp, err, value, "Error calling aging");
+            });
         });
+
+
 
     }
 });

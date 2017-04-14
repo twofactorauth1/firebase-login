@@ -56,7 +56,7 @@
 
             if(inventoryService.globalSearch){
                 _qString += "&term=" + inventoryService.globalSearch;
-                _qString += "&fieldNames=OITM_ItemName,OMRC_FirmName,OITM_ItemCode";
+                //_qString += "&fieldNames=OITM_ItemName,OMRC_FirmName,OITM_ItemCode";
                 urlParts.push('search');
             }
 

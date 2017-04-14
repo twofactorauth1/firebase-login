@@ -2,9 +2,9 @@
 
 app.directive('ssbEditWrap', ssbEditWrap);
 
-ssbEditWrap.$inject = ['$rootScope', '$compile', '$timeout', 'SimpleSiteBuilderService'];
+ssbEditWrap.$inject = ['$rootScope', '$compile', '$timeout', 'SimpleSiteBuilderService','UtilService'];
 /* @ngInject */
-function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
+function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService,UtilService) {
 
     return {
         restrict: 'C',
@@ -41,7 +41,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 })();
 
                 function handleTouchStart(e){
-                    
+                    UtilService.flyoverhideonclick();
                     handleClick(e);
                 }
                 
@@ -213,7 +213,9 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }
 
                 function handleClick(e) {
-
+                    
+                       UtilService.flyoverhideonclick();
+                     
                     //ignore if clicked on a control
                     if ($(e.target).hasClass('ssb-edit-control') ||
                         $(e.target).hasClass('ssb-theme-btn') ||
@@ -289,7 +291,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }
 
                 function handleSectionClick(e, el) {
-
+                     UtilService.flyoverhideonclick();
                     el.scope().vm.uiState.hoveredSectionIndex = undefined;
                     el.scope().vm.uiState.hoveredComponentIndex = undefined;
                     el.scope().vm.uiState.hoveredComponentEl = undefined;
@@ -309,6 +311,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }
 
                 function handleComponentClick(e, el, clickedSectionData, clickedComponent, clickedSectionScope, clickedComponentScope, clickedComponentData) {
+                    UtilService.flyoverhideonclick();
                     e.stopPropagation();
 
                     $timeout(function() {
@@ -371,7 +374,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }
 
                 function handleComponentPartialAreaClick(e) {
-
+                      UtilService.flyoverhideonclick();
                     e.preventDefault();
 
                     var el = angular.element(e.currentTarget);
@@ -400,6 +403,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }
 
                 function handleComponentPartialAreaClickFn(e){
+                     UtilService.flyoverhideonclick();
                     var el = angular.element(e.currentTarget);
                     var targetEl = angular.element(e.target);
                     var hasComponentChildMouseOver = el.find('[data-edit]').length > 0;
@@ -506,7 +510,7 @@ function ssbEditWrap($rootScope, $compile, $timeout, SimpleSiteBuilderService) {
                 }
 
                 function handleElementClick(el, clickedComponent) {
-
+                    UtilService.flyoverhideonclick();
                     console.log('isElement edit control');
 
                     var clickedComponentScope = clickedComponent.scope();

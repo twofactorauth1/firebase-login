@@ -19,6 +19,7 @@ var productManager = require('../../../products/product_manager');
 var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
+var moment = require('moment');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -126,65 +127,67 @@ _.extend(api.prototype, baseApi.prototype, {
         //  Webhook
         // ------------------------------------------------
         app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
-        app.get(this.url('revenue'),  this.isAuthApi.bind(this), this.listChargesForAccount.bind(this));      
+        app.get(this.url('revenue'),this.isAuthApi.bind(this),   this.listChargesForAccount.bind(this));      
 
        
     },
 
-     listChargesForAccount: function(req, resp) {
-console.log('==============revenue function starts=========================');
-        var pre_query_time = new Date().getTime();
+    listChargesForAccount: function(req, resp) {
         var self = this;
-        self.log.debug('>> listCharges');
-        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
-            if (isAllowed !== true) {
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        var start = req.query.start;
+        var end = req.query.end;
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+         
+         //we prefer to pass the accountId and userId to our logging methods.  It helps for readability and tracking.
+        self.log.debug(accountId, userId, '>> listChargesForAccount');
+
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed){
+            if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
                 self.getStripeTokenFromAccount(req, function(err, accessToken){
-                    var accountId = parseInt(self.accountId(req));
-                    if(accessToken === null && accountId != appConfig.mainAccountID) {
-            return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
+                    if(!accessToken && accountId !== appConfig.mainAccountID) {
+                        return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected',
+                            'Connect the Stripe account and retry this operation.');
                     }
+                    //TODO: fill these in.
+                    var created = {
+                        gte:start.getTime() || null,//req.query.from OR today-30days as a timestamp (1492095302)
+                        lte:end.getTime() || null//req.query.to OR today as a timestamp
+                    };
+                    var limit = req.query.limit || 0;
 
-                        var dateobj = new Date();
-                        if(!req.query.from){
-                        var revenueFromDate  = dateobj; 
-                        }
-                        else{
-                        var revenueFromDate  = req.query.from;    
-                        }
-                        if(!req.query.to){
-                        var revenueToDate  =  dateobj.setDate(dateobj.getDate() - 30);   
-                        }else{
-                            var revenueToDate  = req.query.to;
-                        }
-                        // var created = req.body.created;
-                        // var customerId = req.body.customerId;
-                        // var ending_before = req.body.ending_before;
-                        // var limit = req.body.limit;
-                        // var starting_after = req.body.starting_after;
+                    /*
+                     * Leave these blank for now.  They are used for pagination within Stripe's list.  According to Stripe's docs:
+                     *
+                     * A cursor for use in pagination. ending_before is an object ID that defines your place in the list.
+                     * For instance, if you make a list request and receive 100 objects, starting with obj_bar, your
+                     * subsequent call can include ending_before=obj_bar in order to fetch the previous page of the list.
+                     */
+                    var endingBefore = null;
+                    var startingAfter = null;
 
-                        var created = req.query.created;
-                        var customerId = req.query.customerId;
-                        var ending_before =revenueFromDate;
-                        var limit = req.query.limit;
-                        var starting_after = revenueToDate;
-
-                        stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, accessToken,
-                        function(err, value){
-                            self.log.debug('<< listCharges');
-                            var post_query_time = new Date().getTime();
-                            var duration = (post_query - pre_query)/1000 ;
-                            consle.log('total time taken by query in seconds is'+duration);
-
-                            return self.sendResultOrError(resp, err, value, "Error listing charges");
+                    paymentsManager.listChargesForAccount(accountId, created, endingBefore, limit, startingAfter, userId, function(err, charges){
+                        self.log.debug(accountId, userId, '<< listChargesForAccount');
+                        return self.sendResultOrError(resp, err, charges, "Error listing revenue");
                     });
-                     
                 });
-
             }
         });
-console.log('==============revenue function ends ==========================');
+
     },
 
 
