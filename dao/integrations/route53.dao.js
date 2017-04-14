@@ -60,7 +60,7 @@ var dao = {
         var self = this;
         self.log.debug(accountId, userId, '>> getNameServers');
         r53.zoneInfo(domain, function(err, value){
-            if(err) {
+            if(err || !value.nameServers) {
                 self.log.error(accountId, userId, 'Error getting zone info:', err);
                 fn(err);
             } else {
