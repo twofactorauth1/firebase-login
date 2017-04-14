@@ -262,7 +262,7 @@ var insightsManager = {
                     content:siteUrl
                 });
                 var data = sectionDataMap.weeklyreport;
-             
+
                 /*
                  * Need to build rows like:
                  * {
@@ -316,10 +316,10 @@ var insightsManager = {
                         row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
                         row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
                      }
-                    
-                   
-                    
-                 
+
+
+
+
                     return row;
                 };
 
@@ -328,7 +328,7 @@ var insightsManager = {
                 rows.push(buildRow('bounceRate', 'Bounce Rate', 'currentBounceRate', 'previousBounceRate', data, '', '%'));
                 rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data, '', ''));
-               
+
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
                 self.log.debug('data:', JSON.stringify(data));
                 rows.push(buildRow('sentCount', 'Emails Sent', 'current', 'previous', data.emailReports, '', ''));
@@ -408,7 +408,11 @@ var insightsManager = {
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
                 //TODO: put these is org settings
                 if(account.get("orgId") == 1){
-                    siteUrl = account.get('subdomain') + '.gorvlvr.com';
+                    var suffix = '.gorvlvr.com'; // Todo: Get domain from orgId
+                    if(appConfig.nonProduction === true) {
+                        suffix = '.test' + suffix;
+                    }
+                    siteUrl = account.get('subdomain') + suffix;
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_1301/rvlvr_logo_350.png'});
                 } else {
                     vars.push({name:'ORGLOGO', content:'https://s3.amazonaws.com/indigenous-digital-assets/account_6/Logo_Blog_Template_1455919441097.jpg'});
