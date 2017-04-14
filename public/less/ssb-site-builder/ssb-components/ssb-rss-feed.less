@@ -43,8 +43,11 @@
     }
 }
 .ssb-page-section-layout-3-col-v3{
+    [ssb-rss-feed-component]{
+       z-index: 2 !important; 
+    }
     @media screen and (max-width: 767px) {
-        [ssb-rss-feed-component]{
+        [ssb-rss-feed-component]{            
             width: 100%;
             &:not(:nth-last-child(2)){
                 .inner-page{
@@ -56,8 +59,11 @@
 }
 
 .ssb-page-section-layout-2-col-v2{
+    [ssb-rss-feed-component]{
+       z-index: 2 !important; 
+    }
     @media screen and (max-width: 767px) {
-        [ssb-rss-feed-component]{
+        [ssb-rss-feed-component]{            
             width: 100%;
             &:not(:nth-last-child(2)){                
                 .inner-page{
