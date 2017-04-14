@@ -107,6 +107,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.sendResultOrError(resp, err, value, "Error searching inventory");
             });
         } else {
+            delete req.query.skip;
+            delete req.query.limit;
+            delete req.query.sortBy;
+            delete req.query.sortDir;
             //TODO: security
             manager.inventoryFilter(accountId, userId, query, skip, limit, sortBy, sortDir, function(err, value){
                 self.log.debug(accountId, userId, '<< inventoryFilter');
