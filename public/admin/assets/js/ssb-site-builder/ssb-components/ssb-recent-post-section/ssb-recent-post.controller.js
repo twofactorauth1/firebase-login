@@ -86,8 +86,11 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
         if (!vm.blog.posts.length) {
             vm.initData();
         }else{
-            if(vm.blog.posts.length>5)
+            if(vm.blog.posts.length>5){
                vm.blog.posts=   vm.blog.posts.slice(0, 5)
+            }else if(vm.blog.posts.length<1){
+                element.closest("div.ssb-page-section").css({'display': 'none'});
+            }
 
         }
 
