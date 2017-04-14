@@ -14,9 +14,9 @@ function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogServic
     vm.hasFeaturedPosts = false;
 
     vm.blog = SimpleSiteBuilderBlogService.blog || {};
-    vm.blog_tags=[];
+    vm.blog_tags= [];
     vm.filteredPostView = false;
-
+    vm.encodeUrlText = encodeUrlText;
 
     $scope.$watchCollection('vm.blog.posts', function(newValue) {
         if (newValue) {
@@ -26,6 +26,8 @@ function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogServic
             vm.blog_tags=getTags();
         }
     });
+
+    
     function getTags(){
         var blog_tags = []
         if (vm.blog.posts.length > 0) {
@@ -41,6 +43,13 @@ function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogServic
         }
         return blog_tags;
     }
+
+
+    function encodeUrlText(url){
+        return encodeURI(url);
+    }
+
+
     function init(element) {
     	vm.element = element;
         vm.blog_tags=getTags();
