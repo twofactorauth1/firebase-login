@@ -1,6 +1,6 @@
 (function(){
 
-app.directive('ssbRecentPostSectionComponent', ssbBolgRecentPostComponent);
+app.directive('ssbRecentPostComponent', ssbBolgRecentPostComponent);
 
 function ssbBolgRecentPostComponent() {
   return {

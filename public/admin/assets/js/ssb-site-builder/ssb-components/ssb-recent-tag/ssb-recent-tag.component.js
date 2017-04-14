@@ -1,6 +1,6 @@
 (function(){
 
-app.directive('ssbRecentTagSectionComponent', ssbBolgRecentTagComponent);
+app.directive('ssbRecentTagComponent', ssbBolgRecentTagComponent);
 
 function ssbBolgRecentTagComponent() {
   return {
