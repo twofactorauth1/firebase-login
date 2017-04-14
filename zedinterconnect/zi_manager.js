@@ -241,7 +241,23 @@ module.exports = {
 
             }
         });
-        //response.payload.data.row
+    },
+
+    getCustomers: function(accountId, userId, fn) {
+        var self = this;
+        self.log.debug(accountId, userId, '>> getCustomers');
+        var path = 'query/Indigenous/CustomerList.aspx?accept=application/json';
+
+        self._ziRequest(path, function(err, value){
+            if(err) {
+                self.log.error(accountId, userId, 'Error loading customers:', err);
+                fn(err);
+            } else {
+                value = JSON.parse(value);
+                self.log.debug(accountId, userId, '<< getCustomers');
+                fn(null, value);
+            }
+        });
     },
 
     _ziRequest: function(path, fn) {

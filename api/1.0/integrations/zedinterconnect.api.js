@@ -28,14 +28,16 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('inventory/filter'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFilter.bind(this));
 
         //TODO: remove these two.  Subsumed by filter
-        app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
-        app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
+        //app.get(this.url('inventory/search'), this.isAuthAndSubscribedApi.bind(this), this.inventorySearch.bind(this));
+        //app.get(this.url('inventory/search/:field/:value'), this.isAuthAndSubscribedApi.bind(this), this.inventoryFieldSearch.bind(this));
 
 
 
         app.get(this.url('inventory/:id'), this.isAuthAndSubscribedApi.bind(this), this.inventoryItem.bind(this));
         app.get(this.url('loadinventory'), this.isAuthAndSubscribedApi.bind(this), this.loadinventory.bind(this));
         app.get(this.url('ledger'), this.isAuthAndSubscribedApi.bind(this), this.ledger.bind(this));
+
+        app.get(this.url('customers'), this.isAuthAndSubscribedApi.bind(this), this.getCustomers.bind(this));
     },
 
     demo: function(req, resp) {
@@ -189,11 +191,26 @@ _.extend(api.prototype, baseApi.prototype, {
             }
             //TODO: security
             manager.getLedger(accountId, userId, cardCodeFrom, cardCodeTo, dateString, function(err, value){
-                self.log.debug('<< ledger');
+                self.log.debug(accountId, userId, '<< ledger');
                 return self.sendResultOrError(resp, err, value, "Error calling aging");
             });
         });
 
+
+
+    },
+
+    getCustomers: function(req, resp) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        var userId = self.userId(req);
+        self.log.debug(accountId, userId, '>> getCustomers');
+
+        //TODO: security
+        manager.getCustomers(accountId, userId, function(err, value){
+            self.log.debug(accountId, userId, '<< getCustomers');
+            return self.sendResultOrError(resp, err, value, "Error listing customers");
+        });
 
 
     }
