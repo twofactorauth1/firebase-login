@@ -121,7 +121,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         vm.elementId = 'text-element_' + vm.parentSectionId + "-" + vm.parentComponentId + "-" + vm.elementModelName;
 
         if (vm.isNestedModelProp) {
-            if (vm.parentNgRepeat.length) {
+            if (vm.parentNgRepeat.length || vm.parentRepeatIndex.length) {
                 if(vm.parentRepeatIndex.length){
                     vm.elementModelIndex = vm.parentRepeatIndex.attr("data-repeat-index-id");
                 }
@@ -184,7 +184,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
             } else {
 
-                if (vm.parentNgRepeat.length) {
+                if (vm.parentNgRepeat.length  || vm.parentRepeatIndex.length) {
 
                     if(vm.parentRepeatIndex.length){
                         vm.elementModelIndex = vm.parentRepeatIndex.attr("data-repeat-index-id");
@@ -228,7 +228,7 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
 
             pvm.component.elementStyles[vm.elementModelName] = pvm.component.elementStyles[vm.elementModelName] || {};
 
-            if (vm.parentNgRepeat.length) {
+            if (vm.parentNgRepeat.length  || vm.parentRepeatIndex.length) {
 
                 if(vm.parentRepeatIndex.length){
                     vm.elementModelIndex = vm.parentRepeatIndex.attr("data-repeat-index-id");
@@ -426,11 +426,8 @@ function ssbTextSettingsController($rootScope, $scope, $attrs, $filter, $timeout
         } else {
 
             //just set the style props on the frontend
-            $timeout(function(){
-                vm.parentRepeatIndex = getParentRepeatIndex();
-                applyStyles();
-            }, 0)
             
+            applyStyles();
 
         }
 
