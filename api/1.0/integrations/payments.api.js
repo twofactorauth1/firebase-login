@@ -19,6 +19,7 @@ var productManager = require('../../../products/product_manager');
 var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
+var moment = require('moment');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -126,7 +127,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //  Webhook
         // ------------------------------------------------
         app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
-        app.get(this.url('revenue'),  this.isAuthApi.bind(this), this.listChargesForAccount.bind(this));      
+        app.get(this.url('revenue'),this.isAuthApi.bind(this),   this.listChargesForAccount.bind(this));      
 
        
     },
@@ -135,7 +136,22 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var accountId = parseInt(self.accountId(req));
         var userId = self.userId(req);
-        //we prefer to pass the accountId and userId to our logging methods.  It helps for readability and tracking.
+        var start = req.query.start;
+        var end = req.query.end;
+        if(!end) {
+            end = moment().toDate();
+        } else {
+            //2016-07-03T00:00:00 05:30
+            end = moment(end, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+        }
+        if(!start) {
+            start = moment().add(-30, 'days').toDate();
+        } else {
+            start = moment(start, 'YYYY-MM-DD[T]HH:mm:ss').toDate();
+            self.log.debug('start:', start);
+        }
+         
+         //we prefer to pass the accountId and userId to our logging methods.  It helps for readability and tracking.
         self.log.debug(accountId, userId, '>> listChargesForAccount');
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed){
@@ -149,8 +165,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     //TODO: fill these in.
                     var created = {
-                        gte:null,//req.query.from OR today-30days as a timestamp (1492095302)
-                        lte:null//req.query.to OR today as a timestamp
+                        gte:start.getTime() || null,//req.query.from OR today-30days as a timestamp (1492095302)
+                        lte:end.getTime() || null//req.query.to OR today as a timestamp
                     };
                     var limit = req.query.limit || 0;
 
