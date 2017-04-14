@@ -262,7 +262,7 @@ var insightsManager = {
                     content:siteUrl
                 });
                 var data = sectionDataMap.weeklyreport;
-
+             
                 /*
                  * Need to build rows like:
                  * {
@@ -316,10 +316,10 @@ var insightsManager = {
                         row.lastWeek = prefix + numeral(row.lastWeek).format('0,0[.]00') + suffix;
                         row.previousWeek = prefix + numeral(row.previousWeek).format('0,0[.]00') + suffix;
                      }
-
-
-
-
+                    
+                   
+                    
+                 
                     return row;
                 };
 
@@ -328,7 +328,7 @@ var insightsManager = {
                 rows.push(buildRow('bounceRate', 'Bounce Rate', 'currentBounceRate', 'previousBounceRate', data, '', '%'));
                 rows.push(buildRow('searchReferrals', 'Inbounds from Search', 'currentCount', 'previousCount', data, '', ''));
                 rows.push(buildRow('ordersCount', 'Orders', 'currentCount', 'previousCount', data, '', ''));
-
+               
                 rows.push(buildRow('revenueReport', 'Revenue', 'currentRevenue', 'previousRevenue', data, '$', ''));
                 self.log.debug('data:', JSON.stringify(data));
                 rows.push(buildRow('sentCount', 'Emails Sent', 'current', 'previous', data.emailReports, '', ''));
@@ -407,11 +407,7 @@ var insightsManager = {
             function(account, sectionDataMap, html, contact, vars, cb) {
                 var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
                 if(account.get("orgId") == 1){
-                    var suffix = '.gorvlvr.com'; // Todo: Get domain from orgId
-                    if(appConfig.nonProduction === true) {
-                        suffix = '.test' + suffix;
-                    }
-                    siteUrl = account.get('subdomain') + suffix;
+                    siteUrl = account.get('subdomain') + '.gorvlvr.com';
                 }
                 console.log(siteUrl);
                 app.render('insights/footer', {siteUrl:siteUrl}, function(err, jadeHtml){
