@@ -8,7 +8,7 @@
 </section>
 <div st-table="vm.displayedOrders" st-safe-src="vm.invoice.row">
     <div class="invoice-top-buttons container-fluid container-fullw bg-white">
-        <div class="col-xs-6 col-md-8 padding-right-0 margin-top-5">
+        <div class="col-xs-12 col-md-12 padding-right-30 margin-top-5">
             <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToInvoices()">
             Back to Ledger
             </button>
@@ -112,7 +112,7 @@
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
-                            <th>Item Code</th>
+                            <th>Item</th>
                             <th>Posted</th>
                             <th>Due</th>
                             <th colspan="2">Item Description</th>
@@ -131,11 +131,11 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
-                            <td><strong>Item Code: </strong>{{order.INV1_ItemCode}}</td>
-                            <td><strong>Posted: </strong>{{order._CustStatmentDtl_RefDate | date:'M/dd/yyyy'}}</td>
-                            <td><strong>Due: </strong>{{order._CustStatmentDtl_DueDate | date:'M/dd/yyyy'}}</td>
-                            <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                            <td><strong>Item Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="40" ng-tt-no-toggling></span></td>
+                            <td><strong>Code: </strong>{{order.INV1_ItemCode}}</td>
+                            <td><strong>Posted: </strong>{{vm.parseValueToDate(order._CustStatmentDtl_RefDate) | date:'M/d/yyyy'}}</td>
+                            <td><strong>Due: </strong>{{vm.parseValueToDate(order._CustStatmentDtl_DueDate) | date:'M/d/yyyy'}}</td>
+                            <td><strong>Item: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                            <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling title="{{order.INV1_U_dscription}}"></span></td>
                             <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
                             <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>
                             <td><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>

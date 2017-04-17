@@ -17,7 +17,8 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
     vm.backToInvoices = backToInvoices;
     vm.calculateTotal = calculateTotal;
     vm.parseValueToFloat = parseValueToFloat;
-    
+    vm.parseValueToDate = parseValueToDate;
+
 
     function backToInvoices(){
         $state.go("app.customers");
@@ -30,7 +31,7 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
             if(vm.invoice && vm.invoice.row)
                 vm.totalLineOrder = calculateTotal(vm.invoice);
             vm.uiState.loading = false;
-        }) 
+        })
     }
 
     function calculateTotal(orders){
@@ -46,6 +47,14 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
             return parseFloat(value);
         }
     }
+
+    function parseValueToDate(value){
+        if(value){
+            var formattedDate = Date.parse(value); // "M/d/yyyy h:mm:ss a"
+            return formattedDate;
+        }
+    }
+
 
 }
 
