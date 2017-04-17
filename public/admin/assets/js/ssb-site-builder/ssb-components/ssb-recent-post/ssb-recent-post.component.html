@@ -3,8 +3,8 @@
         <h3 ng-attr-style="{{vm.titleStyle()}}">
             <div elem ng-model="vm.component.title"></div>
         </h3>
-        <div class="col-lg-12"  ng-repeat="post in vm.blog.posts| orderBy:vm.sortBlogPosts:true |limitTo:5:1 track by $index">
-            <a href="#" ng-attr-style="{{vm.descriptionStyle()}}">{{post.display_title || post.post_title}} </a>
+        <div class="col-lg-12"  ng-repeat="post in vm.blog.posts| orderBy:vm.sortBlogPosts:true | limitTo:(1-vm.blog.posts.length)">
+            <a ng-if="!vm.compactView" ng-class="{'ssb-theme-btn' : post.display_title || post.post_title}" class="btn btn-link" href="/blog/{{post.post_url}}" target="_self" ng-attr-style="{{vm.descriptionStyle()}}">{{post.display_title || post.post_title}} </a>
         </div>
     </div>
 </div>
