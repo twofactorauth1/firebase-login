@@ -197,7 +197,7 @@ module.exports = {
     getLedger: function(accountId, userId, cardCodeFrom, cardCodeTo, dateString, fn) {
         var self = this;
         self.log.debug(accountId, userId, '>> getLedger');
-        var path = 'query/Indigenous/CustomerAging2.aspx?0=' + cardCodeFrom + '&1=' + cardCodeTo + '&2=' + dateString + '&accept=application/json';
+        var path = 'query/Indigenous/CustomerAging2.aspx?0=' + cardCodeFrom + '&1=' + cardCodeTo + '&accept=application/json';
 
         self._ziRequest(path, function(err, value) {
             if (err) {
