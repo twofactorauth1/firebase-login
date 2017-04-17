@@ -212,7 +212,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
                section.components[index].gridHeight= section.layoutModifiers.grid.height;
             });
         }
-        if(section.layoutModifiers.grid.overlay &&         section.layoutModifiers.grid.overlay.isOverlayActive){
+        if(section.layoutModifiers.grid && section.layoutModifiers.grid.overlay &&         section.layoutModifiers.grid.overlay.isOverlayActive){
             angular.forEach(section.components, function(cmp,index) {
              section.components[index].isOverlayActive=true;
                section.components[index].overlayBackground=

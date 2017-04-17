@@ -5,7 +5,31 @@
     	min-width: 200px;
     }
 }
+
 section.ssb-page-section-layout-1-col-grid{
+     .col-xs-15:not(.ssb-component-index-0):not(.ssb-component-index-4),
+     .col-sm-15:not(.ssb-component-index-0):not(.ssb-component-index-4),
+     .col-md-15:not(.ssb-component-index-0):not(.ssb-component-index-4),
+     .col-lg-15:not(.ssb-component-index-0):not(.ssb-component-index-4), {
+          padding-right: 0px;
+          padding-left: 0px;
+      }
+     .ssb-component-index-0.col-xs-15,
+     .ssb-component-index-0.col-sm-15,
+     .ssb-component-index-0.col-md-15,
+     .ssb-component-index-0.col-lg-15 {
+          padding-right: 0px;
+      }
+     .ssb-component-index-4.col-xs-15,
+     .ssb-component-index-4.col-sm-15,
+     .ssb-component-index-4.col-md-15,
+     .ssb-component-index-4.col-lg-15 {
+          padding-left: 0px;
+      }
+    .ssb-text-settings.ssb-element-text {
+        background-size: cover;
+        height: 100%
+    }
     div.ssb-text-only:not(:nth-of-type(3)):not(:nth-last-child(2)) div.col-xs-12{
         padding-right: 0px;
         padding-left: 0px;
@@ -29,5 +53,6 @@ section.ssb-page-section-layout-1-col-grid{
     }
     div.element-wrap{
         overflow: hidden;
+        background-size: cover;
     }
 }
