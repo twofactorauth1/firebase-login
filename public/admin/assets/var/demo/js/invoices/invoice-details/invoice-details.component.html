@@ -6,7 +6,7 @@
         </div>
     </div>
 </section>
-<div st-table="vm.displayedOrders" st-safe-src="vm.invoice.orders">
+<div st-table="vm.displayedOrders" st-safe-src="vm.invoice.row">
     <div class="invoice-top-buttons container-fluid container-fullw bg-white">
         <div class="col-xs-6 col-md-4 margin-top-5">
             <span class="input-icon">
@@ -128,7 +128,7 @@
                 <div class="form-group">
                     <h4>Memo</h4>
                     <ul class="notes panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                        <li ng-repeat="note in vm.state.purchaseOrder.notes">
+                        <li ng-repeat="note in vm.state.invoices.notes">
                             <div class="col-xs-2">
                                 <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
                             </div>
@@ -161,18 +161,21 @@
                         </tr>
                         <tr ng-if="showFilter">
                             <th>
-                                <input st-search="itemCode" placeholder="Item Code" class="form-control" type="search" />
+                                <input st-search="INV1_ItemCode" placeholder="Item Code" class="form-control" type="search" />
+                            </th>
+                            <th>
+                                <input st-search="INV1_Dscription" placeholder="Item Code" class="form-control" type="search" />
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
-                            <td><strong>Item Code: </strong>{{order.itemCode}}</td>
-                            <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.description" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                            <td><strong>Item Description: </strong><span class="list-name"></span><span ng-text-truncate="order.itemDescription" ng-tt-chars-threshold="40" ng-tt-no-toggling></span></td>
-                            <td><strong>Qty: </strong>{{order.qty}}</td>
-                            <td><strong>Unit Price: </strong>{{order.unitPrice}}</td>
-                            <td><strong>Line Total: </strong>{{order.lineTotal}}</td>
+                            <td><strong>Item Code: </strong>{{order.INV1_ItemCode}}</td>
+                            <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                            <td><strong>Item Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="40" ng-tt-no-toggling></span></td>
+                            <td><strong>Qty: </strong>{{order.INV1_Quantity}}</td>
+                            <td><strong>Unit Price: </strong>{{order.INV1_Price}}</td>
+                            <td><strong>Line Total: </strong>{{order.INV1_LineTotal}}</td>
                         </tr>
                     </tbody>
                     <tfoot>

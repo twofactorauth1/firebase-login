@@ -26,7 +26,7 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
         vm.element = element;
         InvoiceService.viewCustomerInvoice($stateParams.customerId).then(function(response){
             vm.invoice = response.data.response.payload.querydata.data;
-            //vm.totalLineOrder = calculateTotal(response.orders);
+            //vm.totalLineOrder = calculateTotal(vm.invoice);
             vm.uiState.loading = false;
         }) 
     }
