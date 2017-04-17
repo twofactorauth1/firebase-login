@@ -25,6 +25,8 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     vm.sortBlogPosts = sortBlogPosts;
 
     vm.filteredPostView = false;
+    vm.titleStyle=titleStyle;
+    vm.descriptionStyle=descriptionStyle;
 
     if (path.indexOf("tag/") > -1) {
         vm.blog.currentTag = path.replace('/tag/', '');
@@ -42,9 +44,43 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
                 $scope.$broadcast('$refreshSlickSlider');
             }, 2000)
             checkHasFeaturedPosts();
+            if(vm.blog.posts.length>1){
+                if(vm.blog.posts.length>6){
+                  vm.blog.posts=   vm.blog.posts.slice(0, 6);
+                }
+                vm.element.closest("div.ssb-page-section").css({'display': 'block'});
+            }else{
+                 vm.element.closest("div.ssb-page-section").css({'display': 'none'});
+            }
         }
     });
+    function titleStyle(){
+		var styleString = ' ';
+		if(vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.fontSize){
+			styleString += 'font-size: ' + vm.component.settings.title.fontSize + 'px !important;';
+		}
+		if(vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.fontFamily){
+			styleString += 'font-family: ' + vm.component.settings.title.fontFamily + 'px !important;';
+		}
+		if(vm.component && vm.component.settings && vm.component.settings.title && vm.component.settings.title.color){
+			styleString += 'color: ' + vm.component.settings.title.color + "!important;";
+		}
+		return styleString;
+	}
 
+	function descriptionStyle(){
+		var styleString = ' ';
+		if(vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.fontSize){
+			styleString += 'font-size: ' + vm.component.settings.description.fontSize + 'px !important;';
+		}
+		if(vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.fontFamily){
+			styleString += 'font-family: ' + vm.component.settings.description.fontFamily + 'px !important;';
+		}
+		if(vm.component && vm.component.settings && vm.component.settings.description && vm.component.settings.description.color){
+			styleString += 'color: ' + vm.component.settings.description.color + "!important;";
+		}
+		return styleString;
+	}
     function initData() {
         var posts = SimpleSiteBuilderBlogService.loadDataFromPage('#indigenous-precache-sitedata-posts') || window.indigenous.precache.siteData.posts;
         if (posts) {
@@ -82,18 +118,9 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     function init(element) {
     	vm.element = element;
         checkHasFeaturedPosts();
-
         if (!vm.blog.posts.length) {
             vm.initData();
-        }else{
-            if(vm.blog.posts.length>5){
-               vm.blog.posts = vm.blog.posts.slice(0, 5)
-            }else if(vm.blog.posts.length<1){
-                element.closest("div.ssb-page-section").css({'display': 'none'});
-            }
-
         }
-
     }
 
 }

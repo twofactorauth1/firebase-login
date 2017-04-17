@@ -3,11 +3,11 @@
 /*jslint unparam:true*/
 (function () {
 
-	app.factory('DashboardService', DashboardService);
+    app.factory('DashboardService', DashboardService);
 
-	DashboardService.$inject = ['$http', '$q', '$rootScope', '$timeout', 'dashboardBackgrounds'];
-	/* @ngInject */
-	function DashboardService($http, $q, $rootScope, $timeout, dashboardBackgrounds) {
+    DashboardService.$inject = ['$http', '$q', '$rootScope', '$timeout', 'dashboardBackgrounds'];
+    /* @ngInject */
+    function DashboardService($http, $q, $rootScope, $timeout, dashboardBackgrounds) {
 
         var dashboardService = {
             state: {
@@ -15,6 +15,7 @@
                 reports:{}
             }
         };
+        var baseStripApi = '/api/1.0/integrations/payments/revenue';
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
         var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
@@ -24,6 +25,7 @@
         var baseLiveVisitorDetailsAPIUrl = '/api/1.0/analytics/liveDetails';
 
         var defaultLookBackInMinutesInterval = 60;
+        var totalrevenue =0;
 
         dashboardService.getActiveMessages = getActiveMessages;
         dashboardService.loading = { value:0 };
@@ -33,6 +35,7 @@
         dashboardService.polls = 0;
         dashboardService.numberPolling = 0;
         dashboardService.doPolling = true;
+
 
         dashboardService.workstreamDisplayOrder = [
             'Build an Online Presence',
@@ -64,9 +67,9 @@
         dashboardService.getLiveTraffic = getLiveTraffic;
         dashboardService.getLiveVisitorDetails = getLiveVisitorDetails;
         dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
+        dashboardService.getRevenueFromStripe = getRevenueFromStripe;
 
-
-		function dashRequest(fn) {
+        function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
             // console.info('dashService | loading +1 : ' + dashboardService.loading.value);
             fn.finally(function() {
@@ -74,7 +77,7 @@
                 // console.info('dashService | loading -1 : ' + dashboardService.loading.value);
             });
             return fn;
-		}
+        }
 
         function getWorkstreams() {
 
@@ -264,6 +267,8 @@
 
             function success(data) {
                 console.log(data);
+                   
+
                 dashboardService.broadcastMessages = data;
             }
 
@@ -275,6 +280,23 @@
 
         }
 
+        function getRevenueFromStripe(){
+            function success(data) {
+                console.log(data);
+                var totaldataarray = data.data;
+                for(var i  =0 ;i<totaldataarray.length;i++){
+                for(var j=0;j<totaldataarray[i].length;j++){
+                totalrevenue=totalrevenue+(totaldataarray[i][j].amount/100);
+                }};  
+                 dashboardService.revenueFromStripe = totalrevenue.toFixed(2);
+            }
+
+            function error(error) {
+                console.error('dashRequest getRevenueFromStripe error: ', JSON.stringify(error));
+            }
+
+            return dashRequest($http.get(baseStripApi).success(success).error(error));
+        }
 
         $rootScope.$on('$ssbAccountUpdated', function(event, account) {
             dashboardService.getAccount();
@@ -282,7 +304,7 @@
 
 
 
-		(function init() {
+        (function init() {
 
             dashboardService.getAccount();
             dashboardService.getAnalytics();
@@ -290,11 +312,12 @@
             dashboardService.getLiveTraffic();
             dashboardService.getLiveVisitorDetails();
             dashboardService.getActiveMessages();
+            dashboardService.getRevenueFromStripe();
             dashboardService.numberPolling++;
-		})();
+        })();
 
 
-		return dashboardService;
-	}
+        return dashboardService;
+    }
 
 })();

@@ -13,10 +13,11 @@
             
         };
 
-        var baseInvoiceAPIUrl = '/api/1.0/integrations/zi/inventory';
+        var baseInvoiceAPIUrl = '/api/1.0/integrations/zi';
 
         invoiceService.getInvoices = getInvoices;
         invoiceService.getSingleInvoice = getSingleInvoice;
+        invoiceService.viewCustomerInvoice= viewCustomerInvoice
 
         invoiceService.loading = {value: 0};
 
@@ -85,6 +86,25 @@
 
             deferred.resolve(invoice);
             return deferred.promise;
+        }
+
+
+        /**
+            * Get customer invoice details
+        */
+        function viewCustomerInvoice(customerId) {
+
+            function success(data) {
+               // invoiceService.invoice = data.response.payload.querydata.data;
+            }
+
+            function error(error) {
+                console.error('InvoiceService viewCustomerInvoice error: ', JSON.stringify(error));
+            }
+
+            var qString = "?cardCodeFrom="+ customerId + "&cardCodeTo=" + customerId;
+
+            return invoiceRequest($http.get([baseInvoiceAPIUrl, 'ledger'].join('/') + qString).success(success).error(error));
         }
 
 

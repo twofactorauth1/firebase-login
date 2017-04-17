@@ -16,27 +16,35 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
 
     vm.backToInvoices = backToInvoices;
     vm.calculateTotal = calculateTotal;
+    vm.parseValueToFloat = parseValueToFloat;
     
 
     function backToInvoices(){
-        $state.go("app.invoices");
+        $state.go("app.customers");
     }
 
     function init(element) {
         vm.element = element;
-        InvoiceService.getSingleInvoice($stateParams.invoiceId).then(function(response){
-            vm.invoice = response;
-            vm.totalLineOrder = calculateTotal(response.orders);
+        InvoiceService.viewCustomerInvoice($stateParams.customerId).then(function(response){
+            vm.invoice = response.data.response.payload.querydata.data;
+            if(vm.invoice && vm.invoice.row)
+                vm.totalLineOrder = calculateTotal(vm.invoice);
             vm.uiState.loading = false;
         }) 
     }
 
     function calculateTotal(orders){
         var _sum = 0;
-        _.each(orders, function(order){
-            _sum+= order.lineTotal
+        _.each(orders.row, function(order){
+            _sum+= parseFloat(order.INV1_LineTotal)
         })
         return _sum;
+    }
+
+    function parseValueToFloat(value){
+        if(value){
+            return parseFloat(value);
+        }
     }
 
 }

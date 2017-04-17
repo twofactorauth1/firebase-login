@@ -677,6 +677,14 @@ app.constant('JS_REQUIRES', {
     'InvoiceDetailsComponent': 'assets/var/demo/js/invoices/invoice-details/invoice-details.component.js',
     'InvoiceDetailsController': 'assets/var/demo/js/invoices/invoice-details/invoice-details.controller.js',    
 
+
+    // Customers
+
+    
+    'CustomersComponent': 'assets/var/demo/js/customers/customers.component.js',
+    'CustomersComponentController': 'assets/var/demo/js/customers/customers.controller.js',
+    'CustomersService': 'assets/var/demo/js/customers/customers.service.js',
+
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
