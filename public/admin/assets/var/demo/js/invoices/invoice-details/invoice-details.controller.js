@@ -16,6 +16,7 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
 
     vm.backToInvoices = backToInvoices;
     vm.calculateTotal = calculateTotal;
+    vm.parseValueToFloat = parseValueToFloat;
     
 
     function backToInvoices(){
@@ -38,6 +39,12 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
             _sum+= parseFloat(order.INV1_LineTotal)
         })
         return _sum;
+    }
+
+    function parseValueToFloat(value){
+        if(value){
+            return parseFloat(value);
+        }
     }
 
 }
