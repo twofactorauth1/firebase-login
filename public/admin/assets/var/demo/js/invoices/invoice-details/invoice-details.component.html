@@ -181,7 +181,7 @@
                     <tfoot>
                         <tr>
                             <td class="text-right padding-right-20" colspan="10">
-                                <span class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder}}</span>
+                                <span ng-if="vm.totalLineOrder" class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder}}</span>
                             </td>
                         </tr>
                     </tfoot>
