@@ -26,15 +26,16 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
         vm.element = element;
         InvoiceService.viewCustomerInvoice($stateParams.customerId).then(function(response){
             vm.invoice = response.data.response.payload.querydata.data;
-            //vm.totalLineOrder = calculateTotal(vm.invoice);
+            if(vm.invoice && vm.invoice.row)
+                vm.totalLineOrder = calculateTotal(vm.invoice);
             vm.uiState.loading = false;
         }) 
     }
 
     function calculateTotal(orders){
         var _sum = 0;
-        _.each(orders, function(order){
-            _sum+= order.lineTotal
+        _.each(orders.row, function(order){
+            _sum+= parseFloat(order.INV1_LineTotal)
         })
         return _sum;
     }
