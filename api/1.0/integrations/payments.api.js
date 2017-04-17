@@ -158,32 +158,35 @@ _.extend(api.prototype, baseApi.prototype, {
             if(isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                self.getStripeTokenFromAccount(req, function(err, accessToken){
-                    if(!accessToken && accountId !== appConfig.mainAccountID) {
-                        return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected',
-                            'Connect the Stripe account and retry this operation.');
-                    }
-                    //TODO: fill these in.
-                    var created = {
-                        gte:start.getTime() || null,//req.query.from OR today-30days as a timestamp (1492095302)
-                        lte:end.getTime() || null//req.query.to OR today as a timestamp
-                    };
-                    var limit = req.query.limit || 0;
+                accountDao.getAccountByID(accountId, function(err, account) {
+                    if (err) {
+                        self.log.error('Error getting account by ID:', err);
+                        return self.wrapError(resp, 500, 'Error getting invoice', 'There was an error getting upcoming invoices', '');
+                    } else {
+                        
+                        var created = {
+                            gte:start.getTime() || null,//req.query.from OR today-30days as a timestamp (1492095302)
+                            lte:end.getTime() || null//req.query.to OR today as a timestamp
+                        };
+                        var limit = req.query.limit || 0;
 
-                    /*
-                     * Leave these blank for now.  They are used for pagination within Stripe's list.  According to Stripe's docs:
-                     *
-                     * A cursor for use in pagination. ending_before is an object ID that defines your place in the list.
-                     * For instance, if you make a list request and receive 100 objects, starting with obj_bar, your
-                     * subsequent call can include ending_before=obj_bar in order to fetch the previous page of the list.
-                     */
-                    var endingBefore = null;
-                    var startingAfter = null;
+                        /*
+                         * Leave these blank for now.  They are used for pagination within Stripe's list.  According to Stripe's docs:
+                         *
+                         * A cursor for use in pagination. ending_before is an object ID that defines your place in the list.
+                         * For instance, if you make a list request and receive 100 objects, starting with obj_bar, your
+                         * subsequent call can include ending_before=obj_bar in order to fetch the previous page of the list.
+                         */
+                        var endingBefore = null;
+                        var startingAfter = null;
 
-                    paymentsManager.listChargesForAccount(accountId, created, endingBefore, limit, startingAfter, userId, function(err, charges){
-                        self.log.debug(accountId, userId, '<< listChargesForAccount');
-                        return self.sendResultOrError(resp, err, charges, "Error listing revenue");
-                    });
+                        var customerId = account.get('billing').stripeCustomerId;
+
+                        paymentsManager.listChargesForAccount(account, created, endingBefore, limit, startingAfter, userId, function(err, charges){
+                            self.log.debug(accountId, userId, '<< listChargesForAccount');
+                            return self.sendResultOrError(resp, err, charges, "Error listing revenue");
+                        });
+                    }   
                 });
             }
         });
