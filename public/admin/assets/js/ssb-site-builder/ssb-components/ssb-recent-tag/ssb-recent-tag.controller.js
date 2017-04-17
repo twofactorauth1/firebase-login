@@ -66,7 +66,8 @@ function SiteBuilderBolgRecentTagComponentController(SimpleSiteBuilderBlogServic
             angular.forEach(vm.blog.posts, function(post, key) {
                 if (post.post_tags && post.post_tags.length > 0) {
                     angular.forEach(post.post_tags, function(tag, key1) {
-                        if(blog_tags.length<=10){
+                        debugger
+                        if(blog_tags.length<10){
                           if (blog_tags.indexOf(tag) == -1) {
                             blog_tags.push(tag)
                            }
