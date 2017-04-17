@@ -92,12 +92,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Contacts',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('contactsCtrl', 'ImportContactService', "socialConfigService", 'contactService', 'papaParse', 'string_score', 'importContactModalCtrl')
-    }).state('app.customers', {
-        url: '/customers',
-        templateUrl: "/admin/assets/views/customers.html",
-        title: 'Customers',
-        icon: 'ti-layout-media-left-alt',
-        resolve: loadSequence('customersCtrl', 'customerService')
     }).state('app.customeranalytics', {
         url: '/customers/analytics',
         templateUrl: "/admin/assets/views/customer-analytics.html",
@@ -283,6 +277,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Invoice',
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('InvoiceComponent', 'InvoiceComponentController', 'InvoiceService')
+    }).state('app.customers', {
+        url: '/customers',
+        templateUrl: "/admin/assets/var/demo/js/customers/customers.html",
+        title: 'Customers',
+        icon: 'ti-layout-media-left-alt',
+        resolve: loadSequence('CustomersComponent', 'CustomersComponentController', 'CustomersService')
     }).state('app.invoiceDetails', {
         url: '/invoices/:invoiceId',
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice-details/invoice-details.html",
