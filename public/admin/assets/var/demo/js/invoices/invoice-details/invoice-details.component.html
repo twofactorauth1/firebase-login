@@ -173,15 +173,15 @@
                             <td><strong>Item Code: </strong>{{order.INV1_ItemCode}}</td>
                             <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                             <td><strong>Item Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="40" ng-tt-no-toggling></span></td>
-                            <td><strong>Qty: </strong>{{order.INV1_Quantity}}</td>
-                            <td><strong>Unit Price: </strong>{{order.INV1_Price}}</td>
-                            <td><strong>Line Total: </strong>{{order.INV1_LineTotal}}</td>
+                            <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
+                            <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>
+                            <td><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <td class="text-right padding-right-20" colspan="10">
-                                <span ng-if="vm.totalLineOrder" class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder}}</span>
+                                <span ng-if="vm.totalLineOrder" class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</span>
                             </td>
                         </tr>
                     </tfoot>
