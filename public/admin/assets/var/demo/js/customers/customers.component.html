@@ -110,23 +110,32 @@
 	    <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
 	        <thead ng-class="{'bg-white': tableView == 'grid'}">
 	            <tr>
-	                <th st-sort="OCRD_CardCode">Card Code</th>
-	                <th st-sort="OCRD_CardName">Card Name</th>
-	                <th>Phone</th>
+	                <th st-sort="OCRD_CardCode">Id</th>
+	                <th st-sort="OCRD_CardName">Name</th>
+	                <th class="hidden-xs">Address</th>
+	                <th st-sort="OCRD_City">City</th>
+	                <th st-sort="OCRD_State1">State</th>
+	                <th st-sort="OCRD_ZipCode">ZipCode</th>
 	            </tr>
 	            <tr ng-if="showFilter">
 	                <th>
-	                    <input st-search="title" placeholder="Name" class="form-control" type="search" />
+	                    <input st-search="OCRD_CardCode" placeholder="Id" class="form-control" type="search" />
+	                </th>
+	                <th>
+	                    <input st-search="OCRD_CardName" placeholder="Name" class="form-control" type="search" />
 	                </th>
 	            </tr>
 	        </thead>
 	        <tbody>
 	            <tr ng-repeat="customer in vm.displayedCustomers" class="product-item">
 	            
-	                <td class=""><strong>Card Code: </strong>{{customer.OCRD_CardCode}}</td>
+	                <td class=""><strong>Id: </strong>{{customer.OCRD_CardCode}}</td>
 
-	                <td><strong>Card Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_CardName" ng-tt-chars-threshold="30" ng-tt-no-toggling></span></div></td>
-	                <td><strong>Phone: </strong>{{customer.OCRD_Phone1}}</td>	 
+	                <td><strong>Name: </strong><div class="name-block-container"><span class="list-name"></span><span ng-text-truncate="customer.OCRD_CardName" ng-tt-chars-threshold="30" ng-tt-no-toggling></span></div></td>
+	                <td class="hidden-xs"><strong>Address: </strong>{{customer.OCRD_Address}}</td>
+	                <td><strong>City: </strong>{{customer.OCRD_City}}</td>
+	                <td><strong>State: </strong>{{customer.OCRD_State1}}</td>
+	                <td><strong>ZipCode: </strong>{{customer.OCRD_ZipCode}}</td>	 
 	            </tr>
 	        </tbody>
 	        <tfoot>
