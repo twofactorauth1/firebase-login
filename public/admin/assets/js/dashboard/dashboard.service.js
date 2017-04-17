@@ -15,6 +15,7 @@
                 reports:{}
             }
         };
+        var stripeapi = '/api/2.0/integrations/payment/revenue'
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
         var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
@@ -178,6 +179,8 @@
             function error(error) {
                 console.error('DashboardService getAnalytics error: ', JSON.stringify(error));
             }
+
+            dashRequest($http.get(stripeapi).success(success).error(error));
 
             return dashRequest($http.get(baseAnalyticsAPIUrl).success(success).error(error));
 
