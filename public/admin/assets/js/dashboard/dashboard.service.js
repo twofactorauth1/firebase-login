@@ -25,6 +25,7 @@
         var baseLiveVisitorDetailsAPIUrl = '/api/1.0/analytics/liveDetails';
 
         var defaultLookBackInMinutesInterval = 60;
+        var totalrevenue =0;
 
         dashboardService.getActiveMessages = getActiveMessages;
         dashboardService.loading = { value:0 };
@@ -34,6 +35,7 @@
         dashboardService.polls = 0;
         dashboardService.numberPolling = 0;
         dashboardService.doPolling = true;
+
 
         dashboardService.workstreamDisplayOrder = [
             'Build an Online Presence',
@@ -265,6 +267,8 @@
 
             function success(data) {
                 console.log(data);
+                   
+
                 dashboardService.broadcastMessages = data;
             }
 
@@ -279,7 +283,12 @@
         function getRevenueFromStripe(){
             function success(data) {
                 console.log(data);
-                dashboardService.revenueFromStripe = data;
+                var totaldataarray = data.data;
+                for(var i  =0 ;i<totaldataarray.length;i++){
+                for(var j=0;j<totaldataarray[i].length;j++){
+                totalrevenue=totalrevenue+(totaldataarray[i][j].amount%100);
+                }};  
+                 dashboardService.revenueFromStripe = totalrevenue;
             }
 
             function error(error) {
