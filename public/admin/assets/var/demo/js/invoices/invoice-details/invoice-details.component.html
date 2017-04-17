@@ -1,23 +1,14 @@
 <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
         <div class="col-sm-8">
-            <h1 class="mainTitle">Invoice Detail </h1>
-            <span class="mainDescription">{{vm.invoice.row[0].CompanyAddr}}</span>
+            <h1 class="mainTitle">Customer Ledger</h1>
+            <span class="mainDescription">{{vm.invoice.row[0]._CustStatmentHdr_CardName}}</span>
         </div>
     </div>
 </section>
 <div st-table="vm.displayedOrders" st-safe-src="vm.invoice.row">
     <div class="invoice-top-buttons container-fluid container-fullw bg-white">
-        <div class="col-xs-6 col-md-4 margin-top-5">
-            <span class="input-icon">
-                <input type="text" st-search placeholder="Search by name, vendor, sku..." id="form-field-14" class="form-control">
-                <i class="ti-search"></i>
-            </span>
-        </div>
         <div class="col-xs-6 col-md-8 padding-right-0 margin-top-5">
-            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active" ng-click="showFilter = !showFilter">
-                <span>Filter</span>
-            </button>
             <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-bottom-5 margin-left-5" ng-click="vm.backToInvoices()">
             Back to Ledger
             </button>
@@ -29,96 +20,94 @@
             <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-left-panel">
                 <div class="form-group">
                     <h4>Customer</h4>
-                    
+
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_CardCode}}    
-                        </span>                    
+                            {{vm.invoice.row[0]._CustStatmentHdr_CardCode}}
+                        </span>
                     </div>
                     <hr>
                 </div>
                 <div class="form-group">
                     <h4>Name</h4>
-                    
+
                     <div class="description">
                         <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_CardName}}  
-                        </span>                    
+                            {{vm.invoice.row[0]._CustStatmentHdr_CardName}}
+                        </span>
                     </div>
                     <hr>
                 </div>
                 <div class="form-group">
                     <h4>Address</h4>
-                    
+
                     <div class="description">
                         <span>
                             {{vm.invoice.row[0]._CustStatmentHdr_Address}}
-                        </span>                    
+                        </span>
                     </div>
                     <hr>
                 </div>
-                <div class="form-group">
-                    <h4>City</h4>
-                    
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_City}}
-                        </span>                    
-                    </div>
-                    <hr>
-                </div>
-                <div class="form-group">
-                    <h4>State</h4>
-                    
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_State1}}
-                        </span>                    
-                    </div>
-                    <hr>
-                </div>
-                <div class="form-group">
-                    <h4>Zip</h4>
-                    
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentHdr_ZipCode}}
-                        </span>                    
-                    </div>
-                    <hr>
-                </div>
-
             </div>
 
             <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-middle-panel">
                 <div class="form-group hidden">
                     <h4>Status</h4>
-                    
+
                     <div class="description">
                         <span>
                             {{vm.invoice.invoiceStatus}}
-                        </span>                    
+                        </span>
                     </div>
                     <hr>
                 </div>
+                <div class="form-group">
+                    <h4>City</h4>
 
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.row[0]._CustStatmentHdr_City}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+                <div class="form-group">
+                    <h4>State</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.row[0]._CustStatmentHdr_State1}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
+                <div class="form-group">
+                    <h4>Zip</h4>
+
+                    <div class="description">
+                        <span>
+                            {{vm.invoice.row[0]._CustStatmentHdr_ZipCode}}
+                        </span>
+                    </div>
+                    <hr>
+                </div>
                 <div class="form-group">
                     <h4>Posting Date</h4>
-                    
+
                     <div class="description">
                         <span>
                             {{vm.invoice.row[0]._CustStatmentDtl_RefDate | date:'M/dd/yyyy'}}
-                        </span>                    
+                        </span>
                     </div>
                     <hr>
                 </div>
                 <div class="form-group">
                     <h4>Due Date</h4>
-                    
+
                     <div class="description">
                         <span>
                             {{vm.invoice.row[0]._CustStatmentDtl_DueDate | date:'M/dd/yyyy'}}
-                        </span>                    
+                        </span>
                     </div>
                     <hr>
                 </div>
@@ -138,8 +127,8 @@
                             </div>
                             <div class="clearfix"></div>
                         </li>
-                    </ul> 
-                    
+                    </ul>
+
                     <textarea id="newNote" rows="5" class="form-control margin-bottom-15" ng-model="vm.newNote.text"></textarea>
                     <button type="button" ng-disabled="!(vm.newNote.text) || vm.uiState.saveLoading" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="vm.addNote(vm.newNote.text)">
                         <span>Add</span>
@@ -148,7 +137,7 @@
             </div>
         </div>
         <div class="inner-invoice-details bg-white col-xs-12 margin-top-30 purchase-orders-list">
-            <div ng-init="tableView='list'">        
+            <div ng-init="tableView='list'">
                 <table class="table table-hover table-striped" ng-class="{'grid': tableView == 'grid', 'bg-white table-list-view': tableView == 'list'}" ng-if="!vm.uiState.loading">
                     <thead ng-class="{'bg-white': tableView == 'grid'}">
                         <tr>
@@ -186,11 +175,11 @@
                         </tr>
                     </tfoot>
                 </table>
-                <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>        
+                <div class="load1 csspinner height-400" ng-show="vm.uiState.loading"></div>
             </div>
         </div>
     </div>
 </div>
 <div class="loading-invoice-details center" ng-if="vm.uiState.loading">
-    <h2>Loading invoice details.Please wait....</h2>
+    <h2>Loading customer ledger. Please wait....</h2>
 </div>
