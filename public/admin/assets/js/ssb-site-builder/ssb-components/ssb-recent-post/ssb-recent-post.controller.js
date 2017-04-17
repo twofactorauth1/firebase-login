@@ -44,10 +44,11 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
                 $scope.$broadcast('$refreshSlickSlider');
             }, 2000)
             checkHasFeaturedPosts();
-            if(vm.blog.posts.length<1){
-                 vm.element.closest("div.ssb-page-section").css({'display': 'none'});
+            debugger
+            if(vm.blog.posts.length>1){
+                vm.element.closest("div.ssb-page-section").css({'display': 'block'});
             }else{
-                 vm.element.closest("div.ssb-page-section").css({'display': 'block'});
+                 vm.element.closest("div.ssb-page-section").css({'display': 'none'});
             }
         }
     });
@@ -115,18 +116,9 @@ function ssbBlogRecentPostComponentController(SimpleSiteBuilderBlogService, $sco
     function init(element) {
     	vm.element = element;
         checkHasFeaturedPosts();
-
         if (!vm.blog.posts.length) {
             vm.initData();
-        }else{
-            if(vm.blog.posts.length>5){
-               vm.blog.posts = vm.blog.posts.slice(0, 5)
-            }else if(vm.blog.posts.length<1){
-                element.closest("div.ssb-page-section").css({'display': 'none'});
-            }
-
         }
-
     }
 
 }
