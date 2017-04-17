@@ -181,9 +181,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         self.log.debug(accountId, userId, '>> ledger');
 
-        var dateString = req.query.date || '3/27/17';
-        var cardCodeFrom = req.query.cardCodeFrom || 'C101290';
-        var cardCodeTo = req.query.cardCodeTo || 'C101290';
+        var dateString = req.query.date || moment().format("M/DD/YY");
+        var cardCodeFrom = req.query.cardCodeFrom || 'C1002221';
+        var cardCodeTo = req.query.cardCodeTo || 'C1002221';
         self.getUserProperty(userId, 'cardCodes', function(err, cardCodes){
             if(cardCodes) {
                 cardCodeFrom = cardCodes[0];

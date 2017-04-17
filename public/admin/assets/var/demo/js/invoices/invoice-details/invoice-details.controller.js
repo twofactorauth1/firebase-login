@@ -19,14 +19,14 @@ function invoiceDetailsController($scope, $state, $attrs, $filter, $modal, $time
     
 
     function backToInvoices(){
-        $state.go("app.invoices");
+        $state.go("app.customers");
     }
 
     function init(element) {
         vm.element = element;
-        InvoiceService.getSingleInvoice($stateParams.invoiceId).then(function(response){
-            vm.invoice = response;
-            vm.totalLineOrder = calculateTotal(response.orders);
+        InvoiceService.viewCustomerInvoice($stateParams.customerId).then(function(response){
+            vm.invoice = response.data.response.payload.querydata.data;
+            //vm.totalLineOrder = calculateTotal(response.orders);
             vm.uiState.loading = false;
         }) 
     }

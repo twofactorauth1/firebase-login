@@ -284,7 +284,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('CustomersComponent', 'CustomersComponentController', 'CustomersService')
     }).state('app.invoiceDetails', {
-        url: '/invoices/:invoiceId',
+        url: '/invoices/:customerId',
         templateUrl: "/admin/assets/var/demo/js/invoices/invoice-details/invoice-details.html",
         title: 'Invoice Details',
         icon: 'ti-layout-media-left-alt',
