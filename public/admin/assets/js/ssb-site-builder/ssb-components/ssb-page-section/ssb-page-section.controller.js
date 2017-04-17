@@ -207,13 +207,18 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
 
         if (section.layoutModifiers &&
-            section.layoutModifiers.grid && section.layoutModifiers.grid.isActive && section.layoutModifiers.grid.overlay &&         section.layoutModifiers.grid.overlay.isOverlayActive){
+            section.layoutModifiers.grid && section.layoutModifiers.grid.isActive ){
+             angular.forEach(section.components, function(cmp,index) {
+               section.components[index].gridHeight= section.layoutModifiers.grid.height;
+            });
+        }
+        if(section.layoutModifiers.grid.overlay &&         section.layoutModifiers.grid.overlay.isOverlayActive){
             angular.forEach(section.components, function(cmp,index) {
              section.components[index].isOverlayActive=true;
                section.components[index].overlayBackground=
                    section.layoutModifiers.grid.overlay.overlayColor;
                section.components[index].overlayOpacity= section.layoutModifiers.grid.overlay.overlayOpacity ;
-               section.components[index].gridHeight= section.layoutModifiers.grid.height
+               section.components[index].gridHeight= section.layoutModifiers.grid.height;
             });
 
         }else{
