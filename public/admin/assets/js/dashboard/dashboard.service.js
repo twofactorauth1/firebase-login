@@ -3,11 +3,11 @@
 /*jslint unparam:true*/
 (function () {
 
-	app.factory('DashboardService', DashboardService);
+    app.factory('DashboardService', DashboardService);
 
-	DashboardService.$inject = ['$http', '$q', '$rootScope', '$timeout', 'dashboardBackgrounds'];
-	/* @ngInject */
-	function DashboardService($http, $q, $rootScope, $timeout, dashboardBackgrounds) {
+    DashboardService.$inject = ['$http', '$q', '$rootScope', '$timeout', 'dashboardBackgrounds'];
+    /* @ngInject */
+    function DashboardService($http, $q, $rootScope, $timeout, dashboardBackgrounds) {
 
         var dashboardService = {
             state: {
@@ -65,9 +65,9 @@
         dashboardService.getLiveTraffic = getLiveTraffic;
         dashboardService.getLiveVisitorDetails = getLiveVisitorDetails;
         dashboardService.getPlatformLiveTraffic = getPlatformLiveTraffic;
+        dashboardService.getRevenueFromStripe = getRevenueFromStripe;
 
-
-		function dashRequest(fn) {
+        function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
             // console.info('dashService | loading +1 : ' + dashboardService.loading.value);
             fn.finally(function() {
@@ -75,7 +75,7 @@
                 // console.info('dashService | loading -1 : ' + dashboardService.loading.value);
             });
             return fn;
-		}
+        }
 
         function getWorkstreams() {
 
@@ -278,6 +278,18 @@
 
         }
 
+        function getRevenueFromStripe(){
+            function success(data) {
+                console.log(data);
+                dashboardService.revenueFromStripe = data;
+            }
+
+            function error(error) {
+                console.error('dashRequest getRevenueFromStripe error: ', JSON.stringify(error));
+            }
+
+            return dashRequest($http.get(stripeapi).success(success).error(error));
+        }
 
         $rootScope.$on('$ssbAccountUpdated', function(event, account) {
             dashboardService.getAccount();
@@ -285,7 +297,7 @@
 
 
 
-		(function init() {
+        (function init() {
 
             dashboardService.getAccount();
             dashboardService.getAnalytics();
@@ -293,11 +305,12 @@
             dashboardService.getLiveTraffic();
             dashboardService.getLiveVisitorDetails();
             dashboardService.getActiveMessages();
+            dashboardService.getRevenueFromStripe();
             dashboardService.numberPolling++;
-		})();
+        })();
 
 
-		return dashboardService;
-	}
+        return dashboardService;
+    }
 
 })();
