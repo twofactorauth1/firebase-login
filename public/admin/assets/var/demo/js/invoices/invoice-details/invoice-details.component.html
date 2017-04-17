@@ -28,18 +28,18 @@
                     </div>
                     <hr>
                 </div>
-            </div>
-            <div class="form-group">
-                <h4>Customer</h4>
 
-                <div class="description">
+                <div class="form-group">
+                    <h4>Customer</h4>
+
+                    <div class="description">
                         <span>
                             {{vm.invoice.row[0]._CustStatmentHdr_CardCode}}
                         </span>
+                    </div>
+                    <hr>
                 </div>
-                <hr>
             </div>
-
 
             <div class="col-sm-4 col-xs-12 invoice-details-panel invoice-details-middle-panel">
                 <div class="form-group hidden">
@@ -78,26 +78,6 @@
                     <div class="description">
                         <span>
                             {{vm.invoice.row[0]._CustStatmentHdr_ZipCode}}
-                        </span>
-                    </div>
-                    <hr>
-                </div>
-                <div class="form-group">
-                    <h4>Posting Date</h4>
-
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentDtl_RefDate | date:'M/dd/yyyy'}}
-                        </span>
-                    </div>
-                    <hr>
-                </div>
-                <div class="form-group">
-                    <h4>Due Date</h4>
-
-                    <div class="description">
-                        <span>
-                            {{vm.invoice.row[0]._CustStatmentDtl_DueDate | date:'M/dd/yyyy'}}
                         </span>
                     </div>
                     <hr>
@@ -153,10 +133,10 @@
                     <tbody>
                         <tr ng-repeat="order in vm.displayedOrders" class="product-item">
                             <td><strong>Item Code: </strong>{{order.INV1_ItemCode}}</td>
-                            <td><strong>Posted: </strong>{{order._CustStatmentDtl_RefDate}}</td>
-                            <td><strong>Due: </strong>{{order._CustStatmentDtl_DueDate}}</td>
+                            <td><strong>Posted: </strong>{{order._CustStatmentDtl_RefDate | date:'M/dd/yyyy'}}</td>
+                            <td><strong>Due: </strong>{{order._CustStatmentDtl_DueDate | date:'M/dd/yyyy'}}</td>
                             <td><strong>Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_Dscription" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                            <td><strong>Item Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="30" ng-tt-no-toggling></span></td>
+                            <td><strong>Item Description: </strong><span class="list-name"></span><span ng-text-truncate="order.INV1_U_dscription" ng-tt-chars-threshold="40" ng-tt-no-toggling></span></td>
                             <td><strong>Qty: </strong>{{vm.parseValueToFloat(order.INV1_Quantity)}}</td>
                             <td><strong>Unit Price: </strong>{{order.INV1_Price | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>
                             <td><strong>Line Total: </strong>{{order.INV1_LineTotal | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</td>
@@ -164,7 +144,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <td class="text-right padding-right-30" colspan="10">
+                            <td class="text-right padding-right-20" colspan="10">
                                 <span ng-if="vm.totalLineOrder" class="order-total-text">Total</span><span class="order-total-value">{{vm.totalLineOrder | currency : vm.invoice.row[0]._CustStatmentHdr_Currency}}</span>
                             </td>
                         </tr>
