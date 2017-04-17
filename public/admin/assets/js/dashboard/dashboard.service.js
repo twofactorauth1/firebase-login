@@ -15,6 +15,7 @@
                 reports:{}
             }
         };
+        var baseStripApi = '/api/1.0/integrations/payments/revenue';
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
         var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
@@ -285,7 +286,7 @@
                 console.error('dashRequest getRevenueFromStripe error: ', JSON.stringify(error));
             }
 
-            return dashRequest($http.get(stripeapi).success(success).error(error));
+            return dashRequest($http.get(baseStripApi).success(success).error(error));
         }
 
         $rootScope.$on('$ssbAccountUpdated', function(event, account) {
